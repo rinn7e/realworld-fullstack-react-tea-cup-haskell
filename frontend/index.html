@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Conduit (react-tea-cup)</title>
+    <style>
+      .initial-loader-wrap {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+      }
+      .initial-loader {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #5cb85c;
+        border-radius: 50%;
+        animation: initial-spin 1s linear infinite;
+      }
+      @keyframes initial-spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="overflow-y-scroll">
+    <div id="root">
+      <!-- 
+        Initial Loading Indicator
+        This is a standalone HTML/CSS spinner that renders immediately before React or TailwindCSS loads.
+        We use position: fixed to prevent scrollbars caused by default browser body margins prior to Tailwind's preflight.
+        Once React hydration occurs, the contents of #root will be entirely replaced automatically.
+      -->
+      <div class="initial-loader-wrap">
+        <div class="initial-loader"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/root.tsx"></script>
+  </body>
+</html>

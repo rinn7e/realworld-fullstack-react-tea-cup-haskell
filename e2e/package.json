@@ -1,0 +1,28 @@
+{
+  "name": "realworld-e2e-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generic E2E tests for RealWorld frontend implementations",
+  "type": "module",
+  "scripts": {
+    "test:e2e": "playwright test --reporter=line",
+    "test:e2e:ui": "playwright test --ui",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@playwright/test": "^1.59.1",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "@types/node": "^25.6.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "eslint": "^9.29.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "globals": "^16.2.0",
+    "prettier": "^3.8.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.1"
+  }
+}

@@ -1,0 +1,3 @@
+export BASE_URL=http://localhost:5173
+export JWT_SECRET=example-jwt-secret
+export VITE_API_BASE=http://localhost:3000/api

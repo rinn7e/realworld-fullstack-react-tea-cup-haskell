@@ -1,0 +1,3 @@
+ALTER TABLE "user" DROP COLUMN "role";
+DROP TABLE "log" CASCADE;
+DROP TABLE "visitor" CASCADE;

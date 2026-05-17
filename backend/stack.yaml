@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 Serokell <https://serokell.io>
+#
+# SPDX-License-Identifier: CC0-1.0
+resolver: lts-23.28
+
+packages:
+  - .
+
+extra-deps:
+  - jose-0.11
+  - servant-auth-0.4.1.0
+  - servant-auth-server-0.4.9.1
+  - lens-5.2.3
+
+allow-newer: true

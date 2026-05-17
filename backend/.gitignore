@@ -1,0 +1,8 @@
+.stack-work/
+*.cabal
+*.envrc
+.env
+dist-newstyle/
+.DS_Store
+*.log
+.env
