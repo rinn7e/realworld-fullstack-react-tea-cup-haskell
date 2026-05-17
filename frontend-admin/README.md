@@ -16,9 +16,9 @@
 
 ### Installation
 
-1. Navigate to the `frontend/` directory:
+1. Navigate to the `frontend-admin/` directory:
    ```bash
-   cd frontend
+   cd frontend-admin
    ```
 2. Install dependencies:
    ```bash

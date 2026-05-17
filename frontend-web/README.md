@@ -21,9 +21,9 @@ A functional, type-safe implementation of the RealWorld Medium.com clone spec bu
 To run the application with a local API server:
 
 1.  Clone the repository.
-2.  Go to the `frontend` directory:
+2.  Go to the `frontend-web` directory:
     ```bash
-    cd frontend
+    cd frontend-web
     ```
 3.  Install dependencies:
     ```bash
@@ -40,7 +40,7 @@ To run the application with a local API server:
 To run the application using the official RealWorld API server:
 
 ```bash
-cd frontend
+cd frontend-web
 pnpm dev --mode production
 ```
 
@@ -49,7 +49,7 @@ This will use the base URL: `https://api.realworld.show/api`.
 ## Available Scripts
 
 > [!NOTE]
-> All scripts should be run from the `frontend/` directory.
+> All scripts should be run from the `frontend-web/` directory.
 
 | Command             | Description                          |
 | ------------------- | ------------------------------------ |

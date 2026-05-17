@@ -3,10 +3,9 @@
 Overall file structure of the frontend directory.
 
 ```yaml
-frontend/
+frontend-admin/
 ├── dist/                # Production build output
 ├── doc/                 # Documentation
-├── e2e/                 # Playwright end-to-end tests
 ├── public/              # Static assets
 ├── scripts/             # Build and utility scripts
 ├── src/                 # Main source code
