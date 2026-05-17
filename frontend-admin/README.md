@@ -1,7 +1,5 @@
 # Sentinel Dashboard
 
-[![Deploy to GitHub Pages](https://github.com/rinn7e/sentinel-dashboard/actions/workflows/deploy.yml/badge.svg)](https://github.com/rinn7e/sentinel-dashboard/actions/workflows/deploy.yml)
-
 ## Tech Stack
 
 - [**react 19.x**](https://github.com/facebook/react): UI Library

@@ -40,6 +40,16 @@ jobs:
         run: pnpm install
         working-directory: frontend-web
 
+      - name: Debug node_modules
+        run: |
+          echo "=== Contents of node_modules/@rinn7e ==="
+          ls -la node_modules/@rinn7e || echo "@rinn7e not found"
+          echo "=== Contents of node_modules/@rinn7e/tea-cup-prelude ==="
+          ls -la node_modules/@rinn7e/tea-cup-prelude || echo "tea-cup-prelude not found"
+          echo "=== Contents of node_modules/@rinn7e/tea-cup-prelude/lib ==="
+          ls -la node_modules/@rinn7e/tea-cup-prelude/lib || echo "lib not found"
+        working-directory: frontend-web
+
       - name: Build
         run: pnpm build
         working-directory: frontend-web
