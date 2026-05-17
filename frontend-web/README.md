@@ -16,22 +16,41 @@ A functional, type-safe implementation of the RealWorld Medium.com clone spec bu
 
 ## How to start locally
 
-To run the application with a local API server:
+To run the application locally, you must clone **both** this application repository and its sibling library package repository (`tea-cup-package`) as sibling directories under the same parent folder.
 
-1.  Clone the repository.
-2.  Go to the `frontend-web` directory:
-    ```bash
-    cd frontend-web
-    ```
-3.  Install dependencies:
-    ```bash
-    pnpm install
-    ```
-4.  Ensure you have a local [RealWorld backend](https://github.com/gothinkster/realworld) running (usually on `http://localhost:3000/api`).
-5.  Run the development server:
-    ```bash
-    pnpm dev
-    ```
+### 1. Clone Sibling Repositories
+Ensure your local directory layout is structured as siblings:
+```text
+parent-directory/
+├── realworld-fullstack-react-tea-cup-haskell/  <-- This repository
+└── tea-cup-package/                           <-- Sibling library repository
+```
+
+Clone the sibling package repository if you haven't already:
+```bash
+git clone https://github.com/rinn7e/tea-cup-package.git
+```
+
+### 2. Build the Shared Libraries
+Before running the application, build the shared `tea-cup-package` libraries first:
+```bash
+cd tea-cup-package
+pnpm install
+pnpm build
+cd ../realworld-fullstack-react-tea-cup-haskell/frontend-web
+```
+
+### 3. Install Web App Dependencies and Run
+1. Go to the `frontend-web` directory.
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+3. Ensure you have a local [RealWorld backend](https://github.com/gothinkster/realworld) running (usually on `http://localhost:3000/api`).
+4. Run the development server:
+   ```bash
+   pnpm dev
+   ```
 
 ## How to start using official API server
 

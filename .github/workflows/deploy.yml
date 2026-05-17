@@ -21,8 +21,17 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
+      - name: Checkout main repo
         uses: actions/checkout@v4
+        with:
+          path: realworld-fullstack-react-tea-cup-haskell
+
+      - name: Checkout tea-cup-package
+        uses: actions/checkout@v4
+        with:
+          repository: rinn7e/tea-cup-package
+          ref: master
+          path: tea-cup-package
 
       - name: Install pnpm
         uses: pnpm/action-setup@v3
@@ -34,13 +43,19 @@ jobs:
         with:
           node-version: 22
 
+      - name: Build tea-cup-package
+        run: |
+          pnpm install
+          pnpm build
+        working-directory: tea-cup-package
+
       - name: Install dependencies
-        run: pnpm install --force
-        working-directory: frontend-web
+        run: pnpm install
+        working-directory: realworld-fullstack-react-tea-cup-haskell/frontend-web
 
       - name: Build
         run: pnpm build
-        working-directory: frontend-web
+        working-directory: realworld-fullstack-react-tea-cup-haskell/frontend-web
         env:
           VITE_API_BASE: https://api.realworld.show/api
           VITE_BASE_URL: /realworld-fullstack-react-tea-cup-haskell/
@@ -48,7 +63,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend-web/dist
+          path: realworld-fullstack-react-tea-cup-haskell/frontend-web/dist
 
       - name: Deploy to GitHub Pages
         id: deployment
