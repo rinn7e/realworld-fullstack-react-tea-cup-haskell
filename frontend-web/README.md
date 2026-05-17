@@ -1,6 +1,6 @@
 # RealWorld example app in `react-tea-cup`
 
-### [Demo](https://rinn7e.github.io/tea-cup-realworld)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
+### [Demo](https://rinn7e.github.io/realworld-fullstack-react-tea-cup-haskell/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
 A functional, type-safe implementation of the RealWorld Medium.com clone spec built using **react-tea-cup** following **The Elm Architecture (TEA)**.
 
