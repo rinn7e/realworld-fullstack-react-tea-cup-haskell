@@ -30,11 +30,11 @@ server-watch:
 
 # Reset database and start dev server
 resetdb:
-	./my-scripts/resetdb.sh
+	./script/resetdb.sh
 
 # Reset database and start dev server
 resetdb-seed:
-	./my-scripts/resetdb.sh
+	./script/resetdb.sh
 	$(MAKE) migrate-up
 	$(MAKE) seed
 	$(MAKE) server
