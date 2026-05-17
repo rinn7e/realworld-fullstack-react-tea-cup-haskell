@@ -18,16 +18,16 @@ export default defineConfig({
           {
             command: `direnv exec . make server`,
             url: 'http://localhost:3000/api/tags',
-            cwd: process.env.BACKEND_PATH || '../../haskell-servant-realworld/backend',
+            cwd: process.env.BACKEND_PATH || '../backend',
             reuseExistingServer: !process.env.CI,
             timeout: 120_000,
           },
         ]
       : []),
     {
-      command: 'npm run dev',
+      command: 'pnpm dev',
       url: 'http://localhost:5173',
-      cwd: '../frontend',
+      cwd: '../frontend-web',
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },
