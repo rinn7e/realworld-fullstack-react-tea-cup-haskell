@@ -27,25 +27,17 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 9
+          version: 11
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: frontend-web/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install
-        working-directory: frontend-web
-
-      - name: Debug node_modules
-        run: |
-          echo "=== Contents of node_modules/@rinn7e ==="
-          ls -la node_modules/@rinn7e || echo "@rinn7e not found"
-          echo "=== Contents of node_modules/@rinn7e/tea-cup-prelude ==="
-          ls -la node_modules/@rinn7e/tea-cup-prelude || echo "tea-cup-prelude not found"
-          echo "=== Contents of node_modules/@rinn7e/tea-cup-prelude/lib ==="
-          ls -la node_modules/@rinn7e/tea-cup-prelude/lib || echo "lib not found"
         working-directory: frontend-web
 
       - name: Build
