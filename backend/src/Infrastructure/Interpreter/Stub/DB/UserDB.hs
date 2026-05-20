@@ -12,6 +12,7 @@ import UnliftIO.IORef
 
 import Capability.Database.UserDB
 import Domain.Type (User (..), UserId (..), UserRole (..))
+import Domain.Type qualified as D
 import Infrastructure.Interpreter.Stub.DB.Types (MockDB (..), emptyMockDB)
 
 runUserDBStub :: (IOE :> es) => IORef MockDB -> Eff (UserDB : es) a -> Eff es a
@@ -52,7 +53,7 @@ runUserDBStub ref = interpret $ \_ -> \case
     atomicModifyIORef' ref $ \db ->
       let newDb = db{users = Map.delete uid db.users}
        in (newDb, ())
-  ListUsers mLimit mOffset mUsername mEmail -> do
+  ListUsers mLimit mOffset mUsername mEmail mSort mDir -> do
     db <- readIORef ref
     let allUsers = Map.elems db.users
         filtered =
@@ -62,7 +63,7 @@ runUserDBStub ref = interpret $ \_ -> \case
                   && maybe True (\uemail -> uemail == u.email) mEmail
             )
             allUsers
-        sliced = take (maybe 10 id mLimit) $ drop (maybe 0 id mOffset) filtered
+        sliced = take (maybe 10 D.unLimit mLimit) $ drop (maybe 0 D.unOffset mOffset) filtered
     pure (sliced, length filtered)
   FollowUser follower followed -> do
     atomicModifyIORef' ref $ \db ->

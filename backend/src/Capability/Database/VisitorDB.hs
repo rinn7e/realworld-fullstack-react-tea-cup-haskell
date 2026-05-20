@@ -1,7 +1,8 @@
 module Capability.Database.VisitorDB where
 
 import Data.Time (UTCTime)
-import Domain.Type
+import Domain.Type hiding (Limit, Offset)
+import Domain.Type qualified as D
 import Effectful
 import Effectful.Dispatch.Dynamic
 
@@ -9,10 +10,12 @@ data VisitorDB :: Effect where
   InsertVisitor
     :: VisitorIp -> VisitorUserAgent -> VisitorPath -> UTCTime -> VisitorDB m Visitor
   ListVisitors
-    :: Maybe Int
-    -> Maybe Int
+    :: Maybe D.Limit
+    -> Maybe D.Offset
     -> Maybe VisitorIp
     -> Maybe VisitorPath
+    -> Maybe D.VisitorSort
+    -> Maybe D.Direction
     -> VisitorDB m ([Visitor], Int)
   GetVisitorsSince :: UTCTime -> VisitorDB m [Visitor]
   CountAllVisitors :: VisitorDB m Int
@@ -30,12 +33,14 @@ insertVisitor ip ua path t = send (InsertVisitor ip ua path t)
 
 listVisitors
   :: (VisitorDB :> es)
-  => Maybe Int
-  -> Maybe Int
+  => Maybe D.Limit
+  -> Maybe D.Offset
   -> Maybe VisitorIp
   -> Maybe VisitorPath
+  -> Maybe D.VisitorSort
+  -> Maybe D.Direction
   -> Eff es ([Visitor], Int)
-listVisitors mLimit mOffset mIp mPath = send (ListVisitors mLimit mOffset mIp mPath)
+listVisitors mLimit mOffset mIp mPath mSort mDir = send (ListVisitors mLimit mOffset mIp mPath mSort mDir)
 
 getVisitorsSince :: (VisitorDB :> es) => UTCTime -> Eff es [Visitor]
 getVisitorsSince since = send (GetVisitorsSince since)

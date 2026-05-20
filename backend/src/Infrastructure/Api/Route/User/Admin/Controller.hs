@@ -43,17 +43,21 @@ getUsersHandler
      , Error S.ServerError :> es
      )
   => S.AuthResult DB.UserId
-  -> Maybe Int
-  -> Maybe Int
+  -> Maybe D.Limit
+  -> Maybe D.Offset
   -> Maybe D.Username
   -> Maybe D.Email
+  -> Maybe D.UserSort
+  -> Maybe D.Direction
   -> Eff es Api.AdminUserListResponse
-getUsersHandler (S.Authenticated uid) mLimit mOffset mUsername mEmail = do
+getUsersHandler (S.Authenticated uid) mLimit mOffset mUsername mEmail mSort mDir = do
   guardAdmin uid
-  (users, total) <- listUsers mLimit mOffset mUsername mEmail
+  let limit = maybe (D.Limit 10) id mLimit
+      offset = maybe (D.Offset 0) id mOffset
+  (users, total) <- listUsers (Just limit) (Just offset) mUsername mEmail mSort mDir
   let adminUsers = map Api.toAdminUserResponse users
   return $ Api.AdminUserListResponse adminUsers total
-getUsersHandler _ _ _ _ _ = throwError S.err401
+getUsersHandler _ _ _ _ _ _ _ = throwError S.err401
 
 updateUserRoleHandler
   :: ( UserDB :> es

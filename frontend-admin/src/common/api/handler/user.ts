@@ -54,6 +54,8 @@ export const getAdminUsers = (
     offset?: number
     username?: string
     email?: string
+    sort?: string
+    direction?: string
   } = {},
 ): TE.TaskEither<HttpError<ApiError>, AdminUserListResponse> => {
   const query = new URLSearchParams()
@@ -61,6 +63,8 @@ export const getAdminUsers = (
   if (params.offset !== undefined) query.set('offset', String(params.offset))
   if (params.username !== undefined) query.set('username', params.username)
   if (params.email !== undefined) query.set('email', params.email)
+  if (params.sort !== undefined) query.set('sort', params.sort)
+  if (params.direction !== undefined) query.set('direction', params.direction)
   const qs = query.toString()
 
   return pipe(

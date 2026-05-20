@@ -68,7 +68,9 @@ getDashboardStatsHandler
   -> Eff es Api.DashboardStatsResponse
 getDashboardStatsHandler (S.Authenticated uid) = do
   guardAdmin uid
-  totalUsers <- listUsers Nothing Nothing Nothing Nothing >>= \(_, c) -> return c
+  totalUsers <- listUsers Nothing Nothing Nothing Nothing Nothing Nothing
+                        >>= \ (_, c) -> return c
+
   totalArticles <- countArticles Nothing Nothing Nothing
   (_, totalComments) <- listAdminComments Nothing Nothing Nothing Nothing (D.Limit 0) (D.Offset 0)
   totalVisitors <- countAllVisitors
@@ -182,7 +184,7 @@ getVisitorsHandler (S.Authenticated uid) mLimit mOffset mIp mPath = do
       offset = maybe 0 id mOffset
       dIp = fmap D.VisitorIp mIp
       dPath = fmap D.VisitorPath mPath
-  (visitors, total) <- listVisitors (Just limit) (Just offset) dIp dPath
+  (visitors, total) <- listVisitors (Just (D.Limit limit)) (Just (D.Offset offset)) dIp dPath Nothing Nothing
   let visitorResponses = map Api.toVisitorResponse visitors
   return
     Api.VisitorListResponse

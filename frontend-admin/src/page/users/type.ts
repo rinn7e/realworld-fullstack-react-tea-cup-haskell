@@ -27,7 +27,7 @@ export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
   _tag: S.Eq,
   users: A.getEq(UserEq),
   selectedUser: O.getEq(UserEq),
-  searchBar: SearchBar.ModelEq as any,
+  searchBar: SearchBar.ModelEq<UserSortAttr>(),
 })
 
 export type Props = {

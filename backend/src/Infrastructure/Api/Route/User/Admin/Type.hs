@@ -27,10 +27,12 @@ data AdminUserRoute mode = AdminUserRoute
           :> Summary "Get All Users"
           :> Description "Retrieve all registered users with pagination and keyword filters"
           :> Tag "Admin Users"
-          :> QueryParam "limit" Int
-          :> QueryParam "offset" Int
+          :> QueryParam "limit" D.Limit
+          :> QueryParam "offset" D.Offset
           :> QueryParam "username" D.Username
           :> QueryParam "email" D.Email
+          :> QueryParam "sort" D.UserSort
+          :> QueryParam "direction" D.Direction
           :> Get '[JSON] Api.AdminUserListResponse
   , updateUserRole
       :: mode

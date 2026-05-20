@@ -53,7 +53,7 @@ export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
   _tag: S.Eq,
   pagination: Pagination.mkModelEq(ArticleEq, getHttpErrorEq(ApiErrorEq)),
   selectedArticle: O.getEq(ArticleEq),
-  searchBar: SearchBar.ModelEq as any,
+  searchBar: SearchBar.ModelEq<ArticleSortAttr>(),
 })
 
 export type Props = {

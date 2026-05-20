@@ -43,6 +43,11 @@ deriving newtype instance ToSchema D.UserImage
 instance ToParamSchema D.Username
 instance ToParamSchema D.Email
 
+instance ToParamSchema D.UserSort where
+  toParamSchema _ =
+    mempty
+      & type_ ?~ OpenApiString
+
 -- Tag instances
 deriving newtype instance ToSchema D.TagName
 instance ToParamSchema D.TagName

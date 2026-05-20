@@ -31,7 +31,7 @@ export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
   _tag: S.Eq,
   visitors: A.getEq(VisitorEq),
   selectedVisitor: O.getEq(VisitorEq),
-  searchBar: SearchBar.ModelEq,
+  searchBar: SearchBar.ModelEq<VisitorSortAttr>(),
 })
 
 export type Props = {

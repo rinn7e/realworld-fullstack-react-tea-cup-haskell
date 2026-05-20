@@ -9,7 +9,8 @@ import Effectful.Dispatch.Dynamic
 import UnliftIO.IORef
 
 import Capability.Database.VisitorDB
-import Domain.Type
+import Domain.Type hiding (Limit, Offset)
+import Domain.Type qualified as D
 import Infrastructure.Interpreter.Stub.DB.Types (MockDB (..))
 
 runVisitorDBStub :: (IOE :> es) => IORef MockDB -> Eff (VisitorDB : es) a -> Eff es a
@@ -23,17 +24,16 @@ runVisitorDBStub ref = interpret $ \_ -> \case
             , visitors = Map.insert vid newVisitor db.visitors
             }
       in (newDb, newVisitor)
-  ListVisitors mLimit mOffset mIp mPath -> do
+  ListVisitors mLimit mOffset mIp mPath mSort mDir -> do
     db <- readIORef ref
     let allVisitors = Map.elems db.visitors
-        sorted = L.sortBy (\v1 v2 -> compare v2.timestamp v1.timestamp) allVisitors
         filtered = filter (\v ->
           maybe True (== v.ip) mIp &&
           maybe True (== v.path) mPath
-          ) sorted
+          ) allVisitors
         total = length filtered
-        limit = maybe 10 id mLimit
-        offset = maybe 0 id mOffset
+        limit = maybe 10 D.unLimit mLimit
+        offset = maybe 0 D.unOffset mOffset
         sliced = take limit $ drop offset filtered
     pure (sliced, total)
   GetVisitorsSince since -> do

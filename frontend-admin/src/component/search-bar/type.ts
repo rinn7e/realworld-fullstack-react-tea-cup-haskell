@@ -15,11 +15,12 @@ export type Model<sortType> = {
   direction: Direction
 }
 
-export const ModelEq = EqClass.struct<Model<any>>({
-  searchText: S.Eq,
-  sort: EqClass.fromEquals((a, b) => a === b),
-  direction: S.Eq as any,
-})
+export const ModelEq = <sortType>() =>
+  EqClass.struct<Model<sortType>>({
+    searchText: S.Eq,
+    sort: EqClass.fromEquals((a, b) => a === b),
+    direction: S.Eq,
+  })
 
 export type Msg<sortType> =
   | { _tag: 'ChangeSearchText'; text: string }

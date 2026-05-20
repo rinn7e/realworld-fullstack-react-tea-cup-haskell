@@ -50,7 +50,7 @@ runUserDBPostgres = interpret $ \_ -> \case
   InsertUser username email pwdHash -> insertUserHandler username email pwdHash
   UpdateUser uid dUser -> updateUserHandler uid dUser
   DeleteUser uid -> deleteUserHandler uid
-  ListUsers mLimit mOffset mUsername mEmail -> listUsersHandler mLimit mOffset mUsername mEmail
+  ListUsers mLimit mOffset mUsername mEmail mSort mDir -> listUsersHandler mLimit mOffset mUsername mEmail mSort mDir
   FollowUser follower followed -> followUserHandler follower followed
   UnfollowUser follower followed -> unfollowUserHandler follower followed
   IsFollowing follower followed -> isFollowingHandler follower followed
@@ -159,25 +159,38 @@ deleteUserHandler (D.UserId uidInt) = do
 
 listUsersHandler
   :: (IOE :> es, Reader ConnectionPool :> es)
-  => Maybe Int
-  -> Maybe Int
+  => Maybe D.Limit
+  -> Maybe D.Offset
   -> Maybe D.Username
   -> Maybe D.Email
+  -> Maybe D.UserSort
+  -> Maybe D.Direction
   -> Eff es ([D.User], Int)
-listUsersHandler mLimit mOffset mUsername mEmail = do
+listUsersHandler mLimit mOffset mUsername mEmail mSort mDir = do
   pool <- ask @ConnectionPool
   liftIO $
     runSqlPool
       ( do
-          let limit = maybe 10 id mLimit
-              offset = maybe 0 id mOffset
+          let limit = maybe 10 D.unLimit mLimit
+              offset = maybe 0 D.unOffset mOffset
               filters =
                 concat
                   [ maybe [] (\u -> [DB.UserUsername ==. u]) mUsername
                   , maybe [] (\e -> [DB.UserEmail ==. e]) mEmail
                   ]
+              
+              sortOpt = case (mSort, mDir) of
+                (Just D.UserSortId, Just D.Asc) -> Asc DB.UserId
+                (Just D.UserSortId, _) -> Desc DB.UserId
+                (Just D.UserSortUsername, Just D.Asc) -> Asc DB.UserUsername
+                (Just D.UserSortUsername, _) -> Desc DB.UserUsername
+                (Just D.UserSortEmail, Just D.Asc) -> Asc DB.UserEmail
+                (Just D.UserSortEmail, _) -> Desc DB.UserEmail
+                (_, Just D.Asc) -> Asc DB.UserUsername
+                (_, _) -> Desc DB.UserUsername
+          
           total <- count filters
-          entities <- selectList filters [Asc DB.UserUsername, LimitTo limit, OffsetBy offset]
+          entities <- selectList filters [sortOpt, LimitTo limit, OffsetBy offset]
           return (map toDomainUser entities, fromIntegral total)
       )
       pool
