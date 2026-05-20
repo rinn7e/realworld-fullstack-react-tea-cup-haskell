@@ -181,8 +181,15 @@ instance ToSchema UpdateUserRequest where
           & properties .~ InsOrd.fromList [("user", Inline userSchema)]
           & required .~ ["user"]
 
+instance ToSchema D.UserRole where
+  declareNamedSchema _ = do
+    return $
+      NamedSchema (Just "UserRole") $
+        mempty
+          & type_ ?~ OpenApiString
+
 data UpdateUserRoleRequest = UpdateUserRoleRequest
-  { role :: Text
+  { role :: D.UserRole
   }
   deriving stock (Show, Generic)
   deriving anyclass (FromJSON, ToSchema)
@@ -196,7 +203,7 @@ data AdminUserResponse = AdminUserResponse
   , email :: Text
   , bio :: Maybe Text
   , image :: Maybe Text
-  , role :: Text
+  , role :: D.UserRole
   }
   deriving stock (Show, Generic)
   deriving anyclass (ToJSON, ToSchema)

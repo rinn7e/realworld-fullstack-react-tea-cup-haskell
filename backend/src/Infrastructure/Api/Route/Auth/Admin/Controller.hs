@@ -38,7 +38,7 @@ loginAdminHandler _ (Api.LoginUserRequest email pwd) = do
       if not ok
         then throwError S.err401{S.errBody = "Invalid email or password"}
         else do
-          if u.role /= "Admin"
+          if u.role /= D.AdminRole
             then throwError S.err403{S.errBody = "Access Denied: Administrator role required"}
             else do
               token <- generateToken u.userId

@@ -10,9 +10,9 @@ import Database.Persist.Sql (toSqlKey)
 import Servant.Auth.Server qualified as S
 import Test.Hspec
 
-import Infrastructure.Api.Auth.Web.Controller (loginUserHandler, registerUserHandler)
-import Infrastructure.Api.User.Web.Controller (followUserHandler)
-import Infrastructure.Entity.User.DTO
+import Infrastructure.Api.Route.Auth.Web.Controller (loginUserHandler, registerUserHandler)
+import Infrastructure.Api.Route.User.Web.Controller (followUserHandler)
+import Infrastructure.Api.DTO
   ( LoginUserRequest (..)
   , NewUserRequest (..)
   , Profile (..)

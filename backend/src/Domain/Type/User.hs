@@ -9,6 +9,10 @@ newtype UserId = UserId {unUserId :: Int}
   deriving stock (Eq, Ord, Show, Generic)
   deriving newtype (Num, ToJSON, FromJSON, ToHttpApiData, FromHttpApiData)
 
+data UserRole = AdminRole | RegularRole
+  deriving stock (Eq, Show, Read, Generic)
+  deriving anyclass (ToJSON, FromJSON)
+
 data User = User
   { userId :: UserId
   , username :: Text
@@ -16,6 +20,6 @@ data User = User
   , password :: Text
   , bio :: Maybe Text
   , image :: Maybe Text
-  , role :: Text
+  , role :: UserRole
   }
   deriving stock (Eq, Show, Generic)

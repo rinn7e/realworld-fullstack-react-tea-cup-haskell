@@ -12,7 +12,7 @@ import Effectful.Dispatch.Dynamic
 import UnliftIO.IORef
 
 import Capability.Database.UserDB
-import Domain.Type (User (..), UserId (..))
+import Domain.Type (User (..), UserId (..), UserRole (..))
 
 data MockDB = MockDB
   { nextUserId :: Int
@@ -51,7 +51,7 @@ runUserDBStub ref = interpret $ \_ -> \case
               , password = pwdHash
               , bio = Nothing
               , image = Nothing
-              , role = "User"
+              , role = RegularRole
               }
           newDb =
             db

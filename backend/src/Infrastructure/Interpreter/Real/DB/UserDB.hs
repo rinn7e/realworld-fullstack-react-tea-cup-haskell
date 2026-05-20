@@ -77,7 +77,7 @@ runUserDBPostgres = interpret $ \_ -> \case
     liftIO $
       runSqlPool
         ( do
-            let u = DB.User username email pwdHash Nothing Nothing "User"
+            let u = DB.User username email pwdHash Nothing Nothing D.RegularRole
             uid <- insert u
             return $ toDomainUser (Entity uid u)
         )

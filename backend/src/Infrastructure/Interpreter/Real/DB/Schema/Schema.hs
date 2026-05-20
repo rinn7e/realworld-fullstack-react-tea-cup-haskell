@@ -6,7 +6,11 @@ import Database.Persist.TH
 import GHC.Generics (Generic)
 import Servant.Auth.Server (FromJWT, ToJWT)
 
+import Domain.Type.User (UserRole(..))
+
 import Infrastructure.Interpreter.Real.DB.Util.Internal (stripEntityPrefix)
+
+derivePersistField "UserRole"
 
 share
   [ mkPersist
@@ -23,7 +27,7 @@ User
     password Text
     bio Text Maybe
     image Text Maybe
-    role Text default='User'
+    role UserRole default='RegularRole'
     UniqueUsername username
     UniqueEmail email
     deriving Show Generic
