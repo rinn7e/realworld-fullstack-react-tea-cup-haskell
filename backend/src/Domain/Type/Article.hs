@@ -3,11 +3,12 @@ module Domain.Type.Article where
 import Data.Aeson (FromJSON, ToJSON)
 import Data.String (IsString)
 import Data.Text (Text)
+import qualified Data.Text as T
 import Data.Time (UTCTime)
 import Domain.Type.Tag (Tag)
 import Domain.Type.User (User, UserId)
 import GHC.Generics (Generic)
-import Web.HttpApiData (FromHttpApiData, ToHttpApiData)
+import Web.HttpApiData (FromHttpApiData(..), ToHttpApiData(..))
 
 newtype ArticleId = ArticleId {unArticleId :: Int}
   deriving stock (Eq, Ord, Show, Generic)
@@ -40,6 +41,24 @@ data Article = Article
   , updatedAt :: UTCTime
   }
   deriving stock (Eq, Show, Generic)
+
+data ArticleSort = ArticleSortId | ArticleSortTitle | ArticleSortFavoritesCount | ArticleSortCreatedAt
+  deriving stock (Eq, Ord, Show, Generic)
+  deriving anyclass (ToJSON, FromJSON)
+
+instance FromHttpApiData ArticleSort where
+  parseQueryParam t = case t of
+    "id" -> Right ArticleSortId
+    "title" -> Right ArticleSortTitle
+    "favoritesCount" -> Right ArticleSortFavoritesCount
+    "createdAt" -> Right ArticleSortCreatedAt
+    _ -> Left "Invalid sort field"
+
+instance ToHttpApiData ArticleSort where
+  toQueryParam ArticleSortId = "id"
+  toQueryParam ArticleSortTitle = "title"
+  toQueryParam ArticleSortFavoritesCount = "favoritesCount"
+  toQueryParam ArticleSortCreatedAt = "createdAt"
 
 data ArticleDetail = ArticleDetail
   { article :: Article

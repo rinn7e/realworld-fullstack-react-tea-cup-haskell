@@ -44,7 +44,7 @@ data ArticleDB :: Effect where
     :: Maybe TagName
     -> Maybe Username
     -> Maybe Text
-    -> Maybe Sort
+    -> Maybe ArticleSort
     -> Maybe Direction
     -> D.Limit
     -> D.Offset
@@ -122,7 +122,7 @@ listAdminArticles
   => Maybe TagName
   -> Maybe Username
   -> Maybe Text
-  -> Maybe Sort
+  -> Maybe ArticleSort
   -> Maybe Direction
   -> D.Limit
   -> D.Offset

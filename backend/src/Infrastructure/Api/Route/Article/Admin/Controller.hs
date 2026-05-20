@@ -49,7 +49,7 @@ getArticlesHandler
   -> Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
-  -> Maybe D.Sort
+  -> Maybe D.ArticleSort
   -> Maybe D.Direction
   -> Eff es Api.AdminArticleListResponse
 getArticlesHandler (S.Authenticated uid) mLimit mOffset mTag mAuthor mSearch mSort mDir = do

@@ -339,7 +339,7 @@ listAdminArticles
   :: Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
-  -> Maybe D.Sort
+  -> Maybe D.ArticleSort
   -> Maybe D.Direction
   -> D.Limit
   -> D.Offset
@@ -354,7 +354,7 @@ listAdminArticlesSQL
   :: Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
-  -> Maybe D.Sort
+  -> Maybe D.ArticleSort
   -> Maybe D.Direction
   -> D.Limit
   -> D.Offset
@@ -387,7 +387,7 @@ filterAdminArticlesIdsSQL
   :: Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
-  -> Maybe D.Sort
+  -> Maybe D.ArticleSort
   -> Maybe D.Direction
   -> D.Limit
   -> D.Offset
@@ -396,13 +396,13 @@ filterAdminArticlesIdsSQL mTag mAuthor mSearch mSort mDir (D.Limit limInt) (D.Of
   article <- from $ table @Article
   applyAdminArticleFilters mTag mAuthor mSearch article
   
-  let sortOpt = case (fmap D.unSort mSort, mDir) of
-        (Just "title", Just D.Asc) -> asc (article ^. ArticleTitle)
-        (Just "title", _) -> desc (article ^. ArticleTitle)
-        (Just "id", Just D.Asc) -> asc (article ^. ArticleId)
-        (Just "id", _) -> desc (article ^. ArticleId)
-        (Just "favoritesCount", Just D.Asc) -> asc (countFavoritesExpr (article ^. ArticleId))
-        (Just "favoritesCount", _) -> desc (countFavoritesExpr (article ^. ArticleId))
+  let sortOpt = case (mSort, mDir) of
+        (Just D.ArticleSortTitle, Just D.Asc) -> asc (article ^. ArticleTitle)
+        (Just D.ArticleSortTitle, _) -> desc (article ^. ArticleTitle)
+        (Just D.ArticleSortId, Just D.Asc) -> asc (article ^. ArticleId)
+        (Just D.ArticleSortId, _) -> desc (article ^. ArticleId)
+        (Just D.ArticleSortFavoritesCount, Just D.Asc) -> asc (countFavoritesExpr (article ^. ArticleId))
+        (Just D.ArticleSortFavoritesCount, _) -> desc (countFavoritesExpr (article ^. ArticleId))
         (_, Just D.Asc) -> asc (article ^. ArticleCreatedAt)
         (_, _) -> desc (article ^. ArticleCreatedAt)
 

@@ -281,12 +281,13 @@ listAdminArticlesHandler
   => Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
-  -> Maybe D.Sort
+  -> Maybe D.ArticleSort
   -> Maybe D.Direction
   -> D.Limit
   -> D.Offset
   -> Eff es [D.ArticleDetail]
 listAdminArticlesHandler mTag mAuthor mSearch mSort mDir lim off = do
+
   pool <- ask @ConnectionPool
   liftIO $
     runSqlPool

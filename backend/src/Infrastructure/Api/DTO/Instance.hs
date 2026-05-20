@@ -55,8 +55,18 @@ deriving newtype instance ToSchema D.ArticleBody
 
 instance ToParamSchema D.ArticleSlug
 
+instance ToParamSchema D.ArticleSort where
+  toParamSchema _ =
+    mempty
+      & type_ ?~ OpenApiString
+
 -- Comment instances
 deriving newtype instance ToSchema D.CommentBody
+
+instance ToParamSchema D.CommentSort where
+  toParamSchema _ =
+    mempty
+      & type_ ?~ OpenApiString
 
 -- Log instances
 deriving newtype instance ToSchema D.LogMessage

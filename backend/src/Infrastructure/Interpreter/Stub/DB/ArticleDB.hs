@@ -141,19 +141,19 @@ runArticleDBStub ref = interpret $ \_ -> \case
         filtered = filter (matchArticleFilters db mTag mAuthor Nothing mSearch) allArts
     pure $ length filtered
 
-sortArticles :: MockDB -> Maybe Sort -> Maybe Direction -> [Article] -> [Article]
+sortArticles :: MockDB -> Maybe ArticleSort -> Maybe Direction -> [Article] -> [Article]
 sortArticles db mSort mDir arts =
   let dir = maybe Desc id mDir
       cmp = case mSort of
-        Just sort -> case sort.unSort of
-          "title" -> \a1 a2 -> compare a1.title.unArticleTitle a2.title.unArticleTitle
-          "id" -> \a1 a2 -> compare a1.articleId.unArticleId a2.articleId.unArticleId
-          "favoritesCount" -> \a1 a2 ->
-            let c1 = length $ filter (\(_, aid) -> aid == a1.articleId) db.favorites
-                c2 = length $ filter (\(_, aid) -> aid == a2.articleId) db.favorites
-            in compare c1 c2
-          _ -> \a1 a2 -> compare a1.createdAt a2.createdAt
+        Just ArticleSortTitle -> \a1 a2 -> compare a1.title.unArticleTitle a2.title.unArticleTitle
+        Just ArticleSortId -> \a1 a2 -> compare a1.articleId.unArticleId a2.articleId.unArticleId
+        Just ArticleSortFavoritesCount -> \a1 a2 ->
+          let c1 = length $ filter (\(_, aid) -> aid == a1.articleId) db.favorites
+              c2 = length $ filter (\(_, aid) -> aid == a2.articleId) db.favorites
+          in compare c1 c2
+        Just ArticleSortCreatedAt -> \a1 a2 -> compare a1.createdAt a2.createdAt
         Nothing -> \a1 a2 -> compare a1.createdAt a2.createdAt
+
       sorted = L.sortBy cmp arts
   in case dir of
        Asc -> sorted
