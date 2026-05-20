@@ -44,6 +44,8 @@ data ArticleDB :: Effect where
     :: Maybe TagName
     -> Maybe Username
     -> Maybe Text
+    -> Maybe Sort
+    -> Maybe Direction
     -> D.Limit
     -> D.Offset
     -> ArticleDB m [ArticleDetail]
@@ -120,10 +122,12 @@ listAdminArticles
   => Maybe TagName
   -> Maybe Username
   -> Maybe Text
+  -> Maybe Sort
+  -> Maybe Direction
   -> D.Limit
   -> D.Offset
   -> Eff es [ArticleDetail]
-listAdminArticles mTag mAuthor mSearch lim off = send (ListAdminArticles mTag mAuthor mSearch lim off)
+listAdminArticles mTag mAuthor mSearch mSort mDir lim off = send (ListAdminArticles mTag mAuthor mSearch mSort mDir lim off)
 
 countAdminArticles
   :: (ArticleDB :> es) => Maybe TagName -> Maybe Username -> Maybe Text -> Eff es Int

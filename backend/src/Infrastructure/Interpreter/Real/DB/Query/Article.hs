@@ -339,11 +339,13 @@ listAdminArticles
   :: Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
+  -> Maybe D.Sort
+  -> Maybe D.Direction
   -> D.Limit
   -> D.Offset
   -> SqlPersistT IO (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
-listAdminArticles mTag mAuthor mSearch lim off = do
-  result <- select $ listAdminArticlesSQL mTag mAuthor mSearch lim off
+listAdminArticles mTag mAuthor mSearch mSort mDir lim off = do
+  result <- select $ listAdminArticlesSQL mTag mAuthor mSearch mSort mDir lim off
   let result2 = mconcat $ map mkArticleGrouped result
   pure result2
 
@@ -352,10 +354,12 @@ listAdminArticlesSQL
   :: Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
+  -> Maybe D.Sort
+  -> Maybe D.Direction
   -> D.Limit
   -> D.Offset
   -> SqlQuery ArticleExpr
-listAdminArticlesSQL mTag mAuthor mSearch lim off = do
+listAdminArticlesSQL mTag mAuthor mSearch mSort mDir lim off = do
   (((article :& author) :& _) :& tag) <-
     from $
       table @Article
@@ -367,7 +371,7 @@ listAdminArticlesSQL mTag mAuthor mSearch lim off = do
   where_
     ( article
         ^. ArticleId
-        `in_` subList_select (filterAdminArticlesIdsSQL mTag mAuthor mSearch lim off)
+        `in_` subList_select (filterAdminArticlesIdsSQL mTag mAuthor mSearch mSort mDir lim off)
     )
 
   return
@@ -383,13 +387,28 @@ filterAdminArticlesIdsSQL
   :: Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
+  -> Maybe D.Sort
+  -> Maybe D.Direction
   -> D.Limit
   -> D.Offset
   -> SqlQuery (SqlExpr (Value ArticleId))
-filterAdminArticlesIdsSQL mTag mAuthor mSearch (D.Limit limInt) (D.Offset offInt) = do
+filterAdminArticlesIdsSQL mTag mAuthor mSearch mSort mDir (D.Limit limInt) (D.Offset offInt) = do
   article <- from $ table @Article
   applyAdminArticleFilters mTag mAuthor mSearch article
-  orderBy [desc (article ^. ArticleCreatedAt)]
+  
+  let sortOpt = case (fmap D.unSort mSort, mDir) of
+        (Just "title", Just D.Asc) -> asc (article ^. ArticleTitle)
+        (Just "title", _) -> desc (article ^. ArticleTitle)
+        (Just "id", Just D.Asc) -> asc (article ^. ArticleId)
+        (Just "id", _) -> desc (article ^. ArticleId)
+        (Just "favoritesCount", Just D.Asc) -> asc (countFavoritesExpr (article ^. ArticleId))
+        (Just "favoritesCount", _) -> desc (countFavoritesExpr (article ^. ArticleId))
+        (_, Just D.Asc) -> asc (article ^. ArticleCreatedAt)
+        (_, _) -> desc (article ^. ArticleCreatedAt)
+
+  orderBy [sortOpt]
+
+
   when (limInt > 0) $ limit (fromIntegral limInt)
   when (offInt > 0) $ offset (fromIntegral offInt)
   return (article ^. ArticleId)

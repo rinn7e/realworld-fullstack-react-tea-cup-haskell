@@ -1,4 +1,12 @@
-module Domain.Type.Common where
+{-# LANGUAGE FieldSelectors #-}
+module Domain.Type.Common
+  ( Limit(..)
+  , Offset(..)
+  , Sort(..)
+  , unSort
+  , Direction(..)
+  )
+where
 
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Text (Text)

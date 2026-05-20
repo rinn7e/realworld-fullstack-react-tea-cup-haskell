@@ -85,7 +85,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
   CountFeed currentUserId -> countFeedHandler currentUserId
   FavoriteArticle uid aid -> favoriteArticleHandler uid aid
   UnfavoriteArticle uid aid -> unfavoriteArticleHandler uid aid
-  ListAdminArticles mTag mAuthor mSearch lim off -> listAdminArticlesHandler mTag mAuthor mSearch lim off
+  ListAdminArticles mTag mAuthor mSearch mSort mDir lim off -> listAdminArticlesHandler mTag mAuthor mSearch mSort mDir lim off
   CountAdminArticles mTag mAuthor mSearch -> countAdminArticlesHandler mTag mAuthor mSearch
 
 getArticleBySlugHandler
@@ -281,15 +281,17 @@ listAdminArticlesHandler
   => Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
+  -> Maybe D.Sort
+  -> Maybe D.Direction
   -> D.Limit
   -> D.Offset
   -> Eff es [D.ArticleDetail]
-listAdminArticlesHandler mTag mAuthor mSearch lim off = do
+listAdminArticlesHandler mTag mAuthor mSearch mSort mDir lim off = do
   pool <- ask @ConnectionPool
   liftIO $
     runSqlPool
       ( do
-          res <- Q.listAdminArticles mTag mAuthor mSearch lim off
+          res <- Q.listAdminArticles mTag mAuthor mSearch mSort mDir lim off
           return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
       )
       pool

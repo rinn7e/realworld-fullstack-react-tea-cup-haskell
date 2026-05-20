@@ -31,6 +31,8 @@ data AdminArticleRoute mode = AdminArticleRoute
           :> QueryParam "tag" D.TagName
           :> QueryParam "author" D.Username
           :> QueryParam "search" Text
+          :> QueryParam "sort" D.Sort
+          :> QueryParam "direction" D.Direction
           :> Get '[JSON] Api.AdminArticleListResponse
   , deleteArticle
       :: mode

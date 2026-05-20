@@ -32,6 +32,8 @@ export const getAdminArticles = (
     tag?: string
     author?: string
     search?: string
+    sort?: string
+    direction?: string
   } = {},
 ): TE.TaskEither<HttpError<ApiError>, ArticleListResponse> => {
   const query = new URLSearchParams()
@@ -40,6 +42,8 @@ export const getAdminArticles = (
   if (params.tag !== undefined) query.set('tag', params.tag)
   if (params.author !== undefined) query.set('author', params.author)
   if (params.search !== undefined) query.set('search', params.search)
+  if (params.sort !== undefined) query.set('sort', params.sort)
+  if (params.direction !== undefined) query.set('direction', params.direction)
   const qs = query.toString()
 
   return pipe(

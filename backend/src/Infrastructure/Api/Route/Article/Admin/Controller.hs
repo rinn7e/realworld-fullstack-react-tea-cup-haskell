@@ -49,16 +49,18 @@ getArticlesHandler
   -> Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
+  -> Maybe D.Sort
+  -> Maybe D.Direction
   -> Eff es Api.AdminArticleListResponse
-getArticlesHandler (S.Authenticated uid) mLimit mOffset mTag mAuthor mSearch = do
+getArticlesHandler (S.Authenticated uid) mLimit mOffset mTag mAuthor mSearch mSort mDir = do
   guardAdmin uid
   let limit = maybe (D.Limit 10) id mLimit
       offset = maybe (D.Offset 0) id mOffset
-  articlesDetail <- listAdminArticles mTag mAuthor mSearch limit offset
+  articlesDetail <- listAdminArticles mTag mAuthor mSearch mSort mDir limit offset
   totalCount <- countAdminArticles mTag mAuthor mSearch
   let articles = map Api.toAdminArticle articlesDetail
   return $ Api.AdminArticleListResponse articles totalCount
-getArticlesHandler _ _ _ _ _ _ = throwError S.err401
+getArticlesHandler _ _ _ _ _ _ _ _ = throwError S.err401
 
 deleteAdminArticleHandler
   :: ( ArticleDB :> es

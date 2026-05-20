@@ -20,9 +20,13 @@ export const mkPaginationConfig = (
   limit: GET_ARTICLES_LIMIT,
   scrollContainerId: 'main-content',
   handler: (offset, limit) => {
-    const searchParams = model.searchBar.searchText.trim()
-      ? { limit, offset, search: model.searchBar.searchText.trim() }
-      : { limit, offset }
+    const searchParams = {
+      limit,
+      offset,
+      ...(model.searchBar.searchText.trim() && { search: model.searchBar.searchText.trim() }),
+      sort: model.searchBar.sort.attr,
+      direction: model.searchBar.sort.direction,
+    }
 
     return pipe(
       shared.token,
@@ -38,22 +42,10 @@ export const mkPaginationConfig = (
         (token) =>
           pipe(
             getAdminArticles(token, searchParams),
-            TE.map((res) => {
-              const sortedArticles = [...res.articles].sort((a, b) => {
-                const valA = a[model.searchBar.sort.attr as keyof Article]
-                const valB = b[model.searchBar.sort.attr as keyof Article]
-                if (valA === undefined || valB === undefined) return 0
-                if (valA < valB)
-                  return model.searchBar.sort.direction === 'asc' ? -1 : 1
-                if (valA > valB)
-                  return model.searchBar.sort.direction === 'asc' ? 1 : -1
-                return 0
-              })
-              return {
-                items: sortedArticles,
-                totalCount: res.articlesCount,
-              }
-            }),
+            TE.map((res) => ({
+              items: res.articles,
+              totalCount: res.articlesCount,
+            })),
           ),
       ),
     )
