@@ -5,6 +5,8 @@ import * as t from 'io-ts'
 
 import { type Profile, ProfileEq, ProfileJson } from './profile'
 
+export type CommentSortAttr = 'id' | 'createdAt' | 'author'
+
 export type Comment = {
   id: number
   body: string

@@ -7,6 +7,8 @@ import * as t from 'io-ts'
 
 import { type AdminUser, AdminUserEq, AdminUserJson } from './user'
 
+export type ArticleSortAttr = 'id' | 'title' | 'favoritesCount' | 'createdAt'
+
 export type Article = {
   id: number
   slug: string

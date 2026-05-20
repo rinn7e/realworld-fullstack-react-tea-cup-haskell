@@ -12,6 +12,7 @@ import {
   getHttpErrorEq,
 } from '@/common/api/type'
 import { type Article, ArticleEq } from '@/common/api/type/article'
+import { type ArticleSortAttr } from '@/common/api/type/article'
 import * as SearchBar from '@/component/search-bar'
 import type { Shared } from '@/type'
 
@@ -21,7 +22,7 @@ export type Model = {
   readonly _tag: 'ArticlesModel'
   readonly pagination: Pagination.Model<Article, HttpError<ApiError>>
   readonly selectedArticle: O.Option<Article>
-  readonly searchBar: SearchBar.Model
+  readonly searchBar: SearchBar.Model<ArticleSortAttr>
 }
 
 export type ArticleItemMsg = {
@@ -32,7 +33,7 @@ export type ArticleItemMsg = {
 export type Msg =
   | { readonly _tag: 'NoOp' }
   | { readonly _tag: 'ClearSelected' }
-  | { readonly _tag: 'SearchBarMsg'; readonly subMsg: SearchBar.Msg }
+  | { readonly _tag: 'SearchBarMsg'; readonly subMsg: SearchBar.Msg<ArticleSortAttr> }
   | {
       readonly _tag: 'PaginationMsg'
       readonly subMsg: Pagination.Msg<
@@ -46,7 +47,7 @@ export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
   _tag: S.Eq,
   pagination: Pagination.mkModelEq(ArticleEq, getHttpErrorEq(ApiErrorEq)),
   selectedArticle: O.getEq(ArticleEq),
-  searchBar: SearchBar.ModelEq,
+  searchBar: SearchBar.ModelEq as any,
 })
 
 export type Props = {

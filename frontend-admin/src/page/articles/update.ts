@@ -7,15 +7,17 @@ import { Cmd } from 'tea-cup-fp'
 
 import * as SearchBar from '@/component/search-bar'
 import type { Shared } from '@/type'
+import { type ArticleSortAttr } from '@/common/api/type/article'
 
 import { mkPaginationConfig } from './helper'
 import { type Model, type Msg } from './type'
 
 export const init = (shared: Shared): [Model, Cmd<Msg>] => {
-  const [searchBar, searchBarCmd] = SearchBar.init('', {
-    attr: 'createdAt',
-    direction: 'desc',
-  })
+  const [searchBar, searchBarCmd] = SearchBar.init<ArticleSortAttr>(
+    '',
+    'createdAt',
+    'desc',
+  )
 
   const initialModel: Model = {
     _tag: 'ArticlesModel',
@@ -62,10 +64,13 @@ export const update =
 
 const searchBarMsgHandler = (
   shared: Shared,
-  subMsg: SearchBar.Msg,
+  subMsg: SearchBar.Msg<ArticleSortAttr>,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const [searchBar, searchBarCmd] = SearchBar.update(subMsg, model.searchBar)
+  const [searchBar, searchBarCmd] = SearchBar.update<ArticleSortAttr>(
+    subMsg,
+    model.searchBar,
+  )
 
   return pipe(
     [

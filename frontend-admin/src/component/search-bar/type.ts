@@ -2,40 +2,35 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as S from 'fp-ts/lib/string'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type Sort, SortEq } from '@/common/type/filter'
+import { type Direction } from '@/common/type/filter'
 
-export type SearchOption = {
+export type SearchOption<sortType> = {
   label: string
-  value: string
+  value: sortType
 }
 
-export type Model = {
+export type Model<sortType> = {
   searchText: string
-  sort: Sort
+  sort: sortType
+  direction: Direction
 }
 
-export const ModelEq = EqClass.struct<Model>({
+export const ModelEq = EqClass.struct<Model<any>>({
   searchText: S.Eq,
-  sort: SortEq,
+  sort: EqClass.fromEquals((a, b) => a === b),
+  direction: S.Eq as any,
 })
 
-export type Msg =
+export type Msg<sortType> =
   | { _tag: 'ChangeSearchText'; text: string }
-  | { _tag: 'ChangeSort'; sort: Sort }
+  | { _tag: 'ChangeSort'; sort: sortType }
+  | { _tag: 'ChangeDirection'; direction: Direction }
   | { _tag: 'Submit' }
 
-export type Props = {
-  model: Model
-  sortOptions: SearchOption[]
+export type Props<sortType> = {
+  model: Model<sortType>
+  sortOptions: SearchOption<sortType>[]
+  sortToString: (s: sortType) => string
   placeholder?: string
-  dispatch: Dispatcher<Msg>
+  dispatch: Dispatcher<Msg<sortType>>
 }
-
-export const PropsEq = EqClass.struct<Props>({
-  dispatch: { equals: () => true },
-  model: ModelEq,
-  sortOptions: EqClass.fromEquals(
-    (a, b) => JSON.stringify(a) === JSON.stringify(b),
-  ),
-  placeholder: EqClass.fromEquals((a, b) => a === b),
-})

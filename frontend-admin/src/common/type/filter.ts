@@ -15,14 +15,4 @@ export const FilterEq = EqClass.struct<Filter>({
   mode: S.Eq as any,
 })
 
-export type SortDirection = 'asc' | 'desc'
-
-export type Sort = {
-  attr: string
-  direction: SortDirection
-}
-
-export const SortEq = EqClass.struct<Sort>({
-  attr: S.Eq,
-  direction: S.Eq as any,
-})
+export type Direction = 'asc' | 'desc'

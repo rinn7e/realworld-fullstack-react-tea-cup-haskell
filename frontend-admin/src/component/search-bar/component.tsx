@@ -1,14 +1,16 @@
+import * as Eq from 'fp-ts/lib/Eq'
+
 import { memoStrategy } from '@/common/util'
 
-import { type Props, PropsEq } from './type'
+import { type Model, type Msg, type Props } from './type'
 
-const SearchBarComponent = (props: Props) => {
+const SearchBarComponent = <sortType,>(props: Props<sortType>) => {
   return view(props)
 }
 
-const view = (props: Props) => {
+const view = <sortType,>(props: Props<sortType>) => {
   const { model, sortOptions, placeholder = 'Search...', dispatch } = props
-  const { searchText, sort } = model
+  const { searchText, sort, direction } = model
 
   return (
     <div className='flex flex-col gap-[16px] lg:flex-row lg:items-center'>
@@ -77,11 +79,11 @@ const view = (props: Props) => {
           Sort By
         </div>
         <select
-          value={sort.attr}
+          value={sort}
           onChange={(e) =>
             dispatch({
               _tag: 'ChangeSort',
-              sort: { ...sort, attr: e.target.value },
+              sort: e.target.value,
             })
           }
           className='cursor-pointer rounded-[10px] border border-slate-100 bg-slate-50 px-[16px] py-[10px] text-[14px] font-bold text-slate-600 transition-colors outline-none hover:bg-slate-100 dark:border-white/20 dark:bg-black/20 dark:text-white dark:hover:bg-black/40'
@@ -143,6 +145,17 @@ const view = (props: Props) => {
   )
 }
 
-export const SearchBarMemo = memoStrategy(SearchBarComponent, (prev, next) => {
-  return PropsEq.equals(prev, next)
-})
+export const SearchBarMemo = <sortType,>(props: Props<sortType>) => {
+  const equals = Eq.fromEquals<Props<sortType>>((prev, next) => {
+    return (
+      prev.model.searchText === next.model.searchText &&
+      prev.model.sort === next.model.sort &&
+      prev.model.direction === next.model.direction
+    )
+  })
+  return equals.equals(props, props) ? (
+    <SearchBarComponent {...props} />
+  ) : (
+    <SearchBarComponent {...props} />
+  )
+}

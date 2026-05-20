@@ -24,8 +24,8 @@ export const mkPaginationConfig = (
       limit,
       offset,
       ...(model.searchBar.searchText.trim() && { search: model.searchBar.searchText.trim() }),
-      sort: model.searchBar.sort.attr,
-      direction: model.searchBar.sort.direction,
+      sort: model.searchBar.sort,
+      direction: model.searchBar.direction,
     }
 
     return pipe(
