@@ -12,9 +12,7 @@ import Servant
   , (:>)
   )
 
-import Infrastructure.Api.DTO.Dashboard (DashboardStatsResponse, VisitorStatResponse)
-import Infrastructure.Api.DTO.Log (LogLevel, LogListResponse)
-import Infrastructure.Api.DTO.Visitor (VisitorListResponse)
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
 
 data AdminDashboardRoute mode = AdminDashboardRoute
@@ -25,7 +23,7 @@ data AdminDashboardRoute mode = AdminDashboardRoute
           :> Summary "Get Dashboard Stats"
           :> Description "Get dashboard card and visitor metrics"
           :> Tag "Admin Dashboard"
-          :> Get '[JSON] DashboardStatsResponse
+          :> Get '[JSON] Api.DashboardStatsResponse
   , getVisitorStats
       :: mode
         :- "dashboard"
@@ -34,7 +32,7 @@ data AdminDashboardRoute mode = AdminDashboardRoute
           :> Description "Get time-series visitor counts filtered by range (24h, week, month, year)"
           :> Tag "Admin Dashboard"
           :> QueryParam "filter" Text
-          :> Get '[JSON] [VisitorStatResponse]
+          :> Get '[JSON] [Api.VisitorStatResponse]
   , getLogs
       :: mode
         :- "logs"
@@ -43,9 +41,9 @@ data AdminDashboardRoute mode = AdminDashboardRoute
           :> Tag "Admin Dashboard"
           :> QueryParam "limit" Int
           :> QueryParam "offset" Int
-          :> QueryParam "level" LogLevel
+          :> QueryParam "level" Api.LogLevel
           :> QueryParam "source" Text
-          :> Get '[JSON] LogListResponse
+          :> Get '[JSON] Api.LogListResponse
   , getVisitors
       :: mode
         :- "visitors"
@@ -56,6 +54,6 @@ data AdminDashboardRoute mode = AdminDashboardRoute
           :> QueryParam "offset" Int
           :> QueryParam "ip" Text
           :> QueryParam "path" Text
-          :> Get '[JSON] VisitorListResponse
+          :> Get '[JSON] Api.VisitorListResponse
   }
   deriving stock (Generic)

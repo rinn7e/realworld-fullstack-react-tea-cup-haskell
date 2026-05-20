@@ -12,12 +12,7 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Infrastructure.Api.DTO.User
-  ( AdminUserListResponse (..)
-  , AdminUserResponse (..)
-  , UpdateUserRoleRequest (..)
-  , toAdminUserResponse
-  )
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.User.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
@@ -42,16 +37,16 @@ getUsersHandler
   -> Maybe Int
   -> Maybe Text
   -> Maybe Text
-  -> App AdminUserListResponse
+  -> App Api.AdminUserListResponse
 getUsersHandler (S.Authenticated uid) mLimit mOffset mUsername mEmail = do
   guardAdmin uid
   (users, total) <- listUsers mLimit mOffset mUsername mEmail
-  let adminUsers = map toAdminUserResponse users
-  return $ AdminUserListResponse adminUsers total
+  let adminUsers = map Api.toAdminUserResponse users
+  return $ Api.AdminUserListResponse adminUsers total
 getUsersHandler _ _ _ _ _ = throwError S.err401
 
 updateUserRoleHandler
-  :: S.AuthResult DB.UserId -> Int -> UpdateUserRoleRequest -> App AdminUserResponse
+  :: S.AuthResult DB.UserId -> Int -> Api.UpdateUserRoleRequest -> App Api.AdminUserResponse
 updateUserRoleHandler (S.Authenticated uid) targetUidInt req = do
   guardAdmin uid
   let targetUid = D.UserId targetUidInt
@@ -65,7 +60,7 @@ updateUserRoleHandler (S.Authenticated uid) targetUidInt req = do
       let msg = "Updated user role for " <> target.username <> " to " <> req.role
       let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
       _ <- insertLog "INFO" msg "AUTH" now (Just dUid)
-      return $ toAdminUserResponse updatedUser
+      return $ Api.toAdminUserResponse updatedUser
 updateUserRoleHandler _ _ _ = throwError S.err401
 
 deleteUserHandler :: S.AuthResult DB.UserId -> Int -> App S.NoContent

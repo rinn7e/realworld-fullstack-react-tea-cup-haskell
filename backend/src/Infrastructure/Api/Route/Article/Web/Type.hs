@@ -23,12 +23,7 @@ import Servant qualified as S
 import Infrastructure.Api.Route.Comment.Web.Type (CommentRoute)
 import Infrastructure.Api.Route.TagCombinator (Tag)
 
-import Infrastructure.Api.DTO.Article
-  ( ArticleListResponse
-  , ArticleResponse
-  , NewArticleRequest
-  , UpdateArticleRequest
-  )
+import Infrastructure.Api.DTO qualified as Api
 
 data ArticleRoute mode = ArticleRoute
   { getArticleFeed
@@ -40,7 +35,7 @@ data ArticleRoute mode = ArticleRoute
           :> Tag "Articles"
           :> QueryParam "limit" Int
           :> QueryParam "offset" Int
-          :> Get '[JSON] ArticleListResponse
+          :> Get '[JSON] Api.ArticleListResponse
   -- ^ GET /api/articles/feed
   , getArticleList
       :: mode
@@ -53,7 +48,7 @@ data ArticleRoute mode = ArticleRoute
           :> QueryParam "favorited" Text
           :> QueryParam "limit" Int
           :> QueryParam "offset" Int
-          :> Get '[JSON] ArticleListResponse
+          :> Get '[JSON] Api.ArticleListResponse
   -- ^ GET /api/articles
   , createArticle
       :: mode
@@ -61,8 +56,8 @@ data ArticleRoute mode = ArticleRoute
           :> Summary "Create Article"
           :> Description "Create a new article"
           :> Tag "Articles"
-          :> ReqBody '[JSON] NewArticleRequest
-          :> PostCreated '[JSON] ArticleResponse
+          :> ReqBody '[JSON] Api.NewArticleRequest
+          :> PostCreated '[JSON] Api.ArticleResponse
   -- ^ POST /api/articles
   , getArticleOne
       :: mode
@@ -71,7 +66,7 @@ data ArticleRoute mode = ArticleRoute
           :> Summary "Get Article"
           :> Description "Get a single article by slug"
           :> Tag "Articles"
-          :> Get '[JSON] ArticleResponse
+          :> Get '[JSON] Api.ArticleResponse
   -- ^ GET /api/articles/:slug
   , updateArticle
       :: mode
@@ -80,8 +75,8 @@ data ArticleRoute mode = ArticleRoute
           :> Summary "Update Article"
           :> Description "Update an article by slug"
           :> Tag "Articles"
-          :> ReqBody '[JSON] UpdateArticleRequest
-          :> Put '[JSON] ArticleResponse
+          :> ReqBody '[JSON] Api.UpdateArticleRequest
+          :> Put '[JSON] Api.ArticleResponse
   -- ^ PUT /api/articles/:slug
   , deleteArticle
       :: mode
@@ -100,7 +95,7 @@ data ArticleRoute mode = ArticleRoute
           :> Summary "Favorite Article"
           :> Description "Favorite an article by slug"
           :> Tag "Articles"
-          :> Post '[JSON] ArticleResponse
+          :> Post '[JSON] Api.ArticleResponse
   -- ^ POST /api/articles/:slug/favorite
   , unfavoriteArticle
       :: mode
@@ -110,7 +105,7 @@ data ArticleRoute mode = ArticleRoute
           :> Summary "Unfavorite Article"
           :> Description "Unfavorite an article by slug"
           :> Tag "Articles"
-          :> Delete '[JSON] ArticleResponse
+          :> Delete '[JSON] Api.ArticleResponse
   -- ^ DELETE /api/articles/:slug/favorite
   , comments
       :: mode :- "articles" :> Capture "slug" Text :> "comments" :> NamedRoutes CommentRoute

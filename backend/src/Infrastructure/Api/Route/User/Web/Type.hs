@@ -16,7 +16,7 @@ import Servant
   , (:>)
   )
 
-import Infrastructure.Api.DTO.User (ProfileResponse, UpdateUserRequest, UserResponse)
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
 
 data UserRoute mode = UserRoute
@@ -26,7 +26,7 @@ data UserRoute mode = UserRoute
           :> Summary "Get Current User"
           :> Description "Get the currently logged-in user details"
           :> Tag "User"
-          :> Get '[JSON] UserResponse
+          :> Get '[JSON] Api.UserResponse
   -- ^ GET /api/user
   , updateCurrentUser
       :: mode
@@ -34,8 +34,8 @@ data UserRoute mode = UserRoute
           :> Summary "Update Current User"
           :> Description "Update the currently logged-in user details"
           :> Tag "User"
-          :> ReqBody '[JSON] UpdateUserRequest
-          :> Put '[JSON] UserResponse
+          :> ReqBody '[JSON] Api.UpdateUserRequest
+          :> Put '[JSON] Api.UserResponse
   -- ^ PUT /api/user
   , getUserByName
       :: mode
@@ -44,7 +44,7 @@ data UserRoute mode = UserRoute
           :> Summary "Get Profile"
           :> Description "Get a user profile by username"
           :> Tag "Profile"
-          :> Get '[JSON] ProfileResponse
+          :> Get '[JSON] Api.ProfileResponse
   -- ^ GET /api/profiles/:username
   , followUser
       :: mode
@@ -54,7 +54,7 @@ data UserRoute mode = UserRoute
           :> Summary "Follow User"
           :> Description "Follow a user by username"
           :> Tag "Profile"
-          :> Post '[JSON] ProfileResponse
+          :> Post '[JSON] Api.ProfileResponse
   -- ^ POST /api/profiles/:username/follow
   , unfollowUser
       :: mode
@@ -64,7 +64,7 @@ data UserRoute mode = UserRoute
           :> Summary "Unfollow User"
           :> Description "Unfollow a user by username"
           :> Tag "Profile"
-          :> Delete '[JSON] ProfileResponse
+          :> Delete '[JSON] Api.ProfileResponse
   -- ^ DELETE /api/profiles/:username/follow
   }
   deriving stock (Generic)

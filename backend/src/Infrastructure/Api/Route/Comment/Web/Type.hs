@@ -15,11 +15,7 @@ import Servant
   )
 import Servant qualified as S
 
-import Infrastructure.Api.DTO.Comment
-  ( CommentListResponse
-  , CommentResponse
-  , NewCommentRequest
-  )
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
 
 data CommentRoute mode = CommentRoute
@@ -28,15 +24,15 @@ data CommentRoute mode = CommentRoute
         :- Summary "Get Comments"
           :> Description "Get comments for an article"
           :> Tag "Articles"
-          :> Get '[JSON] CommentListResponse
+          :> Get '[JSON] Api.CommentListResponse
   -- ^ GET /api/articles/:slug/comments
   , createComment
       :: mode
         :- Summary "Create Comment"
           :> Description "Create a comment for an article"
           :> Tag "Articles"
-          :> ReqBody '[JSON] NewCommentRequest
-          :> PostCreated '[JSON] CommentResponse
+          :> ReqBody '[JSON] Api.NewCommentRequest
+          :> PostCreated '[JSON] Api.CommentResponse
   -- ^ POST /api/articles/:slug/comments
   , deleteComment
       :: mode

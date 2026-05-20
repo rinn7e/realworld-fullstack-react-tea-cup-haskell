@@ -17,11 +17,7 @@ import Servant
   )
 import Servant qualified as S
 
-import Infrastructure.Api.DTO.User
-  ( AdminUserListResponse (..)
-  , AdminUserResponse (..)
-  , UpdateUserRoleRequest (..)
-  )
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
 
 data AdminUserRoute mode = AdminUserRoute
@@ -35,7 +31,7 @@ data AdminUserRoute mode = AdminUserRoute
           :> QueryParam "offset" Int
           :> QueryParam "username" Text
           :> QueryParam "email" Text
-          :> Get '[JSON] AdminUserListResponse
+          :> Get '[JSON] Api.AdminUserListResponse
   , updateUserRole
       :: mode
         :- "users"
@@ -44,8 +40,8 @@ data AdminUserRoute mode = AdminUserRoute
           :> Summary "Update User Role"
           :> Description "Promote a user to Admin or demote to User"
           :> Tag "Admin Users"
-          :> ReqBody '[JSON] UpdateUserRoleRequest
-          :> Put '[JSON] AdminUserResponse
+          :> ReqBody '[JSON] Api.UpdateUserRoleRequest
+          :> Put '[JSON] Api.AdminUserResponse
   , deleteUser
       :: mode
         :- "users"

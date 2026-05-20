@@ -11,15 +11,8 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Domain.Type (Article (..))
-import Domain.Type qualified as DU
-import Infrastructure.Api.DTO.Article
-  ( ArticleListResponse (..)
-  , ArticleResponse (..)
-  , NewArticleRequest (..)
-  , UpdateArticleRequest (..)
-  , toArticleResponse
-  )
+import Domain.Type qualified as D
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Article.Web.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
@@ -42,15 +35,15 @@ webArticleRoute auth =
     }
 
 getArticleFeedHandler
-  :: S.AuthResult DB.UserId -> Maybe Int -> Maybe Int -> App ArticleListResponse
+  :: S.AuthResult DB.UserId -> Maybe Int -> Maybe Int -> App Api.ArticleListResponse
 getArticleFeedHandler (S.Authenticated uid) mLimit mOffset = do
   let limit = maybe 20 id mLimit
       offset = maybe 0 id mOffset
-      dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
+      dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   articlesDetail <- listFeed dUid limit offset
   totalCount <- countFeed dUid
-  let articles = map toArticleResponse articlesDetail
-  return $ ArticleListResponse articles totalCount
+  let articles = map Api.toArticleResponse articlesDetail
+  return $ Api.ArticleListResponse articles totalCount
 getArticleFeedHandler _ _ _ = throwError S.err401
 
 getArticleListHandler
@@ -60,48 +53,48 @@ getArticleListHandler
   -> Maybe Text
   -> Maybe Int
   -> Maybe Int
-  -> App ArticleListResponse
+  -> App Api.ArticleListResponse
 getArticleListHandler auth mTag mAuthor mFavorited mLimit mOffset = do
   let limit = maybe 20 id mLimit
       offset = maybe 0 id mOffset
       mdUid = case auth of
-        S.Authenticated uid -> Just $ DU.UserId $ fromIntegral (fromSqlKey uid)
+        S.Authenticated uid -> Just $ D.UserId $ fromIntegral (fromSqlKey uid)
         _ -> Nothing
   articlesDetail <- listArticles mdUid mTag mAuthor mFavorited limit offset
   totalCount <- countArticles mTag mAuthor mFavorited
-  let articles = map toArticleResponse articlesDetail
-  return $ ArticleListResponse articles totalCount
+  let articles = map Api.toArticleResponse articlesDetail
+  return $ Api.ArticleListResponse articles totalCount
 
-createArticleHandler :: S.AuthResult DB.UserId -> NewArticleRequest -> App ArticleResponse
-createArticleHandler (S.Authenticated uid) (NewArticleRequest title desc body mTags) = do
+createArticleHandler :: S.AuthResult DB.UserId -> Api.NewArticleRequest -> App Api.ArticleResponse
+createArticleHandler (S.Authenticated uid) (Api.NewArticleRequest title desc body mTags) = do
   let slug = T.intercalate "-" $ T.words $ T.toLower title
       tags = fromMaybe [] mTags
-      dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
+      dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   _ <- createArticle slug title desc body dUid tags
   mArticleDetail <- getArticleWithAuthor (Just dUid) slug
   case mArticleDetail of
-    Just grouped -> return $ ArticleResponse $ toArticleResponse grouped
+    Just grouped -> return $ Api.ArticleResponse $ Api.toArticleResponse grouped
     Nothing -> throwError S.err500
 createArticleHandler _ _ = throwError S.err401
 
-getArticleOneHandler :: S.AuthResult DB.UserId -> Text -> App ArticleResponse
+getArticleOneHandler :: S.AuthResult DB.UserId -> Text -> App Api.ArticleResponse
 getArticleOneHandler auth slug = do
   let mdUid = case auth of
-        S.Authenticated uid -> Just $ DU.UserId $ fromIntegral (fromSqlKey uid)
+        S.Authenticated uid -> Just $ D.UserId $ fromIntegral (fromSqlKey uid)
         _ -> Nothing
   mArticleDetail <- getArticleWithAuthor mdUid slug
   case mArticleDetail of
     Nothing -> throwError S.err404
-    Just grouped -> return $ ArticleResponse $ toArticleResponse grouped
+    Just grouped -> return $ Api.ArticleResponse $ Api.toArticleResponse grouped
 
 updateArticleHandler
-  :: S.AuthResult DB.UserId -> Text -> UpdateArticleRequest -> App ArticleResponse
-updateArticleHandler (S.Authenticated uid) slug (UpdateArticleRequest mTitle mDesc mBody mTags) = do
+  :: S.AuthResult DB.UserId -> Text -> Api.UpdateArticleRequest -> App Api.ArticleResponse
+updateArticleHandler (S.Authenticated uid) slug (Api.UpdateArticleRequest mTitle mDesc mBody mTags) = do
   mArt <- getArticleBySlug slug
   case mArt of
     Nothing -> throwError S.err404
     Just art -> do
-      let dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
+      let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
       if art.authorId /= dUid
         then throwError S.err403
         else do
@@ -112,7 +105,7 @@ updateArticleHandler (S.Authenticated uid) slug (UpdateArticleRequest mTitle mDe
           _ <- updateArticle art.articleId newSlug newTitle newDesc newBody mTags
           mArticleDetail <- getArticleWithAuthor (Just dUid) newSlug
           case mArticleDetail of
-            Just grouped -> return $ ArticleResponse $ toArticleResponse grouped
+            Just grouped -> return $ Api.ArticleResponse $ Api.toArticleResponse grouped
             Nothing -> throwError S.err500
 updateArticleHandler _ _ _ = throwError S.err401
 
@@ -122,7 +115,7 @@ deleteArticleHandler (S.Authenticated uid) slug = do
   case mArt of
     Nothing -> throwError S.err404
     Just art -> do
-      let dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
+      let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
       if art.authorId /= dUid
         then throwError S.err403
         else do
@@ -130,30 +123,30 @@ deleteArticleHandler (S.Authenticated uid) slug = do
           return S.NoContent
 deleteArticleHandler _ _ = throwError S.err401
 
-favoriteArticleHandler :: S.AuthResult DB.UserId -> Text -> App ArticleResponse
+favoriteArticleHandler :: S.AuthResult DB.UserId -> Text -> App Api.ArticleResponse
 favoriteArticleHandler (S.Authenticated uid) slug = do
   mArt <- getArticleBySlug slug
   case mArt of
     Nothing -> throwError S.err404
     Just art -> do
-      let dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
+      let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
       favoriteArticle dUid art.articleId
       mArticleDetail <- getArticleWithAuthor (Just dUid) slug
       case mArticleDetail of
-        Just grouped -> return $ ArticleResponse $ toArticleResponse grouped
+        Just grouped -> return $ Api.ArticleResponse $ Api.toArticleResponse grouped
         Nothing -> throwError S.err500
 favoriteArticleHandler _ _ = throwError S.err401
 
-unfavoriteArticleHandler :: S.AuthResult DB.UserId -> Text -> App ArticleResponse
+unfavoriteArticleHandler :: S.AuthResult DB.UserId -> Text -> App Api.ArticleResponse
 unfavoriteArticleHandler (S.Authenticated uid) slug = do
   mArt <- getArticleBySlug slug
   case mArt of
     Nothing -> throwError S.err404
     Just art -> do
-      let dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
+      let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
       unfavoriteArticle dUid art.articleId
       mArticleDetail <- getArticleWithAuthor (Just dUid) slug
       case mArticleDetail of
-        Just grouped -> return $ ArticleResponse $ toArticleResponse grouped
+        Just grouped -> return $ Api.ArticleResponse $ Api.toArticleResponse grouped
         Nothing -> throwError S.err500
 unfavoriteArticleHandler _ _ = throwError S.err401

@@ -19,17 +19,7 @@ import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
 import Domain.Type (Visitor (..))
-import Infrastructure.Api.DTO.Dashboard
-  ( DashboardStatsResponse (..)
-  , VisitorStatResponse (..)
-  )
-import Infrastructure.Api.DTO.Log
-  ( LogLevel (..)
-  , LogListResponse (..)
-  , logLevelToText
-  , toLogResponse
-  )
-import Infrastructure.Api.DTO.Visitor (VisitorListResponse (..), toVisitorResponse)
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Dashboard.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
@@ -52,7 +42,7 @@ adminDashboardRoute auth =
     , getVisitors = getVisitorsHandler auth
     }
 
-getDashboardStatsHandler :: S.AuthResult DB.UserId -> App DashboardStatsResponse
+getDashboardStatsHandler :: S.AuthResult DB.UserId -> App Api.DashboardStatsResponse
 getDashboardStatsHandler (S.Authenticated uid) = do
   guardAdmin uid
   totalUsers <- listUsers Nothing Nothing Nothing Nothing >>= \(_, c) -> return c
@@ -64,17 +54,17 @@ getDashboardStatsHandler (S.Authenticated uid) = do
   activeVisitors <- getVisitorsSince oneDayAgo
   let activeCount = length activeVisitors
   return
-    DashboardStatsResponse
-      { totalUsers = totalUsers
-      , totalArticles = totalArticles
-      , totalComments = totalComments
-      , totalVisitors = totalVisitors
-      , activeUsers24h = if activeCount == 0 then totalUsers else activeCount
+    Api.DashboardStatsResponse
+      { Api.totalUsers = totalUsers
+      , Api.totalArticles = totalArticles
+      , Api.totalComments = totalComments
+      , Api.totalVisitors = totalVisitors
+      , Api.activeUsers24h = if activeCount == 0 then totalUsers else activeCount
       }
 getDashboardStatsHandler _ = throwError S.err401
 
 getVisitorStatsHandler
-  :: S.AuthResult DB.UserId -> Maybe Text -> App [VisitorStatResponse]
+  :: S.AuthResult DB.UserId -> Maybe Text -> App [Api.VisitorStatResponse]
 getVisitorStatsHandler (S.Authenticated uid) mFilter = do
   guardAdmin uid
   let filterVal = maybe "week" id mFilter
@@ -116,7 +106,7 @@ getVisitorStatsHandler (S.Authenticated uid) mFilter = do
           initMap
           visitors
 
-  let result = map (\b -> VisitorStatResponse b (fromMaybe 0 $ Map.lookup b countsMap)) buckets
+  let result = map (\b -> Api.VisitorStatResponse b (fromMaybe 0 $ Map.lookup b countsMap)) buckets
   return result
 getVisitorStatsHandler _ _ = throwError S.err401
 
@@ -124,20 +114,20 @@ getLogsHandler
   :: S.AuthResult DB.UserId
   -> Maybe Int
   -> Maybe Int
-  -> Maybe LogLevel
+  -> Maybe Api.LogLevel
   -> Maybe Text
-  -> App LogListResponse
+  -> App Api.LogListResponse
 getLogsHandler (S.Authenticated uid) mLimit mOffset mLevel mSource = do
   guardAdmin uid
   let limit = maybe 10 id mLimit
       offset = maybe 0 id mOffset
-      levelText = fmap logLevelToText mLevel
+      levelText = fmap Api.logLevelToText mLevel
   (logs, total) <- listLogs (Just limit) (Just offset) levelText mSource
-  let logResponses = map toLogResponse logs
+  let logResponses = map Api.toLogResponse logs
   return
-    LogListResponse
-      { logs = logResponses
-      , totalCount = total
+    Api.LogListResponse
+      { Api.logs = logResponses
+      , Api.totalCount = total
       }
 getLogsHandler _ _ _ _ _ = throwError S.err401
 
@@ -147,16 +137,16 @@ getVisitorsHandler
   -> Maybe Int
   -> Maybe Text
   -> Maybe Text
-  -> App VisitorListResponse
+  -> App Api.VisitorListResponse
 getVisitorsHandler (S.Authenticated uid) mLimit mOffset mIp mPath = do
   guardAdmin uid
   let limit = maybe 10 id mLimit
       offset = maybe 0 id mOffset
   (visitors, total) <- listVisitors (Just limit) (Just offset) mIp mPath
-  let visitorResponses = map toVisitorResponse visitors
+  let visitorResponses = map Api.toVisitorResponse visitors
   return
-    VisitorListResponse
-      { visitors = visitorResponses
-      , totalCount = total
+    Api.VisitorListResponse
+      { Api.visitors = visitorResponses
+      , Api.totalCount = total
       }
 getVisitorsHandler _ _ _ _ _ = throwError S.err401

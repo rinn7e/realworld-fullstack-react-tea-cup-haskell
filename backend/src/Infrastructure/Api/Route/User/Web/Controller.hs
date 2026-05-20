@@ -14,13 +14,7 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Infrastructure.Api.DTO.User
-  ( Profile (..)
-  , ProfileResponse (..)
-  , UpdateUserRequest (..)
-  , User (..)
-  , UserResponse (..)
-  )
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.User.Web.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
@@ -40,7 +34,7 @@ webUserRoute auth =
     , unfollowUser = unfollowUserHandler auth
     }
 
-getCurrentUserHandler :: S.AuthResult DB.UserId -> App UserResponse
+getCurrentUserHandler :: S.AuthResult DB.UserId -> App Api.UserResponse
 getCurrentUserHandler (S.Authenticated uid) = do
   let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   mUser <- lookupUserById dUid
@@ -48,12 +42,12 @@ getCurrentUserHandler (S.Authenticated uid) = do
     Nothing -> throwError S.err401
     Just u -> do
       token <- generateToken dUid
-      return $ UserResponse $ User u.email token u.username u.bio u.image
+      return $ Api.UserResponse $ Api.User u.email token u.username u.bio u.image
 getCurrentUserHandler _ = throwError S.err401
 
 updateCurrentUserHandler
-  :: S.AuthResult DB.UserId -> UpdateUserRequest -> App UserResponse
-updateCurrentUserHandler (S.Authenticated uid) (UpdateUserRequest mEmail mUsername mPassword mBio mImage) = do
+  :: S.AuthResult DB.UserId -> Api.UpdateUserRequest -> App Api.UserResponse
+updateCurrentUserHandler (S.Authenticated uid) (Api.UpdateUserRequest mEmail mUsername mPassword mBio mImage) = do
   let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   mUser <- lookupUserById dUid
   case mUser of
@@ -73,11 +67,11 @@ updateCurrentUserHandler (S.Authenticated uid) (UpdateUserRequest mEmail mUserna
       _ <- updateUser dUid newUser
       token <- generateToken dUid
       return $
-        UserResponse $
-          User newUser.email token newUser.username newUser.bio newUser.image
+        Api.UserResponse $
+          Api.User newUser.email token newUser.username newUser.bio newUser.image
 updateCurrentUserHandler _ _ = throwError S.err401
 
-getUserByNameHandler :: S.AuthResult DB.UserId -> Text -> App ProfileResponse
+getUserByNameHandler :: S.AuthResult DB.UserId -> Text -> App Api.ProfileResponse
 getUserByNameHandler auth username = do
   mUser <- lookupUserByUsername username
   case mUser of
@@ -88,9 +82,9 @@ getUserByNameHandler auth username = do
           let dCurrentUid = D.UserId $ fromIntegral (fromSqlKey currentUid)
           isFollowing dCurrentUid u.userId
         _ -> return False
-      return $ ProfileResponse $ Profile u.username u.bio u.image isFol
+      return $ Api.ProfileResponse $ Api.Profile u.username u.bio u.image isFol
 
-followUserHandler :: S.AuthResult DB.UserId -> Text -> App ProfileResponse
+followUserHandler :: S.AuthResult DB.UserId -> Text -> App Api.ProfileResponse
 followUserHandler (S.Authenticated currentUid) username = do
   mUser <- lookupUserByUsername username
   case mUser of
@@ -98,10 +92,10 @@ followUserHandler (S.Authenticated currentUid) username = do
     Just u -> do
       let dCurrentUid = D.UserId $ fromIntegral (fromSqlKey currentUid)
       followUser dCurrentUid u.userId
-      return $ ProfileResponse $ Profile u.username u.bio u.image True
+      return $ Api.ProfileResponse $ Api.Profile u.username u.bio u.image True
 followUserHandler _ _ = throwError S.err401
 
-unfollowUserHandler :: S.AuthResult DB.UserId -> Text -> App ProfileResponse
+unfollowUserHandler :: S.AuthResult DB.UserId -> Text -> App Api.ProfileResponse
 unfollowUserHandler (S.Authenticated currentUid) username = do
   mUser <- lookupUserByUsername username
   case mUser of
@@ -109,5 +103,5 @@ unfollowUserHandler (S.Authenticated currentUid) username = do
     Just u -> do
       let dCurrentUid = D.UserId $ fromIntegral (fromSqlKey currentUid)
       unfollowUser dCurrentUid u.userId
-      return $ ProfileResponse $ Profile u.username u.bio u.image False
+      return $ Api.ProfileResponse $ Api.Profile u.username u.bio u.image False
 unfollowUserHandler _ _ = throwError S.err401

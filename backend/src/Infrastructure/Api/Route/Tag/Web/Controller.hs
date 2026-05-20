@@ -6,7 +6,7 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Infrastructure.Api.DTO.Tag (TagListResponse (..))
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Tag.Web.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
@@ -19,7 +19,7 @@ webTagRoute _auth =
     { getTagList = getTagListHandler
     }
 
-getTagListHandler :: App TagListResponse
+getTagListHandler :: App Api.TagListResponse
 getTagListHandler = do
   tags <- getTags
-  return $ TagListResponse tags
+  return $ Api.TagListResponse tags

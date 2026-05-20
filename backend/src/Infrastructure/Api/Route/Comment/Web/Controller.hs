@@ -13,12 +13,7 @@ import Servant.Auth.Server qualified as S
 
 import Domain.Type (Article (..))
 import Domain.Type qualified as D
-import Infrastructure.Api.DTO.Comment
-  ( CommentListResponse (..)
-  , CommentResponse (..)
-  , NewCommentRequest (..)
-  , toCommentDTO
-  )
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Comment.Web.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
@@ -35,7 +30,7 @@ commentRoute auth slug =
     , deleteComment = deleteCommentHandler auth slug
     }
 
-getCommentListHandler :: S.AuthResult DB.UserId -> Text -> App CommentListResponse
+getCommentListHandler :: S.AuthResult DB.UserId -> Text -> App Api.CommentListResponse
 getCommentListHandler auth slug = do
   mArt <- getArticleBySlug slug
   case mArt of
@@ -49,12 +44,12 @@ getCommentListHandler auth slug = do
         isFol <- case mdUid of
           Just dUid -> isFollowing dUid author.userId
           Nothing -> return False
-        return $ toCommentDTO comm author isFol
-      return $ CommentListResponse comments (length comments)
+        return $ Api.toCommentDTO comm author isFol
+      return $ Api.CommentListResponse comments (length comments)
 
 createCommentHandler
-  :: S.AuthResult DB.UserId -> Text -> NewCommentRequest -> App CommentResponse
-createCommentHandler (S.Authenticated uid) slug (NewCommentRequest body) = do
+  :: S.AuthResult DB.UserId -> Text -> Api.NewCommentRequest -> App Api.CommentResponse
+createCommentHandler (S.Authenticated uid) slug (Api.NewCommentRequest body) = do
   mArt <- getArticleBySlug slug
   case mArt of
     Nothing -> throwError S.err404
@@ -64,7 +59,7 @@ createCommentHandler (S.Authenticated uid) slug (NewCommentRequest body) = do
       case mPair of
         Nothing -> throwError S.err500
         Just (comm, author) -> do
-          return $ CommentResponse $ toCommentDTO comm author False
+          return $ Api.CommentResponse $ Api.toCommentDTO comm author False
 createCommentHandler _ _ _ = throwError S.err401
 
 deleteCommentHandler :: S.AuthResult DB.UserId -> Text -> Int -> App S.NoContent

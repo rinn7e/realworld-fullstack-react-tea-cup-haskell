@@ -10,10 +10,7 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Infrastructure.Api.DTO.Comment
-  ( CommentListResponse (..)
-  , toCommentDTOFromDetail
-  )
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Comment.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
@@ -24,8 +21,7 @@ import Capability.Database.LoggerDB
 import Capability.Time
 import Domain.Type qualified as D
 
-adminCommentRoute
-  :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminCommentRoute) App
+adminCommentRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminCommentRoute) App
 adminCommentRoute auth =
   AdminCommentRoute
     { getComments = getCommentsHandler auth
@@ -38,14 +34,14 @@ getCommentsHandler
   -> Maybe Int
   -> Maybe Text
   -> Maybe Text
-  -> App CommentListResponse
+  -> App Api.CommentListResponse
 getCommentsHandler (S.Authenticated uid) mLimit mOffset mAuthor mArticleSlug = do
   guardAdmin uid
   let limit = maybe 10 id mLimit
       offset = maybe 0 id mOffset
   (comments, total) <- listAdminComments mAuthor mArticleSlug limit offset
-  let dtoComments = map toCommentDTOFromDetail comments
-  return $ CommentListResponse dtoComments total
+  let dtoComments = map Api.toCommentDTOFromDetail comments
+  return $ Api.CommentListResponse dtoComments total
 getCommentsHandler _ _ _ _ _ = throwError S.err401
 
 deleteAdminCommentHandler :: S.AuthResult DB.UserId -> Int -> App S.NoContent

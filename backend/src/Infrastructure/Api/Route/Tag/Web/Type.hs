@@ -12,7 +12,7 @@ import Servant
   , (:>)
   )
 
-import Infrastructure.Api.DTO.Tag (TagListResponse)
+import Infrastructure.Api.DTO qualified as Api
 
 data TagRoute mode = TagRoute
   { getTagList
@@ -21,7 +21,7 @@ data TagRoute mode = TagRoute
           :> Summary "Get Tags"
           :> Description "Get a list of all tags"
           :> Tag "Tags"
-          :> Get '[JSON] TagListResponse
+          :> Get '[JSON] Api.TagListResponse
   -- ^ GET /api/tags
   }
   deriving stock (Generic)

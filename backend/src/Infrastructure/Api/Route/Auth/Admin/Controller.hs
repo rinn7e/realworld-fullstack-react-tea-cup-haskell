@@ -11,11 +11,7 @@ import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
 import Domain.Type qualified as D
-import Infrastructure.Api.DTO.User
-  ( LoginUserRequest (..)
-  , User (..)
-  , UserResponse (..)
-  )
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Auth.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
@@ -32,8 +28,8 @@ adminAuthRoute auth =
     , getCurrentAdmin = getCurrentAdminHandler auth
     }
 
-loginAdminHandler :: S.AuthResult DB.UserId -> LoginUserRequest -> App UserResponse
-loginAdminHandler _ (LoginUserRequest email pwd) = do
+loginAdminHandler :: S.AuthResult DB.UserId -> Api.LoginUserRequest -> App Api.UserResponse
+loginAdminHandler _ (Api.LoginUserRequest email pwd) = do
   mUser <- lookupUserByEmail email
   case mUser of
     Nothing -> throwError S.err401{S.errBody = "Invalid email or password"}
@@ -46,9 +42,9 @@ loginAdminHandler _ (LoginUserRequest email pwd) = do
             then throwError S.err403{S.errBody = "Access Denied: Administrator role required"}
             else do
               token <- generateToken u.userId
-              return $ UserResponse $ User u.email token u.username u.bio u.image
+              return $ Api.UserResponse $ Api.User u.email token u.username u.bio u.image
 
-getCurrentAdminHandler :: S.AuthResult DB.UserId -> App UserResponse
+getCurrentAdminHandler :: S.AuthResult DB.UserId -> App Api.UserResponse
 getCurrentAdminHandler (S.Authenticated uid) = do
   guardAdmin uid
   let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
@@ -57,5 +53,5 @@ getCurrentAdminHandler (S.Authenticated uid) = do
     Nothing -> throwError S.err401
     Just (u :: D.User) -> do
       token <- generateToken dUid
-      return $ UserResponse $ User u.email token u.username u.bio u.image
+      return $ Api.UserResponse $ Api.User u.email token u.username u.bio u.image
 getCurrentAdminHandler _ = throwError S.err401

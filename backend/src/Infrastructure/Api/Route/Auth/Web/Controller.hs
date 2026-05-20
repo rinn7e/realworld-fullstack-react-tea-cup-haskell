@@ -10,12 +10,7 @@ import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
 import Domain.Type qualified as D
-import Infrastructure.Api.DTO.User
-  ( LoginUserRequest (..)
-  , NewUserRequest (..)
-  , User (..)
-  , UserResponse (..)
-  )
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Auth.Web.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
@@ -31,8 +26,8 @@ webAuthRoute auth =
     , registerUser = registerUserHandler auth
     }
 
-loginUserHandler :: S.AuthResult DB.UserId -> LoginUserRequest -> App UserResponse
-loginUserHandler _ (LoginUserRequest email pwd) = do
+loginUserHandler :: S.AuthResult DB.UserId -> Api.LoginUserRequest -> App Api.UserResponse
+loginUserHandler _ (Api.LoginUserRequest email pwd) = do
   mUser <- lookupUserByEmail email
   case mUser of
     Nothing -> throwError S.err401{S.errBody = "Invalid email or password"}
@@ -42,11 +37,11 @@ loginUserHandler _ (LoginUserRequest email pwd) = do
         then throwError S.err401{S.errBody = "Invalid email or password"}
         else do
           token <- generateToken u.userId
-          return $ UserResponse $ User u.email token u.username u.bio u.image
+          return $ Api.UserResponse $ Api.User u.email token u.username u.bio u.image
 
-registerUserHandler :: S.AuthResult DB.UserId -> NewUserRequest -> App UserResponse
-registerUserHandler _ (NewUserRequest username email pwd) = do
+registerUserHandler :: S.AuthResult DB.UserId -> Api.NewUserRequest -> App Api.UserResponse
+registerUserHandler _ (Api.NewUserRequest username email pwd) = do
   hashedPwd <- hashPassword pwd
   (newUser :: D.User) <- insertUser username email hashedPwd
   token <- generateToken newUser.userId
-  return $ UserResponse $ User email token username Nothing Nothing
+  return $ Api.UserResponse $ Api.User email token username Nothing Nothing

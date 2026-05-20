@@ -14,7 +14,7 @@ import Servant
   , (:>)
   )
 
-import Infrastructure.Api.DTO.User (LoginUserRequest, NewUserRequest, UserResponse)
+import Infrastructure.Api.DTO qualified as Api
 
 data AuthRoute mode = AuthRoute
   { loginUser
@@ -24,8 +24,8 @@ data AuthRoute mode = AuthRoute
           :> Summary "Login"
           :> Description "Login an existing user"
           :> Tag "Authentication"
-          :> ReqBody '[JSON] LoginUserRequest
-          :> Post '[JSON] UserResponse
+          :> ReqBody '[JSON] Api.LoginUserRequest
+          :> Post '[JSON] Api.UserResponse
   -- ^ POST /api/users/login
   , registerUser
       :: mode
@@ -33,8 +33,8 @@ data AuthRoute mode = AuthRoute
           :> Summary "Register"
           :> Description "Register a new user"
           :> Tag "Authentication"
-          :> ReqBody '[JSON] NewUserRequest
-          :> PostCreated '[JSON] UserResponse
+          :> ReqBody '[JSON] Api.NewUserRequest
+          :> PostCreated '[JSON] Api.UserResponse
   -- ^ POST /api/users
   }
   deriving stock (Generic)

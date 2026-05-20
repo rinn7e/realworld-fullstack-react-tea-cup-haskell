@@ -15,7 +15,7 @@ import Servant
   )
 import Servant qualified as S
 
-import Infrastructure.Api.DTO.Article (AdminArticleListResponse (..))
+import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
 
 data AdminArticleRoute mode = AdminArticleRoute
@@ -30,7 +30,7 @@ data AdminArticleRoute mode = AdminArticleRoute
           :> QueryParam "tag" Text
           :> QueryParam "author" Text
           :> QueryParam "search" Text
-          :> Get '[JSON] AdminArticleListResponse
+          :> Get '[JSON] Api.AdminArticleListResponse
   , deleteArticle
       :: mode
         :- "articles"

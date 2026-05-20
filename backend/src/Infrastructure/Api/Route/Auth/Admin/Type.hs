@@ -13,7 +13,7 @@ import Servant
   , (:>)
   )
 
-import Infrastructure.Api.DTO.User (LoginUserRequest, UserResponse)
+import Infrastructure.Api.DTO qualified as Api
 
 data AdminAuthRoute mode = AdminAuthRoute
   { loginAdmin
@@ -22,14 +22,14 @@ data AdminAuthRoute mode = AdminAuthRoute
           :> Summary "Admin Login"
           :> Description "Login with administrative credentials"
           :> Tag "Admin Authentication"
-          :> ReqBody '[JSON] LoginUserRequest
-          :> Post '[JSON] UserResponse
+          :> ReqBody '[JSON] Api.LoginUserRequest
+          :> Post '[JSON] Api.UserResponse
   , getCurrentAdmin
       :: mode
         :- "user"
           :> Summary "Get Current Admin"
           :> Description "Get currently logged-in administrator details"
           :> Tag "Admin Authentication"
-          :> Get '[JSON] UserResponse
+          :> Get '[JSON] Api.UserResponse
   }
   deriving stock (Generic)
