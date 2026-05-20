@@ -1,4 +1,4 @@
-module Infrastructure.Interpreter.Crypto
+module Infrastructure.Interpreter.Real.Crypto
   ( runCryptoArgon2
   ) where
 

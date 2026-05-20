@@ -5,12 +5,9 @@ module Infrastructure.Api.Article.Web.Controller
 import Data.Map.Append (unAppendMap)
 import Data.Map.Strict qualified as Map
 import Data.Maybe (fromMaybe)
-import Data.Semigroup (First (..))
 import Data.Text (Text)
 import Data.Text qualified as T
-import Database.Persist (Entity (..))
-import Database.Persist.Sql (fromSqlKey, toSqlKey)
-import Effectful
+import Database.Persist.Sql (toSqlKey)
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
@@ -26,11 +23,9 @@ import Infrastructure.Entity.Article.DTO
   )
 import Infrastructure.Api.Article.Web.Type
 import Infrastructure.Common.Type.App (App)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 
 import Capability.Database.ArticleDB
-import Capability.Time
 import Infrastructure.Api.Comment.Web.Controller qualified as Comm
 
 webArticleRoute :: S.AuthResult UserId -> S.ServerT (NamedRoutes ArticleRoute) App

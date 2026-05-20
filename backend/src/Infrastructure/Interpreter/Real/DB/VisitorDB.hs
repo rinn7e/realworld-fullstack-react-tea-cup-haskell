@@ -1,9 +1,7 @@
-module Infrastructure.Interpreter.DB.Postgres.VisitorDB
+module Infrastructure.Interpreter.Real.DB.VisitorDB
   ( runVisitorDBPostgres
   ) where
 
-import Data.Text (Text)
-import Data.Time (UTCTime)
 import Database.Persist
   ( Entity (..)
   , Filter
@@ -14,7 +12,7 @@ import Database.Persist
   , (==.)
   , (>=.)
   )
-import Database.Persist.Sql (ConnectionPool, fromSqlKey, runSqlPool, toSqlKey)
+import Database.Persist.Sql (ConnectionPool, fromSqlKey, runSqlPool)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
@@ -22,7 +20,7 @@ import Effectful.Reader.Static
 import Capability.Database.VisitorDB
 import Domain.Visitor (Visitor)
 import Domain.Visitor qualified as D
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 toDomainVisitor :: Entity DB.Visitor -> Visitor
 toDomainVisitor (Entity vid v) =

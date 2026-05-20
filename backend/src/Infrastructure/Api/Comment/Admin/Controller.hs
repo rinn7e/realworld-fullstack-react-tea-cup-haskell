@@ -4,9 +4,9 @@ module Infrastructure.Api.Comment.Admin.Controller
 
 import Data.Text (Text)
 import Database.Persist.Sql (fromSqlKey, toSqlKey)
-import Effectful
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
+
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
@@ -16,7 +16,7 @@ import Infrastructure.Entity.Comment.DTO
 import Infrastructure.Api.Comment.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (Comment (..), UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (Comment (..), UserId)
 
 import Capability.Database.CommentDB
 import Capability.Database.LoggerDB

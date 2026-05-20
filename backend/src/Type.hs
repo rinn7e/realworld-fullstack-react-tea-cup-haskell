@@ -10,7 +10,6 @@ module Type
 
 import GHC.Generics (Generic)
 import Servant (GenericMode (type (:-)), NamedRoutes, (:<|>), (:>))
-import Servant qualified as S
 import Servant.Auth.Server qualified as S
 import Servant.Swagger.UI (SwaggerSchemaUI)
 
@@ -24,10 +23,7 @@ import Infrastructure.Api.Metadata.Web.Type (MetadataRoute)
 import Infrastructure.Api.Tag.Web.Type (TagRoute)
 import Infrastructure.Api.User.Admin.Type (AdminUserRoute)
 import Infrastructure.Api.User.Web.Type (UserRoute)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
-
-import Infrastructure.Api.TagCombinator (Tag)
-import Infrastructure.Entity.User.DTO (UserResponse)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 
 type AppApi auths = S.Auth auths UserId :> NamedRoutes AppRoute
 

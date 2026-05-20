@@ -5,7 +5,6 @@ module Infrastructure.Api.Auth.Web.Controller
   ) where
 
 import Database.Persist.Sql (toSqlKey)
-import Effectful
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
@@ -20,7 +19,7 @@ import Infrastructure.Entity.User.DTO
   , UserResponse (..)
   )
 import Infrastructure.Common.Type.App (App)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 
 import Capability.Auth
 import Capability.Crypto

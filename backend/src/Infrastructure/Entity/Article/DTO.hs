@@ -35,8 +35,8 @@ import Database.Persist.Sql (Entity (..))
 import GHC.Generics (Generic)
 
 import Infrastructure.Entity.User.DTO (AdminUserResponse (..), Profile (..))
-import Infrastructure.Interpreter.DB.Postgres.Query.ArticleType (ArticleGrouped)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
+import Infrastructure.Interpreter.Real.DB.Query.Article.Type (ArticleGrouped)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 -------------------------------
 -- Article

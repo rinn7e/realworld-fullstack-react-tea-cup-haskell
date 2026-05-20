@@ -1,4 +1,4 @@
-module Infrastructure.Interpreter.Time
+module Infrastructure.Interpreter.Real.Time
   ( runTimeIO
   ) where
 

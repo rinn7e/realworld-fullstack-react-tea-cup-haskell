@@ -1,4 +1,4 @@
-module Infrastructure.Interpreter.Auth
+module Infrastructure.Interpreter.Real.Auth
   ( runAuthJWT
   ) where
 

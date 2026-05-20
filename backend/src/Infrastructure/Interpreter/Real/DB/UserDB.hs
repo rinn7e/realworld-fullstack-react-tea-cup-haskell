@@ -1,11 +1,9 @@
-module Infrastructure.Interpreter.DB.Postgres.UserDB
+module Infrastructure.Interpreter.Real.DB.UserDB
   ( runUserDBPostgres
   ) where
 
-import Data.Text (Text)
 import Database.Persist
   ( Entity (..)
-  , Filter
   , SelectOpt (..)
   , count
   , delete
@@ -20,16 +18,15 @@ import Database.Persist.Sql (ConnectionPool, fromSqlKey, runSqlPool, toSqlKey)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
-import GHC.Generics (Generic)
 
 import Capability.Database.UserDB
 import Domain.User (User)
 import Domain.User qualified as D
-import Infrastructure.Interpreter.DB.Postgres.Query.User
+import Infrastructure.Interpreter.Real.DB.Query.User
   ( getUserByEmail
   , getUserByUsername
   )
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 toDomainUser :: Entity DB.User -> User
 toDomainUser (Entity uid u) =

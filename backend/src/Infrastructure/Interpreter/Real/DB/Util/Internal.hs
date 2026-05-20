@@ -1,4 +1,4 @@
-module Infrastructure.Interpreter.DB.Postgres.Util.Internal where
+module Infrastructure.Interpreter.Real.DB.Util.Internal where
 
 import Data.Char (toLower)
 import Data.Text (Text)

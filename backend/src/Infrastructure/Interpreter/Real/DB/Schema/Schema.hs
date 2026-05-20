@@ -1,4 +1,4 @@
-module Infrastructure.Interpreter.DB.Postgres.Schema.Schema where
+module Infrastructure.Interpreter.Real.DB.Schema.Schema where
 
 import Data.Text (Text)
 import Data.Time (UTCTime)
@@ -6,7 +6,7 @@ import Database.Persist.TH
 import GHC.Generics (Generic)
 import Servant.Auth.Server (FromJWT, ToJWT)
 
-import Infrastructure.Interpreter.DB.Postgres.Util.Internal (stripEntityPrefix)
+import Infrastructure.Interpreter.Real.DB.Util.Internal (stripEntityPrefix)
 
 share
   [ mkPersist

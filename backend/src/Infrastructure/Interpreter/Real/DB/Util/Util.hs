@@ -1,4 +1,4 @@
-module Infrastructure.Interpreter.DB.Postgres.Util.Util where
+module Infrastructure.Interpreter.Real.DB.Util.Util where
 
 import Database.Persist.Sql (SqlPersistT, runSqlPool)
 import Effectful (liftIO)

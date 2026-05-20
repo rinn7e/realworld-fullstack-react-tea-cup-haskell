@@ -9,7 +9,6 @@ import Data.Semigroup (First (..))
 import Data.Text (Text)
 import Database.Persist (Entity (..))
 import Database.Persist.Sql (fromSqlKey, toSqlKey)
-import Effectful
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
@@ -24,9 +23,9 @@ import Infrastructure.Api.Article.Admin.Type
 import Infrastructure.Entity.User.DTO (AdminUserResponse (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Interpreter.DB.Postgres.Query.ArticleType (ArticleGrouped)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
+import Infrastructure.Interpreter.Real.DB.Query.Article.Type (ArticleGrouped)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Database.ArticleDB
 import Capability.Database.LoggerDB

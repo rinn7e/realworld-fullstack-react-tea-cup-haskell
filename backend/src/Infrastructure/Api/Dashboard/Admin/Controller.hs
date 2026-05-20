@@ -7,14 +7,12 @@ import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import Data.Text qualified as T
 import Data.Time
-  ( UTCTime
-  , addUTCTime
+  ( addUTCTime
   , defaultTimeLocale
   , formatTime
   , toGregorian
   , utctDay
   )
-import Effectful
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
@@ -37,7 +35,7 @@ import Infrastructure.Entity.Log.DTO
 import Infrastructure.Entity.Visitor.DTO (VisitorListResponse (..), VisitorResponse (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 
 import Capability.Database.ArticleDB
 import Capability.Database.CommentDB

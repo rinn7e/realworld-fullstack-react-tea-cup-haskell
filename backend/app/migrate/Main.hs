@@ -18,7 +18,7 @@ import Database.Persist.Sql
   , toPersistValue
   )
 import Infrastructure.Common.Type.Config (Config (..), loadConfig)
-import Infrastructure.Interpreter.DB.Postgres.Migration.Migration
+import Infrastructure.Interpreter.Real.DB.Migration.Migration
   ( generateMigration
   , getAppliedMigrations
   , getPendingMigrations
@@ -26,7 +26,7 @@ import Infrastructure.Interpreter.DB.Postgres.Migration.Migration
   , runMigrationUpOne
   , runMigrationsUp
   )
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (migrateAll)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (migrateAll)
 import System.Directory (listDirectory)
 import System.Environment (getArgs)
 import System.Exit (exitFailure, exitSuccess)

@@ -3,7 +3,7 @@ module Capability.Auth where
 import Data.Text (Text)
 import Effectful
 import Effectful.Dispatch.Dynamic
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 
 data Auth :: Effect where
   GenerateToken :: UserId -> Auth m Text

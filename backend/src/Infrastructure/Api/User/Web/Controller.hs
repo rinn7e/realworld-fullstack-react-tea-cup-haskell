@@ -9,7 +9,6 @@ module Infrastructure.Api.User.Web.Controller
 
 import Data.Text (Text)
 import Database.Persist.Sql (fromSqlKey)
-import Effectful
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
@@ -24,7 +23,7 @@ import Infrastructure.Entity.User.DTO
   )
 import Infrastructure.Api.User.Web.Type
 import Infrastructure.Common.Type.App (App)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 
 import Capability.Auth
 import Capability.Crypto

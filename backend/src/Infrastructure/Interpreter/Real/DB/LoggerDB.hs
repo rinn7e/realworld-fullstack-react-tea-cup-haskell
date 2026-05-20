@@ -1,10 +1,8 @@
-module Infrastructure.Interpreter.DB.Postgres.LoggerDB
+module Infrastructure.Interpreter.Real.DB.LoggerDB
   ( runLoggerDBPostgres
   , toDomainLogEntry
   ) where
 
-import Data.Text (Text)
-import Data.Time (UTCTime)
 import Database.Persist
   ( Entity (..)
   , Filter
@@ -22,7 +20,7 @@ import Effectful.Reader.Static
 import Capability.Database.LoggerDB
 import Domain.Log (LogEntry)
 import Domain.Log qualified as D
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 toDomainLogEntry :: Entity DB.Log -> LogEntry
 toDomainLogEntry (Entity lid l) =

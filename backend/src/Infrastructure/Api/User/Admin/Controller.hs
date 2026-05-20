@@ -7,7 +7,6 @@ module Infrastructure.Api.User.Admin.Controller
 
 import Data.Text (Text)
 import Database.Persist.Sql (fromSqlKey)
-import Effectful
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
@@ -21,7 +20,7 @@ import Infrastructure.Entity.User.DTO
 import Infrastructure.Api.User.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 
 import Capability.Database.LoggerDB
 import Capability.Database.UserDB

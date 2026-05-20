@@ -1,40 +1,32 @@
-module Infrastructure.Interpreter.DB.Postgres.ArticleDB
+module Infrastructure.Interpreter.Real.DB.ArticleDB
   ( runArticleDBPostgres
   , toDomainArticle
   ) where
 
-import Data.Map.Append (AppendMap)
-import Data.Ord (Down)
 import Data.Text (Text)
-import Data.Time (UTCTime, getCurrentTime)
+import Data.Time (getCurrentTime)
 import Database.Esqueleto.Experimental (runSqlPool)
 import Database.Persist
   ( Entity (..)
-  , Filter
-  , SelectOpt (..)
-  , count
   , delete
   , deleteWhere
   , get
   , insert
   , insertBy
   , replace
-  , selectList
   , (==.)
   )
-import Database.Persist.Sql (ConnectionPool, SqlPersistT, fromSqlKey, toSqlKey)
+import Database.Persist.Sql (ConnectionPool, SqlPersistT, fromSqlKey)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
-import GHC.Generics (Generic)
 
 import Capability.Database.ArticleDB
 import Domain.Article (Article)
 import Domain.Article qualified as D
-import Infrastructure.Interpreter.DB.Postgres.Query.Article qualified as Q
-import Infrastructure.Interpreter.DB.Postgres.Query.ArticleType (ArticleGrouped)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (ArticleId, UserId)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
+import Infrastructure.Interpreter.Real.DB.Query.Article qualified as Q
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (ArticleId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 toDomainArticle :: Entity DB.Article -> Article
 toDomainArticle (Entity aid a) =

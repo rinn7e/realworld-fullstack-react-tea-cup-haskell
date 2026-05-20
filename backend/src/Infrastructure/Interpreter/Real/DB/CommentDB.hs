@@ -1,8 +1,7 @@
-module Infrastructure.Interpreter.DB.Postgres.CommentDB
+module Infrastructure.Interpreter.Real.DB.CommentDB
   ( runCommentDBPostgres
   ) where
 
-import Data.Text (Text)
 import Data.Traversable (for)
 import Database.Persist
   ( Entity (..)
@@ -20,15 +19,8 @@ import Effectful.Reader.Static
 
 import Capability.Database.CommentDB
 import Infrastructure.Entity.Comment.DTO (AdminCommentResponse (..))
-import Infrastructure.Interpreter.DB.Postgres.Query.Comment qualified as Q
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
-  ( ArticleId
-  , Comment
-  , CommentId
-  , User
-  , UserId
-  )
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
+import Infrastructure.Interpreter.Real.DB.Query.Comment qualified as Q
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 runCommentDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (CommentDB : es) a -> Eff es a

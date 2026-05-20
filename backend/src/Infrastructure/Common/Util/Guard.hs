@@ -5,8 +5,8 @@ import Effectful.Error.Static (throwError)
 import Servant qualified as S
 
 import Infrastructure.Common.Type.App (App)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (User (..), UserId)
-import Infrastructure.Interpreter.DB.Postgres.Util.Util (runDB)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (User (..), UserId)
+import Infrastructure.Interpreter.Real.DB.Util.Util (runDB)
 
 {- | Secure verification guard.
 Queries the user database profile and throws 403 Forbidden if their role is not exactly "Admin".

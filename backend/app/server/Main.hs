@@ -7,7 +7,6 @@ import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Logger (runNoLoggingT, runStdoutLoggingT)
 import Data.ByteString qualified as BS
 import Data.Proxy (Proxy (..))
-import Data.Text qualified as T
 import Database.Persist.Postgresql (createPostgresqlPool)
 import Database.Persist.Sql (getMigration, runSqlPool)
 import Network.Wai (Middleware, Request (..))
@@ -15,7 +14,6 @@ import Network.Wai.Handler.Warp (run)
 import Network.Wai.Middleware.Cors
   ( CorsResourcePolicy (..)
   , cors
-  , simpleCorsResourcePolicy
   )
 import Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import Servant (Context (..))
@@ -24,15 +22,13 @@ import Servant.Auth.Server qualified as S
 
 import Infrastructure.Common.Type.Config (Config (..), loadConfig)
 import Infrastructure.Common.Type.JWK (makeSecretKey)
-import Infrastructure.Interpreter.DB.Postgres.Migration.Migration
-  ( generateMigration
-  , getPendingMigrations
+import Infrastructure.Interpreter.Real.DB.Migration.Migration
+  ( getPendingMigrations
   , runMigrationsUp
   )
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (migrateAll)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema (migrateAll)
 import RunServer (AppEnv (..), FullAPI, runServer)
 import Text.RawString.QQ (r)
-import Type
 
 main :: IO ()
 main = do

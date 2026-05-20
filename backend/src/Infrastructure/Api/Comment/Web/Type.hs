@@ -1,6 +1,5 @@
 module Infrastructure.Api.Comment.Web.Type where
 
-import Data.Text (Text)
 import GHC.Generics (Generic)
 import Servant
   ( Capture

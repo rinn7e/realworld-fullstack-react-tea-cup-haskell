@@ -25,16 +25,16 @@ import Capability.Time (Time)
 
 -- Interpreters
 
-import Infrastructure.Interpreter.Auth (runAuthJWT)
-import Infrastructure.Interpreter.Crypto (runCryptoArgon2)
-import Infrastructure.Interpreter.DB.Postgres.ArticleDB (runArticleDBPostgres)
-import Infrastructure.Interpreter.DB.Postgres.CommentDB (runCommentDBPostgres)
-import Infrastructure.Interpreter.DB.Postgres.LoggerDB (runLoggerDBPostgres)
-import Infrastructure.Interpreter.DB.Postgres.MetadataDB (runMetadataDBPostgres)
-import Infrastructure.Interpreter.DB.Postgres.TagDB (runTagDBPostgres)
-import Infrastructure.Interpreter.DB.Postgres.UserDB (runUserDBPostgres)
-import Infrastructure.Interpreter.DB.Postgres.VisitorDB (runVisitorDBPostgres)
-import Infrastructure.Interpreter.Time (runTimeIO)
+import Infrastructure.Interpreter.Real.Auth (runAuthJWT)
+import Infrastructure.Interpreter.Real.Crypto (runCryptoArgon2)
+import Infrastructure.Interpreter.Real.DB.ArticleDB (runArticleDBPostgres)
+import Infrastructure.Interpreter.Real.DB.CommentDB (runCommentDBPostgres)
+import Infrastructure.Interpreter.Real.DB.LoggerDB (runLoggerDBPostgres)
+import Infrastructure.Interpreter.Real.DB.MetadataDB (runMetadataDBPostgres)
+import Infrastructure.Interpreter.Real.DB.TagDB (runTagDBPostgres)
+import Infrastructure.Interpreter.Real.DB.UserDB (runUserDBPostgres)
+import Infrastructure.Interpreter.Real.DB.VisitorDB (runVisitorDBPostgres)
+import Infrastructure.Interpreter.Real.Time (runTimeIO)
 
 data AppEnv = AppEnv
   { appPool :: ConnectionPool

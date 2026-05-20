@@ -1,4 +1,4 @@
-module Infrastructure.Interpreter.DB.Postgres.Query.Article
+module Infrastructure.Interpreter.Real.DB.Query.Article
   ( getArticleBySlug
   , getArticleBySlugSQL
   , getArticleWithAuthor
@@ -34,9 +34,8 @@ import Database.Esqueleto.Experimental
 import Debug.Trace (traceM)
 import UnliftIO (MonadUnliftIO)
 
-import Infrastructure.Interpreter.DB.Postgres.Query.ArticleType
-import Infrastructure.Interpreter.DB.Postgres.Query.Follow (isFollowing)
-import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
+import Infrastructure.Interpreter.Real.DB.Query.Article.Type
+import Infrastructure.Interpreter.Real.DB.Schema.Schema
 
 getArticleBySlug :: (MonadUnliftIO m) => Text -> SqlPersistT m (Maybe (Entity Article))
 getArticleBySlug slug = selectOne $ getArticleBySlugSQL slug
@@ -64,7 +63,7 @@ getArticleWithAuthorSQL
   -> Text
   -> SqlQuery ArticleExpr
 getArticleWithAuthorSQL mCurrentUserId slug = do
-  (((article :& author) :& articleTag) :& tag) <-
+  (((article :& author) :& _) :& tag) <-
     from $
       table @Article
         `innerJoin` table @User `on` (\(art :& auth) -> art ^. ArticleAuthorId ==. auth ^. UserId)
@@ -109,7 +108,7 @@ listArticlesSQL
   -> Int
   -> SqlQuery ArticleExpr
 listArticlesSQL mCurrentUserId mTag mAuthor mFavorited lim off = do
-  (((article :& author) :& articleTag) :& tag) <-
+  (((article :& author) :& _) :& tag) <-
     from $
       table @Article
         `innerJoin` table @User `on` (\(art :& auth) -> art ^. ArticleAuthorId ==. auth ^. UserId)
@@ -154,7 +153,7 @@ listFeedSQL
   -> Int
   -> SqlQuery ArticleExpr
 listFeedSQL currentUserId lim off = do
-  (((article :& author) :& articleTag) :& tag) <-
+  (((article :& author) :& _) :& tag) <-
     from $
       table @Article
         `innerJoin` table @User `on` (\(art :& auth) -> art ^. ArticleAuthorId ==. auth ^. UserId)
@@ -240,7 +239,7 @@ countArticles mTag mAuthor mFavorited = do
 countFeed :: (MonadUnliftIO m) => UserId -> SqlPersistT m Int
 countFeed currentUserId = do
   res <- select $ do
-    ((article :& author) :& follow) <-
+    ((_ :& _) :& follow) <-
       from $
         table @Article
           `innerJoin` table @User `on` (\(art :& auth) -> art ^. ArticleAuthorId ==. auth ^. UserId)
@@ -259,7 +258,7 @@ feedArticlesIdsSQL
   -> Int
   -> SqlQuery (SqlExpr (Value ArticleId))
 feedArticlesIdsSQL currentUserId lim off = do
-  ((article :& author) :& follow) <-
+  ((article :& _) :& follow) <-
     from $
       table @Article
         `innerJoin` table @User `on` (\(art :& auth) -> art ^. ArticleAuthorId ==. auth ^. UserId)
@@ -330,7 +329,7 @@ listAdminArticles
   -> SqlPersistT IO (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
 listAdminArticles mTag mAuthor mSearch lim off = do
   result <- select $ do
-    (((article :& author) :& articleTag) :& tag) <-
+    (((article :& author) :& _) :& tag) <-
       from $
         table @Article
           `innerJoin` table @User `on` (\(art :& auth) -> art ^. ArticleAuthorId ==. auth ^. UserId)
