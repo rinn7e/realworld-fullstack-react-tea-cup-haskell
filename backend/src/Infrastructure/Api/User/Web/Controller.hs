@@ -23,14 +23,14 @@ import Infrastructure.Entity.User.DTO
   )
 import Infrastructure.Api.User.Web.Type
 import Infrastructure.Common.Type.App (App)
-import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Auth
 import Capability.Crypto
 import Capability.Database.UserDB
 import Domain.User qualified as D
 
-webUserRoute :: S.AuthResult UserId -> S.ServerT (NamedRoutes UserRoute) App
+webUserRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes UserRoute) App
 webUserRoute auth =
   UserRoute
     { getCurrentUser = getCurrentUserHandler auth
@@ -40,21 +40,21 @@ webUserRoute auth =
     , unfollowUser = unfollowUserHandler auth
     }
 
-getCurrentUserHandler :: S.AuthResult UserId -> App UserResponse
+getCurrentUserHandler :: S.AuthResult DB.UserId -> App UserResponse
 getCurrentUserHandler (S.Authenticated uid) = do
-  let uidInt = fromIntegral (fromSqlKey uid)
-  mUser <- lookupUserById uidInt
+  let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
+  mUser <- lookupUserById dUid
   case mUser of
     Nothing -> throwError S.err401
     Just u -> do
-      token <- generateToken uid
+      token <- generateToken dUid
       return $ UserResponse $ User u.email token u.username u.bio u.image
 getCurrentUserHandler _ = throwError S.err401
 
-updateCurrentUserHandler :: S.AuthResult UserId -> UpdateUserRequest -> App UserResponse
+updateCurrentUserHandler :: S.AuthResult DB.UserId -> UpdateUserRequest -> App UserResponse
 updateCurrentUserHandler (S.Authenticated uid) (UpdateUserRequest mEmail mUsername mPassword mBio mImage) = do
-  let uidInt = fromIntegral (fromSqlKey uid)
-  mUser <- lookupUserById uidInt
+  let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
+  mUser <- lookupUserById dUid
   case mUser of
     Nothing -> throwError S.err401
     Just u -> do
@@ -69,14 +69,14 @@ updateCurrentUserHandler (S.Authenticated uid) (UpdateUserRequest mEmail mUserna
               , D.bio = maybe u.bio Just mBio
               , D.image = maybe u.image Just mImage
               }
-      _ <- updateUser uidInt newUser
-      token <- generateToken uid
+      _ <- updateUser dUid newUser
+      token <- generateToken dUid
       return $
         UserResponse $
           User newUser.email token newUser.username newUser.bio newUser.image
 updateCurrentUserHandler _ _ = throwError S.err401
 
-getUserByNameHandler :: S.AuthResult UserId -> Text -> App ProfileResponse
+getUserByNameHandler :: S.AuthResult DB.UserId -> Text -> App ProfileResponse
 getUserByNameHandler auth username = do
   mUser <- lookupUserByUsername username
   case mUser of
@@ -84,29 +84,29 @@ getUserByNameHandler auth username = do
     Just u -> do
       isFol <- case auth of
         S.Authenticated currentUid -> do
-          let currentUidInt = fromIntegral (fromSqlKey currentUid)
-          isFollowing currentUidInt u.userId
+          let dCurrentUid = D.UserId $ fromIntegral (fromSqlKey currentUid)
+          isFollowing dCurrentUid u.userId
         _ -> return False
       return $ ProfileResponse $ Profile u.username u.bio u.image isFol
 
-followUserHandler :: S.AuthResult UserId -> Text -> App ProfileResponse
+followUserHandler :: S.AuthResult DB.UserId -> Text -> App ProfileResponse
 followUserHandler (S.Authenticated currentUid) username = do
   mUser <- lookupUserByUsername username
   case mUser of
     Nothing -> throwError S.err404{S.errBody = "User not found"}
     Just u -> do
-      let currentUidInt = fromIntegral (fromSqlKey currentUid)
-      followUser currentUidInt u.userId
+      let dCurrentUid = D.UserId $ fromIntegral (fromSqlKey currentUid)
+      followUser dCurrentUid u.userId
       return $ ProfileResponse $ Profile u.username u.bio u.image True
 followUserHandler _ _ = throwError S.err401
 
-unfollowUserHandler :: S.AuthResult UserId -> Text -> App ProfileResponse
+unfollowUserHandler :: S.AuthResult DB.UserId -> Text -> App ProfileResponse
 unfollowUserHandler (S.Authenticated currentUid) username = do
   mUser <- lookupUserByUsername username
   case mUser of
     Nothing -> throwError S.err404{S.errBody = "User not found"}
     Just u -> do
-      let currentUidInt = fromIntegral (fromSqlKey currentUid)
-      unfollowUser currentUidInt u.userId
+      let dCurrentUid = D.UserId $ fromIntegral (fromSqlKey currentUid)
+      unfollowUser dCurrentUid u.userId
       return $ ProfileResponse $ Profile u.username u.bio u.image False
 unfollowUserHandler _ _ = throwError S.err401

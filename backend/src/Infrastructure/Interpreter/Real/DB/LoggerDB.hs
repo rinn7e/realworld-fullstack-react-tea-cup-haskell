@@ -22,27 +22,29 @@ import Domain.Log (LogEntry)
 import Domain.Log qualified as D
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
+import Domain.User qualified as DU
+
 toDomainLogEntry :: Entity DB.Log -> LogEntry
 toDomainLogEntry (Entity lid l) =
   D.LogEntry
-    { logId = fromIntegral (fromSqlKey lid)
+    { logId = D.LogId $ fromIntegral (fromSqlKey lid)
     , level = l.level
     , message = l.message
     , source = l.source
     , timestamp = l.timestamp
-    , userId = fmap (fromIntegral . fromSqlKey) l.userId
+    , userId = fmap (DU.UserId . fromIntegral . fromSqlKey) l.userId
     }
 
 runLoggerDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (LoggerDB : es) a -> Eff es a
 runLoggerDBPostgres = interpret $ \_ -> \case
-  InsertLog level message source timestamp mUidInt -> do
+  InsertLog level message source timestamp mUid -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
         ( do
-            let mUid = fmap (toSqlKey . fromIntegral) mUidInt
-                l = DB.Log level message source timestamp mUid
+            let mSqlUid = fmap (toSqlKey . fromIntegral . (.unUserId)) mUid
+                l = DB.Log level message source timestamp mSqlUid
             lid <- insert l
             return $ toDomainLogEntry (Entity lid l)
         )

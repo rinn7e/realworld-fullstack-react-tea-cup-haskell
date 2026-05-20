@@ -1,22 +1,16 @@
 module Capability.Database.CommentDB where
 
 import Data.Text (Text)
-import Database.Persist.Sql (Entity)
+import Domain.Article (ArticleId)
+import Domain.Comment (AdminCommentResponse, Comment, CommentId)
+import Domain.User (User, UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
-import Infrastructure.Entity.Comment.DTO (AdminCommentResponse)
-import Infrastructure.Interpreter.Real.DB.Schema.Schema
-  ( ArticleId
-  , Comment
-  , CommentId
-  , User
-  , UserId
-  )
 
 data CommentDB :: Effect where
-  GetCommentsForArticle :: ArticleId -> CommentDB m [(Entity Comment, Entity User)]
+  GetCommentsForArticle :: ArticleId -> CommentDB m [(Comment, User)]
   InsertComment
-    :: ArticleId -> UserId -> Text -> CommentDB m (Maybe (Entity Comment, Entity User))
+    :: ArticleId -> UserId -> Text -> CommentDB m (Maybe (Comment, User))
   DeleteComment :: CommentId -> CommentDB m ()
   GetComment :: CommentId -> CommentDB m (Maybe Comment)
   ListAdminComments
@@ -25,7 +19,7 @@ data CommentDB :: Effect where
 type instance DispatchOf CommentDB = 'Dynamic
 
 getCommentsForArticle
-  :: (CommentDB :> es) => ArticleId -> Eff es [(Entity Comment, Entity User)]
+  :: (CommentDB :> es) => ArticleId -> Eff es [(Comment, User)]
 getCommentsForArticle aid = send (GetCommentsForArticle aid)
 
 insertComment
@@ -33,7 +27,7 @@ insertComment
   => ArticleId
   -> UserId
   -> Text
-  -> Eff es (Maybe (Entity Comment, Entity User))
+  -> Eff es (Maybe (Comment, User))
 insertComment aid uid body = send (InsertComment aid uid body)
 
 deleteComment :: (CommentDB :> es) => CommentId -> Eff es ()

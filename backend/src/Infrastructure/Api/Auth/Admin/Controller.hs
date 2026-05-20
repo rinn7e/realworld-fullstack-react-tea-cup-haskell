@@ -4,7 +4,7 @@ module Infrastructure.Api.Auth.Admin.Controller
   , getCurrentAdminHandler
   ) where
 
-import Database.Persist.Sql (fromSqlKey, toSqlKey)
+import Database.Persist.Sql (fromSqlKey)
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
@@ -19,20 +19,20 @@ import Infrastructure.Entity.User.DTO
   )
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Auth
 import Capability.Crypto
 import Capability.Database.UserDB
 
-adminAuthRoute :: S.AuthResult UserId -> S.ServerT (NamedRoutes AdminAuthRoute) App
+adminAuthRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminAuthRoute) App
 adminAuthRoute auth =
   AdminAuthRoute
     { loginAdmin = loginAdminHandler auth
     , getCurrentAdmin = getCurrentAdminHandler auth
     }
 
-loginAdminHandler :: S.AuthResult UserId -> LoginUserRequest -> App UserResponse
+loginAdminHandler :: S.AuthResult DB.UserId -> LoginUserRequest -> App UserResponse
 loginAdminHandler _ (LoginUserRequest email pwd) = do
   mUser <- lookupUserByEmail email
   case mUser of
@@ -45,18 +45,17 @@ loginAdminHandler _ (LoginUserRequest email pwd) = do
           if u.role /= "Admin"
             then throwError S.err403{S.errBody = "Access Denied: Administrator role required"}
             else do
-              let uid = toSqlKey (fromIntegral u.userId)
-              token <- generateToken uid
+              token <- generateToken u.userId
               return $ UserResponse $ User u.email token u.username u.bio u.image
 
-getCurrentAdminHandler :: S.AuthResult UserId -> App UserResponse
+getCurrentAdminHandler :: S.AuthResult DB.UserId -> App UserResponse
 getCurrentAdminHandler (S.Authenticated uid) = do
   guardAdmin uid
-  let uidInt = fromIntegral (fromSqlKey uid)
-  mUser <- lookupUserById uidInt
+  let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
+  mUser <- lookupUserById dUid
   case mUser of
     Nothing -> throwError S.err401
     Just (u :: D.User) -> do
-      token <- generateToken uid
+      token <- generateToken dUid
       return $ UserResponse $ User u.email token u.username u.bio u.image
 getCurrentAdminHandler _ = throwError S.err401

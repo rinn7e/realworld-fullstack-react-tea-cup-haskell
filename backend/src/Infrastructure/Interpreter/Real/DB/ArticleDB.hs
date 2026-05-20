@@ -3,12 +3,15 @@ module Infrastructure.Interpreter.Real.DB.ArticleDB
   , toDomainArticle
   ) where
 
+import Data.Map.Append (AppendMap (..), unAppendMap)
+import Data.Map.Strict qualified as Map
+import Data.Ord (Down)
+import Data.Semigroup (First (..))
 import Data.Text (Text)
 import Data.Time (getCurrentTime)
-import Database.Esqueleto.Experimental (runSqlPool)
+import Database.Esqueleto.Experimental (Entity (..), runSqlPool)
 import Database.Persist
-  ( Entity (..)
-  , delete
+  ( delete
   , deleteWhere
   , get
   , insert
@@ -16,7 +19,7 @@ import Database.Persist
   , replace
   , (==.)
   )
-import Database.Persist.Sql (ConnectionPool, SqlPersistT, fromSqlKey)
+import Database.Persist.Sql (ConnectionPool, SqlPersistT, fromSqlKey, toSqlKey)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
@@ -24,24 +27,45 @@ import Effectful.Reader.Static
 import Capability.Database.ArticleDB
 import Domain.Article (Article)
 import Domain.Article qualified as D
+import Domain.Tag qualified as DT
+import Domain.User qualified as DU
 import Infrastructure.Interpreter.Real.DB.Query.Article qualified as Q
-import Infrastructure.Interpreter.Real.DB.Schema.Schema (ArticleId)
+import Infrastructure.Interpreter.Real.DB.Query.Article.Type (InfrastructureArticleGrouped)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
+import Infrastructure.Interpreter.Real.DB.UserDB (toDomainUser)
 
 toDomainArticle :: Entity DB.Article -> Article
 toDomainArticle (Entity aid a) =
   D.Article
-    { articleId = fromIntegral (fromSqlKey aid)
+    { articleId = D.ArticleId $ fromIntegral (fromSqlKey aid)
     , slug = a.slug
     , title = a.title
     , description = a.description
     , body = a.body
-    , authorId = fromIntegral (fromSqlKey a.authorId)
+    , authorId = DU.UserId $ fromIntegral (fromSqlKey a.authorId)
     , createdAt = a.createdAt
     , updatedAt = a.updatedAt
     }
 
-ensureTag :: ArticleId -> Text -> SqlPersistT IO ()
+toDomainTag :: Entity DB.Tag -> DT.Tag
+toDomainTag (Entity tid t) =
+  DT.Tag
+    { tagId = DT.TagId $ fromIntegral (fromSqlKey tid)
+    , name = t.name
+    }
+
+toDomainArticleGrouped :: InfrastructureArticleGrouped -> D.ArticleGrouped
+toDomainArticleGrouped (First art, First auth, tagsMap, (First favCount, First isFav, First isFol)) =
+  D.ArticleGrouped
+    { article = First $ toDomainArticle art
+    , author = First $ toDomainUser auth
+    , tags = map (toDomainTag . getFirst) $ Map.elems $ unAppendMap tagsMap
+    , favoritesCount = First $ maybe 0 id favCount
+    , isFavorited = First isFav
+    , isFollowingAuthor = First isFol
+    }
+
+ensureTag :: DB.ArticleId -> Text -> SqlPersistT IO ()
 ensureTag aid tagName = do
   tid <- do
     res <- insertBy (DB.Tag tagName)
@@ -65,24 +89,33 @@ runArticleDBPostgres = interpret $ \_ -> \case
         pool
   GetArticleWithAuthor mCurrentUserId slug -> do
     pool <- ask @ConnectionPool
-    liftIO $ runSqlPool (Q.getArticleWithAuthor mCurrentUserId slug) pool
-  CreateArticle slug title desc body authorId tags -> do
+    liftIO $
+      runSqlPool
+        ( do
+            let sqlUserId = fmap (\(DU.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
+            mArtGrp <- Q.getArticleWithAuthor sqlUserId slug
+            return $ fmap toDomainArticleGrouped mArtGrp
+        )
+        pool
+  CreateArticle slug title desc body (DU.UserId authorIdInt) tags -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
         ( do
             now <- liftIO getCurrentTime
-            let art = DB.Article slug title desc body authorId now now
+            let sqlAuthorId = toSqlKey (fromIntegral authorIdInt)
+            let art = DB.Article slug title desc body sqlAuthorId now now
             aid <- insert art
             mapM_ (ensureTag aid) tags
             return $ toDomainArticle (Entity aid art)
         )
         pool
-  UpdateArticle aid newSlug newTitle newDesc newBody mTags -> do
+  UpdateArticle (D.ArticleId aidInt) newSlug newTitle newDesc newBody mTags -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
         ( do
+            let aid = toSqlKey (fromIntegral aidInt)
             mArt <- get aid
             case mArt of
               Nothing -> error "Article not found"
@@ -105,11 +138,12 @@ runArticleDBPostgres = interpret $ \_ -> \case
                 return $ toDomainArticle (Entity aid updatedArt)
         )
         pool
-  DeleteArticle aid -> do
+  DeleteArticle (D.ArticleId aidInt) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
         ( do
+            let aid = toSqlKey (fromIntegral aidInt)
             deleteWhere [DB.ArticleTagArticleId ==. aid]
             deleteWhere [DB.CommentArticleId ==. aid]
             deleteWhere [DB.FavoriteArticleId ==. aid]
@@ -118,39 +152,67 @@ runArticleDBPostgres = interpret $ \_ -> \case
         pool
   ListArticles mCurrentUserId mTag mAuthor mFavorited lim off -> do
     pool <- ask @ConnectionPool
-    liftIO $ runSqlPool (Q.listArticles mCurrentUserId mTag mAuthor mFavorited lim off) pool
-  ListFeed currentUserId lim off -> do
+    liftIO $
+      runSqlPool
+        ( do
+            let sqlUserId = fmap (\(DU.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
+            res <- Q.listArticles sqlUserId mTag mAuthor mFavorited lim off
+            return $ AppendMap $ Map.mapKeys (\(d, k) -> (d, D.ArticleId $ fromIntegral (fromSqlKey k))) $ Map.map toDomainArticleGrouped $ unAppendMap res
+        )
+        pool
+  ListFeed (DU.UserId currentUserIdInt) lim off -> do
     pool <- ask @ConnectionPool
-    liftIO $ runSqlPool (Q.listFeed currentUserId lim off) pool
+    liftIO $
+      runSqlPool
+        ( do
+            let sqlUserId = toSqlKey (fromIntegral currentUserIdInt)
+            res <- Q.listFeed sqlUserId lim off
+            return $ AppendMap $ Map.mapKeys (\(d, k) -> (d, D.ArticleId $ fromIntegral (fromSqlKey k))) $ Map.map toDomainArticleGrouped $ unAppendMap res
+        )
+        pool
   CountArticles mTag mAuthor mFavorited -> do
     pool <- ask @ConnectionPool
     liftIO $ runSqlPool (Q.countArticles mTag mAuthor mFavorited) pool
-  CountFeed currentUserId -> do
-    pool <- ask @ConnectionPool
-    liftIO $ runSqlPool (Q.countFeed currentUserId) pool
-  FavoriteArticle uid aid -> do
+  CountFeed (DU.UserId currentUserIdInt) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
         ( do
-            _ <- insertBy (DB.Favorite uid aid)
+            let sqlUserId = toSqlKey (fromIntegral currentUserIdInt)
+            Q.countFeed sqlUserId
+        )
+        pool
+  FavoriteArticle (DU.UserId uidInt) (D.ArticleId aidInt) -> do
+    ask @ConnectionPool >>= \pool -> liftIO $
+      runSqlPool
+        ( do
+            let sqlUid = toSqlKey (fromIntegral uidInt)
+            let sqlAid = toSqlKey (fromIntegral aidInt)
+            _ <- insertBy (DB.Favorite sqlUid sqlAid)
             return ()
         )
         pool
-  UnfavoriteArticle uid aid -> do
-    pool <- ask @ConnectionPool
-    liftIO $
+  UnfavoriteArticle (DU.UserId uidInt) (D.ArticleId aidInt) -> do
+    ask @ConnectionPool >>= \pool -> liftIO $
       runSqlPool
         ( do
+            let sqlUid = toSqlKey (fromIntegral uidInt)
+            let sqlAid = toSqlKey (fromIntegral aidInt)
             deleteWhere
-              [ DB.FavoriteUserId ==. uid
-              , DB.FavoriteArticleId ==. aid
+              [ DB.FavoriteUserId ==. sqlUid
+              , DB.FavoriteArticleId ==. sqlAid
               ]
         )
         pool
   ListAdminArticles mTag mAuthor mSearch lim off -> do
     pool <- ask @ConnectionPool
-    liftIO $ runSqlPool (Q.listAdminArticles mTag mAuthor mSearch lim off) pool
+    liftIO $
+      runSqlPool
+        ( do
+            res <- Q.listAdminArticles mTag mAuthor mSearch lim off
+            return $ AppendMap $ Map.mapKeys (\(d, k) -> (d, D.ArticleId $ fromIntegral (fromSqlKey k))) $ Map.map toDomainArticleGrouped $ unAppendMap res
+        )
+        pool
   CountAdminArticles mTag mAuthor mSearch -> do
     pool <- ask @ConnectionPool
     liftIO $ runSqlPool (Q.countAdminArticles mTag mAuthor mSearch) pool

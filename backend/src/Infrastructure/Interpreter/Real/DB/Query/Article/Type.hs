@@ -30,7 +30,7 @@ type ArticleRow =
   )
 
 -- | Grouped level (aggregated data for API response)
-type ArticleGrouped =
+type InfrastructureArticleGrouped =
   ( First (Entity Article)
   , First (Entity User)
   , AppendMap TagId (First (Entity Tag))
@@ -40,8 +40,8 @@ type ArticleGrouped =
     )
   )
 
-mkArticleGrouped :: ArticleRow -> AppendMap (Down UTCTime, ArticleId) ArticleGrouped
-mkArticleGrouped (art, auth, mTag, Value favCount, Value isFav, Value isFol) =
+mkInfrastructureArticleGrouped :: ArticleRow -> AppendMap (Down UTCTime, ArticleId) InfrastructureArticleGrouped
+mkInfrastructureArticleGrouped (art, auth, mTag, Value favCount, Value isFav, Value isFol) =
   AppendMap $
     Map.singleton
       (Down art.entityVal.createdAt, art.entityKey)

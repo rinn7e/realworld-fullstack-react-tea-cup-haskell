@@ -20,14 +20,15 @@ import Infrastructure.Entity.User.DTO
 import Infrastructure.Api.User.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
+import Capability.Auth
 import Capability.Database.LoggerDB
 import Capability.Database.UserDB
 import Capability.Time
 import Domain.User qualified as D
 
-adminUserRoute :: S.AuthResult UserId -> S.ServerT (NamedRoutes AdminUserRoute) App
+adminUserRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminUserRoute) App
 adminUserRoute auth =
   AdminUserRoute
     { getUsers = getUsersHandler auth
@@ -38,7 +39,7 @@ adminUserRoute auth =
 toAdminUserResponse :: D.User -> AdminUserResponse
 toAdminUserResponse u =
   AdminUserResponse
-    { id = u.userId
+    { id = u.userId.unUserId
     , username = u.username
     , email = u.email
     , bio = u.bio
@@ -47,7 +48,7 @@ toAdminUserResponse u =
     }
 
 getUsersHandler
-  :: S.AuthResult UserId
+  :: S.AuthResult DB.UserId
   -> Maybe Int
   -> Maybe Int
   -> Maybe Text
@@ -61,31 +62,35 @@ getUsersHandler (S.Authenticated uid) mLimit mOffset mUsername mEmail = do
 getUsersHandler _ _ _ _ _ = throwError S.err401
 
 updateUserRoleHandler
-  :: S.AuthResult UserId -> Int -> UpdateUserRoleRequest -> App AdminUserResponse
+  :: S.AuthResult DB.UserId -> Int -> UpdateUserRoleRequest -> App AdminUserResponse
 updateUserRoleHandler (S.Authenticated uid) targetUidInt req = do
   guardAdmin uid
-  mTarget <- lookupUserById targetUidInt
+  let targetUid = D.UserId targetUidInt
+  mTarget <- lookupUserById targetUid
   case mTarget of
     Nothing -> throwError S.err404
     Just target -> do
       now <- getCurrentTime
       let updatedUser = target{D.role = req.role}
-      _ <- updateUser targetUidInt updatedUser
+      _ <- updateUser targetUid updatedUser
       let msg = "Updated user role for " <> target.username <> " to " <> req.role
-      _ <- insertLog "INFO" msg "AUTH" now (Just (fromIntegral (fromSqlKey uid)))
+      let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
+      _ <- insertLog "INFO" msg "AUTH" now (Just dUid)
       return $ toAdminUserResponse updatedUser
 updateUserRoleHandler _ _ _ = throwError S.err401
 
-deleteUserHandler :: S.AuthResult UserId -> Int -> App S.NoContent
+deleteUserHandler :: S.AuthResult DB.UserId -> Int -> App S.NoContent
 deleteUserHandler (S.Authenticated uid) targetUidInt = do
   guardAdmin uid
-  mTarget <- lookupUserById targetUidInt
+  let targetUid = D.UserId targetUidInt
+  mTarget <- lookupUserById targetUid
   case mTarget of
     Nothing -> throwError S.err404
     Just target -> do
       now <- getCurrentTime
-      deleteUser targetUidInt
+      deleteUser targetUid
       let msg = "Deleted user account: " <> target.username
-      _ <- insertLog "INFO" msg "AUTH" now (Just (fromIntegral (fromSqlKey uid)))
+      let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
+      _ <- insertLog "INFO" msg "AUTH" now (Just dUid)
       return S.NoContent
 deleteUserHandler _ _ = throwError S.err401

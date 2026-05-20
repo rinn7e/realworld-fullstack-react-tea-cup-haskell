@@ -18,8 +18,9 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Domain.Log (LogEntry (..))
-import Domain.Visitor (Visitor (..))
+import Domain.Log (LogEntry (..), LogId (..))
+import Domain.User qualified as DU
+import Domain.Visitor (Visitor (..), VisitorId (..))
 import Infrastructure.Api.Dashboard.Admin.Type
 import Infrastructure.Entity.Dashboard.DTO
   ( DashboardStatsResponse (..)
@@ -35,7 +36,7 @@ import Infrastructure.Entity.Log.DTO
 import Infrastructure.Entity.Visitor.DTO (VisitorListResponse (..), VisitorResponse (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Database.ArticleDB
 import Capability.Database.CommentDB
@@ -45,7 +46,7 @@ import Capability.Database.VisitorDB
 import Capability.Time
 
 adminDashboardRoute
-  :: S.AuthResult UserId -> S.ServerT (NamedRoutes AdminDashboardRoute) App
+  :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminDashboardRoute) App
 adminDashboardRoute auth =
   AdminDashboardRoute
     { getDashboardStats = getDashboardStatsHandler auth
@@ -54,7 +55,7 @@ adminDashboardRoute auth =
     , getVisitors = getVisitorsHandler auth
     }
 
-getDashboardStatsHandler :: S.AuthResult UserId -> App DashboardStatsResponse
+getDashboardStatsHandler :: S.AuthResult DB.UserId -> App DashboardStatsResponse
 getDashboardStatsHandler (S.Authenticated uid) = do
   guardAdmin uid
   totalUsers <- listUsers Nothing Nothing Nothing Nothing >>= \(_, c) -> return c
@@ -75,7 +76,7 @@ getDashboardStatsHandler (S.Authenticated uid) = do
       }
 getDashboardStatsHandler _ = throwError S.err401
 
-getVisitorStatsHandler :: S.AuthResult UserId -> Maybe Text -> App [VisitorStatResponse]
+getVisitorStatsHandler :: S.AuthResult DB.UserId -> Maybe Text -> App [VisitorStatResponse]
 getVisitorStatsHandler (S.Authenticated uid) mFilter = do
   guardAdmin uid
   let filterVal = maybe "week" id mFilter
@@ -122,7 +123,7 @@ getVisitorStatsHandler (S.Authenticated uid) mFilter = do
 getVisitorStatsHandler _ _ = throwError S.err401
 
 getLogsHandler
-  :: S.AuthResult UserId
+  :: S.AuthResult DB.UserId
   -> Maybe Int
   -> Maybe Int
   -> Maybe LogLevel
@@ -144,17 +145,17 @@ getLogsHandler (S.Authenticated uid) mLimit mOffset mLevel mSource = do
   toLogResponse :: LogEntry -> LogResponse
   toLogResponse (l :: LogEntry) =
     LogResponse
-      { id = l.logId
+      { id = l.logId.unLogId
       , level = logLevelFromText l.level
       , message = l.message
       , source = l.source
       , timestamp = l.timestamp
-      , userId = l.userId
+      , userId = fmap (\(DU.UserId i) -> i) l.userId
       }
 getLogsHandler _ _ _ _ _ = throwError S.err401
 
 getVisitorsHandler
-  :: S.AuthResult UserId
+  :: S.AuthResult DB.UserId
   -> Maybe Int
   -> Maybe Int
   -> Maybe Text
@@ -175,7 +176,7 @@ getVisitorsHandler (S.Authenticated uid) mLimit mOffset mIp mPath = do
   toVisitorResponse :: Visitor -> VisitorResponse
   toVisitorResponse (v :: Visitor) =
     VisitorResponse
-      { id = v.visitorId
+      { id = v.visitorId.unVisitorId
       , ip = v.ip
       , userAgent = v.userAgent
       , path = v.path

@@ -3,6 +3,7 @@ module Infrastructure.Interpreter.Real.Auth
   ) where
 
 import Crypto.JWT (JWK)
+import Domain.User (UserId (..))
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
@@ -10,8 +11,12 @@ import Effectful.Reader.Static
 import Capability.Auth hiding (generateToken)
 import Infrastructure.Common.Type.JWK qualified as JWK
 
+import Database.Persist.Sql (toSqlKey)
+
 runAuthJWT :: (IOE :> es, Reader JWK :> es) => Eff (Auth : es) a -> Eff es a
 runAuthJWT = interpret $ \_ -> \case
-  GenerateToken uid -> do
+  GenerateToken (UserId uidInt) -> do
     jwtKey <- ask @JWK
+    let uid = toSqlKey (fromIntegral uidInt)
     liftIO $ JWK.generateToken jwtKey uid
+

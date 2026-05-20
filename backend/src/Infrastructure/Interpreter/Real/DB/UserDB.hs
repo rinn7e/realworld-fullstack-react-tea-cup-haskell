@@ -1,5 +1,6 @@
 module Infrastructure.Interpreter.Real.DB.UserDB
   ( runUserDBPostgres
+  , toDomainUser
   ) where
 
 import Database.Persist
@@ -31,7 +32,7 @@ import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 toDomainUser :: Entity DB.User -> User
 toDomainUser (Entity uid u) =
   D.User
-    { userId = fromIntegral (fromSqlKey uid)
+    { userId = D.UserId $ fromIntegral (fromSqlKey uid)
     , username = u.username
     , email = u.email
     , password = u.password
@@ -43,13 +44,14 @@ toDomainUser (Entity uid u) =
 runUserDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (UserDB : es) a -> Eff es a
 runUserDBPostgres = interpret $ \_ -> \case
-  LookupUserById uid -> do
+  LookupUserById (D.UserId uidInt) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
         ( do
-            mUser <- get (toSqlKey (fromIntegral uid))
-            return $ fmap (\u -> toDomainUser (Entity (toSqlKey (fromIntegral uid)) u)) mUser
+            let sqlKey = toSqlKey (fromIntegral uidInt)
+            mUser <- get sqlKey
+            return $ fmap (\u -> toDomainUser (Entity sqlKey u)) mUser
         )
         pool
   LookupUserByEmail email -> do
@@ -80,7 +82,7 @@ runUserDBPostgres = interpret $ \_ -> \case
             return $ toDomainUser (Entity uid u)
         )
         pool
-  UpdateUser uid dUser -> do
+  UpdateUser (D.UserId uidInt) dUser -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -94,11 +96,11 @@ runUserDBPostgres = interpret $ \_ -> \case
                     , image = dUser.image
                     , role = dUser.role
                     }
-            replace (toSqlKey (fromIntegral uid)) dbUser
+            replace (toSqlKey (fromIntegral uidInt)) dbUser
             return dUser
         )
         pool
-  DeleteUser uidInt -> do
+  DeleteUser (D.UserId uidInt) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -140,7 +142,7 @@ runUserDBPostgres = interpret $ \_ -> \case
             return (map toDomainUser entities, fromIntegral total)
         )
         pool
-  FollowUser follower followed -> do
+  FollowUser (D.UserId follower) (D.UserId followed) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -150,7 +152,7 @@ runUserDBPostgres = interpret $ \_ -> \case
             return ()
         )
         pool
-  UnfollowUser follower followed -> do
+  UnfollowUser (D.UserId follower) (D.UserId followed) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -161,7 +163,7 @@ runUserDBPostgres = interpret $ \_ -> \case
               ]
         )
         pool
-  IsFollowing follower followed -> do
+  IsFollowing (D.UserId follower) (D.UserId followed) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool

@@ -25,7 +25,7 @@ import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 toDomainVisitor :: Entity DB.Visitor -> Visitor
 toDomainVisitor (Entity vid v) =
   D.Visitor
-    { visitorId = fromIntegral (fromSqlKey vid)
+    { visitorId = D.VisitorId $ fromIntegral (fromSqlKey vid)
     , ip = v.ip
     , userAgent = v.userAgent
     , path = v.path

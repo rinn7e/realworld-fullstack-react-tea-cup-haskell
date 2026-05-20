@@ -14,9 +14,7 @@ import Control.Lens ((&), (.~), (?~))
 import Data.Aeson (FromJSON (..), ToJSON (..), (.:), (.:?), (.=))
 import Data.Aeson qualified as A
 import Data.HashMap.Strict.InsOrd qualified as InsOrd
-import Data.Map.Append (unAppendMap)
 import Data.Map.Strict qualified as Map
-import Data.Maybe (fromMaybe)
 import Data.OpenApi
   ( NamedSchema (..)
   , OpenApiType (..)
@@ -31,11 +29,12 @@ import Data.Proxy (Proxy (..))
 import Data.Semigroup (First (..))
 import Data.Text (Text)
 import Data.Time (UTCTime)
-import Database.Persist.Sql (Entity (..))
 import GHC.Generics (Generic)
 
+import Domain.Article qualified as D
+import Domain.Tag qualified as DT
+import Domain.User qualified as DU
 import Infrastructure.Entity.User.DTO (AdminUserResponse (..), Profile (..))
-import Infrastructure.Interpreter.Real.DB.Query.Article.Type (ArticleGrouped)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 -------------------------------
@@ -196,23 +195,23 @@ data AdminArticleListResponse = AdminArticleListResponse
 -------------------------------
 -- Helpers
 -------------------------------
-toArticleResponse :: ArticleGrouped -> Article
-toArticleResponse
-  ( First (Entity _ (art :: DB.Article))
-    , First (Entity _ (author :: DB.User))
-    , tagsMap
-    , (First favCount, First isFav, First isFol)
-    ) =
-    let tags = map (\(First t) -> t.entityVal.name) $ Map.elems $ unAppendMap tagsMap
-        profile = Profile author.username author.bio author.image isFol
-     in Article
-          art.slug
-          art.title
-          art.description
-          art.body
-          tags
-          art.createdAt
-          art.updatedAt
-          isFav
-          (fromMaybe 0 favCount)
-          profile
+toArticleResponse :: D.ArticleGrouped -> Article
+toArticleResponse ag =
+  let art = ag.article.getFirst
+      author = ag.author.getFirst
+      tags = map (\t -> t.name) ag.tags
+      isFol = ag.isFollowingAuthor.getFirst
+      isFav = ag.isFavorited.getFirst
+      favCount = ag.favoritesCount.getFirst
+      profile = Profile author.username author.bio author.image isFol
+   in Article
+        art.slug
+        art.title
+        art.description
+        art.body
+        tags
+        art.createdAt
+        art.updatedAt
+        isFav
+        favCount
+        profile

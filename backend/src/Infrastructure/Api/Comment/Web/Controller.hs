@@ -4,15 +4,17 @@ module Infrastructure.Api.Comment.Web.Controller
 
 import Data.Text (Text)
 import Data.Traversable (for)
-import Database.Persist (Entity (..))
-import Database.Persist.Sql (fromSqlKey, toSqlKey)
+import Database.Persist.Sql (fromSqlKey)
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
 
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Domain.Article (Article (..))
+import Domain.Article (Article (..), ArticleId (..))
+import Domain.Comment (CommentId (..))
+import Domain.Comment qualified as DC
+import Domain.User qualified as DU
 import Infrastructure.Entity.Comment.DTO
   ( Comment (..)
   , CommentListResponse (..)
@@ -22,14 +24,13 @@ import Infrastructure.Entity.Comment.DTO
 import Infrastructure.Api.Comment.Web.Type
 import Infrastructure.Entity.User.DTO (Profile (..))
 import Infrastructure.Common.Type.App (App)
-import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Database.ArticleDB
 import Capability.Database.CommentDB
 import Capability.Database.UserDB
 
-commentRoute :: S.AuthResult UserId -> Text -> S.ServerT (NamedRoutes CommentRoute) App
+commentRoute :: S.AuthResult DB.UserId -> Text -> S.ServerT (NamedRoutes CommentRoute) App
 commentRoute auth slug =
   CommentRoute
     { getCommentList = getCommentListHandler auth slug
@@ -37,52 +38,52 @@ commentRoute auth slug =
     , deleteComment = deleteCommentHandler auth slug
     }
 
-getCommentListHandler :: S.AuthResult UserId -> Text -> App CommentListResponse
+getCommentListHandler :: S.AuthResult DB.UserId -> Text -> App CommentListResponse
 getCommentListHandler auth slug = do
   mArt <- getArticleBySlug slug
   case mArt of
     Nothing -> throwError S.err404
-    Just Article{articleId = artId} -> do
-      let aid = toSqlKey (fromIntegral artId)
+    Just Article{articleId = aid} -> do
       pairs <- getCommentsForArticle aid
-      let mUid = case auth of
-            S.Authenticated uid -> Just uid
+      let mdUid = case auth of
+            S.Authenticated uid -> Just $ DU.UserId $ fromIntegral (fromSqlKey uid)
             _ -> Nothing
-      comments <- for pairs $ \(Entity cid comm, Entity _ author) -> do
-        isFol <- case mUid of
-          Just uid -> isFollowing (fromIntegral (fromSqlKey uid)) (fromIntegral (fromSqlKey comm.authorId))
+      comments <- for pairs $ \(comm, author) -> do
+        isFol <- case mdUid of
+          Just dUid -> isFollowing dUid author.userId
           Nothing -> return False
         let profile = Profile author.username author.bio author.image isFol
         return $
-          Comment (fromIntegral (fromSqlKey cid)) comm.createdAt comm.updatedAt comm.body profile
+          Comment (comm.commentId.unCommentId) comm.createdAt comm.updatedAt comm.body profile
       return $ CommentListResponse comments
 
 createCommentHandler
-  :: S.AuthResult UserId -> Text -> NewCommentRequest -> App CommentResponse
+  :: S.AuthResult DB.UserId -> Text -> NewCommentRequest -> App CommentResponse
 createCommentHandler (S.Authenticated uid) slug (NewCommentRequest body) = do
   mArt <- getArticleBySlug slug
   case mArt of
     Nothing -> throwError S.err404
-    Just Article{articleId = artId} -> do
-      let aid = toSqlKey (fromIntegral artId)
-      mPair <- insertComment aid uid body
+    Just Article{articleId = aid} -> do
+      let dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
+      mPair <- insertComment aid dUid body
       case mPair of
         Nothing -> throwError S.err500
-        Just (Entity cid comm, Entity _ author) -> do
+        Just (comm, author) -> do
           let profile = Profile author.username author.bio author.image False
           return $
             CommentResponse $
-              Comment (fromIntegral (fromSqlKey cid)) comm.createdAt comm.updatedAt comm.body profile
+              Comment (comm.commentId.unCommentId) comm.createdAt comm.updatedAt comm.body profile
 createCommentHandler _ _ _ = throwError S.err401
 
-deleteCommentHandler :: S.AuthResult UserId -> Text -> Int -> App S.NoContent
+deleteCommentHandler :: S.AuthResult DB.UserId -> Text -> Int -> App S.NoContent
 deleteCommentHandler (S.Authenticated uid) _ cidInt = do
-  let cid = toSqlKey (fromIntegral cidInt)
+  let dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
+  let cid = CommentId cidInt
   mComm <- getComment cid
   case mComm of
     Nothing -> throwError S.err404
     Just comm -> do
-      if comm.authorId /= uid
+      if comm.authorId /= dUid
         then throwError S.err403
         else do
           deleteComment cid

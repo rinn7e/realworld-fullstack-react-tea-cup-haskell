@@ -4,11 +4,10 @@ import Data.Map.Append (AppendMap)
 import Data.Ord (Down)
 import Data.Text (Text)
 import Data.Time (UTCTime)
-import Domain.Article (Article)
+import Domain.Article (Article, ArticleGrouped, ArticleId)
+import Domain.User (UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
-import Infrastructure.Interpreter.Real.DB.Query.Article.Type (ArticleGrouped)
-import Infrastructure.Interpreter.Real.DB.Schema.Schema (ArticleId, UserId)
 
 data ArticleDB :: Effect where
   GetArticleBySlug :: Text -> ArticleDB m (Maybe Article)

@@ -1,9 +1,9 @@
 module Capability.Auth where
 
 import Data.Text (Text)
+import Domain.User (UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
-import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 
 data Auth :: Effect where
   GenerateToken :: UserId -> Auth m Text

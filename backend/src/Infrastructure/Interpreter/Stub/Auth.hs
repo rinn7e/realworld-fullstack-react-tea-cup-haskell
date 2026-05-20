@@ -4,6 +4,7 @@ module Infrastructure.Interpreter.Stub.Auth
 
 import Data.Text qualified as T
 import Database.Persist.Sql (fromSqlKey)
+import Domain.User (UserId (..))
 import Effectful
 import Effectful.Dispatch.Dynamic
 
@@ -11,4 +12,4 @@ import Capability.Auth
 
 runAuthStub :: Eff (Auth : es) a -> Eff es a
 runAuthStub = interpret $ \_ -> \case
-  GenerateToken uid -> pure $ "mock_token_" <> T.pack (show (fromSqlKey uid))
+  GenerateToken (UserId uidInt) -> pure $ "mock_token_" <> T.pack (show uidInt)

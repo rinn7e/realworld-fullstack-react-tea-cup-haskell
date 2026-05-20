@@ -4,7 +4,6 @@ module Infrastructure.Api.Auth.Web.Controller
   , registerUserHandler
   ) where
 
-import Database.Persist.Sql (toSqlKey)
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
@@ -19,20 +18,20 @@ import Infrastructure.Entity.User.DTO
   , UserResponse (..)
   )
 import Infrastructure.Common.Type.App (App)
-import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
+import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Auth
 import Capability.Crypto
 import Capability.Database.UserDB
 
-webAuthRoute :: S.AuthResult UserId -> S.ServerT (NamedRoutes AuthRoute) App
+webAuthRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AuthRoute) App
 webAuthRoute auth =
   AuthRoute
     { loginUser = loginUserHandler auth
     , registerUser = registerUserHandler auth
     }
 
-loginUserHandler :: S.AuthResult UserId -> LoginUserRequest -> App UserResponse
+loginUserHandler :: S.AuthResult DB.UserId -> LoginUserRequest -> App UserResponse
 loginUserHandler _ (LoginUserRequest email pwd) = do
   mUser <- lookupUserByEmail email
   case mUser of
@@ -42,14 +41,12 @@ loginUserHandler _ (LoginUserRequest email pwd) = do
       if not ok
         then throwError S.err401{S.errBody = "Invalid email or password"}
         else do
-          let uid = toSqlKey (fromIntegral u.userId)
-          token <- generateToken uid
+          token <- generateToken u.userId
           return $ UserResponse $ User u.email token u.username u.bio u.image
 
-registerUserHandler :: S.AuthResult UserId -> NewUserRequest -> App UserResponse
+registerUserHandler :: S.AuthResult DB.UserId -> NewUserRequest -> App UserResponse
 registerUserHandler _ (NewUserRequest username email pwd) = do
   hashedPwd <- hashPassword pwd
   (newUser :: D.User) <- insertUser username email hashedPwd
-  let uid = toSqlKey (fromIntegral newUser.userId)
-  token <- generateToken uid
+  token <- generateToken newUser.userId
   return $ UserResponse $ User email token username Nothing Nothing

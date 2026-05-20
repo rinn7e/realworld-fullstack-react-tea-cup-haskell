@@ -12,12 +12,12 @@ import Effectful.Dispatch.Dynamic
 import UnliftIO.IORef
 
 import Capability.Database.UserDB
-import Domain.User (User (..))
+import Domain.User (User (..), UserId (..))
 
 data MockDB = MockDB
   { nextUserId :: Int
-  , users :: Map Int User
-  , follows :: [(Int, Int)] -- (followerId, followedId)
+  , users :: Map UserId User
+  , follows :: [(UserId, UserId)] -- (followerId, followedId)
   }
   deriving (Show)
 
@@ -42,7 +42,7 @@ runUserDBStub ref = interpret $ \_ -> \case
     pure $ L.find (\u -> u.username == username) (Map.elems db.users)
   InsertUser username email pwdHash -> do
     atomicModifyIORef' ref $ \db ->
-      let uid = db.nextUserId
+      let uid = UserId db.nextUserId
           newUser =
             User
               { userId = uid
@@ -55,7 +55,7 @@ runUserDBStub ref = interpret $ \_ -> \case
               }
           newDb =
             db
-              { nextUserId = uid + 1
+              { nextUserId = db.nextUserId + 1
               , users = Map.insert uid newUser db.users
               }
        in (newDb, newUser)
