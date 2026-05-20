@@ -1,7 +1,7 @@
 module Capability.Database.CommentDB where
 
-import Domain.Type qualified as D
 import Domain.Type hiding (Limit, Offset)
+import Domain.Type qualified as D
 import Effectful
 import Effectful.Dispatch.Dynamic
 
@@ -12,7 +12,11 @@ data CommentDB :: Effect where
   DeleteComment :: CommentId -> CommentDB m ()
   GetComment :: CommentId -> CommentDB m (Maybe Comment)
   ListAdminComments
-    :: Maybe Username -> Maybe ArticleSlug -> D.Limit -> D.Offset -> CommentDB m ([CommentDetail], Int)
+    :: Maybe Username
+    -> Maybe ArticleSlug
+    -> D.Limit
+    -> D.Offset
+    -> CommentDB m ([CommentDetail], Int)
 
 type instance DispatchOf CommentDB = 'Dynamic
 

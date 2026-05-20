@@ -1,8 +1,8 @@
 module Capability.Database.ArticleDB where
 
 import Data.Text (Text)
-import Domain.Type qualified as D
 import Domain.Type hiding (Limit, Offset)
+import Domain.Type qualified as D
 import Effectful
 import Effectful.Dispatch.Dynamic
 
@@ -124,7 +124,6 @@ listAdminArticles
   -> D.Offset
   -> Eff es [ArticleDetail]
 listAdminArticles mTag mAuthor mSearch lim off = send (ListAdminArticles mTag mAuthor mSearch lim off)
-
 
 countAdminArticles
   :: (ArticleDB :> es) => Maybe TagName -> Maybe Username -> Maybe Text -> Eff es Int

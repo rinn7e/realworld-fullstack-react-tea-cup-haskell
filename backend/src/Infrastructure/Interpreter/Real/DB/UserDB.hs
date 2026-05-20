@@ -55,7 +55,8 @@ runUserDBPostgres = interpret $ \_ -> \case
   UnfollowUser follower followed -> unfollowUserHandler follower followed
   IsFollowing follower followed -> isFollowingHandler follower followed
 
-lookupUserByIdHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> Eff es (Maybe D.User)
+lookupUserByIdHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> Eff es (Maybe D.User)
 lookupUserByIdHandler (D.UserId uidInt) = do
   pool <- ask @ConnectionPool
   liftIO $
@@ -67,7 +68,8 @@ lookupUserByIdHandler (D.UserId uidInt) = do
       )
       pool
 
-lookupUserByEmailHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.Email -> Eff es (Maybe D.User)
+lookupUserByEmailHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.Email -> Eff es (Maybe D.User)
 lookupUserByEmailHandler email = do
   pool <- ask @ConnectionPool
   liftIO $
@@ -78,7 +80,8 @@ lookupUserByEmailHandler email = do
       )
       pool
 
-lookupUserByUsernameHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.Username -> Eff es (Maybe D.User)
+lookupUserByUsernameHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.Username -> Eff es (Maybe D.User)
 lookupUserByUsernameHandler username = do
   pool <- ask @ConnectionPool
   liftIO $
@@ -106,7 +109,8 @@ insertUserHandler username email pwdHash = do
       )
       pool
 
-updateUserHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.User -> Eff es D.User
+updateUserHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.User -> Eff es D.User
 updateUserHandler (D.UserId uidInt) dUser = do
   pool <- ask @ConnectionPool
   liftIO $
@@ -178,7 +182,8 @@ listUsersHandler mLimit mOffset mUsername mEmail = do
       )
       pool
 
-followUserHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.UserId -> Eff es ()
+followUserHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.UserId -> Eff es ()
 followUserHandler (D.UserId follower) (D.UserId followed) = do
   pool <- ask @ConnectionPool
   liftIO $
@@ -190,7 +195,8 @@ followUserHandler (D.UserId follower) (D.UserId followed) = do
       )
       pool
 
-unfollowUserHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.UserId -> Eff es ()
+unfollowUserHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.UserId -> Eff es ()
 unfollowUserHandler (D.UserId follower) (D.UserId followed) = do
   pool <- ask @ConnectionPool
   liftIO $
@@ -203,7 +209,8 @@ unfollowUserHandler (D.UserId follower) (D.UserId followed) = do
       )
       pool
 
-isFollowingHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.UserId -> Eff es Bool
+isFollowingHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.UserId -> Eff es Bool
 isFollowingHandler (D.UserId follower) (D.UserId followed) = do
   pool <- ask @ConnectionPool
   liftIO $

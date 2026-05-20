@@ -84,7 +84,8 @@ listVisitorsHandler mLimit mOffset mIp mPath = do
       )
       pool
 
-getVisitorsSinceHandler :: (IOE :> es, Reader ConnectionPool :> es) => UTCTime -> Eff es [Visitor]
+getVisitorsSinceHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => UTCTime -> Eff es [Visitor]
 getVisitorsSinceHandler since = do
   pool <- ask @ConnectionPool
   liftIO $

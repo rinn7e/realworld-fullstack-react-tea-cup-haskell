@@ -88,7 +88,8 @@ runArticleDBPostgres = interpret $ \_ -> \case
   ListAdminArticles mTag mAuthor mSearch lim off -> listAdminArticlesHandler mTag mAuthor mSearch lim off
   CountAdminArticles mTag mAuthor mSearch -> countAdminArticlesHandler mTag mAuthor mSearch
 
-getArticleBySlugHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.ArticleSlug -> Eff es (Maybe D.Article)
+getArticleBySlugHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.ArticleSlug -> Eff es (Maybe D.Article)
 getArticleBySlugHandler slug = do
   pool <- ask @ConnectionPool
   liftIO $
@@ -99,7 +100,11 @@ getArticleBySlugHandler slug = do
       )
       pool
 
-getArticleWithAuthorHandler :: (IOE :> es, Reader ConnectionPool :> es) => Maybe D.UserId -> D.ArticleSlug -> Eff es (Maybe D.ArticleDetail)
+getArticleWithAuthorHandler
+  :: (IOE :> es, Reader ConnectionPool :> es)
+  => Maybe D.UserId
+  -> D.ArticleSlug
+  -> Eff es (Maybe D.ArticleDetail)
 getArticleWithAuthorHandler mCurrentUserId slug = do
   pool <- ask @ConnectionPool
   liftIO $
@@ -171,7 +176,8 @@ updateArticleHandler (D.ArticleId aidInt) newSlug newTitle newDesc newBody mTags
       )
       pool
 
-deleteArticleHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.ArticleId -> Eff es ()
+deleteArticleHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.ArticleId -> Eff es ()
 deleteArticleHandler (D.ArticleId aidInt) = do
   pool <- ask @ConnectionPool
   liftIO $
@@ -204,7 +210,12 @@ listArticlesHandler mCurrentUserId mTag mAuthor mFavorited lim off = do
       )
       pool
 
-listFeedHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.Limit -> D.Offset -> Eff es [D.ArticleDetail]
+listFeedHandler
+  :: (IOE :> es, Reader ConnectionPool :> es)
+  => D.UserId
+  -> D.Limit
+  -> D.Offset
+  -> Eff es [D.ArticleDetail]
 listFeedHandler currentUserId lim off = do
   pool <- ask @ConnectionPool
   liftIO $
@@ -215,7 +226,12 @@ listFeedHandler currentUserId lim off = do
       )
       pool
 
-countArticlesHandler :: (IOE :> es, Reader ConnectionPool :> es) => Maybe D.TagName -> Maybe D.Username -> Maybe D.Username -> Eff es Int
+countArticlesHandler
+  :: (IOE :> es, Reader ConnectionPool :> es)
+  => Maybe D.TagName
+  -> Maybe D.Username
+  -> Maybe D.Username
+  -> Eff es Int
 countArticlesHandler mTag mAuthor mFavorited = do
   pool <- ask @ConnectionPool
   liftIO $ runSqlPool (Q.countArticles mTag mAuthor mFavorited) pool
@@ -230,7 +246,8 @@ countFeedHandler currentUserId = do
       )
       pool
 
-favoriteArticleHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.ArticleId -> Eff es ()
+favoriteArticleHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.ArticleId -> Eff es ()
 favoriteArticleHandler (D.UserId uidInt) (D.ArticleId aidInt) = do
   ask @ConnectionPool >>= \pool ->
     liftIO $
@@ -243,7 +260,8 @@ favoriteArticleHandler (D.UserId uidInt) (D.ArticleId aidInt) = do
         )
         pool
 
-unfavoriteArticleHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.ArticleId -> Eff es ()
+unfavoriteArticleHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.ArticleId -> Eff es ()
 unfavoriteArticleHandler (D.UserId uidInt) (D.ArticleId aidInt) = do
   ask @ConnectionPool >>= \pool ->
     liftIO $
@@ -276,7 +294,12 @@ listAdminArticlesHandler mTag mAuthor mSearch lim off = do
       )
       pool
 
-countAdminArticlesHandler :: (IOE :> es, Reader ConnectionPool :> es) => Maybe D.TagName -> Maybe D.Username -> Maybe Text -> Eff es Int
+countAdminArticlesHandler
+  :: (IOE :> es, Reader ConnectionPool :> es)
+  => Maybe D.TagName
+  -> Maybe D.Username
+  -> Maybe Text
+  -> Eff es Int
 countAdminArticlesHandler mTag mAuthor mSearch = do
   pool <- ask @ConnectionPool
   liftIO $ runSqlPool (Q.countAdminArticles mTag mAuthor mSearch) pool

@@ -15,7 +15,8 @@ runMetadataDBPostgres
 runMetadataDBPostgres = interpret $ \_ -> \case
   GetLastRanMigration -> getLastRanMigrationHandler
 
-getLastRanMigrationHandler :: (IOE :> es, Reader ConnectionPool :> es) => Eff es (Maybe Int)
+getLastRanMigrationHandler
+  :: (IOE :> es, Reader ConnectionPool :> es) => Eff es (Maybe Int)
 getLastRanMigrationHandler = do
   pool <- ask @ConnectionPool
   liftIO $ runSqlPool Migration.getLastRanMigration pool

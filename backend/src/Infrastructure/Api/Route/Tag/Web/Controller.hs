@@ -13,7 +13,8 @@ import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 
 import Capability.Database.TagDB
 
-webTagRoute :: (TagDB :> es) => S.AuthResult UserId -> S.ServerT (NamedRoutes TagRoute) (Eff es)
+webTagRoute
+  :: (TagDB :> es) => S.AuthResult UserId -> S.ServerT (NamedRoutes TagRoute) (Eff es)
 webTagRoute _auth =
   TagRoute
     { getTagList = getTagListHandler

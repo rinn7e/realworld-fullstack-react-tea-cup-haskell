@@ -20,7 +20,9 @@ import Paths_haskell_servant_realworld qualified as Paths
 import Capability.Database.MetadataDB
 
 webMetadataRoute
-  :: (MetadataDB :> es, Reader AppEnv :> es) => S.AuthResult UserId -> S.ServerT (NamedRoutes MetadataRoute) (Eff es)
+  :: (MetadataDB :> es, Reader AppEnv :> es)
+  => S.AuthResult UserId
+  -> S.ServerT (NamedRoutes MetadataRoute) (Eff es)
 webMetadataRoute _auth =
   MetadataRoute
     { getMetadata = getMetadataHandler
