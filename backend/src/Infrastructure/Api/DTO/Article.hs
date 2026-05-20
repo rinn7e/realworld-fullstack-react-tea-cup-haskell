@@ -5,6 +5,7 @@ module Infrastructure.Api.DTO.Article
   , NewArticleRequest (..)
   , UpdateArticleRequest (..)
   , toArticleResponse
+  , toAdminArticle
   , AdminArticle (..)
   , AdminArticleListResponse (..)
   )
@@ -30,7 +31,11 @@ import Data.Time (UTCTime)
 import GHC.Generics (Generic)
 
 import Domain.Type qualified as D
-import Infrastructure.Api.DTO.User (AdminUserResponse (..), Profile (..))
+import Infrastructure.Api.DTO.User
+  ( AdminUserResponse (..)
+  , Profile (..)
+  , toAdminUserResponse
+  )
 
 -------------------------------
 -- Article
@@ -190,7 +195,7 @@ data AdminArticleListResponse = AdminArticleListResponse
 -------------------------------
 -- Helpers
 -------------------------------
-toArticleResponse :: D.ArticleWithMetadata -> Article
+toArticleResponse :: D.ArticleDetail -> Article
 toArticleResponse am =
   let art = am.article
       author = am.author
@@ -210,3 +215,24 @@ toArticleResponse am =
         isFav
         favCount
         profile
+
+toAdminArticle :: D.ArticleDetail -> AdminArticle
+toAdminArticle am =
+  let art = am.article
+      author = am.author
+      tags = map (\t -> t.name) am.tags
+      isFav = am.isFavorited
+      favCount = am.favoritesCount
+      adminAuthor = toAdminUserResponse author
+   in AdminArticle
+        art.articleId.unArticleId
+        art.slug
+        art.title
+        art.description
+        art.body
+        tags
+        art.createdAt
+        art.updatedAt
+        isFav
+        favCount
+        adminAuthor

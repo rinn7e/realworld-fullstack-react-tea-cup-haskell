@@ -16,11 +16,13 @@ import Infrastructure.Api.DTO.User
   ( AdminUserListResponse (..)
   , AdminUserResponse (..)
   , UpdateUserRoleRequest (..)
+  , toAdminUserResponse
   )
 import Infrastructure.Api.Route.User.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
+
 import Capability.Database.LoggerDB
 import Capability.Database.UserDB
 import Capability.Time
@@ -32,17 +34,6 @@ adminUserRoute auth =
     { getUsers = getUsersHandler auth
     , updateUserRole = updateUserRoleHandler auth
     , deleteUser = deleteUserHandler auth
-    }
-
-toAdminUserResponse :: D.User -> AdminUserResponse
-toAdminUserResponse u =
-  AdminUserResponse
-    { id = u.userId.unUserId
-    , username = u.username
-    , email = u.email
-    , bio = u.bio
-    , image = u.image
-    , role = u.role
     }
 
 getUsersHandler

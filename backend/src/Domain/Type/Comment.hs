@@ -22,10 +22,11 @@ data Comment = Comment
   }
   deriving stock (Eq, Show, Generic)
 
-data AdminCommentResponse = AdminCommentResponse
+data CommentDetail = CommentDetail
   { id :: CommentId
   , body :: Text
   , createdAt :: UTCTime
+  , updatedAt :: UTCTime
   , articleSlug :: Text
   , authorUsername :: Text
   }

@@ -51,7 +51,8 @@ getCurrentUserHandler (S.Authenticated uid) = do
       return $ UserResponse $ User u.email token u.username u.bio u.image
 getCurrentUserHandler _ = throwError S.err401
 
-updateCurrentUserHandler :: S.AuthResult DB.UserId -> UpdateUserRequest -> App UserResponse
+updateCurrentUserHandler
+  :: S.AuthResult DB.UserId -> UpdateUserRequest -> App UserResponse
 updateCurrentUserHandler (S.Authenticated uid) (UpdateUserRequest mEmail mUsername mPassword mBio mImage) = do
   let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   mUser <- lookupUserById dUid

@@ -14,8 +14,8 @@ import Servant
 
 import Infrastructure.Api.DTO.Dashboard (DashboardStatsResponse, VisitorStatResponse)
 import Infrastructure.Api.DTO.Log (LogLevel, LogListResponse)
-import Infrastructure.Api.Route.TagCombinator (Tag)
 import Infrastructure.Api.DTO.Visitor (VisitorListResponse)
+import Infrastructure.Api.Route.TagCombinator (Tag)
 
 data AdminDashboardRoute mode = AdminDashboardRoute
   { getDashboardStats

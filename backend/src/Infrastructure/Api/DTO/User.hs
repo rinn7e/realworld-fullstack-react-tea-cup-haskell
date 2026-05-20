@@ -9,11 +9,12 @@ module Infrastructure.Api.DTO.User
   , UpdateUserRoleRequest (..)
   , AdminUserResponse (..)
   , AdminUserListResponse (..)
+  , toAdminUserResponse
   )
 where
 
 import Control.Lens ((&), (.~), (?~))
-import Data.Aeson (FromJSON (..), ToJSON (..), (.:), (.:?))
+import Data.Aeson (FromJSON (..), ToJSON (..), (.:), (.:?), (.=))
 import Data.Aeson qualified as A
 import Data.HashMap.Strict.InsOrd qualified as InsOrd
 import Data.OpenApi
@@ -29,6 +30,8 @@ import Data.OpenApi
 import Data.Proxy (Proxy (..))
 import Data.Text (Text)
 import GHC.Generics (Generic)
+
+import Domain.Type qualified as D
 
 -------------------------------
 -- User
@@ -48,7 +51,8 @@ instance ToJSON User where
 -------------------------------
 -- UserResponse
 -------------------------------
-data UserResponse = UserResponse {user :: User} deriving (Show, Generic, ToJSON, ToSchema)
+data UserResponse = UserResponse {user :: User}
+  deriving (Show, Generic, ToJSON, ToSchema)
 
 -------------------------------
 -- Profile
@@ -59,25 +63,24 @@ data Profile = Profile
   , image :: Maybe Text
   , following :: Bool
   }
-  deriving (Show, Generic, ToSchema)
-
-instance ToJSON Profile where
-  toJSON = A.genericToJSON A.defaultOptions
+  deriving stock (Show, Generic)
+  deriving anyclass (ToJSON, ToSchema)
 
 -------------------------------
 -- ProfileResponse
 -------------------------------
 data ProfileResponse = ProfileResponse {profile :: Profile}
-  deriving (Show, Generic, ToJSON, ToSchema)
+  deriving stock (Show, Generic)
+  deriving anyclass (ToJSON, ToSchema)
 
 -------------------------------
--- LoginUserRequest
+-- Requests
 -------------------------------
 data LoginUserRequest = LoginUserRequest
   { email :: Text
   , password :: Text
   }
-  deriving (Show, Generic)
+  deriving stock (Show, Generic)
 
 instance FromJSON LoginUserRequest where
   parseJSON = A.withObject "LoginUserRequest" $ \o -> do
@@ -91,11 +94,7 @@ instance ToSchema LoginUserRequest where
     let userSchema =
           mempty
             & type_ ?~ OpenApiObject
-            & properties
-              .~ InsOrd.fromList
-                [ ("email", emailSchema)
-                , ("password", passwordSchema)
-                ]
+            & properties .~ InsOrd.fromList [("email", emailSchema), ("password", passwordSchema)]
             & required .~ ["email", "password"]
     return $
       NamedSchema (Just "LoginUserRequest") $
@@ -104,15 +103,12 @@ instance ToSchema LoginUserRequest where
           & properties .~ InsOrd.fromList [("user", Inline userSchema)]
           & required .~ ["user"]
 
--------------------------------
--- NewUserRequest
--------------------------------
 data NewUserRequest = NewUserRequest
   { username :: Text
   , email :: Text
   , password :: Text
   }
-  deriving (Show, Generic)
+  deriving stock (Show, Generic)
 
 instance FromJSON NewUserRequest where
   parseJSON = A.withObject "NewUserRequest" $ \o -> do
@@ -141,9 +137,6 @@ instance ToSchema NewUserRequest where
           & properties .~ InsOrd.fromList [("user", Inline userSchema)]
           & required .~ ["user"]
 
--------------------------------
--- UpdateUserRequest
--------------------------------
 data UpdateUserRequest = UpdateUserRequest
   { email :: Maybe Text
   , username :: Maybe Text
@@ -151,7 +144,7 @@ data UpdateUserRequest = UpdateUserRequest
   , bio :: Maybe Text
   , image :: Maybe Text
   }
-  deriving (Show, Generic)
+  deriving stock (Show, Generic)
 
 instance FromJSON UpdateUserRequest where
   parseJSON = A.withObject "UpdateUserRequest" $ \o -> do
@@ -188,15 +181,15 @@ instance ToSchema UpdateUserRequest where
           & properties .~ InsOrd.fromList [("user", Inline userSchema)]
           & required .~ ["user"]
 
--------------------------------
--- Admin User
--------------------------------
 data UpdateUserRoleRequest = UpdateUserRoleRequest
   { role :: Text
   }
   deriving stock (Show, Generic)
-  deriving anyclass (FromJSON, ToJSON, ToSchema)
+  deriving anyclass (FromJSON, ToSchema)
 
+-------------------------------
+-- Admin User
+-------------------------------
 data AdminUserResponse = AdminUserResponse
   { id :: Int
   , username :: Text
@@ -214,3 +207,17 @@ data AdminUserListResponse = AdminUserListResponse
   }
   deriving stock (Show, Generic)
   deriving anyclass (ToJSON, ToSchema)
+
+-------------------------------
+-- Helpers
+-------------------------------
+toAdminUserResponse :: D.User -> AdminUserResponse
+toAdminUserResponse u =
+  AdminUserResponse
+    { id = u.userId.unUserId
+    , username = u.username
+    , email = u.email
+    , bio = u.bio
+    , image = u.image
+    , role = u.role
+    }

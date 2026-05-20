@@ -19,4 +19,3 @@ runAuthJWT = interpret $ \_ -> \case
     jwtKey <- ask @JWK
     let uid = toSqlKey (fromIntegral uidInt)
     liftIO $ JWK.generateToken jwtKey uid
-

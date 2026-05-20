@@ -6,13 +6,13 @@ module Infrastructure.Interpreter.Stub.Util
   ) where
 
 import Crypto.JWT (JWK)
+import Data.Pool (createPool)
 import Database.Persist.Sql (ConnectionPool, runSqlPool)
 import Infrastructure.Common.Type.App (AppEnv (..))
 import Infrastructure.Common.Type.Config (Config (..))
 import Infrastructure.Common.Type.JWK (makeSecretKey)
 import Servant.Auth.Server qualified as S
 import System.IO.Unsafe (unsafePerformIO)
-import Data.Pool (createPool)
 
 dummyJWK :: JWK
 dummyJWK = makeSecretKey "dummy-secret-key-that-should-be-at-least-32-chars-long-!!"

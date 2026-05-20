@@ -1,14 +1,13 @@
 module Capability.Database.ArticleDB where
 
 import Data.Text (Text)
-import Domain.Type (Article, ArticleWithMetadata, ArticleId)
-import Domain.Type (UserId)
+import Domain.Type (Article, ArticleId, ArticleDetail, UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
 
 data ArticleDB :: Effect where
   GetArticleBySlug :: Text -> ArticleDB m (Maybe Article)
-  GetArticleWithAuthor :: Maybe UserId -> Text -> ArticleDB m (Maybe ArticleWithMetadata)
+  GetArticleWithAuthor :: Maybe UserId -> Text -> ArticleDB m (Maybe ArticleDetail)
   CreateArticle
     :: Text -> Text -> Text -> Text -> UserId -> [Text] -> ArticleDB m Article
   UpdateArticle
@@ -21,9 +20,9 @@ data ArticleDB :: Effect where
     -> Maybe Text
     -> Int
     -> Int
-    -> ArticleDB m [ArticleWithMetadata]
+    -> ArticleDB m [ArticleDetail]
   ListFeed
-    :: UserId -> Int -> Int -> ArticleDB m [ArticleWithMetadata]
+    :: UserId -> Int -> Int -> ArticleDB m [ArticleDetail]
   CountArticles :: Maybe Text -> Maybe Text -> Maybe Text -> ArticleDB m Int
   CountFeed :: UserId -> ArticleDB m Int
   FavoriteArticle :: UserId -> ArticleId -> ArticleDB m ()
@@ -34,7 +33,7 @@ data ArticleDB :: Effect where
     -> Maybe Text
     -> Int
     -> Int
-    -> ArticleDB m [ArticleWithMetadata]
+    -> ArticleDB m [ArticleDetail]
   CountAdminArticles :: Maybe Text -> Maybe Text -> Maybe Text -> ArticleDB m Int
 
 type instance DispatchOf ArticleDB = 'Dynamic
@@ -43,7 +42,7 @@ getArticleBySlug :: (ArticleDB :> es) => Text -> Eff es (Maybe Article)
 getArticleBySlug slug = send (GetArticleBySlug slug)
 
 getArticleWithAuthor
-  :: (ArticleDB :> es) => Maybe UserId -> Text -> Eff es (Maybe ArticleWithMetadata)
+  :: (ArticleDB :> es) => Maybe UserId -> Text -> Eff es (Maybe ArticleDetail)
 getArticleWithAuthor mCurrentUserId slug = send (GetArticleWithAuthor mCurrentUserId slug)
 
 createArticle
@@ -72,7 +71,7 @@ listArticles
   -> Maybe Text
   -> Int
   -> Int
-  -> Eff es [ArticleWithMetadata]
+  -> Eff es [ArticleDetail]
 listArticles mCurrentUserId mTag mAuthor mFavorited lim off = send (ListArticles mCurrentUserId mTag mAuthor mFavorited lim off)
 
 listFeed
@@ -80,7 +79,7 @@ listFeed
   => UserId
   -> Int
   -> Int
-  -> Eff es [ArticleWithMetadata]
+  -> Eff es [ArticleDetail]
 listFeed currentUserId lim off = send (ListFeed currentUserId lim off)
 
 countArticles :: (ArticleDB :> es) => Maybe Text -> Maybe Text -> Maybe Text -> Eff es Int
@@ -102,7 +101,7 @@ listAdminArticles
   -> Maybe Text
   -> Int
   -> Int
-  -> Eff es [ArticleWithMetadata]
+  -> Eff es [ArticleDetail]
 listAdminArticles mTag mAuthor mSearch lim off = send (ListAdminArticles mTag mAuthor mSearch lim off)
 
 countAdminArticles

@@ -24,7 +24,7 @@ data Article = Article
   }
   deriving stock (Eq, Show, Generic)
 
-data ArticleWithMetadata = ArticleWithMetadata
+data ArticleDetail = ArticleDetail
   { article :: Article
   , author :: User
   , tags :: [Tag]

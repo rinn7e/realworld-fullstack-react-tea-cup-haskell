@@ -1,9 +1,7 @@
 module Capability.Database.CommentDB where
 
 import Data.Text (Text)
-import Domain.Type (ArticleId)
-import Domain.Type (AdminCommentResponse, Comment, CommentId)
-import Domain.Type (User, UserId)
+import Domain.Type (ArticleId, Comment, CommentId, CommentDetail, User, UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
 
@@ -14,7 +12,7 @@ data CommentDB :: Effect where
   DeleteComment :: CommentId -> CommentDB m ()
   GetComment :: CommentId -> CommentDB m (Maybe Comment)
   ListAdminComments
-    :: Maybe Text -> Maybe Text -> Int -> Int -> CommentDB m ([AdminCommentResponse], Int)
+    :: Maybe Text -> Maybe Text -> Int -> Int -> CommentDB m ([CommentDetail], Int)
 
 type instance DispatchOf CommentDB = 'Dynamic
 
@@ -42,5 +40,5 @@ listAdminComments
   -> Maybe Text
   -> Int
   -> Int
-  -> Eff es ([AdminCommentResponse], Int)
+  -> Eff es ([CommentDetail], Int)
 listAdminComments mAuthor mArticleSlug lim off = send (ListAdminComments mAuthor mArticleSlug lim off)

@@ -50,9 +50,9 @@ toDomainTag (Entity tid t) =
     , D.name = t.name
     }
 
-toDomainArticleWithMetadata :: ArticleGrouped -> D.ArticleWithMetadata
-toDomainArticleWithMetadata (First art, First auth, tagsMap, (First favCount, First isFav, First isFol)) =
-  D.ArticleWithMetadata
+toDomainArticleDetail :: ArticleGrouped -> D.ArticleDetail
+toDomainArticleDetail (First art, First auth, tagsMap, (First favCount, First isFav, First isFol)) =
+  D.ArticleDetail
     { D.article = toDomainArticle art
     , D.author = toDomainUser auth
     , D.tags = map (toDomainTag . getFirst) $ Map.elems $ unAppendMap tagsMap
@@ -90,7 +90,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
         ( do
             let sqlUserId = fmap (\(D.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
             mArtGrp <- Q.getArticleWithAuthor sqlUserId slug
-            return $ fmap toDomainArticleWithMetadata mArtGrp
+            return $ fmap toDomainArticleDetail mArtGrp
         )
         pool
   CreateArticle slug title desc body (D.UserId authorIdInt) tags -> do
@@ -153,7 +153,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
         ( do
             let sqlUserId = fmap (\(D.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
             res <- Q.listArticles sqlUserId mTag mAuthor mFavorited lim off
-            return $ map toDomainArticleWithMetadata $ Map.elems $ unAppendMap res
+            return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
         )
         pool
   ListFeed (D.UserId currentUserIdInt) lim off -> do
@@ -163,7 +163,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
         ( do
             let sqlUserId = toSqlKey (fromIntegral currentUserIdInt)
             res <- Q.listFeed sqlUserId lim off
-            return $ map toDomainArticleWithMetadata $ Map.elems $ unAppendMap res
+            return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
         )
         pool
   CountArticles mTag mAuthor mFavorited -> do
@@ -179,34 +179,36 @@ runArticleDBPostgres = interpret $ \_ -> \case
         )
         pool
   FavoriteArticle (D.UserId uidInt) (D.ArticleId aidInt) -> do
-    ask @ConnectionPool >>= \pool -> liftIO $
-      runSqlPool
-        ( do
-            let sqlUid = toSqlKey (fromIntegral uidInt)
-            let sqlAid = toSqlKey (fromIntegral aidInt)
-            _ <- insertBy (DB.Favorite sqlUid sqlAid)
-            return ()
-        )
-        pool
+    ask @ConnectionPool >>= \pool ->
+      liftIO $
+        runSqlPool
+          ( do
+              let sqlUid = toSqlKey (fromIntegral uidInt)
+              let sqlAid = toSqlKey (fromIntegral aidInt)
+              _ <- insertBy (DB.Favorite sqlUid sqlAid)
+              return ()
+          )
+          pool
   UnfavoriteArticle (D.UserId uidInt) (D.ArticleId aidInt) -> do
-    ask @ConnectionPool >>= \pool -> liftIO $
-      runSqlPool
-        ( do
-            let sqlUid = toSqlKey (fromIntegral uidInt)
-            let sqlAid = toSqlKey (fromIntegral aidInt)
-            deleteWhere
-              [ DB.FavoriteUserId ==. sqlUid
-              , DB.FavoriteArticleId ==. sqlAid
-              ]
-        )
-        pool
+    ask @ConnectionPool >>= \pool ->
+      liftIO $
+        runSqlPool
+          ( do
+              let sqlUid = toSqlKey (fromIntegral uidInt)
+              let sqlAid = toSqlKey (fromIntegral aidInt)
+              deleteWhere
+                [ DB.FavoriteUserId ==. sqlUid
+                , DB.FavoriteArticleId ==. sqlAid
+                ]
+          )
+          pool
   ListAdminArticles mTag mAuthor mSearch lim off -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
         ( do
             res <- Q.listAdminArticles mTag mAuthor mSearch lim off
-            return $ map toDomainArticleWithMetadata $ Map.elems $ unAppendMap res
+            return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
         )
         pool
   CountAdminArticles mTag mAuthor mSearch -> do

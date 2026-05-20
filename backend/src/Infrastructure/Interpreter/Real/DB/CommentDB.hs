@@ -18,28 +18,26 @@ import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
 
 import Capability.Database.CommentDB
-import Domain.Type qualified as DA
-import Domain.Type qualified as DC
-import Domain.Type qualified as DU
+import Domain.Type qualified as D
 import Infrastructure.Interpreter.Real.DB.Query.Comment qualified as Q
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 import Infrastructure.Interpreter.Real.DB.UserDB (toDomainUser)
 
-toDomainComment :: Entity DB.Comment -> DC.Comment
+toDomainComment :: Entity DB.Comment -> D.Comment
 toDomainComment (Entity cid c) =
-  DC.Comment
-    { commentId = DC.CommentId $ fromIntegral (fromSqlKey cid)
-    , body = c.body
-    , authorId = DU.UserId $ fromIntegral (fromSqlKey c.authorId)
-    , articleId = DA.ArticleId $ fromIntegral (fromSqlKey c.articleId)
-    , createdAt = c.createdAt
-    , updatedAt = c.updatedAt
+  D.Comment
+    { D.commentId = D.CommentId $ fromIntegral (fromSqlKey cid)
+    , D.body = c.body
+    , D.authorId = D.UserId $ fromIntegral (fromSqlKey c.authorId)
+    , D.articleId = D.ArticleId $ fromIntegral (fromSqlKey c.articleId)
+    , D.createdAt = c.createdAt
+    , D.updatedAt = c.updatedAt
     }
 
 runCommentDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (CommentDB : es) a -> Eff es a
 runCommentDBPostgres = interpret $ \_ -> \case
-  GetCommentsForArticle (DA.ArticleId aidInt) -> do
+  GetCommentsForArticle (D.ArticleId aidInt) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -49,7 +47,7 @@ runCommentDBPostgres = interpret $ \_ -> \case
             return $ map (\(c, u) -> (toDomainComment c, toDomainUser u)) res
         )
         pool
-  InsertComment (DA.ArticleId aidInt) (DU.UserId uidInt) body -> do
+  InsertComment (D.ArticleId aidInt) (D.UserId uidInt) body -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -60,7 +58,7 @@ runCommentDBPostgres = interpret $ \_ -> \case
             return $ fmap (\(c, u) -> (toDomainComment c, toDomainUser u)) res
         )
         pool
-  DeleteComment (DC.CommentId cidInt) -> do
+  DeleteComment (D.CommentId cidInt) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -69,7 +67,7 @@ runCommentDBPostgres = interpret $ \_ -> \case
             delete cid
         )
         pool
-  GetComment (DC.CommentId cidInt) -> do
+  GetComment (D.CommentId cidInt) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -111,12 +109,13 @@ runCommentDBPostgres = interpret $ \_ -> \case
               let slug = maybe "" (\art -> art.slug) mArt
                   username = maybe "" (\u -> u.username) mUser
               return
-                DC.AdminCommentResponse
-                  { id = DC.CommentId $ fromIntegral (fromSqlKey cid)
-                  , body = c.body
-                  , createdAt = c.createdAt
-                  , articleSlug = slug
-                  , authorUsername = username
+                D.CommentDetail
+                  { D.id = D.CommentId $ fromIntegral (fromSqlKey cid)
+                  , D.body = c.body
+                  , D.createdAt = c.createdAt
+                  , D.updatedAt = c.updatedAt
+                  , D.articleSlug = slug
+                  , D.authorUsername = username
                   }
             return (comments, fromIntegral totalCount)
         )

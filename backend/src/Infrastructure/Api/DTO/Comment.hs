@@ -3,8 +3,8 @@ module Infrastructure.Api.DTO.Comment
   , CommentResponse (..)
   , CommentListResponse (..)
   , NewCommentRequest (..)
-  , AdminCommentResponse (..)
-  , AdminCommentListResponse (..)
+  , toCommentDTO
+  , toCommentDTOFromDetail
   )
 where
 
@@ -27,6 +27,7 @@ import Data.Text (Text)
 import Data.Time (UTCTime)
 import GHC.Generics (Generic)
 
+import Domain.Type qualified as D
 import Infrastructure.Api.DTO.User (Profile (..))
 
 -------------------------------
@@ -38,6 +39,7 @@ data Comment = Comment
   , updatedAt :: UTCTime
   , body :: Text
   , author :: Profile
+  , articleSlug :: Maybe Text
   }
   deriving (Show, Generic, ToSchema)
 
@@ -55,11 +57,16 @@ data CommentResponse = CommentResponse {comment :: Comment}
 -------------------------------
 data CommentListResponse = CommentListResponse
   { comments :: [Comment]
+  , totalCount :: Int
   }
   deriving (Show, Generic, ToSchema)
 
 instance ToJSON CommentListResponse where
-  toJSON (CommentListResponse cs) = A.object ["comments" .= cs]
+  toJSON (CommentListResponse cs tc) =
+    A.object
+      [ "comments" .= cs
+      , "totalCount" .= tc
+      ]
 
 -------------------------------
 -- NewCommentRequest
@@ -90,21 +97,26 @@ instance ToSchema NewCommentRequest where
           & required .~ ["comment"]
 
 -------------------------------
--- Admin Comment
+-- Helpers
 -------------------------------
-data AdminCommentResponse = AdminCommentResponse
-  { id :: Int
-  , body :: Text
-  , createdAt :: UTCTime
-  , articleSlug :: Text
-  , authorUsername :: Text
-  }
-  deriving stock (Show, Generic)
-  deriving anyclass (ToJSON, ToSchema)
+toCommentDTO :: D.Comment -> D.User -> Bool -> Comment
+toCommentDTO c u isFol =
+  Comment
+    { id = c.commentId.unCommentId
+    , createdAt = c.createdAt
+    , updatedAt = c.updatedAt
+    , body = c.body
+    , author = Profile u.username u.bio u.image isFol
+    , articleSlug = Nothing
+    }
 
-data AdminCommentListResponse = AdminCommentListResponse
-  { comments :: [AdminCommentResponse]
-  , totalCount :: Int
-  }
-  deriving stock (Show, Generic)
-  deriving anyclass (ToJSON, ToSchema)
+toCommentDTOFromDetail :: D.CommentDetail -> Comment
+toCommentDTOFromDetail r =
+  Comment
+    { id = r.id.unCommentId
+    , body = r.body
+    , createdAt = r.createdAt
+    , updatedAt = r.updatedAt
+    , author = Profile r.authorUsername Nothing Nothing False -- Basic profile
+    , articleSlug = Just r.articleSlug
+    }

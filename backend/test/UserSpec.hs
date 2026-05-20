@@ -10,8 +10,8 @@ import Database.Persist.Sql (toSqlKey)
 import Servant.Auth.Server qualified as S
 import Test.Hspec
 
-import Infrastructure.Interpreter.Stub
-import Infrastructure.Interpreter.Stub.DB.UserDB (MockDB (..), emptyMockDB)
+import Infrastructure.Api.Auth.Web.Controller (loginUserHandler, registerUserHandler)
+import Infrastructure.Api.User.Web.Controller (followUserHandler)
 import Infrastructure.Entity.User.DTO
   ( LoginUserRequest (..)
   , NewUserRequest (..)
@@ -20,8 +20,8 @@ import Infrastructure.Entity.User.DTO
   , User (..)
   , UserResponse (..)
   )
-import Infrastructure.Api.Auth.Web.Controller (loginUserHandler, registerUserHandler)
-import Infrastructure.Api.User.Web.Controller (followUserHandler)
+import Infrastructure.Interpreter.Stub
+import Infrastructure.Interpreter.Stub.DB.UserDB (MockDB (..), emptyMockDB)
 
 spec :: Spec
 spec = do

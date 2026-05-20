@@ -10,13 +10,13 @@ import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
 import Domain.Type qualified as D
-import Infrastructure.Api.Route.Auth.Web.Type
 import Infrastructure.Api.DTO.User
   ( LoginUserRequest (..)
   , NewUserRequest (..)
   , User (..)
   , UserResponse (..)
   )
+import Infrastructure.Api.Route.Auth.Web.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 

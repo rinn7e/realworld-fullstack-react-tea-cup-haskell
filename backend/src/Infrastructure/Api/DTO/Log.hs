@@ -4,6 +4,7 @@ module Infrastructure.Api.DTO.Log
   , LogListResponse (..)
   , logLevelToText
   , logLevelFromText
+  , toLogResponse
   )
 where
 
@@ -15,72 +16,51 @@ import Data.OpenApi
   , OpenApiType (..)
   , ToParamSchema (..)
   , ToSchema (..)
-  , enum_
   , type_
   )
 import Data.Text (Text)
-import Data.Text qualified as T
 import Data.Time (UTCTime)
 import GHC.Generics (Generic)
-import Web.HttpApiData (FromHttpApiData (..), ToHttpApiData (..))
+import Web.HttpApiData (FromHttpApiData (..))
 
-data LogLevel = LogInfo | LogWarning | LogError | LogFatal
+import Domain.Type qualified as D
+
+data LogLevel = INFO | WARNING | ERROR | DEBUG
   deriving stock (Show, Eq, Generic)
 
 logLevelToText :: LogLevel -> Text
-logLevelToText LogInfo = "INFO"
-logLevelToText LogWarning = "WARNING"
-logLevelToText LogError = "ERROR"
-logLevelToText LogFatal = "FATAL"
+logLevelToText INFO = "INFO"
+logLevelToText WARNING = "WARNING"
+logLevelToText ERROR = "ERROR"
+logLevelToText DEBUG = "DEBUG"
 
 logLevelFromText :: Text -> LogLevel
-logLevelFromText t = case T.toLower t of
-  "info" -> LogInfo
-  "warning" -> LogWarning
-  "error" -> LogError
-  "fatal" -> LogFatal
-  _ -> LogInfo
+logLevelFromText "INFO" = INFO
+logLevelFromText "WARNING" = WARNING
+logLevelFromText "ERROR" = ERROR
+logLevelFromText "DEBUG" = DEBUG
+logLevelFromText _ = INFO
 
 instance ToJSON LogLevel where
-  toJSON LogInfo = "info"
-  toJSON LogWarning = "warning"
-  toJSON LogError = "error"
-  toJSON LogFatal = "fatal"
+  toJSON = A.String . logLevelToText
 
 instance FromJSON LogLevel where
-  parseJSON = A.withText "LogLevel" $ \case
-    "info" -> pure LogInfo
-    "warning" -> pure LogWarning
-    "error" -> pure LogError
-    "fatal" -> pure LogFatal
-    t -> fail $ "Unknown log level: " ++ T.unpack t
+  parseJSON = A.withText "LogLevel" $ \t -> return $ logLevelFromText t
 
 instance ToSchema LogLevel where
   declareNamedSchema _ = do
-    let schema =
-          mempty
-            & type_ ?~ OpenApiString
-            & enum_ ?~ ["info", "warning", "error", "fatal"]
-    return $ NamedSchema (Just "LogLevel") schema
+    return $
+      NamedSchema (Just "LogLevel") $
+        mempty
+          & type_ ?~ OpenApiString
 
 instance ToParamSchema LogLevel where
   toParamSchema _ =
     mempty
       & type_ ?~ OpenApiString
-      & enum_ ?~ ["info", "warning", "error", "fatal"]
-
-instance ToHttpApiData LogLevel where
-  toQueryParam LogInfo = "info"
-  toQueryParam LogWarning = "warning"
-  toQueryParam LogError = "error"
-  toQueryParam LogFatal = "fatal"
 
 instance FromHttpApiData LogLevel where
-  parseQueryParam "info" = Right LogInfo
-  parseQueryParam "warning" = Right LogWarning
-  parseQueryParam "error" = Right LogError
-  parseQueryParam "fatal" = Right LogFatal
-  parseQueryParam t = Left $ "Unknown log level: " <> t
+  parseQueryParam t = Right $ logLevelFromText t
 
 data LogResponse = LogResponse
   { id :: Int
@@ -99,3 +79,17 @@ data LogListResponse = LogListResponse
   }
   deriving stock (Show, Generic)
   deriving anyclass (ToJSON, ToSchema)
+
+-------------------------------
+-- Helpers
+-------------------------------
+toLogResponse :: D.LogEntry -> LogResponse
+toLogResponse l =
+  LogResponse
+    { id = l.logId.unLogId
+    , level = logLevelFromText l.level
+    , message = l.message
+    , source = l.source
+    , timestamp = l.timestamp
+    , userId = fmap (\(D.UserId i) -> i) l.userId
+    }

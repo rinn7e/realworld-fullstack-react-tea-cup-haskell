@@ -11,12 +11,12 @@ import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
 import Domain.Type qualified as D
-import Infrastructure.Api.Route.Auth.Admin.Type
 import Infrastructure.Api.DTO.User
   ( LoginUserRequest (..)
   , User (..)
   , UserResponse (..)
   )
+import Infrastructure.Api.Route.Auth.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB

@@ -18,10 +18,7 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Domain.Type (LogEntry (..), LogId (..))
-import Domain.Type qualified as DU
-import Domain.Type (Visitor (..), VisitorId (..))
-import Infrastructure.Api.Route.Dashboard.Admin.Type
+import Domain.Type (Visitor (..))
 import Infrastructure.Api.DTO.Dashboard
   ( DashboardStatsResponse (..)
   , VisitorStatResponse (..)
@@ -29,11 +26,11 @@ import Infrastructure.Api.DTO.Dashboard
 import Infrastructure.Api.DTO.Log
   ( LogLevel (..)
   , LogListResponse (..)
-  , LogResponse (..)
-  , logLevelFromText
   , logLevelToText
+  , toLogResponse
   )
-import Infrastructure.Api.DTO.Visitor (VisitorListResponse (..), VisitorResponse (..))
+import Infrastructure.Api.DTO.Visitor (VisitorListResponse (..), toVisitorResponse)
+import Infrastructure.Api.Route.Dashboard.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
@@ -76,7 +73,8 @@ getDashboardStatsHandler (S.Authenticated uid) = do
       }
 getDashboardStatsHandler _ = throwError S.err401
 
-getVisitorStatsHandler :: S.AuthResult DB.UserId -> Maybe Text -> App [VisitorStatResponse]
+getVisitorStatsHandler
+  :: S.AuthResult DB.UserId -> Maybe Text -> App [VisitorStatResponse]
 getVisitorStatsHandler (S.Authenticated uid) mFilter = do
   guardAdmin uid
   let filterVal = maybe "week" id mFilter
@@ -141,17 +139,6 @@ getLogsHandler (S.Authenticated uid) mLimit mOffset mLevel mSource = do
       { logs = logResponses
       , totalCount = total
       }
- where
-  toLogResponse :: LogEntry -> LogResponse
-  toLogResponse (l :: LogEntry) =
-    LogResponse
-      { id = l.logId.unLogId
-      , level = logLevelFromText l.level
-      , message = l.message
-      , source = l.source
-      , timestamp = l.timestamp
-      , userId = fmap (\(DU.UserId i) -> i) l.userId
-      }
 getLogsHandler _ _ _ _ _ = throwError S.err401
 
 getVisitorsHandler
@@ -171,15 +158,5 @@ getVisitorsHandler (S.Authenticated uid) mLimit mOffset mIp mPath = do
     VisitorListResponse
       { visitors = visitorResponses
       , totalCount = total
-      }
- where
-  toVisitorResponse :: Visitor -> VisitorResponse
-  toVisitorResponse (v :: Visitor) =
-    VisitorResponse
-      { id = v.visitorId.unVisitorId
-      , ip = v.ip
-      , userAgent = v.userAgent
-      , path = v.path
-      , timestamp = v.timestamp
       }
 getVisitorsHandler _ _ _ _ _ = throwError S.err401

@@ -47,9 +47,9 @@ getArticleFeedHandler (S.Authenticated uid) mLimit mOffset = do
   let limit = maybe 20 id mLimit
       offset = maybe 0 id mOffset
       dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
-  articlesWithMetadata <- listFeed dUid limit offset
+  articlesDetail <- listFeed dUid limit offset
   totalCount <- countFeed dUid
-  let articles = map toArticleResponse articlesWithMetadata
+  let articles = map toArticleResponse articlesDetail
   return $ ArticleListResponse articles totalCount
 getArticleFeedHandler _ _ _ = throwError S.err401
 
@@ -67,9 +67,9 @@ getArticleListHandler auth mTag mAuthor mFavorited mLimit mOffset = do
       mdUid = case auth of
         S.Authenticated uid -> Just $ DU.UserId $ fromIntegral (fromSqlKey uid)
         _ -> Nothing
-  articlesWithMetadata <- listArticles mdUid mTag mAuthor mFavorited limit offset
+  articlesDetail <- listArticles mdUid mTag mAuthor mFavorited limit offset
   totalCount <- countArticles mTag mAuthor mFavorited
-  let articles = map toArticleResponse articlesWithMetadata
+  let articles = map toArticleResponse articlesDetail
   return $ ArticleListResponse articles totalCount
 
 createArticleHandler :: S.AuthResult DB.UserId -> NewArticleRequest -> App ArticleResponse
@@ -78,8 +78,8 @@ createArticleHandler (S.Authenticated uid) (NewArticleRequest title desc body mT
       tags = fromMaybe [] mTags
       dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
   _ <- createArticle slug title desc body dUid tags
-  mArticleWithMetadata <- getArticleWithAuthor (Just dUid) slug
-  case mArticleWithMetadata of
+  mArticleDetail <- getArticleWithAuthor (Just dUid) slug
+  case mArticleDetail of
     Just grouped -> return $ ArticleResponse $ toArticleResponse grouped
     Nothing -> throwError S.err500
 createArticleHandler _ _ = throwError S.err401
@@ -89,8 +89,8 @@ getArticleOneHandler auth slug = do
   let mdUid = case auth of
         S.Authenticated uid -> Just $ DU.UserId $ fromIntegral (fromSqlKey uid)
         _ -> Nothing
-  mArticleWithMetadata <- getArticleWithAuthor mdUid slug
-  case mArticleWithMetadata of
+  mArticleDetail <- getArticleWithAuthor mdUid slug
+  case mArticleDetail of
     Nothing -> throwError S.err404
     Just grouped -> return $ ArticleResponse $ toArticleResponse grouped
 
@@ -110,8 +110,8 @@ updateArticleHandler (S.Authenticated uid) slug (UpdateArticleRequest mTitle mDe
               newDesc = maybe art.description id mDesc
               newBody = maybe art.body id mBody
           _ <- updateArticle art.articleId newSlug newTitle newDesc newBody mTags
-          mArticleWithMetadata <- getArticleWithAuthor (Just dUid) newSlug
-          case mArticleWithMetadata of
+          mArticleDetail <- getArticleWithAuthor (Just dUid) newSlug
+          case mArticleDetail of
             Just grouped -> return $ ArticleResponse $ toArticleResponse grouped
             Nothing -> throwError S.err500
 updateArticleHandler _ _ _ = throwError S.err401
@@ -138,8 +138,8 @@ favoriteArticleHandler (S.Authenticated uid) slug = do
     Just art -> do
       let dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
       favoriteArticle dUid art.articleId
-      mArticleWithMetadata <- getArticleWithAuthor (Just dUid) slug
-      case mArticleWithMetadata of
+      mArticleDetail <- getArticleWithAuthor (Just dUid) slug
+      case mArticleDetail of
         Just grouped -> return $ ArticleResponse $ toArticleResponse grouped
         Nothing -> throwError S.err500
 favoriteArticleHandler _ _ = throwError S.err401
@@ -152,8 +152,8 @@ unfavoriteArticleHandler (S.Authenticated uid) slug = do
     Just art -> do
       let dUid = DU.UserId $ fromIntegral (fromSqlKey uid)
       unfavoriteArticle dUid art.articleId
-      mArticleWithMetadata <- getArticleWithAuthor (Just dUid) slug
-      case mArticleWithMetadata of
+      mArticleDetail <- getArticleWithAuthor (Just dUid) slug
+      case mArticleDetail of
         Just grouped -> return $ ArticleResponse $ toArticleResponse grouped
         Nothing -> throwError S.err500
 unfavoriteArticleHandler _ _ = throwError S.err401

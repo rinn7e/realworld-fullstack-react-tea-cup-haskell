@@ -17,12 +17,12 @@ import Servant
   )
 import Servant qualified as S
 
-import Infrastructure.Api.Route.TagCombinator (Tag)
 import Infrastructure.Api.DTO.User
   ( AdminUserListResponse (..)
   , AdminUserResponse (..)
   , UpdateUserRoleRequest (..)
   )
+import Infrastructure.Api.Route.TagCombinator (Tag)
 
 data AdminUserRoute mode = AdminUserRoute
   { getUsers
