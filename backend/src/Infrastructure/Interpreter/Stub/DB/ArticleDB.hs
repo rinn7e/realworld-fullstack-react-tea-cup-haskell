@@ -14,11 +14,11 @@ runArticleDBStub = interpret $ \_ -> \case
   CreateArticle{} -> error "ArticleDBStub: CreateArticle"
   UpdateArticle{} -> error "ArticleDBStub: UpdateArticle"
   DeleteArticle _ -> pure ()
-  ListArticles{} -> pure mempty
-  ListFeed{} -> pure mempty
+  ListArticles{} -> pure []
+  ListFeed{} -> pure []
   CountArticles{} -> pure 0
   CountFeed _ -> pure 0
   FavoriteArticle _ _ -> pure ()
   UnfavoriteArticle _ _ -> pure ()
-  ListAdminArticles{} -> pure mempty
+  ListAdminArticles{} -> pure []
   CountAdminArticles{} -> pure 0

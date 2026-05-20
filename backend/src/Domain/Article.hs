@@ -1,7 +1,6 @@
 module Domain.Article where
 
 import Data.Aeson (FromJSON, ToJSON)
-import Data.Semigroup (First (..))
 import Data.Text (Text)
 import Data.Time (UTCTime)
 import Domain.Tag (Tag)
@@ -25,23 +24,12 @@ data Article = Article
   }
   deriving stock (Eq, Show, Generic)
 
-data ArticleGrouped = ArticleGrouped
-  { article :: First Article
-  , author :: First User
+data ArticleWithMetadata = ArticleWithMetadata
+  { article :: Article
+  , author :: User
   , tags :: [Tag]
-  , favoritesCount :: First Int
-  , isFavorited :: First Bool
-  , isFollowingAuthor :: First Bool
+  , favoritesCount :: Int
+  , isFavorited :: Bool
+  , isFollowingAuthor :: Bool
   }
   deriving stock (Eq, Show, Generic)
-
-instance Semigroup ArticleGrouped where
-  a <> b =
-    ArticleGrouped
-      { article = a.article <> b.article
-      , author = a.author <> b.author
-      , tags = a.tags <> b.tags
-      , favoritesCount = a.favoritesCount <> b.favoritesCount
-      , isFavorited = a.isFavorited <> b.isFavorited
-      , isFollowingAuthor = a.isFollowingAuthor <> b.isFollowingAuthor
-      }

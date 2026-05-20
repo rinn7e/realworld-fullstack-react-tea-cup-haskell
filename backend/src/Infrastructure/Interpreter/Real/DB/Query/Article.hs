@@ -48,11 +48,11 @@ getArticleBySlugSQL slug = do
   return article
 
 getArticleWithAuthor
-  :: (MonadUnliftIO m) => Maybe UserId -> Text -> SqlPersistT m (Maybe InfrastructureArticleGrouped)
+  :: (MonadUnliftIO m) => Maybe UserId -> Text -> SqlPersistT m (Maybe ArticleGrouped)
 getArticleWithAuthor mCurrentUserId slug = do
   result <- select $ getArticleWithAuthorSQL mCurrentUserId slug
   traceM $ "getArticleWithAuthor result length: " ++ show (length result)
-  return $ headMay $ Map.elems $ unAppendMap $ mconcat $ map mkInfrastructureArticleGrouped result
+  return $ headMay $ Map.elems $ unAppendMap $ mconcat $ map mkArticleGrouped result
  where
   headMay (x : _) = Just x
   headMay [] = Nothing
@@ -92,10 +92,10 @@ listArticles
   -> Maybe Text
   -> Int
   -> Int
-  -> SqlPersistT IO (AppendMap (Down UTCTime, ArticleId) InfrastructureArticleGrouped)
+  -> SqlPersistT IO (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
 listArticles mCurrentUserId mTag mAuthor mFavorited lim off = do
   result <- select $ listArticlesSQL mCurrentUserId mTag mAuthor mFavorited lim off
-  let result2 = mconcat $ map mkInfrastructureArticleGrouped result
+  let result2 = mconcat $ map mkArticleGrouped result
   pure result2
 
 -- | Main query to list articles with filtering and pagination
@@ -140,11 +140,11 @@ listFeed
   => UserId
   -> Int
   -> Int
-  -> SqlPersistT m (AppendMap (Down UTCTime, ArticleId) InfrastructureArticleGrouped)
+  -> SqlPersistT m (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
 listFeed currentUserId lim off = do
   result <- select $ listFeedSQL currentUserId lim off
   traceM $ "listFeed result length: " ++ show (length result)
-  return $ mconcat $ map mkInfrastructureArticleGrouped result
+  return $ mconcat $ map mkArticleGrouped result
 
 -- | Main query to fetch the article feed for a user
 listFeedSQL
@@ -326,7 +326,7 @@ listAdminArticles
   -> Maybe Text
   -> Int
   -> Int
-  -> SqlPersistT IO (AppendMap (Down UTCTime, ArticleId) InfrastructureArticleGrouped)
+  -> SqlPersistT IO (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
 listAdminArticles mTag mAuthor mSearch lim off = do
   result <- select $ do
     (((article :& author) :& _) :& tag) <-
@@ -351,7 +351,7 @@ listAdminArticles mTag mAuthor mSearch lim off = do
       , val False
       , val False
       )
-  let result2 = mconcat $ map mkInfrastructureArticleGrouped result
+  let result2 = mconcat $ map mkArticleGrouped result
   pure result2
 
 filterAdminArticlesIdsSQL

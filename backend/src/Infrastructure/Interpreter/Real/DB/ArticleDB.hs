@@ -3,9 +3,8 @@ module Infrastructure.Interpreter.Real.DB.ArticleDB
   , toDomainArticle
   ) where
 
-import Data.Map.Append (AppendMap (..), unAppendMap)
+import Data.Map.Append (unAppendMap)
 import Data.Map.Strict qualified as Map
-import Data.Ord (Down)
 import Data.Semigroup (First (..))
 import Data.Text (Text)
 import Data.Time (getCurrentTime)
@@ -30,7 +29,7 @@ import Domain.Article qualified as D
 import Domain.Tag qualified as DT
 import Domain.User qualified as DU
 import Infrastructure.Interpreter.Real.DB.Query.Article qualified as Q
-import Infrastructure.Interpreter.Real.DB.Query.Article.Type (InfrastructureArticleGrouped)
+import Infrastructure.Interpreter.Real.DB.Query.Article.Type (ArticleGrouped)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 import Infrastructure.Interpreter.Real.DB.UserDB (toDomainUser)
 
@@ -54,15 +53,15 @@ toDomainTag (Entity tid t) =
     , name = t.name
     }
 
-toDomainArticleGrouped :: InfrastructureArticleGrouped -> D.ArticleGrouped
-toDomainArticleGrouped (First art, First auth, tagsMap, (First favCount, First isFav, First isFol)) =
-  D.ArticleGrouped
-    { article = First $ toDomainArticle art
-    , author = First $ toDomainUser auth
+toDomainArticleWithMetadata :: ArticleGrouped -> D.ArticleWithMetadata
+toDomainArticleWithMetadata (First art, First auth, tagsMap, (First favCount, First isFav, First isFol)) =
+  D.ArticleWithMetadata
+    { article = toDomainArticle art
+    , author = toDomainUser auth
     , tags = map (toDomainTag . getFirst) $ Map.elems $ unAppendMap tagsMap
-    , favoritesCount = First $ maybe 0 id favCount
-    , isFavorited = First isFav
-    , isFollowingAuthor = First isFol
+    , favoritesCount = maybe 0 id favCount
+    , isFavorited = isFav
+    , isFollowingAuthor = isFol
     }
 
 ensureTag :: DB.ArticleId -> Text -> SqlPersistT IO ()
@@ -94,7 +93,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
         ( do
             let sqlUserId = fmap (\(DU.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
             mArtGrp <- Q.getArticleWithAuthor sqlUserId slug
-            return $ fmap toDomainArticleGrouped mArtGrp
+            return $ fmap toDomainArticleWithMetadata mArtGrp
         )
         pool
   CreateArticle slug title desc body (DU.UserId authorIdInt) tags -> do
@@ -157,7 +156,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
         ( do
             let sqlUserId = fmap (\(DU.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
             res <- Q.listArticles sqlUserId mTag mAuthor mFavorited lim off
-            return $ AppendMap $ Map.mapKeys (\(d, k) -> (d, D.ArticleId $ fromIntegral (fromSqlKey k))) $ Map.map toDomainArticleGrouped $ unAppendMap res
+            return $ map toDomainArticleWithMetadata $ Map.elems $ unAppendMap res
         )
         pool
   ListFeed (DU.UserId currentUserIdInt) lim off -> do
@@ -167,7 +166,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
         ( do
             let sqlUserId = toSqlKey (fromIntegral currentUserIdInt)
             res <- Q.listFeed sqlUserId lim off
-            return $ AppendMap $ Map.mapKeys (\(d, k) -> (d, D.ArticleId $ fromIntegral (fromSqlKey k))) $ Map.map toDomainArticleGrouped $ unAppendMap res
+            return $ map toDomainArticleWithMetadata $ Map.elems $ unAppendMap res
         )
         pool
   CountArticles mTag mAuthor mFavorited -> do
@@ -210,7 +209,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
       runSqlPool
         ( do
             res <- Q.listAdminArticles mTag mAuthor mSearch lim off
-            return $ AppendMap $ Map.mapKeys (\(d, k) -> (d, D.ArticleId $ fromIntegral (fromSqlKey k))) $ Map.map toDomainArticleGrouped $ unAppendMap res
+            return $ map toDomainArticleWithMetadata $ Map.elems $ unAppendMap res
         )
         pool
   CountAdminArticles mTag mAuthor mSearch -> do

@@ -195,14 +195,14 @@ data AdminArticleListResponse = AdminArticleListResponse
 -------------------------------
 -- Helpers
 -------------------------------
-toArticleResponse :: D.ArticleGrouped -> Article
-toArticleResponse ag =
-  let art = ag.article.getFirst
-      author = ag.author.getFirst
-      tags = map (\t -> t.name) ag.tags
-      isFol = ag.isFollowingAuthor.getFirst
-      isFav = ag.isFavorited.getFirst
-      favCount = ag.favoritesCount.getFirst
+toArticleResponse :: D.ArticleWithMetadata -> Article
+toArticleResponse am =
+  let art = am.article
+      author = am.author
+      tags = map (\t -> t.name) am.tags
+      isFol = am.isFollowingAuthor
+      isFav = am.isFavorited
+      favCount = am.favoritesCount
       profile = Profile author.username author.bio author.image isFol
    in Article
         art.slug

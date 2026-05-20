@@ -1,17 +1,14 @@
 module Capability.Database.ArticleDB where
 
-import Data.Map.Append (AppendMap)
-import Data.Ord (Down)
 import Data.Text (Text)
-import Data.Time (UTCTime)
-import Domain.Article (Article, ArticleGrouped, ArticleId)
+import Domain.Article (Article, ArticleWithMetadata, ArticleId)
 import Domain.User (UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
 
 data ArticleDB :: Effect where
   GetArticleBySlug :: Text -> ArticleDB m (Maybe Article)
-  GetArticleWithAuthor :: Maybe UserId -> Text -> ArticleDB m (Maybe ArticleGrouped)
+  GetArticleWithAuthor :: Maybe UserId -> Text -> ArticleDB m (Maybe ArticleWithMetadata)
   CreateArticle
     :: Text -> Text -> Text -> Text -> UserId -> [Text] -> ArticleDB m Article
   UpdateArticle
@@ -24,9 +21,9 @@ data ArticleDB :: Effect where
     -> Maybe Text
     -> Int
     -> Int
-    -> ArticleDB m (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
+    -> ArticleDB m [ArticleWithMetadata]
   ListFeed
-    :: UserId -> Int -> Int -> ArticleDB m (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
+    :: UserId -> Int -> Int -> ArticleDB m [ArticleWithMetadata]
   CountArticles :: Maybe Text -> Maybe Text -> Maybe Text -> ArticleDB m Int
   CountFeed :: UserId -> ArticleDB m Int
   FavoriteArticle :: UserId -> ArticleId -> ArticleDB m ()
@@ -37,7 +34,7 @@ data ArticleDB :: Effect where
     -> Maybe Text
     -> Int
     -> Int
-    -> ArticleDB m (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
+    -> ArticleDB m [ArticleWithMetadata]
   CountAdminArticles :: Maybe Text -> Maybe Text -> Maybe Text -> ArticleDB m Int
 
 type instance DispatchOf ArticleDB = 'Dynamic
@@ -46,7 +43,7 @@ getArticleBySlug :: (ArticleDB :> es) => Text -> Eff es (Maybe Article)
 getArticleBySlug slug = send (GetArticleBySlug slug)
 
 getArticleWithAuthor
-  :: (ArticleDB :> es) => Maybe UserId -> Text -> Eff es (Maybe ArticleGrouped)
+  :: (ArticleDB :> es) => Maybe UserId -> Text -> Eff es (Maybe ArticleWithMetadata)
 getArticleWithAuthor mCurrentUserId slug = send (GetArticleWithAuthor mCurrentUserId slug)
 
 createArticle
@@ -75,7 +72,7 @@ listArticles
   -> Maybe Text
   -> Int
   -> Int
-  -> Eff es (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
+  -> Eff es [ArticleWithMetadata]
 listArticles mCurrentUserId mTag mAuthor mFavorited lim off = send (ListArticles mCurrentUserId mTag mAuthor mFavorited lim off)
 
 listFeed
@@ -83,7 +80,7 @@ listFeed
   => UserId
   -> Int
   -> Int
-  -> Eff es (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
+  -> Eff es [ArticleWithMetadata]
 listFeed currentUserId lim off = send (ListFeed currentUserId lim off)
 
 countArticles :: (ArticleDB :> es) => Maybe Text -> Maybe Text -> Maybe Text -> Eff es Int
@@ -105,7 +102,7 @@ listAdminArticles
   -> Maybe Text
   -> Int
   -> Int
-  -> Eff es (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
+  -> Eff es [ArticleWithMetadata]
 listAdminArticles mTag mAuthor mSearch lim off = send (ListAdminArticles mTag mAuthor mSearch lim off)
 
 countAdminArticles
