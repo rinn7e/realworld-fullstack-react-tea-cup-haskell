@@ -12,10 +12,8 @@ import {
   getHttpErrorEq,
 } from '@/common/api/type'
 import { type Article, ArticleEq } from '@/common/api/type/article'
-import { type Sort, SortEq } from '@/common/type/filter'
-import type { Shared } from '@/type'
-
 import * as SearchBar from '@/component/search-bar'
+import type { Shared } from '@/type'
 
 export const GET_ARTICLES_LIMIT = 50
 
@@ -26,13 +24,22 @@ export type Model = {
   readonly searchBar: SearchBar.Model
 }
 
+export type ArticleItemMsg = {
+  readonly _tag: 'SelectArticle'
+  readonly article: O.Option<Article>
+}
+
 export type Msg =
   | { readonly _tag: 'NoOp' }
-  | { readonly _tag: 'SelectArticle'; readonly article: O.Option<Article> }
+  | ArticleItemMsg
   | { readonly _tag: 'SearchBarMsg'; readonly subMsg: SearchBar.Msg }
   | {
       readonly _tag: 'PaginationMsg'
-      readonly subMsg: Pagination.Msg<Article, any, HttpError<ApiError>>
+      readonly subMsg: Pagination.Msg<
+        Article,
+        ArticleItemMsg,
+        HttpError<ApiError>
+      >
     }
 
 export const ModelEq: EqClass.Eq<Model> = EqClass.struct({

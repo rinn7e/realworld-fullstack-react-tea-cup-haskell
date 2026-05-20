@@ -2,7 +2,7 @@ import * as O from 'fp-ts/lib/Option'
 import React from 'react'
 
 import { memoStrategy } from '@/common/util'
-import * as SearchBar from '@/component/search-bar'
+import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
 import { VisitorDetailOverlay } from './sub-component/visitor-detail-overlay'
@@ -24,7 +24,9 @@ export const VisitorsPageComponent: React.FC<Props> = ({ model, dispatch }) => {
         <SearchBarMemo
           model={model.searchBar}
           sortOptions={sortOptions}
-          dispatch={(subMsg: SearchBar.Msg) => dispatch({ _tag: 'SearchBarMsg', subMsg })}
+          dispatch={(subMsg: SearchBar.Msg) =>
+            dispatch({ _tag: 'SearchBarMsg', subMsg })
+          }
           placeholder='Search visitors by IP, fingerprint, or User Agent...'
         />
       </div>
@@ -78,4 +80,7 @@ export const VisitorsPageComponent: React.FC<Props> = ({ model, dispatch }) => {
   )
 }
 
-export const VisitorsPageMemo = memoStrategy(VisitorsPageComponent, PropsEq.equals)
+export const VisitorsPageMemo = memoStrategy(
+  VisitorsPageComponent,
+  PropsEq.equals,
+)

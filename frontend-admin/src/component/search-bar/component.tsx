@@ -66,7 +66,7 @@ const view = (props: Props) => {
         )}
         <button
           type='submit'
-          className='bg-theme-primary hover:bg-theme-primary/95 text-white rounded-[12px] px-[16px] py-[8px] text-[14px] font-bold transition-colors'
+          className='bg-theme-primary hover:bg-theme-primary/95 rounded-[12px] px-[16px] py-[8px] text-[14px] font-bold text-white transition-colors'
         >
           Search
         </button>

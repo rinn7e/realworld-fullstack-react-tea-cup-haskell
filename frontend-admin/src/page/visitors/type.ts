@@ -6,8 +6,6 @@ import * as S from 'fp-ts/lib/string'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { type Visitor, VisitorEq } from '@/common/api/type/visitor'
-import { type Sort, SortEq } from '@/common/type/filter'
-
 import * as SearchBar from '@/component/search-bar'
 
 export type Model = {

@@ -3,6 +3,7 @@ import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { type Article } from '@/common/api/type/article'
+import { UserImage } from '@/component/user-image'
 
 import { type Msg } from '../type'
 
@@ -19,7 +20,7 @@ const detailRowView = (label: string, value: string, mono?: boolean) => (
   </div>
 )
 
-export const ArticleDetailComponent: React.FC<{
+export const ArticleDetailOverlay: React.FC<{
   selectedArticle: O.Option<Article>
   dispatch: Dispatcher<Msg>
 }> = ({ selectedArticle, dispatch }) => {
@@ -71,14 +72,13 @@ export const ArticleDetailComponent: React.FC<{
                 Author
               </div>
               <div className='flex items-center gap-[12px]'>
-                <img
-                  src={article.author.image || ''}
+                <UserImage
+                  src={article.author.image}
                   className='h-[40px] w-[40px] rounded-full object-cover shadow-sm'
-                  alt=''
                 />
                 <div>
                   <div className='text-theme-secondary font-bold dark:text-white'>
-                     {article.author.username}
+                    {article.author.username}
                   </div>
                   <div className='text-[12px] text-slate-400 dark:text-slate-200'>
                     {article.author.bio || 'No bio'}
@@ -96,7 +96,10 @@ export const ArticleDetailComponent: React.FC<{
             </div>
             <div className='flex gap-[24px]'>
               {detailRowView('Favorites', article.favoritesCount.toString())}
-              {detailRowView('Created', new Date(article.createdAt).toLocaleString())}
+              {detailRowView(
+                'Created',
+                new Date(article.createdAt).toLocaleString(),
+              )}
             </div>
           </div>
         </div>

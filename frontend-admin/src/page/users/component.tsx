@@ -2,8 +2,9 @@ import * as O from 'fp-ts/lib/Option'
 import React from 'react'
 
 import { memoStrategy } from '@/common/util'
-import * as SearchBar from '@/component/search-bar'
+import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
+import { UserImage } from '@/component/user-image'
 
 import { UserDetailOverlay } from './sub-component/user-detail-overlay'
 import { type Props, PropsEq } from './type'
@@ -24,7 +25,9 @@ export const UsersPageComponent: React.FC<Props> = ({ model, dispatch }) => {
         <SearchBarMemo
           model={model.searchBar}
           sortOptions={sortOptions}
-          dispatch={(subMsg: SearchBar.Msg) => dispatch({ _tag: 'SearchBarMsg', subMsg })}
+          dispatch={(subMsg: SearchBar.Msg) =>
+            dispatch({ _tag: 'SearchBarMsg', subMsg })
+          }
           placeholder='Search users by username, email, or bio...'
         />
       </div>
@@ -53,10 +56,9 @@ export const UsersPageComponent: React.FC<Props> = ({ model, dispatch }) => {
                   {u.id}
                 </td>
                 <td className='px-[24px] py-[16px]'>
-                  <img
-                    src={u.image || ''}
+                  <UserImage
+                    src={u.image}
                     className='h-[32px] w-[32px] rounded-full object-cover shadow-sm'
-                    alt=''
                   />
                 </td>
                 <td className='px-[24px] py-[16px] font-medium text-slate-800 dark:text-white'>

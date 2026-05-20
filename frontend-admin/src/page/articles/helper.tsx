@@ -1,22 +1,22 @@
 import * as RD from '@devexperts/remote-data-ts'
+import type * as Pagination from '@rinn7e/tea-cup-pagination'
 import * as O from 'fp-ts/lib/Option'
 import * as TE from 'fp-ts/lib/TaskEither'
 import { pipe } from 'fp-ts/lib/function'
 import React from 'react'
 
 import { getAdminArticles } from '@/common/api/handler/article'
-import type { Article } from '@/common/api/type/article'
-import type { Shared } from '@/type'
 import { type ApiError, type HttpError } from '@/common/api/type'
-import type * as Pagination from '@rinn7e/tea-cup-pagination'
+import type { Article } from '@/common/api/type/article'
 import { renderPagination } from '@/component/pagination'
+import type { Shared } from '@/type'
 
-import { GET_ARTICLES_LIMIT, type Model } from './type'
+import { type ArticleItemMsg, GET_ARTICLES_LIMIT, type Model } from './type'
 
 export const mkPaginationConfig = (
   shared: Shared,
   model: Model,
- ): Pagination.Config<Article, any, HttpError<ApiError>> => ({
+): Pagination.Config<Article, ArticleItemMsg, HttpError<ApiError>> => ({
   limit: GET_ARTICLES_LIMIT,
   scrollContainerId: 'main-content',
   handler: (offset, limit) => {
@@ -43,8 +43,10 @@ export const mkPaginationConfig = (
                 const valA = a[model.searchBar.sort.attr as keyof Article]
                 const valB = b[model.searchBar.sort.attr as keyof Article]
                 if (valA === undefined || valB === undefined) return 0
-                if (valA < valB) return model.searchBar.sort.direction === 'asc' ? -1 : 1
-                if (valA > valB) return model.searchBar.sort.direction === 'asc' ? 1 : -1
+                if (valA < valB)
+                  return model.searchBar.sort.direction === 'asc' ? -1 : 1
+                if (valA > valB)
+                  return model.searchBar.sort.direction === 'asc' ? 1 : -1
                 return 0
               })
               return {
@@ -61,17 +63,17 @@ export const mkPaginationConfig = (
       itemsRD,
       RD.fold(
         () => (
-          <div className='py-[60px] flex justify-center'>
-            <div className='animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-theme-primary'></div>
+          <div className='flex justify-center py-[60px]'>
+            <div className='border-theme-primary h-10 w-10 animate-spin rounded-full border-t-2 border-b-2'></div>
           </div>
         ),
         () => (
-          <div className='py-[60px] flex justify-center'>
-            <div className='animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-theme-primary'></div>
+          <div className='flex justify-center py-[60px]'>
+            <div className='border-theme-primary h-10 w-10 animate-spin rounded-full border-t-2 border-b-2'></div>
           </div>
         ),
         (err) => (
-          <div className='p-[24px] rounded-[12px] bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 font-semibold shadow-sm'>
+          <div className='rounded-[12px] bg-red-50 p-[24px] font-semibold text-red-600 shadow-sm dark:bg-red-950/20 dark:text-red-400'>
             Error loading articles:{' '}
             {err.err
               ? Object.entries(err.err.errors)
@@ -82,19 +84,21 @@ export const mkPaginationConfig = (
         ),
         (articles) =>
           articles.length === 0 ? (
-            <div className='py-[60px] text-center text-slate-500 dark:text-neutral-400 font-medium'>
+            <div className='py-[60px] text-center font-medium text-slate-500 dark:text-neutral-400'>
               No articles found.
             </div>
           ) : (
-            <div className='dark:bg-surface-dark overflow-x-auto rounded-[12px] bg-white shadow-sm border border-slate-100 dark:border-white/10'>
-              <table className='w-full text-left border-collapse'>
+            <div className='dark:bg-surface-dark overflow-x-auto rounded-[12px] border border-slate-100 bg-white shadow-sm dark:border-white/10'>
+              <table className='w-full border-collapse text-left'>
                 <thead className='bg-slate-50 text-[12px] font-semibold tracking-wider text-slate-500 uppercase dark:bg-black/20 dark:text-slate-200'>
                   <tr>
                     <th className='px-[24px] py-[16px]'>ID</th>
                     <th className='px-[24px] py-[16px]'>Slug</th>
                     <th className='px-[24px] py-[16px]'>Title</th>
                     <th className='px-[24px] py-[16px]'>Author</th>
-                    <th className='px-[24px] py-[16px] text-center'>Favorites</th>
+                    <th className='px-[24px] py-[16px] text-center'>
+                      Favorites
+                    </th>
                     <th className='px-[24px] py-[16px]'>Created At</th>
                   </tr>
                 </thead>
@@ -104,7 +108,10 @@ export const mkPaginationConfig = (
                       key={a.id}
                       className='cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-white/5'
                       onClick={() =>
-                        itemDispatch(a, { _tag: 'SelectArticle', article: O.some(a) })
+                        itemDispatch(a, {
+                          _tag: 'SelectArticle',
+                          article: O.some(a),
+                        })
                       }
                     >
                       <td className='px-[24px] py-[16px] font-mono text-slate-400 dark:text-slate-300'>

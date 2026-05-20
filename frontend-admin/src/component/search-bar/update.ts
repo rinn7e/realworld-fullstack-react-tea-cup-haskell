@@ -4,7 +4,10 @@ import { type Sort } from '@/common/type/filter'
 
 import { type Model, type Msg } from './type'
 
-export const init = (initialSearchText: string, initialSort: Sort): [Model, Cmd<Msg>] => {
+export const init = (
+  initialSearchText: string,
+  initialSort: Sort,
+): [Model, Cmd<Msg>] => {
   return [
     {
       searchText: initialSearchText,

@@ -1,14 +1,15 @@
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
+import { SetGlobalMsgContext } from '@/common/global-context'
 import {
+  type AppRoute,
   articlesPage,
   commentsPage,
   homePage,
   settingsPage,
   usersPage,
   visitorsPage,
-  type AppRoute,
 } from '@/common/type/route'
 import { Link } from '@/component/link'
 import { PersonaPanel } from '@/component/persona-panel/persona-panel'
@@ -20,7 +21,6 @@ import { SettingsPageComponent } from '@/page/settings/component'
 import { UsersPageMemo } from '@/page/users/component'
 import { VisitorsPageMemo } from '@/page/visitors/component'
 
-import { SetGlobalMsgContext } from '@/common/global-context'
 import { type Model, type Msg } from './type'
 
 interface Props {
@@ -56,7 +56,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
           <div className='p-[24px]'>
             <Link
               route={{ page: homePage() }}
-              className='text-left transition-opacity hover:opacity-85 block'
+              className='block text-left transition-opacity hover:opacity-85'
             >
               <h1 className='text-[22px] font-bold tracking-tight text-white hover:underline'>
                 Sentinel Dashboard

@@ -3,6 +3,7 @@ import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { type User } from '@/common/api/type/user'
+import { UserImage } from '@/component/user-image'
 
 import { type Msg } from '../type'
 import { DetailRow } from './detail-row'
@@ -50,11 +51,7 @@ export const UserDetailOverlay: React.FC<{
           </div>
           <div className='flex-grow overflow-y-auto p-[32px]'>
             <div className='mb-[32px] flex items-center gap-[24px]'>
-              <img
-                src={user.image || ''}
-                className='h-[100px] w-[100px] rounded-[24px] border-4 border-white object-cover shadow-lg'
-                alt=''
-              />
+              <UserImage src={user.image} />
               <div>
                 <div className='text-theme-secondary text-[24px] font-bold dark:text-white'>
                   {user.username}

@@ -8,3 +8,6 @@ journal/
 src/generated
 src/package
 deprecated
+
+*.yaml
+*.yml

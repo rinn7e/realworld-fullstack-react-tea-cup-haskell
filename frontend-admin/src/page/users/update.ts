@@ -7,7 +7,10 @@ import * as SearchBar from '@/component/search-bar'
 import { type Model, type Msg } from './type'
 
 export const init = (): [Model, Cmd<Msg>] => {
-  const [searchBar, searchBarCmd] = SearchBar.init('', { attr: 'username', direction: 'asc' })
+  const [searchBar, searchBarCmd] = SearchBar.init('', {
+    attr: 'username',
+    direction: 'asc',
+  })
 
   return [
     {
@@ -24,14 +27,20 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
     case 'SelectUser':
       return [{ ...model, selectedUser: msg.user }, Cmd.none()]
-    case 'SearchBarMsg': {
-      const [searchBar, searchBarCmd] = SearchBar.update(msg.subMsg, model.searchBar)
-      return [
-        { ...model, searchBar },
-        searchBarCmd.map((m): Msg => ({ _tag: 'SearchBarMsg', subMsg: m })),
-      ]
-    }
+    case 'SearchBarMsg':
+      return searchBarMsgHandler(msg.subMsg, model)
     case 'NoOp':
       return [model, Cmd.none()]
   }
+}
+
+const searchBarMsgHandler = (
+  subMsg: SearchBar.Msg,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  const [searchBar, searchBarCmd] = SearchBar.update(subMsg, model.searchBar)
+  return [
+    { ...model, searchBar },
+    searchBarCmd.map((m): Msg => ({ _tag: 'SearchBarMsg', subMsg: m })),
+  ]
 }

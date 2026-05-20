@@ -14,12 +14,12 @@ export const LoginPageComponent: React.FC<Props> = ({ model, dispatch }) => {
   }
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-slate-50 px-[16px] py-[40px] dark:bg-slate-950 transition-colors duration-300'>
+    <div className='flex min-h-screen items-center justify-center bg-slate-50 px-[16px] py-[40px] transition-colors duration-300 dark:bg-slate-950'>
       <div className='w-full max-w-[440px]'>
         {/* Decorative elements */}
         <div className='relative'>
-          <div className='bg-theme-primary/10 absolute -top-[40px] -left-[40px] h-[120px] w-[120px] rounded-full blur-3xl dark:bg-theme-primary/5' />
-          <div className='bg-theme-primary/10 absolute -right-[40px] -bottom-[40px] h-[120px] w-[120px] rounded-full blur-3xl dark:bg-theme-primary/5' />
+          <div className='bg-theme-primary/10 dark:bg-theme-primary/5 absolute -top-[40px] -left-[40px] h-[120px] w-[120px] rounded-full blur-3xl' />
+          <div className='bg-theme-primary/10 dark:bg-theme-primary/5 absolute -right-[40px] -bottom-[40px] h-[120px] w-[120px] rounded-full blur-3xl' />
 
           <form
             onSubmit={handleSubmit}
@@ -98,7 +98,7 @@ export const LoginPageComponent: React.FC<Props> = ({ model, dispatch }) => {
               <button
                 type='submit'
                 disabled={model.isSubmitting}
-                className='bg-theme-primary hover:bg-theme-primary/95 focus:ring-theme-primary/20 mt-[8px] flex w-full items-center justify-center gap-[10px] rounded-[12px] py-[14px] text-[15px] font-bold text-white shadow-lg shadow-theme-primary/10 transition-all hover:shadow-theme-primary/20 focus:ring-4 disabled:opacity-50'
+                className='bg-theme-primary hover:bg-theme-primary/95 focus:ring-theme-primary/20 shadow-theme-primary/10 hover:shadow-theme-primary/20 mt-[8px] flex w-full items-center justify-center gap-[10px] rounded-[12px] py-[14px] text-[15px] font-bold text-white shadow-lg transition-all focus:ring-4 disabled:opacity-50'
               >
                 {model.isSubmitting ? (
                   <>

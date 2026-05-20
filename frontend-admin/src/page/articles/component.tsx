@@ -1,15 +1,15 @@
+import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import React from 'react'
 
-import { ArticleEq } from '@/common/api/type/article'
 import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'
+import { ArticleEq } from '@/common/api/type/article'
 import { memoStrategy } from '@/common/util'
-import * as SearchBar from '@/component/search-bar'
+import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
-import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 
-import { ArticleDetailComponent } from './sub-component/article-detail'
-import { type Props, PropsEq } from './type'
 import { mkPaginationConfig } from './helper'
+import { ArticleDetailOverlay } from './sub-component/article-detail-overlay'
+import { type Props, PropsEq } from './type'
 
 const sortOptions: SearchBar.SearchOption[] = [
   { label: 'Creation Date', value: 'createdAt' },
@@ -18,7 +18,11 @@ const sortOptions: SearchBar.SearchOption[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const ArticlesPageComponent: React.FC<Props> = ({ model, shared, dispatch }) => {
+export const ArticlesPageComponent: React.FC<Props> = ({
+  model,
+  shared,
+  dispatch,
+}) => {
   const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
@@ -30,7 +34,9 @@ export const ArticlesPageComponent: React.FC<Props> = ({ model, shared, dispatch
         <SearchBarMemo
           model={model.searchBar}
           sortOptions={sortOptions}
-          dispatch={(subMsg: SearchBar.Msg) => dispatch({ _tag: 'SearchBarMsg', subMsg })}
+          dispatch={(subMsg: SearchBar.Msg) =>
+            dispatch({ _tag: 'SearchBarMsg', subMsg })
+          }
           placeholder='Search articles by title, slug, or content...'
         />
       </div>
@@ -45,7 +51,7 @@ export const ArticlesPageComponent: React.FC<Props> = ({ model, shared, dispatch
         />
       </div>
 
-      <ArticleDetailComponent
+      <ArticleDetailOverlay
         selectedArticle={model.selectedArticle}
         dispatch={dispatch}
       />
@@ -53,4 +59,7 @@ export const ArticlesPageComponent: React.FC<Props> = ({ model, shared, dispatch
   )
 }
 
-export const ArticlesPageMemo = memoStrategy(ArticlesPageComponent, PropsEq.equals)
+export const ArticlesPageMemo = memoStrategy(
+  ArticlesPageComponent,
+  PropsEq.equals,
+)

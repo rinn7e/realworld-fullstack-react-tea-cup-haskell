@@ -10,7 +10,7 @@
     "build": "tsc -b && vite build && cp dist/index.html dist/404.html",
     "lint": "eslint .",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "check": "tsc --noEmit",
     "check:watch": "tsc --noEmit --watch",
     "check-circular": "madge --circular --ts-config ./tsconfig.json --extensions ts,tsx src/"
   },

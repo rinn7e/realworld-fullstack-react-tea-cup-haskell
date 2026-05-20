@@ -110,17 +110,24 @@ export const init = (): [Model, Cmd<Msg>] => {
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
     case 'ChangeFilter':
-      return [
-        {
-          ...model,
-          currentFilter: msg.filter,
-          visitorStats: getStatsForFilter(msg.filter),
-        },
-        Cmd.none(),
-      ]
+      return changeFilterHandler(msg.filter, model)
     case 'SelectLog':
       return [{ ...model, selectedLog: msg.log }, Cmd.none()]
     case 'NoOp':
       return [model, Cmd.none()]
   }
+}
+
+const changeFilterHandler = (
+  filter: TimeFilter,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  return [
+    {
+      ...model,
+      currentFilter: filter,
+      visitorStats: getStatsForFilter(filter),
+    },
+    Cmd.none(),
+  ]
 }

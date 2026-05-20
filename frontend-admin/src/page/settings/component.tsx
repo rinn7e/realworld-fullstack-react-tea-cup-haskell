@@ -125,10 +125,10 @@ export const SettingsPageComponent: React.FC<{
 
       {/* Account Profile Section */}
       {O.isSome(user) && (
-        <section className='dark:bg-slate-900 overflow-hidden rounded-[24px] border border-slate-100 bg-white p-[32px] shadow-lg dark:border-white/5 dark:bg-slate-900'>
+        <section className='overflow-hidden rounded-[24px] border border-slate-100 bg-white p-[32px] shadow-lg dark:border-white/5 dark:bg-slate-900'>
           <div className='flex flex-col gap-[24px] sm:flex-row sm:items-center'>
             {/* Avatar */}
-            <div className='relative flex h-[80px] w-[80px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-theme-primary/10 text-[28px] font-black text-theme-primary ring-4 ring-theme-primary/10 dark:bg-theme-primary/20'>
+            <div className='bg-theme-primary/10 text-theme-primary ring-theme-primary/10 dark:bg-theme-primary/20 relative flex h-[80px] w-[80px] shrink-0 items-center justify-center overflow-hidden rounded-full text-[28px] font-black ring-4'>
               {user.value.image ? (
                 <img
                   src={user.value.image}
@@ -143,10 +143,10 @@ export const SettingsPageComponent: React.FC<{
             {/* Info */}
             <div className='flex-1'>
               <div className='flex flex-wrap items-center gap-[8px]'>
-                <h3 className='text-[20px] font-black text-theme-secondary dark:text-white'>
+                <h3 className='text-theme-secondary text-[20px] font-black dark:text-white'>
                   {user.value.username}
                 </h3>
-                <span className='rounded-full bg-theme-primary/10 px-[10px] py-[2px] text-[11px] font-black tracking-wide text-theme-primary uppercase dark:bg-theme-primary/20'>
+                <span className='bg-theme-primary/10 text-theme-primary dark:bg-theme-primary/20 rounded-full px-[10px] py-[2px] text-[11px] font-black tracking-wide uppercase'>
                   Administrator
                 </span>
               </div>
@@ -154,7 +154,7 @@ export const SettingsPageComponent: React.FC<{
                 {user.value.email}
               </p>
               {user.value.bio && (
-                <p className='mt-[8px] text-[14px] italic text-slate-600 dark:text-slate-300 max-w-[500px]'>
+                <p className='mt-[8px] max-w-[500px] text-[14px] text-slate-600 italic dark:text-slate-300'>
                   "{user.value.bio}"
                 </p>
               )}
@@ -164,7 +164,7 @@ export const SettingsPageComponent: React.FC<{
             <button
               type='button'
               onClick={() => dispatch({ _tag: 'Logout' })}
-              className='hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950/20 border border-slate-200 hover:border-red-200 dark:border-white/10 dark:hover:border-red-900/30 flex items-center justify-center gap-[8px] rounded-[12px] px-[20px] py-[10px] text-[14px] font-bold text-slate-600 dark:text-slate-300 transition-all self-start sm:self-center bg-transparent cursor-pointer'
+              className='flex cursor-pointer items-center justify-center gap-[8px] self-start rounded-[12px] border border-slate-200 bg-transparent px-[20px] py-[10px] text-[14px] font-bold text-slate-600 transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-700 sm:self-center dark:border-white/10 dark:text-slate-300 dark:hover:border-red-900/30 dark:hover:bg-red-950/20'
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'

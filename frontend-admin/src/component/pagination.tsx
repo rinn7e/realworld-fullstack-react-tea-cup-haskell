@@ -34,13 +34,13 @@ export const renderPagination = (
 
   return (
     <nav className='my-[24px]' data-test='pagination-nav'>
-      <ul className='flex w-fit flex-wrap rounded-md border border-gray-200 dark:border-neutral-800 bg-white/5 dark:bg-neutral-900/50 shadow-sm overflow-hidden'>
+      <ul className='flex w-fit flex-wrap overflow-hidden rounded-md border border-gray-200 bg-white/5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900/50'>
         {pages.map((p, index) => {
           if (p === '...') {
             return (
               <li
                 key={`ellipsis-${index}`}
-                className='border-r border-gray-200 dark:border-neutral-800 last:border-r-0'
+                className='border-r border-gray-200 last:border-r-0 dark:border-neutral-800'
               >
                 <span className='flex h-[38px] min-w-[38px] items-center justify-center px-[12px] text-sm text-gray-400 dark:text-neutral-500'>
                   ...
@@ -53,16 +53,16 @@ export const renderPagination = (
           return (
             <li
               key={pageNum}
-              className='border-r border-gray-200 dark:border-neutral-800 last:border-r-0'
+              className='border-r border-gray-200 last:border-r-0 dark:border-neutral-800'
               data-test='pagination-item'
             >
               <button
                 type='button'
                 className={cn(
-                  'flex h-[38px] min-w-[38px] items-center justify-center px-[12px] text-sm transition-colors duration-200 focus:outline-none font-medium',
+                  'flex h-[38px] min-w-[38px] items-center justify-center px-[12px] text-sm font-medium transition-colors duration-200 focus:outline-none',
                   pageNum === currentPage
                     ? 'bg-theme-primary text-white shadow-md'
-                    : 'text-theme-primary/80 dark:text-neutral-300 hover:bg-theme-primary/10 dark:hover:bg-neutral-800',
+                    : 'text-theme-primary/80 hover:bg-theme-primary/10 dark:text-neutral-300 dark:hover:bg-neutral-800',
                 )}
                 aria-current={pageNum === currentPage ? 'page' : undefined}
                 onClick={() => onPageChange(pageNum)}

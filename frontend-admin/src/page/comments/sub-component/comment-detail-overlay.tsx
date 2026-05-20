@@ -3,6 +3,7 @@ import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { type Comment } from '@/common/api/type/comment'
+import { UserImage } from '@/component/user-image'
 
 import { type Msg } from '../type'
 import { DetailRow } from './detail-row'
@@ -56,10 +57,12 @@ export const CommentDetailOverlay: React.FC<{
                 Author
               </div>
               <div className='flex items-center gap-[12px]'>
-                <img
-                  src={comment.author.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.author.username}`}
+                <UserImage
+                  src={
+                    comment.author.image ||
+                    `https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.author.username}`
+                  }
                   className='h-[32px] w-[32px] rounded-full object-cover shadow-sm'
-                  alt=''
                 />
                 <div className='text-theme-secondary font-bold dark:text-white'>
                   {comment.author.username}

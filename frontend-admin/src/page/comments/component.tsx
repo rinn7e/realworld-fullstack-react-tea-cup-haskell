@@ -2,7 +2,7 @@ import * as O from 'fp-ts/lib/Option'
 import React from 'react'
 
 import { memoStrategy } from '@/common/util'
-import * as SearchBar from '@/component/search-bar'
+import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
 import { CommentDetailOverlay } from './sub-component/comment-detail-overlay'
@@ -24,7 +24,9 @@ export const CommentsPageComponent: React.FC<Props> = ({ model, dispatch }) => {
         <SearchBarMemo
           model={model.searchBar}
           sortOptions={sortOptions}
-          dispatch={(subMsg: SearchBar.Msg) => dispatch({ _tag: 'SearchBarMsg', subMsg })}
+          dispatch={(subMsg: SearchBar.Msg) =>
+            dispatch({ _tag: 'SearchBarMsg', subMsg })
+          }
           placeholder='Search comments by author or message content...'
         />
       </div>
@@ -74,4 +76,7 @@ export const CommentsPageComponent: React.FC<Props> = ({ model, dispatch }) => {
   )
 }
 
-export const CommentsPageMemo = memoStrategy(CommentsPageComponent, PropsEq.equals)
+export const CommentsPageMemo = memoStrategy(
+  CommentsPageComponent,
+  PropsEq.equals,
+)

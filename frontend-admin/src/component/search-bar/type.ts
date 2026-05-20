@@ -34,6 +34,8 @@ export type Props = {
 export const PropsEq = EqClass.struct<Props>({
   dispatch: { equals: () => true },
   model: ModelEq,
-  sortOptions: EqClass.fromEquals((a, b) => JSON.stringify(a) === JSON.stringify(b)),
+  sortOptions: EqClass.fromEquals(
+    (a, b) => JSON.stringify(a) === JSON.stringify(b),
+  ),
   placeholder: EqClass.fromEquals((a, b) => a === b),
 })

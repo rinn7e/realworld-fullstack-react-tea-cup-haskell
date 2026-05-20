@@ -7,6 +7,7 @@ import { getCurrentUser } from '@/common/api/handler/user'
 import { getToken, removeToken, saveToken } from '@/common/cache'
 import { type AppRoute, AppRouteEq } from '@/common/type/route'
 import { parseAppRoute, toUrlString } from '@/common/util/route'
+import type * as PersonaType from '@/component/persona-panel/type'
 import * as Persona from '@/component/persona-panel/update'
 import * as Articles from '@/page/articles'
 import * as Comments from '@/page/comments'
@@ -16,16 +17,27 @@ import * as Users from '@/page/users'
 import * as Visitors from '@/page/visitors'
 
 import { defaultTheme, themes } from './theme/data'
+import { type Theme } from './theme/type'
 import {
+  type ColorScheme,
   injectTheme,
   loadColorScheme,
   loadThemeId,
   saveColorScheme,
   saveTheme,
 } from './theme/util'
-import { type Model, type Msg, type PageModel, type User, type Shared } from './type'
+import {
+  type Model,
+  type Msg,
+  type PageModel,
+  type Shared,
+  type User,
+} from './type'
 
-export const initPageModel = (route: AppRoute, shared: Shared): [PageModel, Cmd<Msg>] => {
+export const initPageModel = (
+  route: AppRoute,
+  shared: Shared,
+): [PageModel, Cmd<Msg>] => {
   switch (route.page._tag) {
     case 'HomePage': {
       const [m, c] = Home.init()
@@ -166,28 +178,32 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
       return {
         _tag: 'Init',
         location,
-        user: res.tag === 'Ok'
-          ? O.some({
-              email: res.value.user.email,
-              token: res.value.user.token,
-              username: res.value.user.username,
-              bio: res.value.user.bio,
-              image: res.value.user.image,
-            })
-          : O.none,
+        user:
+          res.tag === 'Ok'
+            ? O.some({
+                email: res.value.user.email,
+                token: res.value.user.token,
+                username: res.value.user.username,
+                bio: res.value.user.bio,
+                image: res.value.user.image,
+              })
+            : O.none,
         isUnavailable,
         token,
       }
     })
   }
 
-  return Task.perform(Task.succeed(undefined), (): Msg => ({
-    _tag: 'Init',
-    location,
-    user: O.none,
-    isUnavailable: false,
-    token: O.none,
-  }))
+  return Task.perform(
+    Task.succeed(undefined),
+    (): Msg => ({
+      _tag: 'Init',
+      location,
+      user: O.none,
+      isUnavailable: false,
+      token: O.none,
+    }),
+  )
 }
 
 export const navigate =
@@ -221,13 +237,7 @@ export const navigate =
       pageModel,
     }
 
-    return [
-      nextModel,
-      Cmd.batch([
-        urlCmd,
-        pageCmd,
-      ]),
-    ]
+    return [nextModel, Cmd.batch([urlCmd, pageCmd])]
   }
 
 const execChangeRoute =
@@ -285,174 +295,233 @@ export const changeRouteNoReload =
 
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
-    case 'UrlChange': {
-      if (model.isInternal) {
-        return [
-          {
-            ...model,
-            isInternal: false,
-          },
-          Cmd.none(),
-        ]
-      } else {
-        const route = parseAppRoute(window.location.origin, msg.location.href)
-        return changeRouteHandler(route, false)(model)
-      }
-    }
-    case 'ChangeRoute': {
+    case 'UrlChange':
+      return urlChangeHandler(msg.location, model)
+    case 'ChangeRoute':
       return changeRouteHandler(msg.route, true)(model)
-    }
     case 'Init':
       // Handled by preUpdate
       return [model, Cmd.none()]
-    case 'Logout': {
-      removeToken()
-      const nextModel = {
-        ...model,
-        shared: {
-          user: O.none,
-          token: O.none,
-        },
-      }
-      return changeRouteHandler({ page: { _tag: 'LoginPage' } }, true)(nextModel)
-    }
-    case 'HomePageMsg': {
-      if (model.pageModel._tag === 'HomePageModel') {
-        const [m, c] = Home.update(msg.subMsg, model.pageModel.model)
-        return [
-          { ...model, pageModel: { ...model.pageModel, model: m } },
-          c.map((subMsg): Msg => ({ _tag: 'HomePageMsg', subMsg })),
-        ]
-      }
-      return [model, Cmd.none()]
-    }
-    case 'LoginPageMsg': {
-      if (model.pageModel._tag === 'LoginPageModel') {
-        const [m, c] = Login.update(msg.subMsg, model.pageModel.model)
-        const nextModel = { ...model, pageModel: { ...model.pageModel, model: m } }
-        const nextCmd = c.map((subMsg): Msg => ({ _tag: 'LoginPageMsg', subMsg }))
-
-        if (msg.subMsg._tag === 'SubmitResult' && msg.subMsg.result.tag === 'Ok') {
-          const user = msg.subMsg.result.value.user
-          saveToken(user.token)
-          const updatedModel = {
-            ...nextModel,
-            shared: {
-              ...nextModel.shared,
-              user: O.some({
-                email: user.email,
-                token: user.token,
-                username: user.username,
-                bio: user.bio,
-                image: user.image,
-              }),
-              token: O.some(user.token),
-            },
-          }
-          const [finalModel, navCmd] = changeRouteHandler({ page: { _tag: 'HomePage' } }, true)(updatedModel)
-          return [
-            finalModel,
-            Cmd.batch([
-              nextCmd,
-              navCmd,
-            ]),
-          ]
-        }
-
-        return [nextModel, nextCmd]
-      }
-      return [model, Cmd.none()]
-    }
-    case 'ArticlesPageMsg': {
-      if (model.pageModel._tag === 'ArticlesPageModel') {
-        const [m, c] = Articles.update(model.shared)(msg.subMsg, model.pageModel.model)
-        return [
-          { ...model, pageModel: { ...model.pageModel, model: m } },
-          c.map((subMsg): Msg => ({ _tag: 'ArticlesPageMsg', subMsg })),
-        ]
-      }
-      return [model, Cmd.none()]
-    }
-    case 'UsersPageMsg': {
-      if (model.pageModel._tag === 'UsersPageModel') {
-        const [m, c] = Users.update(msg.subMsg, model.pageModel.model)
-        return [
-          { ...model, pageModel: { ...model.pageModel, model: m } },
-          c.map((subMsg): Msg => ({ _tag: 'UsersPageMsg', subMsg })),
-        ]
-      }
-      return [model, Cmd.none()]
-    }
-    case 'CommentsPageMsg': {
-      if (model.pageModel._tag === 'CommentsPageModel') {
-        const [m, c] = Comments.update(msg.subMsg, model.pageModel.model)
-        return [
-          { ...model, pageModel: { ...model.pageModel, model: m } },
-          c.map((subMsg): Msg => ({ _tag: 'CommentsPageMsg', subMsg })),
-        ]
-      }
-      return [model, Cmd.none()]
-    }
-    case 'VisitorsPageMsg': {
-      if (model.pageModel._tag === 'VisitorsPageModel') {
-        const [m, c] = Visitors.update(msg.subMsg, model.pageModel.model)
-        return [
-          { ...model, pageModel: { ...model.pageModel, model: m } },
-          c.map((subMsg): Msg => ({ _tag: 'VisitorsPageMsg', subMsg })),
-        ]
-      }
-      return [model, Cmd.none()]
-    }
-    case 'PersonaMsg': {
-      const [m, c] = Persona.update(msg.subMsg, model.persona)
-      return [
-        { ...model, persona: m },
-        c.map((subMsg): Msg => ({ _tag: 'PersonaMsg', subMsg })),
-      ]
-    }
+    case 'Logout':
+      return logoutHandler(model)
+    case 'HomePageMsg':
+      return homePageMsgHandler(msg.subMsg, model)
+    case 'LoginPageMsg':
+      return loginPageMsgHandler(msg.subMsg, model)
+    case 'ArticlesPageMsg':
+      return articlesPageMsgHandler(msg.subMsg, model)
+    case 'UsersPageMsg':
+      return usersPageMsgHandler(msg.subMsg, model)
+    case 'CommentsPageMsg':
+      return commentsPageMsgHandler(msg.subMsg, model)
+    case 'VisitorsPageMsg':
+      return visitorsPageMsgHandler(msg.subMsg, model)
+    case 'PersonaMsg':
+      return personaMsgHandler(msg.subMsg, model)
     case 'SetShowScrollTop':
       return [{ ...model, showScrollTop: msg.value }, Cmd.none()]
-    case 'ScrollToTop': {
-      return [
-        model,
-        Task.perform(
-          Task.succeed(undefined).andThen(() => {
-            document
-              .getElementById('main-content')
-              ?.scrollTo({ top: 0, behavior: 'smooth' })
-            return Task.succeed(undefined)
-          }),
-          () => ({ _tag: 'NoOp' }) as Msg,
-        ),
-      ]
-    }
-    case 'SwitchTheme': {
-      return [
-        { ...model, theme: msg.theme },
-        Task.perform(
-          Task.succeed(undefined).andThen(() => {
-            saveTheme(msg.theme)
-            injectTheme(msg.theme, model.colorScheme)
-            return Task.succeed(undefined)
-          }),
-          () => ({ _tag: 'NoOp' }) as Msg,
-        ),
-      ]
-    }
-    case 'SetColorScheme': {
-      return [
-        { ...model, colorScheme: msg.scheme },
-        Task.perform(
-          Task.succeed(undefined).andThen(() => {
-            saveColorScheme(msg.scheme)
-            injectTheme(model.theme, msg.scheme)
-            return Task.succeed(undefined)
-          }),
-          () => ({ _tag: 'NoOp' }) as Msg,
-        ),
-      ]
-    }
+    case 'ScrollToTop':
+      return scrollToTopHandler(model)
+    case 'SwitchTheme':
+      return switchThemeHandler(msg.theme, model)
+    case 'SetColorScheme':
+      return setColorSchemeHandler(msg.scheme, model)
     case 'NoOp':
       return [model, Cmd.none()]
   }
+}
+
+const urlChangeHandler = (
+  location: Location,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  if (model.isInternal) {
+    return [
+      {
+        ...model,
+        isInternal: false,
+      },
+      Cmd.none(),
+    ]
+  } else {
+    const route = parseAppRoute(window.location.origin, location.href)
+    return changeRouteHandler(route, false)(model)
+  }
+}
+
+const logoutHandler = (model: Model): [Model, Cmd<Msg>] => {
+  removeToken()
+  const nextModel = {
+    ...model,
+    shared: {
+      user: O.none,
+      token: O.none,
+    },
+  }
+  return changeRouteHandler({ page: { _tag: 'LoginPage' } }, true)(nextModel)
+}
+
+const homePageMsgHandler = (
+  subMsg: Home.Msg,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  if (model.pageModel._tag === 'HomePageModel') {
+    const [m, c] = Home.update(subMsg, model.pageModel.model)
+    return [
+      { ...model, pageModel: { ...model.pageModel, model: m } },
+      c.map((msg): Msg => ({ _tag: 'HomePageMsg', subMsg: msg })),
+    ]
+  }
+  return [model, Cmd.none()]
+}
+
+const loginPageMsgHandler = (
+  subMsg: Login.Msg,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  if (model.pageModel._tag === 'LoginPageModel') {
+    const [m, c] = Login.update(subMsg, model.pageModel.model)
+    const nextModel = { ...model, pageModel: { ...model.pageModel, model: m } }
+    const nextCmd = c.map((msg): Msg => ({ _tag: 'LoginPageMsg', subMsg: msg }))
+
+    if (subMsg._tag === 'SubmitResult' && subMsg.result.tag === 'Ok') {
+      const user = subMsg.result.value.user
+      saveToken(user.token)
+      const updatedModel = {
+        ...nextModel,
+        shared: {
+          ...nextModel.shared,
+          user: O.some({
+            email: user.email,
+            token: user.token,
+            username: user.username,
+            bio: user.bio,
+            image: user.image,
+          }),
+          token: O.some(user.token),
+        },
+      }
+      const [finalModel, navCmd] = changeRouteHandler(
+        { page: { _tag: 'HomePage' } },
+        true,
+      )(updatedModel)
+      return [finalModel, Cmd.batch([nextCmd, navCmd])]
+    }
+
+    return [nextModel, nextCmd]
+  }
+  return [model, Cmd.none()]
+}
+
+const articlesPageMsgHandler = (
+  subMsg: Articles.Msg,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  if (model.pageModel._tag === 'ArticlesPageModel') {
+    const [m, c] = Articles.update(model.shared)(subMsg, model.pageModel.model)
+    return [
+      { ...model, pageModel: { ...model.pageModel, model: m } },
+      c.map((msg): Msg => ({ _tag: 'ArticlesPageMsg', subMsg: msg })),
+    ]
+  }
+  return [model, Cmd.none()]
+}
+
+const usersPageMsgHandler = (
+  subMsg: Users.Msg,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  if (model.pageModel._tag === 'UsersPageModel') {
+    const [m, c] = Users.update(subMsg, model.pageModel.model)
+    return [
+      { ...model, pageModel: { ...model.pageModel, model: m } },
+      c.map((msg): Msg => ({ _tag: 'UsersPageMsg', subMsg: msg })),
+    ]
+  }
+  return [model, Cmd.none()]
+}
+
+const commentsPageMsgHandler = (
+  subMsg: Comments.Msg,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  if (model.pageModel._tag === 'CommentsPageModel') {
+    const [m, c] = Comments.update(subMsg, model.pageModel.model)
+    return [
+      { ...model, pageModel: { ...model.pageModel, model: m } },
+      c.map((msg): Msg => ({ _tag: 'CommentsPageMsg', subMsg: msg })),
+    ]
+  }
+  return [model, Cmd.none()]
+}
+
+const visitorsPageMsgHandler = (
+  subMsg: Visitors.Msg,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  if (model.pageModel._tag === 'VisitorsPageModel') {
+    const [m, c] = Visitors.update(subMsg, model.pageModel.model)
+    return [
+      { ...model, pageModel: { ...model.pageModel, model: m } },
+      c.map((msg): Msg => ({ _tag: 'VisitorsPageMsg', subMsg: msg })),
+    ]
+  }
+  return [model, Cmd.none()]
+}
+
+const personaMsgHandler = (
+  subMsg: PersonaType.Msg,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  const [m, c] = Persona.update(subMsg, model.persona)
+  return [
+    { ...model, persona: m },
+    c.map((msg): Msg => ({ _tag: 'PersonaMsg', subMsg: msg })),
+  ]
+}
+
+const scrollToTopHandler = (model: Model): [Model, Cmd<Msg>] => {
+  return [
+    model,
+    Task.perform(
+      Task.succeed(undefined).andThen(() => {
+        document
+          .getElementById('main-content')
+          ?.scrollTo({ top: 0, behavior: 'smooth' })
+        return Task.succeed(undefined)
+      }),
+      () => ({ _tag: 'NoOp' }) as Msg,
+    ),
+  ]
+}
+
+const switchThemeHandler = (theme: Theme, model: Model): [Model, Cmd<Msg>] => {
+  return [
+    { ...model, theme },
+    Task.perform(
+      Task.succeed(undefined).andThen(() => {
+        saveTheme(theme)
+        injectTheme(theme, model.colorScheme)
+        return Task.succeed(undefined)
+      }),
+      () => ({ _tag: 'NoOp' }) as Msg,
+    ),
+  ]
+}
+
+const setColorSchemeHandler = (
+  scheme: ColorScheme,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  return [
+    { ...model, colorScheme: scheme },
+    Task.perform(
+      Task.succeed(undefined).andThen(() => {
+        saveColorScheme(scheme)
+        injectTheme(model.theme, scheme)
+        return Task.succeed(undefined)
+      }),
+      () => ({ _tag: 'NoOp' }) as Msg,
+    ),
+  ]
 }
