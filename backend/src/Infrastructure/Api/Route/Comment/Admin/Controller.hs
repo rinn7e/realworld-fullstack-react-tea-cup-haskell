@@ -21,7 +21,8 @@ import Capability.Database.LoggerDB
 import Capability.Time
 import Domain.Type qualified as D
 
-adminCommentRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminCommentRoute) App
+adminCommentRoute
+  :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminCommentRoute) App
 adminCommentRoute auth =
   AdminCommentRoute
     { getComments = getCommentsHandler auth
@@ -33,7 +34,7 @@ getCommentsHandler
   -> Maybe Int
   -> Maybe Int
   -> Maybe D.Username
-  -> Maybe Text
+  -> Maybe D.ArticleSlug
   -> App Api.CommentListResponse
 getCommentsHandler (S.Authenticated uid) mLimit mOffset mAuthor mArticleSlug = do
   guardAdmin uid
@@ -57,9 +58,9 @@ deleteAdminCommentHandler (S.Authenticated uid) cidInt = do
       let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
       _ <-
         insertLog
-          "INFO"
-          ("Deleted comment: " <> target.body)
-          "COMMENT"
+          D.INFO
+          (D.LogMessage ("Deleted comment: " <> target.body.unCommentBody))
+          (D.LogSource "COMMENT")
           now
           (Just dUid)
       return S.NoContent

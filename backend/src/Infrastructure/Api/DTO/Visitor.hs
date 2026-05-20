@@ -37,8 +37,8 @@ toVisitorResponse :: D.Visitor -> VisitorResponse
 toVisitorResponse v =
   VisitorResponse
     { id = v.visitorId.unVisitorId
-    , ip = v.ip
-    , userAgent = v.userAgent
-    , path = v.path
+    , ip = v.ip.unVisitorIp
+    , userAgent = v.userAgent.unVisitorUserAgent
+    , path = v.path.unVisitorPath
     , timestamp = v.timestamp
     }

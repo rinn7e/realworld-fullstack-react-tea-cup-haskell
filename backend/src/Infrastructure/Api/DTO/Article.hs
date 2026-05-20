@@ -3,6 +3,7 @@ module Infrastructure.Api.DTO.Article
   , ArticleResponse (..)
   , ArticleListResponse (..)
   , NewArticleRequest (..)
+  , ArticleWrapper (..)
   , UpdateArticleRequest (..)
   , toArticleResponse
   , toAdminArticle
@@ -41,11 +42,11 @@ import Infrastructure.Api.DTO.User
 -- Article
 -------------------------------
 data Article = Article
-  { slug :: Text
-  , title :: Text
-  , description :: Text
-  , body :: Text
-  , tagList :: [Text]
+  { slug :: D.ArticleSlug
+  , title :: D.ArticleTitle
+  , description :: D.ArticleDescription
+  , body :: D.ArticleBody
+  , tagList :: [D.TagName]
   , createdAt :: UTCTime
   , updatedAt :: UTCTime
   , favorited :: Bool
@@ -65,117 +66,53 @@ data ArticleResponse = ArticleResponse {article :: Article}
 
 -------------------------------
 -- ArticleListResponse
--------------------------------
+-- -------------------------------
 data ArticleListResponse = ArticleListResponse
   { articles :: [Article]
   , articlesCount :: Int
   }
-  deriving (Show, Generic, ToSchema)
+  deriving (Show, Generic, ToJSON, ToSchema)
 
-instance ToJSON ArticleListResponse where
-  toJSON (ArticleListResponse as c) =
-    A.object
-      [ "articles" .= as
-      , "articlesCount" .= c
-      ]
-
--------------------------------
--- NewArticleRequest
--------------------------------
-data NewArticleRequest = NewArticleRequest
-  { title :: Text
-  , description :: Text
-  , body :: Text
-  , tagList :: Maybe [Text]
+data ArticleWrapper a = ArticleWrapper
+  { article :: a
   }
   deriving (Show, Generic)
 
-instance FromJSON NewArticleRequest where
-  parseJSON = A.withObject "NewArticleRequest" $ \o -> do
-    a <- o .: "article"
-    NewArticleRequest
-      <$> a .: "title"
-      <*> a .: "description"
-      <*> a .: "body"
-      <*> a .:? "tagList"
+instance (FromJSON a) => FromJSON (ArticleWrapper a)
+instance (ToSchema a) => ToSchema (ArticleWrapper a)
 
-instance ToSchema NewArticleRequest where
-  declareNamedSchema _ = do
-    titleSchema <- declareSchemaRef (Proxy @Text)
-    descriptionSchema <- declareSchemaRef (Proxy @Text)
-    bodySchema <- declareSchemaRef (Proxy @Text)
-    tagListSchema <- declareSchemaRef (Proxy @(Maybe [Text]))
-    let articleSchema =
-          mempty
-            & type_ ?~ OpenApiObject
-            & properties
-              .~ InsOrd.fromList
-                [ ("title", titleSchema)
-                , ("description", descriptionSchema)
-                , ("body", bodySchema)
-                , ("tagList", tagListSchema)
-                ]
-            & required .~ ["title", "description", "body"]
-    return $
-      NamedSchema (Just "NewArticleRequest") $
-        mempty
-          & type_ ?~ OpenApiObject
-          & properties .~ InsOrd.fromList [("article", Inline articleSchema)]
-          & required .~ ["article"]
+-------------------------------
+-- NewArticleRequest
+-- -------------------------------
+data NewArticleRequest = NewArticleRequest
+  { title :: D.ArticleTitle
+  , description :: D.ArticleDescription
+  , body :: D.ArticleBody
+  , tagList :: Maybe [D.TagName]
+  }
+  deriving (Show, Generic, FromJSON, ToSchema)
 
 -------------------------------
 -- UpdateArticleRequest
 -------------------------------
 data UpdateArticleRequest = UpdateArticleRequest
-  { title :: Maybe Text
-  , description :: Maybe Text
-  , body :: Maybe Text
-  , tagList :: Maybe [Text]
+  { title :: Maybe D.ArticleTitle
+  , description :: Maybe D.ArticleDescription
+  , body :: Maybe D.ArticleBody
+  , tagList :: Maybe [D.TagName]
   }
-  deriving (Show, Generic)
-
-instance FromJSON UpdateArticleRequest where
-  parseJSON = A.withObject "UpdateArticleRequest" $ \o -> do
-    a <- o .: "article"
-    UpdateArticleRequest
-      <$> a .:? "title"
-      <*> a .:? "description"
-      <*> a .:? "body"
-      <*> a .:? "tagList"
-
-instance ToSchema UpdateArticleRequest where
-  declareNamedSchema _ = do
-    titleSchema <- declareSchemaRef (Proxy @(Maybe Text))
-    descriptionSchema <- declareSchemaRef (Proxy @(Maybe Text))
-    bodySchema <- declareSchemaRef (Proxy @(Maybe Text))
-    tagListSchema <- declareSchemaRef (Proxy @(Maybe [Text]))
-    let articleSchema =
-          mempty
-            & type_ ?~ OpenApiObject
-            & properties
-              .~ InsOrd.fromList
-                [ ("title", titleSchema)
-                , ("description", descriptionSchema)
-                , ("body", bodySchema)
-                , ("tagList", tagListSchema)
-                ]
-    return $
-      NamedSchema (Just "UpdateArticleRequest") $
-        mempty
-          & type_ ?~ OpenApiObject
-          & properties .~ InsOrd.fromList [("article", Inline articleSchema)]
-          & required .~ ["article"]
+  deriving (Show, Generic, FromJSON, ToSchema)
 
 -------------------------------
 -- Admin Article
 -------------------------------
 data AdminArticle = AdminArticle
   { id :: Int
-  , slug :: Text
-  , title :: Text
-  , description :: Text
-  , body :: Text
-  , tagList :: [Text]
+  , slug :: D.ArticleSlug
+  , title :: D.ArticleTitle
+  , description :: D.ArticleDescription
+  , body :: D.ArticleBody
+  , tagList :: [D.TagName]
   , createdAt :: UTCTime
   , updatedAt :: UTCTime
   , favorited :: Bool

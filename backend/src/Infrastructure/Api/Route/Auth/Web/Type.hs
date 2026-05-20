@@ -24,7 +24,7 @@ data AuthRoute mode = AuthRoute
           :> Summary "Login"
           :> Description "Login an existing user"
           :> Tag "Authentication"
-          :> ReqBody '[JSON] Api.LoginUserRequest
+          :> ReqBody '[JSON] (Api.UserWrapper Api.LoginUserRequest)
           :> Post '[JSON] Api.UserResponse
   -- ^ POST /api/users/login
   , registerUser
@@ -33,7 +33,7 @@ data AuthRoute mode = AuthRoute
           :> Summary "Register"
           :> Description "Register a new user"
           :> Tag "Authentication"
-          :> ReqBody '[JSON] Api.NewUserRequest
+          :> ReqBody '[JSON] (Api.UserWrapper Api.NewUserRequest)
           :> PostCreated '[JSON] Api.UserResponse
   -- ^ POST /api/users
   }

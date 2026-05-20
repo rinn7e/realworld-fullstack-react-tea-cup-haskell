@@ -6,6 +6,7 @@ module Infrastructure.Api.Route.User.Web.Controller
   , followUserHandler
   , unfollowUserHandler
   ) where
+
 import Database.Persist.Sql (fromSqlKey)
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
@@ -44,8 +45,8 @@ getCurrentUserHandler (S.Authenticated uid) = do
 getCurrentUserHandler _ = throwError S.err401
 
 updateCurrentUserHandler
-  :: S.AuthResult DB.UserId -> Api.UpdateUserRequest -> App Api.UserResponse
-updateCurrentUserHandler (S.Authenticated uid) (Api.UpdateUserRequest mEmail mUsername mPassword mBio mImage) = do
+  :: S.AuthResult DB.UserId -> Api.UserWrapper Api.UpdateUserRequest -> App Api.UserResponse
+updateCurrentUserHandler (S.Authenticated uid) (Api.UserWrapper (Api.UpdateUserRequest mEmail mUsername mPassword mBio mImage)) = do
   let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   mUser <- lookupUserById dUid
   case mUser of

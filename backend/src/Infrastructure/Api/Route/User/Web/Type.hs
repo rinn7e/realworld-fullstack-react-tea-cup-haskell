@@ -15,9 +15,9 @@ import Servant
   , (:>)
   )
 
+import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
-import Domain.Type qualified as D
 
 data UserRoute mode = UserRoute
   { getCurrentUser
@@ -34,7 +34,7 @@ data UserRoute mode = UserRoute
           :> Summary "Update Current User"
           :> Description "Update the currently logged-in user details"
           :> Tag "User"
-          :> ReqBody '[JSON] Api.UpdateUserRequest
+          :> ReqBody '[JSON] (Api.UserWrapper Api.UpdateUserRequest)
           :> Put '[JSON] Api.UserResponse
   -- ^ PUT /api/user
   , getUserByName

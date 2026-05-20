@@ -19,6 +19,7 @@ import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
 import Domain.Type (Visitor (..))
+import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Dashboard.Admin.Type
 import Infrastructure.Common.Type.App (App)
@@ -114,15 +115,15 @@ getLogsHandler
   :: S.AuthResult DB.UserId
   -> Maybe Int
   -> Maybe Int
-  -> Maybe Api.LogLevel
+  -> Maybe D.LogLevel
   -> Maybe Text
   -> App Api.LogListResponse
 getLogsHandler (S.Authenticated uid) mLimit mOffset mLevel mSource = do
   guardAdmin uid
   let limit = maybe 10 id mLimit
       offset = maybe 0 id mOffset
-      levelText = fmap Api.logLevelToText mLevel
-  (logs, total) <- listLogs (Just limit) (Just offset) levelText mSource
+      dSource = fmap D.LogSource mSource
+  (logs, total) <- listLogs (Just limit) (Just offset) mLevel dSource
   let logResponses = map Api.toLogResponse logs
   return
     Api.LogListResponse
@@ -142,7 +143,9 @@ getVisitorsHandler (S.Authenticated uid) mLimit mOffset mIp mPath = do
   guardAdmin uid
   let limit = maybe 10 id mLimit
       offset = maybe 0 id mOffset
-  (visitors, total) <- listVisitors (Just limit) (Just offset) mIp mPath
+      dIp = fmap D.VisitorIp mIp
+      dPath = fmap D.VisitorPath mPath
+  (visitors, total) <- listVisitors (Just limit) (Just offset) dIp dPath
   let visitorResponses = map Api.toVisitorResponse visitors
   return
     Api.VisitorListResponse

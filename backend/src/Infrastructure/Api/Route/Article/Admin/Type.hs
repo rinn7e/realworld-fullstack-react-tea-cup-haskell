@@ -15,9 +15,9 @@ import Servant
   )
 import Servant qualified as S
 
+import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
-import Domain.Type qualified as D
 
 data AdminArticleRoute mode = AdminArticleRoute
   { getArticles
@@ -28,14 +28,14 @@ data AdminArticleRoute mode = AdminArticleRoute
           :> Tag "Admin Articles"
           :> QueryParam "limit" Int
           :> QueryParam "offset" Int
-          :> QueryParam "tag" Text
+          :> QueryParam "tag" D.TagName
           :> QueryParam "author" D.Username
           :> QueryParam "search" Text
           :> Get '[JSON] Api.AdminArticleListResponse
   , deleteArticle
       :: mode
         :- "articles"
-          :> Capture "slug" Text
+          :> Capture "slug" D.ArticleSlug
           :> Summary "Delete Article"
           :> Description "Administrative takedown of an offensive article"
           :> Tag "Admin Articles"

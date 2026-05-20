@@ -61,7 +61,7 @@ toDomainArticleDetail (First art, First auth, tagsMap, (First favCount, First is
     , D.isFollowingAuthor = isFol
     }
 
-ensureTag :: DB.ArticleId -> Text -> SqlPersistT IO ()
+ensureTag :: DB.ArticleId -> D.TagName -> SqlPersistT IO ()
 ensureTag aid tagName = do
   tid <- do
     res <- insertBy (DB.Tag tagName)
@@ -88,8 +88,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
     liftIO $
       runSqlPool
         ( do
-            let sqlUserId = fmap (\(D.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
-            mArtGrp <- Q.getArticleWithAuthor sqlUserId slug
+            mArtGrp <- Q.getArticleWithAuthor mCurrentUserId slug
             return $ fmap toDomainArticleDetail mArtGrp
         )
         pool
@@ -151,31 +150,28 @@ runArticleDBPostgres = interpret $ \_ -> \case
     liftIO $
       runSqlPool
         ( do
-            let sqlUserId = fmap (\(D.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
-            res <- Q.listArticles sqlUserId mTag mAuthor mFavorited lim off
+            res <- Q.listArticles mCurrentUserId mTag mAuthor mFavorited lim off
             return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
         )
         pool
-  ListFeed (D.UserId currentUserIdInt) lim off -> do
+  ListFeed currentUserId lim off -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
         ( do
-            let sqlUserId = toSqlKey (fromIntegral currentUserIdInt)
-            res <- Q.listFeed sqlUserId lim off
+            res <- Q.listFeed currentUserId lim off
             return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
         )
         pool
   CountArticles mTag mAuthor mFavorited -> do
     pool <- ask @ConnectionPool
     liftIO $ runSqlPool (Q.countArticles mTag mAuthor mFavorited) pool
-  CountFeed (D.UserId currentUserIdInt) -> do
+  CountFeed currentUserId -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
         ( do
-            let sqlUserId = toSqlKey (fromIntegral currentUserIdInt)
-            Q.countFeed sqlUserId
+            Q.countFeed currentUserId
         )
         pool
   FavoriteArticle (D.UserId uidInt) (D.ArticleId aidInt) -> do

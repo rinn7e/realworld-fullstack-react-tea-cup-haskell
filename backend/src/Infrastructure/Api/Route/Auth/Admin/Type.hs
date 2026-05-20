@@ -22,7 +22,7 @@ data AdminAuthRoute mode = AdminAuthRoute
           :> Summary "Admin Login"
           :> Description "Login with administrative credentials"
           :> Tag "Admin Authentication"
-          :> ReqBody '[JSON] Api.LoginUserRequest
+          :> ReqBody '[JSON] (Api.UserWrapper Api.LoginUserRequest)
           :> Post '[JSON] Api.UserResponse
   , getCurrentAdmin
       :: mode

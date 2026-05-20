@@ -16,9 +16,9 @@ import Servant
   )
 import Servant qualified as S
 
+import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
-import Domain.Type qualified as D
 
 data AdminUserRoute mode = AdminUserRoute
   { getUsers

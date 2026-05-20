@@ -1,29 +1,39 @@
 module Capability.Database.LoggerDB where
 
-import Data.Text (Text)
 import Data.Time (UTCTime)
-import Domain.Type (LogEntry, UserId)
+import Domain.Type
 import Effectful
 import Effectful.Dispatch.Dynamic
 
 data LoggerDB :: Effect where
-  InsertLog :: Text -> Text -> Text -> UTCTime -> Maybe UserId -> LoggerDB m LogEntry -- level, msg, src, timestamp, mUid
+  InsertLog
+    :: LogLevel -> LogMessage -> LogSource -> UTCTime -> Maybe UserId -> LoggerDB m LogEntry
   ListLogs
-    :: Maybe Int -> Maybe Int -> Maybe Text -> Maybe Text -> LoggerDB m ([LogEntry], Int)
+    :: Maybe Int
+    -> Maybe Int
+    -> Maybe LogLevel
+    -> Maybe LogSource
+    -> LoggerDB m ([LogEntry], Int)
   CountAllLogs :: LoggerDB m Int
 
 type instance DispatchOf LoggerDB = 'Dynamic
 
 insertLog
-  :: (LoggerDB :> es) => Text -> Text -> Text -> UTCTime -> Maybe UserId -> Eff es LogEntry
+  :: (LoggerDB :> es)
+  => LogLevel
+  -> LogMessage
+  -> LogSource
+  -> UTCTime
+  -> Maybe UserId
+  -> Eff es LogEntry
 insertLog level message source timestamp mUid = send (InsertLog level message source timestamp mUid)
 
 listLogs
   :: (LoggerDB :> es)
   => Maybe Int
   -> Maybe Int
-  -> Maybe Text
-  -> Maybe Text
+  -> Maybe LogLevel
+  -> Maybe LogSource
   -> Eff es ([LogEntry], Int)
 listLogs mLimit mOffset mLevel mSource = send (ListLogs mLimit mOffset mLevel mSource)
 

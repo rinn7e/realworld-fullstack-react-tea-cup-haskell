@@ -57,9 +57,10 @@ updateUserRoleHandler (S.Authenticated uid) targetUidInt req = do
       now <- getCurrentTime
       let updatedUser = target{D.role = req.role}
       _ <- updateUser targetUid updatedUser
-      let msg = "Updated user role for " <> target.username.unUsername <> " to " <> pack (show req.role)
+      let msg =
+            "Updated user role for " <> target.username.unUsername <> " to " <> pack (show req.role)
       let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
-      _ <- insertLog "INFO" msg "AUTH" now (Just dUid)
+      _ <- insertLog D.INFO (D.LogMessage msg) (D.LogSource "AUTH") now (Just dUid)
       return $ Api.toAdminUserResponse updatedUser
 updateUserRoleHandler _ _ _ = throwError S.err401
 
@@ -75,6 +76,6 @@ deleteUserHandler (S.Authenticated uid) targetUidInt = do
       deleteUser targetUid
       let msg = "Deleted user account: " <> target.username.unUsername
       let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
-      _ <- insertLog "INFO" msg "AUTH" now (Just dUid)
+      _ <- insertLog D.INFO (D.LogMessage msg) (D.LogSource "AUTH") now (Just dUid)
       return S.NoContent
 deleteUserHandler _ _ = throwError S.err401

@@ -7,6 +7,7 @@ module Infrastructure.Api.DTO.User
   , NewUserRequest (..)
   , UpdateUserRequest (..)
   , UpdateUserRoleRequest (..)
+  , UserWrapper (..)
   , AdminUserResponse (..)
   , AdminUserListResponse (..)
   , toAdminUserResponse
@@ -74,35 +75,23 @@ data ProfileResponse = ProfileResponse {profile :: Profile}
   deriving stock (Show, Generic)
   deriving anyclass (ToJSON, ToSchema)
 
+data UserWrapper a = UserWrapper
+  { user :: a
+  }
+  deriving (Show, Generic)
+
+instance (FromJSON a) => FromJSON (UserWrapper a)
+instance (ToSchema a) => ToSchema (UserWrapper a)
+
 -------------------------------
 -- Requests
--------------------------------
+-- -------------------------------
 data LoginUserRequest = LoginUserRequest
   { email :: D.Email
   , password :: D.Password
   }
   deriving stock (Show, Generic)
-
-instance FromJSON LoginUserRequest where
-  parseJSON = A.withObject "LoginUserRequest" $ \o -> do
-    u <- o .: "user"
-    LoginUserRequest <$> u .: "email" <*> u .: "password"
-
-instance ToSchema LoginUserRequest where
-  declareNamedSchema _ = do
-    emailSchema <- declareSchemaRef (Proxy @D.Email)
-    passwordSchema <- declareSchemaRef (Proxy @D.Password)
-    let userSchema =
-          mempty
-            & type_ ?~ OpenApiObject
-            & properties .~ InsOrd.fromList [("email", emailSchema), ("password", passwordSchema)]
-            & required .~ ["email", "password"]
-    return $
-      NamedSchema (Just "LoginUserRequest") $
-        mempty
-          & type_ ?~ OpenApiObject
-          & properties .~ InsOrd.fromList [("user", Inline userSchema)]
-          & required .~ ["user"]
+  deriving anyclass (FromJSON, ToSchema)
 
 data NewUserRequest = NewUserRequest
   { username :: D.Username
@@ -110,33 +99,7 @@ data NewUserRequest = NewUserRequest
   , password :: D.Password
   }
   deriving stock (Show, Generic)
-
-instance FromJSON NewUserRequest where
-  parseJSON = A.withObject "NewUserRequest" $ \o -> do
-    u <- o .: "user"
-    NewUserRequest <$> u .: "username" <*> u .: "email" <*> u .: "password"
-
-instance ToSchema NewUserRequest where
-  declareNamedSchema _ = do
-    usernameSchema <- declareSchemaRef (Proxy @D.Username)
-    emailSchema <- declareSchemaRef (Proxy @D.Email)
-    passwordSchema <- declareSchemaRef (Proxy @D.Password)
-    let userSchema =
-          mempty
-            & type_ ?~ OpenApiObject
-            & properties
-              .~ InsOrd.fromList
-                [ ("username", usernameSchema)
-                , ("email", emailSchema)
-                , ("password", passwordSchema)
-                ]
-            & required .~ ["username", "email", "password"]
-    return $
-      NamedSchema (Just "NewUserRequest") $
-        mempty
-          & type_ ?~ OpenApiObject
-          & properties .~ InsOrd.fromList [("user", Inline userSchema)]
-          & required .~ ["user"]
+  deriving anyclass (FromJSON, ToSchema)
 
 data UpdateUserRequest = UpdateUserRequest
   { email :: Maybe D.Email
@@ -146,41 +109,7 @@ data UpdateUserRequest = UpdateUserRequest
   , image :: Maybe D.UserImage
   }
   deriving stock (Show, Generic)
-
-instance FromJSON UpdateUserRequest where
-  parseJSON = A.withObject "UpdateUserRequest" $ \o -> do
-    u <- o .: "user"
-    UpdateUserRequest
-      <$> u .:? "email"
-      <*> u .:? "username"
-      <*> u .:? "password"
-      <*> u .:? "bio"
-      <*> u .:? "image"
-
-instance ToSchema UpdateUserRequest where
-  declareNamedSchema _ = do
-    emailSchema <- declareSchemaRef (Proxy @(Maybe D.Email))
-    usernameSchema <- declareSchemaRef (Proxy @(Maybe D.Username))
-    passwordSchema <- declareSchemaRef (Proxy @(Maybe D.Password))
-    bioSchema <- declareSchemaRef (Proxy @(Maybe D.UserBio))
-    imageSchema <- declareSchemaRef (Proxy @(Maybe D.UserImage))
-    let userSchema =
-          mempty
-            & type_ ?~ OpenApiObject
-            & properties
-              .~ InsOrd.fromList
-                [ ("email", emailSchema)
-                , ("username", usernameSchema)
-                , ("password", passwordSchema)
-                , ("bio", bioSchema)
-                , ("image", imageSchema)
-                ]
-    return $
-      NamedSchema (Just "UpdateUserRequest") $
-        mempty
-          & type_ ?~ OpenApiObject
-          & properties .~ InsOrd.fromList [("user", Inline userSchema)]
-          & required .~ ["user"]
+  deriving anyclass (FromJSON, ToSchema)
 
 instance ToSchema D.UserRole where
   declareNamedSchema _ = do
@@ -188,8 +117,6 @@ instance ToSchema D.UserRole where
       NamedSchema (Just "UserRole") $
         mempty
           & type_ ?~ OpenApiString
-
-
 
 data UpdateUserRoleRequest = UpdateUserRoleRequest
   { role :: D.UserRole

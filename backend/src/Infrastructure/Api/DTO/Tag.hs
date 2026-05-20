@@ -3,14 +3,15 @@ module Infrastructure.Api.DTO.Tag where
 import Data.Aeson (ToJSON (..), (.=))
 import Data.Aeson qualified as A
 import Data.OpenApi (ToSchema)
-import Data.Text (Text)
+import Domain.Type qualified as D
 import GHC.Generics (Generic)
+import Infrastructure.Api.DTO.Instance ()
 
 -------------------------------
 -- TagListResponse
 -------------------------------
 data TagListResponse = TagListResponse
-  { tags :: [Text]
+  { tags :: [D.TagName]
   }
   deriving (Show, Generic, ToSchema)
 

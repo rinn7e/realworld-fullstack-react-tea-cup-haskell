@@ -10,8 +10,6 @@ import Database.Persist.Sql (toSqlKey)
 import Servant.Auth.Server qualified as S
 import Test.Hspec
 
-import Infrastructure.Api.Route.Auth.Web.Controller (loginUserHandler, registerUserHandler)
-import Infrastructure.Api.Route.User.Web.Controller (followUserHandler)
 import Infrastructure.Api.DTO
   ( LoginUserRequest (..)
   , NewUserRequest (..)
@@ -19,7 +17,13 @@ import Infrastructure.Api.DTO
   , ProfileResponse (..)
   , User (..)
   , UserResponse (..)
+  , UserWrapper (..)
   )
+import Infrastructure.Api.Route.Auth.Web.Controller
+  ( loginUserHandler
+  , registerUserHandler
+  )
+import Infrastructure.Api.Route.User.Web.Controller (followUserHandler)
 import Infrastructure.Interpreter.Stub
 import Infrastructure.Interpreter.Stub.DB.UserDB (MockDB (..), emptyMockDB)
 
@@ -33,7 +37,8 @@ spec = do
 
       -- 2. Register first user "alice"
       let regReq1 = NewUserRequest "alice" "alice@example.com" "alicepassword"
-      resReg1 <- runAppInMemory dbRef fixedTime (registerUserHandler S.Indefinite regReq1)
+      resReg1 <-
+        runAppInMemory dbRef fixedTime (registerUserHandler S.Indefinite (UserWrapper regReq1))
 
       case resReg1 of
         UserResponse User{username = uname, email = uemail, token = utoken} -> do
@@ -50,11 +55,13 @@ spec = do
 
       -- 3. Register second user "bob"
       let regReq2 = NewUserRequest "bob" "bob@example.com" "bobpassword"
-      _ <- runAppInMemory dbRef fixedTime (registerUserHandler S.Indefinite regReq2)
+      _ <-
+        runAppInMemory dbRef fixedTime (registerUserHandler S.Indefinite (UserWrapper regReq2))
 
       -- 4. Try logging in as Alice
       let loginReq = LoginUserRequest "alice@example.com" "alicepassword"
-      resLogin <- runAppInMemory dbRef fixedTime (loginUserHandler S.Indefinite loginReq)
+      resLogin <-
+        runAppInMemory dbRef fixedTime (loginUserHandler S.Indefinite (UserWrapper loginReq))
 
       case resLogin of
         UserResponse User{username = uname, token = utoken} -> do

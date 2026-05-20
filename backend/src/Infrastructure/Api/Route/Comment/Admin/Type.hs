@@ -15,9 +15,9 @@ import Servant
   )
 import Servant qualified as S
 
+import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
-import Domain.Type qualified as D
 
 data AdminCommentRoute mode = AdminCommentRoute
   { getComments
@@ -29,7 +29,7 @@ data AdminCommentRoute mode = AdminCommentRoute
           :> QueryParam "limit" Int
           :> QueryParam "offset" Int
           :> QueryParam "author" D.Username
-          :> QueryParam "articleSlug" Text
+          :> QueryParam "articleSlug" D.ArticleSlug
           :> Get '[JSON] Api.CommentListResponse
   , deleteComment
       :: mode

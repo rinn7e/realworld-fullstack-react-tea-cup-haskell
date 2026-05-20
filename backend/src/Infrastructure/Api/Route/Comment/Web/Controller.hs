@@ -22,7 +22,8 @@ import Capability.Database.ArticleDB
 import Capability.Database.CommentDB
 import Capability.Database.UserDB
 
-commentRoute :: S.AuthResult DB.UserId -> Text -> S.ServerT (NamedRoutes CommentRoute) App
+commentRoute
+  :: S.AuthResult DB.UserId -> D.ArticleSlug -> S.ServerT (NamedRoutes CommentRoute) App
 commentRoute auth slug =
   CommentRoute
     { getCommentList = getCommentListHandler auth slug
@@ -30,7 +31,8 @@ commentRoute auth slug =
     , deleteComment = deleteCommentHandler auth slug
     }
 
-getCommentListHandler :: S.AuthResult DB.UserId -> Text -> App Api.CommentListResponse
+getCommentListHandler
+  :: S.AuthResult DB.UserId -> D.ArticleSlug -> App Api.CommentListResponse
 getCommentListHandler auth slug = do
   mArt <- getArticleBySlug slug
   case mArt of
@@ -48,8 +50,11 @@ getCommentListHandler auth slug = do
       return $ Api.CommentListResponse comments (length comments)
 
 createCommentHandler
-  :: S.AuthResult DB.UserId -> Text -> Api.NewCommentRequest -> App Api.CommentResponse
-createCommentHandler (S.Authenticated uid) slug (Api.NewCommentRequest body) = do
+  :: S.AuthResult DB.UserId
+  -> D.ArticleSlug
+  -> Api.CommentWrapper Api.NewCommentRequest
+  -> App Api.CommentResponse
+createCommentHandler (S.Authenticated uid) slug (Api.CommentWrapper (Api.NewCommentRequest body)) = do
   mArt <- getArticleBySlug slug
   case mArt of
     Nothing -> throwError S.err404
@@ -62,7 +67,7 @@ createCommentHandler (S.Authenticated uid) slug (Api.NewCommentRequest body) = d
           return $ Api.CommentResponse $ Api.toCommentDTO comm author False
 createCommentHandler _ _ _ = throwError S.err401
 
-deleteCommentHandler :: S.AuthResult DB.UserId -> Text -> Int -> App S.NoContent
+deleteCommentHandler :: S.AuthResult DB.UserId -> D.ArticleSlug -> Int -> App S.NoContent
 deleteCommentHandler (S.Authenticated uid) _ cidInt = do
   let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   let cid = D.CommentId cidInt

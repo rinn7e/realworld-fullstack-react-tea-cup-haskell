@@ -1,6 +1,7 @@
 module Domain.Type.Visitor where
 
 import Data.Aeson (FromJSON, ToJSON)
+import Data.String (IsString)
 import Data.Text (Text)
 import Data.Time (UTCTime)
 import GHC.Generics (Generic)
@@ -10,11 +11,23 @@ newtype VisitorId = VisitorId {unVisitorId :: Int}
   deriving stock (Eq, Ord, Show, Generic)
   deriving newtype (Num, ToJSON, FromJSON, ToHttpApiData, FromHttpApiData)
 
+newtype VisitorIp = VisitorIp {unVisitorIp :: Text}
+  deriving stock (Eq, Show, Generic)
+  deriving newtype (ToJSON, FromJSON, ToHttpApiData, FromHttpApiData, IsString)
+
+newtype VisitorUserAgent = VisitorUserAgent {unVisitorUserAgent :: Text}
+  deriving stock (Eq, Show, Generic)
+  deriving newtype (ToJSON, FromJSON, ToHttpApiData, FromHttpApiData, IsString)
+
+newtype VisitorPath = VisitorPath {unVisitorPath :: Text}
+  deriving stock (Eq, Show, Generic)
+  deriving newtype (ToJSON, FromJSON, ToHttpApiData, FromHttpApiData, IsString)
+
 data Visitor = Visitor
   { visitorId :: VisitorId
-  , ip :: Text
-  , userAgent :: Text
-  , path :: Text
+  , ip :: VisitorIp
+  , userAgent :: VisitorUserAgent
+  , path :: VisitorPath
   , timestamp :: UTCTime
   }
   deriving stock (Eq, Show, Generic)

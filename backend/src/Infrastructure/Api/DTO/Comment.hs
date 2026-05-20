@@ -3,6 +3,7 @@ module Infrastructure.Api.DTO.Comment
   , CommentResponse (..)
   , CommentListResponse (..)
   , NewCommentRequest (..)
+  , CommentWrapper (..)
   , toCommentDTO
   , toCommentDTOFromDetail
   )
@@ -37,9 +38,9 @@ data Comment = Comment
   { id :: Int
   , createdAt :: UTCTime
   , updatedAt :: UTCTime
-  , body :: Text
+  , body :: D.CommentBody
   , author :: Profile
-  , articleSlug :: Maybe Text
+  , articleSlug :: Maybe D.ArticleSlug
   }
   deriving (Show, Generic, ToSchema)
 
@@ -59,42 +60,23 @@ data CommentListResponse = CommentListResponse
   { comments :: [Comment]
   , totalCount :: Int
   }
-  deriving (Show, Generic, ToSchema)
+  deriving (Show, Generic, ToJSON, ToSchema)
 
-instance ToJSON CommentListResponse where
-  toJSON (CommentListResponse cs tc) =
-    A.object
-      [ "comments" .= cs
-      , "totalCount" .= tc
-      ]
-
--------------------------------
--- NewCommentRequest
--------------------------------
-data NewCommentRequest = NewCommentRequest
-  { body :: Text
+data CommentWrapper a = CommentWrapper
+  { comment :: a
   }
   deriving (Show, Generic)
 
-instance FromJSON NewCommentRequest where
-  parseJSON = A.withObject "NewCommentRequest" $ \o -> do
-    c <- o .: "comment"
-    NewCommentRequest <$> c .: "body"
+instance (FromJSON a) => FromJSON (CommentWrapper a)
+instance (ToSchema a) => ToSchema (CommentWrapper a)
 
-instance ToSchema NewCommentRequest where
-  declareNamedSchema _ = do
-    bodySchema <- declareSchemaRef (Proxy @Text)
-    let commentSchema =
-          mempty
-            & type_ ?~ OpenApiObject
-            & properties .~ InsOrd.fromList [("body", bodySchema)]
-            & required .~ ["body"]
-    return $
-      NamedSchema (Just "NewCommentRequest") $
-        mempty
-          & type_ ?~ OpenApiObject
-          & properties .~ InsOrd.fromList [("comment", Inline commentSchema)]
-          & required .~ ["comment"]
+-------------------------------
+-- NewCommentRequest
+-- -------------------------------
+data NewCommentRequest = NewCommentRequest
+  { body :: D.CommentBody
+  }
+  deriving (Show, Generic, FromJSON, ToSchema)
 
 -------------------------------
 -- Helpers

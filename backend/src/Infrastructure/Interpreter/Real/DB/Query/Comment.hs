@@ -1,9 +1,9 @@
 module Infrastructure.Interpreter.Real.DB.Query.Comment where
 
-import Data.Text (Text)
 import Data.Time (getCurrentTime)
 import Database.Esqueleto.Experimental
 import Database.Persist qualified as P
+import Domain.Type qualified as D
 import UnliftIO (MonadIO (..), MonadUnliftIO)
 
 import Infrastructure.Interpreter.Real.DB.Schema.Schema
@@ -27,7 +27,7 @@ insertComment
   :: (MonadUnliftIO m)
   => ArticleId
   -> UserId
-  -> Text
+  -> D.CommentBody
   -> SqlPersistT m (Maybe (Entity Comment, Entity User))
 insertComment aid uid body = do
   now <- liftIO getCurrentTime

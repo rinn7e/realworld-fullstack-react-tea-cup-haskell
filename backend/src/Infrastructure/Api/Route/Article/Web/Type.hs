@@ -23,8 +23,8 @@ import Servant qualified as S
 import Infrastructure.Api.Route.Comment.Web.Type (CommentRoute)
 import Infrastructure.Api.Route.TagCombinator (Tag)
 
-import Infrastructure.Api.DTO qualified as Api
 import Domain.Type qualified as D
+import Infrastructure.Api.DTO qualified as Api
 
 data ArticleRoute mode = ArticleRoute
   { getArticleFeed
@@ -44,7 +44,7 @@ data ArticleRoute mode = ArticleRoute
           :> Summary "Get Articles"
           :> Description "Get a list of recent articles"
           :> Tag "Articles"
-          :> QueryParam "tag" Text
+          :> QueryParam "tag" D.TagName
           :> QueryParam "author" D.Username
           :> QueryParam "favorited" D.Username
           :> QueryParam "limit" Int
@@ -57,13 +57,13 @@ data ArticleRoute mode = ArticleRoute
           :> Summary "Create Article"
           :> Description "Create a new article"
           :> Tag "Articles"
-          :> ReqBody '[JSON] Api.NewArticleRequest
+          :> ReqBody '[JSON] (Api.ArticleWrapper Api.NewArticleRequest)
           :> PostCreated '[JSON] Api.ArticleResponse
   -- ^ POST /api/articles
   , getArticleOne
       :: mode
         :- "articles"
-          :> Capture "slug" Text
+          :> Capture "slug" D.ArticleSlug
           :> Summary "Get Article"
           :> Description "Get a single article by slug"
           :> Tag "Articles"
@@ -72,17 +72,17 @@ data ArticleRoute mode = ArticleRoute
   , updateArticle
       :: mode
         :- "articles"
-          :> Capture "slug" Text
+          :> Capture "slug" D.ArticleSlug
           :> Summary "Update Article"
           :> Description "Update an article by slug"
           :> Tag "Articles"
-          :> ReqBody '[JSON] Api.UpdateArticleRequest
+          :> ReqBody '[JSON] (Api.ArticleWrapper Api.UpdateArticleRequest)
           :> Put '[JSON] Api.ArticleResponse
   -- ^ PUT /api/articles/:slug
   , deleteArticle
       :: mode
         :- "articles"
-          :> Capture "slug" Text
+          :> Capture "slug" D.ArticleSlug
           :> Summary "Delete Article"
           :> Description "Delete an article by slug"
           :> Tag "Articles"
@@ -91,7 +91,7 @@ data ArticleRoute mode = ArticleRoute
   , favoriteArticle
       :: mode
         :- "articles"
-          :> Capture "slug" Text
+          :> Capture "slug" D.ArticleSlug
           :> "favorite"
           :> Summary "Favorite Article"
           :> Description "Favorite an article by slug"
@@ -101,7 +101,7 @@ data ArticleRoute mode = ArticleRoute
   , unfavoriteArticle
       :: mode
         :- "articles"
-          :> Capture "slug" Text
+          :> Capture "slug" D.ArticleSlug
           :> "favorite"
           :> Summary "Unfavorite Article"
           :> Description "Unfavorite an article by slug"
@@ -109,7 +109,8 @@ data ArticleRoute mode = ArticleRoute
           :> Delete '[JSON] Api.ArticleResponse
   -- ^ DELETE /api/articles/:slug/favorite
   , comments
-      :: mode :- "articles" :> Capture "slug" Text :> "comments" :> NamedRoutes CommentRoute
+      :: mode
+        :- "articles" :> Capture "slug" D.ArticleSlug :> "comments" :> NamedRoutes CommentRoute
   -- ^ /api/articles/:slug/comments
   }
   deriving stock (Generic)

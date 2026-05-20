@@ -6,16 +6,32 @@ import Database.Persist.TH
 import GHC.Generics (Generic)
 import Servant.Auth.Server (FromJWT, ToJWT)
 
-import Domain.Type.User (UserRole(..), PasswordHashed(..), Username(..), Email(..))
-import Domain.Type.User qualified as D
+import Domain.Type
+  ( ArticleBody
+  , ArticleDescription
+  , ArticleSlug
+  , ArticleTitle
+  , CommentBody
+  , Email (..)
+  , LogLevel (..)
+  , LogMessage
+  , LogSource
+  , PasswordHashed (..)
+  , TagName
+  , UserBio
+  , UserImage
+  , UserRole (..)
+  , Username (..)
+  , VisitorIp
+  , VisitorPath
+  , VisitorUserAgent
+  )
 
-import Infrastructure.Interpreter.Real.DB.Util.Internal (stripEntityPrefix)
 import Infrastructure.Interpreter.Real.DB.Schema.Instance ()
+import Infrastructure.Interpreter.Real.DB.Util.Internal (stripEntityPrefix)
 
 derivePersistField "UserRole"
-
-type UserBio = D.UserBio
-type UserImage = D.UserImage
+derivePersistField "LogLevel"
 
 share
   [ mkPersist
@@ -38,25 +54,25 @@ User
     deriving Show Generic
 
 Visitor
-    ip Text
-    userAgent Text
-    path Text
+    ip VisitorIp
+    userAgent VisitorUserAgent
+    path VisitorPath
     timestamp UTCTime
     deriving Show Generic
 
 Log
-    level Text
-    message Text
-    source Text
+    level LogLevel
+    message LogMessage
+    source LogSource
     timestamp UTCTime
     userId UserId Maybe
     deriving Show Generic
 
 Article
-    slug Text
-    title Text
-    description Text
-    body Text
+    slug ArticleSlug
+    title ArticleTitle
+    description ArticleDescription
+    body ArticleBody
     authorId UserId
     createdAt UTCTime
     updatedAt UTCTime
@@ -64,7 +80,7 @@ Article
     deriving Show Generic
 
 Tag
-    name Text
+    name TagName
     UniqueTagName name
     deriving Show Generic
 
@@ -75,7 +91,7 @@ ArticleTag
     deriving Show Generic
 
 Comment
-    body Text
+    body CommentBody
     authorId UserId
     articleId ArticleId
     createdAt UTCTime

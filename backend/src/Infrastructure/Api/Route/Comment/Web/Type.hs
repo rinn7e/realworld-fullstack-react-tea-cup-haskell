@@ -31,7 +31,7 @@ data CommentRoute mode = CommentRoute
         :- Summary "Create Comment"
           :> Description "Create a comment for an article"
           :> Tag "Articles"
-          :> ReqBody '[JSON] Api.NewCommentRequest
+          :> ReqBody '[JSON] (Api.CommentWrapper Api.NewCommentRequest)
           :> PostCreated '[JSON] Api.CommentResponse
   -- ^ POST /api/articles/:slug/comments
   , deleteComment

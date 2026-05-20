@@ -28,8 +28,9 @@ adminAuthRoute auth =
     , getCurrentAdmin = getCurrentAdminHandler auth
     }
 
-loginAdminHandler :: S.AuthResult DB.UserId -> Api.LoginUserRequest -> App Api.UserResponse
-loginAdminHandler _ (Api.LoginUserRequest email pwd) = do
+loginAdminHandler
+  :: S.AuthResult DB.UserId -> Api.UserWrapper Api.LoginUserRequest -> App Api.UserResponse
+loginAdminHandler _ (Api.UserWrapper (Api.LoginUserRequest email pwd)) = do
   mUser <- lookupUserByEmail email
   case mUser of
     Nothing -> throwError S.err401{S.errBody = "Invalid email or password"}

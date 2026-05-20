@@ -26,8 +26,9 @@ webAuthRoute auth =
     , registerUser = registerUserHandler auth
     }
 
-loginUserHandler :: S.AuthResult DB.UserId -> Api.LoginUserRequest -> App Api.UserResponse
-loginUserHandler _ (Api.LoginUserRequest email pwd) = do
+loginUserHandler
+  :: S.AuthResult DB.UserId -> Api.UserWrapper Api.LoginUserRequest -> App Api.UserResponse
+loginUserHandler _ (Api.UserWrapper (Api.LoginUserRequest email pwd)) = do
   mUser <- lookupUserByEmail email
   case mUser of
     Nothing -> throwError S.err401{S.errBody = "Invalid email or password"}
@@ -39,8 +40,9 @@ loginUserHandler _ (Api.LoginUserRequest email pwd) = do
           token <- generateToken u.userId
           return $ Api.UserResponse $ Api.User u.email token u.username u.bio u.image
 
-registerUserHandler :: S.AuthResult DB.UserId -> Api.NewUserRequest -> App Api.UserResponse
-registerUserHandler _ (Api.NewUserRequest username email pwd) = do
+registerUserHandler
+  :: S.AuthResult DB.UserId -> Api.UserWrapper Api.NewUserRequest -> App Api.UserResponse
+registerUserHandler _ (Api.UserWrapper (Api.NewUserRequest username email pwd)) = do
   hashedPwd <- hashPassword pwd
   (newUser :: D.User) <- insertUser username email hashedPwd
   token <- generateToken newUser.userId

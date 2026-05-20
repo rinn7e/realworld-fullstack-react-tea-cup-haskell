@@ -1,13 +1,13 @@
 module Capability.Database.TagDB where
 
-import Data.Text (Text)
+import Domain.Type.Tag (TagName)
 import Effectful
 import Effectful.Dispatch.Dynamic
 
 data TagDB :: Effect where
-  GetTags :: TagDB m [Text]
+  GetTags :: TagDB m [TagName]
 
 type instance DispatchOf TagDB = 'Dynamic
 
-getTags :: (TagDB :> es) => Eff es [Text]
+getTags :: (TagDB :> es) => Eff es [TagName]
 getTags = send GetTags

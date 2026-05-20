@@ -1,6 +1,7 @@
 module Domain.Type.Tag where
 
 import Data.Aeson (FromJSON, ToJSON)
+import Data.String (IsString)
 import Data.Text (Text)
 import GHC.Generics (Generic)
 import Web.HttpApiData (FromHttpApiData, ToHttpApiData)
@@ -9,8 +10,12 @@ newtype TagId = TagId {unTagId :: Int}
   deriving stock (Eq, Ord, Show, Generic)
   deriving newtype (Num, ToJSON, FromJSON, ToHttpApiData, FromHttpApiData)
 
+newtype TagName = TagName {unTagName :: Text}
+  deriving stock (Eq, Ord, Show, Generic)
+  deriving newtype (ToJSON, FromJSON, ToHttpApiData, FromHttpApiData, IsString)
+
 data Tag = Tag
   { tagId :: TagId
-  , name :: Text
+  , name :: TagName
   }
   deriving stock (Eq, Show, Generic)

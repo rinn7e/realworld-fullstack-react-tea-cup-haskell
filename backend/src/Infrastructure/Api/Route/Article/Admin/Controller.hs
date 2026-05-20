@@ -32,7 +32,7 @@ getArticlesHandler
   :: S.AuthResult DB.UserId
   -> Maybe Int
   -> Maybe Int
-  -> Maybe Text
+  -> Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
   -> App Api.AdminArticleListResponse
@@ -46,7 +46,7 @@ getArticlesHandler (S.Authenticated uid) mLimit mOffset mTag mAuthor mSearch = d
   return $ Api.AdminArticleListResponse articles totalCount
 getArticlesHandler _ _ _ _ _ _ = throwError S.err401
 
-deleteAdminArticleHandler :: S.AuthResult DB.UserId -> Text -> App S.NoContent
+deleteAdminArticleHandler :: S.AuthResult DB.UserId -> D.ArticleSlug -> App S.NoContent
 deleteAdminArticleHandler (S.Authenticated uid) slug = do
   guardAdmin uid
   mArt <- getArticleBySlug slug
@@ -58,9 +58,9 @@ deleteAdminArticleHandler (S.Authenticated uid) slug = do
       let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
       _ <-
         insertLog
-          "INFO"
-          ("Deleted article: " <> slug)
-          "ARTICLE"
+          D.INFO
+          (D.LogMessage ("Deleted article: " <> slug.unArticleSlug))
+          (D.LogSource "ARTICLE")
           now
           (Just dUid)
       return S.NoContent

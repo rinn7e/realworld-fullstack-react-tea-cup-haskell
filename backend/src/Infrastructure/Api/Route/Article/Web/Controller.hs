@@ -48,7 +48,7 @@ getArticleFeedHandler _ _ _ = throwError S.err401
 
 getArticleListHandler
   :: S.AuthResult DB.UserId
-  -> Maybe Text
+  -> Maybe D.TagName
   -> Maybe D.Username
   -> Maybe D.Username
   -> Maybe Int
@@ -65,9 +65,13 @@ getArticleListHandler auth mTag mAuthor mFavorited mLimit mOffset = do
   let articles = map Api.toArticleResponse articlesDetail
   return $ Api.ArticleListResponse articles totalCount
 
-createArticleHandler :: S.AuthResult DB.UserId -> Api.NewArticleRequest -> App Api.ArticleResponse
-createArticleHandler (S.Authenticated uid) (Api.NewArticleRequest title desc body mTags) = do
-  let slug = T.intercalate "-" $ T.words $ T.toLower title
+createArticleHandler
+  :: S.AuthResult DB.UserId
+  -> Api.ArticleWrapper Api.NewArticleRequest
+  -> App Api.ArticleResponse
+createArticleHandler (S.Authenticated uid) (Api.ArticleWrapper (Api.NewArticleRequest title desc body mTags)) = do
+  let slugText = T.intercalate "-" $ T.words $ T.toLower title.unArticleTitle
+      slug = D.ArticleSlug slugText
       tags = fromMaybe [] mTags
       dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   _ <- createArticle slug title desc body dUid tags
@@ -77,7 +81,7 @@ createArticleHandler (S.Authenticated uid) (Api.NewArticleRequest title desc bod
     Nothing -> throwError S.err500
 createArticleHandler _ _ = throwError S.err401
 
-getArticleOneHandler :: S.AuthResult DB.UserId -> Text -> App Api.ArticleResponse
+getArticleOneHandler :: S.AuthResult DB.UserId -> D.ArticleSlug -> App Api.ArticleResponse
 getArticleOneHandler auth slug = do
   let mdUid = case auth of
         S.Authenticated uid -> Just $ D.UserId $ fromIntegral (fromSqlKey uid)
@@ -88,8 +92,11 @@ getArticleOneHandler auth slug = do
     Just grouped -> return $ Api.ArticleResponse $ Api.toArticleResponse grouped
 
 updateArticleHandler
-  :: S.AuthResult DB.UserId -> Text -> Api.UpdateArticleRequest -> App Api.ArticleResponse
-updateArticleHandler (S.Authenticated uid) slug (Api.UpdateArticleRequest mTitle mDesc mBody mTags) = do
+  :: S.AuthResult DB.UserId
+  -> D.ArticleSlug
+  -> Api.ArticleWrapper Api.UpdateArticleRequest
+  -> App Api.ArticleResponse
+updateArticleHandler (S.Authenticated uid) slug (Api.ArticleWrapper (Api.UpdateArticleRequest mTitle mDesc mBody mTags)) = do
   mArt <- getArticleBySlug slug
   case mArt of
     Nothing -> throwError S.err404
@@ -98,7 +105,11 @@ updateArticleHandler (S.Authenticated uid) slug (Api.UpdateArticleRequest mTitle
       if art.authorId /= dUid
         then throwError S.err403
         else do
-          let newSlug = maybe art.slug (T.intercalate "-" . T.words . T.toLower) mTitle
+          let newSlug =
+                maybe
+                  art.slug
+                  (\t -> D.ArticleSlug (T.intercalate "-" . T.words . T.toLower $ t.unArticleTitle))
+                  mTitle
               newTitle = maybe art.title id mTitle
               newDesc = maybe art.description id mDesc
               newBody = maybe art.body id mBody
@@ -109,7 +120,7 @@ updateArticleHandler (S.Authenticated uid) slug (Api.UpdateArticleRequest mTitle
             Nothing -> throwError S.err500
 updateArticleHandler _ _ _ = throwError S.err401
 
-deleteArticleHandler :: S.AuthResult DB.UserId -> Text -> App S.NoContent
+deleteArticleHandler :: S.AuthResult DB.UserId -> D.ArticleSlug -> App S.NoContent
 deleteArticleHandler (S.Authenticated uid) slug = do
   mArt <- getArticleBySlug slug
   case mArt of
@@ -123,7 +134,8 @@ deleteArticleHandler (S.Authenticated uid) slug = do
           return S.NoContent
 deleteArticleHandler _ _ = throwError S.err401
 
-favoriteArticleHandler :: S.AuthResult DB.UserId -> Text -> App Api.ArticleResponse
+favoriteArticleHandler
+  :: S.AuthResult DB.UserId -> D.ArticleSlug -> App Api.ArticleResponse
 favoriteArticleHandler (S.Authenticated uid) slug = do
   mArt <- getArticleBySlug slug
   case mArt of
@@ -137,7 +149,8 @@ favoriteArticleHandler (S.Authenticated uid) slug = do
         Nothing -> throwError S.err500
 favoriteArticleHandler _ _ = throwError S.err401
 
-unfavoriteArticleHandler :: S.AuthResult DB.UserId -> Text -> App Api.ArticleResponse
+unfavoriteArticleHandler
+  :: S.AuthResult DB.UserId -> D.ArticleSlug -> App Api.ArticleResponse
 unfavoriteArticleHandler (S.Authenticated uid) slug = do
   mArt <- getArticleBySlug slug
   case mArt of
