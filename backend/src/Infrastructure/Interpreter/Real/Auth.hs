@@ -3,7 +3,7 @@ module Infrastructure.Interpreter.Real.Auth
   ) where
 
 import Crypto.JWT (JWK)
-import Domain.User (UserId (..))
+import Domain.Type (UserId (..))
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static

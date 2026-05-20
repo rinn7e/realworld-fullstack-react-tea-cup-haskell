@@ -11,10 +11,10 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Domain.Article (Article (..), ArticleId (..))
-import Domain.Comment (CommentId (..))
-import Domain.Comment qualified as DC
-import Domain.User qualified as DU
+import Domain.Type (Article (..))
+import Domain.Type (CommentId (..))
+import Domain.Type qualified as DC
+import Domain.Type qualified as DU
 import Infrastructure.Api.DTO.Comment
   ( Comment (..)
   , CommentListResponse (..)

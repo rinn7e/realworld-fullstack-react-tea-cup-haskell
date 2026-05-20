@@ -18,8 +18,8 @@ import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
 
 import Capability.Database.VisitorDB
-import Domain.Visitor (Visitor)
-import Domain.Visitor qualified as D
+import Domain.Type (Visitor)
+import Domain.Type qualified as D
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 toDomainVisitor :: Entity DB.Visitor -> Visitor

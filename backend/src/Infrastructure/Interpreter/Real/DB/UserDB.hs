@@ -21,8 +21,8 @@ import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
 
 import Capability.Database.UserDB
-import Domain.User (User)
-import Domain.User qualified as D
+import Domain.Type (User)
+import Domain.Type qualified as D
 import Infrastructure.Interpreter.Real.DB.Query.User
   ( getUserByEmail
   , getUserByUsername

@@ -18,9 +18,9 @@ import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
 
 import Capability.Database.CommentDB
-import Domain.Article qualified as DA
-import Domain.Comment qualified as DC
-import Domain.User qualified as DU
+import Domain.Type qualified as DA
+import Domain.Type qualified as DC
+import Domain.Type qualified as DU
 import Infrastructure.Interpreter.Real.DB.Query.Comment qualified as Q
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 import Infrastructure.Interpreter.Real.DB.UserDB (toDomainUser)

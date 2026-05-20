@@ -12,7 +12,7 @@ import Effectful.Dispatch.Dynamic
 import UnliftIO.IORef
 
 import Capability.Database.UserDB
-import Domain.User (User (..), UserId (..))
+import Domain.Type (User (..), UserId (..))
 
 data MockDB = MockDB
   { nextUserId :: Int

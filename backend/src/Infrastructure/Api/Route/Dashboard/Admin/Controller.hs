@@ -18,9 +18,9 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Domain.Log (LogEntry (..), LogId (..))
-import Domain.User qualified as DU
-import Domain.Visitor (Visitor (..), VisitorId (..))
+import Domain.Type (LogEntry (..), LogId (..))
+import Domain.Type qualified as DU
+import Domain.Type (Visitor (..), VisitorId (..))
 import Infrastructure.Api.Route.Dashboard.Admin.Type
 import Infrastructure.Api.DTO.Dashboard
   ( DashboardStatsResponse (..)

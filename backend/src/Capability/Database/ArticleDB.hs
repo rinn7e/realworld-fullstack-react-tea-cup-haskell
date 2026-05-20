@@ -1,8 +1,8 @@
 module Capability.Database.ArticleDB where
 
 import Data.Text (Text)
-import Domain.Article (Article, ArticleWithMetadata, ArticleId)
-import Domain.User (UserId)
+import Domain.Type (Article, ArticleWithMetadata, ArticleId)
+import Domain.Type (UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
 

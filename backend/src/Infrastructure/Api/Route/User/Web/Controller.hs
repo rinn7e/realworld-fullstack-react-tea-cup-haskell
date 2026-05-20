@@ -28,7 +28,7 @@ import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 import Capability.Auth
 import Capability.Crypto
 import Capability.Database.UserDB
-import Domain.User qualified as D
+import Domain.Type qualified as D
 
 webUserRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes UserRoute) App
 webUserRoute auth =

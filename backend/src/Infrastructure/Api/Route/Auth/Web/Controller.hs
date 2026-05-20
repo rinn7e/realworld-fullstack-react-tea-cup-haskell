@@ -9,7 +9,7 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Domain.User qualified as D
+import Domain.Type qualified as D
 import Infrastructure.Api.Route.Auth.Web.Type
 import Infrastructure.Api.DTO.User
   ( LoginUserRequest (..)

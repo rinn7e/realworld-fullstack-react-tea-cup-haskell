@@ -11,8 +11,8 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Domain.Article (Article (..), ArticleId (..))
-import Domain.User qualified as DU
+import Domain.Type (Article (..))
+import Domain.Type qualified as DU
 import Infrastructure.Api.DTO.Article
   ( ArticleListResponse (..)
   , ArticleResponse (..)

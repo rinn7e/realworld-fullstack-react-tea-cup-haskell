@@ -2,7 +2,7 @@ module Capability.Database.VisitorDB where
 
 import Data.Text (Text)
 import Data.Time (UTCTime)
-import Domain.Visitor (Visitor)
+import Domain.Type (Visitor)
 import Effectful
 import Effectful.Dispatch.Dynamic
 

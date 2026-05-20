@@ -1,10 +1,10 @@
-module Domain.Article where
+module Domain.Type.Article where
 
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Text (Text)
 import Data.Time (UTCTime)
-import Domain.Tag (Tag)
-import Domain.User (User, UserId)
+import Domain.Type.Tag (Tag)
+import Domain.Type.User (User, UserId)
 import GHC.Generics (Generic)
 import Web.HttpApiData (FromHttpApiData, ToHttpApiData)
 

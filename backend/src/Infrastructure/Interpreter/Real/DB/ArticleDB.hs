@@ -24,44 +24,41 @@ import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
 
 import Capability.Database.ArticleDB
-import Domain.Article (Article)
-import Domain.Article qualified as D
-import Domain.Tag qualified as DT
-import Domain.User qualified as DU
+import Domain.Type qualified as D
 import Infrastructure.Interpreter.Real.DB.Query.Article qualified as Q
 import Infrastructure.Interpreter.Real.DB.Query.Article.Type (ArticleGrouped)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 import Infrastructure.Interpreter.Real.DB.UserDB (toDomainUser)
 
-toDomainArticle :: Entity DB.Article -> Article
+toDomainArticle :: Entity DB.Article -> D.Article
 toDomainArticle (Entity aid a) =
   D.Article
-    { articleId = D.ArticleId $ fromIntegral (fromSqlKey aid)
-    , slug = a.slug
-    , title = a.title
-    , description = a.description
-    , body = a.body
-    , authorId = DU.UserId $ fromIntegral (fromSqlKey a.authorId)
-    , createdAt = a.createdAt
-    , updatedAt = a.updatedAt
+    { D.articleId = D.ArticleId $ fromIntegral (fromSqlKey aid)
+    , D.slug = a.slug
+    , D.title = a.title
+    , D.description = a.description
+    , D.body = a.body
+    , D.authorId = D.UserId $ fromIntegral (fromSqlKey a.authorId)
+    , D.createdAt = a.createdAt
+    , D.updatedAt = a.updatedAt
     }
 
-toDomainTag :: Entity DB.Tag -> DT.Tag
+toDomainTag :: Entity DB.Tag -> D.Tag
 toDomainTag (Entity tid t) =
-  DT.Tag
-    { tagId = DT.TagId $ fromIntegral (fromSqlKey tid)
-    , name = t.name
+  D.Tag
+    { D.tagId = D.TagId $ fromIntegral (fromSqlKey tid)
+    , D.name = t.name
     }
 
 toDomainArticleWithMetadata :: ArticleGrouped -> D.ArticleWithMetadata
 toDomainArticleWithMetadata (First art, First auth, tagsMap, (First favCount, First isFav, First isFol)) =
   D.ArticleWithMetadata
-    { article = toDomainArticle art
-    , author = toDomainUser auth
-    , tags = map (toDomainTag . getFirst) $ Map.elems $ unAppendMap tagsMap
-    , favoritesCount = maybe 0 id favCount
-    , isFavorited = isFav
-    , isFollowingAuthor = isFol
+    { D.article = toDomainArticle art
+    , D.author = toDomainUser auth
+    , D.tags = map (toDomainTag . getFirst) $ Map.elems $ unAppendMap tagsMap
+    , D.favoritesCount = maybe 0 id favCount
+    , D.isFavorited = isFav
+    , D.isFollowingAuthor = isFol
     }
 
 ensureTag :: DB.ArticleId -> Text -> SqlPersistT IO ()
@@ -91,12 +88,12 @@ runArticleDBPostgres = interpret $ \_ -> \case
     liftIO $
       runSqlPool
         ( do
-            let sqlUserId = fmap (\(DU.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
+            let sqlUserId = fmap (\(D.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
             mArtGrp <- Q.getArticleWithAuthor sqlUserId slug
             return $ fmap toDomainArticleWithMetadata mArtGrp
         )
         pool
-  CreateArticle slug title desc body (DU.UserId authorIdInt) tags -> do
+  CreateArticle slug title desc body (D.UserId authorIdInt) tags -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -154,12 +151,12 @@ runArticleDBPostgres = interpret $ \_ -> \case
     liftIO $
       runSqlPool
         ( do
-            let sqlUserId = fmap (\(DU.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
+            let sqlUserId = fmap (\(D.UserId i) -> toSqlKey (fromIntegral i)) mCurrentUserId
             res <- Q.listArticles sqlUserId mTag mAuthor mFavorited lim off
             return $ map toDomainArticleWithMetadata $ Map.elems $ unAppendMap res
         )
         pool
-  ListFeed (DU.UserId currentUserIdInt) lim off -> do
+  ListFeed (D.UserId currentUserIdInt) lim off -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -172,7 +169,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
   CountArticles mTag mAuthor mFavorited -> do
     pool <- ask @ConnectionPool
     liftIO $ runSqlPool (Q.countArticles mTag mAuthor mFavorited) pool
-  CountFeed (DU.UserId currentUserIdInt) -> do
+  CountFeed (D.UserId currentUserIdInt) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -181,7 +178,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
             Q.countFeed sqlUserId
         )
         pool
-  FavoriteArticle (DU.UserId uidInt) (D.ArticleId aidInt) -> do
+  FavoriteArticle (D.UserId uidInt) (D.ArticleId aidInt) -> do
     ask @ConnectionPool >>= \pool -> liftIO $
       runSqlPool
         ( do
@@ -191,7 +188,7 @@ runArticleDBPostgres = interpret $ \_ -> \case
             return ()
         )
         pool
-  UnfavoriteArticle (DU.UserId uidInt) (D.ArticleId aidInt) -> do
+  UnfavoriteArticle (D.UserId uidInt) (D.ArticleId aidInt) -> do
     ask @ConnectionPool >>= \pool -> liftIO $
       runSqlPool
         ( do

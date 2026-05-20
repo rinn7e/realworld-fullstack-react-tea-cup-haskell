@@ -9,10 +9,10 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Domain.Article (Article (..), ArticleId (..))
-import Domain.Article qualified as D
-import Domain.Tag qualified as DT
-import Domain.User qualified as DU
+import Domain.Type (Article (..), ArticleId (..))
+import Domain.Type qualified as D
+import Domain.Type qualified as DT
+import Domain.Type qualified as DU
 import Infrastructure.Api.DTO.Article
   ( AdminArticle (..)
   , AdminArticleListResponse (..)

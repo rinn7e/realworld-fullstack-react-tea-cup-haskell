@@ -1,16 +1,22 @@
-module Domain.Tag where
+module Domain.Type.Log where
 
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Text (Text)
+import Data.Time (UTCTime)
+import Domain.Type.User (UserId)
 import GHC.Generics (Generic)
 import Web.HttpApiData (FromHttpApiData, ToHttpApiData)
 
-newtype TagId = TagId {unTagId :: Int}
+newtype LogId = LogId {unLogId :: Int}
   deriving stock (Eq, Ord, Show, Generic)
   deriving newtype (Num, ToJSON, FromJSON, ToHttpApiData, FromHttpApiData)
 
-data Tag = Tag
-  { tagId :: TagId
-  , name :: Text
+data LogEntry = LogEntry
+  { logId :: LogId
+  , level :: Text
+  , message :: Text
+  , source :: Text
+  , timestamp :: UTCTime
+  , userId :: Maybe UserId
   }
   deriving stock (Eq, Show, Generic)

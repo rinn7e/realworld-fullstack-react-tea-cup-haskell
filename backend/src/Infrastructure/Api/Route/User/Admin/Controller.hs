@@ -21,12 +21,10 @@ import Infrastructure.Api.Route.User.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
-
-import Capability.Auth
 import Capability.Database.LoggerDB
 import Capability.Database.UserDB
 import Capability.Time
-import Domain.User qualified as D
+import Domain.Type qualified as D
 
 adminUserRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminUserRoute) App
 adminUserRoute auth =

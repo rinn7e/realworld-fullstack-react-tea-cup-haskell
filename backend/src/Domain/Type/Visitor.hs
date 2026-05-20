@@ -1,4 +1,4 @@
-module Domain.Visitor where
+module Domain.Type.Visitor where
 
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Text (Text)

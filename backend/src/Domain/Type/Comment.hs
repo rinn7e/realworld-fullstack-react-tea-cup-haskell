@@ -1,10 +1,10 @@
-module Domain.Comment where
+module Domain.Type.Comment where
 
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Text (Text)
 import Data.Time (UTCTime)
-import Domain.Article (ArticleId)
-import Domain.User (UserId)
+import Domain.Type.Article (ArticleId)
+import Domain.Type.User (UserId)
 import GHC.Generics (Generic)
 import Web.HttpApiData (FromHttpApiData, ToHttpApiData)
 

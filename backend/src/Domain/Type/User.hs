@@ -1,4 +1,4 @@
-module Domain.User where
+module Domain.Type.User where
 
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Text (Text)

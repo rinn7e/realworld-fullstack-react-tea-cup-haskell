@@ -14,7 +14,6 @@ import Control.Lens ((&), (.~), (?~))
 import Data.Aeson (FromJSON (..), ToJSON (..), (.:), (.:?), (.=))
 import Data.Aeson qualified as A
 import Data.HashMap.Strict.InsOrd qualified as InsOrd
-import Data.Map.Strict qualified as Map
 import Data.OpenApi
   ( NamedSchema (..)
   , OpenApiType (..)
@@ -26,16 +25,12 @@ import Data.OpenApi
   , type_
   )
 import Data.Proxy (Proxy (..))
-import Data.Semigroup (First (..))
 import Data.Text (Text)
 import Data.Time (UTCTime)
 import GHC.Generics (Generic)
 
-import Domain.Article qualified as D
-import Domain.Tag qualified as DT
-import Domain.User qualified as DU
+import Domain.Type qualified as D
 import Infrastructure.Api.DTO.User (AdminUserResponse (..), Profile (..))
-import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 -------------------------------
 -- Article

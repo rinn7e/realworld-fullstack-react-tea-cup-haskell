@@ -1,7 +1,7 @@
 module Capability.Database.UserDB where
 
 import Data.Text (Text)
-import Domain.User (User, UserId)
+import Domain.Type (User, UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
 

@@ -2,8 +2,8 @@ module Capability.Database.LoggerDB where
 
 import Data.Text (Text)
 import Data.Time (UTCTime)
-import Domain.Log (LogEntry)
-import Domain.User (UserId)
+import Domain.Type (LogEntry)
+import Domain.Type (UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
 

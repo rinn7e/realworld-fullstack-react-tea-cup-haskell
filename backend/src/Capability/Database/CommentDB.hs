@@ -1,9 +1,9 @@
 module Capability.Database.CommentDB where
 
 import Data.Text (Text)
-import Domain.Article (ArticleId)
-import Domain.Comment (AdminCommentResponse, Comment, CommentId)
-import Domain.User (User, UserId)
+import Domain.Type (ArticleId)
+import Domain.Type (AdminCommentResponse, Comment, CommentId)
+import Domain.Type (User, UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
 

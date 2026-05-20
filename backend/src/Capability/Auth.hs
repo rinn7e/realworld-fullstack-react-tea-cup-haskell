@@ -1,7 +1,7 @@
 module Capability.Auth where
 
 import Data.Text (Text)
-import Domain.User (UserId)
+import Domain.Type (UserId)
 import Effectful
 import Effectful.Dispatch.Dynamic
 

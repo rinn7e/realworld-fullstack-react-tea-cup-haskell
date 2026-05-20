@@ -22,8 +22,8 @@ import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 import Capability.Database.CommentDB
 import Capability.Database.LoggerDB
 import Capability.Time
-import Domain.Comment qualified as DC
-import Domain.User qualified as DU
+import Domain.Type qualified as DC
+import Domain.Type qualified as DU
 
 adminCommentRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminCommentRoute) App
 adminCommentRoute auth =

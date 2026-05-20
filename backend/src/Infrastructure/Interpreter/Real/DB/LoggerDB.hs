@@ -18,11 +18,11 @@ import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
 
 import Capability.Database.LoggerDB
-import Domain.Log (LogEntry)
-import Domain.Log qualified as D
+import Domain.Type (LogEntry)
+import Domain.Type qualified as D
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
-import Domain.User qualified as DU
+import Domain.Type qualified as DU
 
 toDomainLogEntry :: Entity DB.Log -> LogEntry
 toDomainLogEntry (Entity lid l) =
