@@ -70,7 +70,7 @@ getDashboardStatsHandler (S.Authenticated uid) = do
   guardAdmin uid
   totalUsers <- listUsers Nothing Nothing Nothing Nothing >>= \(_, c) -> return c
   totalArticles <- countArticles Nothing Nothing Nothing
-  (_, totalComments) <- listAdminComments Nothing Nothing (D.Limit 0) (D.Offset 0)
+  (_, totalComments) <- listAdminComments Nothing Nothing Nothing Nothing (D.Limit 0) (D.Offset 0)
   totalVisitors <- countAllVisitors
   now <- getCurrentTime
   let oneDayAgo = addUTCTime (-86400) now

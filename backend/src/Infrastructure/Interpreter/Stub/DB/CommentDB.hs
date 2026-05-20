@@ -48,10 +48,9 @@ runCommentDBStub ref = interpret $ \_ -> \case
   GetComment cid -> do
     db <- readIORef ref
     pure $ Map.lookup cid db.comments
-  ListAdminComments mAuthor mArticleSlug (Limit lim) (Offset off) -> do
+  ListAdminComments mAuthor mArticleSlug mSort mDir (Limit lim) (Offset off) -> do
     db <- readIORef ref
     let allComments = Map.elems db.comments
-        sorted = L.sortBy (\c1 c2 -> compare c2.createdAt c1.createdAt) allComments
         matches v =
           let author = Map.lookup v.authorId db.users
               article = Map.lookup v.articleId db.articles
@@ -62,9 +61,7 @@ runCommentDBStub ref = interpret $ \_ -> \case
                 Nothing -> True
                 Just slug -> maybe False (\a -> a.slug == slug) article
           in authorMatch && articleMatch
-        filtered = filter matches sorted
-        total = length filtered
-        sliced = take lim $ drop off filtered
+        filtered = filter matches allComments
         details = map (\c ->
           let author = Map.findWithDefault (error "User not found") c.authorId db.users
               article = Map.findWithDefault (error "Article not found") c.articleId db.articles
@@ -76,5 +73,19 @@ runCommentDBStub ref = interpret $ \_ -> \case
             , articleSlug = article.slug
             , authorUsername = author.username
             }
-          ) sliced
-    pure (details, total)
+          ) filtered
+        compareComments d1 d2 =
+          let cmp = case fmap (\s -> s.unSort) mSort of
+                Just "author" -> compare d1.authorUsername d2.authorUsername
+                Just "id" -> compare d1.id d2.id
+                _ -> compare d1.createdAt d2.createdAt
+          in case mDir of
+               Just Asc -> cmp
+               _ -> case cmp of
+                      LT -> GT
+                      GT -> LT
+                      EQ -> EQ
+        sorted = L.sortBy compareComments details
+        total = length sorted
+        sliced = take lim $ drop off sorted
+    pure (sliced, total)

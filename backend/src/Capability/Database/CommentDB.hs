@@ -14,6 +14,8 @@ data CommentDB :: Effect where
   ListAdminComments
     :: Maybe Username
     -> Maybe ArticleSlug
+    -> Maybe Sort
+    -> Maybe Direction
     -> D.Limit
     -> D.Offset
     -> CommentDB m ([CommentDetail], Int)
@@ -42,7 +44,9 @@ listAdminComments
   :: (CommentDB :> es)
   => Maybe Username
   -> Maybe ArticleSlug
+  -> Maybe Sort
+  -> Maybe Direction
   -> D.Limit
   -> D.Offset
   -> Eff es ([CommentDetail], Int)
-listAdminComments mAuthor mArticleSlug lim off = send (ListAdminComments mAuthor mArticleSlug lim off)
+listAdminComments mAuthor mArticleSlug mSort mDir lim off = send (ListAdminComments mAuthor mArticleSlug mSort mDir lim off)

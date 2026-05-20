@@ -68,7 +68,7 @@ export const initPageModel = (
       ]
     }
     case 'CommentsPage': {
-      const [m, c] = Comments.init()
+      const [m, c] = Comments.init(shared)
       return [
         { _tag: 'CommentsPageModel', model: m },
         c.map((subMsg): Msg => ({ _tag: 'CommentsPageMsg', subMsg })),
@@ -446,7 +446,7 @@ const commentsPageMsgHandler = (
   model: Model,
 ): [Model, Cmd<Msg>] => {
   if (model.pageModel._tag === 'CommentsPageModel') {
-    const [m, c] = Comments.update(subMsg, model.pageModel.model)
+    const [m, c] = Comments.update(model.shared)(subMsg, model.pageModel.model)
     return [
       { ...model, pageModel: { ...model.pageModel, model: m } },
       c.map((msg): Msg => ({ _tag: 'CommentsPageMsg', subMsg: msg })),

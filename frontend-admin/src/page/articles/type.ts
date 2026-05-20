@@ -31,7 +31,7 @@ export type ArticleItemMsg = {
 
 export type Msg =
   | { readonly _tag: 'NoOp' }
-  | ArticleItemMsg
+  | { readonly _tag: 'ClearSelected' }
   | { readonly _tag: 'SearchBarMsg'; readonly subMsg: SearchBar.Msg }
   | {
       readonly _tag: 'PaginationMsg'

@@ -303,6 +303,7 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
       return (
         <CommentsPageMemo
           model={model.pageModel.model}
+          shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'CommentsPageMsg', subMsg })}
         />
       )

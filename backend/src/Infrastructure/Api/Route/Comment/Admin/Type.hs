@@ -29,6 +29,8 @@ data AdminCommentRoute mode = AdminCommentRoute
           :> QueryParam "offset" D.Offset
           :> QueryParam "author" D.Username
           :> QueryParam "articleSlug" D.ArticleSlug
+          :> QueryParam "sort" D.Sort
+          :> QueryParam "direction" D.Direction
           :> Get '[JSON] Api.CommentListResponse
   , deleteComment
       :: mode

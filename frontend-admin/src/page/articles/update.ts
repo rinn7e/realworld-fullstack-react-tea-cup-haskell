@@ -49,8 +49,8 @@ export const update =
   (shared: Shared) =>
   (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     switch (msg._tag) {
-      case 'SelectArticle':
-        return [{ ...model, selectedArticle: msg.article }, Cmd.none()]
+      case 'ClearSelected':
+        return [{ ...model, selectedArticle: O.none }, Cmd.none()]
       case 'SearchBarMsg':
         return searchBarMsgHandler(shared, msg.subMsg, model)
       case 'PaginationMsg':

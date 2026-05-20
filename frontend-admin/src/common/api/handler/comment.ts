@@ -23,6 +23,8 @@ export const getAdminComments = (
     offset?: number
     author?: string
     articleSlug?: string
+    sort?: string
+    direction?: string
   } = {},
 ): TE.TaskEither<HttpError<ApiError>, CommentListResponse> => {
   const query = new URLSearchParams()
@@ -31,6 +33,8 @@ export const getAdminComments = (
   if (params.author !== undefined) query.set('author', params.author)
   if (params.articleSlug !== undefined)
     query.set('articleSlug', params.articleSlug)
+  if (params.sort !== undefined) query.set('sort', params.sort)
+  if (params.direction !== undefined) query.set('direction', params.direction)
   const qs = query.toString()
 
   return pipe(

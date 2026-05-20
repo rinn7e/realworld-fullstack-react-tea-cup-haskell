@@ -41,7 +41,7 @@ runCommentDBPostgres = interpret $ \_ -> \case
   InsertComment aid uid body -> insertCommentHandler aid uid body
   DeleteComment cid -> deleteCommentHandler cid
   GetComment cid -> getCommentHandler cid
-  ListAdminComments mAuthor mArticleSlug lim off -> listAdminCommentsHandler mAuthor mArticleSlug lim off
+  ListAdminComments mAuthor mArticleSlug mSort mDir lim off -> listAdminCommentsHandler mAuthor mArticleSlug mSort mDir lim off
 
 getCommentsForArticleHandler
   :: (IOE :> es, Reader ConnectionPool :> es) => D.ArticleId -> Eff es [(D.Comment, D.User)]
@@ -103,10 +103,12 @@ listAdminCommentsHandler
   :: (IOE :> es, Reader ConnectionPool :> es)
   => Maybe D.Username
   -> Maybe D.ArticleSlug
+  -> Maybe D.Sort
+  -> Maybe D.Direction
   -> D.Limit
   -> D.Offset
   -> Eff es ([D.CommentDetail], Int)
-listAdminCommentsHandler mAuthor mArticleSlug (D.Limit limInt) (D.Offset offInt) = do
+listAdminCommentsHandler mAuthor mArticleSlug mSort mDir (D.Limit limInt) (D.Offset offInt) = do
   pool <- ask @ConnectionPool
   liftIO $
     runSqlPool
@@ -130,8 +132,15 @@ listAdminCommentsHandler mAuthor mArticleSlug (D.Limit limInt) (D.Offset offInt)
                   [ maybe [] (\authId -> [DB.CommentAuthorId ==. authId]) mAuthorId
                   , maybe [] (\artId -> [DB.CommentArticleId ==. artId]) mArtId
                   ]
+              sortOpt = case (fmap (\s -> s.unSort) mSort, mDir) of
+                (Just "author", Just D.Asc) -> Asc DB.CommentAuthorId
+                (Just "author", _) -> Desc DB.CommentAuthorId
+                (Just "id", Just D.Asc) -> Asc DB.CommentId
+                (Just "id", _) -> Desc DB.CommentId
+                (_, Just D.Asc) -> Asc DB.CommentCreatedAt
+                (_, _) -> Desc DB.CommentCreatedAt
           totalCount <- count filters
-          entities <- selectList filters [Desc DB.CommentCreatedAt, LimitTo limInt, OffsetBy offInt]
+          entities <- selectList filters [sortOpt, LimitTo limInt, OffsetBy offInt]
           comments <- for entities $ \(Entity cid c) -> do
             mArt <- get c.articleId
             mUser <- get c.authorId

@@ -16,6 +16,21 @@ deriving newtype instance ToSchema D.Offset
 instance ToParamSchema D.Limit
 instance ToParamSchema D.Offset
 
+deriving newtype instance ToSchema D.Sort
+instance ToParamSchema D.Sort
+
+instance ToSchema D.Direction where
+  declareNamedSchema _ = do
+    return $
+      NamedSchema (Just "Direction") $
+        mempty
+          & type_ ?~ OpenApiString
+
+instance ToParamSchema D.Direction where
+  toParamSchema _ =
+    mempty
+      & type_ ?~ OpenApiString
+
 -- User instances
 deriving newtype instance ToSchema D.UserId
 deriving newtype instance ToSchema D.Password

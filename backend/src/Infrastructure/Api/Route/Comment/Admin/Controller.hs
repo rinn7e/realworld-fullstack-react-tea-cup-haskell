@@ -48,15 +48,17 @@ getCommentsHandler
   -> Maybe D.Offset
   -> Maybe D.Username
   -> Maybe D.ArticleSlug
+  -> Maybe D.Sort
+  -> Maybe D.Direction
   -> Eff es Api.CommentListResponse
-getCommentsHandler (S.Authenticated uid) mLimit mOffset mAuthor mArticleSlug = do
+getCommentsHandler (S.Authenticated uid) mLimit mOffset mAuthor mArticleSlug mSort mDir = do
   guardAdmin uid
   let limit = maybe (D.Limit 10) id mLimit
       offset = maybe (D.Offset 0) id mOffset
-  (comments, total) <- listAdminComments mAuthor mArticleSlug limit offset
+  (comments, total) <- listAdminComments mAuthor mArticleSlug mSort mDir limit offset
   let dtoComments = map Api.toCommentDTOFromDetail comments
   return $ Api.CommentListResponse dtoComments total
-getCommentsHandler _ _ _ _ _ = throwError S.err401
+getCommentsHandler _ _ _ _ _ _ _ = throwError S.err401
 
 deleteAdminCommentHandler
   :: ( CommentDB :> es
