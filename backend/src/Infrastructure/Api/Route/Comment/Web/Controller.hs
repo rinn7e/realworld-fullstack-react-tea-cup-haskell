@@ -15,14 +15,14 @@ import Domain.Article (Article (..), ArticleId (..))
 import Domain.Comment (CommentId (..))
 import Domain.Comment qualified as DC
 import Domain.User qualified as DU
-import Infrastructure.Entity.Comment.DTO
+import Infrastructure.Api.DTO.Comment
   ( Comment (..)
   , CommentListResponse (..)
   , CommentResponse (..)
   , NewCommentRequest (..)
   )
 import Infrastructure.Api.Route.Comment.Web.Type
-import Infrastructure.Entity.User.DTO (Profile (..))
+import Infrastructure.Api.DTO.User (Profile (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 

@@ -23,7 +23,7 @@ import Servant qualified as S
 import Infrastructure.Api.Route.Comment.Web.Type (CommentRoute)
 import Infrastructure.Api.Route.TagCombinator (Tag)
 
-import Infrastructure.Entity.Article.DTO
+import Infrastructure.Api.DTO.Article
   ( ArticleListResponse
   , ArticleResponse
   , NewArticleRequest

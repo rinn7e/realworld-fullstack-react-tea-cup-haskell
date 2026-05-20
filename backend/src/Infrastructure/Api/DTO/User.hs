@@ -1,4 +1,4 @@
-module Infrastructure.Entity.User.DTO
+module Infrastructure.Api.DTO.User
   ( User (..)
   , UserResponse (..)
   , Profile (..)

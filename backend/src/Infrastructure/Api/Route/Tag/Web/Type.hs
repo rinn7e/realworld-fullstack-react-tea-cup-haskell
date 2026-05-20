@@ -12,7 +12,7 @@ import Servant
   , (:>)
   )
 
-import Infrastructure.Entity.Tag.DTO (TagListResponse)
+import Infrastructure.Api.DTO.Tag (TagListResponse)
 
 data TagRoute mode = TagRoute
   { getTagList

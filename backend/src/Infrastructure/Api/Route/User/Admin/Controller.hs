@@ -12,7 +12,7 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Infrastructure.Entity.User.DTO
+import Infrastructure.Api.DTO.User
   ( AdminUserListResponse (..)
   , AdminUserResponse (..)
   , UpdateUserRoleRequest (..)

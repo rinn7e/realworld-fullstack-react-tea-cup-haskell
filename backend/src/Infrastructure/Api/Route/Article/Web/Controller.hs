@@ -13,7 +13,7 @@ import Servant.Auth.Server qualified as S
 
 import Domain.Article (Article (..), ArticleId (..))
 import Domain.User qualified as DU
-import Infrastructure.Entity.Article.DTO
+import Infrastructure.Api.DTO.Article
   ( ArticleListResponse (..)
   , ArticleResponse (..)
   , NewArticleRequest (..)

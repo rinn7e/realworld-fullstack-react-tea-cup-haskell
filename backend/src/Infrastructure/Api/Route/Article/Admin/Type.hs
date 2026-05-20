@@ -15,7 +15,7 @@ import Servant
   )
 import Servant qualified as S
 
-import Infrastructure.Entity.Article.DTO (AdminArticleListResponse (..))
+import Infrastructure.Api.DTO.Article (AdminArticleListResponse (..))
 import Infrastructure.Api.Route.TagCombinator (Tag)
 
 data AdminArticleRoute mode = AdminArticleRoute

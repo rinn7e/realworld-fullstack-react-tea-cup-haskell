@@ -13,12 +13,12 @@ import Domain.Article (Article (..), ArticleId (..))
 import Domain.Article qualified as D
 import Domain.Tag qualified as DT
 import Domain.User qualified as DU
-import Infrastructure.Entity.Article.DTO
+import Infrastructure.Api.DTO.Article
   ( AdminArticle (..)
   , AdminArticleListResponse (..)
   )
 import Infrastructure.Api.Route.Article.Admin.Type
-import Infrastructure.Entity.User.DTO (AdminUserResponse (..))
+import Infrastructure.Api.DTO.User (AdminUserResponse (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB

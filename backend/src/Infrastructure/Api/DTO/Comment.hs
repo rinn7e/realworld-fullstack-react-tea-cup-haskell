@@ -1,4 +1,4 @@
-module Infrastructure.Entity.Comment.DTO
+module Infrastructure.Api.DTO.Comment
   ( Comment (..)
   , CommentResponse (..)
   , CommentListResponse (..)
@@ -27,7 +27,7 @@ import Data.Text (Text)
 import Data.Time (UTCTime)
 import GHC.Generics (Generic)
 
-import Infrastructure.Entity.User.DTO (Profile (..))
+import Infrastructure.Api.DTO.User (Profile (..))
 
 -------------------------------
 -- Comment

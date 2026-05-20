@@ -1,4 +1,4 @@
-module Infrastructure.Entity.Visitor.DTO where
+module Infrastructure.Api.DTO.Visitor where
 
 import Data.Aeson (ToJSON (..))
 import Data.OpenApi (ToSchema (..))

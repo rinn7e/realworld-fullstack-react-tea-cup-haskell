@@ -13,7 +13,7 @@ import Servant
   , (:>)
   )
 
-import Infrastructure.Entity.User.DTO (LoginUserRequest, UserResponse)
+import Infrastructure.Api.DTO.User (LoginUserRequest, UserResponse)
 
 data AdminAuthRoute mode = AdminAuthRoute
   { loginAdmin

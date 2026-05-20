@@ -1,4 +1,4 @@
-module Infrastructure.Entity.Article.DTO
+module Infrastructure.Api.DTO.Article
   ( Article (..)
   , ArticleResponse (..)
   , ArticleListResponse (..)
@@ -34,7 +34,7 @@ import GHC.Generics (Generic)
 import Domain.Article qualified as D
 import Domain.Tag qualified as DT
 import Domain.User qualified as DU
-import Infrastructure.Entity.User.DTO (AdminUserResponse (..), Profile (..))
+import Infrastructure.Api.DTO.User (AdminUserResponse (..), Profile (..))
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 -------------------------------

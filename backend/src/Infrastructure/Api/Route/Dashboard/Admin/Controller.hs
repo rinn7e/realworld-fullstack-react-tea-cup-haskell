@@ -22,18 +22,18 @@ import Domain.Log (LogEntry (..), LogId (..))
 import Domain.User qualified as DU
 import Domain.Visitor (Visitor (..), VisitorId (..))
 import Infrastructure.Api.Route.Dashboard.Admin.Type
-import Infrastructure.Entity.Dashboard.DTO
+import Infrastructure.Api.DTO.Dashboard
   ( DashboardStatsResponse (..)
   , VisitorStatResponse (..)
   )
-import Infrastructure.Entity.Log.DTO
+import Infrastructure.Api.DTO.Log
   ( LogLevel (..)
   , LogListResponse (..)
   , LogResponse (..)
   , logLevelFromText
   , logLevelToText
   )
-import Infrastructure.Entity.Visitor.DTO (VisitorListResponse (..), VisitorResponse (..))
+import Infrastructure.Api.DTO.Visitor (VisitorListResponse (..), VisitorResponse (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB

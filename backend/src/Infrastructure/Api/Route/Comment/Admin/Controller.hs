@@ -10,10 +10,10 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Infrastructure.Entity.Comment.DTO
+import Infrastructure.Api.DTO.Comment
   ( AdminCommentListResponse (..)
   )
-import Infrastructure.Entity.Comment.DTO qualified as DTO
+import Infrastructure.Api.DTO.Comment qualified as DTO
 import Infrastructure.Api.Route.Comment.Admin.Type
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
