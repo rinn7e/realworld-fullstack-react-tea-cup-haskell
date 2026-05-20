@@ -10,18 +10,18 @@ server:
 
 .PHONY: test-fe
 test-fe:
-	cd frontend && npm run test:e2e:ui
+	cd e2e && npm run test:e2e:ui
 
 .PHONY: lint-fe
 lint-fe:
-	cd frontend && npx eslint --fix . && npx prettier --write .
+	cd frontend-web && npx eslint --fix . && npx prettier --write .
 
 .PHONY: run-fe
 run-fe:
-	cd frontend && npm run dev
+	cd frontend-web && npm run dev
 
 .PHONY: check-fe
 check-fe:
-	cd frontend && npm run check:watch
+	cd frontend-web && npm run check:watch
 
 
