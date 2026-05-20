@@ -33,7 +33,7 @@ getArticlesHandler
   -> Maybe Int
   -> Maybe Int
   -> Maybe Text
-  -> Maybe Text
+  -> Maybe D.Username
   -> Maybe Text
   -> App Api.AdminArticleListResponse
 getArticlesHandler (S.Authenticated uid) mLimit mOffset mTag mAuthor mSearch = do

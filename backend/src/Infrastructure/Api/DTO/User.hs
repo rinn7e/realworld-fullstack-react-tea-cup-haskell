@@ -32,16 +32,17 @@ import Data.Text (Text)
 import GHC.Generics (Generic)
 
 import Domain.Type qualified as D
+import Infrastructure.Api.DTO.Instance ()
 
 -------------------------------
 -- User
 -------------------------------
 data User = User
-  { email :: Text
+  { email :: D.Email
   , token :: Text
-  , username :: Text
-  , bio :: Maybe Text
-  , image :: Maybe Text
+  , username :: D.Username
+  , bio :: Maybe D.UserBio
+  , image :: Maybe D.UserImage
   }
   deriving (Show, Generic, ToSchema)
 
@@ -58,9 +59,9 @@ data UserResponse = UserResponse {user :: User}
 -- Profile
 -------------------------------
 data Profile = Profile
-  { username :: Text
-  , bio :: Maybe Text
-  , image :: Maybe Text
+  { username :: D.Username
+  , bio :: Maybe D.UserBio
+  , image :: Maybe D.UserImage
   , following :: Bool
   }
   deriving stock (Show, Generic)
@@ -77,8 +78,8 @@ data ProfileResponse = ProfileResponse {profile :: Profile}
 -- Requests
 -------------------------------
 data LoginUserRequest = LoginUserRequest
-  { email :: Text
-  , password :: Text
+  { email :: D.Email
+  , password :: D.Password
   }
   deriving stock (Show, Generic)
 
@@ -89,8 +90,8 @@ instance FromJSON LoginUserRequest where
 
 instance ToSchema LoginUserRequest where
   declareNamedSchema _ = do
-    emailSchema <- declareSchemaRef (Proxy @Text)
-    passwordSchema <- declareSchemaRef (Proxy @Text)
+    emailSchema <- declareSchemaRef (Proxy @D.Email)
+    passwordSchema <- declareSchemaRef (Proxy @D.Password)
     let userSchema =
           mempty
             & type_ ?~ OpenApiObject
@@ -104,9 +105,9 @@ instance ToSchema LoginUserRequest where
           & required .~ ["user"]
 
 data NewUserRequest = NewUserRequest
-  { username :: Text
-  , email :: Text
-  , password :: Text
+  { username :: D.Username
+  , email :: D.Email
+  , password :: D.Password
   }
   deriving stock (Show, Generic)
 
@@ -117,9 +118,9 @@ instance FromJSON NewUserRequest where
 
 instance ToSchema NewUserRequest where
   declareNamedSchema _ = do
-    usernameSchema <- declareSchemaRef (Proxy @Text)
-    emailSchema <- declareSchemaRef (Proxy @Text)
-    passwordSchema <- declareSchemaRef (Proxy @Text)
+    usernameSchema <- declareSchemaRef (Proxy @D.Username)
+    emailSchema <- declareSchemaRef (Proxy @D.Email)
+    passwordSchema <- declareSchemaRef (Proxy @D.Password)
     let userSchema =
           mempty
             & type_ ?~ OpenApiObject
@@ -138,11 +139,11 @@ instance ToSchema NewUserRequest where
           & required .~ ["user"]
 
 data UpdateUserRequest = UpdateUserRequest
-  { email :: Maybe Text
-  , username :: Maybe Text
-  , password :: Maybe Text
-  , bio :: Maybe Text
-  , image :: Maybe Text
+  { email :: Maybe D.Email
+  , username :: Maybe D.Username
+  , password :: Maybe D.Password
+  , bio :: Maybe D.UserBio
+  , image :: Maybe D.UserImage
   }
   deriving stock (Show, Generic)
 
@@ -158,11 +159,11 @@ instance FromJSON UpdateUserRequest where
 
 instance ToSchema UpdateUserRequest where
   declareNamedSchema _ = do
-    emailSchema <- declareSchemaRef (Proxy @(Maybe Text))
-    usernameSchema <- declareSchemaRef (Proxy @(Maybe Text))
-    passwordSchema <- declareSchemaRef (Proxy @(Maybe Text))
-    bioSchema <- declareSchemaRef (Proxy @(Maybe Text))
-    imageSchema <- declareSchemaRef (Proxy @(Maybe Text))
+    emailSchema <- declareSchemaRef (Proxy @(Maybe D.Email))
+    usernameSchema <- declareSchemaRef (Proxy @(Maybe D.Username))
+    passwordSchema <- declareSchemaRef (Proxy @(Maybe D.Password))
+    bioSchema <- declareSchemaRef (Proxy @(Maybe D.UserBio))
+    imageSchema <- declareSchemaRef (Proxy @(Maybe D.UserImage))
     let userSchema =
           mempty
             & type_ ?~ OpenApiObject
@@ -188,6 +189,8 @@ instance ToSchema D.UserRole where
         mempty
           & type_ ?~ OpenApiString
 
+
+
 data UpdateUserRoleRequest = UpdateUserRoleRequest
   { role :: D.UserRole
   }
@@ -199,10 +202,10 @@ data UpdateUserRoleRequest = UpdateUserRoleRequest
 -------------------------------
 data AdminUserResponse = AdminUserResponse
   { id :: Int
-  , username :: Text
-  , email :: Text
-  , bio :: Maybe Text
-  , image :: Maybe Text
+  , username :: D.Username
+  , email :: D.Email
+  , bio :: Maybe D.UserBio
+  , image :: Maybe D.UserImage
   , role :: D.UserRole
   }
   deriving stock (Show, Generic)

@@ -6,8 +6,6 @@ module Infrastructure.Api.Route.User.Web.Controller
   , followUserHandler
   , unfollowUserHandler
   ) where
-
-import Data.Text (Text)
 import Database.Persist.Sql (fromSqlKey)
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
@@ -71,7 +69,7 @@ updateCurrentUserHandler (S.Authenticated uid) (Api.UpdateUserRequest mEmail mUs
           Api.User newUser.email token newUser.username newUser.bio newUser.image
 updateCurrentUserHandler _ _ = throwError S.err401
 
-getUserByNameHandler :: S.AuthResult DB.UserId -> Text -> App Api.ProfileResponse
+getUserByNameHandler :: S.AuthResult DB.UserId -> D.Username -> App Api.ProfileResponse
 getUserByNameHandler auth username = do
   mUser <- lookupUserByUsername username
   case mUser of
@@ -84,7 +82,7 @@ getUserByNameHandler auth username = do
         _ -> return False
       return $ Api.ProfileResponse $ Api.Profile u.username u.bio u.image isFol
 
-followUserHandler :: S.AuthResult DB.UserId -> Text -> App Api.ProfileResponse
+followUserHandler :: S.AuthResult DB.UserId -> D.Username -> App Api.ProfileResponse
 followUserHandler (S.Authenticated currentUid) username = do
   mUser <- lookupUserByUsername username
   case mUser of
@@ -95,7 +93,7 @@ followUserHandler (S.Authenticated currentUid) username = do
       return $ Api.ProfileResponse $ Api.Profile u.username u.bio u.image True
 followUserHandler _ _ = throwError S.err401
 
-unfollowUserHandler :: S.AuthResult DB.UserId -> Text -> App Api.ProfileResponse
+unfollowUserHandler :: S.AuthResult DB.UserId -> D.Username -> App Api.ProfileResponse
 unfollowUserHandler (S.Authenticated currentUid) username = do
   mUser <- lookupUserByUsername username
   case mUser of

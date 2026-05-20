@@ -5,7 +5,7 @@ module Infrastructure.Api.Route.User.Admin.Controller
   , deleteUserHandler
   ) where
 
-import Data.Text (Text, pack)
+import Data.Text (pack)
 import Database.Persist.Sql (fromSqlKey)
 import Effectful.Error.Static (throwError)
 import Servant (NamedRoutes)
@@ -35,8 +35,8 @@ getUsersHandler
   :: S.AuthResult DB.UserId
   -> Maybe Int
   -> Maybe Int
-  -> Maybe Text
-  -> Maybe Text
+  -> Maybe D.Username
+  -> Maybe D.Email
   -> App Api.AdminUserListResponse
 getUsersHandler (S.Authenticated uid) mLimit mOffset mUsername mEmail = do
   guardAdmin uid
@@ -57,7 +57,7 @@ updateUserRoleHandler (S.Authenticated uid) targetUidInt req = do
       now <- getCurrentTime
       let updatedUser = target{D.role = req.role}
       _ <- updateUser targetUid updatedUser
-      let msg = "Updated user role for " <> target.username <> " to " <> pack (show req.role)
+      let msg = "Updated user role for " <> target.username.unUsername <> " to " <> pack (show req.role)
       let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
       _ <- insertLog "INFO" msg "AUTH" now (Just dUid)
       return $ Api.toAdminUserResponse updatedUser
@@ -73,7 +73,7 @@ deleteUserHandler (S.Authenticated uid) targetUidInt = do
     Just target -> do
       now <- getCurrentTime
       deleteUser targetUid
-      let msg = "Deleted user account: " <> target.username
+      let msg = "Deleted user account: " <> target.username.unUsername
       let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
       _ <- insertLog "INFO" msg "AUTH" now (Just dUid)
       return S.NoContent

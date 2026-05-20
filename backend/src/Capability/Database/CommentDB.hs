@@ -1,7 +1,7 @@
 module Capability.Database.CommentDB where
 
 import Data.Text (Text)
-import Domain.Type (ArticleId, Comment, CommentId, CommentDetail, User, UserId)
+import Domain.Type (ArticleId, Comment, CommentId, CommentDetail, User, UserId, Username)
 import Effectful
 import Effectful.Dispatch.Dynamic
 
@@ -12,7 +12,7 @@ data CommentDB :: Effect where
   DeleteComment :: CommentId -> CommentDB m ()
   GetComment :: CommentId -> CommentDB m (Maybe Comment)
   ListAdminComments
-    :: Maybe Text -> Maybe Text -> Int -> Int -> CommentDB m ([CommentDetail], Int)
+    :: Maybe Username -> Maybe Text -> Int -> Int -> CommentDB m ([CommentDetail], Int)
 
 type instance DispatchOf CommentDB = 'Dynamic
 
@@ -36,7 +36,7 @@ getComment cid = send (GetComment cid)
 
 listAdminComments
   :: (CommentDB :> es)
-  => Maybe Text
+  => Maybe Username
   -> Maybe Text
   -> Int
   -> Int

@@ -12,6 +12,7 @@ where
 import Infrastructure.Api.DTO.Article
 import Infrastructure.Api.DTO.Comment
 import Infrastructure.Api.DTO.Dashboard
+import Infrastructure.Api.DTO.Instance ()
 import Infrastructure.Api.DTO.Log
 import Infrastructure.Api.DTO.Tag
 import Infrastructure.Api.DTO.User

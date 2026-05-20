@@ -4,7 +4,7 @@ import Data.Aeson (FromJSON, ToJSON)
 import Data.Text (Text)
 import Data.Time (UTCTime)
 import Domain.Type.Article (ArticleId)
-import Domain.Type.User (UserId)
+import Domain.Type.User (UserId, Username)
 import GHC.Generics (Generic)
 import Web.HttpApiData (FromHttpApiData, ToHttpApiData)
 
@@ -28,6 +28,6 @@ data CommentDetail = CommentDetail
   , createdAt :: UTCTime
   , updatedAt :: UTCTime
   , articleSlug :: Text
-  , authorUsername :: Text
+  , authorUsername :: Username
   }
   deriving stock (Eq, Show, Generic)

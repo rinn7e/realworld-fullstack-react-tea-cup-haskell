@@ -1,7 +1,7 @@
 module Capability.Database.ArticleDB where
 
 import Data.Text (Text)
-import Domain.Type (Article, ArticleId, ArticleDetail, UserId)
+import Domain.Type (Article, ArticleId, ArticleDetail, UserId, Username)
 import Effectful
 import Effectful.Dispatch.Dynamic
 
@@ -16,25 +16,25 @@ data ArticleDB :: Effect where
   ListArticles
     :: Maybe UserId
     -> Maybe Text
-    -> Maybe Text
-    -> Maybe Text
+    -> Maybe Username
+    -> Maybe Username
     -> Int
     -> Int
     -> ArticleDB m [ArticleDetail]
   ListFeed
     :: UserId -> Int -> Int -> ArticleDB m [ArticleDetail]
-  CountArticles :: Maybe Text -> Maybe Text -> Maybe Text -> ArticleDB m Int
+  CountArticles :: Maybe Text -> Maybe Username -> Maybe Username -> ArticleDB m Int
   CountFeed :: UserId -> ArticleDB m Int
   FavoriteArticle :: UserId -> ArticleId -> ArticleDB m ()
   UnfavoriteArticle :: UserId -> ArticleId -> ArticleDB m ()
   ListAdminArticles
     :: Maybe Text
-    -> Maybe Text
+    -> Maybe Username
     -> Maybe Text
     -> Int
     -> Int
     -> ArticleDB m [ArticleDetail]
-  CountAdminArticles :: Maybe Text -> Maybe Text -> Maybe Text -> ArticleDB m Int
+  CountAdminArticles :: Maybe Text -> Maybe Username -> Maybe Text -> ArticleDB m Int
 
 type instance DispatchOf ArticleDB = 'Dynamic
 
@@ -67,8 +67,8 @@ listArticles
   :: (ArticleDB :> es)
   => Maybe UserId
   -> Maybe Text
-  -> Maybe Text
-  -> Maybe Text
+  -> Maybe Username
+  -> Maybe Username
   -> Int
   -> Int
   -> Eff es [ArticleDetail]
@@ -82,7 +82,7 @@ listFeed
   -> Eff es [ArticleDetail]
 listFeed currentUserId lim off = send (ListFeed currentUserId lim off)
 
-countArticles :: (ArticleDB :> es) => Maybe Text -> Maybe Text -> Maybe Text -> Eff es Int
+countArticles :: (ArticleDB :> es) => Maybe Text -> Maybe Username -> Maybe Username -> Eff es Int
 countArticles mTag mAuthor mFavorited = send (CountArticles mTag mAuthor mFavorited)
 
 countFeed :: (ArticleDB :> es) => UserId -> Eff es Int
@@ -97,7 +97,7 @@ unfavoriteArticle uid aid = send (UnfavoriteArticle uid aid)
 listAdminArticles
   :: (ArticleDB :> es)
   => Maybe Text
-  -> Maybe Text
+  -> Maybe Username
   -> Maybe Text
   -> Int
   -> Int
@@ -105,5 +105,5 @@ listAdminArticles
 listAdminArticles mTag mAuthor mSearch lim off = send (ListAdminArticles mTag mAuthor mSearch lim off)
 
 countAdminArticles
-  :: (ArticleDB :> es) => Maybe Text -> Maybe Text -> Maybe Text -> Eff es Int
+  :: (ArticleDB :> es) => Maybe Text -> Maybe Username -> Maybe Text -> Eff es Int
 countAdminArticles mTag mAuthor mSearch = send (CountAdminArticles mTag mAuthor mSearch)

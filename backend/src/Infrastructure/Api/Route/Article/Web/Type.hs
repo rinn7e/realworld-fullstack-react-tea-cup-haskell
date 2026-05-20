@@ -24,6 +24,7 @@ import Infrastructure.Api.Route.Comment.Web.Type (CommentRoute)
 import Infrastructure.Api.Route.TagCombinator (Tag)
 
 import Infrastructure.Api.DTO qualified as Api
+import Domain.Type qualified as D
 
 data ArticleRoute mode = ArticleRoute
   { getArticleFeed
@@ -44,8 +45,8 @@ data ArticleRoute mode = ArticleRoute
           :> Description "Get a list of recent articles"
           :> Tag "Articles"
           :> QueryParam "tag" Text
-          :> QueryParam "author" Text
-          :> QueryParam "favorited" Text
+          :> QueryParam "author" D.Username
+          :> QueryParam "favorited" D.Username
           :> QueryParam "limit" Int
           :> QueryParam "offset" Int
           :> Get '[JSON] Api.ArticleListResponse

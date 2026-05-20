@@ -49,8 +49,8 @@ getArticleFeedHandler _ _ _ = throwError S.err401
 getArticleListHandler
   :: S.AuthResult DB.UserId
   -> Maybe Text
-  -> Maybe Text
-  -> Maybe Text
+  -> Maybe D.Username
+  -> Maybe D.Username
   -> Maybe Int
   -> Maybe Int
   -> App Api.ArticleListResponse

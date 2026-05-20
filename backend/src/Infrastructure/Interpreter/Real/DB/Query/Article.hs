@@ -34,6 +34,7 @@ import Database.Esqueleto.Experimental
 import Debug.Trace (traceM)
 import UnliftIO (MonadUnliftIO)
 
+import Domain.Type.User (Username)
 import Infrastructure.Interpreter.Real.DB.Query.Article.Type
 import Infrastructure.Interpreter.Real.DB.Schema.Schema
 
@@ -88,8 +89,8 @@ getArticleWithAuthorSQL mCurrentUserId slug = do
 listArticles
   :: Maybe UserId
   -> Maybe Text
-  -> Maybe Text
-  -> Maybe Text
+  -> Maybe Username
+  -> Maybe Username
   -> Int
   -> Int
   -> SqlPersistT IO (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
@@ -102,8 +103,8 @@ listArticles mCurrentUserId mTag mAuthor mFavorited lim off = do
 listArticlesSQL
   :: Maybe UserId
   -> Maybe Text
-  -> Maybe Text
-  -> Maybe Text
+  -> Maybe Username
+  -> Maybe Username
   -> Int
   -> Int
   -> SqlQuery ArticleExpr
@@ -178,8 +179,8 @@ Extracted from filterArticlesIdsSQL to be reused by countArticles.
 -}
 applyArticleFilters
   :: Maybe Text
-  -> Maybe Text
-  -> Maybe Text
+  -> Maybe Username
+  -> Maybe Username
   -> SqlExpr (Entity Article)
   -> SqlQuery ()
 applyArticleFilters mTag mAuthor mFavorited article = do
@@ -207,8 +208,8 @@ applyArticleFilters mTag mAuthor mFavorited article = do
 -- | Subquery to filter article IDs by tags, author, and favorites
 filterArticlesIdsSQL
   :: Maybe Text
-  -> Maybe Text
-  -> Maybe Text
+  -> Maybe Username
+  -> Maybe Username
   -> Int
   -> Int
   -> SqlQuery (SqlExpr (Value ArticleId))
@@ -224,7 +225,7 @@ filterArticlesIdsSQL mTag mAuthor mFavorited lim off = do
 Used to return the total count in the API response.
 -}
 countArticles
-  :: (MonadUnliftIO m) => Maybe Text -> Maybe Text -> Maybe Text -> SqlPersistT m Int
+  :: (MonadUnliftIO m) => Maybe Text -> Maybe Username -> Maybe Username -> SqlPersistT m Int
 countArticles mTag mAuthor mFavorited = do
   res <- select $ do
     article <- from $ table @Article
@@ -307,7 +308,7 @@ getArticleTagsSQL aid = do
 
 applyAdminArticleFilters
   :: Maybe Text
-  -> Maybe Text
+  -> Maybe Username
   -> Maybe Text
   -> SqlExpr (Entity Article)
   -> SqlQuery ()
@@ -322,7 +323,7 @@ applyAdminArticleFilters mTag mAuthor mSearch article = do
 
 listAdminArticles
   :: Maybe Text
-  -> Maybe Text
+  -> Maybe Username
   -> Maybe Text
   -> Int
   -> Int
@@ -356,7 +357,7 @@ listAdminArticles mTag mAuthor mSearch lim off = do
 
 filterAdminArticlesIdsSQL
   :: Maybe Text
-  -> Maybe Text
+  -> Maybe Username
   -> Maybe Text
   -> Int
   -> Int
@@ -370,7 +371,7 @@ filterAdminArticlesIdsSQL mTag mAuthor mSearch lim off = do
   return (article ^. ArticleId)
 
 countAdminArticles
-  :: (MonadUnliftIO m) => Maybe Text -> Maybe Text -> Maybe Text -> SqlPersistT m Int
+  :: (MonadUnliftIO m) => Maybe Text -> Maybe Username -> Maybe Text -> SqlPersistT m Int
 countAdminArticles mTag mAuthor mSearch = do
   res <- select $ do
     article <- from $ table @Article

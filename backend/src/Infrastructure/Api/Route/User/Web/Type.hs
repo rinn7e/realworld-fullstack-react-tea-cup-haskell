@@ -1,6 +1,5 @@
 module Infrastructure.Api.Route.User.Web.Type where
 
-import Data.Text (Text)
 import GHC.Generics (Generic)
 import Servant
   ( Capture
@@ -18,6 +17,7 @@ import Servant
 
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
+import Domain.Type qualified as D
 
 data UserRoute mode = UserRoute
   { getCurrentUser
@@ -40,7 +40,7 @@ data UserRoute mode = UserRoute
   , getUserByName
       :: mode
         :- "profiles"
-          :> Capture "username" Text
+          :> Capture "username" D.Username
           :> Summary "Get Profile"
           :> Description "Get a user profile by username"
           :> Tag "Profile"
@@ -49,7 +49,7 @@ data UserRoute mode = UserRoute
   , followUser
       :: mode
         :- "profiles"
-          :> Capture "username" Text
+          :> Capture "username" D.Username
           :> "follow"
           :> Summary "Follow User"
           :> Description "Follow a user by username"
@@ -59,7 +59,7 @@ data UserRoute mode = UserRoute
   , unfollowUser
       :: mode
         :- "profiles"
-          :> Capture "username" Text
+          :> Capture "username" D.Username
           :> "follow"
           :> Summary "Unfollow User"
           :> Description "Unfollow a user by username"

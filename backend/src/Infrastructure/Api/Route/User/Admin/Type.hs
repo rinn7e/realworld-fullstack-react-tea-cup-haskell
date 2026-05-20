@@ -1,6 +1,5 @@
 module Infrastructure.Api.Route.User.Admin.Type where
 
-import Data.Text (Text)
 import GHC.Generics (Generic)
 import Servant
   ( Capture
@@ -19,6 +18,7 @@ import Servant qualified as S
 
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.TagCombinator (Tag)
+import Domain.Type qualified as D
 
 data AdminUserRoute mode = AdminUserRoute
   { getUsers
@@ -29,8 +29,8 @@ data AdminUserRoute mode = AdminUserRoute
           :> Tag "Admin Users"
           :> QueryParam "limit" Int
           :> QueryParam "offset" Int
-          :> QueryParam "username" Text
-          :> QueryParam "email" Text
+          :> QueryParam "username" D.Username
+          :> QueryParam "email" D.Email
           :> Get '[JSON] Api.AdminUserListResponse
   , updateUserRole
       :: mode

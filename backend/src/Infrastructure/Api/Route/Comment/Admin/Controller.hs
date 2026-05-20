@@ -32,7 +32,7 @@ getCommentsHandler
   :: S.AuthResult DB.UserId
   -> Maybe Int
   -> Maybe Int
-  -> Maybe Text
+  -> Maybe D.Username
   -> Maybe Text
   -> App Api.CommentListResponse
 getCommentsHandler (S.Authenticated uid) mLimit mOffset mAuthor mArticleSlug = do
