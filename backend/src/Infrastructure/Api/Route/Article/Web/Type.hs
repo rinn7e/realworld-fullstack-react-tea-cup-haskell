@@ -34,8 +34,8 @@ data ArticleRoute mode = ArticleRoute
           :> Summary "Get Feed"
           :> Description "Get a feed of recent articles from followed users"
           :> Tag "Articles"
-          :> QueryParam "limit" Int
-          :> QueryParam "offset" Int
+          :> QueryParam "limit" D.Limit
+          :> QueryParam "offset" D.Offset
           :> Get '[JSON] Api.ArticleListResponse
   -- ^ GET /api/articles/feed
   , getArticleList
@@ -47,8 +47,8 @@ data ArticleRoute mode = ArticleRoute
           :> QueryParam "tag" D.TagName
           :> QueryParam "author" D.Username
           :> QueryParam "favorited" D.Username
-          :> QueryParam "limit" Int
-          :> QueryParam "offset" Int
+          :> QueryParam "limit" D.Limit
+          :> QueryParam "offset" D.Offset
           :> Get '[JSON] Api.ArticleListResponse
   -- ^ GET /api/articles
   , createArticle

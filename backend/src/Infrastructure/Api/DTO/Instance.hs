@@ -10,6 +10,12 @@ import Data.OpenApi
   )
 import Domain.Type qualified as D
 
+-- Common instances
+deriving newtype instance ToSchema D.Limit
+deriving newtype instance ToSchema D.Offset
+instance ToParamSchema D.Limit
+instance ToParamSchema D.Offset
+
 -- User instances
 deriving newtype instance ToSchema D.UserId
 deriving newtype instance ToSchema D.Password

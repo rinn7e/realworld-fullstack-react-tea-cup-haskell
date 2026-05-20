@@ -77,7 +77,7 @@ runCommentDBPostgres = interpret $ \_ -> \case
             return $ fmap (\c -> toDomainComment (Entity cid c)) mComment
         )
         pool
-  ListAdminComments mAuthor mArticleSlug lim off -> do
+  ListAdminComments mAuthor mArticleSlug (D.Limit limInt) (D.Offset offInt) -> do
     pool <- ask @ConnectionPool
     liftIO $
       runSqlPool
@@ -102,7 +102,7 @@ runCommentDBPostgres = interpret $ \_ -> \case
                     , maybe [] (\artId -> [DB.CommentArticleId ==. artId]) mArtId
                     ]
             totalCount <- count filters
-            entities <- selectList filters [Desc DB.CommentCreatedAt, LimitTo lim, OffsetBy off]
+            entities <- selectList filters [Desc DB.CommentCreatedAt, LimitTo limInt, OffsetBy offInt]
             comments <- for entities $ \(Entity cid c) -> do
               mArt <- get c.articleId
               mUser <- get c.authorId

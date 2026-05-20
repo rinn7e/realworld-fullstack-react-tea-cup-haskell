@@ -31,15 +31,15 @@ adminCommentRoute auth =
 
 getCommentsHandler
   :: S.AuthResult DB.UserId
-  -> Maybe Int
-  -> Maybe Int
+  -> Maybe D.Limit
+  -> Maybe D.Offset
   -> Maybe D.Username
   -> Maybe D.ArticleSlug
   -> App Api.CommentListResponse
 getCommentsHandler (S.Authenticated uid) mLimit mOffset mAuthor mArticleSlug = do
   guardAdmin uid
-  let limit = maybe 10 id mLimit
-      offset = maybe 0 id mOffset
+  let limit = maybe (D.Limit 10) id mLimit
+      offset = maybe (D.Offset 0) id mOffset
   (comments, total) <- listAdminComments mAuthor mArticleSlug limit offset
   let dtoComments = map Api.toCommentDTOFromDetail comments
   return $ Api.CommentListResponse dtoComments total

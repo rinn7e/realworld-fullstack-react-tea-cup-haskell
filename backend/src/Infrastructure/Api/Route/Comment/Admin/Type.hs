@@ -26,8 +26,8 @@ data AdminCommentRoute mode = AdminCommentRoute
           :> Summary "Get All Comments"
           :> Description "Retrieve all comments in the system with optional author and article filters"
           :> Tag "Admin Comments"
-          :> QueryParam "limit" Int
-          :> QueryParam "offset" Int
+          :> QueryParam "limit" D.Limit
+          :> QueryParam "offset" D.Offset
           :> QueryParam "author" D.Username
           :> QueryParam "articleSlug" D.ArticleSlug
           :> Get '[JSON] Api.CommentListResponse

@@ -1,7 +1,8 @@
 module Capability.Database.ArticleDB where
 
 import Data.Text (Text)
-import Domain.Type
+import Domain.Type qualified as D
+import Domain.Type hiding (Limit, Offset)
 import Effectful
 import Effectful.Dispatch.Dynamic
 
@@ -30,11 +31,11 @@ data ArticleDB :: Effect where
     -> Maybe TagName
     -> Maybe Username
     -> Maybe Username
-    -> Int
-    -> Int
+    -> D.Limit
+    -> D.Offset
     -> ArticleDB m [ArticleDetail]
   ListFeed
-    :: UserId -> Int -> Int -> ArticleDB m [ArticleDetail]
+    :: UserId -> D.Limit -> D.Offset -> ArticleDB m [ArticleDetail]
   CountArticles :: Maybe TagName -> Maybe Username -> Maybe Username -> ArticleDB m Int
   CountFeed :: UserId -> ArticleDB m Int
   FavoriteArticle :: UserId -> ArticleId -> ArticleDB m ()
@@ -43,8 +44,8 @@ data ArticleDB :: Effect where
     :: Maybe TagName
     -> Maybe Username
     -> Maybe Text
-    -> Int
-    -> Int
+    -> D.Limit
+    -> D.Offset
     -> ArticleDB m [ArticleDetail]
   CountAdminArticles :: Maybe TagName -> Maybe Username -> Maybe Text -> ArticleDB m Int
 
@@ -88,16 +89,16 @@ listArticles
   -> Maybe TagName
   -> Maybe Username
   -> Maybe Username
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> Eff es [ArticleDetail]
 listArticles mCurrentUserId mTag mAuthor mFavorited lim off = send (ListArticles mCurrentUserId mTag mAuthor mFavorited lim off)
 
 listFeed
   :: (ArticleDB :> es)
   => UserId
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> Eff es [ArticleDetail]
 listFeed currentUserId lim off = send (ListFeed currentUserId lim off)
 
@@ -119,10 +120,11 @@ listAdminArticles
   => Maybe TagName
   -> Maybe Username
   -> Maybe Text
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> Eff es [ArticleDetail]
 listAdminArticles mTag mAuthor mSearch lim off = send (ListAdminArticles mTag mAuthor mSearch lim off)
+
 
 countAdminArticles
   :: (ArticleDB :> es) => Maybe TagName -> Maybe Username -> Maybe Text -> Eff es Int

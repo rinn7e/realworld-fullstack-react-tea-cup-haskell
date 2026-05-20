@@ -30,16 +30,16 @@ adminArticleRoute auth =
 
 getArticlesHandler
   :: S.AuthResult DB.UserId
-  -> Maybe Int
-  -> Maybe Int
+  -> Maybe D.Limit
+  -> Maybe D.Offset
   -> Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
   -> App Api.AdminArticleListResponse
 getArticlesHandler (S.Authenticated uid) mLimit mOffset mTag mAuthor mSearch = do
   guardAdmin uid
-  let limit = maybe 10 id mLimit
-      offset = maybe 0 id mOffset
+  let limit = maybe (D.Limit 10) id mLimit
+      offset = maybe (D.Offset 0) id mOffset
   articlesDetail <- listAdminArticles mTag mAuthor mSearch limit offset
   totalCount <- countAdminArticles mTag mAuthor mSearch
   let articles = map Api.toAdminArticle articlesDetail

@@ -35,10 +35,10 @@ webArticleRoute auth =
     }
 
 getArticleFeedHandler
-  :: S.AuthResult DB.UserId -> Maybe Int -> Maybe Int -> App Api.ArticleListResponse
+  :: S.AuthResult DB.UserId -> Maybe D.Limit -> Maybe D.Offset -> App Api.ArticleListResponse
 getArticleFeedHandler (S.Authenticated uid) mLimit mOffset = do
-  let limit = maybe 20 id mLimit
-      offset = maybe 0 id mOffset
+  let limit = maybe (D.Limit 20) id mLimit
+      offset = maybe (D.Offset 0) id mOffset
       dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   articlesDetail <- listFeed dUid limit offset
   totalCount <- countFeed dUid
@@ -51,12 +51,12 @@ getArticleListHandler
   -> Maybe D.TagName
   -> Maybe D.Username
   -> Maybe D.Username
-  -> Maybe Int
-  -> Maybe Int
+  -> Maybe D.Limit
+  -> Maybe D.Offset
   -> App Api.ArticleListResponse
 getArticleListHandler auth mTag mAuthor mFavorited mLimit mOffset = do
-  let limit = maybe 20 id mLimit
-      offset = maybe 0 id mOffset
+  let limit = maybe (D.Limit 20) id mLimit
+      offset = maybe (D.Offset 0) id mOffset
       mdUid = case auth of
         S.Authenticated uid -> Just $ D.UserId $ fromIntegral (fromSqlKey uid)
         _ -> Nothing

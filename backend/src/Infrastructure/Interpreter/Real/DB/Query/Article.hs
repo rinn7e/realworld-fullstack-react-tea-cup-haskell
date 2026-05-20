@@ -99,8 +99,8 @@ listArticles
   -> Maybe D.TagName
   -> Maybe D.Username
   -> Maybe D.Username
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> SqlPersistT IO (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
 listArticles mCurrentUserId mTag mAuthor mFavorited lim off = do
   result <- select $ listArticlesSQL mCurrentUserId mTag mAuthor mFavorited lim off
@@ -113,8 +113,8 @@ listArticlesSQL
   -> Maybe D.TagName
   -> Maybe D.Username
   -> Maybe D.Username
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> SqlQuery ArticleExpr
 listArticlesSQL mCurrentUserId mTag mAuthor mFavorited lim off = do
   (((article :& author) :& _) :& tag) <-
@@ -147,8 +147,8 @@ listArticlesSQL mCurrentUserId mTag mAuthor mFavorited lim off = do
 listFeed
   :: (MonadUnliftIO m)
   => D.UserId
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> SqlPersistT m (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
 listFeed currentUserId lim off = do
   result <- select $ listFeedSQL currentUserId lim off
@@ -158,8 +158,8 @@ listFeed currentUserId lim off = do
 -- | Main query to fetch the article feed for a user
 listFeedSQL
   :: D.UserId
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> SqlQuery ArticleExpr
 listFeedSQL currentUserId lim off = do
   (((article :& author) :& _) :& tag) <-
@@ -218,15 +218,15 @@ filterArticlesIdsSQL
   :: Maybe D.TagName
   -> Maybe D.Username
   -> Maybe D.Username
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> SqlQuery (SqlExpr (Value ArticleId))
-filterArticlesIdsSQL mTag mAuthor mFavorited lim off = do
+filterArticlesIdsSQL mTag mAuthor mFavorited (D.Limit limInt) (D.Offset offInt) = do
   article <- from $ table @Article
   applyArticleFilters mTag mAuthor mFavorited article
   orderBy [desc (article ^. ArticleCreatedAt)]
-  when (lim > 0) $ limit (fromIntegral lim)
-  when (off > 0) $ offset (fromIntegral off)
+  when (limInt > 0) $ limit (fromIntegral limInt)
+  when (offInt > 0) $ offset (fromIntegral offInt)
   return (article ^. ArticleId)
 
 {- | Count total articles matching filters, ignoring pagination limits.
@@ -267,10 +267,10 @@ countFeed currentUserId = do
 -- | Subquery to fetch article IDs from followed authors for the feed
 feedArticlesIdsSQL
   :: D.UserId
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> SqlQuery (SqlExpr (Value ArticleId))
-feedArticlesIdsSQL currentUserId lim off = do
+feedArticlesIdsSQL currentUserId (D.Limit limInt) (D.Offset offInt) = do
   ((article :& _) :& follow) <-
     from $
       table @Article
@@ -278,8 +278,8 @@ feedArticlesIdsSQL currentUserId lim off = do
         `innerJoin` table @Follow `on` (\(_ :& auth :& f) -> f ^. FollowFollowedId ==. auth ^. UserId)
   where_ (follow ^. FollowFollowerId ==. val (toDBUserKey currentUserId))
   orderBy [desc (article ^. ArticleCreatedAt)]
-  when (lim > 0) $ limit (fromIntegral lim)
-  when (off > 0) $ offset (fromIntegral off)
+  when (limInt > 0) $ limit (fromIntegral limInt)
+  when (offInt > 0) $ offset (fromIntegral offInt)
   return (article ^. ArticleId)
 
 -- | Expression to count favorites for an article
@@ -338,8 +338,8 @@ listAdminArticles
   :: Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> SqlPersistT IO (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
 listAdminArticles mTag mAuthor mSearch lim off = do
   result <- select $ do
@@ -372,15 +372,15 @@ filterAdminArticlesIdsSQL
   :: Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
-  -> Int
-  -> Int
+  -> D.Limit
+  -> D.Offset
   -> SqlQuery (SqlExpr (Value ArticleId))
-filterAdminArticlesIdsSQL mTag mAuthor mSearch lim off = do
+filterAdminArticlesIdsSQL mTag mAuthor mSearch (D.Limit limInt) (D.Offset offInt) = do
   article <- from $ table @Article
   applyAdminArticleFilters mTag mAuthor mSearch article
   orderBy [desc (article ^. ArticleCreatedAt)]
-  when (lim > 0) $ limit (fromIntegral lim)
-  when (off > 0) $ offset (fromIntegral off)
+  when (limInt > 0) $ limit (fromIntegral limInt)
+  when (offInt > 0) $ offset (fromIntegral offInt)
   return (article ^. ArticleId)
 
 countAdminArticles
