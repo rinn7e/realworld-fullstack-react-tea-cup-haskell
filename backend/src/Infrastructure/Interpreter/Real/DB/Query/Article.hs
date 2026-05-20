@@ -18,6 +18,7 @@ module Infrastructure.Interpreter.Real.DB.Query.Article
   , getArticleTags
   , getArticleTagsSQL
   , listAdminArticles
+  , listAdminArticlesSQL
   , countAdminArticles
   )
 where
@@ -342,31 +343,41 @@ listAdminArticles
   -> D.Offset
   -> SqlPersistT IO (AppendMap (Down UTCTime, ArticleId) ArticleGrouped)
 listAdminArticles mTag mAuthor mSearch lim off = do
-  result <- select $ do
-    (((article :& author) :& _) :& tag) <-
-      from $
-        table @Article
-          `innerJoin` table @User `on` (\(art :& auth) -> art ^. ArticleAuthorId ==. auth ^. UserId)
-          `leftJoin` table @ArticleTag
-            `on` (\(art :& _ :& at) -> just (art ^. ArticleId) ==. at ?. ArticleTagArticleId)
-          `leftJoin` table @Tag `on` (\(_ :& _ :& at :& t) -> at ?. ArticleTagTagId ==. t ?. TagId)
-
-    where_
-      ( article
-          ^. ArticleId
-          `in_` subList_select (filterAdminArticlesIdsSQL mTag mAuthor mSearch lim off)
-      )
-
-    return
-      ( article
-      , author
-      , tag
-      , countFavoritesExpr (article ^. ArticleId)
-      , val False
-      , val False
-      )
+  result <- select $ listAdminArticlesSQL mTag mAuthor mSearch lim off
   let result2 = mconcat $ map mkArticleGrouped result
   pure result2
+
+-- | Main query to list admin articles with filtering and pagination
+listAdminArticlesSQL
+  :: Maybe D.TagName
+  -> Maybe D.Username
+  -> Maybe Text
+  -> D.Limit
+  -> D.Offset
+  -> SqlQuery ArticleExpr
+listAdminArticlesSQL mTag mAuthor mSearch lim off = do
+  (((article :& author) :& _) :& tag) <-
+    from $
+      table @Article
+        `innerJoin` table @User `on` (\(art :& auth) -> art ^. ArticleAuthorId ==. auth ^. UserId)
+        `leftJoin` table @ArticleTag
+          `on` (\(art :& _ :& at) -> just (art ^. ArticleId) ==. at ?. ArticleTagArticleId)
+        `leftJoin` table @Tag `on` (\(_ :& _ :& at :& t) -> at ?. ArticleTagTagId ==. t ?. TagId)
+
+  where_
+    ( article
+        ^. ArticleId
+        `in_` subList_select (filterAdminArticlesIdsSQL mTag mAuthor mSearch lim off)
+    )
+
+  return
+    ( article
+    , author
+    , tag
+    , countFavoritesExpr (article ^. ArticleId)
+    , val False
+    , val False
+    )
 
 filterAdminArticlesIdsSQL
   :: Maybe D.TagName
