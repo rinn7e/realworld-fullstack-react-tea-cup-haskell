@@ -5,7 +5,8 @@ module Infrastructure.Api.Route.Comment.Web.Controller
 import Data.Text (Text)
 import Data.Traversable (for)
 import Database.Persist.Sql (fromSqlKey)
-import Effectful.Error.Static (throwError)
+import Effectful
+import Effectful.Error.Static (Error, throwError)
 import Servant (NamedRoutes)
 
 import Servant qualified as S
@@ -15,7 +16,6 @@ import Domain.Type (Article (..))
 import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Comment.Web.Type
-import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Database.ArticleDB
@@ -23,7 +23,14 @@ import Capability.Database.CommentDB
 import Capability.Database.UserDB
 
 commentRoute
-  :: S.AuthResult DB.UserId -> D.ArticleSlug -> S.ServerT (NamedRoutes CommentRoute) App
+  :: ( ArticleDB :> es
+     , CommentDB :> es
+     , UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.ArticleSlug
+  -> S.ServerT (NamedRoutes CommentRoute) (Eff es)
 commentRoute auth slug =
   CommentRoute
     { getCommentList = getCommentListHandler auth slug
@@ -32,7 +39,14 @@ commentRoute auth slug =
     }
 
 getCommentListHandler
-  :: S.AuthResult DB.UserId -> D.ArticleSlug -> App Api.CommentListResponse
+  :: ( ArticleDB :> es
+     , CommentDB :> es
+     , UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.ArticleSlug
+  -> Eff es Api.CommentListResponse
 getCommentListHandler auth slug = do
   mArt <- getArticleBySlug slug
   case mArt of
@@ -50,10 +64,14 @@ getCommentListHandler auth slug = do
       return $ Api.CommentListResponse comments (length comments)
 
 createCommentHandler
-  :: S.AuthResult DB.UserId
+  :: ( ArticleDB :> es
+     , CommentDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
   -> D.ArticleSlug
   -> Api.CommentWrapper Api.NewCommentRequest
-  -> App Api.CommentResponse
+  -> Eff es Api.CommentResponse
 createCommentHandler (S.Authenticated uid) slug (Api.CommentWrapper (Api.NewCommentRequest body)) = do
   mArt <- getArticleBySlug slug
   case mArt of
@@ -67,7 +85,14 @@ createCommentHandler (S.Authenticated uid) slug (Api.CommentWrapper (Api.NewComm
           return $ Api.CommentResponse $ Api.toCommentDTO comm author False
 createCommentHandler _ _ _ = throwError S.err401
 
-deleteCommentHandler :: S.AuthResult DB.UserId -> D.ArticleSlug -> Int -> App S.NoContent
+deleteCommentHandler
+  :: ( CommentDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.ArticleSlug
+  -> Int
+  -> Eff es S.NoContent
 deleteCommentHandler (S.Authenticated uid) _ cidInt = do
   let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   let cid = D.CommentId cidInt

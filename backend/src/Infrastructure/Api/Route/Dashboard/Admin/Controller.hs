@@ -13,7 +13,8 @@ import Data.Time
   , toGregorian
   , utctDay
   )
-import Effectful.Error.Static (throwError)
+import Effectful
+import Effectful.Error.Static (Error, throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
@@ -22,7 +23,6 @@ import Domain.Type (Visitor (..))
 import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Dashboard.Admin.Type
-import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
@@ -34,7 +34,16 @@ import Capability.Database.VisitorDB
 import Capability.Time
 
 adminDashboardRoute
-  :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminDashboardRoute) App
+  :: ( ArticleDB :> es
+     , CommentDB :> es
+     , LoggerDB :> es
+     , UserDB :> es
+     , VisitorDB :> es
+     , Time :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> S.ServerT (NamedRoutes AdminDashboardRoute) (Eff es)
 adminDashboardRoute auth =
   AdminDashboardRoute
     { getDashboardStats = getDashboardStatsHandler auth
@@ -43,7 +52,16 @@ adminDashboardRoute auth =
     , getVisitors = getVisitorsHandler auth
     }
 
-getDashboardStatsHandler :: S.AuthResult DB.UserId -> App Api.DashboardStatsResponse
+getDashboardStatsHandler
+  :: ( ArticleDB :> es
+     , CommentDB :> es
+     , UserDB :> es
+     , VisitorDB :> es
+     , Time :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> Eff es Api.DashboardStatsResponse
 getDashboardStatsHandler (S.Authenticated uid) = do
   guardAdmin uid
   totalUsers <- listUsers Nothing Nothing Nothing Nothing >>= \(_, c) -> return c
@@ -65,7 +83,14 @@ getDashboardStatsHandler (S.Authenticated uid) = do
 getDashboardStatsHandler _ = throwError S.err401
 
 getVisitorStatsHandler
-  :: S.AuthResult DB.UserId -> Maybe Text -> App [Api.VisitorStatResponse]
+  :: ( UserDB :> es
+     , VisitorDB :> es
+     , Time :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> Maybe Text
+  -> Eff es [Api.VisitorStatResponse]
 getVisitorStatsHandler (S.Authenticated uid) mFilter = do
   guardAdmin uid
   let filterVal = maybe "week" id mFilter
@@ -112,12 +137,16 @@ getVisitorStatsHandler (S.Authenticated uid) mFilter = do
 getVisitorStatsHandler _ _ = throwError S.err401
 
 getLogsHandler
-  :: S.AuthResult DB.UserId
+  :: ( UserDB :> es
+     , LoggerDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
   -> Maybe Int
   -> Maybe Int
   -> Maybe D.LogLevel
   -> Maybe Text
-  -> App Api.LogListResponse
+  -> Eff es Api.LogListResponse
 getLogsHandler (S.Authenticated uid) mLimit mOffset mLevel mSource = do
   guardAdmin uid
   let limit = maybe 10 id mLimit
@@ -133,12 +162,16 @@ getLogsHandler (S.Authenticated uid) mLimit mOffset mLevel mSource = do
 getLogsHandler _ _ _ _ _ = throwError S.err401
 
 getVisitorsHandler
-  :: S.AuthResult DB.UserId
+  :: ( UserDB :> es
+     , VisitorDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
   -> Maybe Int
   -> Maybe Int
   -> Maybe Text
   -> Maybe Text
-  -> App Api.VisitorListResponse
+  -> Eff es Api.VisitorListResponse
 getVisitorsHandler (S.Authenticated uid) mLimit mOffset mIp mPath = do
   guardAdmin uid
   let limit = maybe 10 id mLimit

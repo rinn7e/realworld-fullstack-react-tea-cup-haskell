@@ -8,14 +8,14 @@ module Infrastructure.Api.Route.User.Web.Controller
   ) where
 
 import Database.Persist.Sql (fromSqlKey)
-import Effectful.Error.Static (throwError)
+import Effectful
+import Effectful.Error.Static (Error, throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.User.Web.Type
-import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Auth
@@ -23,7 +23,14 @@ import Capability.Crypto
 import Capability.Database.UserDB
 import Domain.Type qualified as D
 
-webUserRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes UserRoute) App
+webUserRoute
+  :: ( UserDB :> es
+     , Crypto :> es
+     , Auth :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> S.ServerT (NamedRoutes UserRoute) (Eff es)
 webUserRoute auth =
   UserRoute
     { getCurrentUser = getCurrentUserHandler auth
@@ -33,7 +40,13 @@ webUserRoute auth =
     , unfollowUser = unfollowUserHandler auth
     }
 
-getCurrentUserHandler :: S.AuthResult DB.UserId -> App Api.UserResponse
+getCurrentUserHandler
+  :: ( UserDB :> es
+     , Auth :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> Eff es Api.UserResponse
 getCurrentUserHandler (S.Authenticated uid) = do
   let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   mUser <- lookupUserById dUid
@@ -45,7 +58,14 @@ getCurrentUserHandler (S.Authenticated uid) = do
 getCurrentUserHandler _ = throwError S.err401
 
 updateCurrentUserHandler
-  :: S.AuthResult DB.UserId -> Api.UserWrapper Api.UpdateUserRequest -> App Api.UserResponse
+  :: ( UserDB :> es
+     , Crypto :> es
+     , Auth :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> Api.UserWrapper Api.UpdateUserRequest
+  -> Eff es Api.UserResponse
 updateCurrentUserHandler (S.Authenticated uid) (Api.UserWrapper (Api.UpdateUserRequest mEmail mUsername mPassword mBio mImage)) = do
   let dUid = D.UserId $ fromIntegral (fromSqlKey uid)
   mUser <- lookupUserById dUid
@@ -70,7 +90,13 @@ updateCurrentUserHandler (S.Authenticated uid) (Api.UserWrapper (Api.UpdateUserR
           Api.User newUser.email token newUser.username newUser.bio newUser.image
 updateCurrentUserHandler _ _ = throwError S.err401
 
-getUserByNameHandler :: S.AuthResult DB.UserId -> D.Username -> App Api.ProfileResponse
+getUserByNameHandler
+  :: ( UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.Username
+  -> Eff es Api.ProfileResponse
 getUserByNameHandler auth username = do
   mUser <- lookupUserByUsername username
   case mUser of
@@ -83,7 +109,13 @@ getUserByNameHandler auth username = do
         _ -> return False
       return $ Api.ProfileResponse $ Api.Profile u.username u.bio u.image isFol
 
-followUserHandler :: S.AuthResult DB.UserId -> D.Username -> App Api.ProfileResponse
+followUserHandler
+  :: ( UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.Username
+  -> Eff es Api.ProfileResponse
 followUserHandler (S.Authenticated currentUid) username = do
   mUser <- lookupUserByUsername username
   case mUser of
@@ -94,7 +126,13 @@ followUserHandler (S.Authenticated currentUid) username = do
       return $ Api.ProfileResponse $ Api.Profile u.username u.bio u.image True
 followUserHandler _ _ = throwError S.err401
 
-unfollowUserHandler :: S.AuthResult DB.UserId -> D.Username -> App Api.ProfileResponse
+unfollowUserHandler
+  :: ( UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.Username
+  -> Eff es Api.ProfileResponse
 unfollowUserHandler (S.Authenticated currentUid) username = do
   mUser <- lookupUserByUsername username
   case mUser of

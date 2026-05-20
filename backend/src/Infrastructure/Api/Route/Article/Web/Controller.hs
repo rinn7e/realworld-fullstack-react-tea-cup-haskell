@@ -6,7 +6,8 @@ import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import Data.Text qualified as T
 import Database.Persist.Sql (fromSqlKey)
-import Effectful.Error.Static (throwError)
+import Effectful
+import Effectful.Error.Static (Error, throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
@@ -14,13 +15,21 @@ import Servant.Auth.Server qualified as S
 import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Article.Web.Type
-import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Database.ArticleDB
+import Capability.Database.CommentDB
+import Capability.Database.UserDB
 import Infrastructure.Api.Route.Comment.Web.Controller qualified as Comm
 
-webArticleRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes ArticleRoute) App
+webArticleRoute
+  :: ( ArticleDB :> es
+     , CommentDB :> es
+     , UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> S.ServerT (NamedRoutes ArticleRoute) (Eff es)
 webArticleRoute auth =
   ArticleRoute
     { getArticleFeed = getArticleFeedHandler auth
@@ -35,7 +44,13 @@ webArticleRoute auth =
     }
 
 getArticleFeedHandler
-  :: S.AuthResult DB.UserId -> Maybe D.Limit -> Maybe D.Offset -> App Api.ArticleListResponse
+  :: ( ArticleDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> Maybe D.Limit
+  -> Maybe D.Offset
+  -> Eff es Api.ArticleListResponse
 getArticleFeedHandler (S.Authenticated uid) mLimit mOffset = do
   let limit = maybe (D.Limit 20) id mLimit
       offset = maybe (D.Offset 0) id mOffset
@@ -47,13 +62,16 @@ getArticleFeedHandler (S.Authenticated uid) mLimit mOffset = do
 getArticleFeedHandler _ _ _ = throwError S.err401
 
 getArticleListHandler
-  :: S.AuthResult DB.UserId
+  :: ( ArticleDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
   -> Maybe D.TagName
   -> Maybe D.Username
   -> Maybe D.Username
   -> Maybe D.Limit
   -> Maybe D.Offset
-  -> App Api.ArticleListResponse
+  -> Eff es Api.ArticleListResponse
 getArticleListHandler auth mTag mAuthor mFavorited mLimit mOffset = do
   let limit = maybe (D.Limit 20) id mLimit
       offset = maybe (D.Offset 0) id mOffset
@@ -66,9 +84,12 @@ getArticleListHandler auth mTag mAuthor mFavorited mLimit mOffset = do
   return $ Api.ArticleListResponse articles totalCount
 
 createArticleHandler
-  :: S.AuthResult DB.UserId
+  :: ( ArticleDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
   -> Api.ArticleWrapper Api.NewArticleRequest
-  -> App Api.ArticleResponse
+  -> Eff es Api.ArticleResponse
 createArticleHandler (S.Authenticated uid) (Api.ArticleWrapper (Api.NewArticleRequest title desc body mTags)) = do
   let slugText = T.intercalate "-" $ T.words $ T.toLower title.unArticleTitle
       slug = D.ArticleSlug slugText
@@ -81,7 +102,13 @@ createArticleHandler (S.Authenticated uid) (Api.ArticleWrapper (Api.NewArticleRe
     Nothing -> throwError S.err500
 createArticleHandler _ _ = throwError S.err401
 
-getArticleOneHandler :: S.AuthResult DB.UserId -> D.ArticleSlug -> App Api.ArticleResponse
+getArticleOneHandler
+  :: ( ArticleDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.ArticleSlug
+  -> Eff es Api.ArticleResponse
 getArticleOneHandler auth slug = do
   let mdUid = case auth of
         S.Authenticated uid -> Just $ D.UserId $ fromIntegral (fromSqlKey uid)
@@ -92,10 +119,13 @@ getArticleOneHandler auth slug = do
     Just grouped -> return $ Api.ArticleResponse $ Api.toArticleResponse grouped
 
 updateArticleHandler
-  :: S.AuthResult DB.UserId
+  :: ( ArticleDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
   -> D.ArticleSlug
   -> Api.ArticleWrapper Api.UpdateArticleRequest
-  -> App Api.ArticleResponse
+  -> Eff es Api.ArticleResponse
 updateArticleHandler (S.Authenticated uid) slug (Api.ArticleWrapper (Api.UpdateArticleRequest mTitle mDesc mBody mTags)) = do
   mArt <- getArticleBySlug slug
   case mArt of
@@ -120,7 +150,13 @@ updateArticleHandler (S.Authenticated uid) slug (Api.ArticleWrapper (Api.UpdateA
             Nothing -> throwError S.err500
 updateArticleHandler _ _ _ = throwError S.err401
 
-deleteArticleHandler :: S.AuthResult DB.UserId -> D.ArticleSlug -> App S.NoContent
+deleteArticleHandler
+  :: ( ArticleDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.ArticleSlug
+  -> Eff es S.NoContent
 deleteArticleHandler (S.Authenticated uid) slug = do
   mArt <- getArticleBySlug slug
   case mArt of
@@ -135,7 +171,12 @@ deleteArticleHandler (S.Authenticated uid) slug = do
 deleteArticleHandler _ _ = throwError S.err401
 
 favoriteArticleHandler
-  :: S.AuthResult DB.UserId -> D.ArticleSlug -> App Api.ArticleResponse
+  :: ( ArticleDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.ArticleSlug
+  -> Eff es Api.ArticleResponse
 favoriteArticleHandler (S.Authenticated uid) slug = do
   mArt <- getArticleBySlug slug
   case mArt of
@@ -150,7 +191,12 @@ favoriteArticleHandler (S.Authenticated uid) slug = do
 favoriteArticleHandler _ _ = throwError S.err401
 
 unfavoriteArticleHandler
-  :: S.AuthResult DB.UserId -> D.ArticleSlug -> App Api.ArticleResponse
+  :: ( ArticleDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.ArticleSlug
+  -> Eff es Api.ArticleResponse
 unfavoriteArticleHandler (S.Authenticated uid) slug = do
   mArt <- getArticleBySlug slug
   case mArt of

@@ -4,7 +4,8 @@ module Infrastructure.Api.Route.Auth.Web.Controller
   , registerUserHandler
   ) where
 
-import Effectful.Error.Static (throwError)
+import Effectful
+import Effectful.Error.Static (Error, throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
@@ -12,14 +13,20 @@ import Servant.Auth.Server qualified as S
 import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Auth.Web.Type
-import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Auth
 import Capability.Crypto
 import Capability.Database.UserDB
 
-webAuthRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AuthRoute) App
+webAuthRoute
+  :: ( UserDB :> es
+     , Crypto :> es
+     , Auth :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> S.ServerT (NamedRoutes AuthRoute) (Eff es)
 webAuthRoute auth =
   AuthRoute
     { loginUser = loginUserHandler auth
@@ -27,7 +34,14 @@ webAuthRoute auth =
     }
 
 loginUserHandler
-  :: S.AuthResult DB.UserId -> Api.UserWrapper Api.LoginUserRequest -> App Api.UserResponse
+  :: ( UserDB :> es
+     , Crypto :> es
+     , Auth :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> Api.UserWrapper Api.LoginUserRequest
+  -> Eff es Api.UserResponse
 loginUserHandler _ (Api.UserWrapper (Api.LoginUserRequest email pwd)) = do
   mUser <- lookupUserByEmail email
   case mUser of
@@ -41,7 +55,14 @@ loginUserHandler _ (Api.UserWrapper (Api.LoginUserRequest email pwd)) = do
           return $ Api.UserResponse $ Api.User u.email token u.username u.bio u.image
 
 registerUserHandler
-  :: S.AuthResult DB.UserId -> Api.UserWrapper Api.NewUserRequest -> App Api.UserResponse
+  :: ( UserDB :> es
+     , Crypto :> es
+     , Auth :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> Api.UserWrapper Api.NewUserRequest
+  -> Eff es Api.UserResponse
 registerUserHandler _ (Api.UserWrapper (Api.NewUserRequest username email pwd)) = do
   hashedPwd <- hashPassword pwd
   (newUser :: D.User) <- insertUser username email hashedPwd

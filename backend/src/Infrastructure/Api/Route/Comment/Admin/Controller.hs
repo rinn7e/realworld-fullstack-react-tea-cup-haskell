@@ -4,7 +4,8 @@ module Infrastructure.Api.Route.Comment.Admin.Controller
 
 import Data.Text (Text)
 import Database.Persist.Sql (fromSqlKey)
-import Effectful.Error.Static (throwError)
+import Effectful
+import Effectful.Error.Static (Error, throwError)
 import Servant (NamedRoutes)
 
 import Servant qualified as S
@@ -12,17 +13,24 @@ import Servant.Auth.Server qualified as S
 
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Comment.Admin.Type
-import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Database.CommentDB
 import Capability.Database.LoggerDB
+import Capability.Database.UserDB
 import Capability.Time
 import Domain.Type qualified as D
 
 adminCommentRoute
-  :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminCommentRoute) App
+  :: ( CommentDB :> es
+     , LoggerDB :> es
+     , Time :> es
+     , UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> S.ServerT (NamedRoutes AdminCommentRoute) (Eff es)
 adminCommentRoute auth =
   AdminCommentRoute
     { getComments = getCommentsHandler auth
@@ -30,12 +38,16 @@ adminCommentRoute auth =
     }
 
 getCommentsHandler
-  :: S.AuthResult DB.UserId
+  :: ( CommentDB :> es
+     , UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
   -> Maybe D.Limit
   -> Maybe D.Offset
   -> Maybe D.Username
   -> Maybe D.ArticleSlug
-  -> App Api.CommentListResponse
+  -> Eff es Api.CommentListResponse
 getCommentsHandler (S.Authenticated uid) mLimit mOffset mAuthor mArticleSlug = do
   guardAdmin uid
   let limit = maybe (D.Limit 10) id mLimit
@@ -45,7 +57,16 @@ getCommentsHandler (S.Authenticated uid) mLimit mOffset mAuthor mArticleSlug = d
   return $ Api.CommentListResponse dtoComments total
 getCommentsHandler _ _ _ _ _ = throwError S.err401
 
-deleteAdminCommentHandler :: S.AuthResult DB.UserId -> Int -> App S.NoContent
+deleteAdminCommentHandler
+  :: ( CommentDB :> es
+     , LoggerDB :> es
+     , Time :> es
+     , UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> Int
+  -> Eff es S.NoContent
 deleteAdminCommentHandler (S.Authenticated uid) cidInt = do
   guardAdmin uid
   let cid = D.CommentId cidInt

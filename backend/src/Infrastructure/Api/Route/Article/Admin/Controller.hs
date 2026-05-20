@@ -4,7 +4,8 @@ module Infrastructure.Api.Route.Article.Admin.Controller
 
 import Data.Text (Text)
 import Database.Persist.Sql (fromSqlKey)
-import Effectful.Error.Static (throwError)
+import Effectful
+import Effectful.Error.Static (Error, throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
@@ -12,16 +13,23 @@ import Servant.Auth.Server qualified as S
 import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Article.Admin.Type
-import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
 import Capability.Database.ArticleDB
 import Capability.Database.LoggerDB
+import Capability.Database.UserDB
 import Capability.Time
 
 adminArticleRoute
-  :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminArticleRoute) App
+  :: ( ArticleDB :> es
+     , LoggerDB :> es
+     , Time :> es
+     , UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> S.ServerT (NamedRoutes AdminArticleRoute) (Eff es)
 adminArticleRoute auth =
   AdminArticleRoute
     { getArticles = getArticlesHandler auth
@@ -29,13 +37,17 @@ adminArticleRoute auth =
     }
 
 getArticlesHandler
-  :: S.AuthResult DB.UserId
+  :: ( ArticleDB :> es
+     , UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
   -> Maybe D.Limit
   -> Maybe D.Offset
   -> Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
-  -> App Api.AdminArticleListResponse
+  -> Eff es Api.AdminArticleListResponse
 getArticlesHandler (S.Authenticated uid) mLimit mOffset mTag mAuthor mSearch = do
   guardAdmin uid
   let limit = maybe (D.Limit 10) id mLimit
@@ -46,7 +58,16 @@ getArticlesHandler (S.Authenticated uid) mLimit mOffset mTag mAuthor mSearch = d
   return $ Api.AdminArticleListResponse articles totalCount
 getArticlesHandler _ _ _ _ _ _ = throwError S.err401
 
-deleteAdminArticleHandler :: S.AuthResult DB.UserId -> D.ArticleSlug -> App S.NoContent
+deleteAdminArticleHandler
+  :: ( ArticleDB :> es
+     , LoggerDB :> es
+     , Time :> es
+     , UserDB :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> D.ArticleSlug
+  -> Eff es S.NoContent
 deleteAdminArticleHandler (S.Authenticated uid) slug = do
   guardAdmin uid
   mArt <- getArticleBySlug slug

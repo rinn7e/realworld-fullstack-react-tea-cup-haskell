@@ -5,7 +5,8 @@ module Infrastructure.Api.Route.Auth.Admin.Controller
   ) where
 
 import Database.Persist.Sql (fromSqlKey)
-import Effectful.Error.Static (throwError)
+import Effectful
+import Effectful.Error.Static (Error, throwError)
 import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
@@ -13,7 +14,6 @@ import Servant.Auth.Server qualified as S
 import Domain.Type qualified as D
 import Infrastructure.Api.DTO qualified as Api
 import Infrastructure.Api.Route.Auth.Admin.Type
-import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
 
@@ -21,7 +21,14 @@ import Capability.Auth
 import Capability.Crypto
 import Capability.Database.UserDB
 
-adminAuthRoute :: S.AuthResult DB.UserId -> S.ServerT (NamedRoutes AdminAuthRoute) App
+adminAuthRoute
+  :: ( UserDB :> es
+     , Crypto :> es
+     , Auth :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> S.ServerT (NamedRoutes AdminAuthRoute) (Eff es)
 adminAuthRoute auth =
   AdminAuthRoute
     { loginAdmin = loginAdminHandler auth
@@ -29,7 +36,14 @@ adminAuthRoute auth =
     }
 
 loginAdminHandler
-  :: S.AuthResult DB.UserId -> Api.UserWrapper Api.LoginUserRequest -> App Api.UserResponse
+  :: ( UserDB :> es
+     , Crypto :> es
+     , Auth :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> Api.UserWrapper Api.LoginUserRequest
+  -> Eff es Api.UserResponse
 loginAdminHandler _ (Api.UserWrapper (Api.LoginUserRequest email pwd)) = do
   mUser <- lookupUserByEmail email
   case mUser of
@@ -45,7 +59,13 @@ loginAdminHandler _ (Api.UserWrapper (Api.LoginUserRequest email pwd)) = do
               token <- generateToken u.userId
               return $ Api.UserResponse $ Api.User u.email token u.username u.bio u.image
 
-getCurrentAdminHandler :: S.AuthResult DB.UserId -> App Api.UserResponse
+getCurrentAdminHandler
+  :: ( UserDB :> es
+     , Auth :> es
+     , Error S.ServerError :> es
+     )
+  => S.AuthResult DB.UserId
+  -> Eff es Api.UserResponse
 getCurrentAdminHandler (S.Authenticated uid) = do
   guardAdmin uid
   let dUid = D.UserId $ fromIntegral (fromSqlKey uid)

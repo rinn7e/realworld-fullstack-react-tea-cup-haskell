@@ -17,3 +17,9 @@ turn
 [ ]
 - prefer to import Domain directly instead of as D
 - if collided type with other, qualified other import instead of Domain
+
+[ ]
+- use runDB instead of
+
+  liftIO $
+    runSqlPo
