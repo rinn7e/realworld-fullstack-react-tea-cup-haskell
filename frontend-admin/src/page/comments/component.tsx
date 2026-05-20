@@ -2,16 +2,16 @@ import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import React from 'react'
 
 import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'
-import { CommentEq } from '@/common/api/type/comment'
+import { CommentEq, type CommentSortAttr } from '@/common/api/type/comment'
 import { memoStrategy } from '@/common/util'
-import type * as SearchBar from '@/component/search-bar'
+import * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
 import { mkPaginationConfig } from './helper'
 import { CommentDetailOverlay } from './sub-component/comment-detail-overlay'
 import { type Props, PropsEq } from './type'
 
-const sortOptions: SearchBar.SearchOption[] = [
+const sortOptions: SearchBar.SearchOption<CommentSortAttr>[] = [
   { label: 'Creation Date', value: 'createdAt' },
   { label: 'Author', value: 'author' },
   { label: 'ID', value: 'id' },
@@ -30,15 +30,17 @@ export const CommentsPageComponent: React.FC<Props> = ({
         <h2 className='text-theme-secondary text-[28px] font-bold dark:text-white'>
           Comments
         </h2>
-        <SearchBarMemo
+        <SearchBarMemo<CommentSortAttr>
           model={model.searchBar}
           sortOptions={sortOptions}
-          dispatch={(subMsg: SearchBar.Msg) =>
+          sortToString={(s) => s}
+          dispatch={(subMsg: SearchBar.Msg<CommentSortAttr>) =>
             dispatch({ _tag: 'SearchBarMsg', subMsg })
           }
           placeholder='Search comments by author or message content...'
         />
       </div>
+
 
       <PaginationMemo
         model={model.pagination}

@@ -35,6 +35,7 @@ export const ArticlesPageComponent: React.FC<Props> = ({
         <SearchBarMemo<ArticleSortAttr>
           model={model.searchBar}
           sortOptions={sortOptions}
+          sortToString={(s) => s}
           dispatch={(subMsg: SearchBar.Msg<ArticleSortAttr>) =>
             dispatch({ _tag: 'SearchBarMsg', subMsg })
           }

@@ -9,7 +9,7 @@ const SearchBarComponent = <sortType,>(props: Props<sortType>) => {
 }
 
 const view = <sortType,>(props: Props<sortType>) => {
-  const { model, sortOptions, placeholder = 'Search...', dispatch } = props
+  const { model, sortOptions, sortToString, placeholder = 'Search...', dispatch } = props
   const { searchText, sort, direction } = model
 
   return (
@@ -79,17 +79,17 @@ const view = <sortType,>(props: Props<sortType>) => {
           Sort By
         </div>
         <select
-          value={sort}
+          value={sortToString(sort)}
           onChange={(e) =>
             dispatch({
               _tag: 'ChangeSort',
-              sort: e.target.value,
+              sort: e.target.value as unknown as sortType,
             })
           }
           className='cursor-pointer rounded-[10px] border border-slate-100 bg-slate-50 px-[16px] py-[10px] text-[14px] font-bold text-slate-600 transition-colors outline-none hover:bg-slate-100 dark:border-white/20 dark:bg-black/20 dark:text-white dark:hover:bg-black/40'
         >
           {sortOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
+            <option key={sortToString(opt.value)} value={sortToString(opt.value)}>
               {opt.label}
             </option>
           ))}
@@ -98,16 +98,13 @@ const view = <sortType,>(props: Props<sortType>) => {
           type='button'
           onClick={() =>
             dispatch({
-              _tag: 'ChangeSort',
-              sort: {
-                ...sort,
-                direction: sort.direction === 'asc' ? 'desc' : 'asc',
-              },
+              _tag: 'ChangeDirection',
+              direction: direction === 'asc' ? 'desc' : 'asc',
             })
           }
           className='bg-theme-primary/10 text-theme-primary hover:bg-theme-primary/20 flex items-center gap-[8px] rounded-[10px] px-[16px] py-[10px] text-[14px] font-bold transition-colors'
         >
-          {sort.direction === 'asc' ? (
+          {direction === 'asc' ? (
             <svg
               xmlns='http://www.w3.org/2000/svg'
               className='h-[16px] w-[16px]'
@@ -138,7 +135,7 @@ const view = <sortType,>(props: Props<sortType>) => {
               />
             </svg>
           )}
-          {sort.direction.toUpperCase()}
+          {direction.toUpperCase()}
         </button>
       </div>
     </div>

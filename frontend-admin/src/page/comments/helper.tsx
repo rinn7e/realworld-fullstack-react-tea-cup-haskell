@@ -58,8 +58,8 @@ export const mkPaginationConfig = (
           pipe(
             getAdminComments(token, {
               ...params,
-              sort: model.searchBar.sort.attr,
-              direction: model.searchBar.sort.direction,
+              sort: model.searchBar.sort,
+              direction: model.searchBar.direction,
             }),
             TE.map((res) => ({
               items: res.comments,

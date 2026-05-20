@@ -9,7 +9,7 @@ import { UserImage } from '@/component/user-image'
 import { UserDetailOverlay } from './sub-component/user-detail-overlay'
 import { type Props, PropsEq } from './type'
 
-const sortOptions: SearchBar.SearchOption[] = [
+const sortOptions: SearchBar.SearchOption<string>[] = [
   { label: 'Username', value: 'username' },
   { label: 'Email', value: 'email' },
   { label: 'ID', value: 'id' },
@@ -22,10 +22,11 @@ export const UsersPageComponent: React.FC<Props> = ({ model, dispatch }) => {
         <h2 className='text-theme-secondary text-[28px] font-bold dark:text-white'>
           Users
         </h2>
-        <SearchBarMemo
+        <SearchBarMemo<string>
           model={model.searchBar}
           sortOptions={sortOptions}
-          dispatch={(subMsg: SearchBar.Msg) =>
+          sortToString={(s) => s}
+          dispatch={(subMsg: SearchBar.Msg<string>) =>
             dispatch({ _tag: 'SearchBarMsg', subMsg })
           }
           placeholder='Search users by username, email, or bio...'
