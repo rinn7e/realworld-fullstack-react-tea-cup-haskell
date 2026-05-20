@@ -1,10 +1,10 @@
--- Users (Password is 'password' hashed with dummy Argon2-like string)
+-- Users (Password is 'testtest' hashed with dummy Argon2-like string)
 INSERT INTO "user" (username, email, password, bio, image, role) VALUES 
-('admin', 'admin@example.com', '$argon2id$v=19$m=65536,t=2,p=1$c29tZXNhbHQ$Rdesc85idS9tV3Y3S3JKZXNCZ3NidVE', 'System Administrator', 'https://api.realworld.io/images/demo-avatar.png', 'Admin'),
-('jake', 'jake@jake.jake', '$argon2id$v=19$m=65536,t=2,p=1$c29tZXNhbHQ$Rdesc85idS9tV3Y3S3JKZXNCZ3NidVE', 'I work at statefarm', 'https://api.realworld.io/images/smiley-cyrus.jpeg', 'Admin'),
-('anna', 'anna@example.com', '$argon2id$v=19$m=65536,t=2,p=1$c29tZXNhbHQ$Rdesc85idS9tV3Y3S3JKZXNCZ3NidVE', 'I love Haskell', 'https://api.realworld.io/images/demo-avatar.png', 'User'),
-('gerard', 'gerard@example.com', '$argon2id$v=19$m=65536,t=2,p=1$c29tZXNhbHQ$Rdesc85idS9tV3Y3S3JKZXNCZ3NidVE', 'Coffee enthusiast and coder', 'https://api.realworld.io/images/smiley-cyrus.jpeg', 'User'),
-('john_doe', 'john@doe.com', '$argon2id$v=19$m=65536,t=2,p=1$c29tZXNhbHQ$Rdesc85idS9tV3Y3S3JKZXNCZ3NidVE', 'Just another developer', NULL, 'User');
+('admin', 'admin@example.com', '$argon2id$v=19$m=65536,t=2,p=1$H7tvUgoTi3VL0NerwrSLJw$XHCJPdObaSFp34QfvR1tKIwb/QVLJblO64V8XRoIy4w', 'System Administrator', 'https://api.realworld.io/images/demo-avatar.png', 'AdminRole'),
+('jake', 'jake@jake.jake', '$argon2id$v=19$m=65536,t=2,p=1$H7tvUgoTi3VL0NerwrSLJw$XHCJPdObaSFp34QfvR1tKIwb/QVLJblO64V8XRoIy4w', 'I work at statefarm', 'https://api.realworld.io/images/smiley-cyrus.jpeg', 'AdminRole'),
+('anna', 'anna@example.com', '$argon2id$v=19$m=65536,t=2,p=1$H7tvUgoTi3VL0NerwrSLJw$XHCJPdObaSFp34QfvR1tKIwb/QVLJblO64V8XRoIy4w', 'I love Haskell', 'https://api.realworld.io/images/demo-avatar.png', 'RegularRole'),
+('gerard', 'gerard@example.com', '$argon2id$v=19$m=65536,t=2,p=1$H7tvUgoTi3VL0NerwrSLJw$XHCJPdObaSFp34QfvR1tKIwb/QVLJblO64V8XRoIy4w', 'Coffee enthusiast and coder', 'https://api.realworld.io/images/smiley-cyrus.jpeg', 'RegularRole'),
+('john_doe', 'john@doe.com', '$argon2id$v=19$m=65536,t=2,p=1$H7tvUgoTi3VL0NerwrSLJw$XHCJPdObaSFp34QfvR1tKIwb/QVLJblO64V8XRoIy4w', 'Just another developer', NULL, 'RegularRole');
 
 -- Tags
 INSERT INTO "tag" (name) VALUES ('haskell'), ('servant'), ('webdev'), ('functional-programming'), ('tutorial'), ('react'), ('nodejs'), ('postgres');
