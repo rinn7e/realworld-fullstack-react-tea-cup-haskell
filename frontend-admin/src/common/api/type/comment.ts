@@ -3,28 +3,33 @@ import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
 import * as t from 'io-ts'
 
+import { type Profile, ProfileEq, ProfileJson } from './profile'
+
 export type Comment = {
   id: number
   body: string
   createdAt: string
+  updatedAt: string
   articleSlug: string
-  authorUsername: string
+  author: Profile
 }
 
 export const CommentEq = EqClass.struct<Comment>({
   id: N.Eq,
   body: S.Eq,
   createdAt: S.Eq,
+  updatedAt: S.Eq,
   articleSlug: S.Eq,
-  authorUsername: S.Eq,
+  author: ProfileEq,
 })
 
 export const CommentJson: t.Type<Comment> = t.type({
   id: t.number,
   body: t.string,
   createdAt: t.string,
+  updatedAt: t.string,
   articleSlug: t.string,
-  authorUsername: t.string,
+  author: ProfileJson,
 })
 
 export type CommentListResponse = {

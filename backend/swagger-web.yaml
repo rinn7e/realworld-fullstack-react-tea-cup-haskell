@@ -59,8 +59,24 @@ components:
       required:
       - article
       type: object
+    ArticleWrapper_NewArticleRequest:
+      properties:
+        article:
+          $ref: '#/components/schemas/NewArticleRequest'
+      required:
+      - article
+      type: object
+    ArticleWrapper_UpdateArticleRequest:
+      properties:
+        article:
+          $ref: '#/components/schemas/UpdateArticleRequest'
+      required:
+      - article
+      type: object
     Comment:
       properties:
+        articleSlug:
+          type: string
         author:
           $ref: '#/components/schemas/Profile'
         body:
@@ -86,8 +102,13 @@ components:
           items:
             $ref: '#/components/schemas/Comment'
           type: array
+        totalCount:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
       required:
       - comments
+      - totalCount
       type: object
     CommentResponse:
       properties:
@@ -96,20 +117,22 @@ components:
       required:
       - comment
       type: object
+    CommentWrapper_NewCommentRequest:
+      properties:
+        comment:
+          $ref: '#/components/schemas/NewCommentRequest'
+      required:
+      - comment
+      type: object
     LoginUserRequest:
       properties:
-        user:
-          properties:
-            email:
-              type: string
-            password:
-              type: string
-          required:
-          - email
-          - password
-          type: object
+        email:
+          type: string
+        password:
+          type: string
       required:
-      - user
+      - email
+      - password
       type: object
     MetadataResponse:
       properties:
@@ -127,55 +150,40 @@ components:
       type: object
     NewArticleRequest:
       properties:
-        article:
-          properties:
-            body:
-              type: string
-            description:
-              type: string
-            tagList:
-              items:
-                type: string
-              type: array
-            title:
-              type: string
-          required:
-          - title
-          - description
-          - body
-          type: object
+        body:
+          type: string
+        description:
+          type: string
+        tagList:
+          items:
+            type: string
+          type: array
+        title:
+          type: string
       required:
-      - article
+      - title
+      - description
+      - body
       type: object
     NewCommentRequest:
       properties:
-        comment:
-          properties:
-            body:
-              type: string
-          required:
-          - body
-          type: object
+        body:
+          type: string
       required:
-      - comment
+      - body
       type: object
     NewUserRequest:
       properties:
-        user:
-          properties:
-            email:
-              type: string
-            password:
-              type: string
-            username:
-              type: string
-          required:
-          - username
-          - email
-          - password
-          type: object
+        email:
+          type: string
+        password:
+          type: string
+        username:
+          type: string
       required:
-      - user
+      - username
+      - email
+      - password
       type: object
     Profile:
       properties:
@@ -213,39 +221,29 @@ components:
       type: string
     UpdateArticleRequest:
       properties:
-        article:
-          properties:
-            body:
-              type: string
-            description:
-              type: string
-            tagList:
-              items:
-                type: string
-              type: array
-            title:
-              type: string
-          type: object
-      required:
-      - article
+        body:
+          type: string
+        description:
+          type: string
+        tagList:
+          items:
+            type: string
+          type: array
+        title:
+          type: string
       type: object
     UpdateUserRequest:
       properties:
-        user:
-          properties:
-            bio:
-              type: string
-            email:
-              type: string
-            image:
-              type: string
-            password:
-              type: string
-            username:
-              type: string
-          type: object
-      required:
-      - user
+        bio:
+          type: string
+        email:
+          type: string
+        image:
+          type: string
+        password:
+          type: string
+        username:
+          type: string
       type: object
     User:
       properties:
@@ -268,6 +266,27 @@ components:
       properties:
         user:
           $ref: '#/components/schemas/User'
+      required:
+      - user
+      type: object
+    UserWrapper_LoginUserRequest:
+      properties:
+        user:
+          $ref: '#/components/schemas/LoginUserRequest'
+      required:
+      - user
+      type: object
+    UserWrapper_NewUserRequest:
+      properties:
+        user:
+          $ref: '#/components/schemas/NewUserRequest'
+      required:
+      - user
+      type: object
+    UserWrapper_UpdateUserRequest:
+      properties:
+        user:
+          $ref: '#/components/schemas/UpdateUserRequest'
       required:
       - user
       type: object
@@ -334,7 +353,7 @@ paths:
         content:
           application/json;charset=utf-8:
             schema:
-              $ref: '#/components/schemas/NewArticleRequest'
+              $ref: '#/components/schemas/ArticleWrapper_NewArticleRequest'
       responses:
         '201':
           content:
@@ -428,7 +447,7 @@ paths:
         content:
           application/json;charset=utf-8:
             schema:
-              $ref: '#/components/schemas/UpdateArticleRequest'
+              $ref: '#/components/schemas/ArticleWrapper_UpdateArticleRequest'
       responses:
         '200':
           content:
@@ -476,7 +495,7 @@ paths:
         content:
           application/json;charset=utf-8:
             schema:
-              $ref: '#/components/schemas/NewCommentRequest'
+              $ref: '#/components/schemas/CommentWrapper_NewCommentRequest'
       responses:
         '201':
           content:
@@ -665,7 +684,7 @@ paths:
         content:
           application/json;charset=utf-8:
             schema:
-              $ref: '#/components/schemas/UpdateUserRequest'
+              $ref: '#/components/schemas/UserWrapper_UpdateUserRequest'
       responses:
         '200':
           content:
@@ -685,7 +704,7 @@ paths:
         content:
           application/json;charset=utf-8:
             schema:
-              $ref: '#/components/schemas/NewUserRequest'
+              $ref: '#/components/schemas/UserWrapper_NewUserRequest'
       responses:
         '201':
           content:
@@ -705,7 +724,7 @@ paths:
         content:
           application/json;charset=utf-8:
             schema:
-              $ref: '#/components/schemas/LoginUserRequest'
+              $ref: '#/components/schemas/UserWrapper_LoginUserRequest'
       responses:
         '200':
           content:

@@ -57,41 +57,6 @@ components:
       - articles
       - articlesCount
       type: object
-    AdminCommentListResponse:
-      properties:
-        comments:
-          items:
-            $ref: '#/components/schemas/AdminCommentResponse'
-          type: array
-        totalCount:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      required:
-      - comments
-      - totalCount
-      type: object
-    AdminCommentResponse:
-      properties:
-        articleSlug:
-          type: string
-        authorUsername:
-          type: string
-        body:
-          type: string
-        createdAt:
-          $ref: '#/components/schemas/UTCTime'
-        id:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      required:
-      - id
-      - body
-      - createdAt
-      - articleSlug
-      - authorUsername
-      type: object
     AdminUserListResponse:
       properties:
         totalCount:
@@ -119,7 +84,7 @@ components:
         image:
           type: string
         role:
-          type: string
+          $ref: '#/components/schemas/UserRole'
         username:
           type: string
       required:
@@ -127,6 +92,43 @@ components:
       - username
       - email
       - role
+      type: object
+    Comment:
+      properties:
+        articleSlug:
+          type: string
+        author:
+          $ref: '#/components/schemas/Profile'
+        body:
+          type: string
+        createdAt:
+          $ref: '#/components/schemas/UTCTime'
+        id:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        updatedAt:
+          $ref: '#/components/schemas/UTCTime'
+      required:
+      - id
+      - createdAt
+      - updatedAt
+      - body
+      - author
+      type: object
+    CommentListResponse:
+      properties:
+        comments:
+          items:
+            $ref: '#/components/schemas/Comment'
+          type: array
+        totalCount:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      required:
+      - comments
+      - totalCount
       type: object
     DashboardStatsResponse:
       properties:
@@ -158,11 +160,6 @@ components:
       - activeUsers24h
       type: object
     LogLevel:
-      enum:
-      - info
-      - warning
-      - error
-      - fatal
       type: string
     LogListResponse:
       properties:
@@ -205,18 +202,27 @@ components:
       type: object
     LoginUserRequest:
       properties:
-        user:
-          properties:
-            email:
-              type: string
-            password:
-              type: string
-          required:
-          - email
-          - password
-          type: object
+        email:
+          type: string
+        password:
+          type: string
       required:
-      - user
+      - email
+      - password
+      type: object
+    Profile:
+      properties:
+        bio:
+          type: string
+        following:
+          type: boolean
+        image:
+          type: string
+        username:
+          type: string
+      required:
+      - username
+      - following
       type: object
     UTCTime:
       example: 2016-07-22T00:00:00Z
@@ -225,7 +231,7 @@ components:
     UpdateUserRoleRequest:
       properties:
         role:
-          type: string
+          $ref: '#/components/schemas/UserRole'
       required:
       - role
       type: object
@@ -250,6 +256,15 @@ components:
       properties:
         user:
           $ref: '#/components/schemas/User'
+      required:
+      - user
+      type: object
+    UserRole:
+      type: string
+    UserWrapper_LoginUserRequest:
+      properties:
+        user:
+          $ref: '#/components/schemas/LoginUserRequest'
       required:
       - user
       type: object
@@ -410,7 +425,7 @@ paths:
           content:
             application/json;charset=utf-8:
               schema:
-                $ref: '#/components/schemas/AdminCommentListResponse'
+                $ref: '#/components/schemas/CommentListResponse'
           description: ''
         '400':
           description: Invalid `articleSlug` or `author` or `offset` or `limit`
@@ -482,7 +497,7 @@ paths:
         content:
           application/json;charset=utf-8:
             schema:
-              $ref: '#/components/schemas/LoginUserRequest'
+              $ref: '#/components/schemas/UserWrapper_LoginUserRequest'
       responses:
         '200':
           content:
@@ -517,11 +532,6 @@ paths:
         name: level
         required: false
         schema:
-          enum:
-          - info
-          - warning
-          - error
-          - fatal
           type: string
       - in: query
         name: source

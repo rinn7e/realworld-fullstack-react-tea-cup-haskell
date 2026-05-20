@@ -55,7 +55,7 @@ export const CommentsComponent: React.FC<Props> = ({ model, dispatch }) => {
                   {c.id}
                 </td>
                 <td className='text-theme-secondary px-[24px] py-[16px] font-medium dark:text-white'>
-                  {c.authorUsername}
+                  {c.author.username}
                 </td>
                 <td className='max-w-[400px] truncate px-[24px] py-[16px] text-slate-600 dark:text-slate-200'>
                   {c.body}

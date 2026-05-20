@@ -6,12 +6,12 @@ build:
 
 # Generate Web OpenAPI 3.0 specification in YAML format
 swagger-web:
-	stack repl haskell-servant-realworld:lib --package yaml --ghc-options="-e \"import Infrastructure.Api.OpenApi (openApiSpec)\" -e \"import Data.Yaml qualified as Y\" -e \"import Data.ByteString.Char8 qualified as BS\" -e \"BS.writeFile \\\"swagger-web.yaml\\\" (Y.encode openApiSpec)\""
+	stack repl haskell-servant-realworld:lib --package yaml --ghc-options="-e \"import Infrastructure.Api.Route.OpenApi (openApiSpec)\" -e \"import Data.Yaml qualified as Y\" -e \"import Data.ByteString.Char8 qualified as BS\" -e \"BS.writeFile \\\"swagger-web.yaml\\\" (Y.encode openApiSpec)\""
 	@echo "Generated swagger-web.yaml successfully!"
 
 # Generate Admin OpenAPI 3.0 specification in YAML format
 swagger-admin:
-	stack repl haskell-servant-realworld:lib --package yaml --ghc-options="-e \"import Infrastructure.Api.OpenApi (adminOpenApiSpec)\" -e \"import Data.Yaml qualified as Y\" -e \"import Data.ByteString.Char8 qualified as BS\" -e \"BS.writeFile \\\"swagger-admin.yaml\\\" (Y.encode adminOpenApiSpec)\""
+	stack repl haskell-servant-realworld:lib --package yaml --ghc-options="-e \"import Infrastructure.Api.Route.OpenApi (adminOpenApiSpec)\" -e \"import Data.Yaml qualified as Y\" -e \"import Data.ByteString.Char8 qualified as BS\" -e \"BS.writeFile \\\"swagger-admin.yaml\\\" (Y.encode adminOpenApiSpec)\""
 	@echo "Generated swagger-admin.yaml successfully!"
 
 

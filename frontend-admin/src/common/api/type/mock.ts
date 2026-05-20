@@ -43,8 +43,14 @@ const generateComments = (count: number, users: AdminUser[]): Comment[] => {
       id: i + 1,
       body: `This is a comment number ${i + 1}. It is very insightful!`,
       createdAt: new Date(Date.now() - i * 1800000).toISOString(),
+      updatedAt: new Date(Date.now() - i * 1800000).toISOString(),
       articleSlug: `article-slug-${(i % 10) + 1}`,
-      authorUsername: author.username,
+      author: {
+        username: author.username,
+        bio: author.bio,
+        image: author.image,
+        following: false,
+      },
     }
   })
 }
