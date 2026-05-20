@@ -8,11 +8,15 @@ import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
 
 import Capability.Database.TagDB
+import Domain.Type qualified as D
 import Infrastructure.Interpreter.Real.DB.Query.Tag qualified as Q
 
 runTagDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (TagDB : es) a -> Eff es a
 runTagDBPostgres = interpret $ \_ -> \case
-  GetTags -> do
-    pool <- ask @ConnectionPool
-    liftIO $ runSqlPool Q.getTags pool
+  GetTags -> getTagsHandler
+
+getTagsHandler :: (IOE :> es, Reader ConnectionPool :> es) => Eff es [D.TagName]
+getTagsHandler = do
+  pool <- ask @ConnectionPool
+  liftIO $ runSqlPool Q.getTags pool

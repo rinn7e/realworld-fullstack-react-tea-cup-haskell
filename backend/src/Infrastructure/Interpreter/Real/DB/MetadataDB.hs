@@ -13,6 +13,9 @@ import Infrastructure.Interpreter.Real.DB.Migration.Migration qualified as Migra
 runMetadataDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (MetadataDB : es) a -> Eff es a
 runMetadataDBPostgres = interpret $ \_ -> \case
-  GetLastRanMigration -> do
-    pool <- ask @ConnectionPool
-    liftIO $ runSqlPool Migration.getLastRanMigration pool
+  GetLastRanMigration -> getLastRanMigrationHandler
+
+getLastRanMigrationHandler :: (IOE :> es, Reader ConnectionPool :> es) => Eff es (Maybe Int)
+getLastRanMigrationHandler = do
+  pool <- ask @ConnectionPool
+  liftIO $ runSqlPool Migration.getLastRanMigration pool

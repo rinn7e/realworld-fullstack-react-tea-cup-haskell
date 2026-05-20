@@ -74,139 +74,209 @@ ensureTag aid tagName = do
 runArticleDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (ArticleDB : es) a -> Eff es a
 runArticleDBPostgres = interpret $ \_ -> \case
-  GetArticleBySlug slug -> do
-    pool <- ask @ConnectionPool
+  GetArticleBySlug slug -> getArticleBySlugHandler slug
+  GetArticleWithAuthor mCurrentUserId slug -> getArticleWithAuthorHandler mCurrentUserId slug
+  CreateArticle slug title desc body authorId tags -> createArticleHandler slug title desc body authorId tags
+  UpdateArticle aid newSlug newTitle newDesc newBody mTags -> updateArticleHandler aid newSlug newTitle newDesc newBody mTags
+  DeleteArticle aid -> deleteArticleHandler aid
+  ListArticles mCurrentUserId mTag mAuthor mFavorited lim off -> listArticlesHandler mCurrentUserId mTag mAuthor mFavorited lim off
+  ListFeed currentUserId lim off -> listFeedHandler currentUserId lim off
+  CountArticles mTag mAuthor mFavorited -> countArticlesHandler mTag mAuthor mFavorited
+  CountFeed currentUserId -> countFeedHandler currentUserId
+  FavoriteArticle uid aid -> favoriteArticleHandler uid aid
+  UnfavoriteArticle uid aid -> unfavoriteArticleHandler uid aid
+  ListAdminArticles mTag mAuthor mSearch lim off -> listAdminArticlesHandler mTag mAuthor mSearch lim off
+  CountAdminArticles mTag mAuthor mSearch -> countAdminArticlesHandler mTag mAuthor mSearch
+
+getArticleBySlugHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.ArticleSlug -> Eff es (Maybe D.Article)
+getArticleBySlugHandler slug = do
+  pool <- ask @ConnectionPool
+  liftIO $
+    runSqlPool
+      ( do
+          mArt <- Q.getArticleBySlug slug
+          return $ fmap toDomainArticle mArt
+      )
+      pool
+
+getArticleWithAuthorHandler :: (IOE :> es, Reader ConnectionPool :> es) => Maybe D.UserId -> D.ArticleSlug -> Eff es (Maybe D.ArticleDetail)
+getArticleWithAuthorHandler mCurrentUserId slug = do
+  pool <- ask @ConnectionPool
+  liftIO $
+    runSqlPool
+      ( do
+          mArtGrp <- Q.getArticleWithAuthor mCurrentUserId slug
+          return $ fmap toDomainArticleDetail mArtGrp
+      )
+      pool
+
+createArticleHandler
+  :: (IOE :> es, Reader ConnectionPool :> es)
+  => D.ArticleSlug
+  -> D.ArticleTitle
+  -> D.ArticleDescription
+  -> D.ArticleBody
+  -> D.UserId
+  -> [D.TagName]
+  -> Eff es D.Article
+createArticleHandler slug title desc body (D.UserId authorIdInt) tags = do
+  pool <- ask @ConnectionPool
+  liftIO $
+    runSqlPool
+      ( do
+          now <- liftIO getCurrentTime
+          let sqlAuthorId = toSqlKey (fromIntegral authorIdInt)
+          let art = DB.Article slug title desc body sqlAuthorId now now
+          aid <- insert art
+          mapM_ (ensureTag aid) tags
+          return $ toDomainArticle (Entity aid art)
+      )
+      pool
+
+updateArticleHandler
+  :: (IOE :> es, Reader ConnectionPool :> es)
+  => D.ArticleId
+  -> D.ArticleSlug
+  -> D.ArticleTitle
+  -> D.ArticleDescription
+  -> D.ArticleBody
+  -> Maybe [D.TagName]
+  -> Eff es D.Article
+updateArticleHandler (D.ArticleId aidInt) newSlug newTitle newDesc newBody mTags = do
+  pool <- ask @ConnectionPool
+  liftIO $
+    runSqlPool
+      ( do
+          let aid = toSqlKey (fromIntegral aidInt)
+          mArt <- get aid
+          case mArt of
+            Nothing -> error "Article not found"
+            Just art -> do
+              now <- liftIO getCurrentTime
+              let updatedArt =
+                    art
+                      { DB.slug = newSlug
+                      , DB.title = newTitle
+                      , DB.description = newDesc
+                      , DB.body = newBody
+                      , DB.updatedAt = now
+                      }
+              replace aid updatedArt
+              case mTags of
+                Just tags -> do
+                  deleteWhere [DB.ArticleTagArticleId ==. aid]
+                  mapM_ (ensureTag aid) tags
+                Nothing -> return ()
+              return $ toDomainArticle (Entity aid updatedArt)
+      )
+      pool
+
+deleteArticleHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.ArticleId -> Eff es ()
+deleteArticleHandler (D.ArticleId aidInt) = do
+  pool <- ask @ConnectionPool
+  liftIO $
+    runSqlPool
+      ( do
+          let aid = toSqlKey (fromIntegral aidInt)
+          deleteWhere [DB.ArticleTagArticleId ==. aid]
+          deleteWhere [DB.CommentArticleId ==. aid]
+          deleteWhere [DB.FavoriteArticleId ==. aid]
+          delete aid
+      )
+      pool
+
+listArticlesHandler
+  :: (IOE :> es, Reader ConnectionPool :> es)
+  => Maybe D.UserId
+  -> Maybe D.TagName
+  -> Maybe D.Username
+  -> Maybe D.Username
+  -> D.Limit
+  -> D.Offset
+  -> Eff es [D.ArticleDetail]
+listArticlesHandler mCurrentUserId mTag mAuthor mFavorited lim off = do
+  pool <- ask @ConnectionPool
+  liftIO $
+    runSqlPool
+      ( do
+          res <- Q.listArticles mCurrentUserId mTag mAuthor mFavorited lim off
+          return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
+      )
+      pool
+
+listFeedHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.Limit -> D.Offset -> Eff es [D.ArticleDetail]
+listFeedHandler currentUserId lim off = do
+  pool <- ask @ConnectionPool
+  liftIO $
+    runSqlPool
+      ( do
+          res <- Q.listFeed currentUserId lim off
+          return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
+      )
+      pool
+
+countArticlesHandler :: (IOE :> es, Reader ConnectionPool :> es) => Maybe D.TagName -> Maybe D.Username -> Maybe D.Username -> Eff es Int
+countArticlesHandler mTag mAuthor mFavorited = do
+  pool <- ask @ConnectionPool
+  liftIO $ runSqlPool (Q.countArticles mTag mAuthor mFavorited) pool
+
+countFeedHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> Eff es Int
+countFeedHandler currentUserId = do
+  pool <- ask @ConnectionPool
+  liftIO $
+    runSqlPool
+      ( do
+          Q.countFeed currentUserId
+      )
+      pool
+
+favoriteArticleHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.ArticleId -> Eff es ()
+favoriteArticleHandler (D.UserId uidInt) (D.ArticleId aidInt) = do
+  ask @ConnectionPool >>= \pool ->
     liftIO $
       runSqlPool
         ( do
-            mArt <- Q.getArticleBySlug slug
-            return $ fmap toDomainArticle mArt
+            let sqlUid = toSqlKey (fromIntegral uidInt)
+            let sqlAid = toSqlKey (fromIntegral aidInt)
+            _ <- insertBy (DB.Favorite sqlUid sqlAid)
+            return ()
         )
         pool
-  GetArticleWithAuthor mCurrentUserId slug -> do
-    pool <- ask @ConnectionPool
+
+unfavoriteArticleHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.ArticleId -> Eff es ()
+unfavoriteArticleHandler (D.UserId uidInt) (D.ArticleId aidInt) = do
+  ask @ConnectionPool >>= \pool ->
     liftIO $
       runSqlPool
         ( do
-            mArtGrp <- Q.getArticleWithAuthor mCurrentUserId slug
-            return $ fmap toDomainArticleDetail mArtGrp
+            let sqlUid = toSqlKey (fromIntegral uidInt)
+            let sqlAid = toSqlKey (fromIntegral aidInt)
+            deleteWhere
+              [ DB.FavoriteUserId ==. sqlUid
+              , DB.FavoriteArticleId ==. sqlAid
+              ]
         )
         pool
-  CreateArticle slug title desc body (D.UserId authorIdInt) tags -> do
-    pool <- ask @ConnectionPool
-    liftIO $
-      runSqlPool
-        ( do
-            now <- liftIO getCurrentTime
-            let sqlAuthorId = toSqlKey (fromIntegral authorIdInt)
-            let art = DB.Article slug title desc body sqlAuthorId now now
-            aid <- insert art
-            mapM_ (ensureTag aid) tags
-            return $ toDomainArticle (Entity aid art)
-        )
-        pool
-  UpdateArticle (D.ArticleId aidInt) newSlug newTitle newDesc newBody mTags -> do
-    pool <- ask @ConnectionPool
-    liftIO $
-      runSqlPool
-        ( do
-            let aid = toSqlKey (fromIntegral aidInt)
-            mArt <- get aid
-            case mArt of
-              Nothing -> error "Article not found"
-              Just art -> do
-                now <- liftIO getCurrentTime
-                let updatedArt =
-                      art
-                        { DB.slug = newSlug
-                        , DB.title = newTitle
-                        , DB.description = newDesc
-                        , DB.body = newBody
-                        , DB.updatedAt = now
-                        }
-                replace aid updatedArt
-                case mTags of
-                  Just tags -> do
-                    deleteWhere [DB.ArticleTagArticleId ==. aid]
-                    mapM_ (ensureTag aid) tags
-                  Nothing -> return ()
-                return $ toDomainArticle (Entity aid updatedArt)
-        )
-        pool
-  DeleteArticle (D.ArticleId aidInt) -> do
-    pool <- ask @ConnectionPool
-    liftIO $
-      runSqlPool
-        ( do
-            let aid = toSqlKey (fromIntegral aidInt)
-            deleteWhere [DB.ArticleTagArticleId ==. aid]
-            deleteWhere [DB.CommentArticleId ==. aid]
-            deleteWhere [DB.FavoriteArticleId ==. aid]
-            delete aid
-        )
-        pool
-  ListArticles mCurrentUserId mTag mAuthor mFavorited lim off -> do
-    pool <- ask @ConnectionPool
-    liftIO $
-      runSqlPool
-        ( do
-            res <- Q.listArticles mCurrentUserId mTag mAuthor mFavorited lim off
-            return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
-        )
-        pool
-  ListFeed currentUserId lim off -> do
-    pool <- ask @ConnectionPool
-    liftIO $
-      runSqlPool
-        ( do
-            res <- Q.listFeed currentUserId lim off
-            return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
-        )
-        pool
-  CountArticles mTag mAuthor mFavorited -> do
-    pool <- ask @ConnectionPool
-    liftIO $ runSqlPool (Q.countArticles mTag mAuthor mFavorited) pool
-  CountFeed currentUserId -> do
-    pool <- ask @ConnectionPool
-    liftIO $
-      runSqlPool
-        ( do
-            Q.countFeed currentUserId
-        )
-        pool
-  FavoriteArticle (D.UserId uidInt) (D.ArticleId aidInt) -> do
-    ask @ConnectionPool >>= \pool ->
-      liftIO $
-        runSqlPool
-          ( do
-              let sqlUid = toSqlKey (fromIntegral uidInt)
-              let sqlAid = toSqlKey (fromIntegral aidInt)
-              _ <- insertBy (DB.Favorite sqlUid sqlAid)
-              return ()
-          )
-          pool
-  UnfavoriteArticle (D.UserId uidInt) (D.ArticleId aidInt) -> do
-    ask @ConnectionPool >>= \pool ->
-      liftIO $
-        runSqlPool
-          ( do
-              let sqlUid = toSqlKey (fromIntegral uidInt)
-              let sqlAid = toSqlKey (fromIntegral aidInt)
-              deleteWhere
-                [ DB.FavoriteUserId ==. sqlUid
-                , DB.FavoriteArticleId ==. sqlAid
-                ]
-          )
-          pool
-  ListAdminArticles mTag mAuthor mSearch lim off -> do
-    pool <- ask @ConnectionPool
-    liftIO $
-      runSqlPool
-        ( do
-            res <- Q.listAdminArticles mTag mAuthor mSearch lim off
-            return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
-        )
-        pool
-  CountAdminArticles mTag mAuthor mSearch -> do
-    pool <- ask @ConnectionPool
-    liftIO $ runSqlPool (Q.countAdminArticles mTag mAuthor mSearch) pool
+
+listAdminArticlesHandler
+  :: (IOE :> es, Reader ConnectionPool :> es)
+  => Maybe D.TagName
+  -> Maybe D.Username
+  -> Maybe Text
+  -> D.Limit
+  -> D.Offset
+  -> Eff es [D.ArticleDetail]
+listAdminArticlesHandler mTag mAuthor mSearch lim off = do
+  pool <- ask @ConnectionPool
+  liftIO $
+    runSqlPool
+      ( do
+          res <- Q.listAdminArticles mTag mAuthor mSearch lim off
+          return $ map toDomainArticleDetail $ Map.elems $ unAppendMap res
+      )
+      pool
+
+countAdminArticlesHandler :: (IOE :> es, Reader ConnectionPool :> es) => Maybe D.TagName -> Maybe D.Username -> Maybe Text -> Eff es Int
+countAdminArticlesHandler mTag mAuthor mSearch = do
+  pool <- ask @ConnectionPool
+  liftIO $ runSqlPool (Q.countAdminArticles mTag mAuthor mSearch) pool
