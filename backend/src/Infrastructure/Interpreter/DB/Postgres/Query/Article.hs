@@ -1,6 +1,4 @@
-{-# LANGUAGE TypeApplications #-}
-
-module Infrastructure.Postgres.Query.Article
+module Infrastructure.Interpreter.DB.Postgres.Query.Article
   ( getArticleBySlug
   , getArticleBySlugSQL
   , getArticleWithAuthor
@@ -36,9 +34,9 @@ import Database.Esqueleto.Experimental
 import Debug.Trace (traceM)
 import UnliftIO (MonadUnliftIO)
 
-import Infrastructure.Postgres.Query.ArticleType
-import Infrastructure.Postgres.Query.Follow (isFollowing)
-import Infrastructure.Postgres.Schema
+import Infrastructure.Interpreter.DB.Postgres.Query.ArticleType
+import Infrastructure.Interpreter.DB.Postgres.Query.Follow (isFollowing)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
 
 getArticleBySlug :: (MonadUnliftIO m) => Text -> SqlPersistT m (Maybe (Entity Article))
 getArticleBySlug slug = selectOne $ getArticleBySlugSQL slug

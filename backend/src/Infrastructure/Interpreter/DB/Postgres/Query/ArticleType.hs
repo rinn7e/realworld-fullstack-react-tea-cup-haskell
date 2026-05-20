@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.Query.ArticleType where
+module Infrastructure.Interpreter.DB.Postgres.Query.ArticleType where
 
 import Data.Map.Append (AppendMap (..))
 import Data.Map.Strict qualified as Map
@@ -7,7 +7,7 @@ import Data.Semigroup (First (..))
 import Data.Time (UTCTime)
 import Database.Esqueleto.Experimental
 
-import Infrastructure.Postgres.Schema
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
 
 -- | SQL expression level (internal Esqueleto query)
 type ArticleExpr =

@@ -1,9 +1,9 @@
-module Infrastructure.Postgres.Query.Follow where
+module Infrastructure.Interpreter.DB.Postgres.Query.Follow where
 
 import Database.Esqueleto.Experimental
 import UnliftIO (MonadUnliftIO)
 
-import Infrastructure.Postgres.Schema
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
 
 isFollowing :: (MonadUnliftIO m) => UserId -> UserId -> SqlPersistT m Bool
 isFollowing followerId followedId = maybe False (const True) <$> selectOne (isFollowingSQL followerId followedId)

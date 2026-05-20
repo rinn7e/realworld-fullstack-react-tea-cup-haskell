@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.TagDB
+module Infrastructure.Interpreter.DB.Postgres.TagDB
   ( runTagDBPostgres
   ) where
 
@@ -8,7 +8,7 @@ import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
 
 import Capability.Database.TagDB
-import Infrastructure.Postgres.Query.Tag qualified as Q
+import Infrastructure.Interpreter.DB.Postgres.Query.Tag qualified as Q
 
 runTagDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (TagDB : es) a -> Eff es a

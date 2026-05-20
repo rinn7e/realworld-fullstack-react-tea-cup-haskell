@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.Query.Comment where
+module Infrastructure.Interpreter.DB.Postgres.Query.Comment where
 
 import Data.Text (Text)
 import Data.Time (getCurrentTime)
@@ -6,7 +6,7 @@ import Database.Esqueleto.Experimental
 import Database.Persist qualified as P
 import UnliftIO (MonadIO (..), MonadUnliftIO)
 
-import Infrastructure.Postgres.Schema
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
 
 getCommentsForArticle
   :: (MonadUnliftIO m) => ArticleId -> SqlPersistT m [(Entity Comment, Entity User)]

@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.LoggerDB
+module Infrastructure.Interpreter.DB.Postgres.LoggerDB
   ( runLoggerDBPostgres
   , toDomainLogEntry
   ) where
@@ -22,7 +22,7 @@ import Effectful.Reader.Static
 import Capability.Database.LoggerDB
 import Domain.Log (LogEntry)
 import Domain.Log qualified as D
-import Infrastructure.Postgres.Schema qualified as DB
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
 
 toDomainLogEntry :: Entity DB.Log -> LogEntry
 toDomainLogEntry (Entity lid l) =

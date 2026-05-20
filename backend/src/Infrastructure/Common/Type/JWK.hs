@@ -34,7 +34,7 @@ import Data.Time (addUTCTime, getCurrentTime)
 import Database.Persist.Sql (fromSqlKey)
 import Servant.Auth.Server
 
-import Infrastructure.Postgres.Schema (UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
 
 -- In jose 0.11, signClaims needs MonadRandom and AsError.
 -- If IO doesn't have MonadRandom instance from crypton, we provide it for our stack.

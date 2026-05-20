@@ -24,7 +24,7 @@ import Infrastructure.Api.Metadata.Web.Type (MetadataRoute)
 import Infrastructure.Api.Tag.Web.Type (TagRoute)
 import Infrastructure.Api.User.Admin.Type (AdminUserRoute)
 import Infrastructure.Api.User.Web.Type (UserRoute)
-import Infrastructure.Postgres.Schema (UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
 
 import Infrastructure.Api.TagCombinator (Tag)
 import Infrastructure.Api.User.DTO (UserResponse)

@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.Crypto
+module Infrastructure.Interpreter.Crypto
   ( runCryptoArgon2
   ) where
 
@@ -10,7 +10,6 @@ import Data.Password.Argon2
   , mkPassword
   , unPasswordHash
   )
-import Data.Text (Text)
 import Effectful
 import Effectful.Dispatch.Dynamic
 

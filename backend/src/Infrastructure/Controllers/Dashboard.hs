@@ -37,7 +37,7 @@ import Infrastructure.Api.Log.DTO
 import Infrastructure.Api.Visitor.DTO (VisitorListResponse (..), VisitorResponse (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Postgres.Schema (UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
 
 import Capability.Database.ArticleDB
 import Capability.Database.CommentDB

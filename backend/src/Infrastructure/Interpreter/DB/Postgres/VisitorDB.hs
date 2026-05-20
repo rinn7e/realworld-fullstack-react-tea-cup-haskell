@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.VisitorDB
+module Infrastructure.Interpreter.DB.Postgres.VisitorDB
   ( runVisitorDBPostgres
   ) where
 
@@ -22,7 +22,7 @@ import Effectful.Reader.Static
 import Capability.Database.VisitorDB
 import Domain.Visitor (Visitor)
 import Domain.Visitor qualified as D
-import Infrastructure.Postgres.Schema qualified as DB
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
 
 toDomainVisitor :: Entity DB.Visitor -> Visitor
 toDomainVisitor (Entity vid v) =

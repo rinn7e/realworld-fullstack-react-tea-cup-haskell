@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.Migration
+module Infrastructure.Interpreter.DB.Postgres.Migration.Migration
   ( runMigrationsUp
   , runMigrationUpOne
   , runMigrationDownOne
@@ -31,7 +31,7 @@ import System.FilePath (takeExtension, (</>))
 import Text.Printf (printf)
 import UnliftIO.Exception (SomeException, try)
 
-import Infrastructure.Postgres.Schema (migrateAll)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (migrateAll)
 
 getPendingMigrations :: SqlPersistT IO [String]
 getPendingMigrations = do

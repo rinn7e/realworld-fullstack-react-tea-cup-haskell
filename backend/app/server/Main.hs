@@ -24,12 +24,12 @@ import Servant.Auth.Server qualified as S
 
 import Infrastructure.Common.Type.Config (Config (..), loadConfig)
 import Infrastructure.Common.Type.JWK (makeSecretKey)
-import Infrastructure.Postgres.Migration
+import Infrastructure.Interpreter.DB.Postgres.Migration.Migration
   ( generateMigration
   , getPendingMigrations
   , runMigrationsUp
   )
-import Infrastructure.Postgres.Schema (migrateAll)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (migrateAll)
 import RunServer (AppEnv (..), FullAPI, runServer)
 import Text.RawString.QQ (r)
 import Type

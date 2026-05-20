@@ -1,6 +1,7 @@
 module Infrastructure.Common.Type.App where
 
 import Crypto.JWT (JWK)
+import Data.Function ((&))
 import Database.Persist.Sql (ConnectionPool)
 import Effectful
 import Effectful.Error.Static
@@ -24,16 +25,16 @@ import Capability.Time (Time)
 
 -- Interpreters
 
-import Infrastructure.Postgres.ArticleDB (runArticleDBPostgres)
-import Infrastructure.Postgres.Auth (runAuthJWT)
-import Infrastructure.Postgres.CommentDB (runCommentDBPostgres)
-import Infrastructure.Postgres.Crypto (runCryptoArgon2)
-import Infrastructure.Postgres.LoggerDB (runLoggerDBPostgres)
-import Infrastructure.Postgres.MetadataDB (runMetadataDBPostgres)
-import Infrastructure.Postgres.TagDB (runTagDBPostgres)
-import Infrastructure.Postgres.Time (runTimeIO)
-import Infrastructure.Postgres.UserDB (runUserDBPostgres)
-import Infrastructure.Postgres.VisitorDB (runVisitorDBPostgres)
+import Infrastructure.Interpreter.Auth (runAuthJWT)
+import Infrastructure.Interpreter.Crypto (runCryptoArgon2)
+import Infrastructure.Interpreter.DB.Postgres.ArticleDB (runArticleDBPostgres)
+import Infrastructure.Interpreter.DB.Postgres.CommentDB (runCommentDBPostgres)
+import Infrastructure.Interpreter.DB.Postgres.LoggerDB (runLoggerDBPostgres)
+import Infrastructure.Interpreter.DB.Postgres.MetadataDB (runMetadataDBPostgres)
+import Infrastructure.Interpreter.DB.Postgres.TagDB (runTagDBPostgres)
+import Infrastructure.Interpreter.DB.Postgres.UserDB (runUserDBPostgres)
+import Infrastructure.Interpreter.DB.Postgres.VisitorDB (runVisitorDBPostgres)
+import Infrastructure.Interpreter.Time (runTimeIO)
 
 data AppEnv = AppEnv
   { appPool :: ConnectionPool
@@ -65,23 +66,24 @@ type App =
 runApp :: AppEnv -> App a -> S.Handler a
 runApp env action = do
   res <-
-    liftIO $
-      runEff $
-        runErrorNoCallStack @S.ServerError $
-          runReader env.appJwtKey $
-            runReader env.appPool $
-              runReader env $
-                runCryptoArgon2 $
-                  runAuthJWT $
-                    runTimeIO $
-                      runTagDBPostgres $
-                        runVisitorDBPostgres $
-                          runUserDBPostgres $
-                            runMetadataDBPostgres $
-                              runLoggerDBPostgres $
-                                runArticleDBPostgres $
-                                  runCommentDBPostgres $
-                                    action
+    liftIO
+      ( action
+          & runCommentDBPostgres
+          & runArticleDBPostgres
+          & runLoggerDBPostgres
+          & runMetadataDBPostgres
+          & runUserDBPostgres
+          & runVisitorDBPostgres
+          & runTagDBPostgres
+          & runTimeIO
+          & runAuthJWT
+          & runCryptoArgon2
+          & runReader env
+          & runReader env.appPool
+          & runReader env.appJwtKey
+          & runErrorNoCallStack @S.ServerError
+          & runEff
+      )
   case res of
     Left err -> S.throwError err
     Right a -> return a

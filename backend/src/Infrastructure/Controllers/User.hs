@@ -1,6 +1,14 @@
 module Infrastructure.Controllers.User
   ( webUserRoute
   , adminUserRoute
+  , getCurrentUserHandler
+  , updateCurrentUserHandler
+  , getUserByNameHandler
+  , followUserHandler
+  , unfollowUserHandler
+  , getUsersHandler
+  , updateUserRoleHandler
+  , deleteUserHandler
   ) where
 
 import Data.Text (Text)
@@ -26,7 +34,7 @@ import Infrastructure.Api.User.DTO
 import Infrastructure.Api.User.Web.Type
 import Infrastructure.Common.Type.App (App, AppEnv (..))
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Postgres.Schema (UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
 
 import Capability.Auth
 import Capability.Crypto

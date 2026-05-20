@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.MetadataDB
+module Infrastructure.Interpreter.DB.Postgres.MetadataDB
   ( runMetadataDBPostgres
   ) where
 
@@ -8,7 +8,7 @@ import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
 
 import Capability.Database.MetadataDB hiding (getLastRanMigration)
-import Infrastructure.Postgres.Migration qualified as Migration
+import Infrastructure.Interpreter.DB.Postgres.Migration.Migration qualified as Migration
 
 runMetadataDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (MetadataDB : es) a -> Eff es a

@@ -1,6 +1,10 @@
 module Infrastructure.Controllers.Auth
   ( webAuthRoute
   , adminAuthRoute
+  , loginUserHandler
+  , registerUserHandler
+  , loginAdminHandler
+  , getCurrentAdminHandler
   ) where
 
 import Database.Persist.Sql (fromSqlKey, toSqlKey)
@@ -21,7 +25,7 @@ import Infrastructure.Api.User.DTO
   )
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Postgres.Schema (UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
 
 import Capability.Auth
 import Capability.Crypto

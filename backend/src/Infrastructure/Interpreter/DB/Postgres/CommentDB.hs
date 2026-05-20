@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.CommentDB
+module Infrastructure.Interpreter.DB.Postgres.CommentDB
   ( runCommentDBPostgres
   ) where
 
@@ -20,9 +20,15 @@ import Effectful.Reader.Static
 
 import Capability.Database.CommentDB
 import Infrastructure.Api.Comment.DTO (AdminCommentResponse (..))
-import Infrastructure.Postgres.Query.Comment qualified as Q
-import Infrastructure.Postgres.Schema (ArticleId, Comment, CommentId, User, UserId)
-import Infrastructure.Postgres.Schema qualified as DB
+import Infrastructure.Interpreter.DB.Postgres.Query.Comment qualified as Q
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
+  ( ArticleId
+  , Comment
+  , CommentId
+  , User
+  , UserId
+  )
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
 
 runCommentDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (CommentDB : es) a -> Eff es a

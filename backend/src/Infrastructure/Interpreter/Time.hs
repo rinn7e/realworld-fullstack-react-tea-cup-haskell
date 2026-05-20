@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.Time
+module Infrastructure.Interpreter.Time
   ( runTimeIO
   ) where
 

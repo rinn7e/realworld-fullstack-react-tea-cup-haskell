@@ -1,9 +1,8 @@
-module Infrastructure.Postgres.Auth
+module Infrastructure.Interpreter.Auth
   ( runAuthJWT
   ) where
 
 import Crypto.JWT (JWK)
-import Data.Text (Text)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static

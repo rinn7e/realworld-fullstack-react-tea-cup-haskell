@@ -5,7 +5,13 @@ import Database.Persist.Sql (Entity)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Infrastructure.Api.Comment.DTO (AdminCommentResponse)
-import Infrastructure.Postgres.Schema (ArticleId, Comment, CommentId, User, UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
+  ( ArticleId
+  , Comment
+  , CommentId
+  , User
+  , UserId
+  )
 
 data CommentDB :: Effect where
   GetCommentsForArticle :: ArticleId -> CommentDB m [(Entity Comment, Entity User)]

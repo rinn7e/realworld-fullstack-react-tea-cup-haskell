@@ -27,8 +27,8 @@ import Infrastructure.Api.Comment.Web.Type
 import Infrastructure.Api.User.DTO (Profile (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
-import Infrastructure.Postgres.Schema (UserId)
-import Infrastructure.Postgres.Schema qualified as DB
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
 
 import Capability.Database.ArticleDB
 import Capability.Database.CommentDB

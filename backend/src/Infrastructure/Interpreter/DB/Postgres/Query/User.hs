@@ -1,10 +1,10 @@
-module Infrastructure.Postgres.Query.User where
+module Infrastructure.Interpreter.DB.Postgres.Query.User where
 
 import Data.Text (Text)
 import Database.Esqueleto.Experimental
 import UnliftIO (MonadUnliftIO)
 
-import Infrastructure.Postgres.Schema
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
 
 getUserByEmail :: (MonadUnliftIO m) => Text -> SqlPersistT m (Maybe (Entity User))
 getUserByEmail email = selectOne $ getUserByEmailSQL email

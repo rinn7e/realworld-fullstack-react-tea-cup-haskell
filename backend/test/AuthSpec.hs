@@ -6,7 +6,7 @@ import Data.ByteString.Char8 qualified as BSC
 import Data.Text.Encoding qualified as TE
 import Database.Persist.Sql (toSqlKey)
 import Infrastructure.Common.Type.JWK (generateToken, makeSecretKey)
-import Infrastructure.Postgres.Schema (UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
 import Servant.Auth.Server
 import Test.Hspec
 

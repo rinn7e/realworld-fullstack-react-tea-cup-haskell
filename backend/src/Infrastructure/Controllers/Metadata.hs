@@ -14,7 +14,7 @@ import Infrastructure.Api.Metadata.Web.Type
 import Infrastructure.Common.Type.App (App, AppEnv (..))
 import Infrastructure.Common.Type.Config (Config (..))
 import Infrastructure.Common.Type.Metadata (MetadataResponse (..))
-import Infrastructure.Postgres.Schema (UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
 import Paths_haskell_servant_realworld qualified as Paths
 
 import Capability.Database.MetadataDB

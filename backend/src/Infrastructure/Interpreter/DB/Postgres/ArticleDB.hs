@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.ArticleDB
+module Infrastructure.Interpreter.DB.Postgres.ArticleDB
   ( runArticleDBPostgres
   , toDomainArticle
   ) where
@@ -31,10 +31,10 @@ import GHC.Generics (Generic)
 import Capability.Database.ArticleDB
 import Domain.Article (Article)
 import Domain.Article qualified as D
-import Infrastructure.Postgres.Query.Article qualified as Q
-import Infrastructure.Postgres.Query.ArticleType (ArticleGrouped)
-import Infrastructure.Postgres.Schema (ArticleId, UserId)
-import Infrastructure.Postgres.Schema qualified as DB
+import Infrastructure.Interpreter.DB.Postgres.Query.Article qualified as Q
+import Infrastructure.Interpreter.DB.Postgres.Query.ArticleType (ArticleGrouped)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (ArticleId, UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
 
 toDomainArticle :: Entity DB.Article -> Article
 toDomainArticle (Entity aid a) =

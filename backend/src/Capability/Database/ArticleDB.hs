@@ -7,8 +7,8 @@ import Data.Time (UTCTime)
 import Domain.Article (Article)
 import Effectful
 import Effectful.Dispatch.Dynamic
-import Infrastructure.Postgres.Query.ArticleType (ArticleGrouped)
-import Infrastructure.Postgres.Schema (ArticleId, UserId)
+import Infrastructure.Interpreter.DB.Postgres.Query.ArticleType (ArticleGrouped)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (ArticleId, UserId)
 
 data ArticleDB :: Effect where
   GetArticleBySlug :: Text -> ArticleDB m (Maybe Article)

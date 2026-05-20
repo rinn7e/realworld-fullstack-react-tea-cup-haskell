@@ -1,4 +1,4 @@
-module Infrastructure.Postgres.UserDB
+module Infrastructure.Interpreter.DB.Postgres.UserDB
   ( runUserDBPostgres
   ) where
 
@@ -25,8 +25,11 @@ import GHC.Generics (Generic)
 import Capability.Database.UserDB
 import Domain.User (User)
 import Domain.User qualified as D
-import Infrastructure.Postgres.Query.User (getUserByEmail, getUserByUsername)
-import Infrastructure.Postgres.Schema qualified as DB
+import Infrastructure.Interpreter.DB.Postgres.Query.User
+  ( getUserByEmail
+  , getUserByUsername
+  )
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
 
 toDomainUser :: Entity DB.User -> User
 toDomainUser (Entity uid u) =

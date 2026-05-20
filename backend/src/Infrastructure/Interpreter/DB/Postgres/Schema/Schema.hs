@@ -1,7 +1,4 @@
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE NoFieldSelectors #-}
-
-module Infrastructure.Postgres.Schema where
+module Infrastructure.Interpreter.DB.Postgres.Schema.Schema where
 
 import Data.Text (Text)
 import Data.Time (UTCTime)
@@ -9,7 +6,7 @@ import Database.Persist.TH
 import GHC.Generics (Generic)
 import Servant.Auth.Server (FromJWT, ToJWT)
 
-import Infrastructure.Postgres.Internal (stripEntityPrefix)
+import Infrastructure.Interpreter.DB.Postgres.Util.Internal (stripEntityPrefix)
 
 share
   [ mkPersist

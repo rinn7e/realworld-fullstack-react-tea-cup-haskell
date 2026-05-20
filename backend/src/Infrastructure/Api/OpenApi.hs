@@ -26,7 +26,7 @@ import Servant ((:>))
 import Servant.Auth.Server qualified as S
 import Servant.OpenApi
 
-import Infrastructure.Postgres.Schema (UserId)
+import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
 import Type (AdminAPI, WebAPI)
 
 instance (HasOpenApi sub) => HasOpenApi (S.Auth auths UserId :> sub) where
