@@ -3,14 +3,15 @@ import React from 'react'
 import { ArticleEq } from '@/common/api/type/article'
 import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'
 import { memoStrategy } from '@/common/util'
-import { SearchBar, type SearchOption } from '@/component/search-bar'
+import * as SearchBar from '@/component/search-bar'
+import { SearchBarMemo } from '@/component/search-bar/component'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 
 import { ArticleDetailOverlay } from './sub-component/article-detail-overlay'
 import { type Props, PropsEq } from './type'
 import { mkPaginationConfig } from './helper'
 
-const sortOptions: SearchOption[] = [
+const sortOptions: SearchBar.SearchOption[] = [
   { label: 'Creation Date', value: 'createdAt' },
   { label: 'Favorites', value: 'favoritesCount' },
   { label: 'Title', value: 'title' },
@@ -26,14 +27,10 @@ export const ArticlesComponent: React.FC<Props> = ({ model, shared, dispatch }) 
         <h2 className='text-theme-secondary text-[28px] font-bold dark:text-white'>
           Articles
         </h2>
-        <SearchBar
-          searchText={model.searchText}
-          sort={model.sort}
+        <SearchBarMemo
+          model={model.searchBar}
           sortOptions={sortOptions}
-          onSearchChange={(text) =>
-            dispatch({ _tag: 'ChangeSearchText', text })
-          }
-          onSortChange={(sort) => dispatch({ _tag: 'ChangeSort', sort })}
+          dispatch={(subMsg: SearchBar.Msg) => dispatch({ _tag: 'SearchBarMsg', subMsg })}
           placeholder='Search articles by title, slug, or content...'
         />
       </div>

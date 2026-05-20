@@ -15,21 +15,21 @@ import { type Article, ArticleEq } from '@/common/api/type/article'
 import { type Sort, SortEq } from '@/common/type/filter'
 import type { Shared } from '@/type'
 
+import * as SearchBar from '@/component/search-bar'
+
 export const GET_ARTICLES_LIMIT = 50
 
 export type Model = {
   readonly _tag: 'ArticlesModel'
   readonly pagination: Pagination.Model<Article, HttpError<ApiError>>
   readonly selectedArticle: O.Option<Article>
-  readonly searchText: string
-  readonly sort: Sort
+  readonly searchBar: SearchBar.Model
 }
 
 export type Msg =
   | { readonly _tag: 'NoOp' }
   | { readonly _tag: 'SelectArticle'; readonly article: O.Option<Article> }
-  | { readonly _tag: 'ChangeSearchText'; readonly text: string }
-  | { readonly _tag: 'ChangeSort'; readonly sort: Sort }
+  | { readonly _tag: 'SearchBarMsg'; readonly subMsg: SearchBar.Msg }
   | {
       readonly _tag: 'PaginationMsg'
       readonly subMsg: Pagination.Msg<Article, any, HttpError<ApiError>>
@@ -39,8 +39,7 @@ export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
   _tag: S.Eq,
   pagination: Pagination.mkModelEq(ArticleEq, getHttpErrorEq(ApiErrorEq)),
   selectedArticle: O.getEq(ArticleEq),
-  searchText: S.Eq,
-  sort: SortEq,
+  searchBar: SearchBar.ModelEq,
 })
 
 export type Props = {

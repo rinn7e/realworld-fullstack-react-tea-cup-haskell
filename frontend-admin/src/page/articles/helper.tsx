@@ -16,12 +16,12 @@ import { GET_ARTICLES_LIMIT, type Model } from './type'
 export const mkPaginationConfig = (
   shared: Shared,
   model: Model,
-): Pagination.Config<Article, any, HttpError<ApiError>> => ({
+ ): Pagination.Config<Article, any, HttpError<ApiError>> => ({
   limit: GET_ARTICLES_LIMIT,
   scrollContainerId: 'main-content',
   handler: (offset, limit) => {
-    const searchParams = model.searchText.trim()
-      ? { limit, offset, search: model.searchText.trim() }
+    const searchParams = model.searchBar.searchText.trim()
+      ? { limit, offset, search: model.searchBar.searchText.trim() }
       : { limit, offset }
 
     return pipe(
@@ -40,11 +40,11 @@ export const mkPaginationConfig = (
             getAdminArticles(token, searchParams),
             TE.map((res) => {
               const sortedArticles = [...res.articles].sort((a, b) => {
-                const valA = a[model.sort.attr as keyof Article]
-                const valB = b[model.sort.attr as keyof Article]
+                const valA = a[model.searchBar.sort.attr as keyof Article]
+                const valB = b[model.searchBar.sort.attr as keyof Article]
                 if (valA === undefined || valB === undefined) return 0
-                if (valA < valB) return model.sort.direction === 'asc' ? -1 : 1
-                if (valA > valB) return model.sort.direction === 'asc' ? 1 : -1
+                if (valA < valB) return model.searchBar.sort.direction === 'asc' ? -1 : 1
+                if (valA > valB) return model.searchBar.sort.direction === 'asc' ? 1 : -1
                 return 0
               })
               return {

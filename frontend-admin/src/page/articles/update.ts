@@ -6,11 +6,14 @@ import { Cmd } from 'tea-cup-fp'
 import { updateAndCmd } from '@rinn7e/tea-cup-prelude'
 import type { Shared } from '@/type'
 import * as Pagination from '@rinn7e/tea-cup-pagination'
+import * as SearchBar from '@/component/search-bar'
 
 import { mkPaginationConfig } from './helper'
 import { type Model, type Msg } from './type'
 
 export const init = (shared: Shared): [Model, Cmd<Msg>] => {
+  const [searchBar, searchBarCmd] = SearchBar.init('', { attr: 'createdAt', direction: 'desc' })
+
   const initialModel: Model = {
     _tag: 'ArticlesModel',
     pagination: {
@@ -19,8 +22,7 @@ export const init = (shared: Shared): [Model, Cmd<Msg>] => {
       pageAmount: 0,
     },
     selectedArticle: O.none,
-    searchText: '',
-    sort: { attr: 'createdAt', direction: 'desc' },
+    searchBar,
   }
 
   const paginationConfig = mkPaginationConfig(shared, initialModel)
@@ -33,7 +35,10 @@ export const init = (shared: Shared): [Model, Cmd<Msg>] => {
 
   return [
     model,
-    paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
+    Cmd.batch([
+      paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
+      searchBarCmd.map((m): Msg => ({ _tag: 'SearchBarMsg', subMsg: m })),
+    ]),
   ]
 }
 
@@ -43,29 +48,26 @@ export const update =
     switch (msg._tag) {
       case 'SelectArticle':
         return [{ ...model, selectedArticle: msg.article }, Cmd.none()]
-      case 'ChangeSearchText': {
-        const nextModel = { ...model, searchText: msg.text }
-        const paginationConfig = mkPaginationConfig(shared, nextModel)
-        const [pagination, paginationCmd] = Pagination.init(paginationConfig, 1)
-        return [
-          {
-            ...nextModel,
-            pagination,
-          },
-          paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
-        ]
-      }
-      case 'ChangeSort': {
-        const nextModel = { ...model, sort: msg.sort }
-        const paginationConfig = mkPaginationConfig(shared, nextModel)
-        const [pagination, paginationCmd] = Pagination.init(paginationConfig, 1)
-        return [
-          {
-            ...nextModel,
-            pagination,
-          },
-          paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
-        ]
+      case 'SearchBarMsg': {
+        const [searchBar, searchBarCmd] = SearchBar.update(msg.subMsg, model.searchBar)
+
+        return pipe(
+          [
+            { ...model, searchBar },
+            searchBarCmd.map((m): Msg => ({ _tag: 'SearchBarMsg', subMsg: m })),
+          ],
+          updateAndCmd((m) => {
+            if (msg.subMsg._tag === 'Submit' || msg.subMsg._tag === 'ChangeSort') {
+              const paginationConfig = mkPaginationConfig(shared, m)
+              const [pagination, paginationCmd] = Pagination.init(paginationConfig, 1)
+              return [
+                { ...m, pagination },
+                paginationCmd.map((pm): Msg => ({ _tag: 'PaginationMsg', subMsg: pm })),
+              ]
+            }
+            return [m, Cmd.none()]
+          }),
+        )
       }
       case 'PaginationMsg': {
         const paginationConfig = mkPaginationConfig(shared, model)

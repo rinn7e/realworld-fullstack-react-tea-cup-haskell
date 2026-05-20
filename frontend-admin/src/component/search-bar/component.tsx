@@ -1,32 +1,24 @@
-import React from 'react'
+import { memoStrategy } from '@/common/util'
 
-import { type Sort } from '@/common/type/filter'
+import { type Props, PropsEq } from './type'
 
-export type SearchOption = {
-  label: string
-  value: string
+const SearchBarComponent = (props: Props) => {
+  return view(props)
 }
 
-type Props = {
-  searchText: string
-  sort: Sort
-  sortOptions: SearchOption[]
-  onSearchChange: (text: string) => void
-  onSortChange: (sort: Sort) => void
-  placeholder?: string
-}
+const view = (props: Props) => {
+  const { model, sortOptions, placeholder = 'Search...', dispatch } = props
+  const { searchText, sort } = model
 
-export const SearchBar: React.FC<Props> = ({
-  searchText,
-  sort,
-  sortOptions,
-  onSearchChange,
-  onSortChange,
-  placeholder = 'Search...',
-}) => {
   return (
     <div className='flex flex-col gap-[16px] lg:flex-row lg:items-center'>
-      <div className='dark:bg-surface-dark focus-within:border-theme-primary focus-within:ring-theme-primary/10 flex flex-grow items-center gap-[16px] rounded-[16px] border border-slate-100 bg-white p-[16px] shadow-sm transition-all focus-within:ring-4 dark:border-white/20'>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          dispatch({ _tag: 'Submit' })
+        }}
+        className='dark:bg-surface-dark focus-within:border-theme-primary focus-within:ring-theme-primary/10 flex flex-grow items-center gap-[16px] rounded-[16px] border border-slate-100 bg-white p-[16px] shadow-sm transition-all focus-within:ring-4 dark:border-white/20'
+      >
         <div className='pl-[4px] text-slate-400 dark:text-slate-200'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -46,14 +38,16 @@ export const SearchBar: React.FC<Props> = ({
         <input
           type='text'
           value={searchText}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={(e) =>
+            dispatch({ _tag: 'ChangeSearchText', text: e.target.value })
+          }
           placeholder={placeholder}
           className='flex-grow bg-transparent text-[18px] font-medium text-slate-700 outline-none placeholder:text-slate-300 dark:text-white dark:placeholder:text-slate-400'
         />
         {searchText && (
           <button
             type='button'
-            onClick={() => onSearchChange('')}
+            onClick={() => dispatch({ _tag: 'ChangeSearchText', text: '' })}
             className='rounded-full bg-slate-100 p-[4px] text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-600 dark:bg-black/20 dark:text-slate-200 dark:hover:bg-black/40 dark:hover:text-white'
           >
             <svg
@@ -70,7 +64,13 @@ export const SearchBar: React.FC<Props> = ({
             </svg>
           </button>
         )}
-      </div>
+        <button
+          type='submit'
+          className='bg-theme-primary hover:bg-theme-primary/95 text-white rounded-[12px] px-[16px] py-[8px] text-[14px] font-bold transition-colors'
+        >
+          Search
+        </button>
+      </form>
 
       <div className='dark:bg-surface-dark flex items-center gap-[12px] rounded-[16px] border border-slate-100 bg-white p-[8px] shadow-sm dark:border-white/20'>
         <div className='pl-[12px] text-[12px] font-bold tracking-wider text-slate-400 uppercase dark:text-slate-200'>
@@ -78,7 +78,12 @@ export const SearchBar: React.FC<Props> = ({
         </div>
         <select
           value={sort.attr}
-          onChange={(e) => onSortChange({ ...sort, attr: e.target.value })}
+          onChange={(e) =>
+            dispatch({
+              _tag: 'ChangeSort',
+              sort: { ...sort, attr: e.target.value },
+            })
+          }
           className='cursor-pointer rounded-[10px] border border-slate-100 bg-slate-50 px-[16px] py-[10px] text-[14px] font-bold text-slate-600 transition-colors outline-none hover:bg-slate-100 dark:border-white/20 dark:bg-black/20 dark:text-white dark:hover:bg-black/40'
         >
           {sortOptions.map((opt) => (
@@ -90,9 +95,12 @@ export const SearchBar: React.FC<Props> = ({
         <button
           type='button'
           onClick={() =>
-            onSortChange({
-              ...sort,
-              direction: sort.direction === 'asc' ? 'desc' : 'asc',
+            dispatch({
+              _tag: 'ChangeSort',
+              sort: {
+                ...sort,
+                direction: sort.direction === 'asc' ? 'desc' : 'asc',
+              },
             })
           }
           className='bg-theme-primary/10 text-theme-primary hover:bg-theme-primary/20 flex items-center gap-[8px] rounded-[10px] px-[16px] py-[10px] text-[14px] font-bold transition-colors'
@@ -134,3 +142,7 @@ export const SearchBar: React.FC<Props> = ({
     </div>
   )
 }
+
+export const SearchBarMemo = memoStrategy(SearchBarComponent, (prev, next) => {
+  return PropsEq.equals(prev, next)
+})
