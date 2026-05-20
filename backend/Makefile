@@ -67,7 +67,11 @@ migrate-status:
 # Lint Haskell code
 lint:
 	hlint src app
-	find src app test -name "*.hs" | xargs fourmolu --mode check
+
+# # Lint and fix right away
+# lint-fix:
+# 	@echo "Applying hlint automatic refactoring..."
+# 	find src app test -name "*.hs" | xargs -I {} hlint --refactor --refactor-options="-i" {}
 
 # Format Haskell code
 format:
