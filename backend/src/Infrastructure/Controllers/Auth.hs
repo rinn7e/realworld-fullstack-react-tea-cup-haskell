@@ -17,7 +17,7 @@ import Servant.Auth.Server qualified as S
 import Domain.User qualified as D
 import Infrastructure.Api.Auth.Admin.Type
 import Infrastructure.Api.Auth.Web.Type
-import Infrastructure.Api.User.DTO
+import Infrastructure.Api.User.Web.DTO
   ( LoginUserRequest (..)
   , NewUserRequest (..)
   , User (..)

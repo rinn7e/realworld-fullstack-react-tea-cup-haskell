@@ -21,13 +21,15 @@ import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
 import Infrastructure.Api.User.Admin.Type
-import Infrastructure.Api.User.DTO
+import Infrastructure.Api.User.Admin.DTO
   ( AdminUserListResponse (..)
   , AdminUserResponse (..)
-  , Profile (..)
+  , UpdateUserRoleRequest (..)
+  )
+import Infrastructure.Api.User.Web.DTO
+  ( Profile (..)
   , ProfileResponse (..)
   , UpdateUserRequest (..)
-  , UpdateUserRoleRequest (..)
   , User (..)
   , UserResponse (..)
   )

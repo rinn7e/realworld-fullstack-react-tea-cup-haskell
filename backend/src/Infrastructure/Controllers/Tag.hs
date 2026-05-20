@@ -8,7 +8,7 @@ import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Infrastructure.Api.Tag.DTO (TagListResponse (..))
+import Infrastructure.Api.Tag.Web.DTO (TagListResponse (..))
 import Infrastructure.Api.Tag.Web.Type
 import Infrastructure.Common.Type.App (App, AppEnv (..))
 import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)

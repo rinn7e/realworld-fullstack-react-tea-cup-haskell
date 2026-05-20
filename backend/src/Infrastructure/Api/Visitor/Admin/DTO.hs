@@ -1,7 +1,6 @@
-module Infrastructure.Api.Visitor.DTO where
+module Infrastructure.Api.Visitor.Admin.DTO where
 
 import Data.Aeson (ToJSON (..))
-import Data.Aeson qualified as A
 import Data.OpenApi (ToSchema (..))
 import Data.Text (Text)
 import Data.Time (UTCTime)

@@ -23,18 +23,18 @@ import Servant.Auth.Server qualified as S
 import Domain.Log (LogEntry (..))
 import Domain.Visitor (Visitor (..))
 import Infrastructure.Api.Dashboard.Admin.Type
-import Infrastructure.Api.Dashboard.DTO
+import Infrastructure.Api.Dashboard.Admin.DTO
   ( DashboardStatsResponse (..)
   , VisitorStatResponse (..)
   )
-import Infrastructure.Api.Log.DTO
+import Infrastructure.Api.Log.Admin.DTO
   ( LogLevel (..)
   , LogListResponse (..)
   , LogResponse (..)
   , logLevelFromText
   , logLevelToText
   )
-import Infrastructure.Api.Visitor.DTO (VisitorListResponse (..), VisitorResponse (..))
+import Infrastructure.Api.Visitor.Admin.DTO (VisitorListResponse (..), VisitorResponse (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)

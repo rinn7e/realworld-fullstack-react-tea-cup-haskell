@@ -19,17 +19,19 @@ import Servant.Auth.Server qualified as S
 
 import Domain.Article (Article (..))
 import Infrastructure.Api.Article.Admin.Type
-import Infrastructure.Api.Article.DTO
+import Infrastructure.Api.Article.Admin.DTO
   ( AdminArticle (..)
   , AdminArticleListResponse (..)
-  , ArticleListResponse (..)
+  )
+import Infrastructure.Api.Article.Web.DTO
+  ( ArticleListResponse (..)
   , ArticleResponse (..)
   , NewArticleRequest (..)
   , UpdateArticleRequest (..)
   , toArticleResponse
   )
 import Infrastructure.Api.Article.Web.Type
-import Infrastructure.Api.User.DTO (AdminUserResponse (..))
+import Infrastructure.Api.User.Admin.DTO (AdminUserResponse (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.DB.Postgres.Query.ArticleType (ArticleGrouped)

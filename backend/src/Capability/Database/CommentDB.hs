@@ -4,7 +4,7 @@ import Data.Text (Text)
 import Database.Persist.Sql (Entity)
 import Effectful
 import Effectful.Dispatch.Dynamic
-import Infrastructure.Api.Comment.DTO (AdminCommentResponse)
+import Infrastructure.Api.Comment.Admin.DTO (AdminCommentResponse)
 import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
   ( ArticleId
   , Comment

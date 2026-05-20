@@ -15,16 +15,18 @@ import Servant.Auth.Server qualified as S
 
 import Domain.Article (Article (..))
 import Infrastructure.Api.Comment.Admin.Type
-import Infrastructure.Api.Comment.DTO
+import Infrastructure.Api.Comment.Admin.DTO
   ( AdminCommentListResponse (..)
   , AdminCommentResponse (..)
-  , Comment (..)
+  )
+import Infrastructure.Api.Comment.Web.DTO
+  ( Comment (..)
   , CommentListResponse (..)
   , CommentResponse (..)
   , NewCommentRequest (..)
   )
 import Infrastructure.Api.Comment.Web.Type
-import Infrastructure.Api.User.DTO (Profile (..))
+import Infrastructure.Api.User.Web.DTO (Profile (..))
 import Infrastructure.Common.Type.App (App)
 import Infrastructure.Common.Util.Guard (guardAdmin)
 import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)

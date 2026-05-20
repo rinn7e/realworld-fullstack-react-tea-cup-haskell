@@ -1,7 +1,6 @@
-module Infrastructure.Api.Dashboard.DTO where
+module Infrastructure.Api.Dashboard.Admin.DTO where
 
 import Data.Aeson (ToJSON (..))
-import Data.Aeson qualified as A
 import Data.OpenApi (ToSchema (..))
 import Data.Text (Text)
 import GHC.Generics (Generic)

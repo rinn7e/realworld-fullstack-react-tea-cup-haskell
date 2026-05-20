@@ -1,10 +1,8 @@
-module Infrastructure.Api.Comment.DTO
+module Infrastructure.Api.Comment.Web.DTO
   ( Comment (..)
   , CommentResponse (..)
   , CommentListResponse (..)
   , NewCommentRequest (..)
-  , AdminCommentResponse (..)
-  , AdminCommentListResponse (..)
   )
 where
 
@@ -27,7 +25,7 @@ import Data.Text (Text)
 import Data.Time (UTCTime)
 import GHC.Generics (Generic)
 
-import Infrastructure.Api.User.DTO (Profile (..))
+import Infrastructure.Api.User.Web.DTO (Profile (..))
 
 -------------------------------
 -- Comment
@@ -88,24 +86,3 @@ instance ToSchema NewCommentRequest where
           & type_ ?~ OpenApiObject
           & properties .~ InsOrd.fromList [("comment", Inline commentSchema)]
           & required .~ ["comment"]
-
--------------------------------
--- Admin Comment
--------------------------------
-
-data AdminCommentResponse = AdminCommentResponse
-  { id :: Int
-  , body :: Text
-  , createdAt :: UTCTime
-  , articleSlug :: Text
-  , authorUsername :: Text
-  }
-  deriving stock (Show, Generic)
-  deriving anyclass (ToJSON, ToSchema)
-
-data AdminCommentListResponse = AdminCommentListResponse
-  { comments :: [AdminCommentResponse]
-  , totalCount :: Int
-  }
-  deriving stock (Show, Generic)
-  deriving anyclass (ToJSON, ToSchema)

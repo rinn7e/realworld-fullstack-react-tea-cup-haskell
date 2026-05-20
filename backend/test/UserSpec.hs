@@ -11,7 +11,7 @@ import Servant.Auth.Server qualified as S
 import Test.Hspec
 
 import InMemoryDB
-import Infrastructure.Api.User.DTO
+import Infrastructure.Api.User.Web.DTO
   ( LoginUserRequest (..)
   , NewUserRequest (..)
   , Profile (..)

@@ -27,7 +27,7 @@ import Infrastructure.Api.User.Web.Type (UserRoute)
 import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
 
 import Infrastructure.Api.TagCombinator (Tag)
-import Infrastructure.Api.User.DTO (UserResponse)
+import Infrastructure.Api.User.Web.DTO (UserResponse)
 
 type AppApi auths = S.Auth auths UserId :> NamedRoutes AppRoute
 
