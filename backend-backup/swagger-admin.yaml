@@ -1,0 +1,688 @@
+components:
+  schemas:
+    AdminArticle:
+      properties:
+        author:
+          $ref: '#/components/schemas/AdminUserResponse'
+        body:
+          type: string
+        createdAt:
+          $ref: '#/components/schemas/UTCTime'
+        description:
+          type: string
+        favorited:
+          type: boolean
+        favoritesCount:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        id:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        slug:
+          type: string
+        tagList:
+          items:
+            type: string
+          type: array
+        title:
+          type: string
+        updatedAt:
+          $ref: '#/components/schemas/UTCTime'
+      required:
+      - id
+      - slug
+      - title
+      - description
+      - body
+      - tagList
+      - createdAt
+      - updatedAt
+      - favorited
+      - favoritesCount
+      - author
+      type: object
+    AdminArticleListResponse:
+      properties:
+        articles:
+          items:
+            $ref: '#/components/schemas/AdminArticle'
+          type: array
+        articlesCount:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      required:
+      - articles
+      - articlesCount
+      type: object
+    AdminCommentListResponse:
+      properties:
+        comments:
+          items:
+            $ref: '#/components/schemas/AdminCommentResponse'
+          type: array
+        totalCount:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      required:
+      - comments
+      - totalCount
+      type: object
+    AdminCommentResponse:
+      properties:
+        articleSlug:
+          type: string
+        authorUsername:
+          type: string
+        body:
+          type: string
+        createdAt:
+          $ref: '#/components/schemas/UTCTime'
+        id:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      required:
+      - id
+      - body
+      - createdAt
+      - articleSlug
+      - authorUsername
+      type: object
+    AdminUserListResponse:
+      properties:
+        totalCount:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        users:
+          items:
+            $ref: '#/components/schemas/AdminUserResponse'
+          type: array
+      required:
+      - users
+      - totalCount
+      type: object
+    AdminUserResponse:
+      properties:
+        bio:
+          type: string
+        email:
+          type: string
+        id:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        image:
+          type: string
+        role:
+          type: string
+        username:
+          type: string
+      required:
+      - id
+      - username
+      - email
+      - role
+      type: object
+    DashboardStatsResponse:
+      properties:
+        activeUsers24h:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        totalArticles:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        totalComments:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        totalUsers:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        totalVisitors:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      required:
+      - totalUsers
+      - totalArticles
+      - totalComments
+      - totalVisitors
+      - activeUsers24h
+      type: object
+    LogLevel:
+      enum:
+      - info
+      - warning
+      - error
+      - fatal
+      type: string
+    LogListResponse:
+      properties:
+        logs:
+          items:
+            $ref: '#/components/schemas/LogResponse'
+          type: array
+        totalCount:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      required:
+      - logs
+      - totalCount
+      type: object
+    LogResponse:
+      properties:
+        id:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        level:
+          $ref: '#/components/schemas/LogLevel'
+        message:
+          type: string
+        source:
+          type: string
+        timestamp:
+          $ref: '#/components/schemas/UTCTime'
+        userId:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      required:
+      - id
+      - level
+      - message
+      - source
+      - timestamp
+      type: object
+    LoginUserRequest:
+      properties:
+        user:
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+          required:
+          - email
+          - password
+          type: object
+      required:
+      - user
+      type: object
+    UTCTime:
+      example: 2016-07-22T00:00:00Z
+      format: yyyy-mm-ddThh:MM:ssZ
+      type: string
+    UpdateUserRoleRequest:
+      properties:
+        role:
+          type: string
+      required:
+      - role
+      type: object
+    User:
+      properties:
+        bio:
+          type: string
+        email:
+          type: string
+        image:
+          type: string
+        token:
+          type: string
+        username:
+          type: string
+      required:
+      - email
+      - token
+      - username
+      type: object
+    UserResponse:
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+      - user
+      type: object
+    VisitorListResponse:
+      properties:
+        totalCount:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        visitors:
+          items:
+            $ref: '#/components/schemas/VisitorResponse'
+          type: array
+      required:
+      - visitors
+      - totalCount
+      type: object
+    VisitorResponse:
+      properties:
+        id:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+        ip:
+          type: string
+        path:
+          type: string
+        timestamp:
+          $ref: '#/components/schemas/UTCTime'
+        userAgent:
+          type: string
+      required:
+      - id
+      - ip
+      - userAgent
+      - path
+      - timestamp
+      type: object
+    VisitorStatResponse:
+      properties:
+        name:
+          type: string
+        visitors:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      required:
+      - name
+      - visitors
+      type: object
+  securitySchemes:
+    jwt:
+      description: 'JWT Bearer token format: Token <JWT_TOKEN>'
+      in: header
+      name: Authorization
+      type: apiKey
+info:
+  description: Secure Sentinel administration moderation and activity metrics dashboard.
+  title: Conduit Admin API
+  version: 1.0.0
+openapi: 3.0.0
+paths:
+  /api/admin/articles:
+    get:
+      description: Retrieve all articles in the system for administrative review
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      - in: query
+        name: tag
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: author
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: search
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/AdminArticleListResponse'
+          description: ''
+        '400':
+          description: Invalid `search` or `author` or `tag` or `offset` or `limit`
+      summary: Get All Articles
+      tags:
+      - Admin Articles
+  /api/admin/articles/{slug}:
+    delete:
+      description: Administrative takedown of an offensive article
+      parameters:
+      - in: path
+        name: slug
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8: {}
+          description: ''
+        '404':
+          description: '`slug` not found'
+      summary: Delete Article
+      tags:
+      - Admin Articles
+  /api/admin/comments:
+    get:
+      description: Retrieve all comments in the system with optional author and article
+        filters
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      - in: query
+        name: author
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: articleSlug
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/AdminCommentListResponse'
+          description: ''
+        '400':
+          description: Invalid `articleSlug` or `author` or `offset` or `limit`
+      summary: Get All Comments
+      tags:
+      - Admin Comments
+  /api/admin/comments/{id}:
+    delete:
+      description: Administrative deletion of an offensive comment globally
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8: {}
+          description: ''
+        '404':
+          description: '`id` not found'
+      summary: Delete Comment
+      tags:
+      - Admin Comments
+  /api/admin/dashboard/stats:
+    get:
+      description: Get dashboard card and visitor metrics
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/DashboardStatsResponse'
+          description: ''
+      summary: Get Dashboard Stats
+      tags:
+      - Admin Dashboard
+  /api/admin/dashboard/visitor-stats:
+    get:
+      description: Get time-series visitor counts filtered by range (24h, week, month,
+        year)
+      parameters:
+      - in: query
+        name: filter
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8:
+              schema:
+                items:
+                  $ref: '#/components/schemas/VisitorStatResponse'
+                type: array
+          description: ''
+        '400':
+          description: Invalid `filter`
+      summary: Get Visitor Stats
+      tags:
+      - Admin Dashboard
+  /api/admin/login:
+    post:
+      description: Login with administrative credentials
+      requestBody:
+        content:
+          application/json;charset=utf-8:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+          description: ''
+        '400':
+          description: Invalid `body`
+      summary: Admin Login
+      tags:
+      - Admin Authentication
+  /api/admin/logs:
+    get:
+      description: Get paginated system audit and moderator logs using limit and offset
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      - in: query
+        name: level
+        required: false
+        schema:
+          enum:
+          - info
+          - warning
+          - error
+          - fatal
+          type: string
+      - in: query
+        name: source
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/LogListResponse'
+          description: ''
+        '400':
+          description: Invalid `source` or `level` or `offset` or `limit`
+      summary: Get Paginated Logs
+      tags:
+      - Admin Dashboard
+  /api/admin/user:
+    get:
+      description: Get currently logged-in administrator details
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+          description: ''
+      summary: Get Current Admin
+      tags:
+      - Admin Authentication
+  /api/admin/users:
+    get:
+      description: Retrieve all registered users with pagination and keyword filters
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      - in: query
+        name: username
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: email
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/AdminUserListResponse'
+          description: ''
+        '400':
+          description: Invalid `email` or `username` or `offset` or `limit`
+      summary: Get All Users
+      tags:
+      - Admin Users
+  /api/admin/users/{id}:
+    delete:
+      description: Permanently delete a user from the platform
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8: {}
+          description: ''
+        '404':
+          description: '`id` not found'
+      summary: Delete User
+      tags:
+      - Admin Users
+  /api/admin/users/{id}/role:
+    put:
+      description: Promote a user to Admin or demote to User
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      requestBody:
+        content:
+          application/json;charset=utf-8:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRoleRequest'
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/AdminUserResponse'
+          description: ''
+        '400':
+          description: Invalid `body`
+        '404':
+          description: '`id` not found'
+      summary: Update User Role
+      tags:
+      - Admin Users
+  /api/admin/visitors:
+    get:
+      description: Get paginated visitor traffic records using limit and offset
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        schema:
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          type: integer
+      - in: query
+        name: ip
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: path
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/VisitorListResponse'
+          description: ''
+        '400':
+          description: Invalid `path` or `ip` or `offset` or `limit`
+      summary: Get Paginated Visitor Logs
+      tags:
+      - Admin Dashboard
+security:
+- jwt: []

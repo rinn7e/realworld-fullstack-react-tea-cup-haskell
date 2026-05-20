@@ -1,0 +1,7 @@
+export DB_CONN=${DB_CONN:="host=localhost dbname=realworld user=postgres password=postgres port=5432"}
+export JWT_SECRET=${JWT_SECRET:="your-secret-key-that-should-be-at-least-32-chars-long-!!"}
+export SHOULD_RUN_MIGRATION_AUTOMATICALLY=${SHOULD_RUN_MIGRATION_AUTOMATICALLY:="false"}
+export PORT=${PORT:="3000"}
+export GIT_COMMIT_HASH=${GIT_COMMIT_HASH:="unknown"}
+export SHOW_SQL_LOG=${SHOW_SQL_LOG:="true"}
+export ALLOW_CORS=${ALLOW_CORS:="true"}

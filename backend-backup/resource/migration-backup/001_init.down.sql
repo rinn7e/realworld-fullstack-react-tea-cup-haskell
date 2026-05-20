@@ -1,0 +1,9 @@
+-- migration/001_init.down.sql
+
+DROP TABLE IF EXISTS "favorite";
+DROP TABLE IF EXISTS "follow";
+DROP TABLE IF EXISTS "comment";
+DROP TABLE IF EXISTS "article_tag";
+DROP TABLE IF EXISTS "tag";
+DROP TABLE IF EXISTS "article";
+DROP TABLE IF EXISTS "user";
