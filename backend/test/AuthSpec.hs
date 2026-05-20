@@ -2,11 +2,11 @@
 
 module AuthSpec (spec) where
 
-import Common.Type.JWK (generateToken, makeSecretKey)
-import DB.Schema.Type (UserId)
 import Data.ByteString.Char8 qualified as BSC
 import Data.Text.Encoding qualified as TE
 import Database.Persist.Sql (toSqlKey)
+import Infrastructure.Common.Type.JWK (generateToken, makeSecretKey)
+import Infrastructure.Postgres.Schema (UserId)
 import Servant.Auth.Server
 import Test.Hspec
 

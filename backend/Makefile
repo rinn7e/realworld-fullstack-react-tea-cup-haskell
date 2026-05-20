@@ -6,12 +6,12 @@ build:
 
 # Generate Web OpenAPI 3.0 specification in YAML format
 swagger-web:
-	stack repl haskell-servant-realworld:lib --package yaml --ghc-options="-e \"import Api.OpenApi (openApiSpec)\" -e \"import Data.Yaml qualified as Y\" -e \"import Data.ByteString.Char8 qualified as BS\" -e \"BS.writeFile \\\"swagger-web.yaml\\\" (Y.encode openApiSpec)\""
+	stack repl haskell-servant-realworld:lib --package yaml --ghc-options="-e \"import Infrastructure.Api.OpenApi (openApiSpec)\" -e \"import Data.Yaml qualified as Y\" -e \"import Data.ByteString.Char8 qualified as BS\" -e \"BS.writeFile \\\"swagger-web.yaml\\\" (Y.encode openApiSpec)\""
 	@echo "Generated swagger-web.yaml successfully!"
 
 # Generate Admin OpenAPI 3.0 specification in YAML format
 swagger-admin:
-	stack repl haskell-servant-realworld:lib --package yaml --ghc-options="-e \"import Api.OpenApi (adminOpenApiSpec)\" -e \"import Data.Yaml qualified as Y\" -e \"import Data.ByteString.Char8 qualified as BS\" -e \"BS.writeFile \\\"swagger-admin.yaml\\\" (Y.encode adminOpenApiSpec)\""
+	stack repl haskell-servant-realworld:lib --package yaml --ghc-options="-e \"import Infrastructure.Api.OpenApi (adminOpenApiSpec)\" -e \"import Data.Yaml qualified as Y\" -e \"import Data.ByteString.Char8 qualified as BS\" -e \"BS.writeFile \\\"swagger-admin.yaml\\\" (Y.encode adminOpenApiSpec)\""
 	@echo "Generated swagger-admin.yaml successfully!"
 
 
@@ -29,15 +29,15 @@ server-watch:
 	stack build --fast --file-watch --exec "haskell-servant-realworld-exe"
 
 # Reset database and start dev server
-resetdb:
-	./script/resetdb.sh
-
-# Reset database and start dev server
-resetdb-seed:
+server-fresh:
 	./script/resetdb.sh
 	$(MAKE) migrate-up
 	$(MAKE) seed
 	$(MAKE) server
+
+# Reset database and start dev server
+resetdb:
+	./script/resetdb.sh
 
 # Populate database with seed data
 seed:

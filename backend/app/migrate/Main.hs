@@ -1,18 +1,8 @@
 module Main where
 
-import Common.Type.Config (Config (..), loadConfig)
 import Control.Monad (forM_, when)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Logger (runStdoutLoggingT)
-import DB.Migration
-  ( generateMigration
-  , getAppliedMigrations
-  , getPendingMigrations
-  , runMigrationDownOne
-  , runMigrationUpOne
-  , runMigrationsUp
-  )
-import DB.Schema.Type (migrateAll)
 import Data.ByteString qualified as BS
 import Data.List (isSuffixOf, sort)
 import Data.Text qualified as T
@@ -27,6 +17,16 @@ import Database.Persist.Sql
   , runSqlPool
   , toPersistValue
   )
+import Infrastructure.Common.Type.Config (Config (..), loadConfig)
+import Infrastructure.Postgres.Migration
+  ( generateMigration
+  , getAppliedMigrations
+  , getPendingMigrations
+  , runMigrationDownOne
+  , runMigrationUpOne
+  , runMigrationsUp
+  )
+import Infrastructure.Postgres.Schema (migrateAll)
 import System.Directory (listDirectory)
 import System.Environment (getArgs)
 import System.Exit (exitFailure, exitSuccess)

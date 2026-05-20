@@ -1,6 +1,14 @@
 # Haskell Servant RealWorld Backend
 
-A RealWorld Conduit API implementation using Haskell, Servant, Postgres, Persistent, and Esqueleto.
+# Architecture
+
+This backend implements a **3-Layer Cake Clean Architecture** powered by the `effectful` library. This architecture guarantees a strict separation of concerns, high testability, and type safety:
+
+- **Layer 3: Core Domain (`src/Domain/`)**: Pure Haskell data records defining domain models (e.g. `User`, `Article`, `Comment`). They have zero dependencies on databases, web frameworks, or effect systems.
+- **Layer 2: Capability GADTs (`src/Capability/`)**: Dynamic GADT effect declarations using `effectful`. They serve as interfaces for database operations (e.g. `UserDB`, `ArticleDB`) and system services (e.g. `Crypto`, `Auth`, `Time`).
+- **Layer 1: Infrastructure & App Entry (`src/Infrastructure/`)**: Concrete handlers and entry points.
+  - **Interpreters (`src/Infrastructure/Postgres/`)**: Concrete handlers translating dynamic capability GADTs into database queries (Postgres/Persistent/Esqueleto) or system actions (Argon2, JWT, IO).
+  - **Controllers (`src/Infrastructure/Controllers/`)**: Servant REST routing controllers that orchestrate domain logic by composing and evaluating capability effect stacks.
 
 ## Features
 
@@ -43,11 +51,17 @@ A `Makefile` is provided in the `backend` directory for common tasks:
 
 - `make build`: Fast build.
 - `make watch`: Build and watch for changes.
-- `make run`: Build and run the server.
-- `make dev`: Build, watch, and auto-restart the server.
+- `make server`: Build and run the server.
+- `make server-watch`: Build, watch, and auto-restart the server.
+- `make server-fresh`: Reset database, apply migrations, seed data, and start the server.
+- `make resetdb`: Reset the database schema.
+- `make seed`: Populate the database with seed data.
+- `make swagger-web` / `make swagger-admin`: Generate OpenAPI specifications.
 - `make migrate-generate NAME=your_name`: Generate a new migration.
 - `make migrate-up`: Apply pending migrations.
-- `make migrate-down`: Roll back the last migration.
+- `make migrate-up-one`: Apply a single pending up migration.
+- `make migrate-down-one`: Roll back the last migration.
+- `make migrate-status`: Check migration status.
 - `make lint`: Lint the codebase with hlint and check formatting with Fourmolu.
 - `make format`: Format code with Fourmolu.
 - `make haddock`: Generate and open Haddock documentation locally.
@@ -130,13 +144,16 @@ This server follows the [RealWorld OpenAPI spec](https://github.com/gothinkster/
 - **Extensions**: We heavily use `OverloadedRecordDot`, `DuplicateRecordFields`, and `NoFieldSelectors` for improved ergonomics and safety.
 - **ORM**: Use Esqueleto for all complex queries to ensure type safety.
 - **Authentication**: JWT authentication should follow the `Token` prefix convention for spec compatibility.
+- **3-Layer Cake Clean Architecture**: Clean separation between pure domain logic (Layer 3), capability declarations (Layer 2), and infrastructure interpreters/controllers (Layer 1) using the `effectful` library.
 
 ## Project Structure
 
-- `src/DB.hs`: Persistent entities.
-- `src/DB/Query.hs`: Esqueleto queries.
-- `src/DB/Migration.hs`: Migration runner.
-- `src/Api.hs`: Servant API definition.
-- `src/Handler.hs`: Request handlers.
-- `src/Auth.hs`: JWT logic.
-- `src/Type.hs`: API request/response models.
+The project follows a strict 3-Layer Cake layout under `src/`:
+
+- `src/Domain/` (Layer 3: Core Domain): Pure database-free domain models (e.g. `User.hs`, `Article.hs`, `Comment.hs`).
+- `src/Capability/` (Layer 2: Capabilities): Abstract GADT dynamic effect declarations (e.g. `Crypto.hs`, `Auth.hs`, `Time.hs`) and dynamic DB action interfaces (e.g. `Database/ArticleDB.hs`).
+- `src/Infrastructure/` (Layer 1: Infrastructure):
+  - `Controllers/`: Servant REST web and admin controllers.
+  - `Api/`: Servant API endpoints/routes and JSON serialization DTOs.
+  - `Postgres/`: Database interpreters, Persistent schema definitions, migration runners, and raw Esqueleto queries under `Postgres/Query/`.
+  - `Common/`: Configuration parameters, system settings, JWK keys, authentication utilities, and the application monad (`Type/App.hs`).

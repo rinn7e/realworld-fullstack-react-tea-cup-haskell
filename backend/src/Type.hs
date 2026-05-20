@@ -14,20 +14,20 @@ import Servant qualified as S
 import Servant.Auth.Server qualified as S
 import Servant.Swagger.UI (SwaggerSchemaUI)
 
-import Api.Article.Admin.Type (AdminArticleRoute)
-import Api.Article.Web.Type (ArticleRoute)
-import Api.Auth.Admin.Type (AdminAuthRoute)
-import Api.Auth.Web.Type (AuthRoute)
-import Api.Comment.Admin.Type (AdminCommentRoute)
-import Api.Dashboard.Admin.Type (AdminDashboardRoute)
-import Api.Metadata.Web.Type (MetadataRoute)
-import Api.Tag.Web.Type (TagRoute)
-import Api.User.Admin.Type (AdminUserRoute)
-import Api.User.Web.Type (UserRoute)
-import DB.Schema.Type (UserId)
+import Infrastructure.Api.Article.Admin.Type (AdminArticleRoute)
+import Infrastructure.Api.Article.Web.Type (ArticleRoute)
+import Infrastructure.Api.Auth.Admin.Type (AdminAuthRoute)
+import Infrastructure.Api.Auth.Web.Type (AuthRoute)
+import Infrastructure.Api.Comment.Admin.Type (AdminCommentRoute)
+import Infrastructure.Api.Dashboard.Admin.Type (AdminDashboardRoute)
+import Infrastructure.Api.Metadata.Web.Type (MetadataRoute)
+import Infrastructure.Api.Tag.Web.Type (TagRoute)
+import Infrastructure.Api.User.Admin.Type (AdminUserRoute)
+import Infrastructure.Api.User.Web.Type (UserRoute)
+import Infrastructure.Postgres.Schema (UserId)
 
-import Api.TagCombinator (Tag)
-import Entity.User.Api (UserResponse)
+import Infrastructure.Api.TagCombinator (Tag)
+import Infrastructure.Api.User.DTO (UserResponse)
 
 type AppApi auths = S.Auth auths UserId :> NamedRoutes AppRoute
 

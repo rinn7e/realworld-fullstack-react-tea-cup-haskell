@@ -1,0 +1,34 @@
+module Capability.Database.VisitorDB where
+
+import Data.Text (Text)
+import Data.Time (UTCTime)
+import Domain.Visitor (Visitor)
+import Effectful
+import Effectful.Dispatch.Dynamic
+
+data VisitorDB :: Effect where
+  InsertVisitor :: Text -> Text -> Text -> UTCTime -> VisitorDB m Visitor
+  ListVisitors
+    :: Maybe Int -> Maybe Int -> Maybe Text -> Maybe Text -> VisitorDB m ([Visitor], Int)
+  GetVisitorsSince :: UTCTime -> VisitorDB m [Visitor]
+  CountAllVisitors :: VisitorDB m Int
+
+type instance DispatchOf VisitorDB = 'Dynamic
+
+insertVisitor :: (VisitorDB :> es) => Text -> Text -> Text -> UTCTime -> Eff es Visitor
+insertVisitor ip ua path t = send (InsertVisitor ip ua path t)
+
+listVisitors
+  :: (VisitorDB :> es)
+  => Maybe Int
+  -> Maybe Int
+  -> Maybe Text
+  -> Maybe Text
+  -> Eff es ([Visitor], Int)
+listVisitors mLimit mOffset mIp mPath = send (ListVisitors mLimit mOffset mIp mPath)
+
+getVisitorsSince :: (VisitorDB :> es) => UTCTime -> Eff es [Visitor]
+getVisitorsSince since = send (GetVisitorsSince since)
+
+countAllVisitors :: (VisitorDB :> es) => Eff es Int
+countAllVisitors = send CountAllVisitors
