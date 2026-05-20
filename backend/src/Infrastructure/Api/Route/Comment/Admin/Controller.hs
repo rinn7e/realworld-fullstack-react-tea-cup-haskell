@@ -2,7 +2,6 @@ module Infrastructure.Api.Route.Comment.Admin.Controller
   ( adminCommentRoute
   ) where
 
-import Data.Text (Text)
 import Database.Persist.Sql (fromSqlKey)
 import Effectful
 import Effectful.Error.Static (Error, throwError)

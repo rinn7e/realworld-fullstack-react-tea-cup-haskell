@@ -1,6 +1,5 @@
 module Infrastructure.Api.Route.Comment.Admin.Type where
 
-import Data.Text (Text)
 import GHC.Generics (Generic)
 import Servant
   ( Capture

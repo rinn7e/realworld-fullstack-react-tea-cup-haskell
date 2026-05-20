@@ -12,22 +12,11 @@ module Infrastructure.Api.DTO.Article
   )
 where
 
-import Control.Lens ((&), (.~), (?~))
-import Data.Aeson (FromJSON (..), ToJSON (..), (.:), (.:?), (.=))
+import Data.Aeson (FromJSON (..), ToJSON (..))
 import Data.Aeson qualified as A
-import Data.HashMap.Strict.InsOrd qualified as InsOrd
 import Data.OpenApi
-  ( NamedSchema (..)
-  , OpenApiType (..)
-  , Referenced (..)
-  , ToSchema (..)
-  , declareSchemaRef
-  , properties
-  , required
-  , type_
+  ( ToSchema (..)
   )
-import Data.Proxy (Proxy (..))
-import Data.Text (Text)
 import Data.Time (UTCTime)
 import GHC.Generics (Generic)
 
