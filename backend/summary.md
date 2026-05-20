@@ -34,6 +34,13 @@ All old DTO files in `src/Infrastructure/Api/` were permanently deleted.
 - **DB Capabilities & Interpreters**: Updated `src/Capability/Database/CommentDB.hs` and `src/Infrastructure/Interpreter/DB/Postgres/CommentDB.hs` to load the relocated comments DTOs.
 - **Unit Tests**: Updated `test/UserSpec.hs` to import handlers and DTO schemas from their new locations.
 
+### 4. Stub Capabilities Migration & Refactoring
+We relocated and refactored the in-memory test utilities from `test/InMemoryDB.hs` to the `Infrastructure.Interpreter.Stub` namespace to align with the production interpreter patterns:
+- **Core Stubs**: `Auth.hs`, `Crypto.hs`, and `Time.hs` were created under `Stub/`.
+- **DB Stubs**: Entity-specific database stubs (e.g., `UserDB.hs`, `ArticleDB.hs`) were created under `Stub/DB/`.
+- **Composition**: `Stub.hs` provides the `runAppInMemory` helper, and `Stub/Util.hs` contains dummy environment settings.
+- **Cleanup**: `test/InMemoryDB.hs` was deleted, and `test/UserSpec.hs` was updated to use the new stub modules.
+
 ---
 
 ## Verification and Testing

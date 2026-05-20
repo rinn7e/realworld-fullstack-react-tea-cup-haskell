@@ -10,7 +10,8 @@ import Database.Persist.Sql (toSqlKey)
 import Servant.Auth.Server qualified as S
 import Test.Hspec
 
-import InMemoryDB
+import Infrastructure.Interpreter.Stub
+import Infrastructure.Interpreter.Stub.DB.UserDB (MockDB (..), emptyMockDB)
 import Infrastructure.Entity.User.DTO
   ( LoginUserRequest (..)
   , NewUserRequest (..)
