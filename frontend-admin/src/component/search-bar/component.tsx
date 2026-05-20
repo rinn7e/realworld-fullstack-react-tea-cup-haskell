@@ -1,15 +1,19 @@
 import * as Eq from 'fp-ts/lib/Eq'
 
-import { memoStrategy } from '@/common/util'
-
-import { type Model, type Msg, type Props } from './type'
+import { type Props } from './type'
 
 const SearchBarComponent = <sortType,>(props: Props<sortType>) => {
   return view(props)
 }
 
 const view = <sortType,>(props: Props<sortType>) => {
-  const { model, sortOptions, sortToString, placeholder = 'Search...', dispatch } = props
+  const {
+    model,
+    sortOptions,
+    sortToString,
+    placeholder = 'Search...',
+    dispatch,
+  } = props
   const { searchText, sort, direction } = model
 
   return (
@@ -89,7 +93,10 @@ const view = <sortType,>(props: Props<sortType>) => {
           className='cursor-pointer rounded-[10px] border border-slate-100 bg-slate-50 px-[16px] py-[10px] text-[14px] font-bold text-slate-600 transition-colors outline-none hover:bg-slate-100 dark:border-white/20 dark:bg-black/20 dark:text-white dark:hover:bg-black/40'
         >
           {sortOptions.map((opt) => (
-            <option key={sortToString(opt.value)} value={sortToString(opt.value)}>
+            <option
+              key={sortToString(opt.value)}
+              value={sortToString(opt.value)}
+            >
               {opt.label}
             </option>
           ))}

@@ -2,10 +2,9 @@ import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import React from 'react'
 
 import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'
-import { ArticleEq } from '@/common/api/type/article'
-import { type ArticleSortAttr } from '@/common/api/type/article'
+import { ArticleEq, type ArticleSortAttr } from '@/common/api/type/article'
 import { memoStrategy } from '@/common/util'
-import * as SearchBar from '@/component/search-bar'
+import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
 import { mkPaginationConfig } from './helper'
@@ -42,7 +41,6 @@ export const ArticlesPageComponent: React.FC<Props> = ({
           placeholder='Search articles by title, slug, or content...'
         />
       </div>
-
 
       <div className='flex flex-col gap-[20px]'>
         <PaginationMemo

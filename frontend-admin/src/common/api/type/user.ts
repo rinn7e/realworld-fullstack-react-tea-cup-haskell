@@ -4,6 +4,8 @@ import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
 import * as t from 'io-ts'
 
+export type UserSortAttr = 'id' | 'username' | 'email'
+
 export type User = {
   id: number
   username: string

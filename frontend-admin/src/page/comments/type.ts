@@ -11,8 +11,11 @@ import {
   type HttpError,
   getHttpErrorEq,
 } from '@/common/api/type'
-import { type Comment, CommentEq } from '@/common/api/type/comment'
-import { type CommentSortAttr } from '@/common/api/type/comment'
+import {
+  type Comment,
+  CommentEq,
+  type CommentSortAttr,
+} from '@/common/api/type/comment'
 import * as SearchBar from '@/component/search-bar'
 import { type Shared } from '@/type'
 
@@ -33,7 +36,10 @@ export type CommentItemMsg = {
 export type Msg =
   | { readonly _tag: 'NoOp' }
   | { readonly _tag: 'ClearSelected' }
-  | { readonly _tag: 'SearchBarMsg'; readonly subMsg: SearchBar.Msg<CommentSortAttr> }
+  | {
+      readonly _tag: 'SearchBarMsg'
+      readonly subMsg: SearchBar.Msg<CommentSortAttr>
+    }
   | {
       readonly _tag: 'PaginationMsg'
       readonly subMsg: Pagination.Msg<

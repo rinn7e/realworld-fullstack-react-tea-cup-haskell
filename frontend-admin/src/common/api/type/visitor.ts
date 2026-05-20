@@ -3,6 +3,8 @@ import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
 import * as t from 'io-ts'
 
+export type VisitorSortAttr = 'id' | 'ip' | 'path' | 'timestamp'
+
 export type Visitor = {
   id: number
   ip: string

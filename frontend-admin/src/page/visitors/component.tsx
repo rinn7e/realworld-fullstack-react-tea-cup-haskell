@@ -1,6 +1,6 @@
 import * as O from 'fp-ts/lib/Option'
-import React from 'react'
 
+import { type VisitorSortAttr } from '@/common/api/type/visitor'
 import { memoStrategy } from '@/common/util'
 import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
@@ -8,9 +8,10 @@ import { SearchBarMemo } from '@/component/search-bar/component'
 import { VisitorDetailOverlay } from './sub-component/visitor-detail-overlay'
 import { type Props, PropsEq } from './type'
 
-const sortOptions: SearchBar.SearchOption[] = [
-  { label: 'Last Visit', value: 'lastVisitAt' },
-  { label: 'Visit Count', value: 'visitCount' },
+const sortOptions: SearchBar.SearchOption<VisitorSortAttr>[] = [
+  { label: 'Timestamp', value: 'timestamp' },
+  { label: 'Path', value: 'path' },
+  { label: 'IP', value: 'ip' },
   { label: 'ID', value: 'id' },
 ]
 
@@ -21,10 +22,11 @@ export const VisitorsPageComponent: React.FC<Props> = ({ model, dispatch }) => {
         <h2 className='text-theme-secondary text-[28px] font-bold dark:text-white'>
           Visitors
         </h2>
-        <SearchBarMemo
+        <SearchBarMemo<VisitorSortAttr>
           model={model.searchBar}
           sortOptions={sortOptions}
-          dispatch={(subMsg: SearchBar.Msg) =>
+          sortToString={(s) => s}
+          dispatch={(subMsg: SearchBar.Msg<VisitorSortAttr>) =>
             dispatch({ _tag: 'SearchBarMsg', subMsg })
           }
           placeholder='Search visitors by IP, fingerprint, or User Agent...'

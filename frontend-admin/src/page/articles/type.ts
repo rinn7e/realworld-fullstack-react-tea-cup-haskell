@@ -11,8 +11,11 @@ import {
   type HttpError,
   getHttpErrorEq,
 } from '@/common/api/type'
-import { type Article, ArticleEq } from '@/common/api/type/article'
-import { type ArticleSortAttr } from '@/common/api/type/article'
+import {
+  type Article,
+  ArticleEq,
+  type ArticleSortAttr,
+} from '@/common/api/type/article'
 import * as SearchBar from '@/component/search-bar'
 import type { Shared } from '@/type'
 
@@ -33,7 +36,10 @@ export type ArticleItemMsg = {
 export type Msg =
   | { readonly _tag: 'NoOp' }
   | { readonly _tag: 'ClearSelected' }
-  | { readonly _tag: 'SearchBarMsg'; readonly subMsg: SearchBar.Msg<ArticleSortAttr> }
+  | {
+      readonly _tag: 'SearchBarMsg'
+      readonly subMsg: SearchBar.Msg<ArticleSortAttr>
+    }
   | {
       readonly _tag: 'PaginationMsg'
       readonly subMsg: Pagination.Msg<

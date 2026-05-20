@@ -23,7 +23,9 @@ export const mkPaginationConfig = (
     const searchParams = {
       limit,
       offset,
-      ...(model.searchBar.searchText.trim() && { search: model.searchBar.searchText.trim() }),
+      ...(model.searchBar.searchText.trim() && {
+        search: model.searchBar.searchText.trim(),
+      }),
       sort: model.searchBar.sort,
       direction: model.searchBar.direction,
     }

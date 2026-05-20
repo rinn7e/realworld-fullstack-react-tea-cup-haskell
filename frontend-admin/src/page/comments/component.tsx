@@ -4,7 +4,7 @@ import React from 'react'
 import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'
 import { CommentEq, type CommentSortAttr } from '@/common/api/type/comment'
 import { memoStrategy } from '@/common/util'
-import * as SearchBar from '@/component/search-bar'
+import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
 import { mkPaginationConfig } from './helper'
@@ -40,7 +40,6 @@ export const CommentsPageComponent: React.FC<Props> = ({
           placeholder='Search comments by author or message content...'
         />
       </div>
-
 
       <PaginationMemo
         model={model.pagination}

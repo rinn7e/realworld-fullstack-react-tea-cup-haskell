@@ -5,9 +5,9 @@ import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Cmd } from 'tea-cup-fp'
 
+import { type ArticleSortAttr } from '@/common/api/type/article'
 import * as SearchBar from '@/component/search-bar'
 import type { Shared } from '@/type'
-import { type ArticleSortAttr } from '@/common/api/type/article'
 
 import { mkPaginationConfig } from './helper'
 import { type Model, type Msg } from './type'
@@ -78,7 +78,11 @@ const searchBarMsgHandler = (
       searchBarCmd.map((m): Msg => ({ _tag: 'SearchBarMsg', subMsg: m })),
     ],
     updateAndCmd((m) => {
-      if (subMsg._tag === 'Submit' || subMsg._tag === 'ChangeSort') {
+      if (
+        subMsg._tag === 'Submit' ||
+        subMsg._tag === 'ChangeSort' ||
+        subMsg._tag === 'ChangeDirection'
+      ) {
         const paginationConfig = mkPaginationConfig(shared, m)
         const [pagination, paginationCmd] = Pagination.init(paginationConfig, 1)
         return [

@@ -1,6 +1,7 @@
 import * as O from 'fp-ts/lib/Option'
 import React from 'react'
 
+import { type UserSortAttr } from '@/common/api/type/user'
 import { memoStrategy } from '@/common/util'
 import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
@@ -9,7 +10,7 @@ import { UserImage } from '@/component/user-image'
 import { UserDetailOverlay } from './sub-component/user-detail-overlay'
 import { type Props, PropsEq } from './type'
 
-const sortOptions: SearchBar.SearchOption<string>[] = [
+const sortOptions: SearchBar.SearchOption<UserSortAttr>[] = [
   { label: 'Username', value: 'username' },
   { label: 'Email', value: 'email' },
   { label: 'ID', value: 'id' },
@@ -22,11 +23,11 @@ export const UsersPageComponent: React.FC<Props> = ({ model, dispatch }) => {
         <h2 className='text-theme-secondary text-[28px] font-bold dark:text-white'>
           Users
         </h2>
-        <SearchBarMemo<string>
+        <SearchBarMemo<UserSortAttr>
           model={model.searchBar}
           sortOptions={sortOptions}
           sortToString={(s) => s}
-          dispatch={(subMsg: SearchBar.Msg<string>) =>
+          dispatch={(subMsg: SearchBar.Msg<UserSortAttr>) =>
             dispatch({ _tag: 'SearchBarMsg', subMsg })
           }
           placeholder='Search users by username, email, or bio...'
