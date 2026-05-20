@@ -1,5 +1,8 @@
 module Infrastructure.Api.Route.Comment.Web.Controller
   ( commentRoute
+  , getCommentListHandler
+  , createCommentHandler
+  , deleteCommentHandler
   ) where
 
 import Data.Text (Text)

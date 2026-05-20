@@ -1,5 +1,9 @@
 module Infrastructure.Api.Route.Dashboard.Admin.Controller
   ( adminDashboardRoute
+  , getDashboardStatsHandler
+  , getVisitorStatsHandler
+  , getLogsHandler
+  , getVisitorsHandler
   ) where
 
 import Data.Map.Strict qualified as Map

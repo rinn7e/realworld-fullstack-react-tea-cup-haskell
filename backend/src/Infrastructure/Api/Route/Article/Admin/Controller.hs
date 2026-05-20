@@ -1,5 +1,7 @@
 module Infrastructure.Api.Route.Article.Admin.Controller
   ( adminArticleRoute
+  , getArticlesHandler
+  , deleteAdminArticleHandler
   ) where
 
 import Data.Text (Text)

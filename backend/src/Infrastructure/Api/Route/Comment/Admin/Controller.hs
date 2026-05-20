@@ -1,5 +1,7 @@
 module Infrastructure.Api.Route.Comment.Admin.Controller
   ( adminCommentRoute
+  , getCommentsHandler
+  , deleteAdminCommentHandler
   ) where
 
 import Database.Persist.Sql (fromSqlKey)

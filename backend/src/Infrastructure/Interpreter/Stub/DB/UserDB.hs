@@ -5,7 +5,6 @@ module Infrastructure.Interpreter.Stub.DB.UserDB
   ) where
 
 import Data.List qualified as L
-import Data.Map.Strict (Map)
 import Data.Map.Strict qualified as Map
 import Effectful
 import Effectful.Dispatch.Dynamic
@@ -13,21 +12,7 @@ import UnliftIO.IORef
 
 import Capability.Database.UserDB
 import Domain.Type (User (..), UserId (..), UserRole (..))
-
-data MockDB = MockDB
-  { nextUserId :: Int
-  , users :: Map UserId User
-  , follows :: [(UserId, UserId)] -- (followerId, followedId)
-  }
-  deriving (Show)
-
-emptyMockDB :: MockDB
-emptyMockDB =
-  MockDB
-    { nextUserId = 1
-    , users = Map.empty
-    , follows = []
-    }
+import Infrastructure.Interpreter.Stub.DB.Types (MockDB (..), emptyMockDB)
 
 runUserDBStub :: (IOE :> es) => IORef MockDB -> Eff (UserDB : es) a -> Eff es a
 runUserDBStub ref = interpret $ \_ -> \case

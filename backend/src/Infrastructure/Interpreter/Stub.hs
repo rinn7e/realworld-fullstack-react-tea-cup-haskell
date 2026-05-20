@@ -1,5 +1,6 @@
 module Infrastructure.Interpreter.Stub
   ( runAppInMemory
+  , runAppInMemoryEither
   ) where
 
 import Data.Function ((&))
@@ -25,23 +26,26 @@ import Infrastructure.Interpreter.Stub.Util (dummyAppEnv, dummyJWK, dummyPool)
 
 runAppInMemory :: IORef MockDB -> UTCTime -> App a -> IO a
 runAppInMemory dbRef fixedTime action = do
-  res <-
-    action
-      & runCommentDBStub
-      & runArticleDBStub
-      & runLoggerDBStub
-      & runMetadataDBStub
-      & runUserDBStub dbRef
-      & runVisitorDBStub
-      & runTagDBStub
-      & runTimeStub fixedTime
-      & runAuthStub
-      & runCryptoStub
-      & runReader dummyAppEnv
-      & runReader dummyPool
-      & runReader dummyJWK
-      & runErrorNoCallStack @S.ServerError
-      & runEff
+  res <- runAppInMemoryEither dbRef fixedTime action
   case res of
     Left err -> error $ "App failed in test: " ++ show err
     Right a -> return a
+
+runAppInMemoryEither :: IORef MockDB -> UTCTime -> App a -> IO (Either S.ServerError a)
+runAppInMemoryEither dbRef fixedTime action = do
+  action
+    & runCommentDBStub dbRef
+    & runArticleDBStub dbRef
+    & runLoggerDBStub dbRef
+    & runMetadataDBStub dbRef
+    & runUserDBStub dbRef
+    & runVisitorDBStub dbRef
+    & runTagDBStub dbRef
+    & runTimeStub fixedTime
+    & runAuthStub
+    & runCryptoStub
+    & runReader dummyAppEnv
+    & runReader dummyPool
+    & runReader dummyJWK
+    & runErrorNoCallStack @S.ServerError
+    & runEff

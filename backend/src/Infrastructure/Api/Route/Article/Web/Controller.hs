@@ -1,5 +1,13 @@
 module Infrastructure.Api.Route.Article.Web.Controller
   ( webArticleRoute
+  , getArticleFeedHandler
+  , getArticleListHandler
+  , createArticleHandler
+  , getArticleOneHandler
+  , updateArticleHandler
+  , deleteArticleHandler
+  , favoriteArticleHandler
+  , unfavoriteArticleHandler
   ) where
 
 import Data.Maybe (fromMaybe)
