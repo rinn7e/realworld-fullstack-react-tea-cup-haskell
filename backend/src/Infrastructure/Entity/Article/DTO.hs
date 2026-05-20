@@ -1,10 +1,12 @@
-module Infrastructure.Api.Article.Web.DTO
+module Infrastructure.Entity.Article.DTO
   ( Article (..)
   , ArticleResponse (..)
   , ArticleListResponse (..)
   , NewArticleRequest (..)
   , UpdateArticleRequest (..)
   , toArticleResponse
+  , AdminArticle (..)
+  , AdminArticleListResponse (..)
   )
 where
 
@@ -32,7 +34,7 @@ import Data.Time (UTCTime)
 import Database.Persist.Sql (Entity (..))
 import GHC.Generics (Generic)
 
-import Infrastructure.Api.User.Web.DTO (Profile (..))
+import Infrastructure.Entity.User.DTO (AdminUserResponse (..), Profile (..))
 import Infrastructure.Interpreter.DB.Postgres.Query.ArticleType (ArticleGrouped)
 import Infrastructure.Interpreter.DB.Postgres.Schema.Schema qualified as DB
 
@@ -166,9 +168,34 @@ instance ToSchema UpdateArticleRequest where
           & required .~ ["article"]
 
 -------------------------------
+-- Admin Article
+-------------------------------
+data AdminArticle = AdminArticle
+  { id :: Int
+  , slug :: Text
+  , title :: Text
+  , description :: Text
+  , body :: Text
+  , tagList :: [Text]
+  , createdAt :: UTCTime
+  , updatedAt :: UTCTime
+  , favorited :: Bool
+  , favoritesCount :: Int
+  , author :: AdminUserResponse
+  }
+  deriving stock (Show, Generic)
+  deriving anyclass (ToJSON, ToSchema)
+
+data AdminArticleListResponse = AdminArticleListResponse
+  { articles :: [AdminArticle]
+  , articlesCount :: Int
+  }
+  deriving stock (Show, Generic)
+  deriving anyclass (ToJSON, ToSchema)
+
+-------------------------------
 -- Helpers
 -------------------------------
-
 toArticleResponse :: ArticleGrouped -> Article
 toArticleResponse
   ( First (Entity _ (art :: DB.Article))

@@ -11,7 +11,7 @@ import Servant.Auth.Server qualified as S
 import Test.Hspec
 
 import InMemoryDB
-import Infrastructure.Api.User.Web.DTO
+import Infrastructure.Entity.User.DTO
   ( LoginUserRequest (..)
   , NewUserRequest (..)
   , Profile (..)
@@ -19,8 +19,8 @@ import Infrastructure.Api.User.Web.DTO
   , User (..)
   , UserResponse (..)
   )
-import Infrastructure.Controllers.Auth (loginUserHandler, registerUserHandler)
-import Infrastructure.Controllers.User (followUserHandler)
+import Infrastructure.Api.Auth.Web.Controller (loginUserHandler, registerUserHandler)
+import Infrastructure.Api.User.Web.Controller (followUserHandler)
 
 spec :: Spec
 spec = do

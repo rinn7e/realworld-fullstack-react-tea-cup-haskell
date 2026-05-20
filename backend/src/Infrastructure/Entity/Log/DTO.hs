@@ -1,4 +1,4 @@
-module Infrastructure.Api.Log.Admin.DTO
+module Infrastructure.Entity.Log.DTO
   ( LogLevel (..)
   , LogResponse (..)
   , LogListResponse (..)

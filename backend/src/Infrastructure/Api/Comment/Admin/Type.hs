@@ -15,7 +15,7 @@ import Servant
   )
 import Servant qualified as S
 
-import Infrastructure.Api.Comment.Admin.DTO (AdminCommentListResponse (..))
+import Infrastructure.Entity.Comment.DTO (AdminCommentListResponse (..))
 import Infrastructure.Api.TagCombinator (Tag)
 
 data AdminCommentRoute mode = AdminCommentRoute

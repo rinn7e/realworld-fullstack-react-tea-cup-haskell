@@ -16,7 +16,7 @@ import Servant
   )
 import Servant qualified as S
 
-import Infrastructure.Api.Comment.Web.DTO
+import Infrastructure.Entity.Comment.DTO
   ( CommentListResponse
   , CommentResponse
   , NewCommentRequest

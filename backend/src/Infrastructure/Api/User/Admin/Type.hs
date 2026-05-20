@@ -18,7 +18,7 @@ import Servant
 import Servant qualified as S
 
 import Infrastructure.Api.TagCombinator (Tag)
-import Infrastructure.Api.User.Admin.DTO
+import Infrastructure.Entity.User.DTO
   ( AdminUserListResponse (..)
   , AdminUserResponse (..)
   , UpdateUserRoleRequest (..)

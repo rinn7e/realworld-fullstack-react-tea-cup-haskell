@@ -1,4 +1,4 @@
-module Infrastructure.Controllers.Metadata
+module Infrastructure.Api.Metadata.Web.Controller
   ( webMetadataRoute
   ) where
 

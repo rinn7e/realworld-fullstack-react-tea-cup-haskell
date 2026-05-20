@@ -19,7 +19,7 @@ import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
 
 import Capability.Database.CommentDB
-import Infrastructure.Api.Comment.Admin.DTO (AdminCommentResponse (..))
+import Infrastructure.Entity.Comment.DTO (AdminCommentResponse (..))
 import Infrastructure.Interpreter.DB.Postgres.Query.Comment qualified as Q
 import Infrastructure.Interpreter.DB.Postgres.Schema.Schema
   ( ArticleId

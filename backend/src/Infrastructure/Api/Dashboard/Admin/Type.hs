@@ -12,10 +12,10 @@ import Servant
   , (:>)
   )
 
-import Infrastructure.Api.Dashboard.Admin.DTO (DashboardStatsResponse, VisitorStatResponse)
-import Infrastructure.Api.Log.Admin.DTO (LogLevel, LogListResponse)
+import Infrastructure.Entity.Dashboard.DTO (DashboardStatsResponse, VisitorStatResponse)
+import Infrastructure.Entity.Log.DTO (LogLevel, LogListResponse)
 import Infrastructure.Api.TagCombinator (Tag)
-import Infrastructure.Api.Visitor.Admin.DTO (VisitorListResponse)
+import Infrastructure.Entity.Visitor.DTO (VisitorListResponse)
 
 data AdminDashboardRoute mode = AdminDashboardRoute
   { getDashboardStats

@@ -1,32 +1,21 @@
-module Infrastructure.Controllers.User
+module Infrastructure.Api.User.Web.Controller
   ( webUserRoute
-  , adminUserRoute
   , getCurrentUserHandler
   , updateCurrentUserHandler
   , getUserByNameHandler
   , followUserHandler
   , unfollowUserHandler
-  , getUsersHandler
-  , updateUserRoleHandler
-  , deleteUserHandler
   ) where
 
 import Data.Text (Text)
 import Database.Persist.Sql (fromSqlKey)
 import Effectful
 import Effectful.Error.Static (throwError)
-import Effectful.Reader.Static (ask)
 import Servant (NamedRoutes)
 import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
-import Infrastructure.Api.User.Admin.Type
-import Infrastructure.Api.User.Admin.DTO
-  ( AdminUserListResponse (..)
-  , AdminUserResponse (..)
-  , UpdateUserRoleRequest (..)
-  )
-import Infrastructure.Api.User.Web.DTO
+import Infrastructure.Entity.User.DTO
   ( Profile (..)
   , ProfileResponse (..)
   , UpdateUserRequest (..)
@@ -34,15 +23,12 @@ import Infrastructure.Api.User.Web.DTO
   , UserResponse (..)
   )
 import Infrastructure.Api.User.Web.Type
-import Infrastructure.Common.Type.App (App, AppEnv (..))
-import Infrastructure.Common.Util.Guard (guardAdmin)
+import Infrastructure.Common.Type.App (App)
 import Infrastructure.Interpreter.DB.Postgres.Schema.Schema (UserId)
 
 import Capability.Auth
 import Capability.Crypto
-import Capability.Database.LoggerDB
 import Capability.Database.UserDB
-import Capability.Time
 import Domain.User qualified as D
 
 webUserRoute :: S.AuthResult UserId -> S.ServerT (NamedRoutes UserRoute) App
@@ -53,14 +39,6 @@ webUserRoute auth =
     , getUserByName = getUserByNameHandler auth
     , followUser = followUserHandler auth
     , unfollowUser = unfollowUserHandler auth
-    }
-
-adminUserRoute :: S.AuthResult UserId -> S.ServerT (NamedRoutes AdminUserRoute) App
-adminUserRoute auth =
-  AdminUserRoute
-    { getUsers = getUsersHandler auth
-    , updateUserRole = updateUserRoleHandler auth
-    , deleteUser = deleteUserHandler auth
     }
 
 getCurrentUserHandler :: S.AuthResult UserId -> App UserResponse
@@ -133,58 +111,3 @@ unfollowUserHandler (S.Authenticated currentUid) username = do
       unfollowUser currentUidInt u.userId
       return $ ProfileResponse $ Profile u.username u.bio u.image False
 unfollowUserHandler _ _ = throwError S.err401
-
-toAdminUserResponse :: D.User -> AdminUserResponse
-toAdminUserResponse u =
-  AdminUserResponse
-    { id = u.userId
-    , username = u.username
-    , email = u.email
-    , bio = u.bio
-    , image = u.image
-    , role = u.role
-    }
-
-getUsersHandler
-  :: S.AuthResult UserId
-  -> Maybe Int
-  -> Maybe Int
-  -> Maybe Text
-  -> Maybe Text
-  -> App AdminUserListResponse
-getUsersHandler (S.Authenticated uid) mLimit mOffset mUsername mEmail = do
-  guardAdmin uid
-  (users, total) <- listUsers mLimit mOffset mUsername mEmail
-  let adminUsers = map toAdminUserResponse users
-  return $ AdminUserListResponse adminUsers total
-getUsersHandler _ _ _ _ _ = throwError S.err401
-
-updateUserRoleHandler
-  :: S.AuthResult UserId -> Int -> UpdateUserRoleRequest -> App AdminUserResponse
-updateUserRoleHandler (S.Authenticated uid) targetUidInt req = do
-  guardAdmin uid
-  mTarget <- lookupUserById targetUidInt
-  case mTarget of
-    Nothing -> throwError S.err404
-    Just target -> do
-      now <- getCurrentTime
-      let updatedUser = target{D.role = req.role}
-      _ <- updateUser targetUidInt updatedUser
-      let msg = "Updated user role for " <> target.username <> " to " <> req.role
-      _ <- insertLog "INFO" msg "AUTH" now (Just (fromIntegral (fromSqlKey uid)))
-      return $ toAdminUserResponse updatedUser
-updateUserRoleHandler _ _ _ = throwError S.err401
-
-deleteUserHandler :: S.AuthResult UserId -> Int -> App S.NoContent
-deleteUserHandler (S.Authenticated uid) targetUidInt = do
-  guardAdmin uid
-  mTarget <- lookupUserById targetUidInt
-  case mTarget of
-    Nothing -> throwError S.err404
-    Just target -> do
-      now <- getCurrentTime
-      deleteUser targetUidInt
-      let msg = "Deleted user account: " <> target.username
-      _ <- insertLog "INFO" msg "AUTH" now (Just (fromIntegral (fromSqlKey uid)))
-      return S.NoContent
-deleteUserHandler _ _ = throwError S.err401

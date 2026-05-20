@@ -17,7 +17,7 @@ import Servant
   )
 
 import Infrastructure.Api.TagCombinator (Tag)
-import Infrastructure.Api.User.Web.DTO (ProfileResponse, UpdateUserRequest, UserResponse)
+import Infrastructure.Entity.User.DTO (ProfileResponse, UpdateUserRequest, UserResponse)
 
 data UserRoute mode = UserRoute
   { getCurrentUser

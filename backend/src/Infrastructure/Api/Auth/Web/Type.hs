@@ -14,7 +14,7 @@ import Servant
   , (:>)
   )
 
-import Infrastructure.Api.User.Web.DTO (LoginUserRequest, NewUserRequest, UserResponse)
+import Infrastructure.Entity.User.DTO (LoginUserRequest, NewUserRequest, UserResponse)
 
 data AuthRoute mode = AuthRoute
   { loginUser

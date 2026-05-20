@@ -1,4 +1,4 @@
-module Infrastructure.Api.Tag.Web.DTO where
+module Infrastructure.Entity.Tag.DTO where
 
 import Data.Aeson (ToJSON (..), (.=))
 import Data.Aeson qualified as A

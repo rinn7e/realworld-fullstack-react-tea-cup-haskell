@@ -1,4 +1,4 @@
-module Infrastructure.Api.Dashboard.Admin.DTO where
+module Infrastructure.Entity.Dashboard.DTO where
 
 import Data.Aeson (ToJSON (..))
 import Data.OpenApi (ToSchema (..))
