@@ -5,9 +5,21 @@ import { type Dispatcher } from 'tea-cup-fp'
 import { type Article } from '@/common/api/type/article'
 
 import { type Msg } from '../type'
-import { DetailRow } from './detail-row'
 
-export const ArticleDetailOverlay: React.FC<{
+const detailRowView = (label: string, value: string, mono?: boolean) => (
+  <div className='mb-[24px]'>
+    <div className='mb-[4px] text-[12px] font-semibold tracking-wider text-slate-400 uppercase dark:text-slate-200'>
+      {label}
+    </div>
+    <div
+      className={`text-[16px] text-slate-800 dark:text-white ${mono ? 'font-mono' : ''}`}
+    >
+      {value}
+    </div>
+  </div>
+)
+
+export const ArticleDetailComponent: React.FC<{
   selectedArticle: O.Option<Article>
   dispatch: Dispatcher<Msg>
 }> = ({ selectedArticle, dispatch }) => {
@@ -51,9 +63,9 @@ export const ArticleDetailOverlay: React.FC<{
             </button>
           </div>
           <div className='flex-grow overflow-y-auto p-[24px]'>
-            <DetailRow label='Title' value={article.title} />
-            <DetailRow label='Slug' value={article.slug} mono />
-            <DetailRow label='Description' value={article.description} />
+            {detailRowView('Title', article.title)}
+            {detailRowView('Slug', article.slug, true)}
+            {detailRowView('Description', article.description)}
             <div className='mb-[24px]'>
               <div className='mb-[4px] text-[12px] font-semibold tracking-wider text-slate-400 uppercase dark:text-slate-200'>
                 Author
@@ -66,7 +78,7 @@ export const ArticleDetailOverlay: React.FC<{
                 />
                 <div>
                   <div className='text-theme-secondary font-bold dark:text-white'>
-                    {article.author.username}
+                     {article.author.username}
                   </div>
                   <div className='text-[12px] text-slate-400 dark:text-slate-200'>
                     {article.author.bio || 'No bio'}
@@ -83,14 +95,8 @@ export const ArticleDetailOverlay: React.FC<{
               </div>
             </div>
             <div className='flex gap-[24px]'>
-              <DetailRow
-                label='Favorites'
-                value={article.favoritesCount.toString()}
-              />
-              <DetailRow
-                label='Created'
-                value={new Date(article.createdAt).toLocaleString()}
-              />
+              {detailRowView('Favorites', article.favoritesCount.toString())}
+              {detailRowView('Created', new Date(article.createdAt).toLocaleString())}
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@ const sortOptions: SearchBar.SearchOption[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const UsersComponent: React.FC<Props> = ({ model, dispatch }) => {
+export const UsersPageComponent: React.FC<Props> = ({ model, dispatch }) => {
   return (
     <div className='relative flex flex-col gap-[32px]'>
       <div className='flex flex-col gap-[24px]'>
@@ -82,4 +82,4 @@ export const UsersComponent: React.FC<Props> = ({ model, dispatch }) => {
   )
 }
 
-export const UsersMemo = memoStrategy(UsersComponent, PropsEq.equals)
+export const UsersPageMemo = memoStrategy(UsersPageComponent, PropsEq.equals)

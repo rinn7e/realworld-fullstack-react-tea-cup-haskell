@@ -104,7 +104,7 @@ const schemeOptions: SchemeOption[] = [
   },
 ]
 
-export const SettingsComponent: React.FC<{
+export const SettingsPageComponent: React.FC<{
   user: O.Option<User>
   colorScheme: ColorScheme
   theme: Theme

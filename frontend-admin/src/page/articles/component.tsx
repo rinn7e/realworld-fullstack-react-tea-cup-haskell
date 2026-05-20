@@ -7,7 +7,7 @@ import * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 
-import { ArticleDetailOverlay } from './sub-component/article-detail-overlay'
+import { ArticleDetailComponent } from './sub-component/article-detail'
 import { type Props, PropsEq } from './type'
 import { mkPaginationConfig } from './helper'
 
@@ -18,7 +18,7 @@ const sortOptions: SearchBar.SearchOption[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const ArticlesComponent: React.FC<Props> = ({ model, shared, dispatch }) => {
+export const ArticlesPageComponent: React.FC<Props> = ({ model, shared, dispatch }) => {
   const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
@@ -45,7 +45,7 @@ export const ArticlesComponent: React.FC<Props> = ({ model, shared, dispatch }) 
         />
       </div>
 
-      <ArticleDetailOverlay
+      <ArticleDetailComponent
         selectedArticle={model.selectedArticle}
         dispatch={dispatch}
       />
@@ -53,4 +53,4 @@ export const ArticlesComponent: React.FC<Props> = ({ model, shared, dispatch }) 
   )
 }
 
-export const ArticlesMemo = memoStrategy(ArticlesComponent, PropsEq.equals)
+export const ArticlesPageMemo = memoStrategy(ArticlesPageComponent, PropsEq.equals)

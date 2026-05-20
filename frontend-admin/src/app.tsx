@@ -12,13 +12,13 @@ import {
 } from '@/common/type/route'
 import { Link } from '@/component/link'
 import { PersonaPanel } from '@/component/persona-panel/persona-panel'
-import { ArticlesMemo } from '@/page/articles/component'
-import { CommentsMemo } from '@/page/comments/component'
-import { HomeMemo } from '@/page/home/component'
-import { LoginMemo } from '@/page/login/component'
-import { SettingsComponent } from '@/page/settings/component'
-import { UsersMemo } from '@/page/users/component'
-import { VisitorsMemo } from '@/page/visitors/component'
+import { ArticlesPageMemo } from '@/page/articles/component'
+import { CommentsPageMemo } from '@/page/comments/component'
+import { HomePageMemo } from '@/page/home/component'
+import { LoginPageMemo } from '@/page/login/component'
+import { SettingsPageComponent } from '@/page/settings/component'
+import { UsersPageMemo } from '@/page/users/component'
+import { VisitorsPageMemo } from '@/page/visitors/component'
 
 import { SetGlobalMsgContext } from '@/common/global-context'
 import { type Model, type Msg } from './type'
@@ -279,14 +279,14 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
   switch (model.pageModel._tag) {
     case 'HomePageModel':
       return (
-        <HomeMemo
+        <HomePageMemo
           model={model.pageModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'HomePageMsg', subMsg })}
         />
       )
     case 'ArticlesPageModel':
       return (
-        <ArticlesMemo
+        <ArticlesPageMemo
           model={model.pageModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'ArticlesPageMsg', subMsg })}
@@ -294,35 +294,35 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
       )
     case 'UsersPageModel':
       return (
-        <UsersMemo
+        <UsersPageMemo
           model={model.pageModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'UsersPageMsg', subMsg })}
         />
       )
     case 'CommentsPageModel':
       return (
-        <CommentsMemo
+        <CommentsPageMemo
           model={model.pageModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'CommentsPageMsg', subMsg })}
         />
       )
     case 'VisitorsPageModel':
       return (
-        <VisitorsMemo
+        <VisitorsPageMemo
           model={model.pageModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'VisitorsPageMsg', subMsg })}
         />
       )
     case 'LoginPageModel':
       return (
-        <LoginMemo
+        <LoginPageMemo
           model={model.pageModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'LoginPageMsg', subMsg })}
         />
       )
     case 'SettingsPageModel':
       return (
-        <SettingsComponent
+        <SettingsPageComponent
           user={model.shared.user}
           colorScheme={model.colorScheme}
           theme={model.theme}

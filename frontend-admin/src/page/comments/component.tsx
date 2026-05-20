@@ -14,7 +14,7 @@ const sortOptions: SearchBar.SearchOption[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const CommentsComponent: React.FC<Props> = ({ model, dispatch }) => {
+export const CommentsPageComponent: React.FC<Props> = ({ model, dispatch }) => {
   return (
     <div className='relative flex flex-col gap-[32px]'>
       <div className='flex flex-col gap-[24px]'>
@@ -74,4 +74,4 @@ export const CommentsComponent: React.FC<Props> = ({ model, dispatch }) => {
   )
 }
 
-export const CommentsMemo = memoStrategy(CommentsComponent, PropsEq.equals)
+export const CommentsPageMemo = memoStrategy(CommentsPageComponent, PropsEq.equals)

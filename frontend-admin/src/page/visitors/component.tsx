@@ -14,7 +14,7 @@ const sortOptions: SearchBar.SearchOption[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const VisitorsComponent: React.FC<Props> = ({ model, dispatch }) => {
+export const VisitorsPageComponent: React.FC<Props> = ({ model, dispatch }) => {
   return (
     <div className='relative flex flex-col gap-[32px]'>
       <div className='flex flex-col gap-[24px]'>
@@ -78,4 +78,4 @@ export const VisitorsComponent: React.FC<Props> = ({ model, dispatch }) => {
   )
 }
 
-export const VisitorsMemo = memoStrategy(VisitorsComponent, PropsEq.equals)
+export const VisitorsPageMemo = memoStrategy(VisitorsPageComponent, PropsEq.equals)

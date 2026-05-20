@@ -5,7 +5,7 @@ import { memoStrategy } from '@/common/util'
 
 import { type Props, PropsEq } from './type'
 
-export const LoginComponent: React.FC<Props> = ({ model, dispatch }) => {
+export const LoginPageComponent: React.FC<Props> = ({ model, dispatch }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!model.isSubmitting) {
@@ -136,4 +136,4 @@ export const LoginComponent: React.FC<Props> = ({ model, dispatch }) => {
   )
 }
 
-export const LoginMemo = memoStrategy(LoginComponent, PropsEq.equals)
+export const LoginPageMemo = memoStrategy(LoginPageComponent, PropsEq.equals)

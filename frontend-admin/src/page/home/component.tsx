@@ -18,7 +18,7 @@ import { LogDetailOverlay } from './sub-component/log-detail-overlay'
 import { StatCard } from './sub-component/stat-card'
 import { type Props, PropsEq } from './type'
 
-export const HomeComponent: React.FC<Props> = ({ model, dispatch }) => {
+export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
   return (
     <div className='relative flex flex-col gap-[32px]'>
       <div>
@@ -170,4 +170,4 @@ export const HomeComponent: React.FC<Props> = ({ model, dispatch }) => {
   )
 }
 
-export const HomeMemo = memoStrategy(HomeComponent, PropsEq.equals)
+export const HomePageMemo = memoStrategy(HomePageComponent, PropsEq.equals)
