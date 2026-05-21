@@ -7,20 +7,20 @@ import * as S from 'fp-ts/lib/string'
 import { type Dispatcher, type Result } from 'tea-cup-fp'
 
 import {
-  ApiErrorEq,
-  getHttpErrorEq,
   type ApiError,
+  ApiErrorEq,
   type HttpError,
+  getHttpErrorEq,
 } from '@/common/api/type'
 import {
-  DashboardStatsEq,
-  LogEq,
-  VisitorStatEq,
   type DashboardStats,
+  DashboardStatsEq,
   type Log,
+  LogEq,
   type VisitorStat,
+  VisitorStatEq,
 } from '@/common/api/type/dashboard'
-import { SharedEq, type Shared } from '@/common/type/shared'
+import { type Shared, SharedEq } from '@/common/type/shared'
 
 export type TimeFilter = '24h' | 'week' | 'month' | 'year'
 

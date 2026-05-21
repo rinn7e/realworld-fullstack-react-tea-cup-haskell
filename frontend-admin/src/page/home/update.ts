@@ -34,18 +34,27 @@ const fetchAllCmd = (shared: Shared, filter: TimeFilter): Cmd<Msg> =>
       () => Cmd.none(),
       (token) =>
         Cmd.batch([
-          attemptTE(getDashboardStats(token), (result): Msg => ({
-            _tag: 'StatsResult',
-            result,
-          })),
-          attemptTE(getVisitorStats(token, filter), (result): Msg => ({
-            _tag: 'VisitorStatsResult',
-            result,
-          })),
-          attemptTE(getLogs(token, { limit: 10 }), (result): Msg => ({
-            _tag: 'LogsResult',
-            result: result.map((res) => res.logs),
-          })),
+          attemptTE(
+            getDashboardStats(token),
+            (result): Msg => ({
+              _tag: 'StatsResult',
+              result,
+            }),
+          ),
+          attemptTE(
+            getVisitorStats(token, filter),
+            (result): Msg => ({
+              _tag: 'VisitorStatsResult',
+              result,
+            }),
+          ),
+          attemptTE(
+            getLogs(token, { limit: 10 }),
+            (result): Msg => ({
+              _tag: 'LogsResult',
+              result: result.map((res) => res.logs),
+            }),
+          ),
         ]),
     ),
   )
@@ -95,10 +104,13 @@ const changeFilterHandler = (
       O.fold(
         () => Cmd.none(),
         (token) =>
-          attemptTE(getVisitorStats(token, filter), (result): Msg => ({
-            _tag: 'VisitorStatsResult',
-            result,
-          })),
+          attemptTE(
+            getVisitorStats(token, filter),
+            (result): Msg => ({
+              _tag: 'VisitorStatsResult',
+              result,
+            }),
+          ),
       ),
     ),
   ]

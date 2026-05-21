@@ -17,7 +17,7 @@ const sortOptions: SearchBar.SearchOption<CommentSortAttr>[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const CommentsPageComponent: React.FC<Props> = ({
+export const CommentPageComponent: React.FC<Props> = ({
   model,
   shared,
   dispatch,
@@ -57,7 +57,7 @@ export const CommentsPageComponent: React.FC<Props> = ({
   )
 }
 
-export const CommentsPageMemo = memoStrategy(
-  CommentsPageComponent,
+export const CommentPageMemo = memoStrategy(
+  CommentPageComponent,
   PropsEq.equals,
 )

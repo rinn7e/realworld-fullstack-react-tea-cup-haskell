@@ -18,7 +18,7 @@ const sortOptions: SearchBar.SearchOption<VisitorSortAttr>[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const VisitorsPageComponent: React.FC<Props> = ({
+export const VisitorPageComponent: React.FC<Props> = ({
   model,
   shared,
   dispatch,
@@ -60,7 +60,7 @@ export const VisitorsPageComponent: React.FC<Props> = ({
   )
 }
 
-export const VisitorsPageMemo = memoStrategy(
-  VisitorsPageComponent,
+export const VisitorPageMemo = memoStrategy(
+  VisitorPageComponent,
   PropsEq.equals,
 )

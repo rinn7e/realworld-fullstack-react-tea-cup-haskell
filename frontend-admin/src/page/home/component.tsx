@@ -158,7 +158,11 @@ export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
                           stopColor='#3b82f6'
                           stopOpacity={0.1}
                         />
-                        <stop offset='95%' stopColor='#3b82f6' stopOpacity={0} />
+                        <stop
+                          offset='95%'
+                          stopColor='#3b82f6'
+                          stopOpacity={0}
+                        />
                       </linearGradient>
                     </defs>
                     <CartesianGrid

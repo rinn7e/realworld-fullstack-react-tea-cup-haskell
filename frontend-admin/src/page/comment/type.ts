@@ -16,8 +16,8 @@ import {
   CommentEq,
   type CommentSortAttr,
 } from '@/common/api/type/comment'
+import { type Shared, SharedEq } from '@/common/type/shared'
 import * as SearchBar from '@/component/search-bar'
-import { SharedEq, type Shared } from '@/common/type/shared'
 
 export const GET_COMMENTS_LIMIT = 50
 

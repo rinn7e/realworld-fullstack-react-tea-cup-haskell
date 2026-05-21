@@ -18,7 +18,7 @@ const sortOptions: SearchBar.SearchOption<ArticleSortAttr>[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const ArticlesPageComponent: React.FC<Props> = ({
+export const ArticlePageComponent: React.FC<Props> = ({
   model,
   shared,
   dispatch,
@@ -60,7 +60,7 @@ export const ArticlesPageComponent: React.FC<Props> = ({
   )
 }
 
-export const ArticlesPageMemo = memoStrategy(
-  ArticlesPageComponent,
+export const ArticlePageMemo = memoStrategy(
+  ArticlePageComponent,
   PropsEq.equals,
 )

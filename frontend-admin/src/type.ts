@@ -1,8 +1,8 @@
 import { type Option } from 'fp-ts/lib/Option'
 
 import { type AuthUser } from '@/common/type/auth-user'
-import { type Shared } from '@/common/type/shared'
 import { type AppRoute } from '@/common/type/route'
+import { type Shared } from '@/common/type/shared'
 import type * as Persona from '@/component/persona-panel/type'
 import type * as Articles from '@/page/article'
 import type * as Comments from '@/page/comment'
@@ -28,11 +28,11 @@ export type Model = {
 export type PageModel =
   | { _tag: 'HomePageModel'; model: Home.Model }
   | { _tag: 'LoginPageModel'; model: Login.Model }
-  | { _tag: 'ArticlesPageModel'; model: Articles.Model }
-  | { _tag: 'UsersPageModel'; model: Users.Model }
-  | { _tag: 'CommentsPageModel'; model: Comments.Model }
-  | { _tag: 'VisitorsPageModel'; model: Visitors.Model }
-  | { _tag: 'SettingsPageModel' }
+  | { _tag: 'ArticlePageModel'; model: Articles.Model }
+  | { _tag: 'UserPageModel'; model: Users.Model }
+  | { _tag: 'CommentPageModel'; model: Comments.Model }
+  | { _tag: 'VisitorPageModel'; model: Visitors.Model }
+  | { _tag: 'SettingPageModel' }
   | { _tag: 'NotFoundPageModel' }
 
 export type Msg =
@@ -48,10 +48,10 @@ export type Msg =
   | { _tag: 'Logout' }
   | { _tag: 'HomePageMsg'; subMsg: Home.Msg }
   | { _tag: 'LoginPageMsg'; subMsg: Login.Msg }
-  | { _tag: 'ArticlesPageMsg'; subMsg: Articles.Msg }
-  | { _tag: 'UsersPageMsg'; subMsg: Users.Msg }
-  | { _tag: 'CommentsPageMsg'; subMsg: Comments.Msg }
-  | { _tag: 'VisitorsPageMsg'; subMsg: Visitors.Msg }
+  | { _tag: 'ArticlePageMsg'; subMsg: Articles.Msg }
+  | { _tag: 'UserPageMsg'; subMsg: Users.Msg }
+  | { _tag: 'CommentPageMsg'; subMsg: Comments.Msg }
+  | { _tag: 'VisitorPageMsg'; subMsg: Visitors.Msg }
   | { _tag: 'PersonaMsg'; subMsg: Persona.Msg }
   | { _tag: 'SetShowScrollTop'; value: boolean }
   | { _tag: 'ScrollToTop' }

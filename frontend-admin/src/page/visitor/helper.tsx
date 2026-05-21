@@ -8,8 +8,8 @@ import React from 'react'
 import { getVisitors } from '@/common/api/handler/dashboard'
 import { type ApiError, type HttpError } from '@/common/api/type'
 import { type Visitor } from '@/common/api/type/visitor'
-import { renderPagination } from '@/component/pagination'
 import { type Shared } from '@/common/type/shared'
+import { renderPagination } from '@/component/pagination'
 
 import { GET_VISITORS_LIMIT, type Model } from './type'
 

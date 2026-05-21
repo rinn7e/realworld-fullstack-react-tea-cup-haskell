@@ -5,14 +5,19 @@ import * as O from 'fp-ts/lib/Option'
 import * as S from 'fp-ts/lib/string'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { ApiErrorEq, getHttpErrorEq, type ApiError, type HttpError } from '@/common/api/type'
+import {
+  type ApiError,
+  ApiErrorEq,
+  type HttpError,
+  getHttpErrorEq,
+} from '@/common/api/type'
 import {
   type Visitor,
   VisitorEq,
   type VisitorSortAttr,
 } from '@/common/api/type/visitor'
+import { type Shared, SharedEq } from '@/common/type/shared'
 import * as SearchBar from '@/component/search-bar'
-import { SharedEq, type Shared } from '@/common/type/shared'
 
 export const GET_VISITORS_LIMIT = 50
 
@@ -32,11 +37,7 @@ export type Msg =
     }
   | {
       readonly _tag: 'PaginationMsg'
-      readonly subMsg: Pagination.Msg<
-        Visitor,
-        void,
-        HttpError<ApiError>
-      >
+      readonly subMsg: Pagination.Msg<Visitor, void, HttpError<ApiError>>
     }
 
 export const ModelEq: EqClass.Eq<Model> = EqClass.struct({

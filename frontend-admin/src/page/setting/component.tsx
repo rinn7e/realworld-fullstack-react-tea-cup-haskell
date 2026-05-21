@@ -2,11 +2,11 @@ import * as O from 'fp-ts/lib/Option'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
+import { type AuthUser } from '@/common/type/auth-user'
 import { themes } from '@/theme/data'
 import { type Theme } from '@/theme/type'
 import { type ColorScheme } from '@/theme/util'
 import { type Msg } from '@/type'
-import { type AuthUser } from '@/common/type/auth-user'
 
 const SunIcon = () => (
   <svg
@@ -105,7 +105,7 @@ const schemeOptions: SchemeOption[] = [
   },
 ]
 
-export const SettingsPageComponent: React.FC<{
+export const SettingPageComponent: React.FC<{
   user: O.Option<AuthUser>
   colorScheme: ColorScheme
   theme: Theme

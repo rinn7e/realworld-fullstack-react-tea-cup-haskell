@@ -6,8 +6,8 @@ import { pipe } from 'fp-ts/lib/function'
 import { Cmd } from 'tea-cup-fp'
 
 import { type ArticleSortAttr } from '@/common/api/type/article'
-import * as SearchBar from '@/component/search-bar'
 import type { Shared } from '@/common/type/shared'
+import * as SearchBar from '@/component/search-bar'
 
 import { mkPaginationConfig } from './helper'
 import { type Model, type Msg } from './type'

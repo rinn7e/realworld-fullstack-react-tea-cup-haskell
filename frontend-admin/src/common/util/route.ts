@@ -61,15 +61,15 @@ export const toUrlString = (appRoute: AppRoute): string => {
         return format(homeMatch.formatter, {})
       case 'LoginPage':
         return format(loginMatch.formatter, {})
-      case 'ArticlesPage':
+      case 'ArticlePage':
         return format(articlesMatch.formatter, {})
-      case 'UsersPage':
+      case 'UserPage':
         return format(usersMatch.formatter, {})
-      case 'CommentsPage':
+      case 'CommentPage':
         return format(commentsMatch.formatter, {})
-      case 'VisitorsPage':
+      case 'VisitorPage':
         return format(visitorsMatch.formatter, {})
-      case 'SettingsPage':
+      case 'SettingPage':
         return format(settingsMatch.formatter, {})
       case 'NotFoundPage':
         return '/404'

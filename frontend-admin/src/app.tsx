@@ -13,13 +13,13 @@ import {
 } from '@/common/type/route'
 import { Link } from '@/component/link'
 import { PersonaPanel } from '@/component/persona-panel/persona-panel'
-import { ArticlesPageMemo } from '@/page/article/component'
-import { CommentsPageMemo } from '@/page/comment/component'
+import { ArticlePageMemo } from '@/page/article/component'
+import { CommentPageMemo } from '@/page/comment/component'
 import { HomePageMemo } from '@/page/home/component'
 import { LoginPageMemo } from '@/page/login/component'
-import { SettingsPageComponent } from '@/page/setting/component'
-import { UsersPageMemo } from '@/page/user/component'
-import { VisitorsPageMemo } from '@/page/visitor/component'
+import { SettingPageComponent } from '@/page/setting/component'
+import { UserPageMemo } from '@/page/user/component'
+import { VisitorPageMemo } from '@/page/visitor/component'
 
 import { type Model, type Msg } from './type'
 
@@ -109,7 +109,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'ArticlesPage'}
+              active={model.route.page._tag === 'ArticlePage'}
               route={{ page: articlesPage() }}
             />
             <SidebarLink
@@ -130,7 +130,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'UsersPage'}
+              active={model.route.page._tag === 'UserPage'}
               route={{ page: usersPage() }}
             />
             <SidebarLink
@@ -151,7 +151,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'CommentsPage'}
+              active={model.route.page._tag === 'CommentPage'}
               route={{ page: commentsPage() }}
             />
             <SidebarLink
@@ -172,7 +172,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'VisitorsPage'}
+              active={model.route.page._tag === 'VisitorPage'}
               route={{ page: visitorsPage() }}
             />
             <SidebarLink
@@ -199,7 +199,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'SettingsPage'}
+              active={model.route.page._tag === 'SettingPage'}
               route={{ page: settingsPage() }}
             />
           </nav>
@@ -285,36 +285,36 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
           dispatch={(subMsg) => dispatch({ _tag: 'HomePageMsg', subMsg })}
         />
       )
-    case 'ArticlesPageModel':
+    case 'ArticlePageModel':
       return (
-        <ArticlesPageMemo
+        <ArticlePageMemo
           model={model.pageModel.model}
           shared={model.shared}
-          dispatch={(subMsg) => dispatch({ _tag: 'ArticlesPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'ArticlePageMsg', subMsg })}
         />
       )
-    case 'UsersPageModel':
+    case 'UserPageModel':
       return (
-        <UsersPageMemo
+        <UserPageMemo
           model={model.pageModel.model}
           shared={model.shared}
-          dispatch={(subMsg) => dispatch({ _tag: 'UsersPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'UserPageMsg', subMsg })}
         />
       )
-    case 'CommentsPageModel':
+    case 'CommentPageModel':
       return (
-        <CommentsPageMemo
+        <CommentPageMemo
           model={model.pageModel.model}
           shared={model.shared}
-          dispatch={(subMsg) => dispatch({ _tag: 'CommentsPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'CommentPageMsg', subMsg })}
         />
       )
-    case 'VisitorsPageModel':
+    case 'VisitorPageModel':
       return (
-        <VisitorsPageMemo
+        <VisitorPageMemo
           model={model.pageModel.model}
           shared={model.shared}
-          dispatch={(subMsg) => dispatch({ _tag: 'VisitorsPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'VisitorPageMsg', subMsg })}
         />
       )
 
@@ -325,9 +325,9 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
           dispatch={(subMsg) => dispatch({ _tag: 'LoginPageMsg', subMsg })}
         />
       )
-    case 'SettingsPageModel':
+    case 'SettingPageModel':
       return (
-        <SettingsPageComponent
+        <SettingPageComponent
           user={model.shared.user}
           colorScheme={model.colorScheme}
           theme={model.theme}

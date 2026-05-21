@@ -16,8 +16,8 @@ import {
   ArticleEq,
   type ArticleSortAttr,
 } from '@/common/api/type/article'
+import { type Shared, SharedEq } from '@/common/type/shared'
 import * as SearchBar from '@/component/search-bar'
-import { SharedEq, type Shared } from '@/common/type/shared'
 
 export const GET_ARTICLES_LIMIT = 50
 

@@ -8,9 +8,9 @@ import React from 'react'
 import { getAdminUsers } from '@/common/api/handler/user'
 import { type ApiError, type HttpError } from '@/common/api/type'
 import { type AdminUser } from '@/common/api/type/user'
+import { type Shared } from '@/common/type/shared'
 import { renderPagination } from '@/component/pagination'
 import { UserImage } from '@/component/user-image'
-import { type Shared } from '@/common/type/shared'
 
 import { GET_USERS_LIMIT, type Model, type UserItemMsg } from './type'
 

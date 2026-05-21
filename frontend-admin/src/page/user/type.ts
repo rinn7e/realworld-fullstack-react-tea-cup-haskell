@@ -16,8 +16,8 @@ import {
   AdminUserEq,
   type UserSortAttr,
 } from '@/common/api/type/user'
+import { type Shared, SharedEq } from '@/common/type/shared'
 import * as SearchBar from '@/component/search-bar'
-import { SharedEq, type Shared } from '@/common/type/shared'
 
 export const GET_USERS_LIMIT = 50
 

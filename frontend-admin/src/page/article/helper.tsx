@@ -8,8 +8,8 @@ import React from 'react'
 import { getAdminArticles } from '@/common/api/handler/article'
 import { type ApiError, type HttpError } from '@/common/api/type'
 import type { Article } from '@/common/api/type/article'
-import { renderPagination } from '@/component/pagination'
 import type { Shared } from '@/common/type/shared'
+import { renderPagination } from '@/component/pagination'
 
 import { type ArticleItemMsg, GET_ARTICLES_LIMIT, type Model } from './type'
 

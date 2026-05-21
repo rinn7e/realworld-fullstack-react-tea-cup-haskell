@@ -5,7 +5,9 @@ import { Cmd, Task } from 'tea-cup-fp'
 
 import { getCurrentUser } from '@/common/api/handler/user'
 import { getToken, removeToken, saveToken } from '@/common/cache'
+import { type AuthUser } from '@/common/type/auth-user'
 import { type AppRoute, AppRouteEq } from '@/common/type/route'
+import { type Shared } from '@/common/type/shared'
 import { parseAppRoute, toUrlString } from '@/common/util/route'
 import type * as PersonaType from '@/component/persona-panel/type'
 import * as Persona from '@/component/persona-panel/update'
@@ -26,13 +28,7 @@ import {
   saveColorScheme,
   saveTheme,
 } from './theme/util'
-import {
-  type Model,
-  type Msg,
-  type PageModel,
-} from './type'
-import { type Shared } from '@/common/type/shared'
-import { type AuthUser } from '@/common/type/auth-user'
+import { type Model, type Msg, type PageModel } from './type'
 
 export const initPageModel = (
   route: AppRoute,
@@ -53,36 +49,36 @@ export const initPageModel = (
         c.map((subMsg): Msg => ({ _tag: 'LoginPageMsg', subMsg })),
       ]
     }
-    case 'ArticlesPage': {
+    case 'ArticlePage': {
       const [m, c] = Articles.init(shared)
       return [
-        { _tag: 'ArticlesPageModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'ArticlesPageMsg', subMsg })),
+        { _tag: 'ArticlePageModel', model: m },
+        c.map((subMsg): Msg => ({ _tag: 'ArticlePageMsg', subMsg })),
       ]
     }
-    case 'UsersPage': {
+    case 'UserPage': {
       const [m, c] = Users.init(shared)
       return [
-        { _tag: 'UsersPageModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'UsersPageMsg', subMsg })),
+        { _tag: 'UserPageModel', model: m },
+        c.map((subMsg): Msg => ({ _tag: 'UserPageMsg', subMsg })),
       ]
     }
-    case 'CommentsPage': {
+    case 'CommentPage': {
       const [m, c] = Comments.init(shared)
       return [
-        { _tag: 'CommentsPageModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'CommentsPageMsg', subMsg })),
+        { _tag: 'CommentPageModel', model: m },
+        c.map((subMsg): Msg => ({ _tag: 'CommentPageMsg', subMsg })),
       ]
     }
-    case 'VisitorsPage': {
+    case 'VisitorPage': {
       const [m, c] = Visitors.init(shared)
       return [
-        { _tag: 'VisitorsPageModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'VisitorsPageMsg', subMsg })),
+        { _tag: 'VisitorPageModel', model: m },
+        c.map((subMsg): Msg => ({ _tag: 'VisitorPageMsg', subMsg })),
       ]
     }
-    case 'SettingsPage':
-      return [{ _tag: 'SettingsPageModel' }, Cmd.none()]
+    case 'SettingPage':
+      return [{ _tag: 'SettingPageModel' }, Cmd.none()]
     case 'NotFoundPage':
     default:
       return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
@@ -308,13 +304,13 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       return homePageMsgHandler(msg.subMsg, model)
     case 'LoginPageMsg':
       return loginPageMsgHandler(msg.subMsg, model)
-    case 'ArticlesPageMsg':
+    case 'ArticlePageMsg':
       return articlesPageMsgHandler(msg.subMsg, model)
-    case 'UsersPageMsg':
+    case 'UserPageMsg':
       return usersPageMsgHandler(msg.subMsg, model)
-    case 'CommentsPageMsg':
+    case 'CommentPageMsg':
       return commentsPageMsgHandler(msg.subMsg, model)
-    case 'VisitorsPageMsg':
+    case 'VisitorPageMsg':
       return visitorsPageMsgHandler(msg.subMsg, model)
     case 'PersonaMsg':
       return personaMsgHandler(msg.subMsg, model)
@@ -417,11 +413,11 @@ const articlesPageMsgHandler = (
   subMsg: Articles.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  if (model.pageModel._tag === 'ArticlesPageModel') {
+  if (model.pageModel._tag === 'ArticlePageModel') {
     const [m, c] = Articles.update(model.shared)(subMsg, model.pageModel.model)
     return [
       { ...model, pageModel: { ...model.pageModel, model: m } },
-      c.map((msg): Msg => ({ _tag: 'ArticlesPageMsg', subMsg: msg })),
+      c.map((msg): Msg => ({ _tag: 'ArticlePageMsg', subMsg: msg })),
     ]
   }
   return [model, Cmd.none()]
@@ -431,11 +427,11 @@ const usersPageMsgHandler = (
   subMsg: Users.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  if (model.pageModel._tag === 'UsersPageModel') {
+  if (model.pageModel._tag === 'UserPageModel') {
     const [m, c] = Users.update(model.shared)(subMsg, model.pageModel.model)
     return [
       { ...model, pageModel: { ...model.pageModel, model: m } },
-      c.map((msg): Msg => ({ _tag: 'UsersPageMsg', subMsg: msg })),
+      c.map((msg): Msg => ({ _tag: 'UserPageMsg', subMsg: msg })),
     ]
   }
   return [model, Cmd.none()]
@@ -445,11 +441,11 @@ const commentsPageMsgHandler = (
   subMsg: Comments.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  if (model.pageModel._tag === 'CommentsPageModel') {
+  if (model.pageModel._tag === 'CommentPageModel') {
     const [m, c] = Comments.update(model.shared)(subMsg, model.pageModel.model)
     return [
       { ...model, pageModel: { ...model.pageModel, model: m } },
-      c.map((msg): Msg => ({ _tag: 'CommentsPageMsg', subMsg: msg })),
+      c.map((msg): Msg => ({ _tag: 'CommentPageMsg', subMsg: msg })),
     ]
   }
   return [model, Cmd.none()]
@@ -459,11 +455,11 @@ const visitorsPageMsgHandler = (
   subMsg: Visitors.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  if (model.pageModel._tag === 'VisitorsPageModel') {
+  if (model.pageModel._tag === 'VisitorPageModel') {
     const [m, c] = Visitors.update(model.shared)(subMsg, model.pageModel.model)
     return [
       { ...model, pageModel: { ...model.pageModel, model: m } },
-      c.map((msg): Msg => ({ _tag: 'VisitorsPageMsg', subMsg: msg })),
+      c.map((msg): Msg => ({ _tag: 'VisitorPageMsg', subMsg: msg })),
     ]
   }
   return [model, Cmd.none()]

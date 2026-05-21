@@ -17,7 +17,7 @@ const sortOptions: SearchBar.SearchOption<UserSortAttr>[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const UsersPageComponent: React.FC<Props> = ({
+export const UserPageComponent: React.FC<Props> = ({
   model,
   shared,
   dispatch,
@@ -59,4 +59,4 @@ export const UsersPageComponent: React.FC<Props> = ({
   )
 }
 
-export const UsersPageMemo = memoStrategy(UsersPageComponent, PropsEq.equals)
+export const UserPageMemo = memoStrategy(UserPageComponent, PropsEq.equals)
