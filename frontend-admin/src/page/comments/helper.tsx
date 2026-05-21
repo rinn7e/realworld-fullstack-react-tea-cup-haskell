@@ -14,36 +14,49 @@ import type { Shared } from '@/type'
 
 import { type CommentItemMsg, GET_COMMENTS_LIMIT, type Model } from './type'
 
+const parsePrefix =
+  (prefix: string, key: 'author' | 'articleSlug') =>
+  (text: string): O.Option<{ author?: string; articleSlug?: string }> =>
+    pipe(
+      text,
+      O.fromPredicate((s) => s.startsWith(prefix)),
+      O.map((s) => {
+        if (key === 'author') {
+          return { author: s.slice(prefix.length).trim() }
+        } else {
+          return { articleSlug: s.slice(prefix.length).trim() }
+        }
+      }),
+    )
+
+const getSearchParams = (
+  searchText: string,
+): { author?: string; articleSlug?: string } =>
+  pipe(
+    searchText,
+    O.fromPredicate((s) => s.length > 0),
+    O.map((text) =>
+      pipe(
+        parsePrefix('author:', 'author')(text),
+        O.alt(() => parsePrefix('@', 'author')(text)),
+        O.alt(() => parsePrefix('article:', 'articleSlug')(text)),
+        O.alt(() => parsePrefix('slug:', 'articleSlug')(text)),
+        O.getOrElse((): { author?: string; articleSlug?: string } => ({
+          author: text,
+        })),
+      ),
+    ),
+    O.getOrElse((): { author?: string; articleSlug?: string } => ({})),
+  )
+
 export const mkPaginationConfig = (
   shared: Shared,
   model: Model,
 ): Pagination.Config<Comment, CommentItemMsg, HttpError<ApiError>> => ({
   limit: GET_COMMENTS_LIMIT,
   scrollContainerId: 'main-content',
-  handler: (offset, limit) => {
-    const searchText = model.searchBar.searchText.trim()
-    const params: {
-      limit: number
-      offset: number
-      author?: string
-      articleSlug?: string
-    } = { limit, offset }
-
-    if (searchText) {
-      if (searchText.startsWith('author:')) {
-        params.author = searchText.slice(7).trim()
-      } else if (searchText.startsWith('@')) {
-        params.author = searchText.slice(1).trim()
-      } else if (searchText.startsWith('article:')) {
-        params.articleSlug = searchText.slice(8).trim()
-      } else if (searchText.startsWith('slug:')) {
-        params.articleSlug = searchText.slice(5).trim()
-      } else {
-        params.author = searchText
-      }
-    }
-
-    return pipe(
+  handler: (offset, limit) =>
+    pipe(
       shared.token,
       O.fold(
         () =>
@@ -57,9 +70,11 @@ export const mkPaginationConfig = (
         (token) =>
           pipe(
             getAdminComments(token, {
-              ...params,
+              limit,
+              offset,
               sort: model.searchBar.sort,
               direction: model.searchBar.direction,
+              ...getSearchParams(model.searchBar.searchText.trim()),
             }),
             TE.map((res) => ({
               items: res.comments,
@@ -67,8 +82,7 @@ export const mkPaginationConfig = (
             })),
           ),
       ),
-    )
-  },
+    ),
   renderItems: (itemsRD, itemDispatch) => {
     return pipe(
       itemsRD,
