@@ -2,14 +2,14 @@ import * as O from 'fp-ts/lib/Option'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type User } from '@/common/api/type/user'
+import { type AdminUser } from '@/common/api/type/user'
 import { UserImage } from '@/component/user-image'
 
 import { type Msg } from '../type'
 import { DetailRow } from './detail-row'
 
 export const UserDetailOverlay: React.FC<{
-  selectedUser: O.Option<User>
+  selectedUser: O.Option<AdminUser>
   dispatch: Dispatcher<Msg>
 }> = ({ selectedUser, dispatch }) => {
   if (O.isNone(selectedUser)) return null
@@ -20,7 +20,7 @@ export const UserDetailOverlay: React.FC<{
     <>
       <div
         className='fixed inset-0 z-40 cursor-pointer bg-slate-900/20 backdrop-blur-[2px] dark:bg-black/50'
-        onClick={() => dispatch({ _tag: 'SelectUser', user: O.none })}
+        onClick={() => dispatch({ _tag: 'ClearSelected' })}
       />
       <div className='animate-in slide-in-from-right dark:bg-surface-dark fixed top-0 right-0 z-50 h-full w-full max-w-[50%] bg-white shadow-2xl duration-300'>
         <div className='flex h-full flex-col'>
@@ -30,7 +30,7 @@ export const UserDetailOverlay: React.FC<{
             </h3>
             <button
               type='button'
-              onClick={() => dispatch({ _tag: 'SelectUser', user: O.none })}
+              onClick={() => dispatch({ _tag: 'ClearSelected' })}
               className='rounded-full p-[8px] text-slate-400 hover:bg-slate-50 hover:text-slate-600 dark:text-slate-200 dark:hover:bg-white/5 dark:hover:text-white'
             >
               <svg
@@ -64,6 +64,7 @@ export const UserDetailOverlay: React.FC<{
 
             <div className='grid grid-cols-2 gap-[24px]'>
               <DetailRow label='User ID' value={user.id.toString()} mono />
+              <DetailRow label='Role' value={user.role} />
               <DetailRow label='Account Status' value='Active' />
             </div>
 
@@ -76,6 +77,7 @@ export const UserDetailOverlay: React.FC<{
               </div>
             </div>
 
+            {/* TODO: Member since and Total Articles are currently mock values since the AdminUser API does not return them */}
             <div className='bg-theme-primary/10 mt-[32px] rounded-[16px] p-[24px]'>
               <div className='text-theme-primary font-bold'>Account Meta</div>
               <div className='text-theme-primary/80 mt-[12px] flex flex-col gap-[8px] text-[14px]'>

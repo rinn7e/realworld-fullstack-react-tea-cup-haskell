@@ -61,7 +61,7 @@ export const initPageModel = (
       ]
     }
     case 'UsersPage': {
-      const [m, c] = Users.init()
+      const [m, c] = Users.init(shared)
       return [
         { _tag: 'UsersPageModel', model: m },
         c.map((subMsg): Msg => ({ _tag: 'UsersPageMsg', subMsg })),
@@ -432,7 +432,7 @@ const usersPageMsgHandler = (
   model: Model,
 ): [Model, Cmd<Msg>] => {
   if (model.pageModel._tag === 'UsersPageModel') {
-    const [m, c] = Users.update(subMsg, model.pageModel.model)
+    const [m, c] = Users.update(model.shared)(subMsg, model.pageModel.model)
     return [
       { ...model, pageModel: { ...model.pageModel, model: m } },
       c.map((msg): Msg => ({ _tag: 'UsersPageMsg', subMsg: msg })),
