@@ -5,7 +5,8 @@ import { type Dispatcher } from 'tea-cup-fp'
 import { themes } from '@/theme/data'
 import { type Theme } from '@/theme/type'
 import { type ColorScheme } from '@/theme/util'
-import { type Msg, type User } from '@/type'
+import { type Msg } from '@/type'
+import { type AuthUser } from '@/common/type/auth-user'
 
 const SunIcon = () => (
   <svg
@@ -105,7 +106,7 @@ const schemeOptions: SchemeOption[] = [
 ]
 
 export const SettingsPageComponent: React.FC<{
-  user: O.Option<User>
+  user: O.Option<AuthUser>
   colorScheme: ColorScheme
   theme: Theme
   dispatch: Dispatcher<Msg>

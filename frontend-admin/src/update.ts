@@ -30,9 +30,9 @@ import {
   type Model,
   type Msg,
   type PageModel,
-  type Shared,
-  type User,
 } from './type'
+import { type Shared } from '@/common/type/shared'
+import { type AuthUser } from '@/common/type/auth-user'
 
 export const initPageModel = (
   route: AppRoute,
@@ -75,7 +75,7 @@ export const initPageModel = (
       ]
     }
     case 'VisitorsPage': {
-      const [m, c] = Visitors.init()
+      const [m, c] = Visitors.init(shared)
       return [
         { _tag: 'VisitorsPageModel', model: m },
         c.map((subMsg): Msg => ({ _tag: 'VisitorsPageMsg', subMsg })),
@@ -109,7 +109,7 @@ export const preUpdate = (
 
 export const init = (
   location: Location,
-  user: O.Option<User>,
+  user: O.Option<AuthUser>,
   isUnavailable: boolean,
   token: O.Option<string>,
 ): [Model, Cmd<Msg>] => {
@@ -460,7 +460,7 @@ const visitorsPageMsgHandler = (
   model: Model,
 ): [Model, Cmd<Msg>] => {
   if (model.pageModel._tag === 'VisitorsPageModel') {
-    const [m, c] = Visitors.update(subMsg, model.pageModel.model)
+    const [m, c] = Visitors.update(model.shared)(subMsg, model.pageModel.model)
     return [
       { ...model, pageModel: { ...model.pageModel, model: m } },
       c.map((msg): Msg => ({ _tag: 'VisitorsPageMsg', subMsg: msg })),

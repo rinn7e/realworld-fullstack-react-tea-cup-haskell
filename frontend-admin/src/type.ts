@@ -1,5 +1,7 @@
 import { type Option } from 'fp-ts/lib/Option'
 
+import { type AuthUser } from '@/common/type/auth-user'
+import { type Shared } from '@/common/type/shared'
 import { type AppRoute } from '@/common/type/route'
 import type * as Persona from '@/component/persona-panel/type'
 import type * as Articles from '@/page/articles'
@@ -11,19 +13,6 @@ import type * as Visitors from '@/page/visitors'
 
 import { type Theme } from './theme/type'
 import { type ColorScheme } from './theme/util'
-
-export type User = {
-  username: string
-  email: string
-  token: string
-  bio: string | null
-  image: string | null
-}
-
-export type Shared = {
-  user: Option<User>
-  token: Option<string>
-}
 
 export type Model = {
   route: AppRoute
@@ -52,7 +41,7 @@ export type Msg =
   | {
       readonly _tag: 'Init'
       readonly location: Location
-      readonly user: Option<User>
+      readonly user: Option<AuthUser>
       readonly isUnavailable: boolean
       readonly token: Option<string>
     }

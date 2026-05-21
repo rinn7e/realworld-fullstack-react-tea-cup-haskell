@@ -5,32 +5,33 @@ import * as TE from 'fp-ts/lib/TaskEither'
 import { pipe } from 'fp-ts/lib/function'
 import React from 'react'
 
-import { getAdminArticles } from '@/common/api/handler/article'
+import { getVisitors } from '@/common/api/handler/dashboard'
 import { type ApiError, type HttpError } from '@/common/api/type'
-import type { Article } from '@/common/api/type/article'
+import { type Visitor } from '@/common/api/type/visitor'
 import { renderPagination } from '@/component/pagination'
-import type { Shared } from '@/common/type/shared'
+import { type Shared } from '@/common/type/shared'
 
-import { type ArticleItemMsg, GET_ARTICLES_LIMIT, type Model } from './type'
+import { GET_VISITORS_LIMIT, type Model } from './type'
+
+const getSearchParams = (
+  searchText: string,
+): { ip?: string; path?: string } => {
+  const trimmed = searchText.trim()
+  if (!trimmed) return {}
+  if (trimmed.startsWith('/')) {
+    return { path: trimmed }
+  }
+  return { ip: trimmed }
+}
 
 export const mkPaginationConfig = (
   shared: Shared,
   model: Model,
-): Pagination.Config<Article, ArticleItemMsg, HttpError<ApiError>> => ({
-  limit: GET_ARTICLES_LIMIT,
+): Pagination.Config<Visitor, void, HttpError<ApiError>> => ({
+  limit: GET_VISITORS_LIMIT,
   scrollContainerId: 'main-content',
-  handler: (offset, limit) => {
-    const searchParams = {
-      limit,
-      offset,
-      ...(model.searchBar.searchText.trim() && {
-        search: model.searchBar.searchText.trim(),
-      }),
-      sort: model.searchBar.sort,
-      direction: model.searchBar.direction,
-    }
-
-    return pipe(
+  handler: (offset, limit) =>
+    pipe(
       shared.token,
       O.fold(
         () =>
@@ -43,16 +44,19 @@ export const mkPaginationConfig = (
           } as any),
         (token) =>
           pipe(
-            getAdminArticles(token, searchParams),
+            getVisitors(token, {
+              limit,
+              offset,
+              ...getSearchParams(model.searchBar.searchText),
+            }),
             TE.map((res) => ({
-              items: res.articles,
-              totalCount: res.articlesCount,
+              items: res.visitors,
+              totalCount: res.totalCount,
             })),
           ),
       ),
-    )
-  },
-  renderItems: (itemsRD, itemDispatch) => {
+    ),
+  renderItems: (itemsRD, _) => {
     return pipe(
       itemsRD,
       RD.fold(
@@ -68,7 +72,7 @@ export const mkPaginationConfig = (
         ),
         (err) => (
           <div className='rounded-[12px] bg-red-50 p-[24px] font-semibold text-red-600 shadow-sm dark:bg-red-950/20 dark:text-red-400'>
-            Error loading articles:{' '}
+            Error loading visitors:{' '}
             {err.err
               ? Object.entries(err.err.errors)
                   .map(([k, v]) => `${k}: ${v.join(', ')}`)
@@ -76,10 +80,10 @@ export const mkPaginationConfig = (
               : `Connection error (Status ${err.statusCode}): ${err.actualErr || 'unknown'}`}
           </div>
         ),
-        (articles) =>
-          articles.length === 0 ? (
+        (visitors) =>
+          visitors.length === 0 ? (
             <div className='py-[60px] text-center font-medium text-slate-500 dark:text-neutral-400'>
-              No articles found.
+              No visitors found.
             </div>
           ) : (
             <div className='dark:bg-surface-dark overflow-x-auto rounded-[12px] border border-slate-100 bg-white shadow-sm dark:border-white/10'>
@@ -87,46 +91,32 @@ export const mkPaginationConfig = (
                 <thead className='bg-slate-50 text-[12px] font-semibold tracking-wider text-slate-500 uppercase dark:bg-black/20 dark:text-slate-200'>
                   <tr>
                     <th className='px-[24px] py-[16px]'>ID</th>
-                    <th className='px-[24px] py-[16px]'>Slug</th>
-                    <th className='px-[24px] py-[16px]'>Title</th>
-                    <th className='px-[24px] py-[16px]'>Author</th>
-                    <th className='px-[24px] py-[16px] text-center'>
-                      Favorites
-                    </th>
-                    <th className='px-[24px] py-[16px]'>Created At</th>
+                    <th className='px-[24px] py-[16px]'>IP Address</th>
+                    <th className='px-[24px] py-[16px]'>Path</th>
+                    <th className='px-[24px] py-[16px]'>User Agent</th>
+                    <th className='px-[24px] py-[16px]'>Visited At</th>
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-slate-100 text-[14px] dark:divide-white/10'>
-                  {articles.map((a) => (
+                  {visitors.map((v) => (
                     <tr
-                      key={a.id}
+                      key={v.id}
                       className='cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-white/5'
-                      onClick={() =>
-                        itemDispatch(a, {
-                          _tag: 'SelectArticle',
-                          article: O.some(a),
-                        })
-                      }
                     >
-                      <td className='px-[24px] py-[16px] font-mono text-slate-400 dark:text-slate-300'>
-                        {a.id}
+                      <td className='px-[24px] py-[16px] font-mono text-slate-400 dark:text-slate-200'>
+                        {v.id}
                       </td>
-                      <td className='px-[24px] py-[16px] font-mono text-[12px] text-slate-500 dark:text-slate-300'>
-                        {a.slug}
+                      <td className='text-theme-secondary px-[24px] py-[16px] font-medium dark:text-white'>
+                        {v.ip}
                       </td>
-                      <td className='text-theme-secondary px-[24px] py-[16px] font-semibold dark:text-white'>
-                        {a.title}
+                      <td className='px-[24px] py-[16px] font-mono text-[12px] text-slate-500 dark:text-slate-200'>
+                        {v.path}
                       </td>
-                      <td className='px-[24px] py-[16px] text-slate-600 dark:text-slate-300'>
-                        {a.author.username}
+                      <td className='max-w-[300px] truncate px-[24px] py-[16px] text-slate-600 dark:text-slate-200'>
+                        {v.userAgent}
                       </td>
-                      <td className='px-[24px] py-[16px] text-center'>
-                        <span className='rounded-full bg-slate-50 px-[10px] py-[4px] text-[12px] font-bold text-slate-500 dark:bg-white/10 dark:text-slate-300'>
-                          {a.favoritesCount}
-                        </span>
-                      </td>
-                      <td className='px-[24px] py-[16px] text-slate-400 dark:text-slate-300'>
-                        {new Date(a.createdAt).toLocaleDateString()}
+                      <td className='px-[24px] py-[16px] text-slate-400 dark:text-slate-200'>
+                        {new Date(v.timestamp).toLocaleString()}
                       </td>
                     </tr>
                   ))}

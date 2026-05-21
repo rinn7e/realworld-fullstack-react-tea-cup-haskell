@@ -17,7 +17,7 @@ import {
   type ArticleSortAttr,
 } from '@/common/api/type/article'
 import * as SearchBar from '@/component/search-bar'
-import type { Shared } from '@/type'
+import { SharedEq, type Shared } from '@/common/type/shared'
 
 export const GET_ARTICLES_LIMIT = 50
 
@@ -64,6 +64,6 @@ export type Props = {
 
 export const PropsEq: EqClass.Eq<Props> = EqClass.struct({
   model: ModelEq,
-  shared: EqAlways,
+  shared: SharedEq,
   dispatch: EqAlways,
 })

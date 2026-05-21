@@ -10,7 +10,7 @@ import { type ApiError, type HttpError } from '@/common/api/type'
 import type { Comment } from '@/common/api/type/comment'
 import { renderPagination } from '@/component/pagination'
 import { UserImage } from '@/component/user-image'
-import type { Shared } from '@/type'
+import type { Shared } from '@/common/type/shared'
 
 import { type CommentItemMsg, GET_COMMENTS_LIMIT, type Model } from './type'
 

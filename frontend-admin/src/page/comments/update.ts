@@ -7,7 +7,7 @@ import { Cmd } from 'tea-cup-fp'
 
 import { type CommentSortAttr } from '@/common/api/type/comment'
 import * as SearchBar from '@/component/search-bar'
-import type { Shared } from '@/type'
+import type { Shared } from '@/common/type/shared'
 
 import { mkPaginationConfig } from './helper'
 import { type Model, type Msg } from './type'

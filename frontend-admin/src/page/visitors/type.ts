@@ -1,20 +1,24 @@
+import * as Pagination from '@rinn7e/tea-cup-pagination'
 import { EqAlways } from '@rinn7e/tea-cup-prelude'
-import * as A from 'fp-ts/lib/Array'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as O from 'fp-ts/lib/Option'
 import * as S from 'fp-ts/lib/string'
 import { type Dispatcher } from 'tea-cup-fp'
 
+import { ApiErrorEq, getHttpErrorEq, type ApiError, type HttpError } from '@/common/api/type'
 import {
   type Visitor,
   VisitorEq,
   type VisitorSortAttr,
 } from '@/common/api/type/visitor'
 import * as SearchBar from '@/component/search-bar'
+import { SharedEq, type Shared } from '@/common/type/shared'
+
+export const GET_VISITORS_LIMIT = 50
 
 export type Model = {
   readonly _tag: 'VisitorsModel'
-  readonly visitors: Visitor[]
+  readonly pagination: Pagination.Model<Visitor, HttpError<ApiError>>
   readonly selectedVisitor: O.Option<Visitor>
   readonly searchBar: SearchBar.Model<VisitorSortAttr>
 }
@@ -26,20 +30,30 @@ export type Msg =
       readonly _tag: 'SearchBarMsg'
       readonly subMsg: SearchBar.Msg<VisitorSortAttr>
     }
+  | {
+      readonly _tag: 'PaginationMsg'
+      readonly subMsg: Pagination.Msg<
+        Visitor,
+        void,
+        HttpError<ApiError>
+      >
+    }
 
 export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
   _tag: S.Eq,
-  visitors: A.getEq(VisitorEq),
+  pagination: Pagination.mkModelEq(VisitorEq, getHttpErrorEq(ApiErrorEq)),
   selectedVisitor: O.getEq(VisitorEq),
   searchBar: SearchBar.ModelEq<VisitorSortAttr>(),
 })
 
 export type Props = {
   model: Model
+  shared: Shared
   dispatch: Dispatcher<Msg>
 }
 
 export const PropsEq: EqClass.Eq<Props> = EqClass.struct({
   model: ModelEq,
+  shared: SharedEq,
   dispatch: EqAlways,
 })

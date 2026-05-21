@@ -312,9 +312,11 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
       return (
         <VisitorsPageMemo
           model={model.pageModel.model}
+          shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'VisitorsPageMsg', subMsg })}
         />
       )
+
     case 'LoginPageModel':
       return (
         <LoginPageMemo
