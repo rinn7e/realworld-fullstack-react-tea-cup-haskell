@@ -11,6 +11,7 @@ import type { User } from '@/common/api'
 import { homePage } from '@/common/type/route'
 import { assetPath } from '@/common/util'
 import { Link } from '@/component/link'
+import { Image } from '@/component/image'
 import type { Model, Msg } from '@/type'
 
 interface Props {
@@ -102,8 +103,9 @@ export const Navbar: React.FC<Props> = ({ model, dispatch }) => {
                 data-test='nav-link'
                 aria-current={isProfile ? 'page' : undefined}
               >
-                <img
-                  src={assetPath(optUser.value.image || '/default-avatar.svg')}
+                <Image
+                  src={optUser.value.image ? assetPath(optUser.value.image) : null}
+                  defaultSrc={assetPath('/default-avatar.svg')}
                   className='h-[28px] w-[28px] rounded-full object-cover'
                   alt=''
                   data-test='navbar-user-avatar'

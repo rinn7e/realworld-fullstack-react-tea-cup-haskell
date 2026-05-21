@@ -3,7 +3,7 @@ import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { type Article } from '@/common/api/type/article'
-import { UserImage } from '@/component/user-image'
+import { ProfileThumbnail } from '@/component/profile-thumbnail'
 
 import { type Msg } from '../type'
 
@@ -70,10 +70,11 @@ export const ArticleDetailOverlay: React.FC<{
                 Author
               </div>
               <div className='flex items-center gap-[12px]'>
-                <UserImage
+                <ProfileThumbnail
                   src={article.author.image}
-                  className='h-[40px] w-[40px] rounded-full object-cover shadow-sm'
+                  className='h-[48px] w-[48px] rounded-full object-cover shadow-sm'
                 />
+
                 <div>
                   <div className='text-theme-secondary font-bold dark:text-white'>
                     {article.author.username}

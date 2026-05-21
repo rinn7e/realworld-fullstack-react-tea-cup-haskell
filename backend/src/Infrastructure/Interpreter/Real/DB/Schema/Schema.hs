@@ -58,6 +58,7 @@ Visitor
     userAgent VisitorUserAgent
     path VisitorPath
     timestamp UTCTime
+    userId UserId Maybe OnDeleteSetNull
     deriving Show Generic
 
 Log

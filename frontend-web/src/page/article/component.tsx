@@ -10,6 +10,7 @@ import type { ApiError, ArticleResponse, HttpError } from '@/common/api'
 import { assetPath, memoStrategy } from '@/common/util'
 import { ErrorMessages } from '@/component/error-messages'
 import { favButtonView } from '@/component/fav-button'
+import { Image } from '@/component/image'
 import { IndeterminateProgressBar } from '@/component/indeterminate-progress-bar'
 import { Link } from '@/component/link'
 
@@ -50,8 +51,9 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                     },
                   }}
                 >
-                  <img
-                    src={assetPath(author.image || '/default-avatar.svg')}
+                  <Image
+                    src={author.image ? assetPath(author.image) : null}
+                    defaultSrc={assetPath('/default-avatar.svg')}
                     className='h-[36px] w-[36px] rounded-full object-cover'
                     alt=''
                     data-test='article-author-img'

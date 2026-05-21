@@ -4,6 +4,7 @@ import type { Dispatcher } from 'tea-cup-fp'
 import { assetPath } from '@/common/util'
 import { DotLoading } from '@/component/dot-loading'
 import { favButtonView } from '@/component/fav-button'
+import { Image } from '@/component/image'
 import { Link } from '@/component/link'
 
 import type { Model, Msg } from './type'
@@ -33,8 +34,9 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
               },
             }}
           >
-            <img
-              src={assetPath(model.author.image || '/default-avatar.svg')}
+            <Image
+              src={model.author.image ? assetPath(model.author.image) : null}
+              defaultSrc={assetPath('/default-avatar.svg')}
               className='h-[32px] w-[32px] rounded-full object-cover'
               alt=''
               data-test='article-author-img'

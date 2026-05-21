@@ -10,6 +10,7 @@ import { API_BASE } from '@/common/env'
 import { type AppRoute } from '@/common/type/route'
 import { assetPath, memoStrategy } from '@/common/util'
 import { ErrorMessages } from '@/component/error-messages'
+import { Image } from '@/component/image'
 import { IndeterminateProgressBar } from '@/component/indeterminate-progress-bar'
 import { Link } from '@/component/link'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
@@ -49,8 +50,9 @@ const ProfilePageComponent = ({
               >
                 <div className='mx-auto flex max-w-[1152px] flex-col items-center gap-[12px] px-[16px]'>
                   {/* Avatar */}
-                  <img
-                    src={assetPath(data.profile.image || '/default-avatar.svg')}
+                  <Image
+                    src={data.profile.image ? assetPath(data.profile.image) : null}
+                    defaultSrc={assetPath('/default-avatar.svg')}
                     className='h-[96px] w-[96px] rounded-full border-[4px] border-white object-cover shadow-sm'
                     data-test='profile-avatar'
                     alt=''

@@ -3,6 +3,8 @@ import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { type AuthUser } from '@/common/type/auth-user'
+import { Image } from '@/component/image'
+import { DEFAULT_AVATAR_URL } from '@/component/profile-thumbnail'
 import { themes } from '@/theme/data'
 import { type Theme } from '@/theme/type'
 import { type ColorScheme } from '@/theme/util'
@@ -131,8 +133,9 @@ export const SettingPageComponent: React.FC<{
             {/* Avatar */}
             <div className='bg-theme-primary/10 text-theme-primary ring-theme-primary/10 dark:bg-theme-primary/20 relative flex h-[80px] w-[80px] shrink-0 items-center justify-center overflow-hidden rounded-full text-[28px] font-black ring-4'>
               {user.value.image ? (
-                <img
+                <Image
                   src={user.value.image}
+                  defaultSrc={DEFAULT_AVATAR_URL}
                   alt={user.value.username}
                   className='h-full w-full object-cover'
                 />

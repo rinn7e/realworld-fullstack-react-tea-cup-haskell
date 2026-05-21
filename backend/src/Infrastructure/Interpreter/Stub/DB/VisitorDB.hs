@@ -15,10 +15,10 @@ import Infrastructure.Interpreter.Stub.DB.Types (MockDB (..))
 
 runVisitorDBStub :: (IOE :> es) => IORef MockDB -> Eff (VisitorDB : es) a -> Eff es a
 runVisitorDBStub ref = interpret $ \_ -> \case
-  InsertVisitor ip ua path t -> do
+  InsertVisitor ip ua path t mUid -> do
     atomicModifyIORef' ref $ \db ->
       let vid = VisitorId db.nextVisitorId
-          newVisitor = Visitor vid ip ua path t
+          newVisitor = Visitor vid ip ua path t mUid
           newDb = db
             { nextVisitorId = db.nextVisitorId + 1
             , visitors = Map.insert vid newVisitor db.visitors
@@ -35,7 +35,8 @@ runVisitorDBStub ref = interpret $ \_ -> \case
         limit = maybe 10 D.unLimit mLimit
         offset = maybe 0 D.unOffset mOffset
         sliced = take limit $ drop offset filtered
-    pure (sliced, total)
+        results = map (\v -> (v, v.userId >>= \uid -> Map.lookup uid db.users)) sliced
+    pure (results, total)
   GetVisitorsSince since -> do
     db <- readIORef ref
     let allVisitors = Map.elems db.visitors

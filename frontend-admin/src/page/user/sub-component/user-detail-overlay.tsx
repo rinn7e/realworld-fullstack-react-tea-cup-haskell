@@ -3,7 +3,7 @@ import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { type AdminUser } from '@/common/api/type/user'
-import { UserImage } from '@/component/user-image'
+import { ProfileThumbnail } from '@/component/profile-thumbnail'
 
 import { type Msg } from '../type'
 import { DetailRow } from './detail-row'
@@ -50,8 +50,8 @@ export const UserDetailOverlay: React.FC<{
             </button>
           </div>
           <div className='flex-grow overflow-y-auto p-[32px]'>
-            <div className='mb-[32px] flex items-center gap-[24px]'>
-              <UserImage src={user.image} />
+            <div className='flex items-center gap-[12px]'>
+              <ProfileThumbnail src={user.image} />
               <div>
                 <div className='text-theme-secondary text-[24px] font-bold dark:text-white'>
                   {user.username}

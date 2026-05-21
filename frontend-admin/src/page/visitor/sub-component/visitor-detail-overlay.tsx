@@ -63,6 +63,24 @@ export const VisitorDetailOverlay: React.FC<{
               <DetailRow label='Path' value={visitor.path} />
             </div>
 
+            {visitor.user && (
+              <div className='mt-[32px]'>
+                <div className='mb-[16px] border-b border-slate-100 pb-[8px] text-[12px] font-bold tracking-wider text-slate-400 uppercase dark:border-white/10 dark:text-slate-200'>
+                  Linked User
+                </div>
+                <div className='grid grid-cols-1 gap-[20px]'>
+                  <DetailRow
+                    label='User ID'
+                    value={`#${visitor.user.id}`}
+                    mono
+                  />
+                  <DetailRow label='Username' value={`@${visitor.user.username}`} />
+                  <DetailRow label='Email' value={visitor.user.email} />
+                  <DetailRow label='Role' value={visitor.user.role} />
+                </div>
+              </div>
+            )}
+
             <div className='mt-[24px]'>
               <div className='mb-[8px] text-[12px] font-semibold tracking-wider text-slate-400 uppercase dark:text-slate-200'>
                 User Agent

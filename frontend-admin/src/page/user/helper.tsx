@@ -10,7 +10,7 @@ import { type ApiError, type HttpError } from '@/common/api/type'
 import { type AdminUser } from '@/common/api/type/user'
 import { type Shared } from '@/common/type/shared'
 import { renderPagination } from '@/component/pagination'
-import { UserImage } from '@/component/user-image'
+import { ProfileThumbnail } from '@/component/profile-thumbnail'
 
 import { GET_USERS_LIMIT, type Model, type UserItemMsg } from './type'
 
@@ -140,7 +140,7 @@ export const mkPaginationConfig = (
                         {u.id}
                       </td>
                       <td className='px-[24px] py-[16px]'>
-                        <UserImage
+                        <ProfileThumbnail
                           src={u.image}
                           className='h-[32px] w-[32px] rounded-full object-cover shadow-sm'
                         />

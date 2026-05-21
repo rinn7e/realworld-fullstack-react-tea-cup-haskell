@@ -2,21 +2,11 @@ module Infrastructure.Interpreter.Real.DB.VisitorDB
   ( runVisitorDBPostgres
   , toDomainVisitor
   ) where
+
+import Data.List (foldl')
 import Data.Time (UTCTime)
-import Database.Persist
-  ( Entity (..)
-  , SelectOpt (..)
-  , count
-  , delete
-  , deleteWhere
-  , get
-  , insert
-  , replace
-  , selectList
-  , (==.)
-  , Filter
-  , (>=.)
-  )
+import Database.Esqueleto.Experimental
+import Database.Persist qualified as P
 import Database.Persist.Sql (ConnectionPool, fromSqlKey, runSqlPool, toSqlKey)
 import Effectful
 import Effectful.Dispatch.Dynamic
@@ -25,6 +15,7 @@ import Effectful.Reader.Static
 import Capability.Database.VisitorDB
 import Domain.Type qualified as D
 import Infrastructure.Interpreter.Real.DB.Schema.Schema qualified as DB
+import Infrastructure.Interpreter.Real.DB.UserDB (toDomainUser)
 
 toDomainVisitor :: Entity DB.Visitor -> D.Visitor
 toDomainVisitor (Entity vid v) =
@@ -34,13 +25,13 @@ toDomainVisitor (Entity vid v) =
     , userAgent = v.userAgent
     , path = v.path
     , timestamp = v.timestamp
+    , userId = fmap (D.UserId . fromIntegral . fromSqlKey) v.userId
     }
-
 
 runVisitorDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (VisitorDB : es) a -> Eff es a
 runVisitorDBPostgres = interpret $ \_ -> \case
-  InsertVisitor ip ua path t -> insertVisitorHandler ip ua path t
+  InsertVisitor ip ua path t mUid -> insertVisitorHandler ip ua path t mUid
   ListVisitors mLimit mOffset mIp mPath mSort mDir -> listVisitorsHandler mLimit mOffset mIp mPath mSort mDir
   GetVisitorsSince since -> getVisitorsSinceHandler since
   CountAllVisitors -> countAllVisitorsHandler
@@ -51,14 +42,16 @@ insertVisitorHandler
   -> D.VisitorUserAgent
   -> D.VisitorPath
   -> UTCTime
+  -> Maybe D.UserId
   -> Eff es D.Visitor
-insertVisitorHandler ip ua path t = do
+insertVisitorHandler ip ua path t mUid = do
   pool <- ask @ConnectionPool
   liftIO $
     runSqlPool
       ( do
-          let v = DB.Visitor ip ua path t
-          vid <- insert v
+          let sqlUid = fmap (toSqlKey . fromIntegral . (\(D.UserId i) -> i)) mUid
+              v = DB.Visitor ip ua path t sqlUid
+          vid <- P.insert v
           return $ toDomainVisitor (Entity vid v)
       )
       pool
@@ -71,38 +64,56 @@ listVisitorsHandler
   -> Maybe D.VisitorPath
   -> Maybe D.VisitorSort
   -> Maybe D.Direction
-  -> Eff es ([D.Visitor], Int)
+  -> Eff es ([(D.Visitor, Maybe D.User)], Int)
 listVisitorsHandler mLimit mOffset mIp mPath mSort mDir = do
   pool <- ask @ConnectionPool
   liftIO $
     runSqlPool
       ( do
-          let limit = maybe 10 D.unLimit mLimit
-              offset = maybe 0 D.unOffset mOffset
-              filters =
-                concat
-                  [ maybe [] (\ip -> [DB.VisitorIp ==. ip]) mIp
-                  , maybe [] (\p -> [DB.VisitorPath ==. p]) mPath
-                  ]
-              
-              sortOpt = case (mSort, mDir) of
-                (Just D.VisitorSortId, Just D.Asc) -> Asc DB.VisitorId
-                (Just D.VisitorSortId, _) -> Desc DB.VisitorId
-                (Just D.VisitorSortIp, Just D.Asc) -> Asc DB.VisitorIp
-                (Just D.VisitorSortIp, _) -> Desc DB.VisitorIp
-                (Just D.VisitorSortPath, Just D.Asc) -> Asc DB.VisitorPath
-                (Just D.VisitorSortPath, _) -> Desc DB.VisitorPath
-                (Just D.VisitorSortTimestamp, Just D.Asc) -> Asc DB.VisitorTimestamp
-                (Just D.VisitorSortTimestamp, _) -> Desc DB.VisitorTimestamp
-                (_, Just D.Asc) -> Asc DB.VisitorTimestamp
-                (_, _) -> Desc DB.VisitorTimestamp
+          let lim = maybe 10 D.unLimit mLimit
+              offs = maybe 0 D.unOffset mOffset
 
+          total <- P.count filters
           
-          total <- count filters
-          entities <- selectList filters [sortOpt, LimitTo limit, OffsetBy offset]
-          return (map toDomainVisitor entities, fromIntegral total)
+          entities <- select $ do
+            (visitor :& user) <-
+              from $ table @DB.Visitor
+                `leftJoin` table @DB.User
+                `on` (\(v :& u) -> v ^. DB.VisitorUserId ==. u ?. DB.UserId)
+            
+            where_ $ do
+              let conds =
+                    [ maybe (val True) (\ip -> visitor ^. DB.VisitorIp ==. val ip) mIp
+                    , maybe (val True) (\p -> visitor ^. DB.VisitorPath ==. val p) mPath
+                    ]
+              foldl' (&&.) (val True) conds
+
+            case (mSort, mDir) of
+              (Just D.VisitorSortId, Just D.Asc) -> orderBy [asc (visitor ^. DB.VisitorId)]
+              (Just D.VisitorSortId, _) -> orderBy [desc (visitor ^. DB.VisitorId)]
+              (Just D.VisitorSortIp, Just D.Asc) -> orderBy [asc (visitor ^. DB.VisitorIp)]
+              (Just D.VisitorSortIp, _) -> orderBy [desc (visitor ^. DB.VisitorIp)]
+              (Just D.VisitorSortPath, Just D.Asc) -> orderBy [asc (visitor ^. DB.VisitorPath)]
+              (Just D.VisitorSortPath, _) -> orderBy [desc (visitor ^. DB.VisitorPath)]
+              (Just D.VisitorSortTimestamp, Just D.Asc) -> orderBy [asc (visitor ^. DB.VisitorTimestamp)]
+              (Just D.VisitorSortTimestamp, _) -> orderBy [desc (visitor ^. DB.VisitorTimestamp)]
+              (_, Just D.Asc) -> orderBy [asc (visitor ^. DB.VisitorTimestamp)]
+              (_, _) -> orderBy [desc (visitor ^. DB.VisitorTimestamp)]
+
+            limit (fromIntegral lim)
+            offset (fromIntegral offs)
+            return (visitor, user)
+
+          let results = map (\(v, mu) -> (toDomainVisitor v, fmap toDomainUser mu)) entities
+          return (results, fromIntegral total)
       )
       pool
+  where
+    filters =
+      concat
+        [ maybe [] (\ip -> [DB.VisitorIp P.==. ip]) mIp
+        , maybe [] (\p -> [DB.VisitorPath P.==. p]) mPath
+        ]
 
 getVisitorsSinceHandler
   :: (IOE :> es, Reader ConnectionPool :> es) => UTCTime -> Eff es [D.Visitor]
@@ -111,7 +122,7 @@ getVisitorsSinceHandler since = do
   liftIO $
     runSqlPool
       ( do
-          entities <- selectList [DB.VisitorTimestamp >=. since] []
+          entities <- P.selectList [DB.VisitorTimestamp P.>=. since] []
           return $ map toDomainVisitor entities
       )
       pool
@@ -122,6 +133,6 @@ countAllVisitorsHandler = do
   liftIO $
     runSqlPool
       ( do
-          count ([] :: [Filter DB.Visitor])
+          P.count ([] :: [P.Filter DB.Visitor])
       )
       pool

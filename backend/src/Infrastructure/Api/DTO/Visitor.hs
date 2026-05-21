@@ -12,6 +12,7 @@ import Data.Time (UTCTime)
 import GHC.Generics (Generic)
 
 import Domain.Type qualified as D
+import Infrastructure.Api.DTO.User (AdminUserResponse, toAdminUserResponse)
 
 data VisitorResponse = VisitorResponse
   { id :: Int
@@ -19,6 +20,7 @@ data VisitorResponse = VisitorResponse
   , userAgent :: Text
   , path :: Text
   , timestamp :: UTCTime
+  , user :: Maybe AdminUserResponse
   }
   deriving stock (Show, Generic)
   deriving anyclass (ToJSON, ToSchema)
@@ -33,12 +35,13 @@ data VisitorListResponse = VisitorListResponse
 -------------------------------
 -- Helpers
 -------------------------------
-toVisitorResponse :: D.Visitor -> VisitorResponse
-toVisitorResponse v =
+toVisitorResponse :: D.Visitor -> Maybe D.User -> VisitorResponse
+toVisitorResponse v mUser =
   VisitorResponse
     { id = v.visitorId.unVisitorId
     , ip = v.ip.unVisitorIp
     , userAgent = v.userAgent.unVisitorUserAgent
     , path = v.path.unVisitorPath
     , timestamp = v.timestamp
+    , user = fmap toAdminUserResponse mUser
     }

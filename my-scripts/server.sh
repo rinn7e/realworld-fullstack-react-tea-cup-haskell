@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Script to start backend, frontend web, and admin dashboard in new terminal tabs
-
-ROOT_DIR="/home/rinne/projects/my-package/realworld-fullstack-react-tea-cup-haskell"
-
-# Open 1 window with 3 tabs: backend, frontend-web, frontend-admin
-gnome-terminal \
-  --tab --title="Conduit Backend"    -- bash -c "cd '$ROOT_DIR'        && ./my-scripts/core/server.sh"
+concurrently \
+  --names "BACKEND,WEB,ADMIN" \
+  --prefix-colors "blue,green,magenta" \
+  --kill-others \
+  "cd backend && direnv exec . make server" \
+  "cd frontend-web && pnpm dev" \
+  "cd frontend-admin && pnpm dev"

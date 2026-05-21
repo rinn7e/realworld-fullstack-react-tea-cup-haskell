@@ -91,6 +91,7 @@ export const mkPaginationConfig = (
                 <thead className='bg-slate-50 text-[12px] font-semibold tracking-wider text-slate-500 uppercase dark:bg-black/20 dark:text-slate-200'>
                   <tr>
                     <th className='px-[24px] py-[16px]'>ID</th>
+                    <th className='px-[24px] py-[16px]'>User</th>
                     <th className='px-[24px] py-[16px]'>IP Address</th>
                     <th className='px-[24px] py-[16px]'>Path</th>
                     <th className='px-[24px] py-[16px]'>User Agent</th>
@@ -111,6 +112,17 @@ export const mkPaginationConfig = (
                     >
                       <td className='px-[24px] py-[16px] font-mono text-slate-400 dark:text-slate-200'>
                         {v.id}
+                      </td>
+                      <td className='px-[24px] py-[16px] font-medium text-slate-600 dark:text-slate-200'>
+                        {v.user ? (
+                          <span className='text-theme-primary font-semibold'>
+                            @{v.user.username}
+                          </span>
+                        ) : (
+                          <span className='text-slate-400 italic'>
+                            Anonymous
+                          </span>
+                        )}
                       </td>
                       <td className='text-theme-secondary px-[24px] py-[16px] font-medium dark:text-white'>
                         {v.ip}

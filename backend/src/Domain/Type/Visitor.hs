@@ -5,7 +5,8 @@ import Data.String (IsString)
 import Data.Text (Text)
 import Data.Time (UTCTime)
 import GHC.Generics (Generic)
-import Web.HttpApiData (FromHttpApiData(..), ToHttpApiData(..))
+import Domain.Type.User (UserId)
+import Web.HttpApiData (FromHttpApiData (..), ToHttpApiData (..))
 
 newtype VisitorId = VisitorId {unVisitorId :: Int}
   deriving stock (Eq, Ord, Show, Generic)
@@ -47,5 +48,7 @@ data Visitor = Visitor
   , userAgent :: VisitorUserAgent
   , path :: VisitorPath
   , timestamp :: UTCTime
+  , userId :: Maybe UserId
   }
   deriving stock (Eq, Ord, Show, Generic)
+

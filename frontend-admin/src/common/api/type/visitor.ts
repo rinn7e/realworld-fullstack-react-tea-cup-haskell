@@ -1,7 +1,14 @@
+import { NullableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
 import * as t from 'io-ts'
+
+import {
+  type AdminUser,
+  AdminUserEq,
+  AdminUserJson,
+} from './user'
 
 export type VisitorSortAttr = 'id' | 'ip' | 'path' | 'timestamp'
 
@@ -11,6 +18,7 @@ export type Visitor = {
   userAgent: string
   path: string
   timestamp: string
+  user: AdminUser | null
 }
 
 export const VisitorEq: EqClass.Eq<Visitor> = EqClass.struct({
@@ -19,6 +27,7 @@ export const VisitorEq: EqClass.Eq<Visitor> = EqClass.struct({
   userAgent: S.Eq,
   path: S.Eq,
   timestamp: S.Eq,
+  user: NullableEq(AdminUserEq),
 })
 
 export const VisitorJson: t.Type<Visitor> = t.type({
@@ -27,6 +36,7 @@ export const VisitorJson: t.Type<Visitor> = t.type({
   userAgent: t.string,
   path: t.string,
   timestamp: t.string,
+  user: t.union([AdminUserJson, t.null]),
 })
 
 export type VisitorListResponse = {

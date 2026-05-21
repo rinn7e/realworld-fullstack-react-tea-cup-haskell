@@ -2,8 +2,8 @@ import * as O from 'fp-ts/lib/Option'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type Comment } from '@/common/api/type/comment'
-import { UserImage } from '@/component/user-image'
+import type { Comment } from '@/common/api/type/comment'
+import { ProfileThumbnail } from '@/component/profile-thumbnail'
 
 import { type Msg } from '../type'
 import { DetailRow } from './detail-row'
@@ -55,7 +55,7 @@ export const CommentDetailOverlay: React.FC<{
                 Author
               </div>
               <div className='flex items-center gap-[12px]'>
-                <UserImage
+                <ProfileThumbnail
                   src={
                     comment.author.image ||
                     `https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.author.username}`

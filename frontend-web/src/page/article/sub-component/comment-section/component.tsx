@@ -12,6 +12,7 @@ import {
 import { assetPath, memoStrategy } from '@/common/util'
 import { DotLoading } from '@/component/dot-loading'
 import { ErrorMessages } from '@/component/error-messages'
+import { Image } from '@/component/image'
 import { Link } from '@/component/link'
 
 import { type Props, PropsEq } from './type'
@@ -54,8 +55,9 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
               O.fold(
                 () => null,
                 (u) => (
-                  <img
-                    src={assetPath(u.image || '/default-avatar.svg')}
+                  <Image
+                    src={u.image ? assetPath(u.image) : null}
+                    defaultSrc={assetPath('/default-avatar.svg')}
                     className='h-[20px] w-[20px] rounded-full object-cover'
                     alt=''
                     data-test='comment-author-img'
@@ -114,10 +116,9 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                         },
                       }}
                     >
-                      <img
-                        src={assetPath(
-                          comment.author.image || '/default-avatar.svg',
-                        )}
+                      <Image
+                        src={comment.author.image ? assetPath(comment.author.image) : null}
+                        defaultSrc={assetPath('/default-avatar.svg')}
                         className='h-[20px] w-[20px] rounded-full object-cover'
                         alt=''
                         data-test='comment-author-img'

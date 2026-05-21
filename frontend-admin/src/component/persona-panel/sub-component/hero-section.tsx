@@ -1,4 +1,5 @@
 import React from 'react'
+import { Image } from '@/component/image'
 
 export const HeroSection: React.FC<{
   portraitUrl: string
@@ -7,8 +8,9 @@ export const HeroSection: React.FC<{
   return (
     <div className='absolute inset-0 flex items-start justify-center overflow-hidden bg-black'>
       <div className='animate-persona flex h-full w-full items-start justify-center p-[40px]'>
-        <img
+        <Image
           src={portraitUrl}
+          defaultSrc='https://api.dicebear.com/7.x/shapes/svg?seed=placeholder'
           className='h-full w-full object-contain object-top'
           alt='Persona Portrait'
         />

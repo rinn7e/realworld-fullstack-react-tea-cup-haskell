@@ -10,7 +10,7 @@ import { type ApiError, type HttpError } from '@/common/api/type'
 import type { Comment } from '@/common/api/type/comment'
 import type { Shared } from '@/common/type/shared'
 import { renderPagination } from '@/component/pagination'
-import { UserImage } from '@/component/user-image'
+import { ProfileThumbnail } from '@/component/profile-thumbnail'
 
 import { type CommentItemMsg, GET_COMMENTS_LIMIT, type Model } from './type'
 
@@ -139,7 +139,7 @@ export const mkPaginationConfig = (
                         {c.id}
                       </td>
                       <td className='text-theme-secondary flex items-center gap-[8px] px-[24px] py-[16px] font-medium dark:text-white'>
-                        <UserImage
+                        <ProfileThumbnail
                           src={c.author.image}
                           className='h-[24px] w-[24px] rounded-full object-cover shadow-sm'
                         />
