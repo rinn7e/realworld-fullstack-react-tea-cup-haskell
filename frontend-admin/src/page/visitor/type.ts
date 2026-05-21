@@ -28,16 +28,25 @@ export type Model = {
   readonly searchBar: SearchBar.Model<VisitorSortAttr>
 }
 
+export type VisitorItemMsg = {
+  readonly _tag: 'SelectVisitor'
+  readonly visitor: O.Option<Visitor>
+}
+
 export type Msg =
   | { readonly _tag: 'NoOp' }
-  | { readonly _tag: 'SelectVisitor'; readonly visitor: O.Option<Visitor> }
+  | { readonly _tag: 'ClearSelected' }
   | {
       readonly _tag: 'SearchBarMsg'
       readonly subMsg: SearchBar.Msg<VisitorSortAttr>
     }
   | {
       readonly _tag: 'PaginationMsg'
-      readonly subMsg: Pagination.Msg<Visitor, void, HttpError<ApiError>>
+      readonly subMsg: Pagination.Msg<
+        Visitor,
+        VisitorItemMsg,
+        HttpError<ApiError>
+      >
     }
 
 export const ModelEq: EqClass.Eq<Model> = EqClass.struct({

@@ -11,7 +11,7 @@ import { type Visitor } from '@/common/api/type/visitor'
 import { type Shared } from '@/common/type/shared'
 import { renderPagination } from '@/component/pagination'
 
-import { GET_VISITORS_LIMIT, type Model } from './type'
+import { GET_VISITORS_LIMIT, type Model, type VisitorItemMsg } from './type'
 
 const getSearchParams = (
   searchText: string,
@@ -27,7 +27,7 @@ const getSearchParams = (
 export const mkPaginationConfig = (
   shared: Shared,
   model: Model,
-): Pagination.Config<Visitor, void, HttpError<ApiError>> => ({
+): Pagination.Config<Visitor, VisitorItemMsg, HttpError<ApiError>> => ({
   limit: GET_VISITORS_LIMIT,
   scrollContainerId: 'main-content',
   handler: (offset, limit) =>
@@ -56,7 +56,7 @@ export const mkPaginationConfig = (
           ),
       ),
     ),
-  renderItems: (itemsRD, _) => {
+  renderItems: (itemsRD, itemDispatch) => {
     return pipe(
       itemsRD,
       RD.fold(
@@ -102,6 +102,12 @@ export const mkPaginationConfig = (
                     <tr
                       key={v.id}
                       className='cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-white/5'
+                      onClick={() =>
+                        itemDispatch(v, {
+                          _tag: 'SelectVisitor',
+                          visitor: O.some(v),
+                        })
+                      }
                     >
                       <td className='px-[24px] py-[16px] font-mono text-slate-400 dark:text-slate-200'>
                         {v.id}

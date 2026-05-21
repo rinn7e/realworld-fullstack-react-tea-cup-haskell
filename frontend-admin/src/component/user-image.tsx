@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 export interface UserImageProps {
   src?: string | null
@@ -14,5 +14,18 @@ export const UserImage: React.FC<UserImageProps> = ({
   className = 'h-[100px] w-[100px] rounded-[24px] border-4 border-white object-cover shadow-lg',
   alt = '',
 }) => {
-  return <img src={src || DEFAULT_AVATAR_URL} className={className} alt={alt} />
+  const [currentSrc, setCurrentSrc] = useState(src || DEFAULT_AVATAR_URL)
+
+  useEffect(() => {
+    setCurrentSrc(src || DEFAULT_AVATAR_URL)
+  }, [src])
+
+  return (
+    <img
+      src={currentSrc}
+      className={className}
+      alt={alt}
+      onError={() => setCurrentSrc(DEFAULT_AVATAR_URL)}
+    />
+  )
 }

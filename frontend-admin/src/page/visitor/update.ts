@@ -10,7 +10,7 @@ import { type Shared } from '@/common/type/shared'
 import * as SearchBar from '@/component/search-bar'
 
 import { mkPaginationConfig } from './helper'
-import { type Model, type Msg } from './type'
+import { type Model, type Msg, type VisitorItemMsg } from './type'
 
 export const init = (shared: Shared): [Model, Cmd<Msg>] => {
   const [searchBar, searchBarCmd] = SearchBar.init<VisitorSortAttr>(
@@ -51,8 +51,8 @@ export const update =
   (shared: Shared) =>
   (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     switch (msg._tag) {
-      case 'SelectVisitor':
-        return [{ ...model, selectedVisitor: msg.visitor }, Cmd.none()]
+      case 'ClearSelected':
+        return [{ ...model, selectedVisitor: O.none }, Cmd.none()]
       case 'SearchBarMsg':
         return searchBarMsgHandler(shared, msg.subMsg, model)
       case 'PaginationMsg':
@@ -109,8 +109,28 @@ const paginationMsgHandler = (
     model.pagination,
   )
 
-  return [
-    { ...model, pagination },
-    paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
-  ]
+  return pipe(
+    [
+      { ...model, pagination },
+      paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
+    ] as [Model, Cmd<Msg>],
+    updateAndCmd((m) => {
+      if (subMsg._tag === 'ItemMsg') {
+        return paginationItemMsgHandler(subMsg.msg)(m)
+      } else {
+        return [m, Cmd.none()]
+      }
+    }),
+  )
 }
+
+const paginationItemMsgHandler =
+  (msg: VisitorItemMsg) =>
+  (m: Model): [Model, Cmd<Msg>] => {
+    switch (msg._tag) {
+      case 'SelectVisitor':
+        return [{ ...m, selectedVisitor: msg.visitor }, Cmd.none()]
+      default:
+        return [m, Cmd.none()]
+    }
+  }

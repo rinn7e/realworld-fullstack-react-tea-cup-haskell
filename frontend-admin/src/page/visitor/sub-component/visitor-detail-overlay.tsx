@@ -19,7 +19,7 @@ export const VisitorDetailOverlay: React.FC<{
     <>
       <div
         className='fixed inset-0 z-40 cursor-pointer bg-slate-900/20 backdrop-blur-[2px] dark:bg-black/50'
-        onClick={() => dispatch({ _tag: 'SelectVisitor', visitor: O.none })}
+        onClick={() => dispatch({ _tag: 'ClearSelected' })}
       />
       <div className='animate-in slide-in-from-right dark:bg-surface-dark fixed top-0 right-0 z-50 h-full w-full max-w-[50%] bg-white shadow-2xl duration-300'>
         <div className='flex h-full flex-col'>
@@ -29,9 +29,7 @@ export const VisitorDetailOverlay: React.FC<{
             </h3>
             <button
               type='button'
-              onClick={() =>
-                dispatch({ _tag: 'SelectVisitor', visitor: O.none })
-              }
+              onClick={() => dispatch({ _tag: 'ClearSelected' })}
               className='rounded-full p-[8px] text-slate-400 hover:bg-slate-50 hover:text-slate-600 dark:text-slate-200 dark:hover:bg-white/5 dark:hover:text-white'
             >
               <svg
@@ -50,20 +48,27 @@ export const VisitorDetailOverlay: React.FC<{
               </svg>
             </button>
           </div>
-          <div className='flex-grow overflow-y-auto p-[24px]'>
-            <DetailRow label='Internal ID' value={visitor.id.toString()} mono />
-            <DetailRow label='IP Address' value={visitor.ip} />
-            <DetailRow label='Requested Path' value={visitor.path} mono />
-            <DetailRow
-              label='Visited At'
-              value={new Date(visitor.timestamp).toLocaleString()}
-            />
+          <div className='flex-grow overflow-y-auto p-[32px]'>
+            <div className='mb-[32px]'>
+              <div className='text-theme-secondary text-[24px] font-bold dark:text-white'>
+                Visitor #{visitor.id}
+              </div>
+              <div className='text-slate-500 dark:text-slate-200'>
+                {new Date(visitor.timestamp).toLocaleString()}
+              </div>
+            </div>
+
+            <div className='grid grid-cols-1 gap-[24px]'>
+              <DetailRow label='IP Address' value={visitor.ip} mono />
+              <DetailRow label='Path' value={visitor.path} />
+            </div>
+
             <div className='mt-[24px]'>
               <div className='mb-[8px] text-[12px] font-semibold tracking-wider text-slate-400 uppercase dark:text-slate-200'>
                 User Agent
               </div>
-              <div className='rounded-[8px] bg-slate-50 p-[16px] font-mono text-[12px] leading-relaxed text-slate-600 dark:bg-black/20 dark:text-slate-200'>
-                {visitor.userAgent || 'No User Agent recorded'}
+              <div className='rounded-[12px] border border-slate-100 bg-slate-50 p-[20px] text-[15px] leading-relaxed text-slate-600 dark:border-white/20 dark:bg-black/20 dark:text-slate-200'>
+                {visitor.userAgent}
               </div>
             </div>
           </div>
