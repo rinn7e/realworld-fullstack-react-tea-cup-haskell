@@ -18,7 +18,7 @@ The project includes a standalone E2E test suite based on Playwright. These test
     ```
 4.  Run tests against your local frontend:
     ```bash
-    BASE_URL=http://localhost:5173 npm run test:e2e
+    BASE_URL=http://localhost:8001 npm run test:e2e
     ```
 
 > [!TIP]
@@ -27,7 +27,7 @@ The project includes a standalone E2E test suite based on Playwright. These test
 To run tests in interactive mode:
 
 ```bash
-BASE_URL=http://localhost:5173 npm run test:e2e:ui
+BASE_URL=http://localhost:8001 npm run test:e2e:ui
 ```
 
 ## Running tests against a remote API
@@ -55,5 +55,5 @@ npx playwright test -g "should favorite an article" --reporter=line
 - agent may nto able to access envrc, so
 
 ```
-BASE_URL=http://localhost:5173 npx playwright test -g "should favorite an article" --reporter=line
+BASE_URL=http://localhost:8001 npx playwright test -g "should favorite an article" --reporter=line
 ```

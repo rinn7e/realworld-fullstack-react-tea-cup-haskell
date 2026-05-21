@@ -40,7 +40,7 @@ export const initPageModel = (
 ): [PageModel, Cmd<Msg>] => {
   switch (route.page._tag) {
     case 'HomePage': {
-      const [m, c] = Home.init()
+      const [m, c] = Home.init(shared)
       return [
         { _tag: 'HomePageModel', model: m },
         c.map((subMsg): Msg => ({ _tag: 'HomePageMsg', subMsg })),
@@ -366,7 +366,7 @@ const homePageMsgHandler = (
   model: Model,
 ): [Model, Cmd<Msg>] => {
   if (model.pageModel._tag === 'HomePageModel') {
-    const [m, c] = Home.update(subMsg, model.pageModel.model)
+    const [m, c] = Home.update(model.shared)(subMsg, model.pageModel.model)
     return [
       { ...model, pageModel: { ...model.pageModel, model: m } },
       c.map((msg): Msg => ({ _tag: 'HomePageMsg', subMsg: msg })),

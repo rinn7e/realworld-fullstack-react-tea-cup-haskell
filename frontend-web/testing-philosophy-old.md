@@ -120,7 +120,7 @@ Our suite is built in four distinct layers to separate "Business Intent" from "I
     export default defineConfig({
       webServer: !isRemoteApi ? [{
         command: 'make run',
-        url: 'http://localhost:3000/api/tags',
+        url: 'http://localhost:8000/api/tags',
         cwd: '../../backend'
       }] : []
     });

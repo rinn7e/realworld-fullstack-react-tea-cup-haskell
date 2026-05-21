@@ -52,11 +52,15 @@ export const getLogs = (
   params: {
     limit?: number
     offset?: number
+    level?: string
+    source?: string
   } = {},
 ): TE.TaskEither<HttpError<ApiError>, LogListResponse> => {
   const query = new URLSearchParams()
   if (params.limit !== undefined) query.set('limit', String(params.limit))
   if (params.offset !== undefined) query.set('offset', String(params.offset))
+  if (params.level !== undefined) query.set('level', params.level)
+  if (params.source !== undefined) query.set('source', params.source)
   const qs = query.toString()
 
   return pipe(

@@ -2,12 +2,14 @@ import * as O from 'fp-ts/lib/Option'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type ErrorLog, type Msg } from '../type'
+import { type Log } from '@/common/api/type/dashboard'
+
+import { type Msg } from '../type'
 import { DetailRow } from './detail-row'
 import { LevelBadge } from './level-badge'
 
 export const LogDetailOverlay: React.FC<{
-  selectedLog: O.Option<ErrorLog>
+  selectedLog: O.Option<Log>
   dispatch: Dispatcher<Msg>
 }> = ({ selectedLog, dispatch }) => {
   if (O.isNone(selectedLog)) return null

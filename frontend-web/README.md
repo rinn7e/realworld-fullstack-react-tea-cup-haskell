@@ -46,7 +46,7 @@ cd ../realworld-fullstack-react-tea-cup-haskell/frontend-web
    ```bash
    pnpm install
    ```
-3. Ensure you have a local [RealWorld backend](https://github.com/gothinkster/realworld) running (usually on `http://localhost:3000/api`).
+3. Ensure you have a local [RealWorld backend](https://github.com/gothinkster/realworld) running (usually on `http://localhost:8000/api`).
 4. Run the development server:
    ```bash
    pnpm dev

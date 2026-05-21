@@ -281,6 +281,7 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
       return (
         <HomePageMemo
           model={model.pageModel.model}
+          shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'HomePageMsg', subMsg })}
         />
       )

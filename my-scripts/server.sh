@@ -6,4 +6,4 @@ ROOT_DIR="/home/rinne/projects/my-package/realworld-fullstack-react-tea-cup-hask
 
 # Open 1 window with 3 tabs: backend, frontend-web, frontend-admin
 gnome-terminal \
-  --tab --title="Conduit Backend"    -- bash -c "cd '$ROOT_DIR'        && ./my-scripts/server-core.sh" \
+  --tab --title="Conduit Backend"    -- bash -c "cd '$ROOT_DIR'        && ./my-scripts/core/server.sh" \

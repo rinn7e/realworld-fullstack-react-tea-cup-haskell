@@ -11,10 +11,10 @@ import { type PlaywrightTestConfig, devices } from '@playwright/test'
  *
  * export default defineConfig({
  *   ...baseConfig,
- *   use: { ...baseConfig.use, baseURL: 'http://localhost:3000' },
+ *   use: { ...baseConfig.use, baseURL: 'http://localhost:8000' },
  *   webServer: {
  *     command: 'npm run start',
- *     url: 'http://localhost:3000',
+ *     url: 'http://localhost:8000',
  *     reuseExistingServer: !process.env.CI,
  *     timeout: 120_000,
  *   },
