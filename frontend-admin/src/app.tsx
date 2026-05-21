@@ -13,13 +13,13 @@ import {
 } from '@/common/type/route'
 import { Link } from '@/component/link'
 import { PersonaPanel } from '@/component/persona-panel/persona-panel'
-import { ArticlesPageMemo } from '@/page/articles/component'
-import { CommentsPageMemo } from '@/page/comments/component'
+import { ArticlesPageMemo } from '@/page/article/component'
+import { CommentsPageMemo } from '@/page/comment/component'
 import { HomePageMemo } from '@/page/home/component'
 import { LoginPageMemo } from '@/page/login/component'
-import { SettingsPageComponent } from '@/page/settings/component'
-import { UsersPageMemo } from '@/page/users/component'
-import { VisitorsPageMemo } from '@/page/visitors/component'
+import { SettingsPageComponent } from '@/page/setting/component'
+import { UsersPageMemo } from '@/page/user/component'
+import { VisitorsPageMemo } from '@/page/visitor/component'
 
 import { type Model, type Msg } from './type'
 
