@@ -7,6 +7,37 @@ import { type Visitor } from '@/common/api/type/visitor'
 import { type Msg } from '../type'
 import { DetailRow } from './detail-row'
 
+const FingerprintBreakdown: React.FC<{ fingerprint: string; ip: string; userAgent: string }> = ({
+  fingerprint,
+  ip,
+  userAgent,
+}) => (
+  <div>
+    <DetailRow label='Fingerprint' value={fingerprint || '-'} mono />
+    <div className='mt-[10px] rounded-[10px] border border-slate-100 bg-slate-50 p-[16px] dark:border-white/10 dark:bg-black/20'>
+      <div className='mb-[8px] text-[11px] font-bold tracking-wider text-slate-400 uppercase dark:text-slate-400'>
+        How is this calculated?
+      </div>
+      <div className='font-mono text-[12px] text-slate-500 dark:text-slate-300'>
+        SHA-256( IP &nbsp;<span className='text-slate-300 dark:text-slate-500'>|</span>&nbsp; User-Agent &nbsp;<span className='text-slate-300 dark:text-slate-500'>|</span>&nbsp; Accept-Language )
+      </div>
+      <div className='mt-[10px] grid grid-cols-1 gap-[6px]'>
+        <div className='flex items-start gap-[8px] text-[12px]'>
+          <span className='mt-[1px] shrink-0 rounded bg-blue-100 px-[6px] py-[1px] font-mono text-[11px] text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'>IP</span>
+          <span className='break-all text-slate-500 dark:text-slate-300'>{ip}</span>
+        </div>
+        <div className='flex items-start gap-[8px] text-[12px]'>
+          <span className='mt-[1px] shrink-0 rounded bg-violet-100 px-[6px] py-[1px] font-mono text-[11px] text-violet-600 dark:bg-violet-900/40 dark:text-violet-300'>UA</span>
+          <span className='break-all text-slate-500 dark:text-slate-300'>{userAgent}</span>
+        </div>
+      </div>
+      <p className='mt-[10px] text-[11px] leading-relaxed text-slate-400 dark:text-slate-500'>
+        Each unique combination of IP address, browser User-Agent, and Accept-Language header produces the same hash — identifying the same device across visits without storing personal data.
+      </p>
+    </div>
+  </div>
+)
+
 export const VisitorDetailOverlay: React.FC<{
   selectedVisitor: O.Option<Visitor>
   dispatch: Dispatcher<Msg>
@@ -61,7 +92,11 @@ export const VisitorDetailOverlay: React.FC<{
             <div className='grid grid-cols-1 gap-[24px]'>
               <DetailRow label='IP Address' value={visitor.ip} mono />
               <DetailRow label='Path' value={visitor.path} />
-              <DetailRow label='Fingerprint' value={visitor.fingerprint || '-'} mono />
+              <FingerprintBreakdown
+                fingerprint={visitor.fingerprint}
+                ip={visitor.ip}
+                userAgent={visitor.userAgent}
+              />
             </div>
 
             {visitor.user && (
@@ -84,15 +119,6 @@ export const VisitorDetailOverlay: React.FC<{
                 </div>
               </div>
             )}
-
-            <div className='mt-[24px]'>
-              <div className='mb-[8px] text-[12px] font-semibold tracking-wider text-slate-400 uppercase dark:text-slate-200'>
-                User Agent
-              </div>
-              <div className='rounded-[12px] border border-slate-100 bg-slate-50 p-[20px] text-[15px] leading-relaxed text-slate-600 dark:border-white/20 dark:bg-black/20 dark:text-slate-200'>
-                {visitor.userAgent}
-              </div>
-            </div>
           </div>
         </div>
       </div>

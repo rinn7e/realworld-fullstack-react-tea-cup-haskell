@@ -13,7 +13,7 @@ import Servant (NoContent (..))
 import Test.Hspec
 import Data.Text qualified as T
 
-import Capability.Database.VisitorDB (insertVisitor)
+import Capability.Database.VisitorDB (upsertVisitor)
 import Domain.Type qualified as D
 import Infrastructure.Api.DTO
 import Infrastructure.Api.Route.Auth.Web.Controller (registerUserHandler)
@@ -71,7 +71,7 @@ spec = do
       resStats2.totalUsers `shouldBe` 2
 
       -- 7. Test visitor insertion capability, controller handler, and retrieval by admin
-      _ <- runAppInMemory dbRef fixedTime (insertVisitor (D.VisitorIp "127.0.0.1") (D.VisitorUserAgent "Mozilla") (D.VisitorPath "/api/articles") (D.VisitorFp "dummy-fp") fixedTime Nothing)
+      _ <- runAppInMemory dbRef fixedTime (upsertVisitor (D.VisitorIp "127.0.0.1") (D.VisitorUserAgent "Mozilla") (D.VisitorPath "/api/articles") (D.VisitorFp "dummy-fp") fixedTime Nothing)
       
       let trackReq = TrackVisitorRequest { path = "/home" }
       resTrack <- runAppInMemory dbRef fixedTime (trackVisitorHandler S.Indefinite trackReq (Just "Mozilla/5.0") (Just "1.2.3.4") Nothing Nothing)

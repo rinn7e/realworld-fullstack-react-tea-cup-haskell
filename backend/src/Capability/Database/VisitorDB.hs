@@ -7,7 +7,7 @@ import Effectful
 import Effectful.Dispatch.Dynamic
 
 data VisitorDB :: Effect where
-  InsertVisitor
+  UpsertVisitor
     :: VisitorIp -> VisitorUserAgent -> VisitorPath -> VisitorFp -> UTCTime -> Maybe UserId -> VisitorDB m Visitor
   ListVisitors
     :: Maybe D.Limit
@@ -22,7 +22,7 @@ data VisitorDB :: Effect where
 
 type instance DispatchOf VisitorDB = 'Dynamic
 
-insertVisitor
+upsertVisitor
   :: (VisitorDB :> es)
   => VisitorIp
   -> VisitorUserAgent
@@ -31,7 +31,7 @@ insertVisitor
   -> UTCTime
   -> Maybe UserId
   -> Eff es Visitor
-insertVisitor ip ua path fp t mUid = send (InsertVisitor ip ua path fp t mUid)
+upsertVisitor ip ua path fp t mUid = send (UpsertVisitor ip ua path fp t mUid)
 
 listVisitors
   :: (VisitorDB :> es)

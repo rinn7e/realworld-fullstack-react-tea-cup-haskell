@@ -1,5 +1,6 @@
 import * as Pagination from '@rinn7e/tea-cup-pagination'
 import { EqAlways } from '@rinn7e/tea-cup-prelude'
+import * as B from 'fp-ts/lib/boolean'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as O from 'fp-ts/lib/Option'
 import * as S from 'fp-ts/lib/string'
@@ -26,6 +27,7 @@ export type Model = {
   readonly pagination: Pagination.Model<Visitor, HttpError<ApiError>>
   readonly selectedVisitor: O.Option<Visitor>
   readonly searchBar: SearchBar.Model<VisitorSortAttr>
+  readonly isDescriptionOpen: boolean
 }
 
 export type VisitorItemMsg = {
@@ -36,6 +38,7 @@ export type VisitorItemMsg = {
 export type Msg =
   | { readonly _tag: 'NoOp' }
   | { readonly _tag: 'ClearSelected' }
+  | { readonly _tag: 'ToggleDescription' }
   | {
       readonly _tag: 'SearchBarMsg'
       readonly subMsg: SearchBar.Msg<VisitorSortAttr>
@@ -54,6 +57,7 @@ export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
   pagination: Pagination.mkModelEq(VisitorEq, getHttpErrorEq(ApiErrorEq)),
   selectedVisitor: O.getEq(VisitorEq),
   searchBar: SearchBar.ModelEq<VisitorSortAttr>(),
+  isDescriptionOpen: B.Eq,
 })
 
 export type Props = {

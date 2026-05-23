@@ -58,6 +58,6 @@ trackVisitorHandler auth req mUserAgent mForwarded mRealIp mAcceptLang = do
       mUid = case auth of
         S.Authenticated uid -> Just $ D.UserId $ fromIntegral (fromSqlKey uid)
         _ -> Nothing
-  _ <- insertVisitor ip ua path fingerprint now mUid
+  _ <- upsertVisitor ip ua path fingerprint now mUid
   return S.NoContent
 

@@ -28,6 +28,7 @@ export const init = (shared: Shared): [Model, Cmd<Msg>] => {
     },
     selectedVisitor: O.none,
     searchBar,
+    isDescriptionOpen: false,
   }
 
   const paginationConfig = mkPaginationConfig(shared, initialModel)
@@ -53,6 +54,11 @@ export const update =
     switch (msg._tag) {
       case 'ClearSelected':
         return [{ ...model, selectedVisitor: O.none }, Cmd.none()]
+      case 'ToggleDescription':
+        return [
+          { ...model, isDescriptionOpen: !model.isDescriptionOpen },
+          Cmd.none(),
+        ]
       case 'SearchBarMsg':
         return searchBarMsgHandler(shared, msg.subMsg, model)
       case 'PaginationMsg':

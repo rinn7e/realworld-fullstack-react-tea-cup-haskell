@@ -15,15 +15,22 @@ import Infrastructure.Interpreter.Stub.DB.Types (MockDB (..))
 
 runVisitorDBStub :: (IOE :> es) => IORef MockDB -> Eff (VisitorDB : es) a -> Eff es a
 runVisitorDBStub ref = interpret $ \_ -> \case
-  InsertVisitor ip ua path fp t mUid -> do
+  UpsertVisitor ip ua path fp t mUid -> do
     atomicModifyIORef' ref $ \db ->
-      let vid = VisitorId db.nextVisitorId
-          newVisitor = Visitor vid ip ua path fp t mUid
-          newDb = db
-            { nextVisitorId = db.nextVisitorId + 1
-            , visitors = Map.insert vid newVisitor db.visitors
-            }
-      in (newDb, newVisitor)
+      let existing = L.find (\v -> v.fingerprint == fp) (Map.elems db.visitors)
+      in case existing of
+        Just v ->
+          let updated = v { ip = ip, userAgent = ua, path = path, timestamp = t, userId = mUid }
+              newDb = db { visitors = Map.insert v.visitorId updated db.visitors }
+          in (newDb, updated)
+        Nothing ->
+          let vid = VisitorId db.nextVisitorId
+              newVisitor = Visitor vid ip ua path fp t mUid
+              newDb = db
+                { nextVisitorId = db.nextVisitorId + 1
+                , visitors = Map.insert vid newVisitor db.visitors
+                }
+          in (newDb, newVisitor)
   ListVisitors mLimit mOffset mIp mPath mSort mDir -> do
     db <- readIORef ref
     let allVisitors = Map.elems db.visitors
