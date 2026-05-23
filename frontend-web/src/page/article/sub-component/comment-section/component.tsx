@@ -117,7 +117,11 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                       }}
                     >
                       <Image
-                        src={comment.author.image ? assetPath(comment.author.image) : null}
+                        src={
+                          comment.author.image
+                            ? assetPath(comment.author.image)
+                            : null
+                        }
                         defaultSrc={assetPath('/default-avatar.svg')}
                         className='h-[20px] w-[20px] rounded-full object-cover'
                         alt=''

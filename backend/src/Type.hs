@@ -23,6 +23,7 @@ import Infrastructure.Api.Route.Metadata.Web.Type (MetadataRoute)
 import Infrastructure.Api.Route.Tag.Web.Type (TagRoute)
 import Infrastructure.Api.Route.User.Admin.Type (AdminUserRoute)
 import Infrastructure.Api.Route.User.Web.Type (UserRoute)
+import Infrastructure.Api.Route.Visitor.Web.Type (VisitorWebRoute)
 import Infrastructure.Interpreter.Real.DB.Schema.Schema (UserId)
 
 type AppApi auths = S.Auth auths UserId :> NamedRoutes AppRoute
@@ -33,6 +34,7 @@ data AppRoute mode = AppRoute
   , user :: mode :- NamedRoutes UserRoute
   , articles :: mode :- NamedRoutes ArticleRoute
   , tags :: mode :- NamedRoutes TagRoute
+  , visitors :: mode :- NamedRoutes VisitorWebRoute
   }
   deriving stock (Generic)
 

@@ -1,4 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
+import * as Pagination from '@rinn7e/tea-cup-pagination'
 import { EqAlways } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import type { Dispatcher, Result } from 'tea-cup-fp'
@@ -15,7 +16,6 @@ import { type Article, ArticleEq } from '@/common/api/type/article'
 import { type HomeTab, HomeTabEq } from '@/common/type/route'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import type * as ArticleShort from '@/component/article-short'
-import * as Pagination from '@rinn7e/tea-cup-pagination'
 
 export const GET_ARTICLES_LIMIT = 10
 

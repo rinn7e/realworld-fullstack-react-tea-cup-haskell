@@ -1,11 +1,12 @@
 module Infrastructure.Api.DTO.Visitor
   ( VisitorResponse (..)
   , VisitorListResponse (..)
+  , TrackVisitorRequest (..)
   , toVisitorResponse
   )
 where
 
-import Data.Aeson (ToJSON (..))
+import Data.Aeson (FromJSON (..), ToJSON (..))
 import Data.OpenApi (ToSchema (..))
 import Data.Text (Text)
 import Data.Time (UTCTime)
@@ -32,6 +33,12 @@ data VisitorListResponse = VisitorListResponse
   deriving stock (Show, Generic)
   deriving anyclass (ToJSON, ToSchema)
 
+data TrackVisitorRequest = TrackVisitorRequest
+  { path :: Text
+  }
+  deriving stock (Show, Generic)
+  deriving anyclass (FromJSON, ToSchema)
+
 -------------------------------
 -- Helpers
 -------------------------------
@@ -45,3 +52,4 @@ toVisitorResponse v mUser =
     , timestamp = v.timestamp
     , user = fmap toAdminUserResponse mUser
     }
+

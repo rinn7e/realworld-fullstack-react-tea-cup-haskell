@@ -1,9 +1,10 @@
 import * as RD from '@devexperts/remote-data-ts'
+import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
 import React from 'react'
 
-import { type TagsResponse, ApiErrorEq, getHttpErrorEq } from '@/common/api'
+import { ApiErrorEq, type TagsResponse, getHttpErrorEq } from '@/common/api'
 import { ArticleEq } from '@/common/api/type/article'
 import {
   type AppRoute,
@@ -15,7 +16,6 @@ import {
 import { memoStrategy } from '@/common/util'
 import { DotLoading } from '@/component/dot-loading'
 import { Link } from '@/component/link'
-import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 
 import { mkPaginationConfig } from './helper'
 import { type Props, PropsEq } from './type'

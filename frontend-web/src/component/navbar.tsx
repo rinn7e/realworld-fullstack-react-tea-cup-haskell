@@ -10,8 +10,8 @@ import type { Dispatcher } from 'tea-cup-fp'
 import type { User } from '@/common/api'
 import { homePage } from '@/common/type/route'
 import { assetPath } from '@/common/util'
-import { Link } from '@/component/link'
 import { Image } from '@/component/image'
+import { Link } from '@/component/link'
 import type { Model, Msg } from '@/type'
 
 interface Props {
@@ -104,7 +104,9 @@ export const Navbar: React.FC<Props> = ({ model, dispatch }) => {
                 aria-current={isProfile ? 'page' : undefined}
               >
                 <Image
-                  src={optUser.value.image ? assetPath(optUser.value.image) : null}
+                  src={
+                    optUser.value.image ? assetPath(optUser.value.image) : null
+                  }
                   defaultSrc={assetPath('/default-avatar.svg')}
                   className='h-[28px] w-[28px] rounded-full object-cover'
                   alt=''

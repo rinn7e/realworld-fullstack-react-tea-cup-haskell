@@ -24,6 +24,7 @@ import Infrastructure.Api.Route.OpenApi (adminOpenApiSpec, openApiSpec)
 import Infrastructure.Api.Route.Tag.Web.Type (TagRoute)
 import Infrastructure.Api.Route.User.Admin.Type (AdminUserRoute)
 import Infrastructure.Api.Route.User.Web.Type (UserRoute)
+import Infrastructure.Api.Route.Visitor.Web.Type (VisitorWebRoute)
 
 import Infrastructure.Api.Route.Article.Admin.Controller (adminArticleRoute)
 import Infrastructure.Api.Route.Article.Web.Controller (webArticleRoute)
@@ -35,6 +36,7 @@ import Infrastructure.Api.Route.Metadata.Web.Controller (webMetadataRoute)
 import Infrastructure.Api.Route.Tag.Web.Controller (webTagRoute)
 import Infrastructure.Api.Route.User.Admin.Controller (adminUserRoute)
 import Infrastructure.Api.Route.User.Web.Controller (webUserRoute)
+import Infrastructure.Api.Route.Visitor.Web.Controller (webVisitorRoute)
 
 import Infrastructure.Common.Type.App (AppEnv (..), runApp)
 import Type
@@ -51,6 +53,7 @@ runWebServer env auth =
     , articles =
         S.hoistServer (Proxy @(NamedRoutes ArticleRoute)) (runApp env) (webArticleRoute auth)
     , tags = S.hoistServer (Proxy @(NamedRoutes TagRoute)) (runApp env) (webTagRoute auth)
+    , visitors = S.hoistServer (Proxy @(NamedRoutes VisitorWebRoute)) (runApp env) (webVisitorRoute auth)
     }
 
 runAdminServer :: AppEnv -> S.Server AdminAPI

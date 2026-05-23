@@ -16,6 +16,7 @@ import Domain.Type qualified as D
 import Infrastructure.Api.DTO
 import Infrastructure.Api.Route.Auth.Web.Controller (registerUserHandler)
 import Infrastructure.Api.Route.Dashboard.Admin.Controller
+import Infrastructure.Api.Route.Visitor.Web.Controller (trackVisitorHandler)
 import Infrastructure.Api.Route.User.Admin.Controller
 import Infrastructure.Interpreter.Stub
 import Infrastructure.Interpreter.Stub.DB.UserDB (MockDB (..), emptyMockDB)
@@ -67,13 +68,23 @@ spec = do
       resStats2 <- runAppInMemory dbRef fixedTime (getDashboardStatsHandler normalAuth)
       resStats2.totalUsers `shouldBe` 2
 
-      -- 7. Test visitor insertion capability and retrieval by admin
-      _ <- runAppInMemory dbRef fixedTime (insertVisitor (D.VisitorIp "127.0.0.1") (D.VisitorUserAgent "Mozilla") (D.VisitorPath "/api/articles") fixedTime)
+      -- 7. Test visitor insertion capability, controller handler, and retrieval by admin
+      _ <- runAppInMemory dbRef fixedTime (insertVisitor (D.VisitorIp "127.0.0.1") (D.VisitorUserAgent "Mozilla") (D.VisitorPath "/api/articles") fixedTime Nothing)
+      
+      let trackReq = TrackVisitorRequest { path = "/home" }
+      resTrack <- runAppInMemory dbRef fixedTime (trackVisitorHandler S.Indefinite trackReq (Just "Mozilla/5.0") (Just "1.2.3.4") Nothing)
+      resTrack.ip `shouldBe` "1.2.3.4"
+      resTrack.userAgent `shouldBe` "Mozilla/5.0"
+      resTrack.path `shouldBe` "/home"
+
       resVisitors <- runAppInMemory dbRef fixedTime (getVisitorsHandler adminAuth Nothing Nothing Nothing Nothing)
-      resVisitors.totalCount `shouldBe` 1
-      let vis = head resVisitors.visitors
-      vis.ip `shouldBe` "127.0.0.1"
-      vis.path `shouldBe` "/api/articles"
+      resVisitors.totalCount `shouldBe` 2
+      let vis1 = resVisitors.visitors !! 0
+          vis2 = resVisitors.visitors !! 1
+      vis1.ip `shouldBe` "127.0.0.1"
+      vis1.path `shouldBe` "/api/articles"
+      vis2.ip `shouldBe` "1.2.3.4"
+      vis2.path `shouldBe` "/home"
 
       -- 8. Test log retrieval by admin (role promotion logged an action)
       resLogs <- runAppInMemory dbRef fixedTime (getLogsHandler adminAuth Nothing Nothing Nothing Nothing)

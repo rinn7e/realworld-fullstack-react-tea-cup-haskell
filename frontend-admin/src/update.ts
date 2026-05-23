@@ -1,5 +1,6 @@
-import { taskFromTE } from '@rinn7e/tea-cup-prelude'
+import { taskFromTE, updateAndCmd } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/function'
 import { newUrl } from 'react-tea-cup'
 import { Cmd, Task } from 'tea-cup-fp'
 
@@ -30,60 +31,8 @@ import {
 } from './theme/util'
 import { type Model, type Msg, type PageModel } from './type'
 
-export const initPageModel = (
-  route: AppRoute,
-  shared: Shared,
-): [PageModel, Cmd<Msg>] => {
-  switch (route.page._tag) {
-    case 'HomePage': {
-      const [m, c] = Home.init(shared)
-      return [
-        { _tag: 'HomePageModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'HomePageMsg', subMsg })),
-      ]
-    }
-    case 'LoginPage': {
-      const [m, c] = Login.init()
-      return [
-        { _tag: 'LoginPageModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'LoginPageMsg', subMsg })),
-      ]
-    }
-    case 'ArticlePage': {
-      const [m, c] = Articles.init(shared)
-      return [
-        { _tag: 'ArticlePageModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'ArticlePageMsg', subMsg })),
-      ]
-    }
-    case 'UserPage': {
-      const [m, c] = Users.init(shared)
-      return [
-        { _tag: 'UserPageModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'UserPageMsg', subMsg })),
-      ]
-    }
-    case 'CommentPage': {
-      const [m, c] = Comments.init(shared)
-      return [
-        { _tag: 'CommentPageModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'CommentPageMsg', subMsg })),
-      ]
-    }
-    case 'VisitorPage': {
-      const [m, c] = Visitors.init(shared)
-      return [
-        { _tag: 'VisitorPageModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'VisitorPageMsg', subMsg })),
-      ]
-    }
-    case 'SettingPage':
-      return [{ _tag: 'SettingPageModel' }, Cmd.none()]
-    case 'NotFoundPage':
-    default:
-      return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
-  }
-}
+// Initialization
+// ---------------------------------------------
 
 export const preInit = (location: Location): [Model | null, Cmd<Msg>] => {
   return [null, initializeCmd(location)]
@@ -102,6 +51,9 @@ export const preUpdate = (
 
   return update(msg, model)
 }
+
+// Init, Update
+// ---------------------------------------------
 
 export const init = (
   location: Location,
@@ -133,15 +85,11 @@ export const init = (
     isInternal: false,
   }
 
-  const [nextModel, navCmd] = navigate(route, false)(model)
+  const initCmd = Cmd.batch([
+    personaCmd.map((subMsg): Msg => ({ _tag: 'PersonaMsg', subMsg })),
+  ])
 
-  return [
-    nextModel,
-    Cmd.batch([
-      navCmd,
-      personaCmd.map((subMsg): Msg => ({ _tag: 'PersonaMsg', subMsg })),
-    ]),
-  ]
+  return pipe([model, initCmd], updateAndCmd(navigate(route, true)))
 }
 
 export const initializeCmd = (location: Location): Cmd<Msg> => {
@@ -200,6 +148,61 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
       token: O.none,
     }),
   )
+}
+
+export const initPageModel = (
+  route: AppRoute,
+  shared: Shared,
+): [PageModel, Cmd<Msg>] => {
+  switch (route.page._tag) {
+    case 'HomePage': {
+      const [m, c] = Home.init(shared)
+      return [
+        { _tag: 'HomePageModel', model: m },
+        c.map((subMsg): Msg => ({ _tag: 'HomePageMsg', subMsg })),
+      ]
+    }
+    case 'LoginPage': {
+      const [m, c] = Login.init()
+      return [
+        { _tag: 'LoginPageModel', model: m },
+        c.map((subMsg): Msg => ({ _tag: 'LoginPageMsg', subMsg })),
+      ]
+    }
+    case 'ArticlePage': {
+      const [m, c] = Articles.init(shared)
+      return [
+        { _tag: 'ArticlePageModel', model: m },
+        c.map((subMsg): Msg => ({ _tag: 'ArticlePageMsg', subMsg })),
+      ]
+    }
+    case 'UserPage': {
+      const [m, c] = Users.init(shared)
+      return [
+        { _tag: 'UserPageModel', model: m },
+        c.map((subMsg): Msg => ({ _tag: 'UserPageMsg', subMsg })),
+      ]
+    }
+    case 'CommentPage': {
+      const [m, c] = Comments.init(shared)
+      return [
+        { _tag: 'CommentPageModel', model: m },
+        c.map((subMsg): Msg => ({ _tag: 'CommentPageMsg', subMsg })),
+      ]
+    }
+    case 'VisitorPage': {
+      const [m, c] = Visitors.init(shared)
+      return [
+        { _tag: 'VisitorPageModel', model: m },
+        c.map((subMsg): Msg => ({ _tag: 'VisitorPageMsg', subMsg })),
+      ]
+    }
+    case 'SettingPage':
+      return [{ _tag: 'SettingPageModel' }, Cmd.none()]
+    case 'NotFoundPage':
+    default:
+      return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
+  }
 }
 
 export const navigate =
@@ -326,6 +329,9 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       return [model, Cmd.none()]
   }
 }
+
+// Handlers
+// ---------------------------------------------
 
 const urlChangeHandler = (
   location: Location,

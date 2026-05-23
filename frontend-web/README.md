@@ -19,7 +19,9 @@ A functional, type-safe implementation of the RealWorld Medium.com clone spec bu
 To run the application locally, you must clone **both** this application repository and its sibling library package repository (`tea-cup-package`) as sibling directories under the same parent folder.
 
 ### 1. Clone Sibling Repositories
+
 Ensure your local directory layout is structured as siblings:
+
 ```text
 parent-directory/
 ├── realworld-fullstack-react-tea-cup-haskell/  <-- This repository
@@ -27,12 +29,15 @@ parent-directory/
 ```
 
 Clone the sibling package repository if you haven't already:
+
 ```bash
 git clone https://github.com/rinn7e/tea-cup-package.git
 ```
 
 ### 2. Build the Shared Libraries
+
 Before running the application, build the shared `tea-cup-package` libraries first:
+
 ```bash
 cd tea-cup-package
 pnpm install
@@ -41,6 +46,7 @@ cd ../realworld-fullstack-react-tea-cup-haskell/frontend-web
 ```
 
 ### 3. Install Web App Dependencies and Run
+
 1. Go to the `frontend-web` directory.
 2. Install dependencies:
    ```bash
@@ -68,14 +74,14 @@ This will use the base URL: `https://api.realworld.show/api`.
 > [!NOTE]
 > All scripts should be run from the `frontend-web/` directory.
 
-| Command             | Description                          |
-| ------------------- | ------------------------------------ |
-| `pnpm dev`          | Start the development server         |
-| `pnpm build`        | Build the application for production |
-| `pnpm preview`      | Preview the production build locally |
-| `pnpm lint`         | Lint the codebase                    |
-| `pnpm typecheck`    | Run TypeScript type checking         |
-| `pnpm check:watch`  | Run Type checking in watch mode     |
+| Command            | Description                          |
+| ------------------ | ------------------------------------ |
+| `pnpm dev`         | Start the development server         |
+| `pnpm build`       | Build the application for production |
+| `pnpm preview`     | Preview the production build locally |
+| `pnpm lint`        | Lint the codebase                    |
+| `pnpm typecheck`   | Run TypeScript type checking         |
+| `pnpm check:watch` | Run Type checking in watch mode      |
 
 Check the [e2e/README.md](e2e/README.md) for instructions on how to run the E2E tests locally and [testing-philosophy.md](testing-philosophy.md) for the core principles behind our testing strategy.
 

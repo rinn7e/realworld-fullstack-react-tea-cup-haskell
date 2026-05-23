@@ -1,4 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
+import * as Pagination from '@rinn7e/tea-cup-pagination'
 import { EqAlways } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as B from 'fp-ts/lib/boolean'
@@ -16,7 +17,6 @@ import { type Article, ArticleEq } from '@/common/api/type/article'
 import { type AppRoute, AppRouteEq } from '@/common/type/route'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import type * as ArticleShort from '@/component/article-short'
-import * as Pagination from '@rinn7e/tea-cup-pagination'
 
 export type Model = {
   profile: RD.RemoteData<HttpError<ApiError>, ProfileResponse>

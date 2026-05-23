@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Image } from '@/component/image'
 
 export const HeroSection: React.FC<{

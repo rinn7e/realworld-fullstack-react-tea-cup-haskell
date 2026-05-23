@@ -1,4 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
+import * as Pagination from '@rinn7e/tea-cup-pagination'
 import { ArrayExtra, attemptTE, updateAndCmd } from '@rinn7e/tea-cup-prelude'
 import * as A from 'fp-ts/lib/Array'
 import * as O from 'fp-ts/lib/Option'
@@ -10,7 +11,6 @@ import type { Article } from '@/common/api/type/article'
 import { type HomeTab, HomeTabEq } from '@/common/type/route'
 import type { Shared } from '@/common/type/shared'
 import * as ArticleShort from '@/component/article-short'
-import * as Pagination from '@rinn7e/tea-cup-pagination'
 
 import { mkPaginationConfig } from './helper'
 import { type Model, type Msg } from './type'

@@ -1,10 +1,11 @@
 import * as RD from '@devexperts/remote-data-ts'
+import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
 import { RotateCw, Settings, UserPlus } from 'lucide-react'
 import React from 'react'
 
-import { type ProfileResponse, ApiErrorEq, getHttpErrorEq } from '@/common/api'
+import { ApiErrorEq, type ProfileResponse, getHttpErrorEq } from '@/common/api'
 import { ArticleEq } from '@/common/api/type/article'
 import { API_BASE } from '@/common/env'
 import { type AppRoute } from '@/common/type/route'
@@ -13,7 +14,6 @@ import { ErrorMessages } from '@/component/error-messages'
 import { Image } from '@/component/image'
 import { IndeterminateProgressBar } from '@/component/indeterminate-progress-bar'
 import { Link } from '@/component/link'
-import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 
 import { mkPaginationConfig } from './helper'
 import { type Props, PropsEq } from './type'
@@ -51,7 +51,9 @@ const ProfilePageComponent = ({
                 <div className='mx-auto flex max-w-[1152px] flex-col items-center gap-[12px] px-[16px]'>
                   {/* Avatar */}
                   <Image
-                    src={data.profile.image ? assetPath(data.profile.image) : null}
+                    src={
+                      data.profile.image ? assetPath(data.profile.image) : null
+                    }
                     defaultSrc={assetPath('/default-avatar.svg')}
                     className='h-[96px] w-[96px] rounded-full border-[4px] border-white object-cover shadow-sm'
                     data-test='profile-avatar'

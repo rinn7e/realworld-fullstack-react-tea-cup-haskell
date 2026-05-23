@@ -4,11 +4,7 @@ import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
 import * as t from 'io-ts'
 
-import {
-  type AdminUser,
-  AdminUserEq,
-  AdminUserJson,
-} from './user'
+import { type AdminUser, AdminUserEq, AdminUserJson } from './user'
 
 export type VisitorSortAttr = 'id' | 'ip' | 'path' | 'timestamp'
 

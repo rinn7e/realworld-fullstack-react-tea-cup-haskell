@@ -1,16 +1,16 @@
 import * as RD from '@devexperts/remote-data-ts'
+import type * as Pagination from '@rinn7e/tea-cup-pagination'
 import * as TE from 'fp-ts/lib/TaskEither'
 import { pipe } from 'fp-ts/lib/function'
 import React from 'react'
 
-import { getArticles, type ApiError, type HttpError } from '@/common/api'
+import { type ApiError, type HttpError, getArticles } from '@/common/api'
 import { type Article } from '@/common/api/type/article'
 import type { Shared } from '@/common/type/shared'
 import type * as ArticleShort from '@/component/article-short'
 import { ArticleShortComponent } from '@/component/article-short/component'
 import { DotLoading } from '@/component/dot-loading'
 import { ErrorMessages } from '@/component/error-messages'
-import type * as Pagination from '@rinn7e/tea-cup-pagination'
 import { renderPagination } from '@/component/pagination'
 import { GET_ARTICLES_LIMIT } from '@/page/home/type'
 

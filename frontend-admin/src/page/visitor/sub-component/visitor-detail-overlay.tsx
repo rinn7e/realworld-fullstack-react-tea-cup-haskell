@@ -74,7 +74,10 @@ export const VisitorDetailOverlay: React.FC<{
                     value={`#${visitor.user.id}`}
                     mono
                   />
-                  <DetailRow label='Username' value={`@${visitor.user.username}`} />
+                  <DetailRow
+                    label='Username'
+                    value={`@${visitor.user.username}`}
+                  />
                   <DetailRow label='Email' value={visitor.user.email} />
                   <DetailRow label='Role' value={visitor.user.role} />
                 </div>
