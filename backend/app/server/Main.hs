@@ -3,6 +3,7 @@
 module Main where
 
 import Control.Monad (forM_, when)
+import System.Exit (die)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Logger (runNoLoggingT, runStdoutLoggingT)
 import Data.ByteString qualified as BS
@@ -58,15 +59,16 @@ main = do
               -- we just use it for checking. Only SQL files are applied.
               else liftIO $ do
                 putStrLn "****************************************************"
-                putStrLn "WARNING: Database schema mismatch detected!"
+                putStrLn "ERROR: Database schema mismatch detected!"
                 when (not $ null pending) $ do
                   putStrLn "Pending SQL migrations:"
                   mapM_ (putStrLn . ("  - " ++)) pending
                 when (not $ null missing) $ do
                   putStrLn "Persistent schema changes needed:"
-                  forM_ missing $ \sql -> liftIO (print sql)
+                  forM_ missing print
                 putStrLn "Run 'make migrate-up' or set SHOULD_RUN_MIGRATION_AUTOMATICALLY=true"
                 putStrLn "****************************************************"
+                die "Aborting: database schema is out of date."
     )
     pool
 

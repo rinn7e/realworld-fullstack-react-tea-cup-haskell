@@ -9,6 +9,7 @@ import Data.Time.Clock (UTCTime (..))
 import Database.Persist.Sql (toSqlKey)
 import Servant.Auth.Server qualified as S
 import Servant.Server qualified as S
+import Servant (NoContent (..))
 import Test.Hspec
 import Data.Text qualified as T
 
@@ -74,10 +75,7 @@ spec = do
       
       let trackReq = TrackVisitorRequest { path = "/home" }
       resTrack <- runAppInMemory dbRef fixedTime (trackVisitorHandler S.Indefinite trackReq (Just "Mozilla/5.0") (Just "1.2.3.4") Nothing Nothing)
-      resTrack.ip `shouldBe` "1.2.3.4"
-      resTrack.userAgent `shouldBe` "Mozilla/5.0"
-      resTrack.path `shouldBe` "/home"
-      resTrack.fingerprint `shouldSatisfy` (\fp -> T.length fp == 64)
+      resTrack `shouldBe` NoContent
 
       resVisitors <- runAppInMemory dbRef fixedTime (getVisitorsHandler adminAuth Nothing Nothing Nothing Nothing)
       resVisitors.totalCount `shouldBe` 2

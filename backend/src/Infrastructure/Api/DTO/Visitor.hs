@@ -1,8 +1,8 @@
 module Infrastructure.Api.DTO.Visitor
-  ( VisitorResponse (..)
+  ( AdminVisitorResponse (..)
   , VisitorListResponse (..)
   , TrackVisitorRequest (..)
-  , toVisitorResponse
+  , toAdminVisitorResponse
   )
 where
 
@@ -15,7 +15,7 @@ import GHC.Generics (Generic)
 import Domain.Type qualified as D
 import Infrastructure.Api.DTO.User (AdminUserResponse, toAdminUserResponse)
 
-data VisitorResponse = VisitorResponse
+data AdminVisitorResponse = AdminVisitorResponse
   { id :: Int
   , ip :: Text
   , userAgent :: Text
@@ -28,7 +28,7 @@ data VisitorResponse = VisitorResponse
   deriving anyclass (ToJSON, ToSchema)
 
 data VisitorListResponse = VisitorListResponse
-  { visitors :: [VisitorResponse]
+  { visitors :: [AdminVisitorResponse]
   , totalCount :: Int
   }
   deriving stock (Show, Generic)
@@ -43,9 +43,9 @@ data TrackVisitorRequest = TrackVisitorRequest
 -------------------------------
 -- Helpers
 -------------------------------
-toVisitorResponse :: D.Visitor -> Maybe D.User -> VisitorResponse
-toVisitorResponse v mUser =
-  VisitorResponse
+toAdminVisitorResponse :: D.Visitor -> Maybe D.User -> AdminVisitorResponse
+toAdminVisitorResponse v mUser =
+  AdminVisitorResponse
     { id = v.visitorId.unVisitorId
     , ip = v.ip.unVisitorIp
     , userAgent = v.userAgent.unVisitorUserAgent

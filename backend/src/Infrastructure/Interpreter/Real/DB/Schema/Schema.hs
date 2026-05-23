@@ -60,7 +60,8 @@ Visitor
     path VisitorPath
     timestamp UTCTime
     userId UserId Maybe OnDeleteSetNull
-    fingerprint VisitorFp default=''
+    fingerprint VisitorFp
+    UniqueVisitorFingerprint fingerprint
     deriving Show Generic
 
 Log

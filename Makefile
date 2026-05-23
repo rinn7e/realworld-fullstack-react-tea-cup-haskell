@@ -8,6 +8,11 @@ server:
 	@chmod +x ./my-scripts/server.sh
 	./my-scripts/server.sh
 
+.PHONY: server-fresh
+server-fresh:
+	@chmod +x ./my-scripts/server-fresh.sh
+	./my-scripts/server-fresh.sh
+
 .PHONY: test-fe
 test-fe:
 	cd e2e && npm run test:e2e:ui

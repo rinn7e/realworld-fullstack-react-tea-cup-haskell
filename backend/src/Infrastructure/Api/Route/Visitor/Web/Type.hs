@@ -11,6 +11,7 @@ import Servant
   , ReqBody
   , Summary
   , (:>)
+  , NoContent
   )
 
 import Infrastructure.Api.DTO qualified as Api
@@ -28,6 +29,6 @@ data VisitorWebRoute mode = VisitorWebRoute
           :> Header "X-Forwarded-For" Text
           :> Header "X-Real-IP" Text
           :> Header "Accept-Language" Text
-          :> Post '[JSON] Api.VisitorResponse
+          :> Post '[JSON] NoContent
   }
   deriving stock (Generic)

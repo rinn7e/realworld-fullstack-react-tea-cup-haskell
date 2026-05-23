@@ -39,7 +39,7 @@ trackVisitorHandler
   -> Maybe Text
   -> Maybe Text
   -> Maybe Text
-  -> Eff es Api.VisitorResponse
+  -> Eff es S.NoContent
 trackVisitorHandler auth req mUserAgent mForwarded mRealIp mAcceptLang = do
   now <- getCurrentTime
   let ipVal = fromMaybe "127.0.0.1" (mForwarded <|> mRealIp)
@@ -58,6 +58,6 @@ trackVisitorHandler auth req mUserAgent mForwarded mRealIp mAcceptLang = do
       mUid = case auth of
         S.Authenticated uid -> Just $ D.UserId $ fromIntegral (fromSqlKey uid)
         _ -> Nothing
-  v <- insertVisitor ip ua path fingerprint now mUid
-  return $ Api.toVisitorResponse v Nothing
+  _ <- insertVisitor ip ua path fingerprint now mUid
+  return S.NoContent
 

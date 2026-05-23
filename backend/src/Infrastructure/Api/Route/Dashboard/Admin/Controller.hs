@@ -185,7 +185,7 @@ getVisitorsHandler (S.Authenticated uid) mLimit mOffset mIp mPath = do
       dIp = fmap D.VisitorIp mIp
       dPath = fmap D.VisitorPath mPath
   (visitors, total) <- listVisitors (Just (D.Limit limit)) (Just (D.Offset offset)) dIp dPath Nothing Nothing
-  let visitorResponses = map (\(v, mu) -> Api.toVisitorResponse v mu) visitors
+  let visitorResponses = map (\(v, mu) -> Api.toAdminVisitorResponse v mu) visitors
   return
     Api.VisitorListResponse
       { Api.visitors = visitorResponses
