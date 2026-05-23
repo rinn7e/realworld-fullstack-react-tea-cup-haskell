@@ -25,6 +25,7 @@ import Domain.Type
   , VisitorIp
   , VisitorPath
   , VisitorUserAgent
+  , VisitorFp
   )
 
 import Infrastructure.Interpreter.Real.DB.Schema.Instance ()
@@ -59,6 +60,7 @@ Visitor
     path VisitorPath
     timestamp UTCTime
     userId UserId Maybe OnDeleteSetNull
+    fingerprint VisitorFp default=''
     deriving Show Generic
 
 Log

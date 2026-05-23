@@ -64,11 +64,13 @@ const generateVisitors = (count: number): Visitor[] => {
       userAgent:
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
       path: i % 2 === 0 ? '/api/articles' : '/api/users/login',
+      fingerprint: `mock_fingerprint_${i + 1}`,
       timestamp: new Date(Date.now() - i * 900000).toISOString(),
       user: null,
     }
   })
 }
+
 
 export const mockUsers = generateUsers(50)
 export const mockArticles = generateArticles(50, mockUsers)

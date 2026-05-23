@@ -10,6 +10,7 @@ import Database.Persist.Sql (toSqlKey)
 import Servant.Auth.Server qualified as S
 import Servant.Server qualified as S
 import Test.Hspec
+import Data.Text qualified as T
 
 import Capability.Database.VisitorDB (insertVisitor)
 import Domain.Type qualified as D
@@ -69,13 +70,14 @@ spec = do
       resStats2.totalUsers `shouldBe` 2
 
       -- 7. Test visitor insertion capability, controller handler, and retrieval by admin
-      _ <- runAppInMemory dbRef fixedTime (insertVisitor (D.VisitorIp "127.0.0.1") (D.VisitorUserAgent "Mozilla") (D.VisitorPath "/api/articles") fixedTime Nothing)
+      _ <- runAppInMemory dbRef fixedTime (insertVisitor (D.VisitorIp "127.0.0.1") (D.VisitorUserAgent "Mozilla") (D.VisitorPath "/api/articles") (D.VisitorFp "dummy-fp") fixedTime Nothing)
       
       let trackReq = TrackVisitorRequest { path = "/home" }
-      resTrack <- runAppInMemory dbRef fixedTime (trackVisitorHandler S.Indefinite trackReq (Just "Mozilla/5.0") (Just "1.2.3.4") Nothing)
+      resTrack <- runAppInMemory dbRef fixedTime (trackVisitorHandler S.Indefinite trackReq (Just "Mozilla/5.0") (Just "1.2.3.4") Nothing Nothing)
       resTrack.ip `shouldBe` "1.2.3.4"
       resTrack.userAgent `shouldBe` "Mozilla/5.0"
       resTrack.path `shouldBe` "/home"
+      resTrack.fingerprint `shouldSatisfy` (\fp -> T.length fp == 64)
 
       resVisitors <- runAppInMemory dbRef fixedTime (getVisitorsHandler adminAuth Nothing Nothing Nothing Nothing)
       resVisitors.totalCount `shouldBe` 2
@@ -83,8 +85,10 @@ spec = do
           vis2 = resVisitors.visitors !! 1
       vis1.ip `shouldBe` "127.0.0.1"
       vis1.path `shouldBe` "/api/articles"
+      vis1.fingerprint `shouldBe` "dummy-fp"
       vis2.ip `shouldBe` "1.2.3.4"
       vis2.path `shouldBe` "/home"
+      vis2.fingerprint `shouldSatisfy` (\fp -> T.length fp == 64)
 
       -- 8. Test log retrieval by admin (role promotion logged an action)
       resLogs <- runAppInMemory dbRef fixedTime (getLogsHandler adminAuth Nothing Nothing Nothing Nothing)

@@ -24,6 +24,7 @@ toDomainVisitor (Entity vid v) =
     , ip = v.ip
     , userAgent = v.userAgent
     , path = v.path
+    , fingerprint = v.fingerprint
     , timestamp = v.timestamp
     , userId = fmap (D.UserId . fromIntegral . fromSqlKey) v.userId
     }
@@ -31,7 +32,7 @@ toDomainVisitor (Entity vid v) =
 runVisitorDBPostgres
   :: (IOE :> es, Reader ConnectionPool :> es) => Eff (VisitorDB : es) a -> Eff es a
 runVisitorDBPostgres = interpret $ \_ -> \case
-  InsertVisitor ip ua path t mUid -> insertVisitorHandler ip ua path t mUid
+  InsertVisitor ip ua path fp t mUid -> insertVisitorHandler ip ua path fp t mUid
   ListVisitors mLimit mOffset mIp mPath mSort mDir -> listVisitorsHandler mLimit mOffset mIp mPath mSort mDir
   GetVisitorsSince since -> getVisitorsSinceHandler since
   CountAllVisitors -> countAllVisitorsHandler
@@ -41,20 +42,22 @@ insertVisitorHandler
   => D.VisitorIp
   -> D.VisitorUserAgent
   -> D.VisitorPath
+  -> D.VisitorFp
   -> UTCTime
   -> Maybe D.UserId
   -> Eff es D.Visitor
-insertVisitorHandler ip ua path t mUid = do
+insertVisitorHandler ip ua path fp t mUid = do
   pool <- ask @ConnectionPool
   liftIO $
     runSqlPool
       ( do
           let sqlUid = fmap (toSqlKey . fromIntegral . (\(D.UserId i) -> i)) mUid
-              v = DB.Visitor ip ua path t sqlUid
+              v = DB.Visitor ip ua path t sqlUid fp
           vid <- P.insert v
           return $ toDomainVisitor (Entity vid v)
       )
       pool
+
 
 listVisitorsHandler
   :: (IOE :> es, Reader ConnectionPool :> es)

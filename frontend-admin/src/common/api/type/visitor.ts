@@ -13,6 +13,7 @@ export type Visitor = {
   ip: string
   userAgent: string
   path: string
+  fingerprint: string
   timestamp: string
   user: AdminUser | null
 }
@@ -22,6 +23,7 @@ export const VisitorEq: EqClass.Eq<Visitor> = EqClass.struct({
   ip: S.Eq,
   userAgent: S.Eq,
   path: S.Eq,
+  fingerprint: S.Eq,
   timestamp: S.Eq,
   user: NullableEq(AdminUserEq),
 })
@@ -31,6 +33,7 @@ export const VisitorJson: t.Type<Visitor> = t.type({
   ip: t.string,
   userAgent: t.string,
   path: t.string,
+  fingerprint: t.string,
   timestamp: t.string,
   user: t.union([AdminUserJson, t.null]),
 })

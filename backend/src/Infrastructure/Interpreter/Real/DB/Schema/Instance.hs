@@ -60,3 +60,7 @@ deriving newtype instance PersistFieldSql D.VisitorUserAgent
 
 deriving newtype instance PersistField D.VisitorPath
 deriving newtype instance PersistFieldSql D.VisitorPath
+
+deriving newtype instance PersistField D.VisitorFp
+deriving newtype instance PersistFieldSql D.VisitorFp
+

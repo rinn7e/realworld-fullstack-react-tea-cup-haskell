@@ -20,6 +20,7 @@ data VisitorResponse = VisitorResponse
   , ip :: Text
   , userAgent :: Text
   , path :: Text
+  , fingerprint :: Text
   , timestamp :: UTCTime
   , user :: Maybe AdminUserResponse
   }
@@ -49,6 +50,7 @@ toVisitorResponse v mUser =
     , ip = v.ip.unVisitorIp
     , userAgent = v.userAgent.unVisitorUserAgent
     , path = v.path.unVisitorPath
+    , fingerprint = v.fingerprint.unVisitorFp
     , timestamp = v.timestamp
     , user = fmap toAdminUserResponse mUser
     }

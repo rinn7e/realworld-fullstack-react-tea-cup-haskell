@@ -61,6 +61,7 @@ export const VisitorDetailOverlay: React.FC<{
             <div className='grid grid-cols-1 gap-[24px]'>
               <DetailRow label='IP Address' value={visitor.ip} mono />
               <DetailRow label='Path' value={visitor.path} />
+              <DetailRow label='Fingerprint' value={visitor.fingerprint || '-'} mono />
             </div>
 
             {visitor.user && (

@@ -8,7 +8,7 @@ import Effectful.Dispatch.Dynamic
 
 data VisitorDB :: Effect where
   InsertVisitor
-    :: VisitorIp -> VisitorUserAgent -> VisitorPath -> UTCTime -> Maybe UserId -> VisitorDB m Visitor
+    :: VisitorIp -> VisitorUserAgent -> VisitorPath -> VisitorFp -> UTCTime -> Maybe UserId -> VisitorDB m Visitor
   ListVisitors
     :: Maybe D.Limit
     -> Maybe D.Offset
@@ -27,10 +27,11 @@ insertVisitor
   => VisitorIp
   -> VisitorUserAgent
   -> VisitorPath
+  -> VisitorFp
   -> UTCTime
   -> Maybe UserId
   -> Eff es Visitor
-insertVisitor ip ua path t mUid = send (InsertVisitor ip ua path t mUid)
+insertVisitor ip ua path fp t mUid = send (InsertVisitor ip ua path fp t mUid)
 
 listVisitors
   :: (VisitorDB :> es)

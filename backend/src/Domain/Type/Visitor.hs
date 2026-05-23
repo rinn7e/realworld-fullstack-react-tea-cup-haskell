@@ -42,13 +42,19 @@ newtype VisitorPath = VisitorPath {unVisitorPath :: Text}
   deriving stock (Eq, Ord, Show, Generic)
   deriving newtype (ToJSON, FromJSON, ToHttpApiData, FromHttpApiData, IsString)
 
+newtype VisitorFp = VisitorFp {unVisitorFp :: Text}
+  deriving stock (Eq, Ord, Show, Generic)
+  deriving newtype (ToJSON, FromJSON, ToHttpApiData, FromHttpApiData, IsString)
+
 data Visitor = Visitor
   { visitorId :: VisitorId
   , ip :: VisitorIp
   , userAgent :: VisitorUserAgent
   , path :: VisitorPath
+  , fingerprint :: VisitorFp
   , timestamp :: UTCTime
   , userId :: Maybe UserId
   }
   deriving stock (Eq, Ord, Show, Generic)
+
 

@@ -27,6 +27,7 @@ data VisitorWebRoute mode = VisitorWebRoute
           :> Header "User-Agent" Text
           :> Header "X-Forwarded-For" Text
           :> Header "X-Real-IP" Text
+          :> Header "Accept-Language" Text
           :> Post '[JSON] Api.VisitorResponse
   }
   deriving stock (Generic)

@@ -15,10 +15,10 @@ import Infrastructure.Interpreter.Stub.DB.Types (MockDB (..))
 
 runVisitorDBStub :: (IOE :> es) => IORef MockDB -> Eff (VisitorDB : es) a -> Eff es a
 runVisitorDBStub ref = interpret $ \_ -> \case
-  InsertVisitor ip ua path t mUid -> do
+  InsertVisitor ip ua path fp t mUid -> do
     atomicModifyIORef' ref $ \db ->
       let vid = VisitorId db.nextVisitorId
-          newVisitor = Visitor vid ip ua path t mUid
+          newVisitor = Visitor vid ip ua path fp t mUid
           newDb = db
             { nextVisitorId = db.nextVisitorId + 1
             , visitors = Map.insert vid newVisitor db.visitors
