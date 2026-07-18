@@ -81,17 +81,25 @@ Secure environment variables cannot be stored in the plain text `fly.toml`. Set 
 
 ## Step 5: Build and Deploy
 
-Run the deployment command inside the `backend/` directory:
-```bash
-fly deploy
-```
+We use Docker locally on your Mac to compile the backend for Linux and package it into a container. This avoids Fly.io remote builder heartbeat and memory issues.
+
+Ensure Docker Desktop is running on your Mac, and execute these commands in your terminal inside the `backend/` directory:
+
+1. **Build the Docker image locally**:
+   ```bash
+   docker build -t rinn7e-haskell-realworld-api .
+   ```
+   *(This spins up a Linux compiler container, loads Nix, downloads pre-compiled packages in seconds using Docker's BuildKit cache, and compiles your backend for Linux).*
+
+2. **Deploy the local image to Fly.io** in 1 second, bypassing the remote build VM:
+   ```bash
+   fly deploy --local-only
+   ```
 
 ### What happens during deployment?
-1. Fly.io will read the custom [Dockerfile](file:///Users/rinn7e/projects/rinn7e-technology/realworld-fullstack-react-tea-cup-haskell/backend/Dockerfile).
-2. It will build the Haskell application in the cloud. GHC 9.6.6 compiles the source files, and dependencies are cached for future runs.
-3. The runner stage copies the binary along with the `resource/` directory (which contains SQL migrations in `resource/migration/`).
-4. On startup, the server reads the configuration, sees `SHOULD_RUN_MIGRATION_AUTOMATICALLY = "true"`, scans `resource/migration/`, and automatically runs any missing SQL migrations in your Supabase database.
-5. The API starts listening on port `3000`. Fly.io automatically routes public HTTPS requests on port `443` to the backend.
+1. The locally compiled image is uploaded directly from your local Docker engine to Fly.io's registry.
+2. The server starts in the cloud, reads the configuration, scans `/resource/migration/`, and runs any missing database migrations on Supabase.
+3. The API begins listening on port `3000`.
 
 ---
 
