@@ -1,0 +1,22 @@
+# fly.toml.sample - Configuration for deploying to Fly.io
+# Copy this file to 'fly.toml' and modify as needed.
+
+app = "haskell-servant-realworld"
+primary_region = "sin" # Change to your preferred region (must match your Supabase DB region for low latency!)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[env]
+  PORT = "3000"
+  SHOULD_RUN_MIGRATION_AUTOMATICALLY = "true"
+  ALLOW_CORS = "true"
+  SHOW_SQL_LOG = "true"

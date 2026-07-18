@@ -9,7 +9,7 @@ export default defineConfig({
   testDir: './test',
   use: {
     ...baseConfig.use,
-    baseURL: process.env.BASE_URL || 'http://localhost:8001',
+    baseURL: process.env.BASE_URL || 'http://localhost:5173',
     testIdAttribute: 'data-test',
   },
   webServer: [
@@ -17,7 +17,7 @@ export default defineConfig({
       ? [
           {
             command: `direnv exec . make server`,
-            url: 'http://localhost:8000/api/tags',
+            url: 'http://localhost:3000/api/tags',
             cwd: process.env.BACKEND_PATH || '../backend',
             reuseExistingServer: !process.env.CI,
             timeout: 120_000,
@@ -26,7 +26,7 @@ export default defineConfig({
       : []),
     {
       command: 'pnpm dev',
-      url: 'http://localhost:8001',
+      url: 'http://localhost:5173',
       cwd: '../frontend-web',
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,

@@ -35,7 +35,7 @@ loadConfig = do
           maybe (BSL.fromStrict defaultJwtSecret) (BSL.fromStrict . TE.encodeUtf8 . T.pack) jwtSec
       , shouldRunMigrationAuto = runMig == Just "true"
       , gitCommitHash = T.pack (maybe "unknown" id commit)
-      , port = maybe 8000 read (portStr >>= \s -> if null s then Nothing else Just s)
+      , port = maybe 3000 read (portStr >>= \s -> if null s then Nothing else Just s)
       , showSqlLog = sqlLog == Just "true"
       , allowCorsEnabled = allowCorsStr == Just "true"
       }

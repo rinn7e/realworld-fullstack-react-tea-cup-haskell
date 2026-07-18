@@ -11,13 +11,17 @@ if [ -z "$DB_CONN" ]; then
     exit 1
 fi
 
-# Extract components from connection string
-# host=localhost dbname=realworld user=postgres password=postgres port=5432
-DB_NAME=$(echo "$DB_CONN" | grep -oP 'dbname=\K[^ ]+')
-DB_USER=$(echo "$DB_CONN" | grep -oP 'user=\K[^ ]+')
-DB_PASS=$(echo "$DB_CONN" | grep -oP 'password=\K[^ ]+')
-DB_HOST=$(echo "$DB_CONN" | grep -oP 'host=\K[^ ]+')
-DB_PORT=$(echo "$DB_CONN" | grep -oP 'port=\K[^ ]+')
+# Helper function to extract keys from the connection string in a cross-platform way
+extract_val() {
+    local key="$1"
+    echo "$DB_CONN" | awk -F"${key}=" '{print $2}' | awk '{print $1}'
+}
+
+DB_NAME=$(extract_val "dbname")
+DB_USER=$(extract_val "user")
+DB_PASS=$(extract_val "password")
+DB_HOST=$(extract_val "host")
+DB_PORT=$(extract_val "port")
 
 echo "Resetting database: $DB_NAME"
 

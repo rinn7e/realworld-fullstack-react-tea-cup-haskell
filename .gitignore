@@ -1,0 +1,33 @@
+# macOS System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows System Files
+Thumbs.db
+ehthumbs.db
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Node / Frontend Dependencies & Builds
+node_modules/
+dist/
+.env.local
+.env.*.local
+.eslintcache
+
+# Playwright Test Reports
+playwright-report/
+test-results/
+
+# Haskell Build Artifacts
+.stack-work/

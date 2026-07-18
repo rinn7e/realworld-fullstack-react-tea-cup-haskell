@@ -1,0 +1,22 @@
+# fly.toml - Configuration for deploying the Haskell backend to Fly.io
+# Automatically updated to match your Supabase database in Singapore (ap-southeast-1)
+
+app = "rinn7e-haskell-realworld-api" # You can change this if the name is already taken on Fly.io
+primary_region = "sin" # Singapore region, matching your Supabase database region!
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[env]
+  PORT = "3000"
+  SHOULD_RUN_MIGRATION_AUTOMATICALLY = "true"
+  ALLOW_CORS = "true"
+  SHOW_SQL_LOG = "true"

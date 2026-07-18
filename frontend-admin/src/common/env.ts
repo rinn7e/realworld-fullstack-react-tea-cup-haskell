@@ -4,4 +4,4 @@ export const BASE_URL: string =
 
 export const API_BASE: string =
   (import.meta as { env?: { VITE_API_BASE?: string } }).env?.VITE_API_BASE ??
-  'http://localhost:8000/api'
+  'http://localhost:3000/api'

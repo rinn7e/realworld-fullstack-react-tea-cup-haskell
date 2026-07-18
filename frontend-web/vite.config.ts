@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), tailwindcss(), tsconfigPaths()],
     base: env.VITE_BASE_URL ?? '/',
     server: {
-      port: 8001,
+      port: 5173,
     },
   }
 })
