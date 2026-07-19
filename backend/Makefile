@@ -51,7 +51,7 @@ docker:
 	cp -R ../frontend-web/dist/* dist/web/
 	cp -R ../frontend-admin/dist/* dist/admin/
 	# Run docker build with backend/ as context
-	docker build -t rinn7e-haskell-realworld-api .
+	docker build --platform linux/amd64 -t rinn7e-haskell-realworld-api .
 	# Clean up compiled folders from host backend/dist/
 	rm -rf dist/web dist/admin
 

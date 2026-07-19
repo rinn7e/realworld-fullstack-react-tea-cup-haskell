@@ -7,6 +7,8 @@ import System.Exit (die)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Logger (runNoLoggingT, runStdoutLoggingT)
 import Data.ByteString qualified as BS
+import Data.ByteString.Char8 qualified as BSC
+import Data.List (isPrefixOf)
 import Data.Proxy (Proxy (..))
 import Database.Persist.Postgresql (createPostgresqlPool)
 import Database.Persist.Sql (getMigration, runSqlPool)
@@ -123,7 +125,7 @@ authMiddleware app req sendResponse =
 appCorsResourcePolicy :: CorsResourcePolicy
 appCorsResourcePolicy =
   CorsResourcePolicy
-    { corsOrigins = Nothing
+    { corsOrigins = Nothing -- Overridden dynamically in allowCors
     , corsMethods = ["OPTIONS", "GET", "PUT", "POST", "DELETE"]
     , corsRequestHeaders = ["Authorization", "Content-Type"]
     , corsExposedHeaders = Nothing
@@ -133,5 +135,36 @@ appCorsResourcePolicy =
     , corsIgnoreFailures = False
     }
 
+-- Middleware to enforce CORS policy constraints
 allowCors :: Middleware
-allowCors = cors (const $ Just appCorsResourcePolicy)
+allowCors = cors corsPolicy
+  where
+    -- Dynamically generate the CORS resource policy based on the request's origin
+    corsPolicy :: Request -> Maybe CorsResourcePolicy
+    corsPolicy req =
+      let originHeader = lookup "Origin" (requestHeaders req)
+      in case originHeader of
+           Nothing -> Just appCorsResourcePolicy -- If no Origin header, allow default parameters
+           Just origin ->
+             -- If the origin matches our allowed list, dynamically permit it
+             if isAllowedOrigin req origin
+                then Just (appCorsResourcePolicy { corsOrigins = Just ([origin], True) })
+                else Nothing -- Otherwise block the CORS request
+
+    -- Check if the request's origin is allowed (localhost/127.0.0.1 or dynamic same-origin)
+    isAllowedOrigin :: Request -> BS.ByteString -> Bool
+    isAllowedOrigin req origin =
+      let originStr = BSC.unpack origin
+          hostHeader = lookup "Host" (requestHeaders req)
+          -- Reconstruct same-origin address dynamically from the Host header (no hardcoding fly.dev)
+          sameOriginStr = case hostHeader of
+                            Nothing -> ""
+                            Just host -> "https://" ++ BSC.unpack host
+      in "http://localhost:" `isPrefixOf` originStr
+          || "http://localhost" == originStr
+          || "http://127.0.0.1:" `isPrefixOf` originStr
+          || "http://127.0.0.1" == originStr
+          || "https://localhost:" `isPrefixOf` originStr
+          || "https://127.0.0.1:" `isPrefixOf` originStr
+          -- Verify if origin matches current host same-origin scheme
+          || (not (null sameOriginStr) && sameOriginStr == originStr)
