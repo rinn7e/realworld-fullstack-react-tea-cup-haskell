@@ -1,0 +1,30 @@
+# Exclude Git files
+.git
+.gitignore
+
+# Exclude local Haskell build artifacts
+dist-newstyle
+.stack-work
+
+# Exclude Nix results and profiles
+result
+dev-profile
+.direnv
+.devenv
+
+# Exclude temporary archives and logs
+*.tar
+*.log
+
+# Exclude configuration and deployment files
+Dockerfile
+fly.toml
+fly.toml.sample
+
+# Exclude OS-specific metadata and editor files
+.DS_Store
+Thumbs.db
+*~
+.*.swp
+.vscode
+.idea
