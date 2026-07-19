@@ -96,7 +96,7 @@ main = do
    \ \_\ \_\ \__/.\_\/\____/ \ \_\ \_\ \____\/\____\/\____\
     \/_/\/_/\/__/\/_/\/___/   \/_/\/_/\/____/\/____/\/____/
 ====================================================================|]
-  putStrLn $ "Heyo! Starting server on port " ++ show port
+  putStrLn $ "Hey! Starting server on port " ++ show port
   putStrLn $ "Swagger Web UI is at http://localhost:" ++ show port ++ "/swagger-ui"
   putStrLn $ "Swagger Admin UI is at http://localhost:" ++ show port ++ "/admin/swagger-ui"
   putStrLn $ "===================================================================="

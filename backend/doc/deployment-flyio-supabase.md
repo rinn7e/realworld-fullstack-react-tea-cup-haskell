@@ -91,9 +91,9 @@ Ensure Docker Desktop is running on your Mac, and execute these commands in your
    ```
    *(This spins up a Linux compiler container, loads Nix, downloads pre-compiled packages in seconds using Docker's BuildKit cache, and compiles your backend for Linux).*
 
-2. **Deploy the local image to Fly.io** in 1 second, bypassing the remote build VM:
+2. **Deploy the local image to Fly.io** in 1 second, directly reusing your pre-built image and bypassing any redundant builds:
    ```bash
-   fly deploy --local-only
+   fly deploy --image rinn7e-haskell-realworld-api --local-only
    ```
 
 ### What happens during deployment?
