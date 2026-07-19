@@ -48,11 +48,24 @@
           hspec
         ]);
 
-        # Package derivation for nix build
-        haskellApp = pkgs.haskellPackages.callCabal2nix "haskell-servant-realworld" ./. {};
+        # Package derivation for nix build, stripped of GHC/library runtime references
+        haskellAppRaw = pkgs.haskellPackages.callCabal2nix "haskell-servant-realworld" ./. {};
+        haskellApp = pkgs.haskell.lib.justStaticExecutables haskellAppRaw;
       in
       {
         packages.default = haskellApp;
+
+        # Lean development shell for caching builder dependencies in Docker (no editor tools)
+        devShells.build = pkgs.mkShell {
+          buildInputs = [
+            ghcEnv
+            pkgs.postgresql
+            pkgs.zlib
+            pkgs.gnumake
+            pkgs.cabal2nix
+            pkgs.glibcLocales
+          ];
+        };
 
         # Development shell
         devShells.default = pkgs.mkShell {

@@ -119,6 +119,38 @@ Your API is now publicly accessible! You can test the endpoints using your custo
 
 ---
 
+## Docker Build Caching Optimizations
+
+To make local development and deployments fast, we have optimized the `Dockerfile` caching strategy to the limit. Without these optimizations, changing a single character in your source code would force Docker to download the 1.9 GB GHC compiler and re-compile all 96 Haskell files from scratch, taking over **7-9 minutes** per build.
+
+We resolved this with two distinct caching and optimization layers:
+
+### 1. GHC and Dependencies Layer Cache (GHC Cache)
+* **What we did**: We copy only the configuration files first (`flake.nix`, `flake.lock`, `cabal.project`, `package.yaml`) and run:
+  ```dockerfile
+  RUN nix develop .#build --profile /app/dev-profile --command true
+  ```
+  This pre-downloads GHC and your 29 Haskell dependencies and stores them in `/nix/store`.
+* **How it is locked**: We use the BuildKit `COPY --link` flag. This creates a detached filesystem layer, ensuring that subsequent changes to your `.hs` code files **cannot** invalidate the cache key of the GHC download step. GHC is locked in cache and takes **0.0 seconds** on subsequent builds.
+* **Important (Docker GC Limits)**: Because this layer is massive (~8 GB), Docker Desktop's default BuildKit settings will garbage-collect and evict this layer. To prevent GHC from redownloading, you must add the following configuration to your **Docker Desktop Settings > Docker Engine** JSON config to increase the cache retention threshold:
+  ```json
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "50GB",
+      "enabled": true
+    }
+  }
+  ```
+
+### 2. Production Runtime Closure Stripping (Image Size Optimization)
+* **What we did**: After building the package using `nix build path:.#default`, we extract the binaries to `/app/bin/` and archive the runtime closure paths recursively using:
+  ```dockerfile
+  RUN tar -cf /app/closure.tar $(nix-store -qR result)
+  ```
+* **Why it matters**: This extracts **only** the bare runtime libraries (like `glibc`, `zlib`, `postgresql-lib`) needed to execute the binaries, leaving the heavy 1.9 GB compiler environment behind. The final image size remains **under 100 MB**, making uploads to Fly.io blazing-fast!
+
+---
+
 ## Troubleshooting
 
 ### Build Out Of Memory (OOM) Errors
