@@ -166,5 +166,8 @@ allowCors = cors corsPolicy
           || "http://127.0.0.1" == originStr
           || "https://localhost:" `isPrefixOf` originStr
           || "https://127.0.0.1:" `isPrefixOf` originStr
+          -- Allow the Elm frontend deployment domain
+          || "https://rinn7e-elm-realworld.fly.dev" == originStr
+          || "https://rinn7e-elm-realworld.fly.dev/" == originStr
           -- Verify if origin matches current host same-origin scheme
           || (not (null sameOriginStr) && sameOriginStr == originStr)
