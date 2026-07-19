@@ -58,6 +58,10 @@ RUN tar -xf /closure.tar -C / && rm /closure.tar
 COPY --link --from=builder /app/bin /app/bin
 COPY --link --from=builder /app/resource /app/resource
 
+# Copy static frontend assets (pre-compiled on host)
+COPY --link dist/web /app/frontend-web/dist
+COPY --link dist/admin /app/frontend-admin/dist
+
 # Expose port
 EXPOSE 3000
 
@@ -66,6 +70,8 @@ ENV PORT=3000
 ENV SHOULD_RUN_MIGRATION_AUTOMATICALLY=true
 ENV ALLOW_CORS=true
 ENV SHOW_SQL_LOG=true
+ENV FRONTEND_WEB_DIR=/app/frontend-web/dist
+ENV FRONTEND_ADMIN_DIR=/app/frontend-admin/dist
 
 # Start the server
 CMD ["/app/bin/haskell-servant-realworld-exe"]

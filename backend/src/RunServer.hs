@@ -9,9 +9,16 @@ module RunServer
   ) where
 
 import Data.Proxy (Proxy (..))
-import Servant (NamedRoutes, (:<|>) (..))
+import Servant (NamedRoutes, (:<|>) (..), (:>), Raw, serveDirectoryWith)
 import Servant qualified as S
 import Servant.Swagger.UI qualified as SUI
+import Network.Wai (Middleware, mapResponseHeaders, rawPathInfo, responseLBS)
+import Network.Wai.Application.Static (StaticSettings(..), defaultFileServerSettings)
+import System.FilePath (addTrailingPathSeparator)
+import WaiAppStatic.Types (LookupResult(..), unsafeToPiece)
+import Data.ByteString.Char8 qualified as BS
+import Infrastructure.Common.Type.Config (Config (..))
+import Network.HTTP.Types (status404)
 
 import Infrastructure.Api.Route.Article.Admin.Type (AdminArticleRoute)
 import Infrastructure.Api.Route.Article.Web.Type (ArticleRoute)
@@ -41,7 +48,11 @@ import Infrastructure.Api.Route.Visitor.Web.Controller (webVisitorRoute)
 import Infrastructure.Common.Type.App (AppEnv (..), runApp)
 import Type
 
-type FullAPI = APIWithOpenApi :<|> AdminAPIWithOpenApi
+type FullAPI =
+       APIWithOpenApi
+  :<|> AdminAPIWithOpenApi
+  :<|> ("admin" :> Raw)  -- serves frontend-admin
+  :<|> Raw               -- serves frontend-web
 
 runWebServer :: AppEnv -> S.Server WebAPI
 runWebServer env auth =
@@ -87,3 +98,27 @@ runServer :: AppEnv -> S.Server FullAPI
 runServer env =
   (runWebServer env :<|> SUI.swaggerSchemaUIServer openApiSpec)
     :<|> (runAdminServer env :<|> SUI.swaggerSchemaUIServer adminOpenApiSpec)
+    :<|> serveFrontend env.appConfig.frontendAdminDir
+    :<|> serveFrontend env.appConfig.frontendWebDir
+
+serveFrontend :: Maybe FilePath -> S.Tagged S.Handler S.Application
+serveFrontend Nothing = S.Tagged $ \_ respond -> respond $ responseLBS status404 [("Content-Type", "text/plain")] "Static files directory not configured"
+serveFrontend (Just path) = S.Tagged (cacheControlMiddleware (S.unTagged (serveDirectoryWith ds{ssLookupFile = lookupFile})))
+  where
+    ds = defaultFileServerSettings (addTrailingPathSeparator path)
+    lookupFile p = do
+      ssLookupFile ds p >>= \case
+        LRFile f -> return $ LRFile f
+        LRFolder f -> return $ LRFolder f
+        LRNotFound -> ssLookupFile ds [unsafeToPiece "index.html"]
+
+cacheControlMiddleware :: Middleware
+cacheControlMiddleware app req respond =
+  app req $ \res -> respond $ mapResponseHeaders addCacheControl res
+  where
+    cacheControlValue
+      | "/assets/" `BS.isInfixOf` (rawPathInfo req) =
+          "public, max-age=31536000, immutable"
+      | otherwise = "no-cache"
+    addCacheControl hdrs =
+      ("Cache-Control", cacheControlValue) : filter ((/= "Cache-Control") . fst) hdrs

@@ -28,7 +28,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
     <SetGlobalMsgContext value={dispatch}>
       <div
         className={cn(
-          'flex min-h-dvh flex-col',
+          'flex min-h-dvh flex-col yo',
           isNavOpen && 'h-dvh overflow-hidden',
         )}
       >

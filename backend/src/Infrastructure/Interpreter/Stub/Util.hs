@@ -32,6 +32,8 @@ dummyConfig =
     , port = 0
     , showSqlLog = False
     , allowCorsEnabled = False
+    , frontendWebDir = Nothing
+    , frontendAdminDir = Nothing
     }
 
 dummyAppEnv :: AppEnv

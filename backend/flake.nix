@@ -64,6 +64,7 @@
             pkgs.gnumake
             pkgs.cabal2nix
             pkgs.glibcLocales
+            pkgs.hpack
           ];
         };
 
@@ -79,6 +80,7 @@
             pkgs.fourmolu
             pkgs.hlint
             pkgs.stack
+            pkgs.hpack
 
             # System Libraries
             pkgs.postgresql

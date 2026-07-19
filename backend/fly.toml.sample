@@ -20,3 +20,5 @@ primary_region = "sin" # Change to your preferred region (must match your Supaba
   SHOULD_RUN_MIGRATION_AUTOMATICALLY = "true"
   ALLOW_CORS = "true"
   SHOW_SQL_LOG = "true"
+  FRONTEND_WEB_DIR = "/app/frontend-web/dist"
+  FRONTEND_ADMIN_DIR = "/app/frontend-admin/dist"

@@ -5,3 +5,8 @@ export PORT=${PORT:="3000"}
 export GIT_COMMIT_HASH=${GIT_COMMIT_HASH:="unknown"}
 export SHOW_SQL_LOG=${SHOW_SQL_LOG:="true"}
 export ALLOW_CORS=${ALLOW_CORS:="true"}
+
+# Export env variables pointing to built frontends
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export FRONTEND_WEB_DIR="$PROJECT_ROOT/frontend-web/dist"
+export FRONTEND_ADMIN_DIR="$PROJECT_ROOT/frontend-admin/dist"

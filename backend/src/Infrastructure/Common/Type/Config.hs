@@ -16,6 +16,8 @@ data Config = Config
   , port :: Int
   , showSqlLog :: Bool
   , allowCorsEnabled :: Bool
+  , frontendWebDir :: Maybe FilePath
+  , frontendAdminDir :: Maybe FilePath
   }
 
 loadConfig :: IO Config
@@ -27,6 +29,8 @@ loadConfig = do
   commit <- lookupEnv "GIT_COMMIT_HASH"
   portStr <- lookupEnv "PORT"
   allowCorsStr <- lookupEnv "ALLOW_CORS"
+  feWeb <- lookupEnv "FRONTEND_WEB_DIR"
+  feAdmin <- lookupEnv "FRONTEND_ADMIN_DIR"
 
   return
     Config
@@ -38,6 +42,8 @@ loadConfig = do
       , port = maybe 3000 read (portStr >>= \s -> if null s then Nothing else Just s)
       , showSqlLog = sqlLog == Just "true"
       , allowCorsEnabled = allowCorsStr == Just "true"
+      , frontendWebDir = feWeb
+      , frontendAdminDir = feAdmin
       }
  where
   defaultConnStr = "host=localhost dbname=realworld user=postgres password=postgres port=5432"
