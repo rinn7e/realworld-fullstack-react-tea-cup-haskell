@@ -39,8 +39,8 @@ main = do
 
   pool <-
     if config.showSqlLog
-      then runStdoutLoggingT $ createPostgresqlPool config.dbConnStr 3
-      else runNoLoggingT $ createPostgresqlPool config.dbConnStr 3
+      then runStdoutLoggingT $ createPostgresqlPool config.dbConnStr 15
+      else runNoLoggingT $ createPostgresqlPool config.dbConnStr 15
 
   -- Check for schema mismatches
   runSqlPool

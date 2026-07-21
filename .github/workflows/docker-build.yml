@@ -25,16 +25,21 @@ jobs:
             frontend-web/pnpm-lock.yaml
             frontend-admin/pnpm-lock.yaml
 
+      - name: Configure GitHub Packages Authentication
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> frontend-web/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> frontend-admin/.npmrc
+
       - name: Build frontend-web
         run: |
           cd frontend-web
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
           VITE_BASE_URL=/ VITE_API_BASE=/api pnpm run build
 
       - name: Build frontend-admin
         run: |
           cd frontend-admin
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
           VITE_BASE_URL=/admin/ VITE_API_BASE=/api pnpm run build
 
       - name: Assemble static assets for Docker

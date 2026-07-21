@@ -4,7 +4,7 @@ module Infrastructure.Interpreter.Real.DB.VisitorDB
   ) where
 
 import Data.List (foldl')
-import Data.Time (UTCTime)
+import Data.Time (UTCTime, diffUTCTime)
 import Database.Esqueleto.Experimental
 import Database.Persist qualified as P
 import Database.Persist.Sql (ConnectionPool, fromSqlKey, runSqlPool, toSqlKey)
@@ -53,14 +53,46 @@ upsertVisitorHandler ip ua path fp t mUid = do
       ( do
           let sqlUid = fmap (toSqlKey . fromIntegral . (\(D.UserId i) -> i)) mUid
               v = DB.Visitor ip ua path t sqlUid fp
-          entity <- P.upsertBy (DB.UniqueVisitorFingerprint fp) v
-            [ DB.VisitorIp        P.=. ip
-            , DB.VisitorUserAgent P.=. ua
-            , DB.VisitorPath      P.=. path
-            , DB.VisitorTimestamp P.=. t
-            , DB.VisitorUserId    P.=. sqlUid
-            ]
-          return $ toDomainVisitor entity
+          
+          mExisting <- P.getBy (DB.UniqueVisitorFingerprint fp)
+          case mExisting of
+            Just (Entity existingId existingVal) -> do
+              let timeDiff = diffUTCTime t existingVal.timestamp
+              if timeDiff > 10 -- Only update the DB once per 10 seconds
+                then do
+                  P.update existingId
+                    [ DB.VisitorIp        P.=. ip
+                    , DB.VisitorUserAgent P.=. ua
+                    , DB.VisitorPath      P.=. path
+                    , DB.VisitorTimestamp P.=. t
+                    , DB.VisitorUserId    P.=. sqlUid
+                    ]
+                  return D.Visitor
+                    { visitorId = D.VisitorId $ fromIntegral (fromSqlKey existingId)
+                    , ip = ip
+                    , userAgent = ua
+                    , path = path
+                    , fingerprint = fp
+                    , timestamp = t
+                    , userId = mUid
+                    }
+                else
+                  return $ toDomainVisitor (Entity existingId existingVal)
+            Nothing -> do
+              result <- P.insertBy v
+              case result of
+                Left (Entity existingId existingVal) -> 
+                  return $ toDomainVisitor (Entity existingId existingVal)
+                Right newId -> 
+                  return D.Visitor
+                    { visitorId = D.VisitorId $ fromIntegral (fromSqlKey newId)
+                    , ip = ip
+                    , userAgent = ua
+                    , path = path
+                    , fingerprint = fp
+                    , timestamp = t
+                    , userId = mUid
+                    }
       )
       pool
 

@@ -10,7 +10,7 @@ cd "$PROJECT_ROOT"
 echo "Building frontend-web..."
 (
   cd frontend-web
-  pnpm install --frozen-lockfile
+  pnpm install --no-frozen-lockfile
   VITE_BASE_URL=/ VITE_API_BASE=/api pnpm run build
 )
 rm -rf backend/dist/web
@@ -21,7 +21,7 @@ cp -R frontend-web/dist/* backend/dist/web/
 echo "Building frontend-admin..."
 (
   cd frontend-admin
-  pnpm install --frozen-lockfile
+  pnpm install --no-frozen-lockfile
   VITE_BASE_URL=/admin/ VITE_API_BASE=/api pnpm run build
 )
 rm -rf backend/dist/admin

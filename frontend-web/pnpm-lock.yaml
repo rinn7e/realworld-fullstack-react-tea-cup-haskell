@@ -18,14 +18,14 @@ importers:
         specifier: github:rinn7e/fp-ts-routing#0d9ec901639572171d6ada5b75aeee6ff945dc43
         version: fp-ts-routing@https://codeload.github.com/rinn7e/fp-ts-routing/tar.gz/0d9ec901639572171d6ada5b75aeee6ff945dc43(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))
       '@rinn7e/tea-cup-form':
-        specifier: link:../../tea-cup-package/tea-cup-form
-        version: link:../../tea-cup-package/tea-cup-form
+        specifier: 0.1.0-alpha.1
+        version: 0.1.0-alpha.1(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-datepicker@8.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tea-cup-fp@1.1.1)
       '@rinn7e/tea-cup-pagination':
-        specifier: link:../../tea-cup-package/tea-cup-pagination
-        version: link:../../tea-cup-package/tea-cup-pagination
+        specifier: 0.1.0-alpha.1
+        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.6(react@19.2.6))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tea-cup-fp@1.1.1)
       '@rinn7e/tea-cup-prelude':
-        specifier: link:../../tea-cup-package/tea-cup-prelude
-        version: link:../../tea-cup-package/tea-cup-prelude
+        specifier: 0.1.0-alpha.1
+        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -457,6 +457,27 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@floating-ui/core@1.8.0':
+    resolution: {integrity: sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ==}
+
+  '@floating-ui/dom@1.8.0':
+    resolution: {integrity: sha512-yXSrzeHZBTZadLOlfyhCkJHNeLJnHRnRInwdZ40L7ZiaAtrBwoYlsDrX3v5zB1Utk7CLfzcOVnVVWoXEky7Ceg==}
+
+  '@floating-ui/react-dom@2.1.9':
+    resolution: {integrity: sha512-JDjEFGCpImxDCA7JJKviA0M9+RtmJdj0m/NVU5IMgBK+AmZouAQQ7/+2GLH0GXXY0YMw9oXPB8hKdbPYg5QLYg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
+  '@floating-ui/react@0.27.20':
+    resolution: {integrity: sha512-CMqMy7OaXl9W0eq1Uy7L7i2Y/anPvHmFmESd2CEw0t5YvZhcVCeo4MBevAmswRllX7Y2dEidA4ozGPunLSTQpw==}
+    peerDependencies:
+      react: '>=17.0.0'
+      react-dom: '>=17.0.0'
+
+  '@floating-ui/utils@0.2.12':
+    resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
+
   '@heroicons/react@2.2.0':
     resolution: {integrity: sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ==}
     peerDependencies:
@@ -502,6 +523,41 @@ packages:
     resolution: {integrity: sha512-O71yZIbAh/PxDMNGns37GHBIfrVkEVyn+AXyIa5dOTfb4/xNvRWV+Vv/NMbNCtODB/pO7vLlF2OTmMVLhmr7Ag==}
     engines: {node: '>=18'}
     hasBin: true
+
+  '@rinn7e/tea-cup-form@0.1.0-alpha.1':
+    resolution: {integrity: sha512-1313xQiM3GZI2LfcgFWkThvQ9PqtJMIn9Mlw2ztiHaFJsDy1CECNXDC4uHel4ahupmYZLocrZ3ts3tzSQhqsVg==, tarball: https://npm.pkg.github.com/download/@rinn7e/tea-cup-form/0.1.0-alpha.1/33e6bd1f81b7e1df98cda6e8b3b1457e9d57d5ef}
+    peerDependencies:
+      '@rinn7e/tea-cup-prelude': ^0.1.0-alpha.1
+      fp-ts: ^2.16.11
+      react: ^19.2.0
+      react-datepicker: ^8.9.0
+      react-dom: ^19.2.0
+      react-tea-cup: ^5.1.1
+      tea-cup-fp: ^1.1.1
+
+  '@rinn7e/tea-cup-pagination@0.1.0-alpha.1':
+    resolution: {integrity: sha512-O3Zn3xqc9Lxs31clrHHf/9pbeoy94Gxbd8snoGQ4/A/rD+MEx8EzYc35I5bu1Fv+lOeSEvSu5Tuki3K8HTnZww==, tarball: https://npm.pkg.github.com/download/@rinn7e/tea-cup-pagination/0.1.0-alpha.1/905a968062cdd4f56b5a37284c119812c0e59e42}
+    peerDependencies:
+      '@devexperts/remote-data-ts': ^2.1.1
+      '@rinn7e/tea-cup-prelude': ^0.1.0-alpha.1
+      fp-ts: ^2.16.11
+      react: ^19.2.0
+      react-dom: ^19.2.0
+      react-tea-cup: ^5.1.1
+      tea-cup-fp: ^1.1.1
+
+  '@rinn7e/tea-cup-prelude@0.1.0-alpha.1':
+    resolution: {integrity: sha512-m5Qi241kXKhaBqxskYUfV8QsAeMqoT/rZWzynZllkTpJiSz+AHr8kYj2ai88sdxjvt0nD6+nxsE9qjNAERMyug==, tarball: https://npm.pkg.github.com/download/@rinn7e/tea-cup-prelude/0.1.0-alpha.1/0a7013e485de279b763ec63de3a42213ee564b53}
+    peerDependencies:
+      '@devexperts/remote-data-ts': ^2.1.1
+      clsx: ^2.0.0
+      fp-ts: ^2.16.0
+      io-ts: ^2.2.0
+      io-ts-types: ^0.5.0
+      react: ^19.0.0
+      react-tea-cup: ^5.1.1
+      tailwind-merge: ^3.3.1
+      tea-cup-fp: ^1.1.1
 
   '@rolldown/pluginutils@1.0.0-beta.27':
     resolution: {integrity: sha512-+d0F4MKMCbeVUJwG96uQ4SgAznZNSq93I3V+9NHA4OpvqG8mRCpGdKmK8l/dl02h2CCDHwW2FqilnTyDcAnqjA==}
@@ -1132,6 +1188,9 @@ packages:
   data-view-byte-offset@1.0.1:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
+
+  date-fns@4.4.0:
+    resolution: {integrity: sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w==}
 
   debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
@@ -2304,6 +2363,12 @@ packages:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
 
+  react-datepicker@8.10.0:
+    resolution: {integrity: sha512-JIXuA+g+qP3c4MVJpx24o7n1gnv3WV/8A/D6964HucY1FlSEc30+ITPNUfbKZXYHl5rruCtxYCwi2lzn7gaz7g==}
+    peerDependencies:
+      react: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
+      react-dom: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
+
   react-dom@19.2.6:
     resolution: {integrity: sha512-0prMI+hvBbPjsWnxDLxlCGyM8PN6UuWjEUCYmZhO67xIV9Xasa/r/vDnq+Xyq4Lo27g8QSbO5YzARu0D1Sps3g==}
     peerDependencies:
@@ -2531,6 +2596,9 @@ packages:
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  tabbable@6.5.0:
+    resolution: {integrity: sha512-wieBHXygIm7OyQOu5hQlkk62/WyCFYGlWg7L6/ZCUZwx0o398Zkn4pVmMyfYhfMG8kGrj/Krt8eIk6UKC6VzwA==}
 
   tailwind-merge@3.6.0:
     resolution: {integrity: sha512-uxL7qAVQriqRQPAyK3pj66VqskWqoZ37PW94jwOTwNfq/z9oyu1V+eqrZqtR2+fCiXdYOZe/Modt8GtvqNzu+w==}
@@ -3085,6 +3153,31 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
+  '@floating-ui/core@1.8.0':
+    dependencies:
+      '@floating-ui/utils': 0.2.12
+
+  '@floating-ui/dom@1.8.0':
+    dependencies:
+      '@floating-ui/core': 1.8.0
+      '@floating-ui/utils': 0.2.12
+
+  '@floating-ui/react-dom@2.1.9(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+    dependencies:
+      '@floating-ui/dom': 1.8.0
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+
+  '@floating-ui/react@0.27.20(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+    dependencies:
+      '@floating-ui/react-dom': 2.1.9(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@floating-ui/utils': 0.2.12
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      tabbable: 6.5.0
+
+  '@floating-ui/utils@0.2.12': {}
+
   '@heroicons/react@2.2.0(react@19.2.6)':
     dependencies:
       react: 19.2.6
@@ -3127,6 +3220,38 @@ snapshots:
   '@playwright/test@1.60.0':
     dependencies:
       playwright: 1.60.0
+
+  '@rinn7e/tea-cup-form@0.1.0-alpha.1(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-datepicker@8.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tea-cup-fp@1.1.1)':
+    dependencies:
+      '@rinn7e/tea-cup-prelude': 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+      fp-ts: 2.16.11
+      react: 19.2.6
+      react-datepicker: 8.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      react-dom: 19.2.6(react@19.2.6)
+      react-tea-cup: 5.1.1(react@19.2.6)(tea-cup-fp@1.1.1)
+      tea-cup-fp: 1.1.1
+
+  ? '@rinn7e/tea-cup-pagination@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.6(react@19.2.6))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tea-cup-fp@1.1.1)'
+  : dependencies:
+      '@devexperts/remote-data-ts': 2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))
+      '@rinn7e/tea-cup-prelude': 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+      fp-ts: 2.16.11
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      react-tea-cup: 5.1.1(react@19.2.6)(tea-cup-fp@1.1.1)
+      tea-cup-fp: 1.1.1
+
+  '@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.6)(tea-cup-fp@1.1.1))(react@19.2.6)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)':
+    dependencies:
+      '@devexperts/remote-data-ts': 2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))
+      clsx: 2.1.1
+      fp-ts: 2.16.11
+      io-ts: 2.2.22(fp-ts@2.16.11)
+      io-ts-types: 0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11)))
+      react: 19.2.6
+      react-tea-cup: 5.1.1(react@19.2.6)(tea-cup-fp@1.1.1)
+      tailwind-merge: 3.6.0
+      tea-cup-fp: 1.1.1
 
   '@rolldown/pluginutils@1.0.0-beta.27': {}
 
@@ -3761,6 +3886,8 @@ snapshots:
       call-bound: 1.0.4
       es-errors: 1.3.0
       is-data-view: 1.0.2
+
+  date-fns@4.4.0: {}
 
   debug@3.2.7:
     dependencies:
@@ -5141,6 +5268,14 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
+  react-datepicker@8.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+    dependencies:
+      '@floating-ui/react': 0.27.20(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      clsx: 2.1.1
+      date-fns: 4.4.0
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+
   react-dom@19.2.6(react@19.2.6):
     dependencies:
       react: 19.2.6
@@ -5452,6 +5587,8 @@ snapshots:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  tabbable@6.5.0: {}
 
   tailwind-merge@3.6.0: {}
 
