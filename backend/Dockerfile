@@ -6,7 +6,9 @@ FROM --platform=linux/amd64 nixos/nix:latest AS builder
 # Enable flakes and disable sandboxing
 RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf && \
     echo "sandbox = false" >> /etc/nix/nix.conf && \
-    echo "filter-syscalls = false" >> /etc/nix/nix.conf
+    echo "filter-syscalls = false" >> /etc/nix/nix.conf && \
+    echo "substituters = https://cache.nixos.org https://cache.iog.io" >> /etc/nix/nix.conf && \
+    echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" >> /etc/nix/nix.conf
 
 WORKDIR /app
 
