@@ -17,6 +17,7 @@ import Database.Persist.Sql (ConnectionPool, fromSqlKey, runSqlPool, toSqlKey)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
+import Infrastructure.Common.Type.DBPools (ReadPool (..), WritePool (..))
 
 import Capability.Database.LoggerDB
 import Domain.Type (LogEntry)
@@ -37,14 +38,14 @@ toDomainLogEntry (Entity lid l) =
     }
 
 runLoggerDBPostgres
-  :: (IOE :> es, Reader ConnectionPool :> es) => Eff (LoggerDB : es) a -> Eff es a
+  :: (IOE :> es, Reader ReadPool :> es, Reader WritePool :> es) => Eff (LoggerDB : es) a -> Eff es a
 runLoggerDBPostgres = interpret $ \_ -> \case
   InsertLog level message source timestamp mUid -> insertLogHandler level message source timestamp mUid
   ListLogs mLimit mOffset mLevel mSource -> listLogsHandler mLimit mOffset mLevel mSource
   CountAllLogs -> countAllLogsHandler
 
 insertLogHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader WritePool :> es)
   => D.LogLevel
   -> D.LogMessage
   -> D.LogSource
@@ -52,7 +53,7 @@ insertLogHandler
   -> Maybe DU.UserId
   -> Eff es LogEntry
 insertLogHandler level message source timestamp mUid = do
-  pool <- ask @ConnectionPool
+  WritePool pool <- ask @WritePool
   liftIO $
     runSqlPool
       ( do
@@ -64,14 +65,14 @@ insertLogHandler level message source timestamp mUid = do
       pool
 
 listLogsHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader ReadPool :> es)
   => Maybe Int
   -> Maybe Int
   -> Maybe D.LogLevel
   -> Maybe D.LogSource
   -> Eff es ([LogEntry], Int)
 listLogsHandler mLimit mOffset mLevel mSource = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -88,9 +89,9 @@ listLogsHandler mLimit mOffset mLevel mSource = do
       )
       pool
 
-countAllLogsHandler :: (IOE :> es, Reader ConnectionPool :> es) => Eff es Int
+countAllLogsHandler :: (IOE :> es, Reader ReadPool :> es) => Eff es Int
 countAllLogsHandler = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do

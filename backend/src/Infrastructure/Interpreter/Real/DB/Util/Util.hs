@@ -12,4 +12,4 @@ This helper mimics the ChatFusion pattern for convenient DB access.
 runDB :: SqlPersistT IO a -> App a
 runDB query = do
   env <- ask @AppEnv
-  liftIO $ runSqlPool query env.appPool
+  liftIO $ runSqlPool query env.appReadPool

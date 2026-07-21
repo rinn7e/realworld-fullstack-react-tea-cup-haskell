@@ -37,10 +37,15 @@ main :: IO ()
 main = do
   config <- loadConfig
 
-  pool <-
+  readPool <-
     if config.showSqlLog
-      then runStdoutLoggingT $ createPostgresqlPool config.dbConnStr 15
-      else runNoLoggingT $ createPostgresqlPool config.dbConnStr 15
+      then runStdoutLoggingT $ createPostgresqlPool config.dbConnStr 10
+      else runNoLoggingT $ createPostgresqlPool config.dbConnStr 10
+
+  writePool <-
+    if config.showSqlLog
+      then runStdoutLoggingT $ createPostgresqlPool config.dbConnStr 5
+      else runNoLoggingT $ createPostgresqlPool config.dbConnStr 5
 
   -- Check for schema mismatches
   runSqlPool
@@ -72,7 +77,7 @@ main = do
                 putStrLn "****************************************************"
                 die "Aborting: database schema is out of date."
     )
-    pool
+    readPool
 
   let jwtKey = makeSecretKey config.jwtSecret
       jwtSettings = S.defaultJWTSettings jwtKey
@@ -106,7 +111,7 @@ main = do
     logStdoutDev $
       corsMiddleware $
         authMiddleware $
-          S.serveWithContext api cfg (runServer (AppEnv pool jwtSettings jwtKey config))
+          S.serveWithContext api cfg (runServer (AppEnv readPool writePool jwtSettings jwtKey config))
 
 api :: Proxy FullAPI
 api = Proxy

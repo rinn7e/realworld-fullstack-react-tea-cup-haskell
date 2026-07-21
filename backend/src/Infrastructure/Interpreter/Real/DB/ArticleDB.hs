@@ -22,6 +22,7 @@ import Database.Persist.Sql (ConnectionPool, SqlPersistT, fromSqlKey, toSqlKey)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
+import Infrastructure.Common.Type.DBPools (ReadPool (..), WritePool (..))
 
 import Capability.Database.ArticleDB
 import Domain.Type qualified as D
@@ -72,7 +73,7 @@ ensureTag aid tagName = do
   return ()
 
 runArticleDBPostgres
-  :: (IOE :> es, Reader ConnectionPool :> es) => Eff (ArticleDB : es) a -> Eff es a
+  :: (IOE :> es, Reader ReadPool :> es, Reader WritePool :> es) => Eff (ArticleDB : es) a -> Eff es a
 runArticleDBPostgres = interpret $ \_ -> \case
   GetArticleBySlug slug -> getArticleBySlugHandler slug
   GetArticleWithAuthor mCurrentUserId slug -> getArticleWithAuthorHandler mCurrentUserId slug
@@ -89,9 +90,9 @@ runArticleDBPostgres = interpret $ \_ -> \case
   CountAdminArticles mTag mAuthor mSearch -> countAdminArticlesHandler mTag mAuthor mSearch
 
 getArticleBySlugHandler
-  :: (IOE :> es, Reader ConnectionPool :> es) => D.ArticleSlug -> Eff es (Maybe D.Article)
+  :: (IOE :> es, Reader ReadPool :> es) => D.ArticleSlug -> Eff es (Maybe D.Article)
 getArticleBySlugHandler slug = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -101,12 +102,12 @@ getArticleBySlugHandler slug = do
       pool
 
 getArticleWithAuthorHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader ReadPool :> es)
   => Maybe D.UserId
   -> D.ArticleSlug
   -> Eff es (Maybe D.ArticleDetail)
 getArticleWithAuthorHandler mCurrentUserId slug = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -116,7 +117,7 @@ getArticleWithAuthorHandler mCurrentUserId slug = do
       pool
 
 createArticleHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader WritePool :> es)
   => D.ArticleSlug
   -> D.ArticleTitle
   -> D.ArticleDescription
@@ -125,7 +126,7 @@ createArticleHandler
   -> [D.TagName]
   -> Eff es D.Article
 createArticleHandler slug title desc body (D.UserId authorIdInt) tags = do
-  pool <- ask @ConnectionPool
+  WritePool pool <- ask @WritePool
   liftIO $
     runSqlPool
       ( do
@@ -139,7 +140,7 @@ createArticleHandler slug title desc body (D.UserId authorIdInt) tags = do
       pool
 
 updateArticleHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader WritePool :> es)
   => D.ArticleId
   -> D.ArticleSlug
   -> D.ArticleTitle
@@ -148,7 +149,7 @@ updateArticleHandler
   -> Maybe [D.TagName]
   -> Eff es D.Article
 updateArticleHandler (D.ArticleId aidInt) newSlug newTitle newDesc newBody mTags = do
-  pool <- ask @ConnectionPool
+  WritePool pool <- ask @WritePool
   liftIO $
     runSqlPool
       ( do
@@ -177,9 +178,9 @@ updateArticleHandler (D.ArticleId aidInt) newSlug newTitle newDesc newBody mTags
       pool
 
 deleteArticleHandler
-  :: (IOE :> es, Reader ConnectionPool :> es) => D.ArticleId -> Eff es ()
+  :: (IOE :> es, Reader WritePool :> es) => D.ArticleId -> Eff es ()
 deleteArticleHandler (D.ArticleId aidInt) = do
-  pool <- ask @ConnectionPool
+  WritePool pool <- ask @WritePool
   liftIO $
     runSqlPool
       ( do
@@ -192,7 +193,7 @@ deleteArticleHandler (D.ArticleId aidInt) = do
       pool
 
 listArticlesHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader ReadPool :> es)
   => Maybe D.UserId
   -> Maybe D.TagName
   -> Maybe D.Username
@@ -201,7 +202,7 @@ listArticlesHandler
   -> D.Offset
   -> Eff es [D.ArticleDetail]
 listArticlesHandler mCurrentUserId mTag mAuthor mFavorited lim off = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -211,13 +212,13 @@ listArticlesHandler mCurrentUserId mTag mAuthor mFavorited lim off = do
       pool
 
 listFeedHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader ReadPool :> es)
   => D.UserId
   -> D.Limit
   -> D.Offset
   -> Eff es [D.ArticleDetail]
 listFeedHandler currentUserId lim off = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -227,18 +228,18 @@ listFeedHandler currentUserId lim off = do
       pool
 
 countArticlesHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader ReadPool :> es)
   => Maybe D.TagName
   -> Maybe D.Username
   -> Maybe D.Username
   -> Eff es Int
 countArticlesHandler mTag mAuthor mFavorited = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $ runSqlPool (Q.countArticles mTag mAuthor mFavorited) pool
 
-countFeedHandler :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> Eff es Int
+countFeedHandler :: (IOE :> es, Reader ReadPool :> es) => D.UserId -> Eff es Int
 countFeedHandler currentUserId = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -247,37 +248,37 @@ countFeedHandler currentUserId = do
       pool
 
 favoriteArticleHandler
-  :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.ArticleId -> Eff es ()
+  :: (IOE :> es, Reader WritePool :> es) => D.UserId -> D.ArticleId -> Eff es ()
 favoriteArticleHandler (D.UserId uidInt) (D.ArticleId aidInt) = do
-  ask @ConnectionPool >>= \pool ->
-    liftIO $
-      runSqlPool
-        ( do
-            let sqlUid = toSqlKey (fromIntegral uidInt)
-            let sqlAid = toSqlKey (fromIntegral aidInt)
-            _ <- insertBy (DB.Favorite sqlUid sqlAid)
-            return ()
-        )
-        pool
+  WritePool pool <- ask @WritePool
+  liftIO $
+    runSqlPool
+      ( do
+          let sqlUid = toSqlKey (fromIntegral uidInt)
+          let sqlAid = toSqlKey (fromIntegral aidInt)
+          _ <- insertBy (DB.Favorite sqlUid sqlAid)
+          return ()
+      )
+      pool
 
 unfavoriteArticleHandler
-  :: (IOE :> es, Reader ConnectionPool :> es) => D.UserId -> D.ArticleId -> Eff es ()
+  :: (IOE :> es, Reader WritePool :> es) => D.UserId -> D.ArticleId -> Eff es ()
 unfavoriteArticleHandler (D.UserId uidInt) (D.ArticleId aidInt) = do
-  ask @ConnectionPool >>= \pool ->
-    liftIO $
-      runSqlPool
-        ( do
-            let sqlUid = toSqlKey (fromIntegral uidInt)
-            let sqlAid = toSqlKey (fromIntegral aidInt)
-            deleteWhere
-              [ DB.FavoriteUserId ==. sqlUid
-              , DB.FavoriteArticleId ==. sqlAid
-              ]
-        )
-        pool
+  WritePool pool <- ask @WritePool
+  liftIO $
+    runSqlPool
+      ( do
+          let sqlUid = toSqlKey (fromIntegral uidInt)
+          let sqlAid = toSqlKey (fromIntegral aidInt)
+          deleteWhere
+            [ DB.FavoriteUserId ==. sqlUid
+            , DB.FavoriteArticleId ==. sqlAid
+            ]
+      )
+      pool
 
 listAdminArticlesHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader ReadPool :> es)
   => Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
@@ -287,8 +288,7 @@ listAdminArticlesHandler
   -> D.Offset
   -> Eff es [D.ArticleDetail]
 listAdminArticlesHandler mTag mAuthor mSearch mSort mDir lim off = do
-
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -298,11 +298,11 @@ listAdminArticlesHandler mTag mAuthor mSearch mSort mDir lim off = do
       pool
 
 countAdminArticlesHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader ReadPool :> es)
   => Maybe D.TagName
   -> Maybe D.Username
   -> Maybe Text
   -> Eff es Int
 countAdminArticlesHandler mTag mAuthor mSearch = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $ runSqlPool (Q.countAdminArticles mTag mAuthor mSearch) pool

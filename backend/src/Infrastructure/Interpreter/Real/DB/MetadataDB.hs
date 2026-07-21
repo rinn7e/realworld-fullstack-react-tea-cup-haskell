@@ -6,17 +6,18 @@ import Database.Persist.Sql (ConnectionPool, runSqlPool)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
+import Infrastructure.Common.Type.DBPools (ReadPool (..))
 
 import Capability.Database.MetadataDB hiding (getLastRanMigration)
 import Infrastructure.Interpreter.Real.DB.Migration.Migration qualified as Migration
 
 runMetadataDBPostgres
-  :: (IOE :> es, Reader ConnectionPool :> es) => Eff (MetadataDB : es) a -> Eff es a
+  :: (IOE :> es, Reader ReadPool :> es) => Eff (MetadataDB : es) a -> Eff es a
 runMetadataDBPostgres = interpret $ \_ -> \case
   GetLastRanMigration -> getLastRanMigrationHandler
 
 getLastRanMigrationHandler
-  :: (IOE :> es, Reader ConnectionPool :> es) => Eff es (Maybe Int)
+  :: (IOE :> es, Reader ReadPool :> es) => Eff es (Maybe Int)
 getLastRanMigrationHandler = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $ runSqlPool Migration.getLastRanMigration pool

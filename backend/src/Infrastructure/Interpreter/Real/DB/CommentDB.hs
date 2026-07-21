@@ -16,6 +16,7 @@ import Database.Persist.Sql (ConnectionPool, fromSqlKey, runSqlPool, toSqlKey)
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
+import Infrastructure.Common.Type.DBPools (ReadPool (..), WritePool (..))
 
 import Capability.Database.CommentDB
 import Domain.Type qualified as D
@@ -35,7 +36,7 @@ toDomainComment (Entity cid c) =
     }
 
 runCommentDBPostgres
-  :: (IOE :> es, Reader ConnectionPool :> es) => Eff (CommentDB : es) a -> Eff es a
+  :: (IOE :> es, Reader ReadPool :> es, Reader WritePool :> es) => Eff (CommentDB : es) a -> Eff es a
 runCommentDBPostgres = interpret $ \_ -> \case
   GetCommentsForArticle aid -> getCommentsForArticleHandler aid
   InsertComment aid uid body -> insertCommentHandler aid uid body
@@ -44,9 +45,9 @@ runCommentDBPostgres = interpret $ \_ -> \case
   ListAdminComments mAuthor mArticleSlug mSort mDir lim off -> listAdminCommentsHandler mAuthor mArticleSlug mSort mDir lim off
 
 getCommentsForArticleHandler
-  :: (IOE :> es, Reader ConnectionPool :> es) => D.ArticleId -> Eff es [(D.Comment, D.User)]
+  :: (IOE :> es, Reader ReadPool :> es) => D.ArticleId -> Eff es [(D.Comment, D.User)]
 getCommentsForArticleHandler (D.ArticleId aidInt) = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -57,13 +58,13 @@ getCommentsForArticleHandler (D.ArticleId aidInt) = do
       pool
 
 insertCommentHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader WritePool :> es)
   => D.ArticleId
   -> D.UserId
   -> D.CommentBody
   -> Eff es (Maybe (D.Comment, D.User))
 insertCommentHandler (D.ArticleId aidInt) (D.UserId uidInt) body = do
-  pool <- ask @ConnectionPool
+  WritePool pool <- ask @WritePool
   liftIO $
     runSqlPool
       ( do
@@ -75,9 +76,9 @@ insertCommentHandler (D.ArticleId aidInt) (D.UserId uidInt) body = do
       pool
 
 deleteCommentHandler
-  :: (IOE :> es, Reader ConnectionPool :> es) => D.CommentId -> Eff es ()
+  :: (IOE :> es, Reader WritePool :> es) => D.CommentId -> Eff es ()
 deleteCommentHandler (D.CommentId cidInt) = do
-  pool <- ask @ConnectionPool
+  WritePool pool <- ask @WritePool
   liftIO $
     runSqlPool
       ( do
@@ -87,9 +88,9 @@ deleteCommentHandler (D.CommentId cidInt) = do
       pool
 
 getCommentHandler
-  :: (IOE :> es, Reader ConnectionPool :> es) => D.CommentId -> Eff es (Maybe D.Comment)
+  :: (IOE :> es, Reader ReadPool :> es) => D.CommentId -> Eff es (Maybe D.Comment)
 getCommentHandler (D.CommentId cidInt) = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -100,7 +101,7 @@ getCommentHandler (D.CommentId cidInt) = do
       pool
 
 listAdminCommentsHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader ReadPool :> es)
   => Maybe D.Username
   -> Maybe D.ArticleSlug
   -> Maybe D.Sort
@@ -109,7 +110,7 @@ listAdminCommentsHandler
   -> D.Offset
   -> Eff es ([D.CommentDetail], Int)
 listAdminCommentsHandler mAuthor mArticleSlug mSort mDir (D.Limit limInt) (D.Offset offInt) = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do

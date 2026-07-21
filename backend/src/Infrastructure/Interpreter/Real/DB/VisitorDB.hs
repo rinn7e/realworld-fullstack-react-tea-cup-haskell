@@ -7,10 +7,11 @@ import Data.List (foldl')
 import Data.Time (UTCTime, diffUTCTime)
 import Database.Esqueleto.Experimental
 import Database.Persist qualified as P
-import Database.Persist.Sql (ConnectionPool, fromSqlKey, runSqlPool, toSqlKey)
+import Database.Persist.Sql ()
 import Effectful
 import Effectful.Dispatch.Dynamic
 import Effectful.Reader.Static
+import Infrastructure.Common.Type.DBPools (ReadPool (..), WritePool (..))
 
 import Capability.Database.VisitorDB
 import Domain.Type qualified as D
@@ -30,7 +31,7 @@ toDomainVisitor (Entity vid v) =
     }
 
 runVisitorDBPostgres
-  :: (IOE :> es, Reader ConnectionPool :> es) => Eff (VisitorDB : es) a -> Eff es a
+  :: (IOE :> es, Reader ReadPool :> es, Reader WritePool :> es) => Eff (VisitorDB : es) a -> Eff es a
 runVisitorDBPostgres = interpret $ \_ -> \case
   UpsertVisitor ip ua path fp t mUid -> upsertVisitorHandler ip ua path fp t mUid
   ListVisitors mLimit mOffset mIp mPath mSort mDir -> listVisitorsHandler mLimit mOffset mIp mPath mSort mDir
@@ -38,7 +39,7 @@ runVisitorDBPostgres = interpret $ \_ -> \case
   CountAllVisitors -> countAllVisitorsHandler
 
 upsertVisitorHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader WritePool :> es)
   => D.VisitorIp
   -> D.VisitorUserAgent
   -> D.VisitorPath
@@ -47,18 +48,40 @@ upsertVisitorHandler
   -> Maybe D.UserId
   -> Eff es D.Visitor
 upsertVisitorHandler ip ua path fp t mUid = do
-  pool <- ask @ConnectionPool
+  WritePool pool <- ask @WritePool
   liftIO $
     runSqlPool
       ( do
           let sqlUid = fmap (toSqlKey . fromIntegral . (\(D.UserId i) -> i)) mUid
               v = DB.Visitor ip ua path t sqlUid fp
           
+          -- NOTE on avoiding 'upsertBy' / raw 'ON CONFLICT DO UPDATE':
+          -- Under rapid client-side clicks or quick page refreshes, concurrent requests
+          -- for the same fingerprint attempt to lock the exact same row in the unique index.
+          -- 
+          -- Using raw 'upsertBy' acquires an exclusive row-level lock on conflict. If a transaction
+          -- is slow or aborted midway by a browser disconnect (leaving the connection 'idle in transaction'):
+          -- 1. The exclusive row-level lock is held open.
+          -- 2. Subsequent write requests queue up behind it, waiting for the lock.
+          -- 3. PgBouncer (which has a strict backend connection pool limit) gets saturated with these blocked threads.
+          -- 4. Eventually, PgBouncer is starved of backend connections, blocking all read-only queries too.
+          -- 
+          -- Why not use 'SET LOCAL lock_timeout' or immediate failure catching?
+          -- While we could configure a very short transaction lock timeout (e.g. '10ms') and catch
+          -- the aborted transaction exception (SQL state '55P03' - lock_not_available) in Haskell:
+          -- 1. It still hits Postgres with a write query/transaction attempt on every request.
+          -- 2. Aborting transactions causes rollback overhead in Postgres (CPU/IO/WAL writing).
+          -- 3. It floods Supabase/Postgres logs with noisy "canceled due to lock timeout" errors.
+          -- 
+          -- To prevent this row-lock saturation cleanly, we perform a read-only 'getBy' check first.
+          -- If the visitor already visited recently (< 1 second ago), we return the existing record
+          -- IMMEDIATELY without initiating any database writes, lock requests, or locking transactions.
+          -- If they visited > 1 second ago, we update the existing record.
           mExisting <- P.getBy (DB.UniqueVisitorFingerprint fp)
           case mExisting of
             Just (Entity existingId existingVal) -> do
               let timeDiff = diffUTCTime t existingVal.timestamp
-              if timeDiff > 10 -- Only update the DB once per 10 seconds
+              if timeDiff > 1 -- Only update the DB once per second
                 then do
                   P.update existingId
                     [ DB.VisitorIp        P.=. ip
@@ -98,7 +121,7 @@ upsertVisitorHandler ip ua path fp t mUid = do
 
 
 listVisitorsHandler
-  :: (IOE :> es, Reader ConnectionPool :> es)
+  :: (IOE :> es, Reader ReadPool :> es)
   => Maybe D.Limit
   -> Maybe D.Offset
   -> Maybe D.VisitorIp
@@ -107,7 +130,7 @@ listVisitorsHandler
   -> Maybe D.Direction
   -> Eff es ([(D.Visitor, Maybe D.User)], Int)
 listVisitorsHandler mLimit mOffset mIp mPath mSort mDir = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -157,9 +180,9 @@ listVisitorsHandler mLimit mOffset mIp mPath mSort mDir = do
         ]
 
 getVisitorsSinceHandler
-  :: (IOE :> es, Reader ConnectionPool :> es) => UTCTime -> Eff es [D.Visitor]
+  :: (IOE :> es, Reader ReadPool :> es) => UTCTime -> Eff es [D.Visitor]
 getVisitorsSinceHandler since = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do
@@ -168,9 +191,9 @@ getVisitorsSinceHandler since = do
       )
       pool
 
-countAllVisitorsHandler :: (IOE :> es, Reader ConnectionPool :> es) => Eff es Int
+countAllVisitorsHandler :: (IOE :> es, Reader ReadPool :> es) => Eff es Int
 countAllVisitorsHandler = do
-  pool <- ask @ConnectionPool
+  ReadPool pool <- ask @ReadPool
   liftIO $
     runSqlPool
       ( do

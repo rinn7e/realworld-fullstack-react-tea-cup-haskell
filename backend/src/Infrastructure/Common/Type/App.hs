@@ -10,6 +10,7 @@ import Servant qualified as S
 import Servant.Auth.Server qualified as S
 
 import Infrastructure.Common.Type.Config (Config)
+import Infrastructure.Common.Type.DBPools (ReadPool (..), WritePool (..))
 
 -- Capabilities
 import Capability.Auth (Auth)
@@ -37,7 +38,8 @@ import Infrastructure.Interpreter.Real.DB.VisitorDB (runVisitorDBPostgres)
 import Infrastructure.Interpreter.Real.Time (runTimeIO)
 
 data AppEnv = AppEnv
-  { appPool :: ConnectionPool
+  { appReadPool :: ConnectionPool
+  , appWritePool :: ConnectionPool
   , appJwtSettings :: S.JWTSettings
   , appJwtKey :: JWK
   , appConfig :: Config
@@ -57,7 +59,8 @@ type App =
      , Auth
      , Crypto
      , Reader AppEnv
-     , Reader ConnectionPool
+     , Reader ReadPool
+     , Reader WritePool
      , Reader JWK
      , Error S.ServerError
      , IOE
@@ -79,7 +82,8 @@ runApp env action = do
           & runAuthJWT
           & runCryptoArgon2
           & runReader env
-          & runReader env.appPool
+          & runReader (ReadPool env.appReadPool)
+          & runReader (WritePool env.appWritePool)
           & runReader env.appJwtKey
           & runErrorNoCallStack @S.ServerError
           & runEff

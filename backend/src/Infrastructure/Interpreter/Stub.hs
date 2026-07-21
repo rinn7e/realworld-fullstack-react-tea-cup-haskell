@@ -23,6 +23,7 @@ import Infrastructure.Interpreter.Stub.DB.UserDB (MockDB, runUserDBStub)
 import Infrastructure.Interpreter.Stub.DB.VisitorDB (runVisitorDBStub)
 import Infrastructure.Interpreter.Stub.Time (runTimeStub)
 import Infrastructure.Interpreter.Stub.Util (dummyAppEnv, dummyJWK, dummyPool)
+import Infrastructure.Common.Type.DBPools (ReadPool (..), WritePool (..))
 
 runAppInMemory :: IORef MockDB -> UTCTime -> App a -> IO a
 runAppInMemory dbRef fixedTime action = do
@@ -45,7 +46,8 @@ runAppInMemoryEither dbRef fixedTime action = do
     & runAuthStub
     & runCryptoStub
     & runReader dummyAppEnv
-    & runReader dummyPool
+    & runReader (ReadPool dummyPool)
+    & runReader (WritePool dummyPool)
     & runReader dummyJWK
     & runErrorNoCallStack @S.ServerError
     & runEff

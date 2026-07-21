@@ -39,7 +39,8 @@ dummyConfig =
 dummyAppEnv :: AppEnv
 dummyAppEnv =
   AppEnv
-    { appPool = dummyPool
+    { appReadPool = dummyPool
+    , appWritePool = dummyPool
     , appJwtSettings = S.defaultJWTSettings dummyJWK
     , appJwtKey = dummyJWK
     , appConfig = dummyConfig
