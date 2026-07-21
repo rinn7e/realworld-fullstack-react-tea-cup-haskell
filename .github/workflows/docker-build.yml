@@ -1,7 +1,9 @@
 name: Build and Cache Docker Image
 
-# Triggered manually via the GitHub Actions Tab in the browser
 on:
+  push:
+    branches:
+      - master
   workflow_dispatch:
 
 # Grant permissions to write the built Docker image to GitHub Packages
@@ -52,6 +54,7 @@ jobs:
           mkdir -p backend/dist/web backend/dist/admin
           cp -R frontend-web/dist/* backend/dist/web/
           cp -R frontend-admin/dist/* backend/dist/admin/
+          git add -f backend/dist
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
