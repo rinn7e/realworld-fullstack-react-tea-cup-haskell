@@ -75,13 +75,8 @@ jobs:
       # Magic Nix Cache (caches evaluation data)
       - name: Magic Nix Cache
         uses: DeterminateSystems/magic-nix-cache-action@v8
-
-      # Setup Cachix (downloads dependencies and pushes compiled code)
-      - name: Setup Cachix
-        uses: cachix/cachix-action@v15
         with:
-          name: rinn7e
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+          use-flakehub: false
 
       # Build the Docker image natively using Nix.
       # This generates a tarball containing the layered Docker image.

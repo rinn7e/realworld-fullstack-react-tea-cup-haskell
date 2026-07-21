@@ -117,6 +117,10 @@
             mkdir -p app/dist
             cp -R ${frontendDist}/* app/dist/
             chmod -R u+w app/dist
+
+            mkdir -p app
+            cp -R ${./resource} app/resource
+            chmod -R u+w app/resource
           '';
         };
 

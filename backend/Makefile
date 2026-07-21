@@ -55,8 +55,10 @@ docker:
 	# Clean up compiled folders from host backend/dist/
 	rm -rf dist/web dist/admin
 
-# Deploy to Fly.io using the locally built Docker image
+# Deploy to Fly.io by pulling the compiled image from GHCR, tagging it, and deploying locally
 deploy:
+	docker pull ghcr.io/rinn7e/realworld-fullstack-react-tea-cup-haskell:latest
+	docker tag ghcr.io/rinn7e/realworld-fullstack-react-tea-cup-haskell:latest rinn7e-haskell-realworld-api
 	fly deploy --image rinn7e-haskell-realworld-api --local-only
 
 # Run a dry-run of the Docker build to see what Nix will fetch vs build
