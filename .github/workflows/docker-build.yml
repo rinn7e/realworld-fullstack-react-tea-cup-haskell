@@ -4,6 +4,11 @@ name: Build and Cache Docker Image
 on:
   workflow_dispatch:
 
+# Grant permissions to write the built Docker image to GitHub Packages
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -59,15 +64,38 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Builds the Docker image and pushes it to GHCR.
-      # Uses GitHub Actions cache (gha) to cache the Nix compiler dependencies.
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+      # Install Nix on the runner to support caching/warmup
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v12
+
+      # Magic Nix Cache (caches evaluation data)
+      - name: Magic Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@v8
+
+      # Setup Cachix (downloads dependencies and pushes compiled code)
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v15
         with:
-          context: ./backend
-          file: ./backend/Dockerfile
-          platforms: linux/amd64
-          tags: ghcr.io/${{ github.repository }}:latest
-          push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          name: rinn7e
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+      # Build the Docker image natively using Nix.
+      # This generates a tarball containing the layered Docker image.
+      - name: Build Docker Image via Nix
+        run: |
+          nix build path:./backend#dockerImage \
+            --extra-experimental-features "nix-command flakes" \
+            --option sandbox false \
+            --option filter-syscalls false
+
+      # Load the Nix-built Docker image archive into the runner's Docker daemon,
+      # tag it correctly to lowercase GHCR registry syntax, and push it!
+      - name: Load, Tag, and Push Docker Image
+        run: |
+          docker load -i result
+          
+          # Convert repository name to lowercase for GHCR compatibility
+          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          
+          docker tag realworld-api:latest $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:latest

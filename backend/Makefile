@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := build
 
-.PHONY: build watch server server-watch resetdb seed migrate-generate migrate-up migrate-up-one migrate-down-one migrate-status lint format build-haddock build-hoogle hoogle test compile install exec run-installed swagger-web swagger-admin server-fresh server-prod docker-build deploy
+.PHONY: build watch server server-watch resetdb seed migrate-generate migrate-up migrate-up-one migrate-down-one migrate-status lint format build-haddock build-hoogle hoogle test compile install exec run-installed swagger-web swagger-admin server-fresh server-prod docker deploy docker-dry-run
 
 # Build with fast compilation
 build:
@@ -50,14 +50,18 @@ docker:
 	mkdir -p dist/web dist/admin
 	cp -R ../frontend-web/dist/* dist/web/
 	cp -R ../frontend-admin/dist/* dist/admin/
-	# Run docker build with backend/ as context
-	docker build --platform linux/amd64 -t rinn7e-haskell-realworld-api .
+	# Run docker build with backend/ as context and pass the Cachix auth token securely
+	docker build --secret id=CACHIX_AUTH_TOKEN,env=CACHIX_AUTH_TOKEN --platform linux/amd64 -t rinn7e-haskell-realworld-api .
 	# Clean up compiled folders from host backend/dist/
 	rm -rf dist/web dist/admin
 
 # Deploy to Fly.io using the locally built Docker image
 deploy:
 	fly deploy --image rinn7e-haskell-realworld-api --local-only
+
+# Run a dry-run of the Docker build to see what Nix will fetch vs build
+docker-dry-run:
+	docker build --secret id=CACHIX_AUTH_TOKEN,env=CACHIX_AUTH_TOKEN --platform linux/amd64 -f Dockerfile.dry .
 
 # Reset database and start dev server
 resetdb:

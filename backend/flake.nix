@@ -38,9 +38,10 @@
           src = ./.;
         };
 
-        # The executable package components
+        # The executable package components (native to the host)
         haskellApp = project.haskell-servant-realworld.components.exes.haskell-servant-realworld-exe;
         migrateApp = project.haskell-servant-realworld.components.exes.migrate-exe;
+
 
         # Lean development shell:
         # We remove heavy developer tools (HLS, linters, formatters) from nixpkgs
@@ -82,11 +83,49 @@
           ];
         };
 
+        # Check if frontend assets exist in the backend/dist folder
+        frontendDist = if builtins.pathExists ./dist
+                       then ./dist
+                       else pkgs.runCommand "empty-dist" {} "mkdir -p $out/web $out/admin";
+
+        dockerImage = pkgs.dockerTools.buildLayeredImage {
+          name = "realworld-api";
+          tag = "latest";
+          
+          contents = [
+            haskellApp
+            migrateApp
+            pkgs.bashInteractive
+            pkgs.coreutils
+            pkgs.cacert
+          ];
+
+          config = {
+            Cmd = [ "${haskellApp}/bin/haskell-servant-realworld-exe" ];
+            Env = [
+              "PORT=3000"
+              "FRONTEND_WEB_DIR=/app/dist/web"
+              "FRONTEND_ADMIN_DIR=/app/dist/admin"
+            ];
+            WorkingDir = "/app";
+            ExposedPorts = {
+              "3000/tcp" = {};
+            };
+          };
+
+          extraCommands = ''
+            mkdir -p app/dist
+            cp -R ${frontendDist}/* app/dist/
+            chmod -R u+w app/dist
+          '';
+        };
+
       in
       {
         packages = {
           default = haskellApp;
           migrate = migrateApp;
+          dockerImage = dockerImage;
         };
 
         devShells = {

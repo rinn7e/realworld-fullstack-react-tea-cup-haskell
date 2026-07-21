@@ -7,8 +7,8 @@ FROM --platform=linux/amd64 nixos/nix:latest AS builder
 RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf && \
     echo "sandbox = false" >> /etc/nix/nix.conf && \
     echo "filter-syscalls = false" >> /etc/nix/nix.conf && \
-    echo "substituters = https://cache.nixos.org https://cache.iog.io" >> /etc/nix/nix.conf && \
-    echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" >> /etc/nix/nix.conf
+    echo "substituters = https://cache.nixos.org https://cache.iog.io https://rinn7e.cachix.org" >> /etc/nix/nix.conf && \
+    echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= rinn7e.cachix.org-1:Nt+WWMAPnqJ6mrDtLvNOdJOsH+CZsygvwupCb99aXbM=" >> /etc/nix/nix.conf
 
 WORKDIR /app
 
@@ -20,20 +20,43 @@ COPY --link flake.nix flake.lock cabal.project package.yaml stack.yaml stack.yam
 # Fetch and build all dependencies in the GHC environment, caching this Docker layer.
 # We save it as a persistent profile so GHC and dependencies are cached in the /nix/store.
 # We target the lean .#build shell to exclude massive editor/formatting tools.
-RUN nix develop .#build \
-    --extra-experimental-features "nix-command flakes" \
-    --option sandbox false \
-    --option filter-syscalls false \
-    --profile /app/dev-profile --command true
+# We mount a persistent cache for Nix's evaluation/git database and mount the Cachix token secret.
+# We launch 'cachix watch-store' in the background to push compiled dependency libraries.
+RUN --mount=type=cache,target=/root/.cache/nix \
+    --mount=type=secret,id=CACHIX_AUTH_TOKEN \
+    if [ -f /run/secrets/CACHIX_AUTH_TOKEN ]; then \
+        export CACHIX_AUTH_TOKEN=$(cat /run/secrets/CACHIX_AUTH_TOKEN) && \
+        nix run nixpkgs#cachix -- \
+            --extra-experimental-features "nix-command flakes" \
+            --option sandbox false \
+            --option filter-syscalls false \
+            watch-store rinn7e & \
+    fi && \
+    nix develop .#build \
+        --extra-experimental-features "nix-command flakes" \
+        --option sandbox false \
+        --option filter-syscalls false \
+        --profile /app/dev-profile --command true
 
 # Now copy the rest of the source code
 COPY --link . .
 
 # Build the Haskell project (reusing GHC and libraries from the cached Docker layer!)
-RUN nix build path:.#default \
-    --extra-experimental-features "nix-command flakes" \
-    --option sandbox false \
-    --option filter-syscalls false
+# We mount a persistent cache for Nix's evaluation/git database and mount the Cachix token secret
+RUN --mount=type=cache,target=/root/.cache/nix \
+    --mount=type=secret,id=CACHIX_AUTH_TOKEN \
+    if [ -f /run/secrets/CACHIX_AUTH_TOKEN ]; then \
+        export CACHIX_AUTH_TOKEN=$(cat /run/secrets/CACHIX_AUTH_TOKEN) && \
+        nix run nixpkgs#cachix -- \
+            --extra-experimental-features "nix-command flakes" \
+            --option sandbox false \
+            --option filter-syscalls false \
+            watch-store rinn7e & \
+    fi && \
+    nix build path:.#default \
+        --extra-experimental-features "nix-command flakes" \
+        --option sandbox false \
+        --option filter-syscalls false
 
 # Extract binaries to a clean folder and archive the closure.
 # We remove the '-h' (dereference) flag from tar to prevent infinite recursion on symlinks,
