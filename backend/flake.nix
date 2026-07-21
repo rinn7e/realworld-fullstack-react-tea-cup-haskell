@@ -1,100 +1,83 @@
+# SPDX-FileCopyrightText: 2026 Serokell <https://serokell.io>
+#
+# SPDX-License-Identifier: CC0-1.0
+
 {
-  description = "Haskell Servant RealWorld Backend Dev Environment";
+  description = "Haskell Servant RealWorld Backend Dev Environment (haskell.nix)";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    haskell-nix.url = "github:input-output-hk/haskell.nix";
+    nixpkgs.follows = "haskell-nix/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, haskell-nix, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        overlays = [ haskell-nix.overlay ];
+        pkgs = import nixpkgs { inherit system overlays; };
 
-        # Define GHC with all dependencies pre-installed from Nix cache
-        ghcEnv = pkgs.haskellPackages.ghcWithPackages (ps: with ps; [
-          # App dependencies
-          aeson
-          crypton
-          esqueleto
-          appendmap
-          http-types
-          jose
-          lens
-          monad-logger
-          persistent
-          persistent-postgresql
-          persistent-template
-          resource-pool
-          servant-auth
-          servant-auth-server
-          servant-server
-          wai
-          wai-cors
-          wai-extra
-          warp
-          password
-          effectful
-          effectful-core
-          unliftio
-          openapi3
-          servant-openapi3
-          servant-swagger-ui
-          insert-ordered-containers
-          raw-strings-qq
-          http-api-data
-
-          # Test dependencies
-          hspec
-        ]);
-
-        # Package derivation for nix build, stripped of GHC/library runtime references
-        haskellAppRaw = pkgs.haskellPackages.callCabal2nix "haskell-servant-realworld" ./. {};
-        haskellApp = pkgs.haskell.lib.justStaticExecutables haskellAppRaw;
-      in
-      {
-        packages.default = haskellApp;
-
-        # Lean development shell for caching builder dependencies in Docker (no editor tools)
-        devShells.build = pkgs.mkShell {
-          buildInputs = [
-            ghcEnv
-            pkgs.postgresql
-            pkgs.zlib
-            pkgs.gnumake
-            pkgs.cabal2nix
-            pkgs.glibcLocales
-            pkgs.hpack
-          ];
+        # Project defined by stackProject using the local stack.yaml
+        project = pkgs.haskell-nix.stackProject {
+          src = ./.;
         };
 
-        # Development shell
-        devShells.default = pkgs.mkShell {
+        # The executable package component
+        haskellApp = project.haskell-servant-realworld.components.exes.haskell-servant-realworld-exe;
+        migrateApp = project.haskell-servant-realworld.components.exes.migrate-exe;
+
+        # haskell.nix development shell that exposes GHC with all dependencies pre-installed
+        projectShell = project.shellFor {
+          # We specify the local package in the project
+          packages = ps: [ ps.haskell-servant-realworld ];
+
+          # We specify tools like cabal, hls, etc. matching GHC version
+          tools = {
+            cabal = "latest";
+            haskell-language-server = "latest";
+            fourmolu = "latest";
+            hlint = "latest";
+          };
+
+          # System libraries needed in the dev shell
           buildInputs = [
-            # GHC bundled with our libraries
-            ghcEnv
-
-            # Other tools
-            pkgs.cabal-install
-            pkgs.haskell-language-server
-            pkgs.fourmolu
-            pkgs.hlint
-            pkgs.stack
-            pkgs.hpack
-
-            # System Libraries
             pkgs.postgresql
             pkgs.zlib
             pkgs.gnumake
+            pkgs.stack
+            pkgs.hpack
           ];
 
           shellHook = ''
             export LD_LIBRARY_PATH="${pkgs.postgresql}/lib:${pkgs.zlib}/lib:$LD_LIBRARY_PATH"
             echo "===================================================="
-            echo "  Welcome to the Haskell Servant RealWorld Dev Shell! 🚀"
-            echo "  Using pre-compiled packages from the Nix cache!"
+            echo "  Welcome to the Haskell Servant RealWorld Dev Shell (haskell.nix)! 🚀"
+            echo "  Using GHC 9.8.4 matching your stack.yaml resolver!"
             echo "===================================================="
           '';
+        };
+
+        # A lean shell for caching builder dependencies in Docker (no developer/editor tools)
+        buildShell = project.shellFor {
+          packages = ps: [ ps.haskell-servant-realworld ];
+          buildInputs = [
+            pkgs.postgresql
+            pkgs.zlib
+            pkgs.gnumake
+            pkgs.hpack
+          ];
+        };
+
+      in
+      {
+        packages = {
+          default = haskellApp;
+          migrate = migrateApp;
+        };
+
+        devShells = {
+          default = projectShell;
+          build = buildShell;
         };
       });
 }
