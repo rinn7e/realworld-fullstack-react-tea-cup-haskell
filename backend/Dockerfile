@@ -29,18 +29,32 @@ RUN nix develop .#build \
 # Now copy the rest of the source code
 COPY --link . .
 
-# Build the Haskell project (reusing GHC and libraries from the cached Docker layer!)
-RUN nix build path:.#default \
-    --extra-experimental-features "nix-command flakes" \
-    --option sandbox false \
-    --option filter-syscalls false
+# Declare build mode argument (defaults to 'build', can be set to 'tree')
+ARG MODE=build
+
+# If MODE is tree, run nix-tree directly on the default derivation path.
+# Otherwise, build/compile the Haskell project normally.
+RUN if [ "$MODE" = "tree" ]; then \
+        nix run nixpkgs#nix-tree -- path:.#default \
+            --extra-experimental-features "nix-command flakes" \
+            --option sandbox false \
+            --option filter-syscalls false; \
+    else \
+        nix build path:.#default \
+            --extra-experimental-features "nix-command flakes" \
+            --option sandbox false \
+            --option filter-syscalls false; \
+    fi
 
 # Extract binaries to a clean folder and archive the closure.
 # We remove the '-h' (dereference) flag from tar to prevent infinite recursion on symlinks,
 # which caused the segmentation fault (exit code 139) under emulation.
-RUN mkdir -p /app/bin && \
-    cp -L result/bin/* /app/bin/ && \
-    tar -cf /app/closure.tar $(nix-store -qR result)
+# This step is skipped if we are only printing the dependency tree.
+RUN if [ "$MODE" = "build" ]; then \
+        mkdir -p /app/bin && \
+        cp -L result/bin/* /app/bin/ && \
+        tar -cf /app/closure.tar $(nix-store -qR result); \
+    fi
 
 # --- Runner Stage ---
 FROM --platform=linux/amd64 debian:bookworm-slim AS runner

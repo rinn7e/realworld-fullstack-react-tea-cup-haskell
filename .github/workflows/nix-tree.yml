@@ -18,7 +18,10 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          file: ./backend/Dockerfile.tree
+          file: ./backend/Dockerfile
+          target: builder
+          build-args: |
+            MODE=tree
           push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
