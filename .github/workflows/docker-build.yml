@@ -67,6 +67,10 @@ jobs:
       # Install Nix on the runner to support caching/warmup
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v12
+        with:
+          extra-conf: |
+            substituters = https://cache.nixos.org https://cache.iog.io
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=
 
       # Magic Nix Cache (caches evaluation data)
       - name: Magic Nix Cache
