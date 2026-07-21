@@ -13,7 +13,7 @@ WORKDIR /app
 # Copy ONLY the configuration files first to cache dependencies.
 # We use --link and exclude the .cabal file to prevent local code changes or
 # auto-generated cabal updates from invalidating the GHC download cache.
-COPY --link flake.nix flake.lock cabal.project package.yaml ./
+COPY --link flake.nix flake.lock cabal.project package.yaml stack.yaml stack.yaml.lock ./
 
 # Fetch and build all dependencies in the GHC environment, caching this Docker layer.
 # We save it as a persistent profile so GHC and dependencies are cached in the /nix/store.
