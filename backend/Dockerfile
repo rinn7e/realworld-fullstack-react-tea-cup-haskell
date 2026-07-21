@@ -32,10 +32,10 @@ COPY --link . .
 # Declare build mode argument (defaults to 'build', can be set to 'tree')
 ARG MODE=build
 
-# If MODE is tree, run nix-tree directly on the default derivation path.
+# If MODE is tree, run a dry-run to show what is cached and what will be built.
 # Otherwise, build/compile the Haskell project normally.
 RUN if [ "$MODE" = "tree" ]; then \
-        nix run nixpkgs#nix-tree -- path:.#default \
+        nix build path:.#default --dry-run \
             --extra-experimental-features "nix-command flakes" \
             --option sandbox false \
             --option filter-syscalls false; \
