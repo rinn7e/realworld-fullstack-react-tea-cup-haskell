@@ -88,13 +88,20 @@
                        then ./dist
                        else pkgs.runCommand "empty-dist" {} "mkdir -p $out/web $out/admin";
 
-        dockerImage = pkgs.dockerTools.buildLayeredImage {
+        appAssets = pkgs.runCommand "app-assets" {} ''
+          mkdir -p $out/app/dist $out/app/resource
+          cp -R ${frontendDist}/* $out/app/dist/
+          cp -R ${./resource}/* $out/app/resource/
+        '';
+
+        dockerImage = pkgs.dockerTools.buildImage {
           name = "realworld-api";
           tag = "latest";
           
-          contents = [
+          copyToRoot = [
             haskellApp
             migrateApp
+            appAssets
             pkgs.bashInteractive
             pkgs.coreutils
             pkgs.cacert
@@ -112,16 +119,6 @@
               "3000/tcp" = {};
             };
           };
-
-          extraCommands = ''
-            mkdir -p app/dist
-            cp -R ${frontendDist}/* app/dist/
-            chmod -R u+w app/dist
-
-            mkdir -p app
-            cp -R ${./resource} app/resource
-            chmod -R u+w app/resource
-          '';
         };
 
       in

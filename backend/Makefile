@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := build
 
-.PHONY: build watch server server-watch resetdb seed migrate-generate migrate-up migrate-up-one migrate-down-one migrate-status lint format build-haddock build-hoogle hoogle test compile install exec run-installed swagger-web swagger-admin server-fresh server-prod docker deploy docker-dry-run
+.PHONY: build watch server server-watch resetdb seed migrate-generate migrate-up migrate-up-one migrate-down-one migrate-status lint format build-haddock build-hoogle hoogle test compile install exec run-installed swagger-web swagger-admin server-fresh server-prod docker deploy build-dry-run docker-dry-run
 
 # Build with fast compilation
 build:
@@ -40,7 +40,7 @@ server-prod:
 	@chmod +x ./script/server-prod.sh
 	nix develop -c ./script/server-prod.sh
 
-# Build production docker image entirely inside backend context (compiles frontends on host)
+# Build production docker image natively using Nix
 docker:
 	# Compile frontends on host using pnpm
 	cd ../frontend-web && VITE_BASE_URL=/ VITE_API_BASE=/api pnpm run build
@@ -50,10 +50,13 @@ docker:
 	mkdir -p dist/web dist/admin
 	cp -R ../frontend-web/dist/* dist/web/
 	cp -R ../frontend-admin/dist/* dist/admin/
-	# Run docker build with backend/ as context and pass the Cachix auth token securely
-	docker build --secret id=CACHIX_AUTH_TOKEN,env=CACHIX_AUTH_TOKEN --platform linux/amd64 -t rinn7e-haskell-realworld-api .
-	# Clean up compiled folders from host backend/dist/
-	rm -rf dist/web dist/admin
+	# Build the Docker image natively via Nix (using buildImage, no fakeroot needed!)
+	nix build .#dockerImage
+	# Load the Nix-built Docker image tarball into local Docker daemon and tag it
+	docker load -i result
+	docker tag realworld-api:latest rinn7e-haskell-realworld-api
+	# Clean up compiled folders from host backend/dist/ and result symlink
+	rm -rf dist/web dist/admin result
 
 # Deploy to Fly.io by pulling the compiled image from GHCR, tagging it, and deploying locally
 deploy:
@@ -61,9 +64,13 @@ deploy:
 	docker tag ghcr.io/rinn7e/realworld-fullstack-react-tea-cup-haskell:latest rinn7e-haskell-realworld-api
 	fly deploy --image rinn7e-haskell-realworld-api --local-only
 
+# Run a dry-run of the nix develop shell environment used by make build
+build-dry-run:
+	nix build .#devShells.$$(nix eval --raw --impure --expr 'builtins.currentSystem').default --dry-run
+
 # Run a dry-run of the Docker build to see what Nix will fetch vs build
 docker-dry-run:
-	docker build --secret id=CACHIX_AUTH_TOKEN,env=CACHIX_AUTH_TOKEN --platform linux/amd64 -f Dockerfile.dry .
+	nix build .#dockerImage --dry-run
 
 # Reset database and start dev server
 resetdb:
