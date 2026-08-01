@@ -6,7 +6,7 @@ export type ProgressVariant =
   | 'warning'
   | 'danger'
 
-export type ProgressSize = 'small' | 'normal' | 'medium' | 'large'
+export type ProgressSize = 'xsmall' | 'small' | 'normal' | 'medium' | 'large'
 
 export type ProgressProps = {
   value?: number
