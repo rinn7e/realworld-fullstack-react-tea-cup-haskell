@@ -84,5 +84,3 @@ export const view = ({
     </div>
   )
 }
-
-export const TabsView = view

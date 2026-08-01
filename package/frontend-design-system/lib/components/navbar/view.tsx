@@ -95,5 +95,3 @@ export const view = ({
     </nav>
   )
 }
-
-export const NavbarView = view

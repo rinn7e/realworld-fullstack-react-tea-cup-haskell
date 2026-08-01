@@ -58,5 +58,3 @@ export const view = ({
     </div>
   )
 }
-
-export const DropdownView = view

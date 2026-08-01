@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react'
 
 export type LevelProps = {
-  children: ReactNode
+  children: () => ReactNode
   className?: string
 }
 
 export type LevelItemProps = {
   hasTextCentered?: boolean
-  children: ReactNode
+  children: () => ReactNode
   className?: string
 }

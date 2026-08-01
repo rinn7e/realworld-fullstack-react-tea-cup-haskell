@@ -12,6 +12,6 @@ export type HeroProps = {
   subtitle?: ReactNode
   header?: ReactNode
   footer?: ReactNode
-  children?: ReactNode
+  children?: () => ReactNode
   className?: string
 }

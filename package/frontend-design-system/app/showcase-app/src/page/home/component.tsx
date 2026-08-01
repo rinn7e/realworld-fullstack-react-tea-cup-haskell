@@ -30,27 +30,27 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
         variant: 'primary',
         size: 'medium',
         className: 'w-full rounded-xl p-8 shadow-md text-left',
-        children: (
+        children: () => (
           <div className='space-y-4'>
             <div className='flex items-center gap-2'>
               {Tag.view({
                 variant: 'dark',
                 size: 'normal',
                 isRounded: true,
-                children: '@rinn7e/realworld-design-system',
+                children: () => '@rinn7e/realworld-design-system',
               })}
               {Tag.view({
                 variant: 'light',
                 size: 'small',
                 isRounded: true,
-                children: 'v0.1.0',
+                children: () => 'v0.1.0',
               })}
             </div>
             {Title.view({
               size: 1,
               className:
                 'font-titillium font-extrabold text-white tracking-tight',
-              children: 'Conduit RealWorld Design System',
+              children: () => 'Conduit RealWorld Design System',
             })}
             <p className='max-w-2xl text-lg leading-relaxed font-light text-green-50 opacity-95'>
               A modern, production-grade UI component library for Conduit
@@ -66,7 +66,7 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                   navigateRoute({
                     page: { _tag: 'ButtonPage' },
                   }),
-                children: 'Explore Components →',
+                children: () => 'Explore Components →',
               })}
             </div>
           </div>
@@ -75,58 +75,64 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
 
       {/* Grid of Key Features */}
       {Columns.view({
-        children: (
+        children: () => (
           <>
             {Column.view({
               size: 'one-third',
-              children: Card.view({
-                header: (
-                  <div className='flex items-center gap-2 text-base font-bold text-green-600'>
-                    <Layers className='h-5 w-5' />
-                    <span>35 RealWorld Elements</span>
-                  </div>
-                ),
-                children: Content.view({
-                  size: 'small',
-                  className: 'text-gray-600',
-                  children:
-                    'Complete coverage of elements, components, forms, layouts, and grid systems exported as pure TypeScript functions.',
+              children: () =>
+                Card.view({
+                  header: (
+                    <div className='flex items-center gap-2 text-base font-bold text-green-600'>
+                      <Layers className='h-5 w-5' />
+                      <span>35 RealWorld Elements</span>
+                    </div>
+                  ),
+                  children: () =>
+                    Content.view({
+                      size: 'small',
+                      className: 'text-gray-600',
+                      children: () =>
+                        'Complete coverage of elements, components, forms, layouts, and grid systems exported as pure TypeScript functions.',
+                    }),
                 }),
-              }),
             })}
             {Column.view({
               size: 'one-third',
-              children: Card.view({
-                header: (
-                  <div className='flex items-center gap-2 text-base font-bold text-sky-600'>
-                    <Sparkles className='h-5 w-5' />
-                    <span>Pure Tailwind CSS v4</span>
-                  </div>
-                ),
-                children: Content.view({
-                  size: 'small',
-                  className: 'text-gray-600',
-                  children:
-                    'Zero runtime CSS-in-JS dependencies! Built cleanly with Tailwind v4 utilities and automated source scanning.',
+              children: () =>
+                Card.view({
+                  header: (
+                    <div className='flex items-center gap-2 text-base font-bold text-sky-600'>
+                      <Sparkles className='h-5 w-5' />
+                      <span>Pure Tailwind CSS v4</span>
+                    </div>
+                  ),
+                  children: () =>
+                    Content.view({
+                      size: 'small',
+                      className: 'text-gray-600',
+                      children: () =>
+                        'Zero runtime CSS-in-JS dependencies! Built cleanly with Tailwind v4 utilities and automated source scanning.',
+                    }),
                 }),
-              }),
             })}
             {Column.view({
               size: 'one-third',
-              children: Card.view({
-                header: (
-                  <div className='flex items-center gap-2 text-base font-bold text-amber-600'>
-                    <Code2 className='h-5 w-5' />
-                    <span>Elm Architecture (TEA)</span>
-                  </div>
-                ),
-                children: Content.view({
-                  size: 'small',
-                  className: 'text-gray-600',
-                  children:
-                    'Stateless presentation view functions designed for tea-cup state machines and deterministic frontend updates.',
+              children: () =>
+                Card.view({
+                  header: (
+                    <div className='flex items-center gap-2 text-base font-bold text-amber-600'>
+                      <Code2 className='h-5 w-5' />
+                      <span>Elm Architecture (TEA)</span>
+                    </div>
+                  ),
+                  children: () =>
+                    Content.view({
+                      size: 'small',
+                      className: 'text-gray-600',
+                      children: () =>
+                        'Stateless presentation view functions designed for tea-cup state machines and deterministic frontend updates.',
+                    }),
                 }),
-              }),
             })}
           </>
         ),
@@ -135,18 +141,18 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
       {/* Quick Start Card */}
       {Box.view({
         className: 'p-6 bg-gray-50 border border-gray-200 rounded-lg text-left',
-        children: (
+        children: () => (
           <div className='space-y-4'>
             <div className='flex items-center gap-2'>
               <BookOpen className='h-5 w-5 text-green-600' />
               {Title.view({
                 size: 4,
                 className: 'font-bold text-gray-900',
-                children: 'Quick Start',
+                children: () => 'Quick Start',
               })}
             </div>
             {Content.view({
-              children: (
+              children: () => (
                 <div className='space-y-3 text-sm text-gray-700'>
                   <p>Install the package into your project workspace:</p>
                   <pre className='rounded-md bg-gray-900 p-3 font-mono text-xs text-green-400'>

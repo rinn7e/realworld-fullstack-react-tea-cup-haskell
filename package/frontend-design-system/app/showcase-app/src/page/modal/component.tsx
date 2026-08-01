@@ -10,7 +10,6 @@ interface Props {
   model: Model
   dispatch: Dispatcher<Msg>
 }
-
 export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `{Button.view({ variant: 'primary', onClick: () => dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } }), children: 'Open Modal' })}
 {Modal.view({
@@ -19,7 +18,6 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
   dispatch: (subMsg) => dispatch({ _tag: 'ModalMsg', subMsg }),
   children: <p className='text-sm text-gray-600'>Are you sure you want to delete this article?</p>,
 })}`
-
   return (
     <div data-component='ModalPage' className='w-full space-y-8 text-left'>
       {Hero.view({
@@ -27,7 +25,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
         size: 'small',
         className:
           'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
-        children: (
+        children: () => (
           <>
             <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               COMPONENTS / MODAL
@@ -35,7 +33,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
             {Title.view({
               size: 2,
               className: 'mb-2 font-extrabold text-gray-900',
-              children: 'Modal',
+              children: () => 'Modal',
             })}
             <p className='text-base text-gray-600'>
               Classic modal dialog overlay with header, body, and backdrop close
@@ -51,7 +49,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
             size: 5,
             className:
               'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
-            children: (
+            children: () => (
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
                 <span>Interactive Playground &amp; Code</span>
@@ -64,7 +62,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
             className:
               'flex items-center gap-1 font-semibold text-green-600 hover:underline',
-            children: (
+            children: () => (
               <>
                 <Code2 className='h-3.5 w-3.5' />
                 <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
@@ -75,20 +73,20 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
 
         {sectionView({
           title: 'Modal Dialog Trigger',
-          children: (
+          children: () => (
             <div className='flex w-full justify-center py-4'>
               <div>
                 {Button.view({
                   variant: 'primary',
                   onClick: () =>
                     dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } }),
-                  children: 'Open Modal',
+                  children: () => 'Open Modal',
                 })}
                 {Modal.view({
                   title: 'Confirm Action',
                   model: model.modalModel,
                   dispatch: (subMsg) => dispatch({ _tag: 'ModalMsg', subMsg }),
-                  children: (
+                  children: () => (
                     <p className='text-sm text-gray-600'>
                       Are you sure you want to delete this article?
                     </p>

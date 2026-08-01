@@ -42,5 +42,3 @@ export const view = ({
     </aside>
   )
 }
-
-export const MenuView = view

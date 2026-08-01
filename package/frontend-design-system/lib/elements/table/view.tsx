@@ -27,7 +27,7 @@ export const view = ({
           className,
         )}
       >
-        {children}
+        {children()}
       </table>
     </div>
   )

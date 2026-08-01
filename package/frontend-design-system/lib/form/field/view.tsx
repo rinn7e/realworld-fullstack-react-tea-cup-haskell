@@ -21,7 +21,7 @@ export const view = ({
           {label}
         </label>
       )}
-      <div className='relative'>{children}</div>
+      <div className='relative'>{children()}</div>
       {errorText ? (
         <p className='mt-1 text-xs text-rose-600'>{errorText}</p>
       ) : (

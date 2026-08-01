@@ -25,7 +25,7 @@ export const view = ({
         className,
       )}
     >
-      {children}
+      {children()}
     </div>
   )
 }

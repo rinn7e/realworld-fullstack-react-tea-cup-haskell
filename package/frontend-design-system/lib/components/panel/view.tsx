@@ -64,5 +64,3 @@ export const view = ({
     </nav>
   )
 }
-
-export const PanelView = view

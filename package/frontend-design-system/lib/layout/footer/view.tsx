@@ -16,7 +16,9 @@ export const view = ({
       )}
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        {children || (
+        {children ? (
+          children()
+        ) : (
           <p>
             <strong>RealWorld Design System</strong> by Alex. Built with
             Tailwind CSS &amp; TEA architecture.

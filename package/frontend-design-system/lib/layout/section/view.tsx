@@ -19,7 +19,7 @@ export const view = ({
       data-component='Section'
       className={cn('w-full', sizeStyles[size], className)}
     >
-      {children}
+      {children()}
     </section>
   )
 }

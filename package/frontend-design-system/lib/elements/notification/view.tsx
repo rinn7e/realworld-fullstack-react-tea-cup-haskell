@@ -29,7 +29,7 @@ export const view = ({
         className,
       )}
     >
-      <div className='flex-1 pr-6'>{children}</div>
+      <div className='flex-1 pr-6'>{children()}</div>
       {onDelete && (
         <div className='absolute top-3 right-3'>
           {DeleteView({ size: 'small', onClick: onDelete })}

@@ -1,6 +1,6 @@
-import React from 'react'
+import type React from 'react'
 
 export type BoxProps = {
-  children: React.ReactNode
+  children: () => React.ReactNode
   className?: string
 }

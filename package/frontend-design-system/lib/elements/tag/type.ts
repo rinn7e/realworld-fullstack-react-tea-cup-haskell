@@ -14,7 +14,7 @@ export type TagVariant =
 export type TagSize = 'small' | 'normal' | 'medium' | 'large'
 
 export type TagProps = {
-  children?: React.ReactNode
+  children?: () => React.ReactNode
   variant?: TagVariant
   size?: TagSize
   isRounded?: boolean

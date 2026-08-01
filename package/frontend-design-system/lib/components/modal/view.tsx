@@ -40,7 +40,7 @@ export const view = ({
             })}
           </div>
         )}
-        <div className='p-6'>{children}</div>
+        <div className='p-6'>{children()}</div>
         {footer && (
           <div className='flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50/50 px-6 py-4'>
             {footer}
@@ -50,5 +50,3 @@ export const view = ({
     </div>
   )
 }
-
-export const ModalView = view

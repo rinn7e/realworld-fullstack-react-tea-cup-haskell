@@ -15,7 +15,7 @@ export const view = ({
         className,
       )}
     >
-      {children}
+      {children()}
     </div>
   )
 }
@@ -25,7 +25,7 @@ export const leftView = ({
   className,
 }: LevelProps): React.ReactElement => {
   return (
-    <div className={cn('flex items-center gap-3', className)}>{children}</div>
+    <div className={cn('flex items-center gap-3', className)}>{children()}</div>
   )
 }
 
@@ -34,7 +34,7 @@ export const rightView = ({
   className,
 }: LevelProps): React.ReactElement => {
   return (
-    <div className={cn('flex items-center gap-3', className)}>{children}</div>
+    <div className={cn('flex items-center gap-3', className)}>{children()}</div>
   )
 }
 
@@ -51,11 +51,7 @@ export const itemView = ({
         className,
       )}
     >
-      {children}
+      {children()}
     </div>
   )
 }
-
-export const LevelLeft = leftView
-export const LevelRight = rightView
-export const LevelItem = itemView

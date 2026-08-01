@@ -501,29 +501,30 @@ export const view = (
       {/* Main Layout Container */}
       {Container.view({
         className: 'my-8 flex-1 w-full',
-        children: Columns.view({
-          children: (
-            <>
-              {/* Left Sidebar Navigation */}
-              {Column.view({
-                className: 'w-full md:w-56 md:shrink-0 md:grow-0',
-                children: (
-                  <Sidebar
-                    menuCategories={menuCategories}
-                    menuModel={model.menuModel}
-                    navigateRoute={navigateRoute}
-                  />
-                ),
-              })}
+        children: () =>
+          Columns.view({
+            children: () => (
+              <>
+                {/* Left Sidebar Navigation */}
+                {Column.view({
+                  className: 'w-full md:w-56 md:shrink-0 md:grow-0',
+                  children: () => (
+                    <Sidebar
+                      menuCategories={menuCategories}
+                      menuModel={model.menuModel}
+                      navigateRoute={navigateRoute}
+                    />
+                  ),
+                })}
 
-              {/* Main Page Area */}
-              {Column.view({
-                className: 'flex-1 min-w-0',
-                children: <div className='w-full'>{renderPage()}</div>,
-              })}
-            </>
-          ),
-        }),
+                {/* Main Page Area */}
+                {Column.view({
+                  className: 'flex-1 min-w-0',
+                  children: () => <div className='w-full'>{renderPage()}</div>,
+                })}
+              </>
+            ),
+          }),
       })}
 
       {/* Footer */}

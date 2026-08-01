@@ -12,7 +12,7 @@ export const view = ({ children, className }: BoxProps): React.ReactElement => {
         className,
       )}
     >
-      {children}
+      {children()}
     </div>
   )
 }

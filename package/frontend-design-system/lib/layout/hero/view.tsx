@@ -50,7 +50,7 @@ export const view = ({
         {subtitle && (
           <p className='mt-4 text-lg opacity-90 sm:text-xl'>{subtitle}</p>
         )}
-        {children && <div className='mt-6'>{children}</div>}
+        {children && <div className='mt-6'>{children()}</div>}
       </div>
       {footer && <div className='mt-8'>{footer}</div>}
     </section>

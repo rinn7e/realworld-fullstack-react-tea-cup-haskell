@@ -10,6 +10,6 @@ export type ColumnSize =
 
 export type ColumnProps = {
   size?: ColumnSize
-  children: ReactNode
+  children: () => ReactNode
   className?: string
 }

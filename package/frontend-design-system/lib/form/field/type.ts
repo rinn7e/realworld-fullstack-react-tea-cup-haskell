@@ -5,6 +5,6 @@ export type FieldProps = {
   helpText?: string
   errorText?: string
   isExpanded?: boolean
-  children: React.ReactNode
+  children: () => React.ReactNode
   className?: string
 }

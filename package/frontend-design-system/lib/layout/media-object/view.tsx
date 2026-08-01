@@ -15,7 +15,7 @@ export const view = ({
       className={cn('flex items-start gap-4 text-sm', className)}
     >
       {left && <div className='shrink-0'>{left}</div>}
-      <div className='min-w-0 flex-1'>{children}</div>
+      <div className='min-w-0 flex-1'>{children()}</div>
       {right && <div className='shrink-0'>{right}</div>}
     </article>
   )

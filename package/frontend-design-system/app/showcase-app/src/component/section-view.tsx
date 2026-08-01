@@ -3,7 +3,7 @@ import React from 'react'
 
 export interface SectionViewOptions {
   title: string
-  children: React.ReactNode
+  children: () => React.ReactNode
   boxClassName?: string
 }
 

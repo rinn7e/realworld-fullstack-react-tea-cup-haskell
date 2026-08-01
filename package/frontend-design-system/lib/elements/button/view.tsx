@@ -88,7 +88,7 @@ export const view = ({
       )}
     >
       {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-      {children}
+      {children()}
     </button>
   )
 }

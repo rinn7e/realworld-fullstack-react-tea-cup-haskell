@@ -24,7 +24,7 @@ export const view = ({
         </div>
       )}
       {image && <div className='w-full overflow-hidden'>{image}</div>}
-      <div className='p-5'>{children}</div>
+      <div className='p-5'>{children()}</div>
       {footer && (
         <div className='border-t border-gray-100 bg-gray-50/50 px-5 py-3 text-xs text-gray-500'>
           {footer}

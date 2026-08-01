@@ -59,7 +59,7 @@ export const view = ({
         className,
       )}
     >
-      <span>{children}</span>
+      <span>{children?.()}</span>
       {onDelete && DeleteView({ size: 'small', onClick: onDelete })}
     </span>
   )

@@ -4,6 +4,6 @@ export type ContentSize = 'small' | 'normal' | 'medium' | 'large'
 
 export type ContentProps = {
   size?: ContentSize
-  children: ReactNode
+  children: () => ReactNode
   className?: string
 }

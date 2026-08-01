@@ -12,17 +12,17 @@ export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
     <div className='flex flex-col items-center justify-center py-16 text-center'>
       {Box.view({
         className: 'p-10 max-w-md space-y-4',
-        children: (
+        children: () => (
           <>
             {Title.view({
               size: 1,
               className: 'text-green-600 font-extrabold',
-              children: '404',
+              children: () => '404',
             })}
             {Title.view({
               size: 4,
               className: 'text-gray-800 font-bold',
-              children: 'Page Not Found',
+              children: () => 'Page Not Found',
             })}
             <p className='text-sm text-gray-600'>
               The component page you are looking for does not exist in our
@@ -32,7 +32,7 @@ export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
               {Button.view({
                 variant: 'primary',
                 onClick: () => navigateRoute({ page: { _tag: 'HomePage' } }),
-                children: 'Return to Home Overview',
+                children: () => 'Return to Home Overview',
               })}
             </div>
           </>

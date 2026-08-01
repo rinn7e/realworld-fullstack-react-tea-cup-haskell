@@ -1,5 +1,4 @@
 import { Button, Hero, Section, Title } from '@rinn7e/realworld-design-system'
-import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
@@ -10,14 +9,12 @@ interface Props {
   model: Model
   dispatch: Dispatcher<Msg>
 }
-
 export const SectionPage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `{Section.view({
   size: 'medium',
   className: 'bg-gray-50 border border-gray-200 rounded-lg p-6',
   children: Title.view({ size: 3, children: 'Content Section Title' }),
 })}`
-
   return (
     <div data-component='SectionPage' className='w-full space-y-8 text-left'>
       {Hero.view({
@@ -25,7 +22,7 @@ export const SectionPage: React.FC<Props> = ({ model, dispatch }) => {
         size: 'small',
         className:
           'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
-        children: (
+        children: () => (
           <>
             <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               LAYOUT / SECTION
@@ -33,7 +30,7 @@ export const SectionPage: React.FC<Props> = ({ model, dispatch }) => {
             {Title.view({
               size: 2,
               className: 'mb-2 font-extrabold text-gray-900',
-              children: 'Section',
+              children: () => 'Section',
             })}
             <p className='text-base text-gray-600'>
               Standard layout section container with customizable vertical
@@ -43,45 +40,32 @@ export const SectionPage: React.FC<Props> = ({ model, dispatch }) => {
         ),
       })}
 
-      <div className='flex w-full flex-col gap-6'>
-        <div className='flex w-full items-center justify-between'>
-          {Title.view({
-            size: 5,
-            className:
-              'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
-            children: (
-              <>
-                <Sparkles className='h-4 w-4 text-green-600' />
-                <span>Interactive Playground &amp; Code</span>
-              </>
-            ),
-          })}
+      <div className='w-full space-y-6'>
+        <div className='flex items-center justify-end'>
           {Button.view({
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
-            className:
-              'flex items-center gap-1 font-semibold text-green-600 hover:underline',
-            children: (
-              <>
-                <Code2 className='h-3.5 w-3.5' />
-                <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
-              </>
+            children: () => (
+              <span>
+                {model.showCode ? 'Hide Code' : 'View Code'} &lt;/&gt;
+              </span>
             ),
           })}
         </div>
 
         {sectionView({
           title: 'Layout Section Container',
-          children: (
+          children: () => (
             <div className='w-full'>
               {Section.view({
                 size: 'medium',
                 className: 'bg-gray-50 border border-gray-200 rounded-lg p-6',
-                children: Title.view({
-                  size: 3,
-                  children: 'Content Section Title',
-                }),
+                children: () =>
+                  Title.view({
+                    size: 3,
+                    children: () => 'Content Section Title',
+                  }),
               })}
             </div>
           ),

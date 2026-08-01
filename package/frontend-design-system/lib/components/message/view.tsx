@@ -60,7 +60,7 @@ export const view = ({
           {onDelete && DeleteView({ size: 'small', onClick: onDelete })}
         </div>
       )}
-      <div className='p-4'>{children}</div>
+      <div className='p-4'>{children()}</div>
     </article>
   )
 }
