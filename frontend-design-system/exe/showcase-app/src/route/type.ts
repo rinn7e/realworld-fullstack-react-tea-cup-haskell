@@ -37,6 +37,7 @@ export type ComponentItem =
   | 'media-object'
   | 'footer'
   | 'columns'
+  | 'dot-loading'
 
 export const ALL_COMPONENT_ITEMS: ComponentItem[] = [
   'block',
@@ -75,6 +76,7 @@ export const ALL_COMPONENT_ITEMS: ComponentItem[] = [
   'media-object',
   'footer',
   'columns',
+  'dot-loading',
 ]
 
 export type HomePage = { readonly _tag: 'HomePage' }
@@ -114,9 +116,10 @@ export type LevelPage = { readonly _tag: 'LevelPage' }
 export type MediaObjectPage = { readonly _tag: 'MediaObjectPage' }
 export type FooterPage = { readonly _tag: 'FooterPage' }
 export type ColumnsPage = { readonly _tag: 'ColumnsPage' }
+export type DotLoadingPage = { readonly _tag: 'DotLoadingPage' }
 export type NotFoundPage = { readonly _tag: 'NotFoundPage' }
 
-export type AppPage = HomePage | BlockPage | BoxPage | ButtonPage | ContentPage | DeletePage | IconPage | ImagePage | NotificationPage | ProgressPage | TablePage | TagPage | TitlePage | BreadcrumbPage | CardPage | DropdownPage | MenuPage | MessagePage | ModalPage | NavbarPage | PaginationPage | PanelPage | TabsPage | FieldPage | InputPage | TextareaPage | SelectPage | CheckboxPage | RadioPage | FilePage | ContainerPage | HeroPage | SectionPage | LevelPage | MediaObjectPage | FooterPage | ColumnsPage | NotFoundPage
+export type AppPage = HomePage | BlockPage | BoxPage | ButtonPage | ContentPage | DeletePage | IconPage | ImagePage | NotificationPage | ProgressPage | TablePage | TagPage | TitlePage | BreadcrumbPage | CardPage | DropdownPage | MenuPage | MessagePage | ModalPage | NavbarPage | PaginationPage | PanelPage | TabsPage | FieldPage | InputPage | TextareaPage | SelectPage | CheckboxPage | RadioPage | FilePage | ContainerPage | HeroPage | SectionPage | LevelPage | MediaObjectPage | FooterPage | ColumnsPage | DotLoadingPage | NotFoundPage
 
 export type AppRoute = {
   page: AppPage
@@ -159,6 +162,7 @@ export const levelPage = (): LevelPage => ({ _tag: 'LevelPage' })
 export const mediaObjectPage = (): MediaObjectPage => ({ _tag: 'MediaObjectPage' })
 export const footerPage = (): FooterPage => ({ _tag: 'FooterPage' })
 export const columnsPage = (): ColumnsPage => ({ _tag: 'ColumnsPage' })
+export const dotLoadingPage = (): DotLoadingPage => ({ _tag: 'DotLoadingPage' })
 export const notFoundPage = (): NotFoundPage => ({ _tag: 'NotFoundPage' })
 
 export const AppPageEq: EqClass.Eq<AppPage> = {

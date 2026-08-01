@@ -46,3 +46,6 @@ export * as Footer from './layout/footer'
 // Grid
 export * as Columns from './grid/columns'
 export * as Column from './grid/column'
+
+// Misc
+export * as DotLoading from './misc/dot-loading'

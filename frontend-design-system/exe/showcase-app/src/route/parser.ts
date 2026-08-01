@@ -24,6 +24,7 @@ import {
   containerPage,
   contentPage,
   deletePage,
+  dotLoadingPage,
   dropdownPage,
   fieldPage,
   filePage,
@@ -105,6 +106,7 @@ const levelMatch = lit('level').and(end)
 const mediaobjectMatch = lit('media-object').and(end)
 const footerMatch = lit('footer').and(end)
 const columnsMatch = lit('columns').and(end)
+const dotloadingMatch = lit('dot-loading').and(end)
 
 const anyStrings = new Match<object>(
   new Parser((r) => O.some([{}, new Route([], r.query)])),
@@ -149,6 +151,7 @@ const appRouter: Parser<AppPage> = zero<AppPage>()
   .alt(mediaobjectMatch.parser.map(() => mediaObjectPage()))
   .alt(footerMatch.parser.map(() => footerPage()))
   .alt(columnsMatch.parser.map(() => columnsPage()))
+  .alt(dotloadingMatch.parser.map(() => dotLoadingPage()))
   .alt(anyStrings.parser.map(() => notFoundPage()))
 
 export const parseAppRoute = (_mainUrl: string, href: string): AppRoute => {
@@ -235,6 +238,8 @@ export const toUrlString = (r: AppRoute): string => {
         return format(footerMatch.formatter, {})
       case 'ColumnsPage':
         return format(columnsMatch.formatter, {})
+      case 'DotLoadingPage':
+        return format(dotloadingMatch.formatter, {})
       case 'NotFoundPage':
         return '404'
     }

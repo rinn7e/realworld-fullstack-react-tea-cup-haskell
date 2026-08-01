@@ -14,6 +14,7 @@ import * as ColumnsPage from './page/columns/update'
 import * as ContainerPage from './page/container/update'
 import * as ContentPage from './page/content/update'
 import * as DeletePage from './page/delete/update'
+import * as DotLoadingPage from './page/dot-loading/update'
 import * as DropdownPage from './page/dropdown/update'
 import * as FieldPage from './page/field/update'
 import * as FilePage from './page/file/update'
@@ -47,7 +48,7 @@ import type { Model, Msg } from './type'
 
 const pageTagToComponentId = (pageTag: string): string => {
   const match = pageTag.replace(/Page$/, '')
-  return match.toLowerCase()
+  return match === 'DotLoading' ? 'dot-loading' : match === 'MediaObject' ? 'media-object' : match.toLowerCase()
 }
 
 export const initPageModel =
@@ -538,6 +539,19 @@ export const initPageModel =
         ]
       }
 
+      case 'DotLoadingPage': {
+        const [subModel, subCmd] = DotLoadingPage.init()
+        return [
+          {
+            ...model,
+            route: newRoute,
+            menuModel,
+            pageModel: { _tag: 'DotLoadingPageModel', model: subModel },
+          },
+          subCmd.map((subMsg) => ({ _tag: 'DotLoadingPageMsg', subMsg })),
+        ]
+      }
+
       case 'NotFoundPage':
       default: {
         const [notFoundModel, notFoundCmd] = NotFoundPage.init()
@@ -830,6 +844,11 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       if (model.pageModel._tag !== 'ColumnsPageModel') return [model, Cmd.none()]
       const [subModel, cmd] = ColumnsPage.update(msg.subMsg, model.pageModel.model)
       return [{ ...model, pageModel: { _tag: 'ColumnsPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'ColumnsPageMsg', subMsg }))]
+    }
+    case 'DotLoadingPageMsg': {
+      if (model.pageModel._tag !== 'DotLoadingPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = DotLoadingPage.update(msg.subMsg, model.pageModel.model)
+      return [{ ...model, pageModel: { _tag: 'DotLoadingPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'DotLoadingPageMsg', subMsg }))]
     }
 
     case 'NotFoundPageMsg': {

@@ -23,6 +23,7 @@ import { ColumnsPage } from './page/columns/component'
 import { ContainerPage } from './page/container/component'
 import { ContentPage } from './page/content/component'
 import { DeletePage } from './page/delete/component'
+import { DotLoadingPage } from './page/dot-loading/component'
 import { DropdownPage } from './page/dropdown/component'
 import { FieldPage } from './page/field/component'
 import { FilePage } from './page/file/component'
@@ -131,6 +132,12 @@ export const view = (
       icon: <LayoutGrid className='h-4 w-4 text-green-600' />,
       items: [{ id: 'columns', name: 'Columns' }],
     },
+    {
+      id: 'misc',
+      title: 'Misc',
+      icon: <Sparkles className='h-4 w-4 text-green-600' />,
+      items: [{ id: 'dot-loading', name: 'Dot Loading' }],
+    },
   ]
 
   const activeComponent =
@@ -222,6 +229,13 @@ export const view = (
           <ContentPage
             model={model.pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'ContentPageMsg', subMsg })}
+          />
+        )
+      case 'DotLoadingPageModel':
+        return (
+          <DotLoadingPage
+            model={model.pageModel.model}
+            dispatch={(subMsg) => dispatch({ _tag: 'DotLoadingPageMsg', subMsg })}
           />
         )
       case 'DeletePageModel':

@@ -1,5 +1,7 @@
 import type { Menu, Navbar } from '@rinn7e/realworld-design-system'
 
+import type * as HomePage from './page/home/type'
+import type * as NotFoundPage from './page/not-found/type'
 import type * as BlockPage from './page/block/type'
 import type * as BoxPage from './page/box/type'
 import type * as BreadcrumbPage from './page/breadcrumb/type'
@@ -10,12 +12,12 @@ import type * as ColumnsPage from './page/columns/type'
 import type * as ContainerPage from './page/container/type'
 import type * as ContentPage from './page/content/type'
 import type * as DeletePage from './page/delete/type'
+import type * as DotLoadingPage from './page/dot-loading/type'
 import type * as DropdownPage from './page/dropdown/type'
 import type * as FieldPage from './page/field/type'
 import type * as FilePage from './page/file/type'
 import type * as FooterPage from './page/footer/type'
 import type * as HeroPage from './page/hero/type'
-import type * as HomePage from './page/home/type'
 import type * as IconPage from './page/icon/type'
 import type * as ImagePage from './page/image/type'
 import type * as InputPage from './page/input/type'
@@ -25,7 +27,6 @@ import type * as MenuPage from './page/menu/type'
 import type * as MessagePage from './page/message/type'
 import type * as ModalPage from './page/modal/type'
 import type * as NavbarPage from './page/navbar/type'
-import type * as NotFoundPage from './page/not-found/type'
 import type * as NotificationPage from './page/notification/type'
 import type * as PaginationPage from './page/pagination/type'
 import type * as PanelPage from './page/panel/type'
@@ -40,105 +41,108 @@ import type * as TextareaPage from './page/textarea/type'
 import type * as TitlePage from './page/title/type'
 import type { AppRoute } from './route/type'
 
-export type PageModel =
-  | { _tag: 'HomePageModel'; model: HomePage.Model }
-  | { _tag: 'BlockPageModel'; model: BlockPage.Model }
-  | { _tag: 'BoxPageModel'; model: BoxPage.Model }
-  | { _tag: 'BreadcrumbPageModel'; model: BreadcrumbPage.Model }
-  | { _tag: 'ButtonPageModel'; model: ButtonPage.Model }
-  | { _tag: 'CardPageModel'; model: CardPage.Model }
-  | { _tag: 'CheckboxPageModel'; model: CheckboxPage.Model }
-  | { _tag: 'ColumnsPageModel'; model: ColumnsPage.Model }
-  | { _tag: 'ContainerPageModel'; model: ContainerPage.Model }
-  | { _tag: 'ContentPageModel'; model: ContentPage.Model }
-  | { _tag: 'DeletePageModel'; model: DeletePage.Model }
-  | { _tag: 'DropdownPageModel'; model: DropdownPage.Model }
-  | { _tag: 'FieldPageModel'; model: FieldPage.Model }
-  | { _tag: 'FilePageModel'; model: FilePage.Model }
-  | { _tag: 'FooterPageModel'; model: FooterPage.Model }
-  | { _tag: 'HeroPageModel'; model: HeroPage.Model }
-  | { _tag: 'IconPageModel'; model: IconPage.Model }
-  | { _tag: 'ImagePageModel'; model: ImagePage.Model }
-  | { _tag: 'InputPageModel'; model: InputPage.Model }
-  | { _tag: 'LevelPageModel'; model: LevelPage.Model }
-  | { _tag: 'MediaObjectPageModel'; model: MediaObjectPage.Model }
-  | { _tag: 'MenuPageModel'; model: MenuPage.Model }
-  | { _tag: 'MessagePageModel'; model: MessagePage.Model }
-  | { _tag: 'ModalPageModel'; model: ModalPage.Model }
-  | { _tag: 'NavbarPageModel'; model: NavbarPage.Model }
-  | { _tag: 'NotFoundPageModel'; model: NotFoundPage.Model }
-  | { _tag: 'NotificationPageModel'; model: NotificationPage.Model }
-  | { _tag: 'PaginationPageModel'; model: PaginationPage.Model }
-  | { _tag: 'PanelPageModel'; model: PanelPage.Model }
-  | { _tag: 'ProgressPageModel'; model: ProgressPage.Model }
-  | { _tag: 'RadioPageModel'; model: RadioPage.Model }
-  | { _tag: 'SectionPageModel'; model: SectionPage.Model }
-  | { _tag: 'SelectPageModel'; model: SelectPage.Model }
-  | { _tag: 'TablePageModel'; model: TablePage.Model }
-  | { _tag: 'TabsPageModel'; model: TabsPage.Model }
-  | { _tag: 'TagPageModel'; model: TagPage.Model }
-  | { _tag: 'TextareaPageModel'; model: TextareaPage.Model }
-  | { _tag: 'TitlePageModel'; model: TitlePage.Model }
-
 export type SectionCategory =
   | 'elements'
   | 'components'
   | 'form'
   | 'layout'
   | 'grid'
+  | 'misc'
+
+export type PageModel =
+  | { readonly _tag: 'HomePageModel'; readonly model: HomePage.Model }
+  | { readonly _tag: 'BlockPageModel'; readonly model: BlockPage.Model }
+  | { readonly _tag: 'BoxPageModel'; readonly model: BoxPage.Model }
+  | { readonly _tag: 'BreadcrumbPageModel'; readonly model: BreadcrumbPage.Model }
+  | { readonly _tag: 'ButtonPageModel'; readonly model: ButtonPage.Model }
+  | { readonly _tag: 'CardPageModel'; readonly model: CardPage.Model }
+  | { readonly _tag: 'CheckboxPageModel'; readonly model: CheckboxPage.Model }
+  | { readonly _tag: 'ColumnsPageModel'; readonly model: ColumnsPage.Model }
+  | { readonly _tag: 'ContainerPageModel'; readonly model: ContainerPage.Model }
+  | { readonly _tag: 'ContentPageModel'; readonly model: ContentPage.Model }
+  | { readonly _tag: 'DeletePageModel'; readonly model: DeletePage.Model }
+  | { readonly _tag: 'DotLoadingPageModel'; readonly model: DotLoadingPage.Model }
+  | { readonly _tag: 'DropdownPageModel'; readonly model: DropdownPage.Model }
+  | { readonly _tag: 'FieldPageModel'; readonly model: FieldPage.Model }
+  | { readonly _tag: 'FilePageModel'; readonly model: FilePage.Model }
+  | { readonly _tag: 'FooterPageModel'; readonly model: FooterPage.Model }
+  | { readonly _tag: 'HeroPageModel'; readonly model: HeroPage.Model }
+  | { readonly _tag: 'IconPageModel'; readonly model: IconPage.Model }
+  | { readonly _tag: 'ImagePageModel'; readonly model: ImagePage.Model }
+  | { readonly _tag: 'InputPageModel'; readonly model: InputPage.Model }
+  | { readonly _tag: 'LevelPageModel'; readonly model: LevelPage.Model }
+  | { readonly _tag: 'MediaObjectPageModel'; readonly model: MediaObjectPage.Model }
+  | { readonly _tag: 'MenuPageModel'; readonly model: MenuPage.Model }
+  | { readonly _tag: 'MessagePageModel'; readonly model: MessagePage.Model }
+  | { readonly _tag: 'ModalPageModel'; readonly model: ModalPage.Model }
+  | { readonly _tag: 'NavbarPageModel'; readonly model: NavbarPage.Model }
+  | { readonly _tag: 'NotificationPageModel'; readonly model: NotificationPage.Model }
+  | { readonly _tag: 'PaginationPageModel'; readonly model: PaginationPage.Model }
+  | { readonly _tag: 'PanelPageModel'; readonly model: PanelPage.Model }
+  | { readonly _tag: 'ProgressPageModel'; readonly model: ProgressPage.Model }
+  | { readonly _tag: 'RadioPageModel'; readonly model: RadioPage.Model }
+  | { readonly _tag: 'SectionPageModel'; readonly model: SectionPage.Model }
+  | { readonly _tag: 'SelectPageModel'; readonly model: SelectPage.Model }
+  | { readonly _tag: 'TablePageModel'; readonly model: TablePage.Model }
+  | { readonly _tag: 'TabsPageModel'; readonly model: TabsPage.Model }
+  | { readonly _tag: 'TagPageModel'; readonly model: TagPage.Model }
+  | { readonly _tag: 'TextareaPageModel'; readonly model: TextareaPage.Model }
+  | { readonly _tag: 'TitlePageModel'; readonly model: TitlePage.Model }
+  | { readonly _tag: 'NotFoundPageModel'; readonly model: NotFoundPage.Model }
 
 export type Model = {
-  route: AppRoute
-  isInternal: boolean
-  pageModel: PageModel
-  searchQuery: string
-  navbarModel: Navbar.Model
-  menuModel: Menu.Model
+  readonly route: AppRoute
+  readonly isInternal: boolean
+  readonly pageModel: PageModel
+  readonly searchQuery: string
+  readonly navbarModel: Navbar.Model
+  readonly menuModel: Menu.Model
 }
 
 export type Msg =
-  | { _tag: 'NoOp' }
-  | { _tag: 'Init'; location: Location }
-  | { _tag: 'UrlChange'; location: Location }
-  | { _tag: 'ChangeRoute'; route: AppRoute }
-  | { _tag: 'UpdateSearch'; query: string }
-  | { _tag: 'HomePageMsg'; subMsg: HomePage.Msg }
-  | { _tag: 'BlockPageMsg'; subMsg: BlockPage.Msg }
-  | { _tag: 'BoxPageMsg'; subMsg: BoxPage.Msg }
-  | { _tag: 'BreadcrumbPageMsg'; subMsg: BreadcrumbPage.Msg }
-  | { _tag: 'ButtonPageMsg'; subMsg: ButtonPage.Msg }
-  | { _tag: 'CardPageMsg'; subMsg: CardPage.Msg }
-  | { _tag: 'CheckboxPageMsg'; subMsg: CheckboxPage.Msg }
-  | { _tag: 'ColumnsPageMsg'; subMsg: ColumnsPage.Msg }
-  | { _tag: 'ContainerPageMsg'; subMsg: ContainerPage.Msg }
-  | { _tag: 'ContentPageMsg'; subMsg: ContentPage.Msg }
-  | { _tag: 'DeletePageMsg'; subMsg: DeletePage.Msg }
-  | { _tag: 'DropdownPageMsg'; subMsg: DropdownPage.Msg }
-  | { _tag: 'FieldPageMsg'; subMsg: FieldPage.Msg }
-  | { _tag: 'FilePageMsg'; subMsg: FilePage.Msg }
-  | { _tag: 'FooterPageMsg'; subMsg: FooterPage.Msg }
-  | { _tag: 'HeroPageMsg'; subMsg: HeroPage.Msg }
-  | { _tag: 'IconPageMsg'; subMsg: IconPage.Msg }
-  | { _tag: 'ImagePageMsg'; subMsg: ImagePage.Msg }
-  | { _tag: 'InputPageMsg'; subMsg: InputPage.Msg }
-  | { _tag: 'LevelPageMsg'; subMsg: LevelPage.Msg }
-  | { _tag: 'MediaObjectPageMsg'; subMsg: MediaObjectPage.Msg }
-  | { _tag: 'MenuPageMsg'; subMsg: MenuPage.Msg }
-  | { _tag: 'MessagePageMsg'; subMsg: MessagePage.Msg }
-  | { _tag: 'ModalPageMsg'; subMsg: ModalPage.Msg }
-  | { _tag: 'NavbarPageMsg'; subMsg: NavbarPage.Msg }
-  | { _tag: 'NotFoundPageMsg'; subMsg: NotFoundPage.Msg }
-  | { _tag: 'NotificationPageMsg'; subMsg: NotificationPage.Msg }
-  | { _tag: 'PaginationPageMsg'; subMsg: PaginationPage.Msg }
-  | { _tag: 'PanelPageMsg'; subMsg: PanelPage.Msg }
-  | { _tag: 'ProgressPageMsg'; subMsg: ProgressPage.Msg }
-  | { _tag: 'RadioPageMsg'; subMsg: RadioPage.Msg }
-  | { _tag: 'SectionPageMsg'; subMsg: SectionPage.Msg }
-  | { _tag: 'SelectPageMsg'; subMsg: SelectPage.Msg }
-  | { _tag: 'TablePageMsg'; subMsg: TablePage.Msg }
-  | { _tag: 'TabsPageMsg'; subMsg: TabsPage.Msg }
-  | { _tag: 'TagPageMsg'; subMsg: TagPage.Msg }
-  | { _tag: 'TextareaPageMsg'; subMsg: TextareaPage.Msg }
-  | { _tag: 'TitlePageMsg'; subMsg: TitlePage.Msg }
-  | { _tag: 'NavbarMsg'; subMsg: Navbar.Msg }
-  | { _tag: 'MenuMsg'; subMsg: Menu.Msg }
+  | { readonly _tag: 'NoOp' }
+  | { readonly _tag: 'Init'; readonly location: Location }
+  | { readonly _tag: 'UrlChange'; readonly location: Location }
+  | { readonly _tag: 'ChangeRoute'; readonly route: AppRoute }
+  | { readonly _tag: 'UpdateSearch'; readonly query: string }
+  | { readonly _tag: 'HomePageMsg'; readonly subMsg: HomePage.Msg }
+  | { readonly _tag: 'BlockPageMsg'; readonly subMsg: BlockPage.Msg }
+  | { readonly _tag: 'BoxPageMsg'; readonly subMsg: BoxPage.Msg }
+  | { readonly _tag: 'BreadcrumbPageMsg'; readonly subMsg: BreadcrumbPage.Msg }
+  | { readonly _tag: 'ButtonPageMsg'; readonly subMsg: ButtonPage.Msg }
+  | { readonly _tag: 'CardPageMsg'; readonly subMsg: CardPage.Msg }
+  | { readonly _tag: 'CheckboxPageMsg'; readonly subMsg: CheckboxPage.Msg }
+  | { readonly _tag: 'ColumnsPageMsg'; readonly subMsg: ColumnsPage.Msg }
+  | { readonly _tag: 'ContainerPageMsg'; readonly subMsg: ContainerPage.Msg }
+  | { readonly _tag: 'ContentPageMsg'; readonly subMsg: ContentPage.Msg }
+  | { readonly _tag: 'DeletePageMsg'; readonly subMsg: DeletePage.Msg }
+  | { readonly _tag: 'DotLoadingPageMsg'; readonly subMsg: DotLoadingPage.Msg }
+  | { readonly _tag: 'DropdownPageMsg'; readonly subMsg: DropdownPage.Msg }
+  | { readonly _tag: 'FieldPageMsg'; readonly subMsg: FieldPage.Msg }
+  | { readonly _tag: 'FilePageMsg'; readonly subMsg: FilePage.Msg }
+  | { readonly _tag: 'FooterPageMsg'; readonly subMsg: FooterPage.Msg }
+  | { readonly _tag: 'HeroPageMsg'; readonly subMsg: HeroPage.Msg }
+  | { readonly _tag: 'IconPageMsg'; readonly subMsg: IconPage.Msg }
+  | { readonly _tag: 'ImagePageMsg'; readonly subMsg: ImagePage.Msg }
+  | { readonly _tag: 'InputPageMsg'; readonly subMsg: InputPage.Msg }
+  | { readonly _tag: 'LevelPageMsg'; readonly subMsg: LevelPage.Msg }
+  | { readonly _tag: 'MediaObjectPageMsg'; readonly subMsg: MediaObjectPage.Msg }
+  | { readonly _tag: 'MenuPageMsg'; readonly subMsg: MenuPage.Msg }
+  | { readonly _tag: 'MessagePageMsg'; readonly subMsg: MessagePage.Msg }
+  | { readonly _tag: 'ModalPageMsg'; readonly subMsg: ModalPage.Msg }
+  | { readonly _tag: 'NavbarPageMsg'; readonly subMsg: NavbarPage.Msg }
+  | { readonly _tag: 'NotificationPageMsg'; readonly subMsg: NotificationPage.Msg }
+  | { readonly _tag: 'PaginationPageMsg'; readonly subMsg: PaginationPage.Msg }
+  | { readonly _tag: 'PanelPageMsg'; readonly subMsg: PanelPage.Msg }
+  | { readonly _tag: 'ProgressPageMsg'; readonly subMsg: ProgressPage.Msg }
+  | { readonly _tag: 'RadioPageMsg'; readonly subMsg: RadioPage.Msg }
+  | { readonly _tag: 'SectionPageMsg'; readonly subMsg: SectionPage.Msg }
+  | { readonly _tag: 'SelectPageMsg'; readonly subMsg: SelectPage.Msg }
+  | { readonly _tag: 'TablePageMsg'; readonly subMsg: TablePage.Msg }
+  | { readonly _tag: 'TabsPageMsg'; readonly subMsg: TabsPage.Msg }
+  | { readonly _tag: 'TagPageMsg'; readonly subMsg: TagPage.Msg }
+  | { readonly _tag: 'TextareaPageMsg'; readonly subMsg: TextareaPage.Msg }
+  | { readonly _tag: 'TitlePageMsg'; readonly subMsg: TitlePage.Msg }
+  | { readonly _tag: 'NotFoundPageMsg'; readonly subMsg: NotFoundPage.Msg }
+  | { readonly _tag: 'NavbarMsg'; readonly subMsg: Navbar.Msg }
+  | { readonly _tag: 'MenuMsg'; readonly subMsg: Menu.Msg }
