@@ -18,11 +18,16 @@ interface Props {
 }
 export const MediaObjectPage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `{MediaObject.view({
-  left: Image.view({ src: 'https://api.realworld.io/images/demo-avatar.png', ratio: 'rounded' }),
-  children: (
+  left: (
+    <Image.View
+      src='https://api.realworld.io/images/demo-avatar.png'
+      ratio='rounded'
+    />
+  ),
+  children: () => (
     <div>
       <h4 className='font-bold text-gray-900'>Gerard Quan</h4>
-      <p className='text-sm text-gray-600'>Great article explaining Elm Architecture in React and Haskell!</p>
+      <p className='mt-1 text-sm text-gray-600'>Great article explaining Elm Architecture in React and Haskell!</p>
     </div>
   ),
 })}`
@@ -87,10 +92,12 @@ export const MediaObjectPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='w-full'>
               {MediaObject.view({
-                left: Image.view({
-                  src: 'https://api.realworld.io/images/demo-avatar.png',
-                  ratio: 'rounded',
-                }),
+                left: (
+                  <Image.View
+                    src='https://api.realworld.io/images/demo-avatar.png'
+                    ratio='rounded'
+                  />
+                ),
                 children: () => (
                   <div>
                     <h4 className='font-bold text-gray-900'>Gerard Quan</h4>

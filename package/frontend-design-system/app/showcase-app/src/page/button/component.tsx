@@ -1,5 +1,5 @@
 import { Button, Hero, Title } from '@rinn7e/realworld-design-system'
-import { Code2, Sparkles } from 'lucide-react'
+import { Code2, Heart, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
@@ -233,6 +233,64 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
                   children: () => 'Full Width Button',
                 })}
               </div>
+            </div>
+          ),
+        })}
+
+        {/* Section 5: Favorite Action Buttons */}
+        {sectionView({
+          title: 'Favorite Action Buttons (RealWorld Style)',
+          children: () => (
+            <div className='flex flex-wrap items-center gap-4'>
+              {Button.view({
+                variant: 'primary',
+                size: 'small',
+                dataTest: 'fav-button-active',
+                children: () => (
+                  <span className='flex items-center gap-1'>
+                    <Heart size={12} fill='currentColor' />
+                    <span>29</span>
+                  </span>
+                ),
+              })}
+
+              {Button.view({
+                variant: 'primary',
+                isOutlined: true,
+                size: 'small',
+                dataTest: 'fav-button-outlined',
+                children: () => (
+                  <span className='flex items-center gap-1'>
+                    <Heart size={12} fill='none' />
+                    <span>28</span>
+                  </span>
+                ),
+              })}
+
+              {Button.view({
+                variant: 'primary',
+                size: 'small',
+                children: () => (
+                  <span className='flex items-center gap-1.5'>
+                    <Heart size={13} fill='currentColor' />
+                    <span>Unfavorite Article</span>
+                    <span className='font-normal'>(29)</span>
+                  </span>
+                ),
+              })}
+
+              {Button.view({
+                variant: 'primary',
+                isOutlined: true,
+                size: 'small',
+                children: () => (
+                  <span className='flex items-center gap-1.5'>
+                    <Heart size={13} fill='none' />
+                    <span>Favorite Article</span>
+                    <span className='font-normal'>(28)</span>
+                  </span>
+                ),
+              })}
             </div>
           ),
         })}

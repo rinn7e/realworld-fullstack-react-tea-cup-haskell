@@ -1,4 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
+import { Image } from '@rinn7e/realworld-design-system'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Trash2 } from 'lucide-react'
@@ -12,7 +13,6 @@ import {
 import { assetPath, memoStrategy } from '@/common/util'
 import { DotLoading } from '@/component/dot-loading'
 import { ErrorMessages } from '@/component/error-messages'
-import { Image } from '@/component/image'
 import { Link } from '@/component/link'
 
 import { type Props, PropsEq } from './type'
@@ -55,12 +55,12 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
               O.fold(
                 () => null,
                 (u) => (
-                  <Image
+                  <Image.View
                     src={u.image ? assetPath(u.image) : null}
                     defaultSrc={assetPath('/default-avatar.svg')}
                     className='h-[20px] w-[20px] rounded-full object-cover'
                     alt=''
-                    data-test='comment-author-img'
+                    dataTest='comment-author-img'
                   />
                 ),
               ),
@@ -116,7 +116,7 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                         },
                       }}
                     >
-                      <Image
+                      <Image.View
                         src={
                           comment.author.image
                             ? assetPath(comment.author.image)
@@ -125,7 +125,7 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                         defaultSrc={assetPath('/default-avatar.svg')}
                         className='h-[20px] w-[20px] rounded-full object-cover'
                         alt=''
-                        data-test='comment-author-img'
+                        dataTest='comment-author-img'
                       />
                     </Link>
                     <Link

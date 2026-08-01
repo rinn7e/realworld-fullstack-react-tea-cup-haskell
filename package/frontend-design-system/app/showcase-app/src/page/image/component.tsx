@@ -11,12 +11,12 @@ interface Props {
   dispatch: Dispatcher<Msg>
 }
 export const ImagePage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{Image.view({
-  src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-  ratio: '16by9',
-  alt: 'Avatar Showcase',
-  isRounded: true,
-})}`
+  const code = `<Image.View
+  src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'
+  ratio='16by9'
+  alt='Avatar Showcase'
+  isRounded
+/>`
   return (
     <div data-component='ImagePage' className='w-full space-y-8 text-left'>
       {Hero.view({
@@ -74,11 +74,11 @@ export const ImagePage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='flex w-full justify-center'>
               <div className='w-full max-w-sm'>
-                {Image.view({
-                  src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-                  ratio: '16by9',
-                  alt: 'Showcase Image',
-                })}
+                <Image.View
+                  src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'
+                  ratio='16by9'
+                  alt='Showcase Image'
+                />
               </div>
             </div>
           ),

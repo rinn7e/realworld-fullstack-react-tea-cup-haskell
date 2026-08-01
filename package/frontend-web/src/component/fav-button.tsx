@@ -1,4 +1,4 @@
-import { cn } from '@rinn7e/tea-cup-prelude'
+import { Button } from '@rinn7e/realworld-design-system'
 import { Heart } from 'lucide-react'
 import React from 'react'
 
@@ -10,57 +10,99 @@ type FavButtonProps = {
   variant?: 'normal' | 'detail'
 }
 
-const normalFavButton = ({
+const normalFavButtonLight = ({
   favorited,
   favoritesCount,
   onClick,
-}: FavButtonProps): React.ReactElement => (
-  <button
-    type='button'
-    onClick={onClick}
-    data-test='fav-button'
-    className={cn(
-      'btn flex items-center gap-[4px] rounded border px-[8px] py-[4px] text-xs transition-colors',
-      favorited
-        ? 'border-green-600 bg-green-600 text-white hover:bg-green-700'
-        : 'border-green-600 text-green-600 hover:bg-green-50',
-    )}
-  >
-    <Heart size={12} fill={favorited ? 'currentColor' : 'none'} />
-    {favoritesCount}
-  </button>
-)
+}: FavButtonProps): React.ReactElement =>
+  Button.view({
+    variant: 'primary',
+    isOutlined: !favorited,
+    size: 'small',
+    dataTest: 'fav-button',
+    onClick,
+    className: 'gap-[4px] px-[8px] py-[4px] text-xs',
+    children: () => (
+      <>
+        <Heart size={12} fill={favorited ? 'currentColor' : 'none'} />
+        <span>{favoritesCount}</span>
+      </>
+    ),
+  })
 
-const detailFavButton = ({
+const normalFavButtonDark = ({
   favorited,
   favoritesCount,
   onClick,
-  isLight = false,
-}: FavButtonProps): React.ReactElement => (
-  <button
-    type='button'
-    onClick={onClick}
-    data-test='fav-button'
-    className={cn(
-      'btn flex items-center gap-[4px] rounded border px-[12px] py-[4px] text-xs transition-colors',
-      favorited ? 'border-green-600' : 'border-green-600',
-      isLight
-        ? favorited
-          ? 'bg-green-600 text-white hover:bg-green-700'
-          : 'text-green-400 hover:bg-green-900'
-        : favorited
-          ? 'bg-green-600 text-white hover:bg-green-700'
-          : 'text-green-600 hover:bg-green-50',
-    )}
-  >
-    <Heart size={13} fill={favorited ? 'currentColor' : 'none'} />{' '}
-    {favorited ? 'Unfavorite Article' : 'Favorite Article'}{' '}
-    <span>({favoritesCount})</span>
-  </button>
-)
+}: FavButtonProps): React.ReactElement =>
+  Button.view({
+    variant: 'primary',
+    isOutlined: !favorited,
+    size: 'small',
+    dataTest: 'fav-button',
+    onClick,
+    className: favorited
+      ? 'gap-[4px] border-green-600 bg-green-600 px-[8px] py-[4px] text-xs text-white hover:bg-green-700'
+      : 'gap-[4px] border-green-400 px-[8px] py-[4px] text-xs text-green-400 hover:bg-green-900',
+    children: () => (
+      <>
+        <Heart size={12} fill={favorited ? 'currentColor' : 'none'} />
+        <span>{favoritesCount}</span>
+      </>
+    ),
+  })
+
+const detailFavButtonLight = ({
+  favorited,
+  favoritesCount,
+  onClick,
+}: FavButtonProps): React.ReactElement =>
+  Button.view({
+    variant: 'primary',
+    isOutlined: !favorited,
+    size: 'small',
+    dataTest: 'fav-button',
+    onClick,
+    className: 'gap-[4px] px-[12px] py-[4px] text-xs',
+    children: () => (
+      <>
+        <Heart size={13} fill={favorited ? 'currentColor' : 'none'} />
+        <span>{favorited ? 'Unfavorite Article' : 'Favorite Article'}</span>
+        <span>({favoritesCount})</span>
+      </>
+    ),
+  })
+
+const detailFavButtonDark = ({
+  favorited,
+  favoritesCount,
+  onClick,
+}: FavButtonProps): React.ReactElement =>
+  Button.view({
+    variant: 'primary',
+    isOutlined: !favorited,
+    size: 'small',
+    dataTest: 'fav-button',
+    onClick,
+    className: favorited
+      ? 'gap-[4px] border-green-600 bg-green-600 px-[12px] py-[4px] text-xs text-white hover:bg-green-700'
+      : 'gap-[4px] border-green-400 px-[12px] py-[4px] text-xs text-green-400 hover:bg-green-900',
+    children: () => (
+      <>
+        <Heart size={13} fill={favorited ? 'currentColor' : 'none'} />
+        <span>{favorited ? 'Unfavorite Article' : 'Favorite Article'}</span>
+        <span>({favoritesCount})</span>
+      </>
+    ),
+  })
 
 export const favButtonView = ({
   variant = 'normal',
+  isLight = false,
   ...props
-}: FavButtonProps): React.ReactElement =>
-  variant === 'detail' ? detailFavButton(props) : normalFavButton(props)
+}: FavButtonProps): React.ReactElement => {
+  if (variant === 'detail') {
+    return isLight ? detailFavButtonLight(props) : detailFavButtonDark(props)
+  }
+  return isLight ? normalFavButtonLight(props) : normalFavButtonDark(props)
+}

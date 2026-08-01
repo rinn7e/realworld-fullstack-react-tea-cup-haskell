@@ -1,11 +1,10 @@
-import { Content, Tag, Title } from '@rinn7e/realworld-design-system'
+import { Content, Image, Tag, Title } from '@rinn7e/realworld-design-system'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
 import { assetPath } from '@/common/util'
 import { DotLoading } from '@/component/dot-loading'
 import { favButtonView } from '@/component/fav-button'
-import { Image } from '@/component/image'
 import { Link } from '@/component/link'
 
 import type { Model, Msg } from './type'
@@ -35,12 +34,12 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
               },
             }}
           >
-            <Image
+            <Image.View
               src={model.author.image ? assetPath(model.author.image) : null}
               defaultSrc={assetPath('/default-avatar.svg')}
               className='h-[32px] w-[32px] rounded-full object-cover'
               alt=''
-              data-test='article-author-img'
+              dataTest='article-author-img'
             />
           </Link>
           <div className='info flex flex-col'>

@@ -60,6 +60,7 @@ export const view = ({
   isOutline = false,
   children,
   onDelete,
+  onClick,
   key,
   dataTest,
   className,
@@ -72,8 +73,10 @@ export const view = ({
       key={key}
       data-component='Tag'
       data-test={dataTest}
+      onClick={onClick}
       className={cn(
         'inline-flex items-center gap-1.5 align-middle transition-all',
+        onClick && 'cursor-pointer',
         styleClass,
         sizeStyles[size],
         isRounded ? 'rounded-full' : 'rounded',

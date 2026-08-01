@@ -1,4 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
+import { Image } from '@rinn7e/realworld-design-system'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
@@ -10,7 +11,6 @@ import type { ApiError, ArticleResponse, HttpError } from '@/common/api'
 import { assetPath, memoStrategy } from '@/common/util'
 import { ErrorMessages } from '@/component/error-messages'
 import { favButtonView } from '@/component/fav-button'
-import { Image } from '@/component/image'
 import { IndeterminateProgressBar } from '@/component/indeterminate-progress-bar'
 import { Link } from '@/component/link'
 
@@ -51,12 +51,12 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                     },
                   }}
                 >
-                  <Image
+                  <Image.View
                     src={author.image ? assetPath(author.image) : null}
                     defaultSrc={assetPath('/default-avatar.svg')}
                     className='h-[36px] w-[36px] rounded-full object-cover'
                     alt=''
-                    data-test='article-author-img'
+                    dataTest='article-author-img'
                   />
                 </Link>
                 <div className='flex flex-col'>

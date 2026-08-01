@@ -1,3 +1,4 @@
+import { Image } from '@rinn7e/realworld-design-system'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
 import type { Option } from 'fp-ts/lib/Option'
@@ -10,7 +11,6 @@ import type { Dispatcher } from 'tea-cup-fp'
 import type { User } from '@/common/api'
 import { homePage } from '@/common/type/route'
 import { assetPath } from '@/common/util'
-import { Image } from '@/component/image'
 import { Link } from '@/component/link'
 import type { Model, Msg } from '@/type'
 
@@ -103,14 +103,14 @@ export const Navbar: React.FC<Props> = ({ model, dispatch }) => {
                 data-test='nav-link'
                 aria-current={isProfile ? 'page' : undefined}
               >
-                <Image
+                <Image.View
                   src={
                     optUser.value.image ? assetPath(optUser.value.image) : null
                   }
                   defaultSrc={assetPath('/default-avatar.svg')}
                   className='h-[28px] w-[28px] rounded-full object-cover'
                   alt=''
-                  data-test='navbar-user-avatar'
+                  dataTest='navbar-user-avatar'
                 />
                 {optUser.value.username}
               </Link>
