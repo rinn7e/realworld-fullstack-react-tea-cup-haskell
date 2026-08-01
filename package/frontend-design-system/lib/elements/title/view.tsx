@@ -35,6 +35,8 @@ export const view = ({
   size = 3,
   isSubtitle = false,
   className,
+  key,
+  dataTest,
 }: TitleProps): React.ReactElement => {
   const styles = sizeStyles[size] || sizeStyles[3]
   const fullClass = cn(
@@ -46,43 +48,78 @@ export const view = ({
   switch (size) {
     case 1:
       return (
-        <h1 data-component='Title' className={fullClass}>
+        <h1
+          key={key}
+          data-test={dataTest}
+          data-component='Title'
+          className={fullClass}
+        >
           {children()}
         </h1>
       )
     case 2:
       return (
-        <h2 data-component='Title' className={fullClass}>
+        <h2
+          key={key}
+          data-test={dataTest}
+          data-component='Title'
+          className={fullClass}
+        >
           {children()}
         </h2>
       )
     case 3:
       return (
-        <h3 data-component='Title' className={fullClass}>
+        <h3
+          key={key}
+          data-test={dataTest}
+          data-component='Title'
+          className={fullClass}
+        >
           {children()}
         </h3>
       )
     case 4:
       return (
-        <h4 data-component='Title' className={fullClass}>
+        <h4
+          key={key}
+          data-test={dataTest}
+          data-component='Title'
+          className={fullClass}
+        >
           {children()}
         </h4>
       )
     case 5:
       return (
-        <h5 data-component='Title' className={fullClass}>
+        <h5
+          key={key}
+          data-test={dataTest}
+          data-component='Title'
+          className={fullClass}
+        >
           {children()}
         </h5>
       )
     case 6:
       return (
-        <h6 data-component='Title' className={fullClass}>
+        <h6
+          key={key}
+          data-test={dataTest}
+          data-component='Title'
+          className={fullClass}
+        >
           {children()}
         </h6>
       )
     default:
       return (
-        <h3 data-component='Title' className={fullClass}>
+        <h3
+          key={key}
+          data-test={dataTest}
+          data-component='Title'
+          className={fullClass}
+        >
           {children()}
         </h3>
       )

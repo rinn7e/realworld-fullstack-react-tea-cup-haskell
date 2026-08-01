@@ -27,11 +27,15 @@ export const view = ({
   size = 'xsmall',
   isIndeterminate = false,
   className,
+  key,
+  dataTest,
 }: ProgressProps): React.ReactElement => {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100))
 
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Progress'
       className={cn(
         'relative w-full overflow-hidden rounded-full bg-gray-200',

@@ -1,3 +1,5 @@
+import type React from 'react'
+
 export type MenuItem = {
   id: string
   label: string
@@ -20,4 +22,6 @@ export type MenuProps = {
   model: Model
   dispatch: (msg: Msg) => void
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

@@ -4,10 +4,7 @@ import type { Model } from '@/type'
 export interface ConduitDebug {
   getToken(): string | null
   getAuthState():
-    | 'authenticated'
-    | 'unauthenticated'
-    | 'unavailable'
-    | 'loading'
+    'authenticated' | 'unauthenticated' | 'unavailable' | 'loading'
   getCurrentUser(): {
     username: string
     email: string

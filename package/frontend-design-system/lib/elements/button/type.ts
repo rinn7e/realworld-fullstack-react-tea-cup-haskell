@@ -1,3 +1,4 @@
+import type React from 'react'
 import type { ReactNode } from 'react'
 
 export type ButtonVariant =
@@ -17,4 +18,6 @@ export type ButtonProps = {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   type?: 'button' | 'submit' | 'reset'
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

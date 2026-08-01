@@ -22,5 +22,7 @@ export type TagProps = {
   isOutline?: boolean
   onDelete?: () => void
   onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void
+  key?: React.Key
+  dataTest?: string
   className?: string
 }

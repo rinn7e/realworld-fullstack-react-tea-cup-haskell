@@ -13,4 +13,6 @@ export type SelectProps = {
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
   name?: string
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

@@ -9,4 +9,6 @@ export type MessageProps = {
   variant?: MessageVariant
   onDelete?: () => void
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

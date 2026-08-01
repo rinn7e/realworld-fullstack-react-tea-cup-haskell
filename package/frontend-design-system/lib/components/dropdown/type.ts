@@ -1,3 +1,5 @@
+import type React from 'react'
+
 export type DropdownItem = {
   id: string
   label: string
@@ -18,4 +20,6 @@ export type DropdownProps = {
   model: Model
   dispatch: (msg: Msg) => void
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

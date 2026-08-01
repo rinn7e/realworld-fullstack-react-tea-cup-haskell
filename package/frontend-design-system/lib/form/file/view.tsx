@@ -13,9 +13,13 @@ export const view = ({
   name,
   id,
   className,
+  key,
+  dataTest,
 }: FileProps): React.ReactElement => {
   return (
     <label
+      key={key}
+      data-test={dataTest}
       data-component='File'
       className={cn(
         'inline-flex items-center rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-xs transition-colors focus-within:ring-2 focus-within:ring-emerald-500/20 hover:bg-gray-50',

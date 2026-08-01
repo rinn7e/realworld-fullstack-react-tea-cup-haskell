@@ -1,3 +1,4 @@
+import type React from 'react'
 import type { ReactNode } from 'react'
 
 export type ColumnSize =
@@ -12,4 +13,6 @@ export type ColumnProps = {
   size?: ColumnSize
   children: () => ReactNode
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

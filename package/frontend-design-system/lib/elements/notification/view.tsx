@@ -19,9 +19,13 @@ export const view = ({
   children,
   onDelete,
   className,
+  key,
+  dataTest,
 }: NotificationProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Notification'
       className={cn(
         'relative flex items-center justify-between rounded-xl border p-4 text-sm shadow-xs transition-all',

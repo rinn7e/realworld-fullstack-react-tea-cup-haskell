@@ -236,10 +236,10 @@ export const update =
 
         return [
           { ...model, requestRd: RD.pending },
-          attemptTE(
-            task,
-            (result): Msg => ({ _tag: 'SubmitResponse', result }),
-          ),
+          attemptTE(task, (result): Msg => ({
+            _tag: 'SubmitResponse',
+            result,
+          })),
         ]
       }
       case 'SubmitResponse':

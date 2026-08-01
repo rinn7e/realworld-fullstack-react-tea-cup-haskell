@@ -4,4 +4,6 @@ export type ContainerProps = {
   children: () => React.ReactNode
   isFluid?: boolean
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

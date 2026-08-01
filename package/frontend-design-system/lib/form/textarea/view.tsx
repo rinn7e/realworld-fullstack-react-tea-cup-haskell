@@ -15,9 +15,13 @@ export const view = ({
   name,
   id,
   className,
+  key,
+  dataTest,
 }: TextareaProps): React.ReactElement => {
   return (
     <textarea
+      key={key}
+      data-test={dataTest}
       data-component='Textarea'
       name={name}
       id={id}

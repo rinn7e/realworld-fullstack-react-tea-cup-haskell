@@ -37,11 +37,15 @@ export const view = ({
   variant = 'default',
   onDelete,
   className,
+  key,
+  dataTest,
 }: MessageProps): React.ReactElement => {
   const v = variantStyles[variant] || variantStyles.default
 
   return (
     <article
+      key={key}
+      data-test={dataTest}
       data-component='Message'
       className={cn(
         'overflow-hidden rounded-lg border text-sm',

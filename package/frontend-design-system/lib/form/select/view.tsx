@@ -11,9 +11,13 @@ export const view = ({
   onChange,
   name,
   className,
+  key,
+  dataTest,
 }: SelectProps): React.ReactElement => {
   return (
     <select
+      key={key}
+      data-test={dataTest}
       data-component='Select'
       name={name}
       value={value}

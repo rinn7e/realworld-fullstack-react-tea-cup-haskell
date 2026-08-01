@@ -138,16 +138,13 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
     })
   }
 
-  return Task.perform(
-    Task.succeed(undefined),
-    (): Msg => ({
-      _tag: 'Init',
-      location,
-      user: O.none,
-      isUnavailable: false,
-      token: O.none,
-    }),
-  )
+  return Task.perform(Task.succeed(undefined), (): Msg => ({
+    _tag: 'Init',
+    location,
+    user: O.none,
+    isUnavailable: false,
+    token: O.none,
+  }))
 }
 
 export const initPageModel = (
@@ -209,10 +206,9 @@ export const navigate =
   (newRoute: AppRoute, isInternal: boolean) =>
   (model: Model): [Model, Cmd<Msg>] => {
     const urlCmd = isInternal
-      ? Task.perform(
-          newUrl(toUrlString(newRoute)),
-          (): Msg => ({ _tag: 'NoOp' }),
-        )
+      ? Task.perform(newUrl(toUrlString(newRoute)), (): Msg => ({
+          _tag: 'NoOp',
+        }))
       : Cmd.none<Msg>()
 
     // Route Guard against unauth

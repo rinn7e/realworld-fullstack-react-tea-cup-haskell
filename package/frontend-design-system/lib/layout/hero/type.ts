@@ -1,3 +1,4 @@
+import type React from 'react'
 import type { ReactNode } from 'react'
 
 export type HeroVariant =
@@ -14,4 +15,6 @@ export type HeroProps = {
   footer?: ReactNode
   children?: () => ReactNode
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

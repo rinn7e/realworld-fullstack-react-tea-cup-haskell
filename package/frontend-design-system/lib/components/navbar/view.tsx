@@ -11,9 +11,13 @@ export const view = ({
   model,
   dispatch,
   className,
+  key,
+  dataTest,
 }: NavbarProps): React.ReactElement => {
   return (
     <nav
+      key={key}
+      data-test={dataTest}
       data-component='Navbar'
       className={cn(
         'relative border-b border-gray-100 bg-white px-4 py-3 shadow-2xs sm:px-6 lg:px-8',

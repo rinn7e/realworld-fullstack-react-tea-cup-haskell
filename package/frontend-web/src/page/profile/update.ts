@@ -37,10 +37,10 @@ export const init = (
   return [
     model,
     Cmd.batch([
-      attemptTE(
-        getProfile(token, username),
-        (result): Msg => ({ _tag: 'GetProfileResponse', result }),
-      ),
+      attemptTE(getProfile(token, username), (result): Msg => ({
+        _tag: 'GetProfileResponse',
+        result,
+      })),
       paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
     ]),
   ]
@@ -68,9 +68,10 @@ export const update =
         return pipe(
           [
             { ...model, pagination },
-            paginationCmd.map(
-              (m): Msg => ({ _tag: 'PaginationMsg', subMsg: m }),
-            ),
+            paginationCmd.map((m): Msg => ({
+              _tag: 'PaginationMsg',
+              subMsg: m,
+            })),
           ] as [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'ItemMsg') {
@@ -107,10 +108,10 @@ export const update =
         if (token._tag === 'Some') {
           return [
             { ...model, followRd: RD.pending },
-            attemptTE(
-              followUser(token.value, username),
-              (result): Msg => ({ _tag: 'FollowResponse', result }),
-            ),
+            attemptTE(followUser(token.value, username), (result): Msg => ({
+              _tag: 'FollowResponse',
+              result,
+            })),
           ]
         }
         return [model, Cmd.none()]
@@ -134,10 +135,10 @@ export const update =
         if (token._tag === 'Some') {
           return [
             { ...model, unfollowRd: RD.pending },
-            attemptTE(
-              unfollowUser(token.value, username),
-              (result): Msg => ({ _tag: 'UnfollowResponse', result }),
-            ),
+            attemptTE(unfollowUser(token.value, username), (result): Msg => ({
+              _tag: 'UnfollowResponse',
+              result,
+            })),
           ]
         }
         return [model, Cmd.none()]
@@ -188,16 +189,14 @@ const paginationItemMsgHandler =
                   ),
                 },
               },
-              subCmd.map(
-                (sm): Msg => ({
-                  _tag: 'PaginationMsg',
-                  subMsg: {
-                    _tag: 'ItemMsg',
-                    item: updated,
-                    msg: sm,
-                  },
-                }),
-              ),
+              subCmd.map((sm): Msg => ({
+                _tag: 'PaginationMsg',
+                subMsg: {
+                  _tag: 'ItemMsg',
+                  item: updated,
+                  msg: sm,
+                },
+              })),
             ]
           },
         ),

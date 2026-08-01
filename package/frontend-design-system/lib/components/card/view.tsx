@@ -9,9 +9,13 @@ export const view = ({
   children,
   footer,
   className,
+  key,
+  dataTest,
 }: CardProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Card'
       className={cn(
         'overflow-hidden rounded-xl border border-gray-200 bg-white text-gray-800 shadow-xs transition-all hover:shadow-md',

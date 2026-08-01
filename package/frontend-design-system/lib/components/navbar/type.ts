@@ -22,4 +22,6 @@ export type NavbarProps = {
   dispatch: (msg: Msg) => void
   onNavigate?: (id: string) => void
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

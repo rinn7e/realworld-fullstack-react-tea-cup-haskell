@@ -111,10 +111,10 @@ export const update =
 
         return [
           { ...model, requestRd: RD.pending },
-          attemptTE(
-            login({ user: { email, password } }),
-            (result): Msg => ({ _tag: 'SubmitResponse', result }),
-          ),
+          attemptTE(login({ user: { email, password } }), (result): Msg => ({
+            _tag: 'SubmitResponse',
+            result,
+          })),
         ]
       }
       case 'SubmitResponse':

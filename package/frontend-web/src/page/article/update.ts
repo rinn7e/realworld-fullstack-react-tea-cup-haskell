@@ -28,10 +28,10 @@ export const init = (slug: string, shared: Shared): [Model, Cmd<Msg>] => {
   return [
     model,
     Cmd.batch<Msg>([
-      attemptTE(
-        getArticle(shared.token, slug),
-        (result): Msg => ({ _tag: 'GetArticleResponse', result }),
-      ),
+      attemptTE(getArticle(shared.token, slug), (result): Msg => ({
+        _tag: 'GetArticleResponse',
+        result,
+      })),
       commentSectionCmd.map((subMsg) => ({
         _tag: 'CommentSectionMsg',
         subMsg,

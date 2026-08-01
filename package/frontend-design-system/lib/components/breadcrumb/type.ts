@@ -1,3 +1,5 @@
+import type React from 'react'
+
 export type BreadcrumbItem = {
   label: string
   href?: string
@@ -10,4 +12,6 @@ export type BreadcrumbProps = {
   align?: 'left' | 'center' | 'right'
   onSelect?: (item: BreadcrumbItem) => void
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

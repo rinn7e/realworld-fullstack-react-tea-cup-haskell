@@ -10,9 +10,13 @@ export const view = ({
   isDisabled = false,
   onChange,
   className,
+  key,
+  dataTest,
 }: RadioProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Radio'
       className={cn('flex flex-col gap-2', className)}
     >

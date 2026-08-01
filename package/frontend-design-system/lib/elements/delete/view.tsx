@@ -15,9 +15,13 @@ export const view = ({
   size = 'normal',
   onClick,
   className,
+  key,
+  dataTest,
 }: DeleteProps): React.ReactElement => {
   return (
     <button
+      key={key}
+      data-test={dataTest}
       data-component='Delete'
       type='button'
       onClick={onClick}

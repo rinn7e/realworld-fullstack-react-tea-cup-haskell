@@ -7,4 +7,6 @@ export type TitleProps = {
   size?: TitleSize
   isSubtitle?: boolean
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

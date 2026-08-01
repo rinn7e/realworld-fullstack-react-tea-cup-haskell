@@ -68,12 +68,16 @@ export const view = ({
   onClick,
   type = 'button',
   className,
+  key,
+  dataTest,
 }: ButtonProps): React.ReactElement => {
   const styles = variantStyles[variant] || variantStyles.default
   const colorClass = isOutlined ? styles.outlined : styles.filled
 
   return (
     <button
+      key={key}
+      data-test={dataTest}
       data-component='Button'
       type={type}
       disabled={isDisabled || isLoading}

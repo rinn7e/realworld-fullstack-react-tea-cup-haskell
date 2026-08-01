@@ -7,4 +7,6 @@ export type FieldProps = {
   isExpanded?: boolean
   children: () => React.ReactNode
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

@@ -10,9 +10,13 @@ export const view = ({
   model,
   dispatch,
   className,
+  key,
+  dataTest,
 }: PanelProps): React.ReactElement => {
   return (
     <nav
+      key={key}
+      data-test={dataTest}
       data-component='Panel'
       className={cn(
         'overflow-hidden rounded-xl border border-gray-200 bg-white text-sm shadow-xs',

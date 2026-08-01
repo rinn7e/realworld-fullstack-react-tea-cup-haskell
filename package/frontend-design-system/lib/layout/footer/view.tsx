@@ -6,9 +6,13 @@ import type { FooterProps } from './type'
 export const view = ({
   children,
   className,
+  key,
+  dataTest,
 }: FooterProps): React.ReactElement => {
   return (
     <footer
+      key={key}
+      data-test={dataTest}
       data-component='Footer'
       className={cn(
         'w-full border-t border-gray-200 bg-gray-100 py-12 text-center text-sm text-gray-600',

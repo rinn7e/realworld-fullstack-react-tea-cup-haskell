@@ -1,3 +1,5 @@
+import type React from 'react'
+
 export type ProgressVariant =
   'primary' | 'link' | 'info' | 'success' | 'warning' | 'danger'
 
@@ -15,4 +17,6 @@ export type ProgressProps = {
    */
   isIndeterminate?: boolean
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

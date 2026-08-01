@@ -7,9 +7,13 @@ export const view = ({
   isFluid = false,
   children,
   className,
+  key,
+  dataTest,
 }: ContainerProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Container'
       className={cn(
         'mx-auto px-4 sm:px-6 lg:px-8',

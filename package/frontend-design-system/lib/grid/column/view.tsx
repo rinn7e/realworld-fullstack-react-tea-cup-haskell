@@ -16,9 +16,13 @@ export const view = ({
   size,
   children,
   className,
+  key,
+  dataTest,
 }: ColumnProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       className={cn(
         'flex-1',
         size ? sizeStyles[size] : 'w-full md:w-auto',

@@ -34,10 +34,10 @@ export const init = (
     Cmd.batch([
       paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
 
-      attemptTE(
-        getTags(shared.token),
-        (result): Msg => ({ _tag: 'GetTagsResponse', result }),
-      ),
+      attemptTE(getTags(shared.token), (result): Msg => ({
+        _tag: 'GetTagsResponse',
+        result,
+      })),
     ]),
   ]
 }
@@ -62,9 +62,10 @@ export const update =
         return pipe(
           [
             { ...model, pagination },
-            paginationCmd.map(
-              (m): Msg => ({ _tag: 'PaginationMsg', subMsg: m }),
-            ),
+            paginationCmd.map((m): Msg => ({
+              _tag: 'PaginationMsg',
+              subMsg: m,
+            })),
           ] as [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'ItemMsg')
@@ -94,9 +95,10 @@ export const update =
 
           return [
             newModel,
-            paginationCmd.map(
-              (m): Msg => ({ _tag: 'PaginationMsg', subMsg: m }),
-            ),
+            paginationCmd.map((m): Msg => ({
+              _tag: 'PaginationMsg',
+              subMsg: m,
+            })),
           ]
         }
       }
@@ -133,16 +135,14 @@ const paginationItemMsgHandler =
                   ),
                 },
               },
-              subCmd.map(
-                (sm): Msg => ({
-                  _tag: 'PaginationMsg',
-                  subMsg: {
-                    _tag: 'ItemMsg',
-                    item: updated,
-                    msg: sm,
-                  },
-                }),
-              ),
+              subCmd.map((sm): Msg => ({
+                _tag: 'PaginationMsg',
+                subMsg: {
+                  _tag: 'ItemMsg',
+                  item: updated,
+                  msg: sm,
+                },
+              })),
             ]
           },
         ),

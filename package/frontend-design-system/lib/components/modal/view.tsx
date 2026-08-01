@@ -11,6 +11,8 @@ export const view = ({
   model,
   dispatch,
   className,
+  key,
+  dataTest,
 }: ModalProps): React.ReactElement | null => {
   if (!model.isOpen) {
     return null
@@ -18,6 +20,8 @@ export const view = ({
 
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Modal'
       className='fixed inset-0 z-50 flex items-center justify-center p-4'
     >

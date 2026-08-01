@@ -306,10 +306,9 @@ const navigate =
     const [updatedModel, updatedCmd] = initPageModel(newRoute)(model)
 
     const urlCmd = isInternal
-      ? Task.perform(
-          newUrl(toUrlString(newRoute)),
-          (): Msg => ({ _tag: 'NoOp' }),
-        )
+      ? Task.perform(newUrl(toUrlString(newRoute)), (): Msg => ({
+          _tag: 'NoOp',
+        }))
       : Cmd.none<Msg>()
 
     const trackCmd = trackVisitorCmd(model.shared.token, newRoute)
@@ -435,12 +434,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
               ...model,
               pageModel: { _tag: 'HomePageModel', model: homeModel },
             },
-            homeCmd.map(
-              (subMsg): Msg => ({
-                _tag: 'HomePageMsg',
-                subMsg,
-              }),
-            ),
+            homeCmd.map((subMsg): Msg => ({
+              _tag: 'HomePageMsg',
+              subMsg,
+            })),
           ] as [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'ChangeTab') {
@@ -824,8 +821,7 @@ const trackVisitorCmd = (
   route: AppRoute,
 ): Cmd<Msg> => {
   const path = toUrlString(route)
-  return Task.attempt(
-    taskFromTE(trackVisitor(token, { path })),
-    (): Msg => ({ _tag: 'NoOp' }),
-  )
+  return Task.attempt(taskFromTE(trackVisitor(token, { path })), (): Msg => ({
+    _tag: 'NoOp',
+  }))
 }

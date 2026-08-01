@@ -16,10 +16,14 @@ export const view = ({
   alt,
   ratio = 'square',
   className,
+  key,
+  dataTest,
 }: ImageProps): React.ReactElement => {
   const imageAlt = alt || ''
   return (
     <figure
+      key={key}
+      data-test={dataTest}
       data-component='Image'
       className={cn('overflow-hidden rounded-lg', className)}
     >

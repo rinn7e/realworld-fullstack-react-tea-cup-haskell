@@ -60,6 +60,8 @@ export const view = ({
   isOutline = false,
   children,
   onDelete,
+  key,
+  dataTest,
   className,
 }: TagProps): React.ReactElement => {
   const v = variantStyles[variant] || variantStyles.default
@@ -67,7 +69,9 @@ export const view = ({
 
   return (
     <span
+      key={key}
       data-component='Tag'
+      data-test={dataTest}
       className={cn(
         'inline-flex items-center gap-1.5 align-middle transition-all',
         styleClass,

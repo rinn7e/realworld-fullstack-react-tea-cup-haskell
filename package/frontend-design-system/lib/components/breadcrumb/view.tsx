@@ -15,9 +15,13 @@ export const view = ({
   align = 'left',
   onSelect,
   className,
+  key,
+  dataTest,
 }: BreadcrumbProps): React.ReactElement => {
   return (
     <nav
+      key={key}
+      data-test={dataTest}
       data-component='Breadcrumb'
       aria-label='breadcrumbs'
       className={className}

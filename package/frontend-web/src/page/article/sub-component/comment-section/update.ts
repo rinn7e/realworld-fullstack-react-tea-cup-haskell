@@ -16,10 +16,10 @@ export const init = (slug: string, shared: Shared): [Model, Cmd<Msg>] => {
 
   return [
     model,
-    attemptTE(
-      getComments(shared.token, slug),
-      (result): Msg => ({ _tag: 'GetCommentsResponse', result }),
-    ),
+    attemptTE(getComments(shared.token, slug), (result): Msg => ({
+      _tag: 'GetCommentsResponse',
+      result,
+    })),
   ]
 }
 

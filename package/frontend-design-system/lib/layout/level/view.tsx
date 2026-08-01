@@ -6,9 +6,13 @@ import type { LevelItemProps, LevelProps } from './type'
 export const view = ({
   children,
   className,
+  key,
+  dataTest,
 }: LevelProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Level'
       className={cn(
         'flex flex-col items-center justify-between gap-4 sm:flex-row',
@@ -23,18 +27,34 @@ export const view = ({
 export const leftView = ({
   children,
   className,
+  key,
+  dataTest,
 }: LevelProps): React.ReactElement => {
   return (
-    <div className={cn('flex items-center gap-3', className)}>{children()}</div>
+    <div
+      key={key}
+      data-test={dataTest}
+      className={cn('flex items-center gap-3', className)}
+    >
+      {children()}
+    </div>
   )
 }
 
 export const rightView = ({
   children,
   className,
+  key,
+  dataTest,
 }: LevelProps): React.ReactElement => {
   return (
-    <div className={cn('flex items-center gap-3', className)}>{children()}</div>
+    <div
+      key={key}
+      data-test={dataTest}
+      className={cn('flex items-center gap-3', className)}
+    >
+      {children()}
+    </div>
   )
 }
 
@@ -42,9 +62,13 @@ export const itemView = ({
   hasTextCentered = true,
   children,
   className,
+  key,
+  dataTest,
 }: LevelItemProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       className={cn(
         'flex flex-col items-center justify-center',
         hasTextCentered && 'text-center',

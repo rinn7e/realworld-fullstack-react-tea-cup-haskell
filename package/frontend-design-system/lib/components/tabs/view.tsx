@@ -10,9 +10,13 @@ export const view = ({
   model,
   dispatch,
   className,
+  key,
+  dataTest,
 }: TabsProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Tabs'
       className={cn(
         'border-b border-gray-200 text-sm font-medium text-gray-500',

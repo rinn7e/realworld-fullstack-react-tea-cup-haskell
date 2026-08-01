@@ -1,3 +1,5 @@
+import type React from 'react'
+
 export type Model = {
   currentPage: number
   totalPages: number
@@ -10,4 +12,6 @@ export type PaginationProps = {
   dispatch: (msg: Msg) => void
   onPageChange?: (page: number) => void
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

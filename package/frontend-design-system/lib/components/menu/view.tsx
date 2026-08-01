@@ -8,9 +8,16 @@ export const view = ({
   model,
   dispatch,
   className,
+  key,
+  dataTest,
 }: MenuProps): React.ReactElement => {
   return (
-    <aside data-component='Menu' className={cn('w-full text-sm', className)}>
+    <aside
+      key={key}
+      data-test={dataTest}
+      data-component='Menu'
+      className={cn('w-full text-sm', className)}
+    >
       {categories.map((cat, idx) => (
         <div key={idx} className='mb-4 last:mb-0'>
           <p className='mb-2 px-3 text-xs font-semibold tracking-wider text-gray-500 uppercase'>

@@ -25,9 +25,13 @@ export const view = ({
   name,
   id,
   className,
+  key,
+  dataTest,
 }: InputProps): React.ReactElement => {
   return (
     <input
+      key={key}
+      data-test={dataTest}
       data-component='Input'
       type={type}
       name={name}

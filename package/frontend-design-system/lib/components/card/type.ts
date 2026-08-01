@@ -6,4 +6,6 @@ export type CardProps = {
   children: () => React.ReactNode
   footer?: React.ReactNode
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

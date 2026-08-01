@@ -8,6 +8,8 @@ export const view = ({
   model,
   dispatch,
   className,
+  key,
+  dataTest,
 }: PaginationProps): React.ReactElement => {
   const pages: number[] = []
   for (let i = 1; i <= model.totalPages; i++) {
@@ -16,6 +18,8 @@ export const view = ({
 
   return (
     <nav
+      key={key}
+      data-test={dataTest}
       data-component='Pagination'
       aria-label='Pagination'
       className={cn('flex items-center gap-1 text-sm', className)}

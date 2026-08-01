@@ -8,4 +8,6 @@ export type NotificationProps = {
   variant?: NotificationVariant
   onDelete?: () => void
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

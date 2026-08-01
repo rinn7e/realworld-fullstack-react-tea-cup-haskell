@@ -10,9 +10,13 @@ export const view = ({
   isExpanded = false,
   children,
   className,
+  key,
+  dataTest,
 }: FieldProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Field'
       className={cn('mb-4 last:mb-0', isExpanded && 'w-full', className)}
     >

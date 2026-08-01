@@ -12,4 +12,6 @@ export type RadioProps = {
   isDisabled?: boolean
   onChange?: (value: string) => void
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

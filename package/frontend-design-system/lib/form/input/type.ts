@@ -17,4 +17,6 @@ export type InputProps = {
   name?: string
   id?: string
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

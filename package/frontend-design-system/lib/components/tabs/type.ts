@@ -20,4 +20,6 @@ export type TabsProps = {
   isToggle?: boolean
   isFullWidth?: boolean
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

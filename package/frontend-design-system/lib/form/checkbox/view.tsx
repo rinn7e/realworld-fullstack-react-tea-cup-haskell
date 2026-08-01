@@ -11,9 +11,13 @@ export const view = ({
   name,
   id,
   className,
+  key,
+  dataTest,
 }: CheckboxProps): React.ReactElement => {
   return (
     <label
+      key={key}
+      data-test={dataTest}
       data-component='Checkbox'
       className={cn(
         'inline-flex items-center gap-2 text-sm font-medium text-gray-700 select-none',

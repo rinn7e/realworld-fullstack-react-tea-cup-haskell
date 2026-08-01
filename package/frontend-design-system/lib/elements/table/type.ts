@@ -8,4 +8,6 @@ export type TableProps = {
   isHoverable?: boolean
   isFullWidth?: boolean
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

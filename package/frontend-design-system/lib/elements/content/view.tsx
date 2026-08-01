@@ -14,9 +14,13 @@ export const view = ({
   size = 'normal',
   children,
   className,
+  key,
+  dataTest,
 }: ContentProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Content'
       className={cn(
         'prose max-w-none space-y-4 text-gray-700',

@@ -8,7 +8,8 @@
     "check": "pnpm --filter \"*\" check",
     "check-circular": "pnpm --filter \"*\" check-circular",
     "lint": "pnpm --filter \"*\" lint",
-    "format": "pnpm --filter \"*\" format"
+    "format": "pnpm --filter \"*\" format",
+    "staged": "pnpm --filter \"*\" staged"
   },
   "devDependencies": {
     "madge": "^8.0.0"

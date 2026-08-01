@@ -101,19 +101,19 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
             Read more
             <DotLoading className='gap-[0px]' />
           </span>
-          <ul className='flex flex-wrap gap-[4px]' data-test='tag-list'>
-            {model.tagList.map((tag) => (
-              <li key={tag} data-test='article-tag'>
-                {Tag.view({
-                  variant: 'default',
-                  isOutline: true,
-                  isRounded: true,
-                  size: 'small',
-                  children: () => tag,
-                })}
-              </li>
-            ))}
-          </ul>
+          <div className='flex flex-wrap gap-[4px]' data-test='tag-list'>
+            {model.tagList.map((tag) =>
+              Tag.view({
+                key: tag,
+                dataTest: 'article-tag',
+                variant: 'default',
+                isOutline: true,
+                isRounded: true,
+                size: 'small',
+                children: () => tag,
+              }),
+            )}
+          </div>
         </div>
       </Link>
     </div>

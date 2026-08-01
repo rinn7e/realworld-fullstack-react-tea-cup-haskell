@@ -8,9 +8,13 @@ export const view = ({
   children,
   right,
   className,
+  key,
+  dataTest,
 }: MediaObjectProps): React.ReactElement => {
   return (
     <article
+      key={key}
+      data-test={dataTest}
       data-component='MediaObject'
       className={cn('flex items-start gap-4 text-sm', className)}
     >

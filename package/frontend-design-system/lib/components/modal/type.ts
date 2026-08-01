@@ -13,4 +13,6 @@ export type ModalProps = {
   model: Model
   dispatch: (msg: Msg) => void
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

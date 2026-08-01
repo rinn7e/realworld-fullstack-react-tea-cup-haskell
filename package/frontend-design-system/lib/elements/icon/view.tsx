@@ -14,9 +14,13 @@ export const view = ({
   size = 'normal',
   children,
   className,
+  key,
+  dataTest,
 }: IconProps): React.ReactElement => {
   return (
     <span
+      key={key}
+      data-test={dataTest}
       data-component='Icon'
       className={cn(
         'inline-flex items-center justify-center text-gray-600',

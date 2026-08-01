@@ -5,4 +5,6 @@ export type MediaObjectProps = {
   children: () => React.ReactNode
   right?: React.ReactNode
   className?: string
+  key?: React.Key
+  dataTest?: string
 }

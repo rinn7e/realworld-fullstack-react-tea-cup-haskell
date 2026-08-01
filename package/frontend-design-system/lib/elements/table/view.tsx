@@ -10,9 +10,13 @@ export const view = ({
   isFullWidth = true,
   children,
   className,
+  key,
+  dataTest,
 }: TableProps): React.ReactElement => {
   return (
     <div
+      key={key}
+      data-test={dataTest}
       data-component='Table'
       className='w-full overflow-x-auto rounded-lg border border-gray-200 shadow-2xs'
     >

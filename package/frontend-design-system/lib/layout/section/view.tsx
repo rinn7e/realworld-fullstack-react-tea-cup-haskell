@@ -13,9 +13,13 @@ export const view = ({
   size = 'medium',
   children,
   className,
+  key,
+  dataTest,
 }: SectionProps): React.ReactElement => {
   return (
     <section
+      key={key}
+      data-test={dataTest}
       data-component='Section'
       className={cn('w-full', sizeStyles[size], className)}
     >

@@ -93,9 +93,10 @@ const searchBarMsgHandler = (
         const [pagination, paginationCmd] = Pagination.init(paginationConfig, 1)
         return [
           { ...m, pagination },
-          paginationCmd.map(
-            (pm): Msg => ({ _tag: 'PaginationMsg', subMsg: pm }),
-          ),
+          paginationCmd.map((pm): Msg => ({
+            _tag: 'PaginationMsg',
+            subMsg: pm,
+          })),
         ]
       } else {
         return [m, Cmd.none()]

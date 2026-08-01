@@ -29,9 +29,13 @@ export const view = ({
   header,
   footer,
   className,
+  key,
+  dataTest,
 }: HeroProps): React.ReactElement => {
   return (
     <section
+      key={key}
+      data-test={dataTest}
       data-component='Hero'
       className={cn(
         'relative overflow-hidden transition-all',
