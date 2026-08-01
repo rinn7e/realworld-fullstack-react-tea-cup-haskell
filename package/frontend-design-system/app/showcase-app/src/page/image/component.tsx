@@ -55,6 +55,7 @@ export const ImagePage: React.FC<Props> = ({ model, dispatch }) => {
             ),
           })}
           {Button.view({
+            color: 'green',
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),

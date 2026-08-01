@@ -43,6 +43,7 @@ export const SectionPage: React.FC<Props> = ({ model, dispatch }) => {
       <div className='w-full space-y-6'>
         <div className='flex items-center justify-end'>
           {Button.view({
+            color: 'green',
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),

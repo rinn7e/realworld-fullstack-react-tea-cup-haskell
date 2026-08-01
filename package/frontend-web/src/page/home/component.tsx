@@ -1,4 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
+import { Tag } from '@rinn7e/realworld-design-system'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
@@ -106,23 +107,24 @@ const HomePageComponent = ({ model, shared, dispatch }: Props) => {
                       className='flex flex-wrap gap-[4px]'
                       data-test='tag-list'
                     >
-                      {data.tags.map((tag) => (
-                        <a
-                          key={tag}
-                          href='#'
-                          className='inline-block rounded-full bg-gray-200 px-[8px] py-[2px] text-xs text-gray-700 hover:bg-gray-300'
-                          data-test='tag-pill'
-                          onClick={(e) => {
+                      {data.tags.map((tag) =>
+                        Tag.view({
+                          key: tag,
+                          dataTest: 'tag-pill',
+                          color: 'gray',
+                          variant: 'light',
+                          isRounded: true,
+                          size: 'small',
+                          onClick: (e) => {
                             e.preventDefault()
                             dispatch({
                               _tag: 'ChangeTab',
                               tab: tagFeedTab(tag),
                             })
-                          }}
-                        >
-                          {tag}
-                        </a>
-                      ))}
+                          },
+                          children: () => tag,
+                        }),
+                      )}
                     </div>
                   ),
                 ),

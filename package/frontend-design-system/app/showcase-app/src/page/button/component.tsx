@@ -1,5 +1,13 @@
 import { Button, Hero, Title } from '@rinn7e/realworld-design-system'
-import { Code2, Heart, Sparkles } from 'lucide-react'
+import {
+  Code2,
+  Download,
+  Heart,
+  Plus,
+  Send,
+  Sparkles,
+  Trash2,
+} from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
@@ -11,30 +19,41 @@ interface Props {
   dispatch: Dispatcher<Msg>
 }
 export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `// Colors & Variants
-{Button.view({ variant: 'default', children: 'Default' })}
-{Button.view({ variant: 'primary', children: 'Primary' })}
-{Button.view({ variant: 'link', children: 'Link' })}
-{Button.view({ variant: 'info', children: 'Info' })}
-{Button.view({ variant: 'success', children: 'Success' })}
-{Button.view({ variant: 'warning', children: 'Warning' })}
-{Button.view({ variant: 'danger', children: 'Danger' })}
+  const code = `// Solid Style (variant = 'solid')
+{Button.view({ color: 'white', variant: 'solid', children: () => 'White' })}
+{Button.view({ color: 'green', variant: 'solid', children: () => 'Green' })}
+{Button.view({ color: 'dark-green', variant: 'solid', children: () => 'Dark Green' })}
+{Button.view({ color: 'sky', variant: 'solid', children: () => 'Sky' })}
+{Button.view({ color: 'amber', variant: 'solid', children: () => 'Amber' })}
+{Button.view({ color: 'red', variant: 'solid', children: () => 'Red' })}
 
-// Outlined Style
-{Button.view({ variant: 'primary', isOutlined: true, children: 'Primary' })}
-{Button.view({ variant: 'link', isOutlined: true, children: 'Link' })}
+// Outline Style (variant = 'outline')
+{Button.view({ color: 'white', variant: 'outline', children: () => 'White' })}
+{Button.view({ color: 'green', variant: 'outline', children: () => 'Green' })}
+{Button.view({ color: 'dark-green', variant: 'outline', children: () => 'Dark Green' })}
+{Button.view({ color: 'sky', variant: 'outline', children: () => 'Sky' })}
+{Button.view({ color: 'amber', variant: 'outline', children: () => 'Amber' })}
+{Button.view({ color: 'red', variant: 'outline', children: () => 'Red' })}
+
+// Link Style (variant = 'link')
+{Button.view({ color: 'white', variant: 'link', children: () => 'White Link' })}
+{Button.view({ color: 'green', variant: 'link', children: () => 'Green Link' })}
+{Button.view({ color: 'dark-green', variant: 'link', children: () => 'Dark Green Link' })}
+{Button.view({ color: 'sky', variant: 'link', children: () => 'Sky Link' })}
+{Button.view({ color: 'amber', variant: 'link', children: () => 'Amber Link' })}
+{Button.view({ color: 'red', variant: 'link', children: () => 'Red Link' })}
 
 // Sizes & Shapes
-{Button.view({ size: 'small', children: 'Small' })}
-{Button.view({ size: 'normal', children: 'Normal' })}
-{Button.view({ size: 'medium', children: 'Medium' })}
-{Button.view({ size: 'large', children: 'Large' })}
-{Button.view({ isRounded: true, children: 'Rounded' })}
+{Button.view({ size: 'small', children: () => 'Small' })}
+{Button.view({ size: 'normal', children: () => 'Normal' })}
+{Button.view({ size: 'medium', children: () => 'Medium' })}
+{Button.view({ size: 'large', children: () => 'Large' })}
+{Button.view({ isRounded: true, children: () => 'Rounded' })}
 
 // States & Width
-{Button.view({ isDisabled: true, children: 'Disabled' })}
-{Button.view({ isLoading: true, children: 'Loading' })}
-{Button.view({ isFullWidth: true, children: 'Full Width Button' })}`
+{Button.view({ isDisabled: true, children: () => 'Disabled' })}
+{Button.view({ isLoading: true, children: () => 'Loading' })}
+{Button.view({ isFullWidth: true, children: () => 'Full Width Button' })}`
   return (
     <div data-component='ButtonPage' className='w-full space-y-8 text-left'>
       {Hero.view({
@@ -53,8 +72,9 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
               children: () => 'Button',
             })}
             <p className='text-base text-gray-600'>
-              Essential button element with support for all color variants,
-              sizes, styles (outlined, rounded), and states (loading, disabled).
+              Essential button element with support for color palettes (white,
+              green, dark-green, sky, amber, red), variants (solid, outline,
+              link), sizes, shapes, and states (loading, disabled).
             </p>
           </>
         ),
@@ -74,11 +94,11 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
             ),
           })}
           {Button.view({
+            color: 'green',
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
-            className:
-              'flex items-center gap-1 font-semibold text-green-600 hover:underline',
+            className: 'flex items-center gap-1 font-semibold',
             children: () => (
               <>
                 <Code2 className='h-3.5 w-3.5' />
@@ -88,114 +108,176 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {/* Section 1: Colors & Variants */}
+        {/* Section 1: Solid Variant */}
         {sectionView({
-          title: 'Colors & Variants',
+          title: 'Solid Variant (variant = "solid")',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              {Button.view({ variant: 'default', children: () => 'Default' })}
-              {Button.view({ variant: 'primary', children: () => 'Primary' })}
-              {Button.view({ variant: 'link', children: () => 'Link' })}
-              {Button.view({ variant: 'info', children: () => 'Info' })}
-              {Button.view({ variant: 'success', children: () => 'Success' })}
-              {Button.view({ variant: 'warning', children: () => 'Warning' })}
-              {Button.view({ variant: 'danger', children: () => 'Danger' })}
+              {Button.view({
+                color: 'white',
+                variant: 'solid',
+                children: () => 'White',
+              })}
+              {Button.view({
+                color: 'green',
+                variant: 'solid',
+                children: () => 'Green',
+              })}
+              {Button.view({
+                color: 'dark-green',
+                variant: 'solid',
+                children: () => 'Dark Green',
+              })}
+              {Button.view({
+                color: 'sky',
+                variant: 'solid',
+                children: () => 'Sky',
+              })}
+              {Button.view({
+                color: 'amber',
+                variant: 'solid',
+                children: () => 'Amber',
+              })}
+              {Button.view({
+                color: 'red',
+                variant: 'solid',
+                children: () => 'Red',
+              })}
             </div>
           ),
         })}
 
-        {/* Section 2: Outlined Style */}
+        {/* Section 2: Outline Variant */}
         {sectionView({
-          title: 'Outlined Style',
+          title: 'Outline Variant (variant = "outline")',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
               {Button.view({
-                variant: 'default',
-                isOutlined: true,
-                children: () => 'Default',
+                color: 'white',
+                variant: 'outline',
+                children: () => 'White',
               })}
               {Button.view({
-                variant: 'primary',
-                isOutlined: true,
-                children: () => 'Primary',
+                color: 'green',
+                variant: 'outline',
+                children: () => 'Green',
               })}
               {Button.view({
+                color: 'dark-green',
+                variant: 'outline',
+                children: () => 'Dark Green',
+              })}
+              {Button.view({
+                color: 'sky',
+                variant: 'outline',
+                children: () => 'Sky',
+              })}
+              {Button.view({
+                color: 'amber',
+                variant: 'outline',
+                children: () => 'Amber',
+              })}
+              {Button.view({
+                color: 'red',
+                variant: 'outline',
+                children: () => 'Red',
+              })}
+            </div>
+          ),
+        })}
+
+        {/* Section 3: Link Variant */}
+        {sectionView({
+          title: 'Link Variant (variant = "link")',
+          children: () => (
+            <div className='flex flex-wrap items-center gap-4'>
+              {Button.view({
+                color: 'white',
                 variant: 'link',
-                isOutlined: true,
-                children: () => 'Link',
+                children: () => 'White Link',
               })}
               {Button.view({
-                variant: 'info',
-                isOutlined: true,
-                children: () => 'Info',
+                color: 'green',
+                variant: 'link',
+                children: () => 'Green Link',
               })}
               {Button.view({
-                variant: 'success',
-                isOutlined: true,
-                children: () => 'Success',
+                color: 'dark-green',
+                variant: 'link',
+                children: () => 'Dark Green Link',
               })}
               {Button.view({
-                variant: 'warning',
-                isOutlined: true,
-                children: () => 'Warning',
+                color: 'sky',
+                variant: 'link',
+                children: () => 'Sky Link',
               })}
               {Button.view({
-                variant: 'danger',
-                isOutlined: true,
-                children: () => 'Danger',
+                color: 'amber',
+                variant: 'link',
+                children: () => 'Amber Link',
+              })}
+              {Button.view({
+                color: 'red',
+                variant: 'link',
+                children: () => 'Red Link',
               })}
             </div>
           ),
         })}
 
-        {/* Section 3: Sizes & Shapes */}
+        {/* Section 4: Sizes & Shapes */}
         {sectionView({
           title: 'Sizes & Shapes',
           children: () => (
             <div className='space-y-4'>
               <div className='flex flex-wrap items-center gap-3'>
                 {Button.view({
-                  variant: 'primary',
+                  color: 'green',
+                  size: 'xsmall',
+                  children: () => 'XSmall',
+                })}
+                {Button.view({
+                  color: 'green',
                   size: 'small',
                   children: () => 'Small',
                 })}
                 {Button.view({
-                  variant: 'primary',
+                  color: 'green',
                   size: 'normal',
                   children: () => 'Normal',
                 })}
                 {Button.view({
-                  variant: 'primary',
+                  color: 'green',
                   size: 'medium',
                   children: () => 'Medium',
                 })}
                 {Button.view({
-                  variant: 'primary',
+                  color: 'green',
                   size: 'large',
                   children: () => 'Large',
                 })}
               </div>
               <div className='flex flex-wrap items-center gap-3 pt-2'>
                 {Button.view({
-                  variant: 'primary',
+                  color: 'green',
                   isRounded: true,
                   size: 'small',
                   children: () => 'Rounded Small',
                 })}
                 {Button.view({
-                  variant: 'primary',
+                  color: 'green',
                   isRounded: true,
                   size: 'normal',
                   children: () => 'Rounded Normal',
                 })}
                 {Button.view({
-                  variant: 'primary',
+                  color: 'green',
                   isRounded: true,
                   size: 'medium',
                   children: () => 'Rounded Medium',
                 })}
                 {Button.view({
-                  variant: 'primary',
+                  color: 'green',
                   isRounded: true,
                   size: 'large',
                   children: () => 'Rounded Large',
@@ -205,19 +287,81 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           ),
         })}
 
-        {/* Section 4: States & Width */}
+        {/* Section 5: Buttons with Icons */}
+        {sectionView({
+          title: 'Buttons with Icons',
+          children: () => (
+            <div className='flex flex-wrap items-center gap-3'>
+              {Button.view({
+                color: 'green',
+                size: 'small',
+                children: () => (
+                  <span className='flex items-center gap-1.5'>
+                    <Heart size={14} />
+                    <span>Favorite (12)</span>
+                  </span>
+                ),
+              })}
+              {Button.view({
+                color: 'dark-green',
+                size: 'small',
+                children: () => (
+                  <span className='flex items-center gap-1.5'>
+                    <Plus size={14} />
+                    <span>Follow Author</span>
+                  </span>
+                ),
+              })}
+              {Button.view({
+                color: 'sky',
+                variant: 'outline',
+                size: 'small',
+                children: () => (
+                  <span className='flex items-center gap-1.5'>
+                    <Download size={14} />
+                    <span>Download</span>
+                  </span>
+                ),
+              })}
+              {Button.view({
+                color: 'amber',
+                variant: 'outline',
+                size: 'small',
+                children: () => (
+                  <span className='flex items-center gap-1.5'>
+                    <Send size={14} />
+                    <span>Send Message</span>
+                  </span>
+                ),
+              })}
+              {Button.view({
+                color: 'red',
+                variant: 'outline',
+                size: 'small',
+                children: () => (
+                  <span className='flex items-center gap-1.5'>
+                    <Trash2 size={14} />
+                    <span>Delete</span>
+                  </span>
+                ),
+              })}
+            </div>
+          ),
+        })}
+
+        {/* Section 6: States & Width */}
         {sectionView({
           title: 'States & Width',
           children: () => (
             <div className='w-full space-y-4'>
               <div className='flex flex-wrap items-center gap-3'>
                 {Button.view({
-                  variant: 'success',
+                  color: 'green',
                   isDisabled: true,
                   children: () => 'Disabled Button',
                 })}
                 {Button.view({
-                  variant: 'danger',
+                  color: 'red',
                   isLoading: model.isLoading,
                   onClick: () => dispatch({ _tag: 'ToggleLoading' }),
                   children: () =>
@@ -228,69 +372,11 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
               </div>
               <div className='pt-2'>
                 {Button.view({
-                  variant: 'primary',
+                  color: 'green',
                   isFullWidth: true,
                   children: () => 'Full Width Button',
                 })}
               </div>
-            </div>
-          ),
-        })}
-
-        {/* Section 5: Favorite Action Buttons */}
-        {sectionView({
-          title: 'Favorite Action Buttons (RealWorld Style)',
-          children: () => (
-            <div className='flex flex-wrap items-center gap-4'>
-              {Button.view({
-                variant: 'primary',
-                size: 'small',
-                dataTest: 'fav-button-active',
-                children: () => (
-                  <span className='flex items-center gap-1'>
-                    <Heart size={12} fill='currentColor' />
-                    <span>29</span>
-                  </span>
-                ),
-              })}
-
-              {Button.view({
-                variant: 'primary',
-                isOutlined: true,
-                size: 'small',
-                dataTest: 'fav-button-outlined',
-                children: () => (
-                  <span className='flex items-center gap-1'>
-                    <Heart size={12} fill='none' />
-                    <span>28</span>
-                  </span>
-                ),
-              })}
-
-              {Button.view({
-                variant: 'primary',
-                size: 'small',
-                children: () => (
-                  <span className='flex items-center gap-1.5'>
-                    <Heart size={13} fill='currentColor' />
-                    <span>Unfavorite Article</span>
-                    <span className='font-normal'>(29)</span>
-                  </span>
-                ),
-              })}
-
-              {Button.view({
-                variant: 'primary',
-                isOutlined: true,
-                size: 'small',
-                children: () => (
-                  <span className='flex items-center gap-1.5'>
-                    <Heart size={13} fill='none' />
-                    <span>Favorite Article</span>
-                    <span className='font-normal'>(28)</span>
-                  </span>
-                ),
-              })}
             </div>
           ),
         })}

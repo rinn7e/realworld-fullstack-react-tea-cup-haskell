@@ -105,8 +105,8 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
               Tag.view({
                 key: tag,
                 dataTest: 'article-tag',
-                variant: 'default',
-                isOutline: true,
+                color: 'gray',
+                variant: 'outline',
                 isRounded: true,
                 size: 'small',
                 children: () => tag,

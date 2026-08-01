@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { Image } from '@rinn7e/realworld-design-system'
+import { Image, Tag } from '@rinn7e/realworld-design-system'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
@@ -191,20 +191,22 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                     >
                       <ReactMarkdown>{data.article.body ?? ''}</ReactMarkdown>
                     </div>
-                    <ul
+                    <div
                       className='flex flex-wrap gap-[4px]'
                       data-test='tag-list'
                     >
-                      {data.article.tagList.map((tag) => (
-                        <li
-                          key={tag}
-                          className='rounded-full border border-gray-300 px-[8px] py-[2px] text-xs text-gray-400'
-                          data-test='article-tag'
-                        >
-                          {tag}
-                        </li>
-                      ))}
-                    </ul>
+                      {data.article.tagList.map((tag) =>
+                        Tag.view({
+                          key: tag,
+                          dataTest: 'article-tag',
+                          color: 'gray',
+                          variant: 'outline',
+                          isRounded: true,
+                          size: 'small',
+                          children: () => tag,
+                        }),
+                      )}
+                    </div>
                   </div>
 
                   <hr className='border-gray-200' />

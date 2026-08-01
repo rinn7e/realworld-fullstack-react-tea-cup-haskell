@@ -11,7 +11,9 @@ interface Props {
   dispatch: Dispatcher<Msg>
 }
 export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{Button.view({ variant: 'primary', onClick: () => dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } }), children: 'Open Modal' })}
+  const code = `{Button.view({
+            color: 'green',
+            variant: 'solid', onClick: () => dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } }), children: 'Open Modal' })}
 {Modal.view({
   title: 'Confirm Delete',
   model: model.modalModel,
@@ -57,6 +59,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
             ),
           })}
           {Button.view({
+            color: 'green',
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
@@ -77,7 +80,8 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
             <div className='flex w-full justify-center py-4'>
               <div>
                 {Button.view({
-                  variant: 'primary',
+                  color: 'green',
+                  variant: 'solid',
                   onClick: () =>
                     dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } }),
                   children: () => 'Open Modal',

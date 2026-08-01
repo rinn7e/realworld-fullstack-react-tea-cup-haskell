@@ -1,15 +1,17 @@
 import type React from 'react'
 import type { ReactNode } from 'react'
 
-export type ButtonVariant =
-  'default' | 'primary' | 'link' | 'info' | 'success' | 'warning' | 'danger'
+export type ButtonColor =
+  'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red'
 
-export type ButtonSize = 'small' | 'normal' | 'medium' | 'large'
+export type ButtonVariant = 'solid' | 'outline' | 'link'
+
+export type ButtonSize = 'xsmall' | 'small' | 'normal' | 'medium' | 'large'
 
 export type ButtonProps = {
+  color?: ButtonColor
   variant?: ButtonVariant
   size?: ButtonSize
-  isOutlined?: boolean
   isRounded?: boolean
   isFullWidth?: boolean
   isLoading?: boolean

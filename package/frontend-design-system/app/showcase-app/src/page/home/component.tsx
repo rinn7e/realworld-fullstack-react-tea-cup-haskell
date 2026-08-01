@@ -34,12 +34,13 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
           <div className='space-y-4'>
             <div className='flex items-center gap-2'>
               {Tag.view({
-                variant: 'dark',
+                color: 'gray',
                 size: 'normal',
                 isRounded: true,
                 children: () => '@rinn7e/realworld-design-system',
               })}
               {Tag.view({
+                color: 'gray',
                 variant: 'light',
                 size: 'small',
                 isRounded: true,
@@ -59,7 +60,8 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
             </p>
             <div className='flex items-center gap-4 pt-2'>
               {Button.view({
-                variant: 'default',
+                color: 'white',
+                variant: 'solid',
                 size: 'medium',
                 isRounded: true,
                 onClick: () =>
@@ -166,7 +168,9 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                     {`import { Button, Columns, Column } from '@rinn7e/realworld-design-system'
 
 // Render in your React TEA view function
-{Button.view({ variant: 'primary', children: 'Submit' })}`}
+{Button.view({
+            color: 'green',
+            variant: 'solid', children: 'Submit' })}`}
                   </pre>
                 </div>
               ),

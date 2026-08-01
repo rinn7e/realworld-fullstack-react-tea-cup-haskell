@@ -81,6 +81,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
             ),
           })}
           {Button.view({
+            color: 'green',
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
@@ -134,15 +135,15 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         <td className='p-3 text-gray-600'>Gerard Quan</td>
                         <td className='p-3'>
                           {Tag.view({
-                            variant: 'primary',
+                            color: 'green',
                             children: () => 'react',
                           })}
                         </td>
                         <td className='p-3 font-mono text-gray-700'>1,240</td>
                         <td className='p-3'>
                           {Tag.view({
-                            variant: 'success',
-                            isLight: true,
+                            color: 'green',
+                            variant: 'light',
                             children: () => 'Published',
                           })}
                         </td>
@@ -154,15 +155,15 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         <td className='p-3 text-gray-600'>Anson Cheung</td>
                         <td className='p-3'>
                           {Tag.view({
-                            variant: 'info',
+                            color: 'sky',
                             children: () => 'haskell',
                           })}
                         </td>
                         <td className='p-3 font-mono text-gray-700'>892</td>
                         <td className='p-3'>
                           {Tag.view({
-                            variant: 'success',
-                            isLight: true,
+                            color: 'green',
+                            variant: 'light',
                             children: () => 'Published',
                           })}
                         </td>
@@ -174,15 +175,15 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         <td className='p-3 text-gray-600'>Albert Chen</td>
                         <td className='p-3'>
                           {Tag.view({
-                            variant: 'link',
+                            color: 'dark-green',
                             children: () => 'fp-ts',
                           })}
                         </td>
                         <td className='p-3 font-mono text-gray-700'>415</td>
                         <td className='p-3'>
                           {Tag.view({
-                            variant: 'warning',
-                            isLight: true,
+                            color: 'amber',
+                            variant: 'light',
                             children: () => 'Draft',
                           })}
                         </td>

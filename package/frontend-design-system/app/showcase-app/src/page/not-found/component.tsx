@@ -30,7 +30,8 @@ export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
             </p>
             <div className='pt-2'>
               {Button.view({
-                variant: 'primary',
+                color: 'green',
+                variant: 'solid',
                 onClick: () => navigateRoute({ page: { _tag: 'HomePage' } }),
                 children: () => 'Return to Home Overview',
               })}

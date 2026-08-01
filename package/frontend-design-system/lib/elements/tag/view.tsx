@@ -2,62 +2,92 @@ import React from 'react'
 
 import { cn } from '../../theme'
 import { view as DeleteView } from '../delete/view'
-import type { TagProps } from './type'
+import type { TagColor, TagProps, TagVariant } from './type'
 
-const variantStyles: Record<
-  string,
-  { solid: string; light: string; outline: string }
-> = {
-  default: {
+type TagColorStyle = {
+  solid: string
+  solidHover: string
+  light: string
+  lightHover: string
+  outline: string
+  outlineHover: string
+}
+
+const colorStyles: Record<TagColor, TagColorStyle> = {
+  gray: {
     solid: 'bg-gray-400 text-white',
-    light: 'bg-gray-100 text-gray-700',
+    solidHover: 'hover:bg-gray-500',
+    light: 'bg-gray-200 text-gray-700',
+    lightHover: 'hover:bg-gray-300 hover:text-gray-800',
     outline: 'border border-gray-300 bg-transparent text-gray-400',
+    outlineHover: 'hover:border-gray-400 hover:text-gray-600',
   },
-  primary: {
+  green: {
     solid: 'bg-green-600 text-white',
+    solidHover: 'hover:bg-green-700',
     light: 'bg-green-50 text-green-700',
+    lightHover: 'hover:bg-green-100 hover:text-green-800',
     outline: 'border border-green-600 bg-transparent text-green-600',
+    outlineHover: 'hover:border-green-700 hover:text-green-700',
   },
-  link: {
+  'dark-green': {
     solid: 'bg-green-700 text-white',
+    solidHover: 'hover:bg-green-800',
     light: 'bg-green-50 text-green-800',
+    lightHover: 'hover:bg-green-100 hover:text-green-900',
     outline: 'border border-green-700 bg-transparent text-green-700',
+    outlineHover: 'hover:border-green-800 hover:text-green-800',
   },
-  info: {
+  sky: {
     solid: 'bg-sky-500 text-white',
+    solidHover: 'hover:bg-sky-600',
     light: 'bg-sky-50 text-sky-700',
+    lightHover: 'hover:bg-sky-100 hover:text-sky-800',
     outline: 'border border-sky-500 bg-transparent text-sky-600',
+    outlineHover: 'hover:border-sky-600 hover:text-sky-700',
   },
-  success: {
-    solid: 'bg-green-600 text-white',
-    light: 'bg-green-50 text-green-700',
-    outline: 'border border-green-600 bg-transparent text-green-600',
-  },
-  warning: {
+  amber: {
     solid: 'bg-amber-400 text-gray-900',
+    solidHover: 'hover:bg-amber-500',
     light: 'bg-amber-50 text-amber-800',
+    lightHover: 'hover:bg-amber-100 hover:text-amber-900',
     outline: 'border border-amber-400 bg-transparent text-amber-700',
+    outlineHover: 'hover:border-amber-500 hover:text-amber-800',
   },
-  danger: {
+  red: {
     solid: 'bg-red-600 text-white',
+    solidHover: 'hover:bg-red-700',
     light: 'bg-red-50 text-red-700',
+    lightHover: 'hover:bg-red-100 hover:text-red-800',
     outline: 'border border-red-600 bg-transparent text-red-600',
+    outlineHover: 'hover:border-red-700 hover:text-red-700',
   },
 }
 
 const sizeStyles: Record<string, string> = {
-  small: 'px-2 py-0.5 text-[11px]',
-  normal: 'px-2.5 py-0.5 text-xs font-semibold',
-  medium: 'px-3 py-1 text-sm font-semibold',
-  large: 'px-3.5 py-1.5 text-base font-semibold',
+  small: 'px-2 py-0.5 text-[11px] leading-none',
+  normal: 'px-2.5 py-0.5 text-xs',
+  medium: 'px-3 py-1 text-sm',
+  large: 'px-3.5 py-1.5 text-base',
+}
+
+const getStyleClass = (c: TagColorStyle, variant: TagVariant): string => {
+  if (variant === 'outline') return c.outline
+  if (variant === 'light') return c.light
+  return c.solid
+}
+
+const getHoverClass = (c: TagColorStyle, variant: TagVariant): string => {
+  if (variant === 'outline') return c.outlineHover
+  if (variant === 'light') return c.lightHover
+  return c.solidHover
 }
 
 export const view = ({
-  variant = 'default',
+  color = 'gray',
+  variant = 'solid',
   size = 'normal',
   isRounded = true,
-  isLight = false,
-  isOutline = false,
   children,
   onDelete,
   onClick,
@@ -65,8 +95,9 @@ export const view = ({
   dataTest,
   className,
 }: TagProps): React.ReactElement => {
-  const v = variantStyles[variant] || variantStyles.default
-  const styleClass = isOutline ? v.outline : isLight ? v.light : v.solid
+  const c = colorStyles[color] ?? colorStyles.gray
+  const styleClass = getStyleClass(c, variant)
+  const hoverClass = onClick ? getHoverClass(c, variant) : ''
 
   return (
     <span
@@ -75,9 +106,10 @@ export const view = ({
       data-test={dataTest}
       onClick={onClick}
       className={cn(
-        'inline-flex items-center gap-1.5 align-middle transition-all',
+        'inline-flex items-center gap-1.5 align-middle transition-all select-none',
         onClick && 'cursor-pointer',
         styleClass,
+        hoverClass,
         sizeStyles[size],
         isRounded ? 'rounded-full' : 'rounded',
         className,

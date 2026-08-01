@@ -2,54 +2,55 @@ import { Loader2 } from 'lucide-react'
 import React from 'react'
 
 import { cn } from '../../theme'
-import type { ButtonProps } from './type'
+import type { ButtonColor, ButtonProps, ButtonVariant } from './type'
 
-const variantStyles: Record<string, { filled: string; outlined: string }> = {
-  default: {
-    filled:
+const colorStyles: Record<ButtonColor, Record<ButtonVariant, string>> = {
+  white: {
+    solid:
       'bg-white text-gray-800 border-gray-300 hover:bg-gray-50 focus:ring-gray-300',
-    outlined:
-      'border-gray-400 text-gray-700 hover:bg-gray-100 focus:ring-gray-300',
+    outline:
+      'bg-transparent border-gray-400 text-gray-700 hover:border-gray-600 hover:text-gray-900 hover:bg-transparent focus:ring-gray-300',
+    link: 'bg-transparent text-gray-800 border-transparent hover:underline hover:text-gray-900 focus:ring-gray-300 shadow-none',
   },
-  primary: {
-    filled:
+  green: {
+    solid:
       'bg-green-600 text-white border-transparent hover:bg-green-700 focus:ring-green-500',
-    outlined:
-      'border-green-600 text-green-600 hover:bg-green-600 hover:text-white focus:ring-green-500',
+    outline:
+      'bg-transparent border-green-600 text-green-600 hover:border-green-700 hover:text-green-700 hover:bg-transparent focus:ring-green-500',
+    link: 'bg-transparent text-green-600 border-transparent hover:underline hover:text-green-700 focus:ring-green-500 shadow-none',
   },
-  link: {
-    filled:
-      'bg-transparent text-green-600 border-transparent hover:underline hover:text-green-700 focus:ring-green-500 shadow-none',
-    outlined:
-      'border-green-600 text-green-600 hover:bg-green-50 focus:ring-green-500',
+  'dark-green': {
+    solid:
+      'bg-green-800 text-white border-transparent hover:bg-green-900 focus:ring-green-700',
+    outline:
+      'bg-transparent border-green-800 text-green-800 hover:border-green-900 hover:text-green-900 hover:bg-transparent focus:ring-green-700',
+    link: 'bg-transparent text-green-800 border-transparent hover:underline hover:text-green-900 focus:ring-green-700 shadow-none',
   },
-  info: {
-    filled:
+  sky: {
+    solid:
       'bg-sky-500 text-white border-transparent hover:bg-sky-600 focus:ring-sky-400',
-    outlined:
-      'border-sky-500 text-sky-500 hover:bg-sky-500 hover:text-white focus:ring-sky-400',
+    outline:
+      'bg-transparent border-sky-500 text-sky-500 hover:border-sky-600 hover:text-sky-600 hover:bg-transparent focus:ring-sky-400',
+    link: 'bg-transparent text-sky-500 border-transparent hover:underline hover:text-sky-600 focus:ring-sky-400 shadow-none',
   },
-  success: {
-    filled:
-      'bg-green-600 text-white border-transparent hover:bg-green-700 focus:ring-green-500',
-    outlined:
-      'border-green-600 text-green-600 hover:bg-green-600 hover:text-white focus:ring-green-500',
-  },
-  warning: {
-    filled:
+  amber: {
+    solid:
       'bg-amber-500 text-white border-transparent hover:bg-amber-600 focus:ring-amber-400',
-    outlined:
-      'border-amber-500 text-amber-600 hover:bg-amber-500 hover:text-white focus:ring-amber-400',
+    outline:
+      'bg-transparent border-amber-500 text-amber-600 hover:border-amber-600 hover:text-amber-700 hover:bg-transparent focus:ring-amber-400',
+    link: 'bg-transparent text-amber-500 border-transparent hover:underline hover:text-amber-600 focus:ring-amber-400 shadow-none',
   },
-  danger: {
-    filled:
+  red: {
+    solid:
       'bg-red-600 text-white border-transparent hover:bg-red-700 focus:ring-red-500',
-    outlined:
-      'border-red-600 text-red-600 hover:bg-red-600 hover:text-white focus:ring-red-500',
+    outline:
+      'bg-transparent border-red-600 text-red-600 hover:border-red-700 hover:text-red-700 hover:bg-transparent focus:ring-red-500',
+    link: 'bg-transparent text-red-600 border-transparent hover:underline hover:text-red-700 focus:ring-red-500 shadow-none',
   },
 }
 
 const sizeStyles: Record<string, string> = {
+  xsmall: 'px-2 py-1 text-xs font-medium',
   small: 'px-3 py-1.5 text-xs font-medium',
   normal: 'px-4 py-2 text-sm font-medium',
   medium: 'px-5 py-2.5 text-base font-medium',
@@ -57,9 +58,9 @@ const sizeStyles: Record<string, string> = {
 }
 
 export const view = ({
-  variant = 'default',
+  color = 'green',
+  variant = 'solid',
   size = 'normal',
-  isOutlined = false,
   isRounded = false,
   isFullWidth = false,
   isLoading = false,
@@ -71,8 +72,8 @@ export const view = ({
   key,
   dataTest,
 }: ButtonProps): React.ReactElement => {
-  const styles = variantStyles[variant] || variantStyles.default
-  const colorClass = isOutlined ? styles.outlined : styles.filled
+  const styles = colorStyles[color] || colorStyles.green
+  const colorClass = styles[variant] || styles.solid
 
   return (
     <button

@@ -11,29 +11,27 @@ interface Props {
   dispatch: Dispatcher<Msg>
 }
 export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `// Solid Variants
-{Tag.view({ variant: 'default', children: 'default' })}
-{Tag.view({ variant: 'primary', children: 'conduit' })}
-{Tag.view({ variant: 'link', children: 'react' })}
-{Tag.view({ variant: 'info', children: 'haskell' })}
-{Tag.view({ variant: 'success', children: 'elm' })}
-{Tag.view({ variant: 'warning', children: 'fp-ts' })}
-{Tag.view({ variant: 'danger', children: 'tea-cup' })}
+  const code = `// Solid Colors
+{Tag.view({ color: 'gray', children: () => 'gray' })}
+{Tag.view({ color: 'green', children: () => 'green' })}
+{Tag.view({ color: 'sky', children: () => 'sky' })}
+{Tag.view({ color: 'amber', children: () => 'amber' })}
+{Tag.view({ color: 'red', children: () => 'red' })}
 
 // Light Variants
-{Tag.view({ variant: 'primary', isLight: true, children: 'conduit' })}
-{Tag.view({ variant: 'link', isLight: true, children: 'react' })}
-{Tag.view({ variant: 'info', isLight: true, children: 'haskell' })}
+{Tag.view({ color: 'gray', variant: 'light', children: () => 'gray' })}
+{Tag.view({ color: 'green', variant: 'light', children: () => 'green' })}
 
-// Sizes & Shapes
-{Tag.view({ size: 'small', children: 'Small Tag' })}
-{Tag.view({ size: 'normal', children: 'Normal Tag' })}
-{Tag.view({ size: 'medium', children: 'Medium Tag' })}
-{Tag.view({ size: 'large', children: 'Large Tag' })}
-{Tag.view({ isRounded: true, children: 'Rounded Tag' })}
+// Outline Variants
+{Tag.view({ color: 'gray', variant: 'outline', children: () => 'gray' })}
+{Tag.view({ color: 'green', variant: 'outline', children: () => 'green' })}
 
-// Deletable Tags
-{Tag.view({ variant: 'primary', onDelete: () => alert('deleted'), children: 'Deletable Tag' })}`
+// Clickable (hover state)
+{Tag.view({ color: 'green', variant: 'light', onClick: () => ..., children: () => 'click me' })}
+
+// Deletable
+{Tag.view({ color: 'green', onDelete: () => ..., children: () => 'conduit' })}`
+
   return (
     <div data-component='TagPage' className='w-full space-y-8 text-left'>
       {Hero.view({
@@ -73,6 +71,7 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
             ),
           })}
           {Button.view({
+            color: 'green',
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
@@ -87,61 +86,55 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {/* Section 1: Solid Color Variants */}
+        {/* Section 1: Solid Colors */}
         {sectionView({
           title: 'Solid Colors',
           children: () => (
             <div className='flex flex-wrap items-center gap-2.5'>
-              {Tag.view({ variant: 'default', children: () => 'default' })}
-              {Tag.view({ variant: 'primary', children: () => 'conduit' })}
-              {Tag.view({ variant: 'link', children: () => 'react' })}
-              {Tag.view({ variant: 'info', children: () => 'haskell' })}
-              {Tag.view({ variant: 'success', children: () => 'elm' })}
-              {Tag.view({ variant: 'warning', children: () => 'fp-ts' })}
-              {Tag.view({ variant: 'danger', children: () => 'tea-cup' })}
+              {Tag.view({ color: 'gray', children: () => 'gray' })}
+              {Tag.view({ color: 'green', children: () => 'green' })}
+              {Tag.view({ color: 'dark-green', children: () => 'dark-green' })}
+              {Tag.view({ color: 'sky', children: () => 'sky' })}
+              {Tag.view({ color: 'amber', children: () => 'amber' })}
+              {Tag.view({ color: 'red', children: () => 'red' })}
             </div>
           ),
         })}
 
-        {/* Section 2: Light Color Variants */}
+        {/* Section 2: Light Variants */}
         {sectionView({
           title: 'Light Variants',
           children: () => (
             <div className='flex flex-wrap items-center gap-2.5'>
               {Tag.view({
-                variant: 'default',
-                isLight: true,
-                children: () => 'default',
+                color: 'gray',
+                variant: 'light',
+                children: () => 'gray',
               })}
               {Tag.view({
-                variant: 'primary',
-                isLight: true,
-                children: () => 'conduit',
+                color: 'green',
+                variant: 'light',
+                children: () => 'green',
               })}
               {Tag.view({
-                variant: 'link',
-                isLight: true,
-                children: () => 'react',
+                color: 'dark-green',
+                variant: 'light',
+                children: () => 'dark-green',
               })}
               {Tag.view({
-                variant: 'info',
-                isLight: true,
-                children: () => 'haskell',
+                color: 'sky',
+                variant: 'light',
+                children: () => 'sky',
               })}
               {Tag.view({
-                variant: 'success',
-                isLight: true,
-                children: () => 'elm',
+                color: 'amber',
+                variant: 'light',
+                children: () => 'amber',
               })}
               {Tag.view({
-                variant: 'warning',
-                isLight: true,
-                children: () => 'fp-ts',
-              })}
-              {Tag.view({
-                variant: 'danger',
-                isLight: true,
-                children: () => 'tea-cup',
+                color: 'red',
+                variant: 'light',
+                children: () => 'red',
               })}
             </div>
           ),
@@ -153,92 +146,87 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='flex flex-wrap items-center gap-2.5'>
               {Tag.view({
-                variant: 'default',
-                isOutline: true,
-                children: () => 'default',
+                color: 'gray',
+                variant: 'outline',
+                children: () => 'gray',
               })}
               {Tag.view({
-                variant: 'primary',
-                isOutline: true,
-                children: () => 'conduit',
+                color: 'green',
+                variant: 'outline',
+                children: () => 'green',
               })}
               {Tag.view({
-                variant: 'link',
-                isOutline: true,
-                children: () => 'react',
+                color: 'dark-green',
+                variant: 'outline',
+                children: () => 'dark-green',
               })}
               {Tag.view({
-                variant: 'info',
-                isOutline: true,
-                children: () => 'haskell',
+                color: 'sky',
+                variant: 'outline',
+                children: () => 'sky',
               })}
               {Tag.view({
-                variant: 'success',
-                isOutline: true,
-                children: () => 'elm',
+                color: 'amber',
+                variant: 'outline',
+                children: () => 'amber',
               })}
               {Tag.view({
-                variant: 'warning',
-                isOutline: true,
-                children: () => 'fp-ts',
-              })}
-              {Tag.view({
-                variant: 'danger',
-                isOutline: true,
-                children: () => 'tea-cup',
+                color: 'red',
+                variant: 'outline',
+                children: () => 'red',
               })}
             </div>
           ),
         })}
 
-        {/* Section 3: Sizes & Shapes */}
+        {/* Section 4: Sizes & Shapes */}
         {sectionView({
           title: 'Sizes & Shapes',
           children: () => (
             <div className='space-y-4'>
               <div className='flex flex-wrap items-center gap-2.5'>
                 {Tag.view({
-                  variant: 'primary',
+                  color: 'green',
                   size: 'small',
                   children: () => 'Small Tag',
                 })}
                 {Tag.view({
-                  variant: 'primary',
+                  color: 'green',
                   size: 'normal',
                   children: () => 'Normal Tag',
                 })}
                 {Tag.view({
-                  variant: 'primary',
+                  color: 'green',
                   size: 'medium',
                   children: () => 'Medium Tag',
                 })}
                 {Tag.view({
-                  variant: 'primary',
+                  color: 'green',
                   size: 'large',
                   children: () => 'Large Tag',
                 })}
               </div>
               <div className='flex flex-wrap items-center gap-2.5 pt-2'>
                 {Tag.view({
-                  variant: 'info',
+                  color: 'sky',
                   isRounded: true,
                   size: 'small',
                   children: () => 'Rounded Small',
                 })}
                 {Tag.view({
-                  variant: 'info',
+                  color: 'sky',
                   isRounded: true,
                   size: 'normal',
                   children: () => 'Rounded Normal',
                 })}
                 {Tag.view({
-                  variant: 'info',
+                  color: 'sky',
                   isRounded: true,
                   size: 'medium',
                   children: () => 'Rounded Medium',
                 })}
                 {Tag.view({
-                  variant: 'info',
+                  color: 'sky',
                   isRounded: true,
                   size: 'large',
                   children: () => 'Rounded Large',
@@ -248,32 +236,84 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           ),
         })}
 
-        {/* Section 4: Deletable Chips */}
+        {/* Section 5: Deletable Chips */}
         {sectionView({
           title: 'Deletable Chips',
           children: () => (
             <div className='flex flex-wrap items-center gap-2.5'>
               {Tag.view({
-                variant: 'primary',
+                color: 'green',
                 onDelete: () => alert('Deleted conduit tag!'),
                 children: () => 'conduit',
               })}
               {Tag.view({
-                variant: 'link',
+                color: 'dark-green',
                 onDelete: () => alert('Deleted react tag!'),
                 children: () => 'react',
               })}
               {Tag.view({
-                variant: 'info',
-                isLight: true,
+                color: 'sky',
+                variant: 'light',
                 onDelete: () => alert('Deleted haskell tag!'),
                 children: () => 'haskell',
               })}
               {Tag.view({
-                variant: 'danger',
+                color: 'red',
                 onDelete: () => alert('Deleted tea-cup tag!'),
                 children: () => 'tea-cup',
               })}
+            </div>
+          ),
+        })}
+
+        {/* Section 6: Clickable Tags (with Hover States) */}
+        {sectionView({
+          title: 'Clickable Tags (Hover State)',
+          children: () => (
+            <div className='space-y-3'>
+              <p className='text-xs text-gray-500'>
+                Hover states are only applied when a tag has an{' '}
+                <code className='rounded bg-gray-100 px-1 py-0.5 font-mono'>
+                  onClick
+                </code>{' '}
+                handler. Try hovering!
+              </p>
+              <div className='flex flex-wrap items-center gap-2.5'>
+                {Tag.view({
+                  color: 'gray',
+                  variant: 'light',
+                  onClick: () => alert('clicked gray'),
+                  children: () => 'gray',
+                })}
+                {Tag.view({
+                  color: 'green',
+                  onClick: () => alert('clicked green'),
+                  children: () => 'green',
+                })}
+                {Tag.view({
+                  color: 'dark-green',
+                  variant: 'light',
+                  onClick: () => alert('clicked dark-green'),
+                  children: () => 'dark-green',
+                })}
+                {Tag.view({
+                  color: 'sky',
+                  onClick: () => alert('clicked sky'),
+                  children: () => 'sky',
+                })}
+                {Tag.view({
+                  color: 'amber',
+                  variant: 'light',
+                  onClick: () => alert('clicked amber'),
+                  children: () => 'amber',
+                })}
+                {Tag.view({
+                  color: 'red',
+                  variant: 'outline',
+                  onClick: () => alert('clicked red'),
+                  children: () => 'red',
+                })}
+              </div>
             </div>
           ),
         })}
