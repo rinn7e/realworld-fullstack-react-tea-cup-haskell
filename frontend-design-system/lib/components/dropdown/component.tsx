@@ -13,7 +13,7 @@ export const view = ({
   const selectedItem = items.find((i) => i.id === model.selectedId)
 
   return (
-    <div className={cn('relative inline-block text-left', className)}>
+    <div data-component='Dropdown' className={cn('relative inline-block text-left', className)}>
       <button
         type='button'
         onClick={() => dispatch({ _tag: 'Toggle' })}

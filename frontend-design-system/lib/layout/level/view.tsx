@@ -5,6 +5,7 @@ import type { LevelItemProps, LevelProps } from './type'
 export const view = ({ children, className }: LevelProps): React.ReactElement => {
   return (
     <div
+      data-component='Level'
       className={cn(
         'flex flex-col items-center justify-between gap-4 sm:flex-row',
         className,

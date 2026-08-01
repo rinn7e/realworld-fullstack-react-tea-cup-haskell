@@ -12,6 +12,7 @@ export const view = ({
 }: TabsProps): React.ReactElement => {
   return (
     <div
+      data-component='Tabs'
       className={cn(
         'border-b border-gray-200 text-sm font-medium text-gray-500',
         className,

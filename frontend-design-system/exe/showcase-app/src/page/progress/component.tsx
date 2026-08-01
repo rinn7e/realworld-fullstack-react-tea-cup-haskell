@@ -37,7 +37,7 @@ export const ProgressPage: React.FC<Props> = ({ model, dispatch }) => {
 {Progress.view({ isIndeterminate: true, variant: 'primary' })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='ProgressPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

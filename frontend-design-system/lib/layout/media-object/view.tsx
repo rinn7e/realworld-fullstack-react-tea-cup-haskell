@@ -9,7 +9,7 @@ export const view = ({
   className,
 }: MediaObjectProps): React.ReactElement => {
   return (
-    <article className={cn('flex items-start gap-4 text-sm', className)}>
+    <article data-component='MediaObject' className={cn('flex items-start gap-4 text-sm', className)}>
       {left && <div className='shrink-0'>{left}</div>}
       <div className='flex-1 min-w-0'>{children}</div>
       {right && <div className='shrink-0'>{right}</div>}

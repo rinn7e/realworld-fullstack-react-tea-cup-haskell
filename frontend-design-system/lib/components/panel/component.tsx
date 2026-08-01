@@ -12,6 +12,7 @@ export const view = ({
 }: PanelProps): React.ReactElement => {
   return (
     <nav
+      data-component='Panel'
       className={cn(
         'overflow-hidden rounded-xl border border-gray-200 bg-white text-sm shadow-xs',
         className,

@@ -29,7 +29,7 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
 {Textarea.view({ isDisabled: true, value: 'Read-only content body', rows: 3 })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='TextareaPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

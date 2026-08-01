@@ -9,7 +9,7 @@ export const view = ({
   className,
 }: MenuProps): React.ReactElement => {
   return (
-    <aside className={cn('w-full text-sm', className)}>
+    <aside data-component='Menu' className={cn('w-full text-sm', className)}>
       {categories.map((cat, idx) => (
         <div key={idx} className='mb-4 last:mb-0'>
           <p className='mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-gray-500'>

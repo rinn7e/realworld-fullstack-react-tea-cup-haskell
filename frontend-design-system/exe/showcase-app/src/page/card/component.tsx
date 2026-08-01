@@ -32,7 +32,7 @@ export const CardPage: React.FC<Props> = ({ model, dispatch }) => {
 })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='CardPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

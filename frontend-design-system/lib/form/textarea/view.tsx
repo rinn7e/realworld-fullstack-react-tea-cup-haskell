@@ -17,6 +17,7 @@ export const view = ({
 }: TextareaProps): React.ReactElement => {
   return (
     <textarea
+      data-component='Textarea'
       name={name}
       id={id}
       value={value}

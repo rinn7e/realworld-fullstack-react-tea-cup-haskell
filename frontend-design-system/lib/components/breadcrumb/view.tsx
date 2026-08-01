@@ -16,7 +16,7 @@ export const view = ({
   className,
 }: BreadcrumbProps): React.ReactElement => {
   return (
-    <nav aria-label='breadcrumbs' className={className}>
+    <nav data-component='Breadcrumb' aria-label='breadcrumbs' className={className}>
       <ol
         className={cn(
           'flex items-center gap-1 text-sm text-gray-500',

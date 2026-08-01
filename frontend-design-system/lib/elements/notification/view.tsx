@@ -21,6 +21,7 @@ export const view = ({
 }: NotificationProps): React.ReactElement => {
   return (
     <div
+      data-component='Notification'
       className={cn(
         'relative flex items-center justify-between rounded-xl border p-4 text-sm shadow-xs transition-all',
         variantStyles[variant] || variantStyles.default,

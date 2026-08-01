@@ -13,7 +13,7 @@ export const sectionView = ({
   boxClassName = 'p-6 w-full space-y-4 bg-white border-2 border-dotted border-gray-300 rounded-lg',
 }: SectionViewOptions): React.ReactElement => {
   return (
-    <div className='space-y-3 text-left w-full'>
+    <div data-component='SectionView' className='space-y-3 text-left w-full'>
       <h3 className='text-sm font-semibold text-gray-700 uppercase tracking-wider'>
         {title}
       </h3>

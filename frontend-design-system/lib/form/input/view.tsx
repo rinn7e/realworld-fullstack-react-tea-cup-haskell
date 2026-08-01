@@ -27,6 +27,7 @@ export const view = ({
 }: InputProps): React.ReactElement => {
   return (
     <input
+      data-component='Input'
       type={type}
       name={name}
       id={id}

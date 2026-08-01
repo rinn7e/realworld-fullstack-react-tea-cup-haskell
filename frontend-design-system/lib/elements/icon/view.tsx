@@ -16,6 +16,7 @@ export const view = ({
 }: IconProps): React.ReactElement => {
   return (
     <span
+      data-component='Icon'
       className={cn(
         'inline-flex items-center justify-center text-gray-600',
         sizeStyles[size],

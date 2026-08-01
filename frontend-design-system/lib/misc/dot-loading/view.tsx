@@ -6,7 +6,7 @@ export interface DotLoadingProps {
 
 export const view: React.FC<DotLoadingProps> = ({ className = '' }) => {
   return (
-    <span className={`inline-flex gap-[2px] ${className}`}>
+    <span data-component='DotLoading' className={`inline-flex gap-[2px] ${className}`}>
       <span className='animate-pulse'>.</span>
       <span className='animate-pulse delay-200'>.</span>
       <span className='animate-pulse delay-400'>.</span>

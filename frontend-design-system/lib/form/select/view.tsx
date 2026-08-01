@@ -13,6 +13,7 @@ export const view = ({
 }: SelectProps): React.ReactElement => {
   return (
     <select
+      data-component='Select'
       name={name}
       value={value}
       disabled={isDisabled}

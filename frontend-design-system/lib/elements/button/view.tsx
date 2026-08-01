@@ -73,6 +73,7 @@ export const view = ({
 
   return (
     <button
+      data-component='Button'
       type={type}
       disabled={isDisabled || isLoading}
       onClick={onClick}

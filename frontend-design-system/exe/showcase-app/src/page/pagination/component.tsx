@@ -22,7 +22,7 @@ export const PaginationPage: React.FC<Props> = ({ model, dispatch }) => {
 })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='PaginationPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

@@ -23,7 +23,7 @@ export const TitlePage: React.FC<Props> = ({ model, dispatch }) => {
 {Title.view({ size: 6, children: 'Title Size 6 (sm)' })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='TitlePage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

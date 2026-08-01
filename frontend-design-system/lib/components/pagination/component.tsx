@@ -15,6 +15,7 @@ export const view = ({
 
   return (
     <nav
+      data-component='Pagination'
       aria-label='Pagination'
       className={cn('flex items-center gap-1 text-sm', className)}
     >

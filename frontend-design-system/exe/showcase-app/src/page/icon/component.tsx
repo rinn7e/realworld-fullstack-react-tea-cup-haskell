@@ -20,7 +20,7 @@ export const IconPage: React.FC<Props> = ({ model, dispatch }) => {
 {Icon.view({ children: <Search className='h-6 w-6 text-sky-500' /> })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='IconPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

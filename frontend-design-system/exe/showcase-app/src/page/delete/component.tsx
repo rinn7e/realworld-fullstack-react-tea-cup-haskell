@@ -23,7 +23,7 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
 {Delete.view({ size: 'large', onClick: () => alert('Deleted!') })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='DeletePage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

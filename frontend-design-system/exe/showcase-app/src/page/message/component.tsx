@@ -31,7 +31,7 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
 {Message.view({ variant: 'primary', header: 'Dismissible', onDelete: () => {}, children: 'Click X to dismiss.' })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='MessagePage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

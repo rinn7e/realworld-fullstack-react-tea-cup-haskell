@@ -34,6 +34,7 @@ export const view = ({
 
   return (
     <span
+      data-component='Tag'
       className={cn(
         'inline-flex items-center gap-1.5 align-middle transition-all',
         styleClass,

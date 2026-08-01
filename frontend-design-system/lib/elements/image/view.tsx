@@ -18,7 +18,7 @@ export const view = ({
 }: ImageProps): React.ReactElement => {
   const imageAlt = alt || ''
   return (
-    <figure className={cn('overflow-hidden rounded-lg', className)}>
+    <figure data-component='Image' className={cn('overflow-hidden rounded-lg', className)}>
       <img
         src={src ?? undefined}
         alt={imageAlt}

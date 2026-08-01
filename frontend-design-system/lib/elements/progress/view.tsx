@@ -30,6 +30,7 @@ export const view = ({
 
   return (
     <div
+      data-component='Progress'
       className={cn(
         'w-full overflow-hidden rounded-full bg-gray-200',
         sizeStyles[size],

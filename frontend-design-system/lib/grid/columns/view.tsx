@@ -9,6 +9,7 @@ export const view = ({
 }: ColumnsProps): React.ReactElement => {
   return (
     <div
+      data-component='Columns'
       className={cn(
         'flex flex-col md:flex-row gap-4',
         isMultiline && 'flex-wrap',

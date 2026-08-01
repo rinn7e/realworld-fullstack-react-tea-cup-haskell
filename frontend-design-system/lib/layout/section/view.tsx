@@ -14,7 +14,7 @@ export const view = ({
   className,
 }: SectionProps): React.ReactElement => {
   return (
-    <section className={cn('w-full', sizeStyles[size], className)}>
+    <section data-component='Section' className={cn('w-full', sizeStyles[size], className)}>
       {children}
     </section>
   )

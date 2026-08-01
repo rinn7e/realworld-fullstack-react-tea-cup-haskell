@@ -24,7 +24,7 @@ interface Props {
 
 export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
   return (
-    <div className='w-full space-y-8'>
+    <div data-component='HomePage' className='w-full space-y-8'>
       {/* Hero Banner Intro */}
       {Hero.view({
         variant: 'primary',

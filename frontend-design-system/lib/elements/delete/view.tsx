@@ -17,6 +17,7 @@ export const view = ({
 }: DeleteProps): React.ReactElement => {
   return (
     <button
+      data-component='Delete'
       type='button'
       onClick={onClick}
       aria-label='delete'

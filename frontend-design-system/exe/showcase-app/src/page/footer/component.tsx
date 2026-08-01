@@ -19,7 +19,7 @@ export const FooterPage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `{Footer.view({})}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='FooterPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

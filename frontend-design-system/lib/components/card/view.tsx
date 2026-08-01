@@ -11,6 +11,7 @@ export const view = ({
 }: CardProps): React.ReactElement => {
   return (
     <div
+      data-component='Card'
       className={cn(
         'overflow-hidden rounded-xl border border-gray-200 bg-white text-gray-800 shadow-xs transition-all hover:shadow-md',
         className,

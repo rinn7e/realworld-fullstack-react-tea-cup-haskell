@@ -11,7 +11,7 @@ export const view = ({
   className,
 }: TableProps): React.ReactElement => {
   return (
-    <div className='w-full overflow-x-auto rounded-lg border border-gray-200 shadow-2xs'>
+    <div data-component='Table' className='w-full overflow-x-auto rounded-lg border border-gray-200 shadow-2xs'>
       <table
         className={cn(
           'w-full text-left text-sm text-gray-700',

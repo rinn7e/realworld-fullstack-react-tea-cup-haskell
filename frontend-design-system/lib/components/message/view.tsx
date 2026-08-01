@@ -41,6 +41,7 @@ export const view = ({
 
   return (
     <article
+      data-component='Message'
       className={cn(
         'overflow-hidden rounded-lg border text-sm',
         v.body,

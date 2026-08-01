@@ -39,7 +39,7 @@ export const InputPage: React.FC<Props> = ({ model, dispatch }) => {
 {Input.view({ type: 'email', placeholder: 'email@example.com' })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='InputPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

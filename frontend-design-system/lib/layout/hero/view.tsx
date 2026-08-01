@@ -31,6 +31,7 @@ export const view = ({
 }: HeroProps): React.ReactElement => {
   return (
     <section
+      data-component='Hero'
       className={cn(
         'relative overflow-hidden transition-all',
         variantStyles[variant] || variantStyles.default,

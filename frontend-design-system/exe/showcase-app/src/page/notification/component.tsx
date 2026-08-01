@@ -29,7 +29,7 @@ export const NotificationPage: React.FC<Props> = ({ model, dispatch }) => {
 {Notification.view({ variant: 'primary', onDelete: () => {}, children: 'Dismissible notification' })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='NotificationPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

@@ -434,7 +434,7 @@ export const view = (
   }
 
   return (
-    <div className='flex min-h-screen flex-col bg-white font-sans text-gray-900'>
+    <div data-component='ShowcaseApp' className='flex min-h-screen flex-col bg-white font-sans text-gray-900'>
       {/* Top Navbar Header */}
       {Navbar.view({
         brand: (

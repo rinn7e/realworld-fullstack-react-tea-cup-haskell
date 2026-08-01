@@ -41,7 +41,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
 {Button.view({ isFullWidth: true, children: 'Full Width Button' })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='ButtonPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

@@ -28,7 +28,7 @@ export const CheckboxPage: React.FC<Props> = ({ model, dispatch }) => {
 {Checkbox.view({ label: 'Disabled unchecked box', checked: false, isDisabled: true })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='CheckboxPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

@@ -16,6 +16,7 @@ export const view = ({
 }: ContentProps): React.ReactElement => {
   return (
     <div
+      data-component='Content'
       className={cn(
         'prose max-w-none text-gray-700 space-y-4',
         sizeStyles[size],

@@ -15,6 +15,7 @@ export const view = ({
 }: FileProps): React.ReactElement => {
   return (
     <label
+      data-component='File'
       className={cn(
         'inline-flex items-center rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-xs transition-colors hover:bg-gray-50 focus-within:ring-2 focus-within:ring-emerald-500/20',
         isDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',

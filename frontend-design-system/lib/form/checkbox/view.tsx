@@ -13,6 +13,7 @@ export const view = ({
 }: CheckboxProps): React.ReactElement => {
   return (
     <label
+      data-component='Checkbox'
       className={cn(
         'inline-flex select-none items-center gap-2 text-sm font-medium text-gray-700',
         isDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',

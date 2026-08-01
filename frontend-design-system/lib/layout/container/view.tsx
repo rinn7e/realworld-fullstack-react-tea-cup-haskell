@@ -9,6 +9,7 @@ export const view = ({
 }: ContainerProps): React.ReactElement => {
   return (
     <div
+      data-component='Container'
       className={cn(
         'mx-auto px-4 sm:px-6 lg:px-8',
         isFluid ? 'w-full max-w-none' : 'max-w-7xl',

@@ -11,7 +11,7 @@ export const view = ({
   className,
 }: RadioProps): React.ReactElement => {
   return (
-    <div className={cn('flex flex-col gap-2', className)}>
+    <div data-component='Radio' className={cn('flex flex-col gap-2', className)}>
       {options.map((opt) => (
         <label
           key={opt.value}

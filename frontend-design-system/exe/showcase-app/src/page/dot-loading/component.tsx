@@ -10,7 +10,7 @@ interface Props {
 
 export const DotLoadingPage: React.FC<Props> = () => {
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='DotLoadingPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

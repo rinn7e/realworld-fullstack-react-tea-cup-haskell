@@ -41,7 +41,7 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
 {Tag.view({ variant: 'primary', onDelete: () => alert('deleted'), children: 'Deletable Tag' })}`
 
   return (
-    <div className='w-full text-left space-y-8'>
+    <div data-component='TagPage' className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',

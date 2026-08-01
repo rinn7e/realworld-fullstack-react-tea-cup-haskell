@@ -13,6 +13,7 @@ export const view = ({
 }: NavbarProps): React.ReactElement => {
   return (
     <nav
+      data-component='Navbar'
       className={cn(
         'relative border-b border-gray-100 bg-white px-4 py-3 shadow-2xs sm:px-6 lg:px-8',
         className,
