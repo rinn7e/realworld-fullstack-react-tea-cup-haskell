@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Modal,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,20 @@ interface Props {
 }
 
 export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Modal'}.view({})}`
+  const code = `{Button.view({ variant: 'primary', onClick: () => dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } }), children: 'Open Modal' })}
+{Modal.view({
+  title: 'Confirm Delete',
+  model: model.modalModel,
+  dispatch: (subMsg) => dispatch({ _tag: 'ModalMsg', subMsg }),
+  children: <p className='text-sm text-gray-600'>Are you sure you want to delete this article?</p>,
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +41,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Modal',
             })}
             <p className='text-base text-gray-600'>
-              Classic Bulma modal dialog overlay.
+              Classic modal dialog overlay with header, body, and backdrop close controls.
             </p>
           </>
         ),
@@ -67,17 +73,17 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Modal Dialog Trigger',
           children: (
-            <div className='flex w-full items-center justify-center'>
+            <div className='w-full flex justify-center py-4'>
               <div>
                 {Button.view({ variant: 'primary', onClick: () => dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } }), children: 'Open Modal' })}
                 {Modal.view({
-                  title: 'Modal Title',
+                  title: 'Confirm Action',
                   model: model.modalModel,
                   dispatch: (subMsg) => dispatch({ _tag: 'ModalMsg', subMsg }),
-                  children: <p className='text-sm text-gray-600'>Modal Body Content</p>,
+                  children: <p className='text-sm text-gray-600'>Are you sure you want to delete this article?</p>,
                 })}
               </div>
             </div>

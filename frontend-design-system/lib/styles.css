@@ -1,8 +1,6 @@
 @import "tailwindcss";
 
 @source "./**/*.{ts,tsx}";
-@source "./";
-@source "../exe/showcase-app/src/**/*.{ts,tsx}";
 
 @theme {
   --font-titillium: "Titillium Web", sans-serif;

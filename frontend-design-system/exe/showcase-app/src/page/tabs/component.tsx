@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Tabs,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,22 @@ interface Props {
 }
 
 export const TabsPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Tabs'}.view({})}`
+  const code = `{Tabs.view({
+  items: [
+    { id: 'your_feed', label: 'Your Feed' },
+    { id: 'global_feed', label: 'Global Feed' },
+    { id: 'tag_feed', label: '#react' },
+  ],
+  model: model.tabsModel,
+  dispatch: (subMsg) => dispatch({ _tag: 'TabsMsg', subMsg }),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +43,7 @@ export const TabsPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Tabs',
             })}
             <p className='text-base text-gray-600'>
-              Tabbed navigation bar with active state indicators.
+              Tabbed navigation bar with active state underline indicators.
             </p>
           </>
         ),
@@ -67,13 +75,17 @@ export const TabsPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Feed Navigation Tabs',
           children: (
-            <div className='flex w-full items-center justify-center'>
+            <div className='w-full flex justify-center'>
               <div className='w-full'>
                 {Tabs.view({
-                  items: [{ id: 'f', label: 'Feed' }, { id: 'g', label: 'Global' }],
+                  items: [
+                    { id: 'your_feed', label: 'Your Feed' },
+                    { id: 'global_feed', label: 'Global Feed' },
+                    { id: 'tag_feed', label: '#react' },
+                  ],
                   model: model.tabsModel,
                   dispatch: (subMsg) => dispatch({ _tag: 'TabsMsg', subMsg }),
                 })}

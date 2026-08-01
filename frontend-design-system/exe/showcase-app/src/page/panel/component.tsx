@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Panel,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,24 @@ interface Props {
 }
 
 export const PanelPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Panel'}.view({})}`
+  const code = `{Panel.view({
+  heading: 'Repositories',
+  tabs: [{ id: 'all', label: 'All' }, { id: 'public', label: 'Public' }, { id: 'private', label: 'Private' }],
+  blocks: [
+    { id: 'p1', label: 'realworld-design-system' },
+    { id: 'p2', label: 'frontend-web' },
+    { id: 'p3', label: 'backend-servant' },
+  ],
+  model: model.panelModel,
+  dispatch: (subMsg) => dispatch({ _tag: 'PanelMsg', subMsg }),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +45,7 @@ export const PanelPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Panel',
             })}
             <p className='text-base text-gray-600'>
-              Bordered panel container with heading, search, and list items.
+              Bordered panel container with heading, search input, tabs, and interactive list items.
             </p>
           </>
         ),
@@ -67,15 +77,19 @@ export const PanelPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Repository List Panel',
           children: (
-            <div className='flex w-full items-center justify-center'>
+            <div className='w-full flex justify-center'>
               <div className='w-full max-w-md'>
                 {Panel.view({
                   heading: 'Repositories',
-                  tabs: [{ id: 'all', label: 'All' }],
-                  blocks: [{ id: 'p1', label: 'design-system' }],
+                  tabs: [{ id: 'all', label: 'All' }, { id: 'public', label: 'Public' }, { id: 'private', label: 'Private' }],
+                  blocks: [
+                    { id: 'p1', label: 'realworld-design-system' },
+                    { id: 'p2', label: 'frontend-web' },
+                    { id: 'p3', label: 'backend-servant' },
+                  ],
                   model: model.panelModel,
                   dispatch: (subMsg) => dispatch({ _tag: 'PanelMsg', subMsg }),
                 })}

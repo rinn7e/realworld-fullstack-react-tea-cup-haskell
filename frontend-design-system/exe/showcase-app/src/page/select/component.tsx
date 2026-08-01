@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Select,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,22 @@ interface Props {
 }
 
 export const SelectPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Select'}.view({})}`
+  const code = `{Select.view({
+  value: model.value,
+  options: [
+    { label: 'React 19 Frontend', value: 'react' },
+    { label: 'Haskell Servant Backend', value: 'haskell' },
+    { label: 'Elm Architecture State', value: 'elm' },
+  ],
+  onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +43,7 @@ export const SelectPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Select',
             })}
             <p className='text-base text-gray-600'>
-              Custom dropdown selection input control.
+              Custom dropdown selection input control with options, sizes, and states.
             </p>
           </>
         ),
@@ -67,11 +75,23 @@ export const SelectPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Dropdown Selection */}
+        {sectionView({
+          title: 'Interactive Select Dropdown',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {Select.view({ value: model.value, options: [{ label: 'Opt 1', value: 'opt1' }], onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }) })}
+            <div className='w-full space-y-3'>
+              {Select.view({
+                value: model.value || 'react',
+                options: [
+                  { label: 'React 19 Frontend', value: 'react' },
+                  { label: 'Haskell Servant Backend', value: 'haskell' },
+                  { label: 'Elm Architecture State Machine', value: 'elm' },
+                ],
+                onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }),
+              })}
+              <p className='text-xs text-gray-500'>
+                Selected Value: <span className='font-mono font-bold text-gray-800'>{model.value || 'react'}</span>
+              </p>
             </div>
           ),
         })}

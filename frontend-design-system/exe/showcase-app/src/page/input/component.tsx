@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Input,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,34 @@ interface Props {
 }
 
 export const InputPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Input'}.view({})}`
+  const code = `// Interactive Controlled Input
+{Input.view({
+  value: model.value,
+  placeholder: 'Type something...',
+  onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }),
+})}
+
+// Sizes & Shapes
+{Input.view({ size: 'small', placeholder: 'Small input' })}
+{Input.view({ size: 'normal', placeholder: 'Normal input' })}
+{Input.view({ size: 'medium', placeholder: 'Medium input' })}
+{Input.view({ size: 'large', placeholder: 'Large input' })}
+{Input.view({ isRounded: true, placeholder: 'Rounded input pill' })}
+
+// States
+{Input.view({ isError: true, value: 'invalid-email', placeholder: 'Error state' })}
+{Input.view({ isDisabled: true, value: 'Read only text', placeholder: 'Disabled state' })}
+
+// Input Types
+{Input.view({ type: 'password', value: 'secretpass', placeholder: 'Password input' })}
+{Input.view({ type: 'email', placeholder: 'email@example.com' })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +55,7 @@ export const InputPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Input',
             })}
             <p className='text-base text-gray-600'>
-              Text input control.
+              Text input control supporting interactive state, sizes, rounded pill styling, error states, and input types.
             </p>
           </>
         ),
@@ -67,11 +87,65 @@ export const InputPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Interactive Controlled Input */}
+        {sectionView({
+          title: 'Interactive State',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {Input.view({ value: model.value, placeholder: 'Type here...', onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }) })}
+            <div className='w-full space-y-3'>
+              {Input.view({
+                value: model.value,
+                placeholder: 'Type here to test interactive state binding...',
+                onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }),
+              })}
+              <p className='text-xs text-gray-500'>
+                Current Model Value: <span className='font-mono font-bold text-gray-800'>{model.value || '(empty)'}</span>
+              </p>
+            </div>
+          ),
+        })}
+
+        {/* Section 2: Sizes & Shapes */}
+        {sectionView({
+          title: 'Sizes & Shapes',
+          children: (
+            <div className='w-full space-y-4'>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Small</span>
+                {Input.view({ size: 'small', placeholder: 'Small input field...' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Normal</span>
+                {Input.view({ size: 'normal', placeholder: 'Normal input field...' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Medium</span>
+                {Input.view({ size: 'medium', placeholder: 'Medium input field...' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Large</span>
+                {Input.view({ size: 'large', placeholder: 'Large input field...' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Rounded Pill</span>
+                {Input.view({ isRounded: true, placeholder: 'Search articles, tags, or authors...' })}
+              </div>
+            </div>
+          ),
+        })}
+
+        {/* Section 3: Validation States */}
+        {sectionView({
+          title: 'Validation & Disabled States',
+          children: (
+            <div className='w-full space-y-4'>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Error State</span>
+                {Input.view({ isError: true, value: 'invalid-email-address', placeholder: 'Enter valid email...' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Disabled State</span>
+                {Input.view({ isDisabled: true, value: 'System read-only value', placeholder: 'Disabled...' })}
+              </div>
             </div>
           ),
         })}

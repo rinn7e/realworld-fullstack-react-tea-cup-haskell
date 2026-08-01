@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Radio,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,23 @@ interface Props {
 }
 
 export const RadioPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Radio'}.view({})}`
+  const code = `{Radio.view({
+  name: 'favorite_framework',
+  selectedValue: 'react',
+  options: [
+    { label: 'React 19', value: 'react' },
+    { label: 'Elm / TEA', value: 'elm' },
+    { label: 'Haskell', value: 'haskell' },
+  ],
+  onChange: (val) => console.log(val),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +44,7 @@ export const RadioPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Radio',
             })}
             <p className='text-base text-gray-600'>
-              Radio button input for single-option selection.
+              Radio button input group for single-option selection.
             </p>
           </>
         ),
@@ -67,11 +76,21 @@ export const RadioPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Radio Group */}
+        {sectionView({
+          title: 'Radio Group Selection',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {Radio.view({ name: 'r', options: [{ label: 'Option 1', value: 'opt1' }], selectedValue: 'opt1', onChange: () => {} })}
+            <div className='w-full space-y-3'>
+              {Radio.view({
+                name: 'favorite_framework',
+                selectedValue: 'react',
+                options: [
+                  { label: 'React 19 Frontend', value: 'react' },
+                  { label: 'Elm / TEA Architecture', value: 'elm' },
+                  { label: 'Haskell Backend', value: 'haskell' },
+                ],
+                onChange: () => {},
+              })}
             </div>
           ),
         })}

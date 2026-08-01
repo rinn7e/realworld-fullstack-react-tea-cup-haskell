@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Delete,
   Hero,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,18 @@ interface Props {
 }
 
 export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Delete'}.view({})}`
+  const code = `// Delete Button Sizes
+{Delete.view({ size: 'small', onClick: () => alert('Deleted!') })}
+{Delete.view({ size: 'normal', onClick: () => alert('Deleted!') })}
+{Delete.view({ size: 'medium', onClick: () => alert('Deleted!') })}
+{Delete.view({ size: 'large', onClick: () => alert('Deleted!') })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +39,7 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Delete',
             })}
             <p className='text-base text-gray-600'>
-              Bulma-inspired standalone delete icon button element.
+              Standalone delete cross icon button element with small to large size support.
             </p>
           </>
         ),
@@ -67,16 +71,14 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Delete Icon Button Sizes',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='flex items-center gap-6'>
-                {Delete.view({ size: 'small', onClick: () => alert('Deleted!') })}
-                {Delete.view({ size: 'normal', onClick: () => alert('Deleted!') })}
-                {Delete.view({ size: 'medium', onClick: () => alert('Deleted!') })}
-                {Delete.view({ size: 'large', onClick: () => alert('Deleted!') })}
-              </div>
+            <div className='flex items-center gap-6'>
+              {Delete.view({ size: 'small', onClick: () => alert('Deleted!') })}
+              {Delete.view({ size: 'normal', onClick: () => alert('Deleted!') })}
+              {Delete.view({ size: 'medium', onClick: () => alert('Deleted!') })}
+              {Delete.view({ size: 'large', onClick: () => alert('Deleted!') })}
             </div>
           ),
         })}

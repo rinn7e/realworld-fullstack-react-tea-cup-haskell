@@ -49,3 +49,6 @@ export * as Column from './grid/column'
 
 // Misc
 export * as DotLoading from './misc/dot-loading'
+
+export { default } from './plugin'
+

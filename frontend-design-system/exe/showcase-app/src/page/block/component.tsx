@@ -1,13 +1,13 @@
 import React from 'react'
 import {
   Block,
-  Box,
   Button,
   Hero,
   Title,
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,27 @@ interface Props {
 }
 
 export const BlockPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Block'}.view({})}`
+  const code = `{Block.view({
+  children: (
+    <div className='p-4 bg-gray-50 border border-gray-200 rounded text-sm text-gray-700'>
+      First layout block container with margin spacing.
+    </div>
+  ),
+})}
+{Block.view({
+  children: (
+    <div className='p-4 bg-gray-50 border border-gray-200 rounded text-sm text-gray-700'>
+      Second layout block container.
+    </div>
+  ),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +48,7 @@ export const BlockPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Block',
             })}
             <p className='text-base text-gray-600'>
-              Simple layout block element with vertical spacing.
+              Simple layout block element with vertical bottom spacing to separate elements.
             </p>
           </>
         ),
@@ -67,14 +80,12 @@ export const BlockPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Layout Block Spacing',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='w-full space-y-3'>
-                {Block.view({ children: <p className='rounded border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700'>First Layout Block Container</p> })}
-                {Block.view({ children: <p className='rounded border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700'>Second Layout Block Container</p> })}
-              </div>
+            <div className='w-full space-y-3'>
+              {Block.view({ children: <p className='rounded border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700'>First Layout Block Container</p> })}
+              {Block.view({ children: <p className='rounded border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700'>Second Layout Block Container</p> })}
             </div>
           ),
         })}

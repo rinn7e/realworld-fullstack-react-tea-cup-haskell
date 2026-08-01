@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Tag,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,36 @@ interface Props {
 }
 
 export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Tag'}.view({})}`
+  const code = `// Solid Variants
+{Tag.view({ variant: 'default', children: 'default' })}
+{Tag.view({ variant: 'primary', children: 'conduit' })}
+{Tag.view({ variant: 'link', children: 'react' })}
+{Tag.view({ variant: 'info', children: 'haskell' })}
+{Tag.view({ variant: 'success', children: 'elm' })}
+{Tag.view({ variant: 'warning', children: 'fp-ts' })}
+{Tag.view({ variant: 'danger', children: 'tea-cup' })}
+
+// Light Variants
+{Tag.view({ variant: 'primary', isLight: true, children: 'conduit' })}
+{Tag.view({ variant: 'link', isLight: true, children: 'react' })}
+{Tag.view({ variant: 'info', isLight: true, children: 'haskell' })}
+
+// Sizes & Shapes
+{Tag.view({ size: 'small', children: 'Small Tag' })}
+{Tag.view({ size: 'normal', children: 'Normal Tag' })}
+{Tag.view({ size: 'medium', children: 'Medium Tag' })}
+{Tag.view({ size: 'large', children: 'Large Tag' })}
+{Tag.view({ isRounded: true, children: 'Rounded Tag' })}
+
+// Deletable Tags
+{Tag.view({ variant: 'primary', onDelete: () => alert('deleted'), children: 'Deletable Tag' })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +57,7 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Tag',
             })}
             <p className='text-base text-gray-600'>
-              Small tag badges for labels, categories, and keyword filters.
+              Small tag badges for labels, categories, keyword filters, and deletable chips.
             </p>
           </>
         ),
@@ -67,14 +89,68 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Solid Color Variants */}
+        {sectionView({
+          title: 'Solid Colors',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='flex flex-wrap items-center gap-2'>
-                {Tag.view({ variant: 'primary', children: 'conduit' })}
-                {Tag.view({ variant: 'info', isRounded: true, children: 'react' })}
+            <div className='flex flex-wrap items-center gap-2.5'>
+              {Tag.view({ variant: 'default', children: 'default' })}
+              {Tag.view({ variant: 'primary', children: 'conduit' })}
+              {Tag.view({ variant: 'link', children: 'react' })}
+              {Tag.view({ variant: 'info', children: 'haskell' })}
+              {Tag.view({ variant: 'success', children: 'elm' })}
+              {Tag.view({ variant: 'warning', children: 'fp-ts' })}
+              {Tag.view({ variant: 'danger', children: 'tea-cup' })}
+            </div>
+          ),
+        })}
+
+        {/* Section 2: Light Color Variants */}
+        {sectionView({
+          title: 'Light Variants',
+          children: (
+            <div className='flex flex-wrap items-center gap-2.5'>
+              {Tag.view({ variant: 'default', isLight: true, children: 'default' })}
+              {Tag.view({ variant: 'primary', isLight: true, children: 'conduit' })}
+              {Tag.view({ variant: 'link', isLight: true, children: 'react' })}
+              {Tag.view({ variant: 'info', isLight: true, children: 'haskell' })}
+              {Tag.view({ variant: 'success', isLight: true, children: 'elm' })}
+              {Tag.view({ variant: 'warning', isLight: true, children: 'fp-ts' })}
+              {Tag.view({ variant: 'danger', isLight: true, children: 'tea-cup' })}
+            </div>
+          ),
+        })}
+
+        {/* Section 3: Sizes & Shapes */}
+        {sectionView({
+          title: 'Sizes & Shapes',
+          children: (
+            <div className='space-y-4'>
+              <div className='flex flex-wrap items-center gap-2.5'>
+                {Tag.view({ variant: 'primary', size: 'small', children: 'Small Tag' })}
+                {Tag.view({ variant: 'primary', size: 'normal', children: 'Normal Tag' })}
+                {Tag.view({ variant: 'primary', size: 'medium', children: 'Medium Tag' })}
+                {Tag.view({ variant: 'primary', size: 'large', children: 'Large Tag' })}
               </div>
+              <div className='flex flex-wrap items-center gap-2.5 pt-2'>
+                {Tag.view({ variant: 'info', isRounded: true, size: 'small', children: 'Rounded Small' })}
+                {Tag.view({ variant: 'info', isRounded: true, size: 'normal', children: 'Rounded Normal' })}
+                {Tag.view({ variant: 'info', isRounded: true, size: 'medium', children: 'Rounded Medium' })}
+                {Tag.view({ variant: 'info', isRounded: true, size: 'large', children: 'Rounded Large' })}
+              </div>
+            </div>
+          ),
+        })}
+
+        {/* Section 4: Deletable Chips */}
+        {sectionView({
+          title: 'Deletable Chips',
+          children: (
+            <div className='flex flex-wrap items-center gap-2.5'>
+              {Tag.view({ variant: 'primary', onDelete: () => alert('Deleted conduit tag!'), children: 'conduit' })}
+              {Tag.view({ variant: 'link', onDelete: () => alert('Deleted react tag!'), children: 'react' })}
+              {Tag.view({ variant: 'info', isLight: true, onDelete: () => alert('Deleted haskell tag!'), children: 'haskell' })}
+              {Tag.view({ variant: 'danger', onDelete: () => alert('Deleted tea-cup tag!'), children: 'tea-cup' })}
             </div>
           ),
         })}

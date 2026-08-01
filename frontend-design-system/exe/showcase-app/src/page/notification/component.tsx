@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Notification,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,24 @@ interface Props {
 }
 
 export const NotificationPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Notification'}.view({})}`
+  const code = `// Standard Notifications
+{Notification.view({ variant: 'default', children: 'Default notification banner alert.' })}
+{Notification.view({ variant: 'primary', children: 'Primary notification banner alert.' })}
+{Notification.view({ variant: 'link', children: 'Link notification banner alert.' })}
+{Notification.view({ variant: 'info', children: 'Info notification banner alert.' })}
+{Notification.view({ variant: 'success', children: 'Success! Your settings were saved successfully.' })}
+{Notification.view({ variant: 'warning', children: 'Warning! Please review your form inputs.' })}
+{Notification.view({ variant: 'danger', children: 'Danger! An error occurred while processing.' })}
+
+// Dismissible Notifications
+{Notification.view({ variant: 'primary', onDelete: () => {}, children: 'Dismissible notification' })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +45,7 @@ export const NotificationPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Notification',
             })}
             <p className='text-base text-gray-600'>
-              Bold notification banner boxes for user alerts.
+              Bold notification banner boxes for user alerts, system feedback, and dismissible messages.
             </p>
           </>
         ),
@@ -67,14 +77,31 @@ export const NotificationPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Color Variants */}
+        {sectionView({
+          title: 'Color Variants',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='w-full space-y-3'>
-                {Notification.view({ variant: 'primary', onDelete: () => {}, children: <strong>Success!</strong> })}
-                {Notification.view({ variant: 'danger', onDelete: () => {}, children: <strong>Error!</strong> })}
-              </div>
+            <div className='w-full space-y-3'>
+              {Notification.view({ variant: 'default', children: 'Default notification banner alert.' })}
+              {Notification.view({ variant: 'primary', children: 'Primary notification banner alert.' })}
+              {Notification.view({ variant: 'link', children: 'Link notification banner alert.' })}
+              {Notification.view({ variant: 'info', children: 'Info notification banner alert.' })}
+              {Notification.view({ variant: 'success', children: 'Success! Your article was published successfully.' })}
+              {Notification.view({ variant: 'warning', children: 'Warning! Please review your form inputs before submitting.' })}
+              {Notification.view({ variant: 'danger', children: 'Danger! Could not save changes to backend API.' })}
+            </div>
+          ),
+        })}
+
+        {/* Section 2: Dismissible Notifications */}
+        {sectionView({
+          title: 'Dismissible Banners (with Delete button)',
+          children: (
+            <div className='w-full space-y-3'>
+              {Notification.view({ variant: 'primary', onDelete: () => alert('Dismissed primary alert!'), children: 'Primary notification with dismiss button' })}
+              {Notification.view({ variant: 'info', onDelete: () => alert('Dismissed info alert!'), children: 'Info notification with dismiss button' })}
+              {Notification.view({ variant: 'success', onDelete: () => alert('Dismissed success alert!'), children: 'Success notification with dismiss button' })}
+              {Notification.view({ variant: 'danger', onDelete: () => alert('Dismissed danger alert!'), children: 'Danger notification with dismiss button' })}
             </div>
           ),
         })}

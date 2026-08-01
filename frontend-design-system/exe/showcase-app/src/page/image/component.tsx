@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Image,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,19 @@ interface Props {
 }
 
 export const ImagePage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Image'}.view({})}`
+  const code = `{Image.view({
+  src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
+  ratio: '16by9',
+  alt: 'Avatar Showcase',
+  isRounded: true,
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +40,7 @@ export const ImagePage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Image',
             })}
             <p className='text-base text-gray-600'>
-              Responsive image container with fixed aspect ratios.
+              Responsive image container with fixed aspect ratio controls.
             </p>
           </>
         ),
@@ -67,12 +72,12 @@ export const ImagePage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Aspect Ratio Image Container',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='w-full max-w-sm space-y-4'>
-                {Image.view({ src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', ratio: '16by9', alt: 'Banner' })}
+            <div className='w-full flex justify-center'>
+              <div className='w-full max-w-sm'>
+                {Image.view({ src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', ratio: '16by9', alt: 'Showcase Image' })}
               </div>
             </div>
           ),

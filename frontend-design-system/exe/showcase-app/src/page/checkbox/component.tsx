@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Checkbox,
   Hero,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,23 @@ interface Props {
 }
 
 export const CheckboxPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Checkbox'}.view({})}`
+  const code = `// Interactive Checkbox
+{Checkbox.view({
+  label: 'I agree to the terms and conditions',
+  checked: model.checked,
+  onChange: () => dispatch({ _tag: 'ToggleChecked' }),
+})}
+
+// Disabled Checkbox
+{Checkbox.view({ label: 'Disabled checked box', checked: true, isDisabled: true })}
+{Checkbox.view({ label: 'Disabled unchecked box', checked: false, isDisabled: true })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +44,7 @@ export const CheckboxPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Checkbox',
             })}
             <p className='text-base text-gray-600'>
-              Custom styled checkbox input control.
+              Custom styled checkbox input control supporting interactive state, labels, and disabled states.
             </p>
           </>
         ),
@@ -67,11 +76,30 @@ export const CheckboxPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Interactive Checkbox */}
+        {sectionView({
+          title: 'Interactive Checkbox',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {Checkbox.view({ label: 'Check me', checked: model.checked, onChange: () => dispatch({ _tag: 'ToggleChecked' }) })}
+            <div className='w-full space-y-3'>
+              {Checkbox.view({
+                label: 'I agree to the terms and privacy policy',
+                checked: model.checked,
+                onChange: () => dispatch({ _tag: 'ToggleChecked' }),
+              })}
+              <p className='text-xs text-gray-500'>
+                Current State: <span className='font-mono font-bold text-gray-800'>{model.checked ? 'Checked' : 'Unchecked'}</span>
+              </p>
+            </div>
+          ),
+        })}
+
+        {/* Section 2: Disabled Checkboxes */}
+        {sectionView({
+          title: 'Disabled Checkboxes',
+          children: (
+            <div className='w-full space-y-3'>
+              {Checkbox.view({ label: 'Disabled checked checkbox', checked: true, isDisabled: true })}
+              {Checkbox.view({ label: 'Disabled unchecked checkbox', checked: false, isDisabled: true })}
             </div>
           ),
         })}

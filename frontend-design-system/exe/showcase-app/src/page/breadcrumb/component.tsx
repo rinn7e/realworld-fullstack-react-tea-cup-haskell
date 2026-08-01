@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Breadcrumb,
   Button,
   Hero,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,20 @@ interface Props {
 }
 
 export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Breadcrumb'}.view({})}`
+  const code = `{Breadcrumb.view({
+  items: [
+    { label: 'Home', href: '#' },
+    { label: 'Components', href: '#' },
+    { label: 'Breadcrumb', isActive: true },
+  ],
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -67,14 +73,15 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Standard Breadcrumb Navigation',
           children: (
-            <div className='flex w-full items-center justify-center'>
+            <div className='w-full'>
               {Breadcrumb.view({
                 items: [
-                  { label: 'Home', href: '/' },
-                  { label: 'Design System', isActive: true },
+                  { label: 'Home', href: '#' },
+                  { label: 'Components', href: '#' },
+                  { label: 'Breadcrumb', isActive: true },
                 ],
               })}
             </div>

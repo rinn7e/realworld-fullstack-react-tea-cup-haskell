@@ -8,6 +8,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +17,22 @@ interface Props {
 }
 
 export const BoxPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Box'}.view({})}`
+  const code = `{Box.view({
+  className: 'w-full p-6',
+  children: (
+    <>
+      {Title.view({ size: 4, className: 'mb-1 font-bold text-gray-900', children: 'Interactive Box Container' })}
+      {Content.view({ size: 'normal', className: 'text-gray-600', children: 'This is a classic Bulma-styled box container.' })}
+    </>
+  ),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -67,12 +76,12 @@ export const BoxPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Standard Box Container',
           children: (
-            <div className='flex w-full items-center justify-center'>
+            <div className='w-full'>
               {Box.view({
-                className: 'w-full',
+                className: 'w-full p-6',
                 children: (
                   <>
                     {Title.view({ size: 4, className: 'mb-1 font-bold text-gray-900', children: 'Interactive Box Container' })}

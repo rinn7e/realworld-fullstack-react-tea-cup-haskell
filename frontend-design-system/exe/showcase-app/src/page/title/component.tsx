@@ -1,12 +1,12 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Title,
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -15,14 +15,19 @@ interface Props {
 }
 
 export const TitlePage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Title'}.view({})}`
+  const code = `{Title.view({ size: 1, children: 'Title Size 1 (3xl)' })}
+{Title.view({ size: 2, children: 'Title Size 2 (2xl)' })}
+{Title.view({ size: 3, children: 'Title Size 3 (xl)' })}
+{Title.view({ size: 4, children: 'Title Size 4 (lg)' })}
+{Title.view({ size: 5, children: 'Title Size 5 (base)' })}
+{Title.view({ size: 6, children: 'Title Size 6 (sm)' })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -34,7 +39,7 @@ export const TitlePage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Title',
             })}
             <p className='text-base text-gray-600'>
-              Heading typography sizes (1 through 6).
+              Heading typography element supporting 6 hierarchical sizes (1 through 6).
             </p>
           </>
         ),
@@ -66,14 +71,16 @@ export const TitlePage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Heading Typography Hierarchy',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='space-y-2 text-left'>
-                {Title.view({ size: 1, children: 'Title Size 1' })}
-                {Title.view({ size: 3, children: 'Title Size 3' })}
-              </div>
+            <div className='space-y-3 text-left w-full'>
+              {Title.view({ size: 1, children: 'Title Size 1' })}
+              {Title.view({ size: 2, children: 'Title Size 2' })}
+              {Title.view({ size: 3, children: 'Title Size 3' })}
+              {Title.view({ size: 4, children: 'Title Size 4' })}
+              {Title.view({ size: 5, children: 'Title Size 5' })}
+              {Title.view({ size: 6, children: 'Title Size 6' })}
             </div>
           ),
         })}

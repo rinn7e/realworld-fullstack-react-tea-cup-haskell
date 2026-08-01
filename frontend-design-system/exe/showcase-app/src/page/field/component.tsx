@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Field,
   Hero,
@@ -9,6 +8,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -17,14 +17,22 @@ interface Props {
 }
 
 export const FieldPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Field'}.view({})}`
+  const code = `{Field.view({
+  label: 'Username',
+  helpText: 'Choose a unique handle for your Conduit profile.',
+  children: Input.view({
+    value: model.value,
+    placeholder: 'e.g. gerard_quan',
+    onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }),
+  }),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -36,7 +44,7 @@ export const FieldPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Field',
             })}
             <p className='text-base text-gray-600'>
-              Form field wrapper with label and helper text.
+              Form field wrapper container with field label and optional help/error text.
             </p>
           </>
         ),
@@ -68,11 +76,19 @@ export const FieldPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Form Field Container',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {Field.view({ label: 'Username', children: Input.view({ value: model.value, onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }) }) })}
+            <div className='w-full max-w-md'>
+              {Field.view({
+                label: 'Username',
+                helpText: 'Choose a unique handle for your Conduit profile.',
+                children: Input.view({
+                  value: model.value,
+                  placeholder: 'e.g. gerard_quan',
+                  onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }),
+                }),
+              })}
             </div>
           ),
         })}

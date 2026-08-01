@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Container,
   Hero,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,17 @@ interface Props {
 }
 
 export const ContainerPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Container'}.view({})}`
+  const code = `{Container.view({
+  className: 'p-6 bg-gray-50 border border-gray-200 rounded text-center',
+  children: 'Centering layout wrapper container',
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +38,7 @@ export const ContainerPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Container',
             })}
             <p className='text-base text-gray-600'>
-              Page width wrapper container (max-w-7xl).
+              Page width wrapper container with auto horizontal margins.
             </p>
           </>
         ),
@@ -67,11 +70,11 @@ export const ContainerPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Layout Container Wrapper',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {Container.view({ className: 'p-6 bg-gray-50 border rounded text-center', children: 'Container Content' })}
+            <div className='w-full'>
+              {Container.view({ className: 'p-6 bg-gray-50 border border-gray-200 rounded text-center text-sm font-medium text-gray-700', children: 'Centering layout wrapper container' })}
             </div>
           ),
         })}

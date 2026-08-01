@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Column,
   Columns,
   Container,
@@ -10,6 +9,7 @@ import {
   Navbar,
 } from '@rinn7e/realworld-design-system'
 import { BookOpen, Layers, LayoutGrid, Search, Sparkles } from 'lucide-react'
+import { Sidebar } from './component/sidebar'
 
 import { HomePage } from './page/home/component'
 import { NotFoundPage } from './page/not-found/component'
@@ -491,22 +491,13 @@ export const view = (
               {/* Left Sidebar Navigation */}
               {Column.view({
                 className: 'w-full md:w-56 md:shrink-0 md:grow-0',
-                children: Box.view({
-                  className: 'p-4 w-full text-left bg-gray-50/50 border border-gray-200/80 rounded-lg',
-                  children: Menu.view({
-                    categories: menuCategories,
-                    model: model.menuModel,
-                    dispatch: (subMsg: Menu.Msg) => {
-                      if (subMsg._tag === 'Select') {
-                        const compId = subMsg.id as string
-                        const pageTagName = compId.split('-').map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join('') + 'Page'
-                        navigateRoute({
-                          page: { _tag: pageTagName } as any,
-                        })
-                      }
-                    },
-                  }),
-                }),
+                children: (
+                  <Sidebar
+                    menuCategories={menuCategories}
+                    menuModel={model.menuModel}
+                    navigateRoute={navigateRoute}
+                  />
+                ),
               })}
 
               {/* Main Page Area */}

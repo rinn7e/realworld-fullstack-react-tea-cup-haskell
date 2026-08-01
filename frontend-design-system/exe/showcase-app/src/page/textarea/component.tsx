@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Textarea,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,24 @@ interface Props {
 }
 
 export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Textarea'}.view({})}`
+  const code = `// Interactive Textarea
+{Textarea.view({
+  value: model.value,
+  rows: 4,
+  placeholder: 'Write your article in markdown...',
+  onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }),
+})}
+
+// State Variations
+{Textarea.view({ isError: true, value: 'Invalid markdown content', rows: 3 })}
+{Textarea.view({ isDisabled: true, value: 'Read-only content body', rows: 3 })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +45,7 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Textarea',
             })}
             <p className='text-base text-gray-600'>
-              Multi-line text input control.
+              Multi-line text input control with support for interactive state, row sizes, validation errors, and disabled states.
             </p>
           </>
         ),
@@ -67,11 +77,37 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Interactive Textarea */}
+        {sectionView({
+          title: 'Interactive Textarea',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {Textarea.view({ value: model.value, rows: 4, onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }) })}
+            <div className='w-full space-y-3'>
+              {Textarea.view({
+                value: model.value,
+                rows: 4,
+                placeholder: 'Write your article body (in markdown format)...',
+                onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }),
+              })}
+              <p className='text-xs text-gray-500'>
+                Character Count: <span className='font-mono font-bold text-gray-800'>{model.value.length}</span>
+              </p>
+            </div>
+          ),
+        })}
+
+        {/* Section 2: Validation & Disabled States */}
+        {sectionView({
+          title: 'Validation &amp; Disabled States',
+          children: (
+            <div className='w-full space-y-4'>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Error State</span>
+                {Textarea.view({ isError: true, value: 'Cannot submit empty post content.', rows: 3 })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Disabled State</span>
+                {Textarea.view({ isDisabled: true, value: 'System read-only logs and article notes.', rows: 3 })}
+              </div>
             </div>
           ),
         })}

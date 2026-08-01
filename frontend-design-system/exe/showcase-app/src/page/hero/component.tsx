@@ -1,12 +1,12 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Title,
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -15,14 +15,19 @@ interface Props {
 }
 
 export const HeroPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Hero'}.view({})}`
+  const code = `{Hero.view({
+  variant: 'primary',
+  size: 'medium',
+  className: 'p-8 rounded-lg text-white',
+  children: Title.view({ size: 1, className: 'text-white', children: 'Conduit Hero Banner' }),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -34,7 +39,7 @@ export const HeroPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Hero',
             })}
             <p className='text-base text-gray-600'>
-              Large banner header for page top sections.
+              Large banner header container for page tops and hero callouts.
             </p>
           </>
         ),
@@ -66,11 +71,11 @@ export const HeroPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Primary Hero Banner',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {Hero.view({ variant: 'primary', children: Title.view({ size: 1, className: 'text-white', children: 'Conduit Hero' }) })}
+            <div className='w-full'>
+              {Hero.view({ variant: 'primary', size: 'medium', className: 'p-8 rounded-lg text-white text-center', children: Title.view({ size: 2, className: 'text-white', children: 'Conduit RealWorld Hero Banner' }) })}
             </div>
           ),
         })}

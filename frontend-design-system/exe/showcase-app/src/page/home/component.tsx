@@ -75,7 +75,7 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                 header: (
                   <div className='flex items-center gap-2 text-green-600 font-bold text-base'>
                     <Layers className='h-5 w-5' />
-                    <span>35 Bulma Elements</span>
+                    <span>35 RealWorld Elements</span>
                   </div>
                 ),
                 children: Content.view({

@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Column,
   Columns,
@@ -9,6 +8,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -17,14 +17,21 @@ interface Props {
 }
 
 export const ColumnsPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Columns'}.view({})}`
+  const code = `{Columns.view({
+  children: (
+    <>
+      {Column.view({ size: 'half', children: <div className='p-4 bg-green-50 border border-green-200 text-green-800 rounded font-semibold text-center'>Half Width (6/12)</div> })}
+      {Column.view({ size: 'half', children: <div className='p-4 bg-blue-50 border border-blue-200 text-blue-800 rounded font-semibold text-center'>Half Width (6/12)</div> })}
+    </>
+  ),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -36,7 +43,7 @@ export const ColumnsPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Columns',
             })}
             <p className='text-base text-gray-600'>
-              Flexbox multi-column grid layout system.
+              Flexbox multi-column grid layout system supporting fractional column sizing.
             </p>
           </>
         ),
@@ -68,11 +75,18 @@ export const ColumnsPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: '2-Column Grid Layout',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {Columns.view({ children: <> {Column.view({ size: 'half', children: <div>Col 1</div> })} {Column.view({ size: 'half', children: <div>Col 2</div> })} </> })}
+            <div className='w-full'>
+              {Columns.view({
+                children: (
+                  <>
+                    {Column.view({ size: 'half', children: <div className='p-4 bg-green-50 border border-green-200 text-green-800 rounded font-semibold text-center'>Column 1 (Half)</div> })}
+                    {Column.view({ size: 'half', children: <div className='p-4 bg-blue-50 border border-blue-200 text-blue-800 rounded font-semibold text-center'>Column 2 (Half)</div> })}
+                  </>
+                ),
+              })}
             </div>
           ),
         })}

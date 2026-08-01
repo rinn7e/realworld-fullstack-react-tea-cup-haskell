@@ -1,1 +1,3 @@
-/* Custom styles for showcase app */
+@import "tailwindcss";
+@plugin "@rinn7e/realworld-design-system";
+@source "../node_modules/@rinn7e/realworld-design-system";

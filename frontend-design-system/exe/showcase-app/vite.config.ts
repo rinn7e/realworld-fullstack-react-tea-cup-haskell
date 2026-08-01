@@ -9,11 +9,15 @@ export default defineConfig({
     alias: {
       '@rinn7e/realworld-design-system/styles.css': path.resolve(
         __dirname,
-        '../../lib/styles.css',
+        '../../dist/styles.css',
+      ),
+      '@rinn7e/realworld-design-system/plugin': path.resolve(
+        __dirname,
+        '../../dist/plugin.mjs',
       ),
       '@rinn7e/realworld-design-system': path.resolve(
         __dirname,
-        '../../lib/index.ts',
+        '../../dist/index.mjs',
       ),
     },
   },

@@ -1,7 +1,12 @@
 import React from 'react'
-import { Box, Button, Hero, Title } from '@rinn7e/realworld-design-system'
+import {
+  Button,
+  Hero,
+  Title,
+} from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -10,17 +15,37 @@ interface Props {
 }
 
 export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{Button.view({ variant: 'primary', children: 'Primary' })}
-{Button.view({ variant: 'primary', isOutlined: true, children: 'Outlined' })}
-{Button.view({ variant: 'primary', isRounded: true, children: 'Rounded' })}
-{Button.view({ variant: 'danger', isLoading: ${model.isLoading}, children: 'Loading' })}`
+  const code = `// Colors & Variants
+{Button.view({ variant: 'default', children: 'Default' })}
+{Button.view({ variant: 'primary', children: 'Primary' })}
+{Button.view({ variant: 'link', children: 'Link' })}
+{Button.view({ variant: 'info', children: 'Info' })}
+{Button.view({ variant: 'success', children: 'Success' })}
+{Button.view({ variant: 'warning', children: 'Warning' })}
+{Button.view({ variant: 'danger', children: 'Danger' })}
+
+// Outlined Style
+{Button.view({ variant: 'primary', isOutlined: true, children: 'Primary' })}
+{Button.view({ variant: 'link', isOutlined: true, children: 'Link' })}
+
+// Sizes & Shapes
+{Button.view({ size: 'small', children: 'Small' })}
+{Button.view({ size: 'normal', children: 'Normal' })}
+{Button.view({ size: 'medium', children: 'Medium' })}
+{Button.view({ size: 'large', children: 'Large' })}
+{Button.view({ isRounded: true, children: 'Rounded' })}
+
+// States & Width
+{Button.view({ isDisabled: true, children: 'Disabled' })}
+{Button.view({ isLoading: true, children: 'Loading' })}
+{Button.view({ isFullWidth: true, children: 'Full Width Button' })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -32,7 +57,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Button',
             })}
             <p className='text-base text-gray-600'>
-              The classic Conduit RealWorld button element in different colors, sizes, and states.
+              Essential button element with support for all color variants, sizes, styles (outlined, rounded), and states (loading, disabled).
             </p>
           </>
         ),
@@ -64,10 +89,11 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Colors & Variants */}
+        {sectionView({
+          title: 'Colors & Variants',
           children: (
-            <div className='flex flex-wrap items-center justify-center gap-3'>
+            <div className='flex flex-wrap items-center gap-3'>
               {Button.view({ variant: 'default', children: 'Default' })}
               {Button.view({ variant: 'primary', children: 'Primary' })}
               {Button.view({ variant: 'link', children: 'Link' })}
@@ -75,22 +101,64 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
               {Button.view({ variant: 'success', children: 'Success' })}
               {Button.view({ variant: 'warning', children: 'Warning' })}
               {Button.view({ variant: 'danger', children: 'Danger' })}
-              {Button.view({
-                variant: 'primary',
-                isOutlined: true,
-                children: 'Outlined',
-              })}
-              {Button.view({
-                variant: 'primary',
-                isRounded: true,
-                children: 'Rounded',
-              })}
-              {Button.view({
-                variant: 'danger',
-                isLoading: model.isLoading,
-                onClick: () => dispatch({ _tag: 'ToggleLoading' }),
-                children: model.isLoading ? 'Loading...' : 'Click to Toggle Loading State',
-              })}
+            </div>
+          ),
+        })}
+
+        {/* Section 2: Outlined Style */}
+        {sectionView({
+          title: 'Outlined Style',
+          children: (
+            <div className='flex flex-wrap items-center gap-3'>
+              {Button.view({ variant: 'default', isOutlined: true, children: 'Default' })}
+              {Button.view({ variant: 'primary', isOutlined: true, children: 'Primary' })}
+              {Button.view({ variant: 'link', isOutlined: true, children: 'Link' })}
+              {Button.view({ variant: 'info', isOutlined: true, children: 'Info' })}
+              {Button.view({ variant: 'success', isOutlined: true, children: 'Success' })}
+              {Button.view({ variant: 'warning', isOutlined: true, children: 'Warning' })}
+              {Button.view({ variant: 'danger', isOutlined: true, children: 'Danger' })}
+            </div>
+          ),
+        })}
+
+        {/* Section 3: Sizes & Shapes */}
+        {sectionView({
+          title: 'Sizes & Shapes',
+          children: (
+            <div className='space-y-4'>
+              <div className='flex flex-wrap items-center gap-3'>
+                {Button.view({ variant: 'primary', size: 'small', children: 'Small' })}
+                {Button.view({ variant: 'primary', size: 'normal', children: 'Normal' })}
+                {Button.view({ variant: 'primary', size: 'medium', children: 'Medium' })}
+                {Button.view({ variant: 'primary', size: 'large', children: 'Large' })}
+              </div>
+              <div className='flex flex-wrap items-center gap-3 pt-2'>
+                {Button.view({ variant: 'primary', isRounded: true, size: 'small', children: 'Rounded Small' })}
+                {Button.view({ variant: 'primary', isRounded: true, size: 'normal', children: 'Rounded Normal' })}
+                {Button.view({ variant: 'primary', isRounded: true, size: 'medium', children: 'Rounded Medium' })}
+                {Button.view({ variant: 'primary', isRounded: true, size: 'large', children: 'Rounded Large' })}
+              </div>
+            </div>
+          ),
+        })}
+
+        {/* Section 4: States & Width */}
+        {sectionView({
+          title: 'States & Width',
+          children: (
+            <div className='space-y-4 w-full'>
+              <div className='flex flex-wrap items-center gap-3'>
+                {Button.view({ variant: 'success', isDisabled: true, children: 'Disabled Button' })}
+                {Button.view({
+                  variant: 'danger',
+                  isLoading: model.isLoading,
+                  onClick: () => dispatch({ _tag: 'ToggleLoading' }),
+                  children: model.isLoading ? 'Processing...' : 'Click to Toggle Loading',
+                })}
+              </div>
+              <div className='pt-2'>
+                {Button.view({ variant: 'primary', isFullWidth: true, children: 'Full Width Button' })}
+              </div>
             </div>
           ),
         })}

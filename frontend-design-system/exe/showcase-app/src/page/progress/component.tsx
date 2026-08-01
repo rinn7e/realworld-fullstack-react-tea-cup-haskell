@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Progress,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,32 @@ interface Props {
 }
 
 export const ProgressPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Progress'}.view({})}`
+  const code = `// Standard Progress Bar (Determinate)
+{Progress.view({ value: 60, max: 100, variant: 'primary' })}
+
+// Color Variants
+{Progress.view({ value: 30, variant: 'primary' })}
+{Progress.view({ value: 45, variant: 'link' })}
+{Progress.view({ value: 60, variant: 'info' })}
+{Progress.view({ value: 75, variant: 'success' })}
+{Progress.view({ value: 90, variant: 'warning' })}
+{Progress.view({ value: 100, variant: 'danger' })}
+
+// Sizes
+{Progress.view({ value: 50, size: 'small' })}
+{Progress.view({ value: 50, size: 'normal' })}
+{Progress.view({ value: 50, size: 'medium' })}
+{Progress.view({ value: 50, size: 'large' })}
+
+// Indeterminate Progress Bar
+{Progress.view({ isIndeterminate: true, variant: 'primary' })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +53,7 @@ export const ProgressPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Progress',
             })}
             <p className='text-base text-gray-600'>
-              Standard Bulma progress bar and indeterminate extension.
+              Standard progress bars with support for different color variants, sizes, values, and indeterminate loading states.
             </p>
           </>
         ),
@@ -67,13 +85,80 @@ export const ProgressPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Color Variants */}
+        {sectionView({
+          title: 'Color Variants',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='w-full max-w-md space-y-4'>
-                {Progress.view({ value: 60, max: 100, variant: 'primary' })}
-                {Progress.view({ isIndeterminate: true, variant: 'link' })}
+            <div className='w-full space-y-4'>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Primary (30%)</span>
+                {Progress.view({ value: 30, max: 100, variant: 'primary' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Link (45%)</span>
+                {Progress.view({ value: 45, max: 100, variant: 'link' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Info (60%)</span>
+                {Progress.view({ value: 60, max: 100, variant: 'info' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Success (75%)</span>
+                {Progress.view({ value: 75, max: 100, variant: 'success' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Warning (90%)</span>
+                {Progress.view({ value: 90, max: 100, variant: 'warning' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Danger (100%)</span>
+                {Progress.view({ value: 100, max: 100, variant: 'danger' })}
+              </div>
+            </div>
+          ),
+        })}
+
+        {/* Section 2: Sizes */}
+        {sectionView({
+          title: 'Sizes',
+          children: (
+            <div className='w-full space-y-4'>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Small</span>
+                {Progress.view({ value: 50, size: 'small', variant: 'primary' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Normal</span>
+                {Progress.view({ value: 50, size: 'normal', variant: 'primary' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Medium</span>
+                {Progress.view({ value: 50, size: 'medium', variant: 'primary' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Large</span>
+                {Progress.view({ value: 50, size: 'large', variant: 'primary' })}
+              </div>
+            </div>
+          ),
+        })}
+
+        {/* Section 3: Indeterminate Loading State */}
+        {sectionView({
+          title: 'Indeterminate Loading State',
+          children: (
+            <div className='w-full space-y-4'>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Indeterminate Primary</span>
+                {Progress.view({ isIndeterminate: true, variant: 'primary' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Indeterminate Info</span>
+                {Progress.view({ isIndeterminate: true, variant: 'info' })}
+              </div>
+              <div>
+                <span className='text-xs font-medium text-gray-500 mb-1 block'>Indeterminate Success</span>
+                {Progress.view({ isIndeterminate: true, variant: 'success' })}
               </div>
             </div>
           ),

@@ -1,13 +1,14 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Table,
+  Tag,
   Title,
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +17,38 @@ interface Props {
 }
 
 export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Table'}.view({})}`
+  const code = `// Striped & Bordered Table
+{Table.view({
+  isStriped: true,
+  isBordered: true,
+  children: (
+    <>
+      <thead>
+        <tr className='bg-gray-50 border-b border-gray-200'>
+          <th className='p-3 text-left font-semibold text-gray-700'>Article Title</th>
+          <th className='p-3 text-left font-semibold text-gray-700'>Author</th>
+          <th className='p-3 text-left font-semibold text-gray-700'>Tags</th>
+          <th className='p-3 text-left font-semibold text-gray-700'>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td className='p-3 text-gray-900 font-medium'>How to build a web app</td>
+          <td className='p-3 text-gray-600'>Gerard Quan</td>
+          <td className='p-3'>{Tag.view({ variant: 'primary', children: 'react' })}</td>
+          <td className='p-3'>{Tag.view({ variant: 'success', isLight: true, children: 'Published' })}</td>
+        </tr>
+      </tbody>
+    </>
+  ),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +60,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Table',
             })}
             <p className='text-base text-gray-600'>
-              Styled data table for tabular information display.
+              Styled data table for tabular data with support for striped rows, borders, hover states, and badge elements.
             </p>
           </>
         ),
@@ -67,22 +92,53 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Striped & Bordered Data Table */}
+        {sectionView({
+          title: 'Striped & Bordered Table',
+          boxClassName: 'p-6 w-full',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='w-full overflow-x-auto'>
-                {Table.view({
-                  isBordered: true,
-                  isStriped: true,
-                  children: (
-                    <>
-                      <thead><tr><th className='p-3 text-left font-semibold text-gray-700'>Title</th></tr></thead>
-                      <tbody><tr><td className='p-3 text-gray-900'>TypeScript Design System</td></tr></tbody>
-                    </>
-                  ),
-                })}
-              </div>
+            <div className='w-full overflow-x-auto'>
+              {Table.view({
+                isBordered: true,
+                isStriped: true,
+                isHoverable: true,
+                children: (
+                  <>
+                    <thead>
+                      <tr className='bg-gray-50 border-b border-gray-200'>
+                        <th className='p-3 text-left font-semibold text-gray-700'>Article Title</th>
+                        <th className='p-3 text-left font-semibold text-gray-700'>Author</th>
+                        <th className='p-3 text-left font-semibold text-gray-700'>Tag</th>
+                        <th className='p-3 text-left font-semibold text-gray-700'>Likes</th>
+                        <th className='p-3 text-left font-semibold text-gray-700'>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className='border-b border-gray-100'>
+                        <td className='p-3 text-gray-900 font-semibold'>How to build web applications that scale</td>
+                        <td className='p-3 text-gray-600'>Gerard Quan</td>
+                        <td className='p-3'>{Tag.view({ variant: 'primary', children: 'react' })}</td>
+                        <td className='p-3 text-gray-700 font-mono'>1,240</td>
+                        <td className='p-3'>{Tag.view({ variant: 'success', isLight: true, children: 'Published' })}</td>
+                      </tr>
+                      <tr className='border-b border-gray-100'>
+                        <td className='p-3 text-gray-900 font-semibold'>The Elm Architecture in React and Haskell</td>
+                        <td className='p-3 text-gray-600'>Anson Cheung</td>
+                        <td className='p-3'>{Tag.view({ variant: 'info', children: 'haskell' })}</td>
+                        <td className='p-3 text-gray-700 font-mono'>892</td>
+                        <td className='p-3'>{Tag.view({ variant: 'success', isLight: true, children: 'Published' })}</td>
+                      </tr>
+                      <tr className='border-b border-gray-100'>
+                        <td className='p-3 text-gray-900 font-semibold'>Functional Programming with fp-ts and io-ts</td>
+                        <td className='p-3 text-gray-600'>Albert Chen</td>
+                        <td className='p-3'>{Tag.view({ variant: 'link', children: 'fp-ts' })}</td>
+                        <td className='p-3 text-gray-700 font-mono'>415</td>
+                        <td className='p-3'>{Tag.view({ variant: 'warning', isLight: true, children: 'Draft' })}</td>
+                      </tr>
+                    </tbody>
+                  </>
+                ),
+              })}
             </div>
           ),
         })}

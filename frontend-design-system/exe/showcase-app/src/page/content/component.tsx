@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Content,
   Hero,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,24 @@ interface Props {
 }
 
 export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Content'}.view({})}`
+  const code = `{Content.view({
+  size: 'normal',
+  children: (
+    <div>
+      <h3 className='text-lg font-bold text-gray-900 mb-2'>Rich Article Content</h3>
+      <p className='text-gray-600 mb-3'>
+        Clean line-height typography wrapper designed for body copy, markdown articles, and documentation text.
+      </p>
+    </div>
+  ),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +45,7 @@ export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Content',
             })}
             <p className='text-base text-gray-600'>
-              Typography content wrapper for rich text formatting.
+              Typography content wrapper for rich text formatting and article content.
             </p>
           </>
         ),
@@ -67,16 +77,18 @@ export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Typography Body Copy',
           children: (
-            <div className='flex w-full items-center justify-center'>
+            <div className='w-full'>
               {Content.view({
-                className: 'w-full text-left',
+                size: 'normal',
                 children: (
                   <div>
-                    <h2 className='text-xl font-bold text-gray-900 mb-2'>Bulma Typography Content</h2>
-                    <p className='text-gray-600 mb-3'>Conduit RealWorld article markdown text formatted with clean line height.</p>
+                    <h3 className='text-lg font-bold text-gray-900 mb-2'>Rich Article Content</h3>
+                    <p className='text-gray-600 mb-3 leading-relaxed'>
+                      Clean line-height typography wrapper designed for body copy, markdown articles, and documentation text.
+                    </p>
                   </div>
                 ),
               })}

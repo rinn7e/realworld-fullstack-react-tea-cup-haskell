@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Card,
   Content,
@@ -9,6 +8,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -17,14 +17,26 @@ interface Props {
 }
 
 export const CardPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Card'}.view({})}`
+  const code = `{Card.view({
+  header: 'How to Build a Design System',
+  footer: (
+    <div className='flex items-center justify-between text-xs text-gray-500'>
+      <span>Author: Albert Chen</span>
+      <span>5 min read</span>
+    </div>
+  ),
+  children: Content.view({
+    size: 'normal',
+    children: 'An introduction to modular component design architecture built with React and Tailwind CSS.',
+  }),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -36,7 +48,7 @@ export const CardPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Card',
             })}
             <p className='text-base text-gray-600'>
-              A flexible and extensible content container.
+              A flexible and extensible content container with header, content body, and footer actions.
             </p>
           </>
         ),
@@ -68,14 +80,23 @@ export const CardPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Card with Header & Footer',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='w-full max-w-sm'>
+            <div className='w-full flex justify-center'>
+              <div className='w-full max-w-md'>
                 {Card.view({
-                  header: 'John Smith',
-                  children: Content.view({ size: 'normal', children: 'Card Content' }),
+                  header: 'How to Build a Design System',
+                  footer: (
+                    <div className='flex items-center justify-between text-xs text-gray-500 w-full'>
+                      <span>Author: Albert Chen</span>
+                      <span>5 min read</span>
+                    </div>
+                  ),
+                  children: Content.view({
+                    size: 'normal',
+                    children: 'An introduction to modular component design architecture built with React, Tailwind CSS v4, and the Elm Architecture.',
+                  }),
                 })}
               </div>
             </div>

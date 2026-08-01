@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Image,
@@ -9,6 +8,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -17,14 +17,22 @@ interface Props {
 }
 
 export const MediaObjectPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'MediaObject'}.view({})}`
+  const code = `{MediaObject.view({
+  left: Image.view({ src: 'https://api.realworld.io/images/demo-avatar.png', ratio: 'rounded' }),
+  children: (
+    <div>
+      <h4 className='font-bold text-gray-900'>Gerard Quan</h4>
+      <p className='text-sm text-gray-600'>Great article explaining Elm Architecture in React and Haskell!</p>
+    </div>
+  ),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -36,7 +44,7 @@ export const MediaObjectPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Media Object',
             })}
             <p className='text-base text-gray-600'>
-              Comment/post item with avatar on left and text on right.
+              Comment/post item container with left avatar media and right content text body.
             </p>
           </>
         ),
@@ -68,11 +76,19 @@ export const MediaObjectPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Article Comment Media Object',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {MediaObject.view({ left: Image.view({ src: 'https://api.realworld.io/images/demo-avatar.png', ratio: 'rounded' }), children: <p>Comment text</p> })}
+            <div className='w-full'>
+              {MediaObject.view({
+                left: Image.view({ src: 'https://api.realworld.io/images/demo-avatar.png', ratio: 'rounded' }),
+                children: (
+                  <div>
+                    <h4 className='font-bold text-gray-900'>Gerard Quan</h4>
+                    <p className='text-sm text-gray-600 mt-1'>Great article explaining Elm Architecture in React and Haskell!</p>
+                  </div>
+                ),
+              })}
             </div>
           ),
         })}

@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   File,
   Hero,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,18 @@ interface Props {
 }
 
 export const FilePage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'File'}.view({})}`
+  const code = `{File.view({
+  ctaText: 'Choose Image...',
+  filename: 'profile-picture.png',
+  onChange: (e) => console.log(e.target.files),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +39,7 @@ export const FilePage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'File',
             })}
             <p className='text-base text-gray-600'>
-              Styled file upload input element.
+              Styled file upload input element with custom CTA text and filename display.
             </p>
           </>
         ),
@@ -67,11 +71,16 @@ export const FilePage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: File Upload Input */}
+        {sectionView({
+          title: 'File Upload Control',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {File.view({ ctaText: 'Choose File...', filename: 'avatar.png', onChange: () => {} })}
+            <div className='w-full space-y-3 flex flex-col items-start'>
+              {File.view({
+                ctaText: 'Choose Image...',
+                filename: 'profile-picture.png',
+                onChange: () => {},
+              })}
             </div>
           ),
         })}

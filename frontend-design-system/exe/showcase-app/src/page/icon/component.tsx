@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Icon,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Search, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,15 @@ interface Props {
 }
 
 export const IconPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Icon'}.view({})}`
+  const code = `{Icon.view({ children: <Sparkles className='h-6 w-6 text-green-600' /> })}
+{Icon.view({ children: <Search className='h-6 w-6 text-sky-500' /> })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +36,7 @@ export const IconPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Icon',
             })}
             <p className='text-base text-gray-600'>
-              Icon wrapper container for Lucide icons.
+              Icon wrapper container for Lucide icons with consistent sizing and alignment.
             </p>
           </>
         ),
@@ -67,14 +68,12 @@ export const IconPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Icon Container Wrappers',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='flex items-center gap-6 text-gray-700'>
-                {Icon.view({ children: <Sparkles className='h-6 w-6 text-green-600' /> })}
-                {Icon.view({ children: <Search className='h-6 w-6 text-sky-500' /> })}
-              </div>
+            <div className='flex items-center gap-6 text-gray-700'>
+              {Icon.view({ children: <Sparkles className='h-6 w-6 text-green-600' /> })}
+              {Icon.view({ children: <Search className='h-6 w-6 text-sky-500' /> })}
             </div>
           ),
         })}

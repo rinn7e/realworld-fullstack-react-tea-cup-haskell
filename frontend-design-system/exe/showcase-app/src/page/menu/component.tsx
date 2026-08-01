@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Menu,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,21 @@ interface Props {
 }
 
 export const MenuPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Menu'}.view({})}`
+  const code = `{Menu.view({
+  categories: [
+    { title: 'General', items: [{ id: 'dash', label: 'Dashboard', isActive: true }, { id: 'settings', label: 'Settings' }] },
+    { title: 'Administration', items: [{ id: 'users', label: 'Manage Users' }] }
+  ],
+  model: model.menuModel,
+  dispatch: (subMsg) => dispatch({ _tag: 'MenuMsg', subMsg }),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +42,7 @@ export const MenuPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Menu',
             })}
             <p className='text-base text-gray-600'>
-              Sidebar navigation list with categories and active item states.
+              Vertical sidebar navigation list with grouped categories and active item indicators.
             </p>
           </>
         ),
@@ -67,17 +74,18 @@ export const MenuPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Vertical Navigation Menu',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='w-full max-w-xs'>
-                {Menu.view({
-                  categories: [{ title: 'General', items: [{ id: 'dash', label: 'Dashboard', isActive: true }] }],
-                  model: model.menuModel,
-                  dispatch: (subMsg) => dispatch({ _tag: 'MenuMsg', subMsg }),
-                })}
-              </div>
+            <div className='w-full max-w-xs'>
+              {Menu.view({
+                categories: [
+                  { title: 'General', items: [{ id: 'dash', label: 'Dashboard', isActive: true }, { id: 'settings', label: 'Settings' }] },
+                  { title: 'Administration', items: [{ id: 'users', label: 'Manage Users' }] }
+                ],
+                model: model.menuModel,
+                dispatch: (subMsg) => dispatch({ _tag: 'MenuMsg', subMsg }),
+              })}
             </div>
           ),
         })}

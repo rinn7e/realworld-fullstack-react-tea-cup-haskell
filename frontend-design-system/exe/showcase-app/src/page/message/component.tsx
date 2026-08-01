@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Message,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,26 @@ interface Props {
 }
 
 export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Message'}.view({})}`
+  const code = `// With Header & Body
+{Message.view({ variant: 'default', header: 'Note', children: 'Standard message text content.' })}
+{Message.view({ variant: 'primary', header: 'Primary Note', children: 'Primary callout message body.' })}
+{Message.view({ variant: 'info', header: 'System Update', children: 'System maintenance scheduled.' })}
+{Message.view({ variant: 'success', header: 'Success', children: 'Account setup complete.' })}
+{Message.view({ variant: 'warning', header: 'Warning', children: 'Please verify your email.' })}
+{Message.view({ variant: 'danger', header: 'Error', children: 'Failed to process transaction.' })}
+
+// Body Only (No Header)
+{Message.view({ variant: 'info', children: 'Standalone callout message body without a header.' })}
+
+// Dismissible Message Callout
+{Message.view({ variant: 'primary', header: 'Dismissible', onDelete: () => {}, children: 'Click X to dismiss.' })}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +47,7 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Message',
             })}
             <p className='text-base text-gray-600'>
-              Callout message boxes with optional header and body.
+              Callout message boxes with optional headers, color themes, and dismiss buttons.
             </p>
           </>
         ),
@@ -67,13 +79,28 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {/* Section 1: Color Variants with Headers */}
+        {sectionView({
+          title: 'Color Variants (Header & Body)',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              <div className='w-full space-y-3'>
-                {Message.view({ variant: 'primary', header: 'Note', children: 'Message body' })}
-              </div>
+            <div className='w-full space-y-4'>
+              {Message.view({ variant: 'default', header: 'Note', children: 'Default callout message body detailing general instructions.' })}
+              {Message.view({ variant: 'primary', header: 'Primary Note', children: 'Primary callout message highlighting important features.' })}
+              {Message.view({ variant: 'info', header: 'System Information', children: 'Maintenance is scheduled for tonight at 02:00 UTC.' })}
+              {Message.view({ variant: 'success', header: 'Success', children: 'Your account was upgraded to Pro successfully!' })}
+              {Message.view({ variant: 'warning', header: 'Warning', children: 'Your subscription expires in 3 days. Please renew.' })}
+              {Message.view({ variant: 'danger', header: 'Connection Error', children: 'Unable to reach backend servers. Please try again later.' })}
+            </div>
+          ),
+        })}
+
+        {/* Section 2: Body Only & Dismissible Messages */}
+        {sectionView({
+          title: 'Body Only & Dismissible Messages',
+          children: (
+            <div className='w-full space-y-4'>
+              {Message.view({ variant: 'info', children: 'Standalone callout message body without a header container.' })}
+              {Message.view({ variant: 'primary', header: 'Dismissible Notice', onDelete: () => alert('Message closed!'), children: 'Click the X button on the top right to close this message box.' })}
             </div>
           ),
         })}

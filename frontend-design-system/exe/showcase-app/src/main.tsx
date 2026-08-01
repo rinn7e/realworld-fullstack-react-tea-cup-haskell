@@ -1,4 +1,3 @@
-import '@rinn7e/realworld-design-system/styles.css'
 import './index.css'
 import React from 'react'
 import ReactDOM from 'react-dom/client'

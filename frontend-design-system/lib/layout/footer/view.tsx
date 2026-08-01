@@ -13,7 +13,7 @@ export const view = ({ children, className }: FooterProps): React.ReactElement =
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         {children || (
           <p>
-            <strong>Bulma Design System</strong> by Alex. Built with Tailwind CSS
+            <strong>RealWorld Design System</strong> by Alex. Built with Tailwind CSS
             &amp; TEA architecture.
           </p>
         )}

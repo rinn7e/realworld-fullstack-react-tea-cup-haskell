@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Button,
   Hero,
   Level,
@@ -8,6 +7,7 @@ import {
 } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import type { Dispatcher } from 'tea-cup-fp'
+import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
 interface Props {
@@ -16,14 +16,21 @@ interface Props {
 }
 
 export const LevelPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{${'Level'}.view({})}`
+  const code = `{Level.view({
+  children: (
+    <div className='flex justify-between items-center w-full'>
+      <span className='font-semibold text-gray-800'>Left Alignment Item</span>
+      <span className='text-sm text-green-600 font-bold'>Right Alignment Item</span>
+    </div>
+  ),
+})}`
 
   return (
-    <div className='w-full text-left'>
+    <div className='w-full text-left space-y-8'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'mb-6 rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
             <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
@@ -35,7 +42,7 @@ export const LevelPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Level',
             })}
             <p className='text-base text-gray-600'>
-              Horizontal layout container for multi-part items.
+              Horizontal layout container for multi-part items like headers, toolbars, and split rows.
             </p>
           </>
         ),
@@ -67,11 +74,18 @@ export const LevelPage: React.FC<Props> = ({ model, dispatch }) => {
           })}
         </div>
 
-        {Box.view({
-          className: 'flex min-h-[220px] w-full items-center justify-center p-6',
+        {sectionView({
+          title: 'Split Horizontal Level',
           children: (
-            <div className='flex w-full items-center justify-center'>
-              {Level.view({ children: <div className='flex justify-between w-full'><span>Left</span><span>Right</span></div> })}
+            <div className='w-full'>
+              {Level.view({
+                children: (
+                  <div className='flex justify-between items-center w-full'>
+                    <span className='font-semibold text-gray-800'>Left Alignment Item</span>
+                    <span className='text-sm text-green-600 font-bold'>Right Alignment Item</span>
+                  </div>
+                ),
+              })}
             </div>
           ),
         })}
