@@ -34,6 +34,7 @@ export const VisitorPageComponent: React.FC<Props> = ({
             Visitors
           </h2>
           <button
+            type='button'
             onClick={() => dispatch({ _tag: 'ToggleDescription' })}
             className='flex h-[32px] w-[32px] cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-white'
             aria-label={

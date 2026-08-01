@@ -7,10 +7,11 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "check": "tsc --noEmit",
+    "check-circular": "madge --circular --ts-config ./tsconfig.json --extensions ts,tsx src/",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "echo \"no tests\"",
-    "staged": "pnpm run format && pnpm run check && pnpm run lint && pnpm run test",
+    "staged": "pnpm run format && pnpm run check && pnpm run check-circular && pnpm run lint && pnpm run test",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -38,6 +39,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^15.14.0",
+    "madge": "^8.0.0",
     "prettier": "^3.5.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.0.0",

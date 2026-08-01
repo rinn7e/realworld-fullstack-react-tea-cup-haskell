@@ -15,7 +15,7 @@
     "check-circular": "madge --circular --ts-config ./tsconfig.json --extensions ts,tsx src/",
     "format": "prettier --write .",
     "test": "echo \"no tests\"",
-    "staged": "pnpm run format && pnpm run check && pnpm run lint && pnpm run test"
+    "staged": "pnpm run format && pnpm run check && pnpm run check-circular && pnpm run lint && pnpm run test"
   },
   "dependencies": {
     "@devexperts/remote-data-ts": "^2.1.1",

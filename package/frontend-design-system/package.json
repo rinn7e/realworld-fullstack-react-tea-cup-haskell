@@ -30,7 +30,7 @@
     "format": "prettier --write .",
     "lint": "eslint lib/",
     "test": "echo \"no tests\"",
-    "staged": "pnpm run format && pnpm run check && pnpm run lint && pnpm run test",
+    "staged": "pnpm run format && pnpm run check && pnpm run check-circular && pnpm run lint && pnpm run test",
     "showcase:dev": "cd app/showcase-app && npm run dev",
     "showcase:build": "cd app/showcase-app && npm run build"
   },
