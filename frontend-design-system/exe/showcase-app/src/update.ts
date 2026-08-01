@@ -1,17 +1,19 @@
 import {
   Dropdown,
+  Menu,
   Modal,
   Navbar,
   Pagination,
   Panel,
   Tabs,
-} from '@rinn7e/frontend-design-system'
+} from '@rinn7e/realworld-design-system'
 import { Cmd } from 'tea-cup-fp'
 
 import type { Model, Msg } from './type'
 
 export const init = (): [Model, Cmd<Msg>] => {
   const [dropdownModel] = Dropdown.init('opt1')
+  const [menuModel] = Menu.init('button')
   const [modalModel] = Modal.init(false)
   const [navbarModel] = Navbar.init('home')
   const [paginationModel] = Pagination.init(1, 5)
@@ -25,6 +27,7 @@ export const init = (): [Model, Cmd<Msg>] => {
       searchQuery: '',
       showCode: true,
       dropdownModel,
+      menuModel,
       modalModel,
       navbarModel,
       paginationModel,
@@ -45,8 +48,16 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
     case 'SelectCategory':
       return [{ ...model, activeCategory: msg.category }, Cmd.none()]
-    case 'SelectComponent':
-      return [{ ...model, activeComponent: msg.component }, Cmd.none()]
+    case 'SelectComponent': {
+      const [newMenuModel] = Menu.update({
+        _tag: 'Select',
+        id: msg.component,
+      })(model.menuModel)
+      return [
+        { ...model, activeComponent: msg.component, menuModel: newMenuModel },
+        Cmd.none(),
+      ]
+    }
     case 'UpdateSearch':
       return [{ ...model, searchQuery: msg.query }, Cmd.none()]
     case 'ToggleShowCode':
@@ -60,6 +71,16 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         { ...model, dropdownModel: newSubModel },
         cmd.map((subMsg: Dropdown.Msg) => ({
           _tag: 'DropdownMsg' as const,
+          subMsg,
+        })),
+      ]
+    }
+    case 'MenuMsg': {
+      const [newSubModel, cmd] = Menu.update(msg.subMsg)(model.menuModel)
+      return [
+        { ...model, menuModel: newSubModel },
+        cmd.map((subMsg: Menu.Msg) => ({
+          _tag: 'MenuMsg' as const,
           subMsg,
         })),
       ]

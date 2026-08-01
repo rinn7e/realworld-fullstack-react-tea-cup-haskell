@@ -3,7 +3,7 @@ import { Upload } from 'lucide-react'
 import { cn } from '../../theme'
 import type { FileProps } from './type'
 
-export const view: React.FC<FileProps> = ({
+export const view = ({
   filename,
   ctaText = 'Choose a file…',
   accept,
@@ -12,7 +12,7 @@ export const view: React.FC<FileProps> = ({
   name,
   id,
   className,
-}) => {
+}: FileProps): React.ReactElement => {
   return (
     <label
       className={cn(

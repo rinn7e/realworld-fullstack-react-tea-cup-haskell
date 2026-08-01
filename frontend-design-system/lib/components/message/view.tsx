@@ -30,13 +30,13 @@ const variantStyles: Record<string, { header: string; body: string }> = {
   },
 }
 
-export const view: React.FC<MessageProps> = ({
+export const view = ({
   header,
   children,
   variant = 'default',
   onDelete,
   className,
-}) => {
+}: MessageProps): React.ReactElement => {
   const v = variantStyles[variant] || variantStyles.default
 
   return (
@@ -55,7 +55,7 @@ export const view: React.FC<MessageProps> = ({
           )}
         >
           <span>{header}</span>
-          {onDelete && <DeleteView size='small' onClick={onDelete} />}
+          {onDelete && DeleteView({ size: 'small', onClick: onDelete })}
         </div>
       )}
       <div className='p-4'>{children}</div>

@@ -2,7 +2,7 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { FooterProps } from './type'
 
-export const view: React.FC<FooterProps> = ({ children, className }) => {
+export const view = ({ children, className }: FooterProps): React.ReactElement => {
   return (
     <footer
       className={cn(

@@ -19,7 +19,7 @@
     "baseUrl": ".",
     "paths": {
       "../../lib": ["../../lib/index.ts"],
-      "@rinn7e/frontend-design-system": ["../../lib/index.ts"]
+      "@rinn7e/realworld-design-system": ["../../lib/index.ts"]
     }
   },
   "include": ["src"]

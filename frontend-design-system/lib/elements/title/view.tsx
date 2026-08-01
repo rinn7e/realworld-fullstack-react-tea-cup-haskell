@@ -11,12 +11,12 @@ const sizeStyles: Record<number, { title: string; subtitle: string }> = {
   6: { title: 'text-base font-semibold', subtitle: 'text-xs text-gray-500 font-normal' },
 }
 
-export const view: React.FC<TitleProps> = ({
+export const view = ({
   children,
   size = 3,
   isSubtitle = false,
   className,
-}) => {
+}: TitleProps): React.ReactElement => {
   const styles = sizeStyles[size] || sizeStyles[3]
   const fullClass = cn(
     'tracking-tight text-gray-900',

@@ -10,17 +10,18 @@ const ratioStyles: Record<string, string> = {
   rounded: 'rounded-full aspect-square object-cover',
 }
 
-export const view: React.FC<ImageProps> = ({
+export const view = ({
   src,
-  alt = '',
+  alt,
   ratio = 'square',
   className,
-}) => {
+}: ImageProps): React.ReactElement => {
+  const imageAlt = alt || ''
   return (
     <figure className={cn('overflow-hidden rounded-lg', className)}>
       <img
-        src={src}
-        alt={alt}
+        src={src ?? undefined}
+        alt={imageAlt}
         className={cn('w-full h-full', ratioStyles[ratio])}
       />
     </figure>

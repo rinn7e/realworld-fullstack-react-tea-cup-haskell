@@ -13,12 +13,12 @@ const variantStyles: Record<string, string> = {
   danger: 'bg-rose-500 text-white border-rose-600',
 }
 
-export const view: React.FC<NotificationProps> = ({
+export const view = ({
   variant = 'default',
   children,
   onDelete,
   className,
-}) => {
+}: NotificationProps): React.ReactElement => {
   return (
     <div
       className={cn(
@@ -30,7 +30,7 @@ export const view: React.FC<NotificationProps> = ({
       <div className='flex-1 pr-6'>{children}</div>
       {onDelete && (
         <div className='absolute right-3 top-3'>
-          <DeleteView size='small' onClick={onDelete} />
+          {DeleteView({ size: 'small', onClick: onDelete })}
         </div>
       )}
     </div>

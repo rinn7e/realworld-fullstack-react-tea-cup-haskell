@@ -3,13 +3,13 @@ import { ChevronDown } from 'lucide-react'
 import { cn } from '../../theme'
 import type { DropdownProps } from './type'
 
-export const view: React.FC<DropdownProps> = ({
+export const view = ({
   triggerLabel,
   items,
   model,
   dispatch,
   className,
-}) => {
+}: DropdownProps): React.ReactElement => {
   const selectedItem = items.find((i) => i.id === model.selectedId)
 
   return (

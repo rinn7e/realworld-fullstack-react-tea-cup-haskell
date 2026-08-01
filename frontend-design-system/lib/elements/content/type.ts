@@ -1,6 +1,9 @@
-import React from 'react'
+import type { ReactNode } from 'react'
+
+export type ContentSize = 'small' | 'normal' | 'medium' | 'large'
 
 export type ContentProps = {
-  children: React.ReactNode
+  size?: ContentSize
+  children: ReactNode
   className?: string
 }

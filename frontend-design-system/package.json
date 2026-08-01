@@ -1,15 +1,15 @@
 {
-  "name": "@rinn7e/frontend-design-system",
+  "name": "@rinn7e/realworld-design-system",
   "version": "0.1.0-alpha.1",
   "description": "Bulma-inspired design system library built with Tailwind CSS and react-tea-cup TEA architecture",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     }
   },
   "files": [
@@ -17,7 +17,7 @@
     "lib"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && pnpm run showcase:build",
     "check": "tsc --noEmit",
     "check-circular": "madge --circular lib/",
     "clean": "rimraf dist node_modules/.cache",

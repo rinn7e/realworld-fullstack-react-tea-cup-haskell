@@ -2,7 +2,7 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { CheckboxProps } from './type'
 
-export const view: React.FC<CheckboxProps> = ({
+export const view = ({
   label,
   checked = false,
   isDisabled = false,
@@ -10,7 +10,7 @@ export const view: React.FC<CheckboxProps> = ({
   name,
   id,
   className,
-}) => {
+}: CheckboxProps): React.ReactElement => {
   return (
     <label
       className={cn(

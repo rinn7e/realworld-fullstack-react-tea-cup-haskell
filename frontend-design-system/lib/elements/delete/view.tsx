@@ -10,11 +10,11 @@ const sizeStyles: Record<string, string> = {
   large: 'h-8 w-8 p-1.5',
 }
 
-export const view: React.FC<DeleteProps> = ({
+export const view = ({
   size = 'normal',
   onClick,
   className,
-}) => {
+}: DeleteProps): React.ReactElement => {
   return (
     <button
       type='button'

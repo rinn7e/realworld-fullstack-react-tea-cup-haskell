@@ -2,7 +2,7 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { BoxProps } from './type'
 
-export const view: React.FC<BoxProps> = ({ children, className }) => {
+export const view = ({ children, className }: BoxProps): React.ReactElement => {
   return (
     <div
       className={cn(

@@ -2,11 +2,11 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { ContainerProps } from './type'
 
-export const view: React.FC<ContainerProps> = ({
+export const view = ({
   isFluid = false,
   children,
   className,
-}) => {
+}: ContainerProps): React.ReactElement => {
   return (
     <div
       className={cn(

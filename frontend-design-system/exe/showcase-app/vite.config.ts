@@ -7,14 +7,21 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@rinn7e/frontend-design-system': path.resolve(
+      '@rinn7e/realworld-design-system/styles.css': path.resolve(
+        __dirname,
+        '../../lib/styles.css',
+      ),
+      '@rinn7e/realworld-design-system': path.resolve(
         __dirname,
         '../../lib/index.ts',
       ),
     },
   },
   server: {
-    port: 3000,
+    port: 5175,
     open: true,
+    fs: {
+      allow: [path.resolve(__dirname, '../..')],
+    },
   },
 })

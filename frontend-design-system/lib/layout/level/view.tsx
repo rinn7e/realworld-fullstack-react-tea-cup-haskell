@@ -2,7 +2,7 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { LevelItemProps, LevelProps } from './type'
 
-export const view: React.FC<LevelProps> = ({ children, className }) => {
+export const view = ({ children, className }: LevelProps): React.ReactElement => {
   return (
     <div
       className={cn(
@@ -15,23 +15,23 @@ export const view: React.FC<LevelProps> = ({ children, className }) => {
   )
 }
 
-export const leftView: React.FC<LevelProps> = ({ children, className }) => {
+export const leftView = ({ children, className }: LevelProps): React.ReactElement => {
   return (
     <div className={cn('flex items-center gap-3', className)}>{children}</div>
   )
 }
 
-export const rightView: React.FC<LevelProps> = ({ children, className }) => {
+export const rightView = ({ children, className }: LevelProps): React.ReactElement => {
   return (
     <div className={cn('flex items-center gap-3', className)}>{children}</div>
   )
 }
 
-export const itemView: React.FC<LevelItemProps> = ({
+export const itemView = ({
   hasTextCentered = true,
   children,
   className,
-}) => {
+}: LevelItemProps): React.ReactElement => {
   return (
     <div
       className={cn(
@@ -45,7 +45,6 @@ export const itemView: React.FC<LevelItemProps> = ({
   )
 }
 
-// Named alias exports for convenience
 export const LevelLeft = leftView
 export const LevelRight = rightView
 export const LevelItem = itemView

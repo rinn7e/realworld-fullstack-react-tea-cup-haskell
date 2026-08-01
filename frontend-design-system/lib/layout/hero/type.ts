@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 
 export type HeroVariant =
   | 'default'
@@ -8,13 +8,16 @@ export type HeroVariant =
   | 'success'
   | 'warning'
   | 'danger'
-  | 'dark'
 
-export type HeroSize = 'small' | 'normal' | 'medium' | 'large' | 'fullheight'
+export type HeroSize = 'small' | 'medium' | 'large' | 'fullheight'
 
 export type HeroProps = {
-  children: React.ReactNode
   variant?: HeroVariant
   size?: HeroSize
+  title?: ReactNode
+  subtitle?: ReactNode
+  header?: ReactNode
+  footer?: ReactNode
+  children?: ReactNode
   className?: string
 }

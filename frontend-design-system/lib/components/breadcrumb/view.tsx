@@ -9,12 +9,12 @@ const alignStyles: Record<string, string> = {
   right: 'justify-end',
 }
 
-export const view: React.FC<BreadcrumbProps> = ({
+export const view = ({
   items,
   align = 'left',
   onSelect,
   className,
-}) => {
+}: BreadcrumbProps): React.ReactElement => {
   return (
     <nav aria-label='breadcrumbs' className={className}>
       <ol

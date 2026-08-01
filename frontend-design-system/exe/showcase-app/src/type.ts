@@ -1,11 +1,12 @@
 import type {
   Dropdown,
+  Menu,
   Modal,
   Navbar,
   Pagination,
   Panel,
   Tabs,
-} from '@rinn7e/frontend-design-system'
+} from '@rinn7e/realworld-design-system'
 
 export type SectionCategory =
   | 'elements'
@@ -63,6 +64,7 @@ export type Model = {
   showCode: boolean
   // Component Interactive States
   dropdownModel: Dropdown.Model
+  menuModel: Menu.Model
   modalModel: Modal.Model
   navbarModel: Navbar.Model
   paginationModel: Pagination.Model
@@ -84,6 +86,7 @@ export type Msg =
   | { _tag: 'ToggleShowCode' }
   // Sub-component Msgs
   | { _tag: 'DropdownMsg'; subMsg: Dropdown.Msg }
+  | { _tag: 'MenuMsg'; subMsg: Menu.Msg }
   | { _tag: 'ModalMsg'; subMsg: Modal.Msg }
   | { _tag: 'NavbarMsg'; subMsg: Navbar.Msg }
   | { _tag: 'PaginationMsg'; subMsg: Pagination.Msg }

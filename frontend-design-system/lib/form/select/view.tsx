@@ -2,7 +2,7 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { SelectProps } from './type'
 
-export const view: React.FC<SelectProps> = ({
+export const view = ({
   options,
   value,
   isDisabled = false,
@@ -10,7 +10,7 @@ export const view: React.FC<SelectProps> = ({
   onChange,
   name,
   className,
-}) => {
+}: SelectProps): React.ReactElement => {
   return (
     <select
       name={name}

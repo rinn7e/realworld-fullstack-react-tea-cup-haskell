@@ -3,13 +3,13 @@ import { cn } from '../../theme'
 import type { InputProps } from './type'
 
 const sizeStyles: Record<string, string> = {
-  small: 'px-2.5 py-1 text-xs',
+  small: 'px-3 py-1.5 text-xs',
   normal: 'px-3.5 py-2 text-sm',
   medium: 'px-4 py-2.5 text-base',
   large: 'px-5 py-3 text-lg',
 }
 
-export const view: React.FC<InputProps> = ({
+export const view = ({
   type = 'text',
   value = '',
   placeholder,
@@ -24,7 +24,7 @@ export const view: React.FC<InputProps> = ({
   name,
   id,
   className,
-}) => {
+}: InputProps): React.ReactElement => {
   return (
     <input
       type={type}
@@ -37,12 +37,12 @@ export const view: React.FC<InputProps> = ({
       onFocus={onFocus}
       onBlur={onBlur}
       className={cn(
-        'border bg-white text-gray-900 transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60',
+        'border bg-white text-gray-900 outline-none transition-colors focus:ring-1 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:opacity-60',
         isError
-          ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
-          : 'border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20',
+          ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+          : 'border-gray-300 focus:border-green-500 focus:ring-green-500',
         sizeStyles[size],
-        isRounded ? 'rounded-full' : 'rounded-md',
+        isRounded ? 'rounded-full' : 'rounded',
         isFullWidth && 'w-full',
         className,
       )}

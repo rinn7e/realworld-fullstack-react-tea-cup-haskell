@@ -19,7 +19,7 @@ const sizeStyles: Record<string, string> = {
   fullheight: 'min-h-screen flex flex-col justify-center py-12',
 }
 
-export const view: React.FC<HeroProps> = ({
+export const view = ({
   variant = 'default',
   size = 'medium',
   title,
@@ -28,7 +28,7 @@ export const view: React.FC<HeroProps> = ({
   header,
   footer,
   className,
-}) => {
+}: HeroProps): React.ReactElement => {
   return (
     <section
       className={cn(

@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 
 export type ButtonVariant =
   | 'default'
@@ -8,21 +8,19 @@ export type ButtonVariant =
   | 'success'
   | 'warning'
   | 'danger'
-  | 'dark'
-  | 'light'
 
 export type ButtonSize = 'small' | 'normal' | 'medium' | 'large'
 
 export type ButtonProps = {
-  children?: React.ReactNode
   variant?: ButtonVariant
   size?: ButtonSize
   isOutlined?: boolean
   isRounded?: boolean
-  isLoading?: boolean
   isFullWidth?: boolean
-  disabled?: boolean
-  type?: 'button' | 'submit' | 'reset'
+  isLoading?: boolean
+  isDisabled?: boolean
+  children: ReactNode
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  type?: 'button' | 'submit' | 'reset'
   className?: string
 }

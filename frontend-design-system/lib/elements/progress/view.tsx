@@ -18,14 +18,14 @@ const sizeStyles: Record<string, string> = {
   large: 'h-6',
 }
 
-export const view: React.FC<ProgressProps> = ({
+export const view = ({
   value = 0,
   max = 100,
   variant = 'primary',
   size = 'normal',
   isIndeterminate = false,
   className,
-}) => {
+}: ProgressProps): React.ReactElement => {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100))
 
   return (

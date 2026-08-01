@@ -1,12 +1,12 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 
 export type LevelProps = {
-  children: React.ReactNode
-  isMobile?: boolean
+  children: ReactNode
   className?: string
 }
 
 export type LevelItemProps = {
-  children: React.ReactNode
+  hasTextCentered?: boolean
+  children: ReactNode
   className?: string
 }

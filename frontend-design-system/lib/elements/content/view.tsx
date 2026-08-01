@@ -9,11 +9,11 @@ const sizeStyles: Record<string, string> = {
   large: 'text-lg leading-relaxed',
 }
 
-export const view: React.FC<ContentProps> = ({
+export const view = ({
   size = 'normal',
   children,
   className,
-}) => {
+}: ContentProps): React.ReactElement => {
   return (
     <div
       className={cn(

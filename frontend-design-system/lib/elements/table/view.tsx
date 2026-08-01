@@ -2,14 +2,14 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { TableProps } from './type'
 
-export const view: React.FC<TableProps> = ({
+export const view = ({
   isBordered = false,
   isStriped = false,
   isHoverable = false,
   isFullWidth = true,
   children,
   className,
-}) => {
+}: TableProps): React.ReactElement => {
   return (
     <div className='w-full overflow-x-auto rounded-lg border border-gray-200 shadow-2xs'>
       <table

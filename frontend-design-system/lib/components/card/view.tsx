@@ -2,13 +2,13 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { CardProps } from './type'
 
-export const view: React.FC<CardProps> = ({
+export const view = ({
   header,
   image,
   children,
   footer,
   className,
-}) => {
+}: CardProps): React.ReactElement => {
   return (
     <div
       className={cn(

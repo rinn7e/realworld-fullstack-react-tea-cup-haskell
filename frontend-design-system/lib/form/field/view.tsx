@@ -2,14 +2,14 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { FieldProps } from './type'
 
-export const view: React.FC<FieldProps> = ({
+export const view = ({
   label,
   helpText,
   errorText,
   isExpanded = false,
   children,
   className,
-}) => {
+}: FieldProps): React.ReactElement => {
   return (
     <div className={cn('mb-4 last:mb-0', isExpanded && 'w-full', className)}>
       {label && (

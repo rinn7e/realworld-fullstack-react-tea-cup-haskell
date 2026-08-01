@@ -9,11 +9,11 @@ const sizeStyles: Record<string, string> = {
   large: 'h-8 w-8 text-lg',
 }
 
-export const view: React.FC<IconProps> = ({
+export const view = ({
   size = 'normal',
   children,
   className,
-}) => {
+}: IconProps): React.ReactElement => {
   return (
     <span
       className={cn(

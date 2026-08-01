@@ -2,14 +2,14 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { MenuProps } from './type'
 
-export const view: React.FC<MenuProps> = ({
+export const view = ({
   categories,
   model,
   dispatch,
   className,
-}) => {
+}: MenuProps): React.ReactElement => {
   return (
-    <aside className={cn('w-full max-w-xs text-sm', className)}>
+    <aside className={cn('w-full text-sm', className)}>
       {categories.map((cat, idx) => (
         <div key={idx} className='mb-4 last:mb-0'>
           <p className='mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-gray-500'>
@@ -26,7 +26,7 @@ export const view: React.FC<MenuProps> = ({
                     className={cn(
                       'block w-full rounded-md px-3 py-1.5 text-left font-medium transition-colors',
                       isActive
-                        ? 'bg-emerald-500 font-semibold text-white'
+                        ? 'bg-green-600 font-semibold text-white'
                         : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900',
                     )}
                   >

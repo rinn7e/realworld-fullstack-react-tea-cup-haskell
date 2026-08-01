@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rinn7e/frontend-design-system": "workspace:*",
+    "@rinn7e/realworld-design-system": "workspace:*",
     "clsx": "^2.1.1",
     "fp-ts": "^2.16.11",
     "lucide-react": "^0.475.0",

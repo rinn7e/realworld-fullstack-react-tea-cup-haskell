@@ -8,11 +8,11 @@ const sizeStyles: Record<string, string> = {
   large: 'py-20 sm:py-28',
 }
 
-export const view: React.FC<SectionProps> = ({
+export const view = ({
   size = 'medium',
   children,
   className,
-}) => {
+}: SectionProps): React.ReactElement => {
   return (
     <section className={cn('w-full', sizeStyles[size], className)}>
       {children}

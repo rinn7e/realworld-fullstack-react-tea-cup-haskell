@@ -2,14 +2,14 @@ import React from 'react'
 import { cn } from '../../theme'
 import type { RadioProps } from './type'
 
-export const view: React.FC<RadioProps> = ({
+export const view = ({
   name,
   options,
   selectedValue,
   isDisabled = false,
   onChange,
   className,
-}) => {
+}: RadioProps): React.ReactElement => {
   return (
     <div className={cn('flex flex-col gap-2', className)}>
       {options.map((opt) => (
