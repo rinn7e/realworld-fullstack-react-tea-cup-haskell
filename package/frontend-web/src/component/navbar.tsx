@@ -1,4 +1,4 @@
-import { Image } from '@rinn7e/realworld-design-system'
+import { Button, Image } from '@rinn7e/realworld-design-system'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
 import type { Option } from 'fp-ts/lib/Option'
@@ -192,13 +192,13 @@ export const Navbar: React.FC<Props> = ({ model, dispatch }) => {
           )}
 
           {/* mobile hamburger button */}
-          <button
-            type='button'
-            className='p-[8px] text-gray-500 hover:text-gray-900 focus:outline-none lg:hidden'
-            onClick={() => dispatch({ _tag: 'ToggleNavbarMobile', open: true })}
-          >
-            <Menu size={24} />
-          </button>
+          {Button.view({
+            color: 'gray',
+            variant: 'ghost',
+            onClick: () => dispatch({ _tag: 'ToggleNavbarMobile', open: true }),
+            className: 'p-[8px] lg:hidden',
+            children: () => <Menu size={24} />,
+          })}
 
           {/* desktop nav links */}
           <ul className='hidden lg:flex lg:items-center lg:gap-[4px]'>
@@ -225,15 +225,14 @@ export const Navbar: React.FC<Props> = ({ model, dispatch }) => {
                   <span className='text-xl font-bold text-green-600'>
                     conduit
                   </span>
-                  <button
-                    type='button'
-                    className='p-[8px] text-gray-500 hover:text-gray-900 focus:outline-none'
-                    onClick={() =>
-                      dispatch({ _tag: 'ToggleNavbarMobile', open: false })
-                    }
-                  >
-                    <X size={24} />
-                  </button>
+                  {Button.view({
+                    color: 'gray',
+                    variant: 'ghost',
+                    onClick: () =>
+                      dispatch({ _tag: 'ToggleNavbarMobile', open: false }),
+                    className: 'p-[8px]',
+                    children: () => <X size={24} />,
+                  })}
                 </div>
                 <ul className='flex flex-col gap-[8px]'>{links(true)}</ul>
               </div>

@@ -1,3 +1,4 @@
+import { Button } from '@rinn7e/realworld-design-system'
 import * as Form from '@rinn7e/tea-cup-form'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as E from 'fp-ts/lib/Either'
@@ -101,21 +102,20 @@ export const standardInputUi =
           }
           onKeyDown={onKeyDown}
         />
-        {variant._tag === 'Password' && (
-          <button
-            type='button'
-            className='absolute right-[6px] flex items-center justify-center p-2 text-gray-500 transition-colors hover:text-gray-700'
-            onClick={(e) =>
+        {variant._tag === 'Password' &&
+          Button.view({
+            color: 'gray',
+            variant: 'ghost',
+            onClick: (e) =>
               props.dispatch({
                 _tag: 'SetRevealPassword',
                 reveal: !variant.reveal,
                 event: e,
-              })
-            }
-          >
-            {variant.reveal ? <EyeOff size={20} /> : <Eye size={20} />}
-          </button>
-        )}
+              }),
+            className: 'absolute right-[6px] p-2',
+            children: () =>
+              variant.reveal ? <EyeOff size={20} /> : <Eye size={20} />,
+          })}
       </div>
     )
 
@@ -189,20 +189,21 @@ export const textPillInputUi =
               data-test='tag-pill'
             >
               {tag}
-              <button
-                type='button'
-                className='transition-colors hover:text-red-500'
-                onClick={() =>
+              {Button.view({
+                color: 'gray',
+                variant: 'ghost',
+                onClick: () =>
                   props.dispatch({
                     _tag: 'RemovePill',
                     index,
-                  })
-                }
-              >
-                <i>
-                  <X size={14} />
-                </i>
-              </button>
+                  }),
+                className: 'p-0 hover:text-red-500',
+                children: () => (
+                  <i>
+                    <X size={14} />
+                  </i>
+                ),
+              })}
             </span>
           ))}
           <input

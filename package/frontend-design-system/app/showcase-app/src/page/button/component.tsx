@@ -73,8 +73,9 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
             })}
             <p className='text-base text-gray-600'>
               Essential button element with support for color palettes (white,
-              green, dark-green, sky, amber, red), variants (solid, outline,
-              link), sizes, shapes, and states (loading, disabled).
+              green, dark-green, sky, amber, red, gray), variants (solid,
+              outline, link, ghost), sizes, shapes, and states (loading,
+              disabled).
             </p>
           </>
         ),
@@ -143,6 +144,11 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
                 variant: 'solid',
                 children: () => 'Red',
               })}
+              {Button.view({
+                color: 'gray',
+                variant: 'solid',
+                children: () => 'Gray',
+              })}
             </div>
           ),
         })}
@@ -182,6 +188,11 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
                 variant: 'outline',
                 children: () => 'Red',
               })}
+              {Button.view({
+                color: 'gray',
+                variant: 'outline',
+                children: () => 'Gray',
+              })}
             </div>
           ),
         })}
@@ -220,6 +231,50 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
                 color: 'red',
                 variant: 'link',
                 children: () => 'Red Link',
+              })}
+              {Button.view({
+                color: 'gray',
+                variant: 'link',
+                children: () => 'Gray Link',
+              })}
+            </div>
+          ),
+        })}
+
+        {/* Section 3b: Ghost Variant */}
+        {sectionView({
+          title: 'Ghost Variant (variant = "ghost")',
+          children: () => (
+            <div className='flex flex-wrap items-center gap-4'>
+              {Button.view({
+                color: 'green',
+                variant: 'ghost',
+                children: () => 'Green Ghost',
+              })}
+              {Button.view({
+                color: 'dark-green',
+                variant: 'ghost',
+                children: () => 'Dark Green Ghost',
+              })}
+              {Button.view({
+                color: 'sky',
+                variant: 'ghost',
+                children: () => 'Sky Ghost',
+              })}
+              {Button.view({
+                color: 'amber',
+                variant: 'ghost',
+                children: () => 'Amber Ghost',
+              })}
+              {Button.view({
+                color: 'red',
+                variant: 'ghost',
+                children: () => 'Red Ghost',
+              })}
+              {Button.view({
+                color: 'gray',
+                variant: 'ghost',
+                children: () => 'Gray Ghost',
               })}
             </div>
           ),

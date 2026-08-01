@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { Image, Tag } from '@rinn7e/realworld-design-system'
+import { Button, Image, Tag } from '@rinn7e/realworld-design-system'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
@@ -82,43 +82,45 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                 </div>
                 <div className='flex flex-wrap items-center gap-[8px]'>
                   {isLoggedIn &&
-                    (author.following ? (
-                      <button
-                        type='button'
-                        onClick={() =>
-                          dispatch({
-                            _tag: 'UnfollowAuthor',
-                            username: author.username,
-                          })
-                        }
-                        className={cn(
-                          'flex items-center gap-[4px] rounded border px-[12px] py-[4px] text-xs transition-colors',
-                          isLight
+                    (author.following
+                      ? Button.view({
+                          color: 'gray',
+                          variant: 'outline',
+                          size: 'xsmall',
+                          onClick: () =>
+                            dispatch({
+                              _tag: 'UnfollowAuthor',
+                              username: author.username,
+                            }),
+                          className: isLight
                             ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
-                            : 'border-gray-300 text-gray-600 hover:border-gray-500',
-                        )}
-                      >
-                        <UserMinus size={13} /> Unfollow {author.username}
-                      </button>
-                    ) : (
-                      <button
-                        type='button'
-                        onClick={() =>
-                          dispatch({
-                            _tag: 'FollowAuthor',
-                            username: author.username,
-                          })
-                        }
-                        className={cn(
-                          'flex items-center gap-[4px] rounded border px-[12px] py-[4px] text-xs transition-colors',
-                          isLight
+                            : undefined,
+                          children: () => (
+                            <>
+                              <UserMinus size={13} className='mr-1' /> Unfollow{' '}
+                              {author.username}
+                            </>
+                          ),
+                        })
+                      : Button.view({
+                          color: 'gray',
+                          variant: 'outline',
+                          size: 'xsmall',
+                          onClick: () =>
+                            dispatch({
+                              _tag: 'FollowAuthor',
+                              username: author.username,
+                            }),
+                          className: isLight
                             ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
-                            : 'border-gray-300 text-gray-600 hover:border-gray-500',
-                        )}
-                      >
-                        <UserPlus size={13} /> Follow {author.username}
-                      </button>
-                    ))}
+                            : undefined,
+                          children: () => (
+                            <>
+                              <UserPlus size={13} className='mr-1' /> Follow{' '}
+                              {author.username}
+                            </>
+                          ),
+                        }))}
                   {favButtonView({
                     variant: 'detail',
                     isLight,
@@ -151,19 +153,21 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                       >
                         <Pencil size={13} /> Edit Article
                       </Link>
-                      <button
-                        type='button'
-                        onClick={() => dispatch({ _tag: 'DeleteArticle' })}
-                        className={cn(
-                          'flex items-center gap-[4px] rounded border px-[12px] py-[4px] text-xs transition-colors',
-                          isLight
-                            ? 'border-red-500 text-red-400 hover:bg-red-900'
-                            : 'border-red-500 text-red-600 hover:bg-red-50',
-                        )}
-                        data-test='article-delete-btn'
-                      >
-                        <Trash2 size={13} /> Delete Article
-                      </button>
+                      {Button.view({
+                        color: 'red',
+                        variant: 'outline',
+                        size: 'xsmall',
+                        onClick: () => dispatch({ _tag: 'DeleteArticle' }),
+                        dataTest: 'article-delete-btn',
+                        className: isLight
+                          ? 'hover:bg-red-900'
+                          : 'hover:bg-red-50',
+                        children: () => (
+                          <>
+                            <Trash2 size={13} className='mr-1' /> Delete Article
+                          </>
+                        ),
+                      })}
                     </>
                   )}
                 </div>

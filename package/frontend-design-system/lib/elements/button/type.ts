@@ -2,9 +2,9 @@ import type React from 'react'
 import type { ReactNode } from 'react'
 
 export type ButtonColor =
-  'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red'
+  'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red' | 'gray'
 
-export type ButtonVariant = 'solid' | 'outline' | 'link'
+export type ButtonVariant = 'solid' | 'outline' | 'link' | 'ghost'
 
 export type ButtonSize = 'xsmall' | 'small' | 'normal' | 'medium' | 'large'
 

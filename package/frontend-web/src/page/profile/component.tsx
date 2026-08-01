@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { Image } from '@rinn7e/realworld-design-system'
+import { Button, Image } from '@rinn7e/realworld-design-system'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
@@ -109,23 +109,26 @@ const ProfilePageComponent = ({
                         <Settings size={13} /> Edit Profile Settings
                       </Link>
                     ) : (
-                      <button
-                        type='button'
-                        className='inline-flex items-center gap-[6px] rounded border border-gray-400 px-[12px] py-[6px] text-sm text-gray-600 transition-colors hover:border-gray-600'
-                        data-test='follow-btn'
-                        onClick={() =>
+                      Button.view({
+                        color: 'gray',
+                        variant: 'outline',
+                        size: 'small',
+                        dataTest: 'follow-btn',
+                        onClick: () =>
                           dispatch({
                             _tag: data.profile.following
                               ? 'Unfollow'
                               : 'Follow',
-                          })
-                        }
-                      >
-                        <UserPlus size={13} />{' '}
-                        {data.profile.following
-                          ? `Unfollow ${data.profile.username}`
-                          : `Follow ${data.profile.username}`}
-                      </button>
+                          }),
+                        children: () => (
+                          <>
+                            <UserPlus size={13} className='mr-1.5' />
+                            {data.profile.following
+                              ? `Unfollow ${data.profile.username}`
+                              : `Follow ${data.profile.username}`}
+                          </>
+                        ),
+                      })
                     )}
                   </div>
                 </div>

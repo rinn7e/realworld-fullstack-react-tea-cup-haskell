@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { Image } from '@rinn7e/realworld-design-system'
+import { Button, Image } from '@rinn7e/realworld-design-system'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Trash2 } from 'lucide-react'
@@ -65,12 +65,12 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                 ),
               ),
             )}
-            <button
-              type='submit'
-              className='rounded bg-green-600 px-[12px] py-[4px] text-xs text-white transition-colors hover:bg-green-700'
-            >
-              Post Comment
-            </button>
+            {Button.view({
+              type: 'submit',
+              color: 'green',
+              size: 'xsmall',
+              children: () => 'Post Comment',
+            })}
           </div>
         </form>
       )}
@@ -146,19 +146,18 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                     {isLoggedIn &&
                       user.value.username === comment.author.username && (
                         <span className='ml-auto'>
-                          <button
-                            type='button'
-                            onClick={() =>
+                          {Button.view({
+                            color: 'gray',
+                            variant: 'ghost',
+                            dataTest: 'delete-comment-btn',
+                            onClick: () =>
                               dispatch({
                                 _tag: 'DeleteComment',
                                 id: comment.id,
-                              })
-                            }
-                            className='text-gray-400 transition-colors hover:text-red-500'
-                            data-test='delete-comment-btn'
-                          >
-                            <Trash2 size={12} />
-                          </button>
+                              }),
+                            className: 'hover:text-red-500',
+                            children: () => <Trash2 size={12} />,
+                          })}
                         </span>
                       )}
                   </div>

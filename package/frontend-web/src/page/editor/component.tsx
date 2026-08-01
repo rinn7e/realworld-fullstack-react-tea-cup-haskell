@@ -1,7 +1,6 @@
 import * as RD from '@devexperts/remote-data-ts'
+import { Button } from '@rinn7e/realworld-design-system'
 import { FormItemMemo } from '@rinn7e/tea-cup-form/component'
-import { cn } from '@rinn7e/tea-cup-prelude'
-import { Loader2 } from 'lucide-react'
 import React from 'react'
 
 import { memoStrategy } from '@/common/util'
@@ -69,22 +68,11 @@ const EditorPageComponent = ({ model, dispatch }: Props) => {
         )}
 
         <div className='flex justify-end pt-[24px]'>
-          <button
-            className={cn(
-              'relative flex items-center justify-center rounded bg-green-600 px-[20px] py-[10px] text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60',
-              RD.isPending(model.requestRd) && 'pointer-events-none',
-            )}
-            type='submit'
-          >
-            <span className={cn(RD.isPending(model.requestRd) && 'opacity-0')}>
-              Publish Article
-            </span>
-            {RD.isPending(model.requestRd) && (
-              <div className='absolute inset-0 flex items-center justify-center'>
-                <Loader2 className='h-4 w-4 animate-spin' />
-              </div>
-            )}
-          </button>
+          {Button.view({
+            type: 'submit',
+            isLoading: RD.isPending(model.requestRd),
+            children: () => 'Publish Article',
+          })}
         </div>
       </form>
     </div>

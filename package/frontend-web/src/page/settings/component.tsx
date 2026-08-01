@@ -1,7 +1,6 @@
 import * as RD from '@devexperts/remote-data-ts'
+import { Button } from '@rinn7e/realworld-design-system'
 import { FormItemMemo } from '@rinn7e/tea-cup-form/component'
-import { cn } from '@rinn7e/tea-cup-prelude'
-import { Loader2 } from 'lucide-react'
 import React from 'react'
 
 import { memoStrategy } from '@/common/util'
@@ -86,38 +85,25 @@ const SettingsPageComponent = ({ model, dispatch }: Props) => {
           )}
 
           <div className='flex justify-end pt-[16px]'>
-            <button
-              className={cn(
-                'relative flex items-center justify-center rounded bg-green-600 px-[20px] py-[10px] text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60',
-                RD.isPending(model.requestRd) && 'pointer-events-none',
-              )}
-              type='submit'
-            >
-              <span
-                className={cn(RD.isPending(model.requestRd) && 'opacity-0')}
-              >
-                Update Settings
-              </span>
-              {RD.isPending(model.requestRd) && (
-                <div className='absolute inset-0 flex items-center justify-center'>
-                  <Loader2 className='h-4 w-4 animate-spin' />
-                </div>
-              )}
-            </button>
+            {Button.view({
+              type: 'submit',
+              isLoading: RD.isPending(model.requestRd),
+              children: () => 'Update Settings',
+            })}
           </div>
         </form>
 
         <hr className='border-gray-200' />
 
-        <div className='flex flex-col'>
-          <button
-            type='button'
-            className='cursor-pointer self-start rounded border border-red-400 px-[16px] py-[8px] text-sm text-red-500 transition-colors hover:bg-red-50'
-            data-test='logout-btn'
-            onClick={() => dispatch({ _tag: 'Logout' })}
-          >
-            Or click here to logout.
-          </button>
+        <div className='flex flex-col items-start'>
+          {Button.view({
+            color: 'red',
+            variant: 'outline',
+            dataTest: 'logout-btn',
+            onClick: () => dispatch({ _tag: 'Logout' }),
+            className: 'self-start',
+            children: () => 'Or click here to logout.',
+          })}
         </div>
       </div>
     </div>
