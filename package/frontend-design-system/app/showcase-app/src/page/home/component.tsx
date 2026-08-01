@@ -34,11 +34,15 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
           <div className='space-y-4'>
             <div className='flex items-center gap-2'>
               {Tag.view({
-                variant: 'light',
+                variant: 'dark',
+                size: 'normal',
+                isRounded: true,
                 children: '@rinn7e/realworld-design-system',
               })}
               {Tag.view({
-                variant: 'success',
+                variant: 'light',
+                size: 'small',
+                isRounded: true,
                 children: 'v0.1.0',
               })}
             </div>
@@ -54,6 +58,7 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
               {Button.view({
                 variant: 'default',
                 size: 'medium',
+                isRounded: true,
                 onClick: () =>
                   navigateRoute({
                     page: { _tag: 'ButtonPage' },

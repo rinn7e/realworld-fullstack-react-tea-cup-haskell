@@ -4,8 +4,8 @@ import type { HeroProps } from './type'
 
 const variantStyles: Record<string, string> = {
   default: 'bg-white text-gray-900 border-b border-gray-100',
-  primary: 'bg-emerald-600 text-white',
-  link: 'bg-emerald-700 text-white',
+  primary: 'bg-green-600 text-white',
+  link: 'bg-green-700 text-white',
   info: 'bg-sky-500 text-white',
   success: 'bg-green-600 text-white',
   warning: 'bg-amber-400 text-gray-900',
