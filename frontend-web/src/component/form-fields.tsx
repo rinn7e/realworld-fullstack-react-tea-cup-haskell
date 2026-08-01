@@ -1,9 +1,4 @@
-import {
-  type TextPillTypeUiArg,
-  type TextTypeUiArg,
-  autocompleteToString,
-  textInputVariantToString,
-} from '@rinn7e/tea-cup-form'
+import * as Form from '@rinn7e/tea-cup-form'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as E from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/function'
@@ -18,7 +13,7 @@ export type ExtraTextInputProps = {
 
 export const standardInputUi =
   (extra: ExtraTextInputProps = {}) =>
-  (props: TextTypeUiArg) => {
+  (props: Form.Text.UiArg) => {
     const isSmall = extra.isSmall ?? false
     const isError = E.isLeft(props.validationResult) && props.showValidation
     const sizeClass = isSmall ? 'py-[8px] text-sm' : 'py-[12px] text-base'
@@ -38,8 +33,7 @@ export const standardInputUi =
       if (extra.isTag && e.key === 'Enter') {
         e.preventDefault()
         props.dispatch({
-          _tag: 'UpdateFormManual',
-          key: props.key,
+          _tag: 'UpdateValue',
           value: props.currentValue + ', ',
         })
       }
@@ -52,29 +46,26 @@ export const standardInputUi =
       <textarea
         name={props.key}
         data-test={testId}
-        autoComplete={autocompleteToString(props.autocomplete)}
+        autoComplete={Form.Text.autocompleteToString(props.autocomplete)}
         className={cn(inputClass, 'resize-none')}
         rows={8}
         placeholder={props.placeholder}
         value={props.currentValue}
         onChange={(e) =>
           props.dispatch({
-            _tag: 'UpdateForm',
-            key: props.key,
-            event: e as unknown as React.ChangeEvent<HTMLInputElement>,
+            _tag: 'UpdateEvent',
+            event: e,
           })
         }
         onFocus={() =>
           props.dispatch({
             _tag: 'HandleFocus',
-            key: props.key,
             isFocus: true,
           })
         }
         onBlur={() =>
           props.dispatch({
             _tag: 'HandleFocus',
-            key: props.key,
             isFocus: false,
           })
         }
@@ -85,29 +76,26 @@ export const standardInputUi =
         <input
           name={props.key}
           data-test={testId}
-          autoComplete={autocompleteToString(props.autocomplete)}
+          autoComplete={Form.Text.autocompleteToString(props.autocomplete)}
           className={cn(inputClass, variant._tag === 'Password' && 'pr-[40px]')}
-          type={textInputVariantToString(variant)}
+          type={Form.Text.textInputVariantToString(variant)}
           placeholder={props.placeholder}
           value={props.currentValue}
           onInput={(e) =>
             props.dispatch({
-              _tag: 'UpdateForm',
-              key: props.key,
-              event: e as unknown as React.ChangeEvent<HTMLInputElement>,
+              _tag: 'UpdateEvent',
+              event: e,
             })
           }
           onFocus={() =>
             props.dispatch({
               _tag: 'HandleFocus',
-              key: props.key,
               isFocus: true,
             })
           }
           onBlur={() =>
             props.dispatch({
               _tag: 'HandleFocus',
-              key: props.key,
               isFocus: false,
             })
           }
@@ -120,7 +108,6 @@ export const standardInputUi =
             onClick={(e) =>
               props.dispatch({
                 _tag: 'SetRevealPassword',
-                key: props.key,
                 reveal: !variant.reveal,
                 event: e,
               })
@@ -139,7 +126,7 @@ export const standardInputUi =
           pipe(
             props.validationResult,
             E.fold(
-              (err) => (
+              (err: React.ReactNode) => (
                 <div
                   data-test='fe-input-error'
                   className='px-[4px] text-xs text-red-600'
@@ -156,7 +143,7 @@ export const standardInputUi =
 
 export const textPillInputUi =
   (extra: ExtraTextInputProps = {}) =>
-  (props: TextPillTypeUiArg) => {
+  (props: Form.TextPill.UiArg) => {
     const isSmall = extra.isSmall ?? false
     const isError = E.isLeft(props.validationResult) && props.showValidation
     const sizeClass = isSmall ? 'py-[4px] text-sm' : 'py-[6px] text-base'
@@ -176,9 +163,8 @@ export const textPillInputUi =
       ) {
         e.preventDefault()
         props.dispatch({
-          _tag: 'TextPillMsg',
-          key: props.key,
-          subMsg: { _tag: 'AddPill', value: props.currentValue.trim() },
+          _tag: 'AddPill',
+          value: props.currentValue.trim(),
         })
       }
       if (
@@ -187,9 +173,8 @@ export const textPillInputUi =
         props.allValues.length > 0
       ) {
         props.dispatch({
-          _tag: 'TextPillMsg',
-          key: props.key,
-          subMsg: { _tag: 'RemovePill', index: props.allValues.length - 1 },
+          _tag: 'RemovePill',
+          index: props.allValues.length - 1,
         })
       }
     }
@@ -209,9 +194,8 @@ export const textPillInputUi =
                 className='transition-colors hover:text-red-500'
                 onClick={() =>
                   props.dispatch({
-                    _tag: 'TextPillMsg',
-                    key: props.key,
-                    subMsg: { _tag: 'RemovePill', index },
+                    _tag: 'RemovePill',
+                    index,
                   })
                 }
               >
@@ -224,31 +208,25 @@ export const textPillInputUi =
           <input
             name={props.key}
             data-test={extra.testId ?? props.key + '-input'}
-            autoComplete={autocompleteToString(props.autocomplete)}
+            autoComplete={Form.Text.autocompleteToString(props.autocomplete)}
             className={cn('flex-1 bg-transparent outline-none', sizeClass)}
             placeholder={props.placeholder}
             value={props.currentValue}
             onInput={(e) =>
               props.dispatch({
-                _tag: 'TextPillMsg',
-                key: props.key,
-                subMsg: {
-                  _tag: 'UpdateTextPill',
-                  event: e as unknown as React.FormEvent<HTMLInputElement>,
-                },
+                _tag: 'UpdateTextPill',
+                event: e as unknown as React.FormEvent<HTMLInputElement>,
               })
             }
             onFocus={() =>
               props.dispatch({
                 _tag: 'HandleFocus',
-                key: props.key,
                 isFocus: true,
               })
             }
             onBlur={() =>
               props.dispatch({
                 _tag: 'HandleFocus',
-                key: props.key,
                 isFocus: false,
               })
             }
@@ -259,7 +237,7 @@ export const textPillInputUi =
           pipe(
             props.validationResult,
             E.fold(
-              (err) => (
+              (err: React.ReactNode) => (
                 <div
                   data-test='fe-input-error'
                   className='px-[4px] text-xs text-red-600'

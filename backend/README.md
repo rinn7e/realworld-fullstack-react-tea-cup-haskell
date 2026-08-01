@@ -57,8 +57,8 @@ A `Makefile` is provided in the `backend` directory for common tasks. Make sure 
 
 - `make build`: Build the project (`cabal build`).
 - `make watch`: Build and watch for changes (`cabal build --file-watch`).
-- `make server`: Build and run the API server (`cabal run haskell-servant-realworld-exe`).
-- `make server-watch`: Build, watch, and auto-restart the server.
+- `make api`: Build and run the API server (`cabal run haskell-servant-realworld-exe`).
+- `make api-watch`: Build, watch, and auto-restart the server.
 - `make server-fresh`: Reset database, apply migrations, seed data, and start the server.
 - `make resetdb`: Reset the database schema.
 - `make seed`: Populate the database with seed data.

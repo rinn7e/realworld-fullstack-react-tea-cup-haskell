@@ -21,7 +21,7 @@ tmux set-option -t "$SESSION_NAME" mouse on
 # [ Pane 1: Web ] | [ Pane 2: Admin ]
 
 # Pane 0: Backend [Top]
-tmux send-keys -t "$SESSION_NAME" "cd backend && direnv exec . make server" C-m
+tmux send-keys -t "$SESSION_NAME" "cd backend && direnv exec . make api" C-m
 
 # Pane 1: Frontend Web [Bottom Left]
 tmux split-window -v -t "$SESSION_NAME"

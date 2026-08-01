@@ -28,17 +28,19 @@ const editorTitleFormItem = (title: string): [string, Form.FormType] => [
   editorTitleField,
   {
     _tag: 'TextType',
-    placeholder: 'Article Title',
-    label: 'Title',
-    currentValue: title,
-    validation: (s: string) => Form.nonEmptyValidator(s, 'Title'),
-    linkValidations: [],
-    showValidation: false,
-    isTextarea: false,
-    variant: { _tag: 'Text' },
-    autocomplete: false,
-    isFocus: false,
-    ui: standardInputUi({ testId: 'article-title-input' }),
+    model: {
+      placeholder: 'Article Title',
+      label: 'Title',
+      currentValue: title,
+      validation: (s: string) => Form.nonEmptyValidator(s, 'Title'),
+      linkValidations: [],
+      showValidation: false,
+      isTextarea: false,
+      variant: { _tag: 'Text' },
+      autocomplete: false,
+      isFocus: false,
+      ui: standardInputUi({ testId: 'article-title-input' }),
+    },
   },
 ]
 
@@ -48,17 +50,19 @@ const editorDescriptionFormItem = (
   editorDescriptionField,
   {
     _tag: 'TextType',
-    placeholder: "What's this article about?",
-    label: 'Description',
-    currentValue: description,
-    validation: (s: string) => Form.nonEmptyValidator(s, 'Description'),
-    linkValidations: [],
-    showValidation: false,
-    isTextarea: false,
-    variant: { _tag: 'Text' },
-    autocomplete: false,
-    isFocus: false,
-    ui: standardInputUi({ isSmall: true, testId: 'article-desc-input' }),
+    model: {
+      placeholder: "What's this article about?",
+      label: 'Description',
+      currentValue: description,
+      validation: (s: string) => Form.nonEmptyValidator(s, 'Description'),
+      linkValidations: [],
+      showValidation: false,
+      isTextarea: false,
+      variant: { _tag: 'Text' },
+      autocomplete: false,
+      isFocus: false,
+      ui: standardInputUi({ isSmall: true, testId: 'article-desc-input' }),
+    },
   },
 ]
 
@@ -66,17 +70,19 @@ const editorBodyFormItem = (body: string): [string, Form.FormType] => [
   editorBodyField,
   {
     _tag: 'TextType',
-    placeholder: 'Write your article (in markdown)',
-    label: 'Body',
-    currentValue: body,
-    validation: (s: string) => Form.nonEmptyValidator(s, 'Body'),
-    linkValidations: [],
-    showValidation: false,
-    isTextarea: true,
-    variant: { _tag: 'Text' },
-    autocomplete: false,
-    isFocus: false,
-    ui: standardInputUi({ isSmall: true, testId: 'article-body-textarea' }),
+    model: {
+      placeholder: 'Write your article (in markdown)',
+      label: 'Body',
+      currentValue: body,
+      validation: (s: string) => Form.nonEmptyValidator(s, 'Body'),
+      linkValidations: [],
+      showValidation: false,
+      isTextarea: true,
+      variant: { _tag: 'Text' },
+      autocomplete: false,
+      isFocus: false,
+      ui: standardInputUi({ isSmall: true, testId: 'article-body-textarea' }),
+    },
   },
 ]
 
@@ -84,16 +90,18 @@ const editorTagInputFormItem = (tags: string[]): [string, Form.FormType] => [
   editorTagInputField,
   {
     _tag: 'TextPillType',
-    placeholder: 'Enter tags',
-    label: 'Tags',
-    allValues: tags,
-    currentValue: '',
-    validation: (s: string[]) => E.right(s),
-    showValidation: false,
-    isTextarea: false,
-    autocomplete: false,
-    isFocus: false,
-    ui: textPillInputUi(),
+    model: {
+      placeholder: 'Enter tags',
+      label: 'Tags',
+      allValues: tags,
+      currentValue: '',
+      validation: (s: string[]) => E.right(s),
+      showValidation: false,
+      isTextarea: false,
+      autocomplete: false,
+      isFocus: false,
+      ui: textPillInputUi(),
+    },
   },
 ]
 
@@ -134,15 +142,19 @@ const preprocessFormMsgHandler =
 
 export const formMsgHandler =
   (subMsg: Form.Msg) =>
-  (model: Model): Model => {
-    return preprocessFormMsgHandler(Form.update(subMsg)(model.form))(model)
+  (model: Model): [Model, Cmd<Msg>] => {
+    const [newForm, formCmd] = Form.update(subMsg)(model.form)
+    return [
+      preprocessFormMsgHandler(newForm)(model),
+      formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
+    ]
   }
 
 export const init = (
   shared: Shared,
   slug: O.Option<string>,
 ): [Model, Cmd<Msg>] => {
-  const initialForm = Form.init(editorFormConfig())
+  const [initialForm, formCmd] = Form.init(editorFormConfig())
   const baseModel: Model = {
     slug: slug._tag === 'Some' ? slug.value : null,
     form: initialForm,
@@ -156,14 +168,20 @@ export const init = (
     const token = shared.token
     return [
       { ...model, requestRd: RD.pending },
-      attemptTE(
-        getArticle(token, slug.value),
-        (result): Msg => ({ _tag: 'GetArticleResponse', result }),
-      ),
+      Cmd.batch([
+        formCmd.map((subMsg): Msg => ({ _tag: 'FormMsg', subMsg })),
+        attemptTE(
+          getArticle(token, slug.value),
+          (result) => ({ _tag: 'GetArticleResponse', result }),
+        ),
+      ]),
     ]
   }
 
-  return [model, Cmd.none()]
+  return [
+    model,
+    formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
+  ]
 }
 
 export const update =
@@ -171,23 +189,25 @@ export const update =
   (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     switch (msg._tag) {
       case 'FormMsg': {
-        return [{ ...formMsgHandler(msg.subMsg)(model) }, Cmd.none()]
+        return formMsgHandler(msg.subMsg)(model)
       }
       case 'GetArticleResponse':
         if (msg.result.tag === 'Ok') {
           const a = msg.result.value.article
+          const [newForm, formCmd] = Form.init(
+            editorFormConfigForEdit({
+              title: a.title,
+              description: a.description,
+              body: a.body ?? '',
+              tagList: a.tagList,
+            }),
+          )
           return [
-            preprocessFormMsgHandler(
-              Form.init(
-                editorFormConfigForEdit({
-                  title: a.title,
-                  description: a.description,
-                  body: a.body ?? '',
-                  tagList: a.tagList,
-                }),
-              ),
-            )({ ...model, requestRd: RD.success(null) }),
-            Cmd.none(),
+            preprocessFormMsgHandler(newForm)({
+              ...model,
+              requestRd: RD.success(null),
+            }),
+            formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
           ]
         }
         return [{ ...model, requestRd: RD.failure(msg.result.err) }, Cmd.none()]

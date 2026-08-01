@@ -20,17 +20,19 @@ const signupUsernameFormItem = (): [string, Form.FormType] => [
   signupUsernameField,
   {
     _tag: 'TextType',
-    placeholder: 'Username',
-    label: 'Username',
-    currentValue: '',
-    validation: (s: string) => Form.nonEmptyValidator(s, 'Username'),
-    linkValidations: [],
-    showValidation: false,
-    isTextarea: false,
-    variant: { _tag: 'Text' },
-    autocomplete: false,
-    isFocus: false,
-    ui: standardInputUi(),
+    model: {
+      placeholder: 'Username',
+      label: 'Username',
+      currentValue: '',
+      validation: (s: string) => Form.nonEmptyValidator(s, 'Username'),
+      linkValidations: [],
+      showValidation: false,
+      isTextarea: false,
+      variant: { _tag: 'Text' },
+      autocomplete: false,
+      isFocus: false,
+      ui: standardInputUi(),
+    },
   },
 ]
 
@@ -38,17 +40,19 @@ const signupEmailFormItem = (): [string, Form.FormType] => [
   signupEmailField,
   {
     _tag: 'TextType',
-    placeholder: 'Email',
-    label: 'Email',
-    currentValue: '',
-    validation: Form.emailValidator,
-    linkValidations: [],
-    showValidation: false,
-    isTextarea: false,
-    variant: { _tag: 'Email' },
-    autocomplete: false,
-    isFocus: false,
-    ui: standardInputUi(),
+    model: {
+      placeholder: 'Email',
+      label: 'Email',
+      currentValue: '',
+      validation: Form.emailValidator,
+      linkValidations: [],
+      showValidation: false,
+      isTextarea: false,
+      variant: { _tag: 'Email' },
+      autocomplete: false,
+      isFocus: false,
+      ui: standardInputUi(),
+    },
   },
 ]
 
@@ -56,17 +60,19 @@ const signupPasswordFormItem = (): [string, Form.FormType] => [
   signupPasswordField,
   {
     _tag: 'TextType',
-    placeholder: 'Password',
-    label: 'Password',
-    currentValue: '',
-    validation: (s: string) => Form.minLengthValidator('Password', 8)(s),
-    linkValidations: [],
-    showValidation: false,
-    isTextarea: false,
-    variant: { _tag: 'Password', reveal: false },
-    autocomplete: false,
-    isFocus: false,
-    ui: standardInputUi(),
+    model: {
+      placeholder: 'Password',
+      label: 'Password',
+      currentValue: '',
+      validation: (s: string) => Form.minLengthValidator('Password', 8)(s),
+      linkValidations: [],
+      showValidation: false,
+      isTextarea: false,
+      variant: { _tag: 'Password', reveal: false },
+      autocomplete: false,
+      isFocus: false,
+      ui: standardInputUi(),
+    },
   },
 ]
 
@@ -93,19 +99,25 @@ const preprocessFormMsgHandler =
 
 export const formMsgHandler =
   (subMsg: Form.Msg) =>
-  (model: Model): Model => {
-    return pipe(model.form, Form.update(subMsg), (newForm) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const [newForm, formCmd] = Form.update(subMsg)(model.form)
+    return [
       preprocessFormMsgHandler(newForm)(model),
-    )
+      formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
+    ]
   }
 
 export const init = (_shared: Shared): [Model, Cmd<Msg>] => {
+  const [initialForm, formCmd] = Form.init(signupFormConfig())
   const model: Model = {
-    form: Form.init(signupFormConfig()),
+    form: initialForm,
     requestRd: RD.initial,
     isFormValid: false,
   }
-  return [preprocessFormMsgHandler(model.form)(model), Cmd.none()]
+  return [
+    preprocessFormMsgHandler(model.form)(model),
+    formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
+  ]
 }
 
 export const update =
@@ -113,7 +125,7 @@ export const update =
   (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     switch (msg._tag) {
       case 'FormMsg': {
-        return [{ ...formMsgHandler(msg.subMsg)(model) }, Cmd.none()]
+        return formMsgHandler(msg.subMsg)(model)
       }
       case 'Submit': {
         const email = Form.valueTextType(

@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := build
 
-.PHONY: build watch server server-watch resetdb seed migrate-generate migrate-up migrate-up-one migrate-down-one migrate-status lint format build-haddock build-hoogle hoogle test compile install exec run-installed swagger-web swagger-admin server-fresh server-prod docker deploy build-dry-run docker-dry-run
+.PHONY: build watch api api-watch server resetdb seed migrate-generate migrate-up migrate-up-one migrate-down-one migrate-status lint format build-haddock build-hoogle hoogle test compile install exec run-installed swagger-web swagger-admin server-fresh server-prod docker deploy build-dry-run docker-dry-run
 
 # Build with fast compilation
 build:
@@ -20,13 +20,18 @@ swagger-admin:
 watch:
 	nix develop -c "cabal build --file-watch"
 
-# Build and run the server
-server:
+# Build and run the API
+api:
 	nix develop -c cabal run haskell-servant-realworld-exe
 
-# Build, watch, and auto-restart the server
-server-watch:
+# Build, watch, and auto-restart the API
+api-watch:
 	nix develop -c "cabal run haskell-servant-realworld-exe --file-watch"
+
+# Run API, Frontend Web, and Frontend Admin in tmux windows
+server:
+	@chmod +x ./script/server.sh
+	./script/server.sh
 
 # Reset database and start dev server
 server-fresh:

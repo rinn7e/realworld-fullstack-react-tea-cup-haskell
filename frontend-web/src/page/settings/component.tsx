@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { FormItemMemo } from '@rinn7e/tea-cup-form/lib/component'
+import { FormItemMemo } from '@rinn7e/tea-cup-form/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { Loader2 } from 'lucide-react'
 import React from 'react'
