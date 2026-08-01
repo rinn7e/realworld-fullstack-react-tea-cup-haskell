@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "@capacitor/core": "^6.0.0",
-    "@rinn7e/tea-cup-prelude": "link:../../tea-cup-package/tea-cup-prelude",
+    "@rinn7e/tea-cup-prelude": "link:../../../tea-cup-package/tea-cup-prelude",
     "clsx": "^2.1.1",
     "fp-ts": "^2.16.0",
     "lucide-react": "^0.435.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-tea-cup": "5.1.3",
+    "react-tea-cup": "5.1.1",
     "tailwind-merge": "^3.3.1",
     "tea-cup-fp": "1.1.1"
   },
