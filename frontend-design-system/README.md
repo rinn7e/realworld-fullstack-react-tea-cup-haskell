@@ -6,6 +6,8 @@ A comprehensive, Bulma-inspired design system component library and custom UI re
 
 ## 📦 Installation
 
+### 1. Package Manager (npm / pnpm / yarn)
+
 Install the package via `pnpm`, `npm`, or `yarn`:
 
 ```bash
@@ -19,33 +21,52 @@ npm install @rinn7e/realworld-design-system
 yarn add @rinn7e/realworld-design-system
 ```
 
-### Workspace Dependency (pnpm Monorepo)
-If you are working inside a `pnpm` workspace monorepo, add it to your project's `package.json`:
+### 2. Local Installation (Monorepo / Sibling Link)
+
+If consuming this design system as a local sibling package during development (e.g. inside `frontend-web`), add it using relative `link:` in your project's `package.json`:
 
 ```json
 {
   "dependencies": {
-    "@rinn7e/realworld-design-system": "workspace:*"
+    "@rinn7e/realworld-design-system": "link:../frontend-design-system"
   }
 }
 ```
 
-### Peer Dependencies
-Ensure your application has the following peer dependencies installed:
-- `react` (>= 18.0.0)
-- `react-dom` (>= 18.0.0)
+Then run `pnpm install` in your consuming application.
+
+### 3. Peer Dependencies
+
+Ensure your application has the following installed:
+- `react` (>= 19.0.0)
+- `react-dom` (>= 19.0.0)
 - `react-tea-cup` (>= 5.0.0)
-- `tea-cup-fp` (>= 1.0.0)
+- `tailwindcss` (>= 4.0.0)
+
+---
+
+### Tailwind CSS v4 Setup
+
+Add the design system plugin and `@source` scanner to your application's CSS file (e.g., `index.css`):
+
+```css
+@import "tailwindcss";
+@plugin "@rinn7e/realworld-design-system/plugin";
+@source "../node_modules/@rinn7e/realworld-design-system";
+```
 
 ---
 
 ## 🚀 Quick Start & Usage Examples
 
 ### 1. Global Styles & Font Setup
-In your application's entry point (`main.tsx` or `index.ts`), import the design system's stylesheet:
 
-```tsx
-import '@rinn7e/realworld-design-system/styles.css'
+In your application's main CSS entrypoint (e.g. `src/index.css`), include the Tailwind v4 directives:
+
+```css
+@import "tailwindcss";
+@plugin "@rinn7e/realworld-design-system/plugin";
+@source "../node_modules/@rinn7e/realworld-design-system";
 ```
 
 Include Google Fonts (`Titillium Web` and `Inter`) in your `index.html`:
@@ -274,8 +295,11 @@ To ensure optimal performance and minimal package bundle sizes, `@rinn7e/realwor
 Launch the interactive `react-tea-cup` documentation website showcasing all components on port `5175` with live **Canvas** previews and **Code Snippets**:
 
 ```bash
-cd exe/showcase-app
-pnpm install
+# From root of frontend-design-system
+pnpm run showcase:dev
+
+# Or directly in the showcase app directory
+cd app/showcase-app
 pnpm run dev
 ```
 

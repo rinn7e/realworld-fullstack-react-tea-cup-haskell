@@ -1,6 +1,6 @@
 packages:
   - '.'
-  - 'exe/*'
+  - 'app/*'
 
 allowBuilds:
   esbuild: true
