@@ -1,0 +1,67 @@
+/* Bulma Design System Tokens & Utility Styles */
+
+:root {
+  --bulma-primary: #00d1b2;
+  --bulma-primary-invert: #fff;
+  --bulma-link: #485fc7;
+  --bulma-link-invert: #fff;
+  --bulma-info: #3e8ed0;
+  --bulma-info-invert: #fff;
+  --bulma-success: #48c78e;
+  --bulma-success-invert: #fff;
+  --bulma-warning: #ffe08a;
+  --bulma-warning-invert: rgba(0, 0, 0, 0.7);
+  --bulma-danger: #f14668;
+  --bulma-danger-invert: #fff;
+  --bulma-dark: #363636;
+  --bulma-light: #f5f5f5;
+  --bulma-white: #ffffff;
+  --bulma-black: #0a0a0a;
+}
+
+/* Helper Utility Classes */
+.bulma-box {
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+  color: #4a4a4a;
+  display: block;
+  padding: 1.25rem;
+}
+
+.bulma-notification {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  position: relative;
+  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+}
+
+.bulma-notification.is-primary { background-color: var(--bulma-primary); color: var(--bulma-primary-invert); }
+.bulma-notification.is-link { background-color: var(--bulma-link); color: var(--bulma-link-invert); }
+.bulma-notification.is-info { background-color: var(--bulma-info); color: var(--bulma-info-invert); }
+.bulma-notification.is-success { background-color: var(--bulma-success); color: var(--bulma-success-invert); }
+.bulma-notification.is-warning { background-color: var(--bulma-warning); color: var(--bulma-warning-invert); }
+.bulma-notification.is-danger { background-color: var(--bulma-danger); color: var(--bulma-danger-invert); }
+
+.bulma-tag {
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  color: #4a4a4a;
+  display: inline-flex;
+  font-size: 0.75rem;
+  height: 2em;
+  justify-content: center;
+  line-height: 1.5;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  white-space: nowrap;
+}
+
+.bulma-tag.is-primary { background-color: var(--bulma-primary); color: var(--bulma-primary-invert); }
+.bulma-tag.is-link { background-color: var(--bulma-link); color: var(--bulma-link-invert); }
+.bulma-tag.is-info { background-color: var(--bulma-info); color: var(--bulma-info-invert); }
+.bulma-tag.is-success { background-color: var(--bulma-success); color: var(--bulma-success-invert); }
+.bulma-tag.is-warning { background-color: var(--bulma-warning); color: var(--bulma-warning-invert); }
+.bulma-tag.is-danger { background-color: var(--bulma-danger); color: var(--bulma-danger-invert); }
+.bulma-tag.is-rounded { border-radius: 9999px; }

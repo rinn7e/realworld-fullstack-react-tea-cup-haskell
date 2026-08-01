@@ -1,0 +1,59 @@
+{
+  "name": "@rinn7e/frontend-design-system",
+  "version": "0.1.0-alpha.1",
+  "description": "Bulma-inspired design system library built with Tailwind CSS and react-tea-cup TEA architecture",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "check": "tsc --noEmit",
+    "check-circular": "madge --circular lib/",
+    "clean": "rimraf dist node_modules/.cache",
+    "lint": "eslint lib/",
+    "showcase:dev": "cd exe/showcase-app && vite",
+    "showcase:build": "cd exe/showcase-app && vite build"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "fp-ts": "^2.16.11",
+    "lucide-react": "^0.475.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-tea-cup": "^5.1.3",
+    "tailwind-merge": "^3.0.1",
+    "tea-cup-fp": "^1.1.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^22.13.1",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.19.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.18",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "globals": "^15.14.0",
+    "madge": "^8.0.0",
+    "prettier": "^3.5.0",
+    "rimraf": "^6.0.1",
+    "tailwindcss": "^4.0.0",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.23.0",
+    "vite": "^6.1.0"
+  }
+}
