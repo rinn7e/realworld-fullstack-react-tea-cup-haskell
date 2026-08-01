@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>RealWorld Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .initial-loader-wrap {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        transition: background-color 0.2s ease;
+      }
+      /* Dark mode styles for the initial loader */
+      .dark .initial-loader-wrap {
+        background-color: #000000;
+      }
+      .initial-loader {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3b82f6;
+        border-radius: 50%;
+        animation: initial-spin 1s linear infinite;
+      }
+      /* Adjust loader ring color for dark mode */
+      .dark .initial-loader {
+        border: 4px solid #1e293b;
+        border-top: 4px solid #3b82f6;
+      }
+      @keyframes initial-spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script>
+      /**
+       * Immediately apply dark mode class before the app boots to prevent white flash.
+       * Uses the same key as the TEA application for consistency.
+       */
+      ;(function () {
+        try {
+          var scheme = localStorage.getItem('admin-color-scheme') || 'auto'
+          var isDark =
+            scheme === 'dark' ||
+            (scheme === 'auto' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (isDark) {
+            document.documentElement.classList.add('dark')
+          }
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body class="overflow-y-scroll bg-gray-50 dark:bg-black">
+    <div id="root">
+      <div class="initial-loader-wrap">
+        <div class="initial-loader"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/root.tsx"></script>
+  </body>
+</html>

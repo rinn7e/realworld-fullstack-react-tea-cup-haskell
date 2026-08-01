@@ -193,6 +193,142 @@ importers:
         specifier: ^4.3.2
         version: 4.3.2(typescript@5.8.3)(vite@7.3.6(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0))
 
+  package/frontend-admin-legacy:
+    dependencies:
+      '@devexperts/remote-data-ts':
+        specifier: ^2.1.1
+        version: 2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))
+      '@heroicons/react':
+        specifier: ^2.2.0
+        version: 2.2.0(react@19.2.8)
+      '@rinn7e/fp-ts-routing':
+        specifier: github:rinn7e/fp-ts-routing#0d9ec901639572171d6ada5b75aeee6ff945dc43
+        version: fp-ts-routing@https://codeload.github.com/rinn7e/fp-ts-routing/tar.gz/0d9ec901639572171d6ada5b75aeee6ff945dc43(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))
+      '@rinn7e/tea-cup-form':
+        specifier: 0.1.0-alpha.3
+        version: 0.1.0-alpha.3(6232d0fc0b4a1f536fa41e03c5f29610)
+      '@rinn7e/tea-cup-pagination':
+        specifier: 0.1.0-alpha.1
+        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
+      '@rinn7e/tea-cup-prelude':
+        specifier: 0.1.0-alpha.1
+        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      fp-ts:
+        specifier: ^2.16.0
+        version: 2.16.11
+      io-ts:
+        specifier: ^2.2.21
+        version: 2.2.22(fp-ts@2.16.11)
+      lucide-react:
+        specifier: ^1.8.0
+        version: 1.28.0(react@19.2.8)
+      modern-screenshot:
+        specifier: ^4.7.0
+        version: 4.7.0
+      react:
+        specifier: ^19.1.0
+        version: 19.2.8
+      react-dom:
+        specifier: ^19.1.0
+        version: 19.2.8(react@19.2.8)
+      react-markdown:
+        specifier: ^10.1.0
+        version: 10.1.0(@types/react@19.2.18)(react@19.2.8)
+      react-tea-cup:
+        specifier: 5.1.1
+        version: 5.1.1(react@19.2.8)(tea-cup-fp@1.1.1)
+      recharts:
+        specifier: ^3.8.1
+        version: 3.10.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react-is@19.2.8)(react@19.2.8)(redux@5.0.1)
+      tailwind-merge:
+        specifier: ^3.3.1
+        version: 3.6.0
+      tea-cup-fp:
+        specifier: 1.1.1
+        version: 1.1.1
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.29.0
+        version: 9.39.5
+      '@tailwindcss/vite':
+        specifier: ^4.1.18
+        version: 4.3.3(vite@7.3.6(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0))
+      '@trivago/prettier-plugin-sort-imports':
+        specifier: ^6.0.2
+        version: 6.0.2(@vue/compiler-sfc@3.5.40)(prettier@3.9.6)
+      '@types/node':
+        specifier: ^20.3.3
+        version: 20.19.43
+      '@types/react':
+        specifier: ^19.1.8
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: ^19.1.6
+        version: 19.2.4(@types/react@19.2.18)
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.0.0
+        version: 8.65.0(@typescript-eslint/parser@8.65.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.8.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.8.3)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@7.3.6(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0))
+      autoprefixer:
+        specifier: ^10.4.14
+        version: 10.5.4(postcss@8.5.25)
+      eslint:
+        specifier: ^9.29.0
+        version: 9.39.5(jiti@2.7.0)
+      eslint-plugin-import:
+        specifier: ^2.32.0
+        version: 2.32.0(@typescript-eslint/parser@8.65.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.8.3))(eslint@9.39.5(jiti@2.7.0))
+      eslint-plugin-react-dom:
+        specifier: ^1.52.2
+        version: 1.53.1(eslint@9.39.5(jiti@2.7.0))(typescript@5.8.3)
+      eslint-plugin-react-hooks:
+        specifier: ^5.2.0
+        version: 5.2.0(eslint@9.39.5(jiti@2.7.0))
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.20
+        version: 0.4.26(eslint@9.39.5(jiti@2.7.0))
+      eslint-plugin-react-x:
+        specifier: ^1.52.2
+        version: 1.53.1(eslint@9.39.5(jiti@2.7.0))(ts-api-utils@2.5.0(typescript@5.8.3))(typescript@5.8.3)
+      eslint-plugin-unused-imports:
+        specifier: ^4.4.1
+        version: 4.4.1(@typescript-eslint/eslint-plugin@8.65.0(@typescript-eslint/parser@8.65.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.8.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.8.3))(eslint@9.39.5(jiti@2.7.0))
+      globals:
+        specifier: ^16.2.0
+        version: 16.5.0
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@5.8.3)
+      postcss:
+        specifier: ^8.5.9
+        version: 8.5.25
+      prettier:
+        specifier: ^3.8.1
+        version: 3.9.6
+      prettier-plugin-tailwindcss:
+        specifier: ^0.7.2
+        version: 0.7.4(@trivago/prettier-plugin-sort-imports@6.0.2(@vue/compiler-sfc@3.5.40)(prettier@3.9.6))(prettier@3.9.6)
+      tailwindcss:
+        specifier: ^4.1.18
+        version: 4.3.3
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
+      typescript-eslint:
+        specifier: ^8.34.1
+        version: 8.65.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.8.3)
+      vite:
+        specifier: ^7.0.0
+        version: 7.3.6(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+      vite-tsconfig-paths:
+        specifier: ^4.3.2
+        version: 4.3.2(typescript@5.8.3)(vite@7.3.6(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0))
+
   package/frontend-design-system:
     dependencies:
       clsx:

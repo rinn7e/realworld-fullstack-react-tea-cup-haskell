@@ -1,0 +1,91 @@
+@import 'tailwindcss';
+
+/* Use class-based dark mode (.dark on <html>) instead of OS media query */
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-primary: #2563eb;
+  --color-secondary: #0f172a;
+  --font-header: 'Inter', sans-serif;
+  --font-normal: 'Inter', sans-serif;
+}
+
+@theme {
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+
+  --color-purple-500: #a855f7;
+  --color-amber-600: #d97706;
+
+  /* Theme variables */
+  --color-theme-primary: var(--color-primary);
+  --color-theme-secondary: var(--color-secondary);
+  --font-theme-header: var(--font-header);
+  --font-theme-normal: var(--font-normal);
+
+  --color-surface-dark: #000000;
+  --color-surface: #ffffff;
+
+  /* Chart colors */
+  --color-chart-tick: #64748b; /* slate-500 */
+}
+
+.dark {
+  --color-chart-tick: #94a3b8; /* slate-400 */
+}
+
+/* Custom styles if needed */
+body {
+  @apply font-theme-normal bg-gray-50 text-slate-900 dark:bg-black dark:text-slate-200;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-theme-header dark:text-white;
+}
+
+@keyframes persona-animate-float {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(4px, 0);
+  }
+  50% {
+    transform: translate(4px, -4px);
+  }
+  75% {
+    transform: translate(0, -4px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.animate-persona {
+  animation: persona-animate-float 5s ease-in-out infinite;
+}
+
+button,
+a,
+select,
+[role='button'] {
+  cursor: pointer;
+}

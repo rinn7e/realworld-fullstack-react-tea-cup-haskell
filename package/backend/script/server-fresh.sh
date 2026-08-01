@@ -16,9 +16,10 @@ tmux kill-session -t "$SESSION_NAME" 2>/dev/null
 tmux new-session -d -s "$SESSION_NAME" -n "services"
 tmux set-option -t "$SESSION_NAME" mouse on
 
-# --- Pane Layout (2x2 Grid) ---
-# [ Pane 0: Backend ] | [ Pane 1: Showcase ]
-# [ Pane 2: Web     ] | [ Pane 3: Admin    ]
+# --- Pane Layout ---
+# [ Backend ]      | [ Showcase ]
+# [ Web     ]      | [ Admin    ]
+#                  | [ Admin Legacy ]
 
 # 1. Top Left: Backend (fresh DB)
 tmux send-keys -t "$SESSION_NAME" "cd package/backend && direnv exec . make server-fresh" C-m
@@ -37,7 +38,12 @@ tmux select-pane -t "$SESSION_NAME:0.1"
 tmux split-window -v -t "$SESSION_NAME"
 tmux send-keys -t "$SESSION_NAME" "cd package/frontend-admin && pnpm dev" C-m
 
-# 5. Enforce 2x2 equal grid layout
+# 5. Select Bottom Right & split vertically -> Admin Legacy (port 5176)
+tmux select-pane -t "$SESSION_NAME:0.3"
+tmux split-window -v -t "$SESSION_NAME"
+tmux send-keys -t "$SESSION_NAME" "cd package/frontend-admin-legacy && pnpm dev" C-m
+
+# 6. Enforce equal grid layout
 tmux select-layout -t "$SESSION_NAME" tiled
 
 # Attach to the session

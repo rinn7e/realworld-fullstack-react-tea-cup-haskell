@@ -28,6 +28,17 @@ rm -rf package/backend/dist/admin
 mkdir -p package/backend/dist/admin
 cp -R package/frontend-admin/dist/* package/backend/dist/admin/
 
+# 2.5. Build frontend-admin-legacy for production
+echo "Building frontend-admin-legacy..."
+(
+  cd package/frontend-admin-legacy
+  pnpm install --no-frozen-lockfile
+  VITE_BASE_URL=/admin-legacy/ VITE_API_BASE=/api pnpm run build
+)
+rm -rf package/backend/dist/admin-legacy
+mkdir -p package/backend/dist/admin-legacy
+cp -R package/frontend-admin-legacy/dist/* package/backend/dist/admin-legacy/
+
 # 3. Build showcase-app for production
 echo "Building showcase-app..."
 (
@@ -42,6 +53,7 @@ cp -R package/frontend-design-system/app/showcase-app/dist/* package/backend/dis
 # Export env variables pointing to built frontends
 export FRONTEND_WEB_DIR="$PROJECT_ROOT/package/frontend-web/dist"
 export FRONTEND_ADMIN_DIR="$PROJECT_ROOT/package/frontend-admin/dist"
+export FRONTEND_ADMIN_LEGACY_DIR="$PROJECT_ROOT/package/frontend-admin-legacy/dist"
 export SHOWCASE_APP_DIR="$PROJECT_ROOT/package/frontend-design-system/app/showcase-app/dist"
 
 # Run backend in production mode directly in this terminal
