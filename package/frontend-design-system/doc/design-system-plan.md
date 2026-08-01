@@ -1,0 +1,4 @@
+- find various component that exists in both web and admin, then make them both use design-system and see how it's going to work
+- figure if bulma has `Sidebar` component and use it in admin
+- table and so on etc...
+- design-system should support dark mode, but not customize primary color
