@@ -1,9 +1,6 @@
 name: Build and Cache Docker Image
 
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
 
 # Grant permissions to write the built Docker image to GitHub Packages
@@ -29,32 +26,32 @@ jobs:
           node-version: 22
           cache: 'pnpm'
           cache-dependency-path: |
-            frontend-web/pnpm-lock.yaml
-            frontend-admin/pnpm-lock.yaml
+            package/frontend-web/pnpm-lock.yaml
+            package/frontend-admin/pnpm-lock.yaml
 
       - name: Configure GitHub Packages Authentication
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> frontend-web/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> frontend-admin/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> package/frontend-web/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> package/frontend-admin/.npmrc
 
       - name: Build frontend-web
         run: |
-          cd frontend-web
+          cd package/frontend-web
           pnpm install --no-frozen-lockfile
           VITE_BASE_URL=/ VITE_API_BASE=/api pnpm run build
 
       - name: Build frontend-admin
         run: |
-          cd frontend-admin
+          cd package/frontend-admin
           pnpm install --no-frozen-lockfile
           VITE_BASE_URL=/admin/ VITE_API_BASE=/api pnpm run build
 
       - name: Assemble static assets for Docker
         run: |
-          mkdir -p backend/dist/web backend/dist/admin
-          cp -R frontend-web/dist/* backend/dist/web/
-          cp -R frontend-admin/dist/* backend/dist/admin/
-          git add -f backend/dist
+          mkdir -p package/backend/dist/web package/backend/dist/admin
+          cp -R package/frontend-web/dist/* package/backend/dist/web/
+          cp -R package/frontend-admin/dist/* package/backend/dist/admin/
+          git add -f package/backend/dist
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -85,7 +82,7 @@ jobs:
       # This generates a tarball containing the layered Docker image.
       - name: Build Docker Image via Nix
         run: |
-          nix build path:./backend#dockerImage \
+          nix build path:./package/backend#dockerImage \
             --extra-experimental-features "nix-command flakes" \
             --option sandbox false \
             --option filter-syscalls false
