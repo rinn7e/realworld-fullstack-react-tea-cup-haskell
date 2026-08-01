@@ -31,7 +31,7 @@ export const view = ({
                 type='button'
                 onClick={() => dispatch({ _tag: 'SelectTab', id: item.id })}
                 className={cn(
-                  'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  'cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-colors',
                   model.activeId === item.id
                     ? 'bg-emerald-50 text-emerald-600 font-semibold'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
@@ -53,7 +53,7 @@ export const view = ({
           <button
             type='button'
             onClick={() => dispatch({ _tag: 'ToggleBurger' })}
-            className='rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+            className='cursor-pointer rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900'
           >
             {model.isBurgerOpen ? (
               <X className='h-6 w-6' />
@@ -72,7 +72,7 @@ export const view = ({
               type='button'
               onClick={() => dispatch({ _tag: 'SelectTab', id: item.id })}
               className={cn(
-                'block w-full rounded-md px-3 py-2 text-left text-base font-medium',
+                'block w-full cursor-pointer rounded-md px-3 py-2 text-left text-base font-medium',
                 model.activeId === item.id
                   ? 'bg-emerald-50 text-emerald-600 font-semibold'
                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',

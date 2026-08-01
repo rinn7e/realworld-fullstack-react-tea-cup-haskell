@@ -56,7 +56,7 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                 size: 'medium',
                 onClick: () =>
                   navigateRoute({
-                    page: { _tag: 'ComponentPage', component: 'button' },
+                    page: { _tag: 'ButtonPage' },
                   }),
                 children: 'Explore Components →',
               })}

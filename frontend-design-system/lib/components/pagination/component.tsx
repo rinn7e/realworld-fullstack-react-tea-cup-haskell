@@ -22,7 +22,7 @@ export const view = ({
         type='button'
         disabled={model.currentPage <= 1}
         onClick={() => dispatch({ _tag: 'SetPage', page: model.currentPage - 1 })}
-        className='inline-flex items-center justify-center rounded-md border border-gray-300 bg-white p-2 text-gray-700 shadow-2xs hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40'
+        className='inline-flex cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white p-2 text-gray-700 shadow-2xs hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40'
       >
         <ChevronLeft className='h-4 w-4' />
       </button>
@@ -33,7 +33,7 @@ export const view = ({
           type='button'
           onClick={() => dispatch({ _tag: 'SetPage', page: p })}
           className={cn(
-            'inline-flex h-9 w-9 items-center justify-center rounded-md font-semibold transition-colors',
+            'inline-flex cursor-pointer h-9 w-9 items-center justify-center rounded-md font-semibold transition-colors',
             p === model.currentPage
               ? 'bg-emerald-600 text-white shadow-2xs'
               : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
@@ -47,7 +47,7 @@ export const view = ({
         type='button'
         disabled={model.currentPage >= model.totalPages}
         onClick={() => dispatch({ _tag: 'SetPage', page: model.currentPage + 1 })}
-        className='inline-flex items-center justify-center rounded-md border border-gray-300 bg-white p-2 text-gray-700 shadow-2xs hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40'
+        className='inline-flex cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white p-2 text-gray-700 shadow-2xs hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40'
       >
         <ChevronRight className='h-4 w-4' />
       </button>

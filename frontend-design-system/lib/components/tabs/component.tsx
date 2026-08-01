@@ -27,7 +27,7 @@ export const view = ({
                   type='button'
                   onClick={() => dispatch({ _tag: 'Select', id: item.id })}
                   className={cn(
-                    'inline-flex items-center gap-2 rounded-t-lg border border-b-0 px-4 py-2.5 transition-colors',
+                    'inline-flex cursor-pointer items-center gap-2 rounded-t-lg border border-b-0 px-4 py-2.5 transition-colors',
                     isActive
                       ? 'border-gray-200 bg-white font-semibold text-emerald-600 shadow-2xs'
                       : 'border-transparent bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-900',
@@ -47,7 +47,7 @@ export const view = ({
                   type='button'
                   onClick={() => dispatch({ _tag: 'Select', id: item.id })}
                   className={cn(
-                    'inline-flex items-center gap-2 rounded-md px-4 py-2 transition-colors',
+                    'inline-flex cursor-pointer items-center gap-2 rounded-md px-4 py-2 transition-colors',
                     isActive
                       ? 'bg-emerald-600 font-semibold text-white shadow-2xs'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
@@ -66,7 +66,7 @@ export const view = ({
                 type='button'
                 onClick={() => dispatch({ _tag: 'Select', id: item.id })}
                 className={cn(
-                  'inline-flex items-center gap-2 border-b-2 px-4 py-2.5 transition-colors',
+                  'inline-flex cursor-pointer items-center gap-2 border-b-2 px-4 py-2.5 transition-colors',
                   isActive
                     ? 'border-emerald-600 font-bold text-emerald-600'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',

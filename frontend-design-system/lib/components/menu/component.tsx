@@ -24,7 +24,7 @@ export const view = ({
                     type='button'
                     onClick={() => dispatch({ _tag: 'Select', id: item.id })}
                     className={cn(
-                      'block w-full rounded-md px-3 py-1.5 text-left font-medium transition-colors',
+                      'block w-full cursor-pointer rounded-md px-3 py-1.5 text-left font-medium transition-colors',
                       isActive
                         ? 'bg-green-600 font-semibold text-white'
                         : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900',

@@ -18,7 +18,7 @@ export const view = ({
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center p-4'>
       <div
-        className='fixed inset-0 bg-gray-900/60 backdrop-blur-xs transition-opacity'
+        className='fixed inset-0 cursor-pointer bg-gray-900/60 backdrop-blur-xs transition-opacity'
         onClick={() => dispatch({ _tag: 'Close' })}
       />
       <div

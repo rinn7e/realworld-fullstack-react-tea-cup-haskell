@@ -21,7 +21,7 @@ export const view = ({
       onClick={onClick}
       aria-label='delete'
       className={cn(
-        'inline-flex items-center justify-center rounded-full bg-gray-900/20 text-white transition-all hover:bg-gray-900/40 focus:outline-none focus:ring-2 focus:ring-gray-400',
+        'inline-flex cursor-pointer items-center justify-center rounded-full bg-gray-900/20 text-white transition-all hover:bg-gray-900/40 focus:outline-none focus:ring-2 focus:ring-gray-400',
         sizeStyles[size],
         className,
       )}

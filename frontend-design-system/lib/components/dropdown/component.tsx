@@ -17,7 +17,7 @@ export const view = ({
       <button
         type='button'
         onClick={() => dispatch({ _tag: 'Toggle' })}
-        className='inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20'
+        className='inline-flex cursor-pointer items-center gap-2 rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20'
       >
         <span>{selectedItem ? selectedItem.label : triggerLabel}</span>
         <ChevronDown
@@ -39,7 +39,7 @@ export const view = ({
                 type='button'
                 onClick={() => dispatch({ _tag: 'Select', id: item.id })}
                 className={cn(
-                  'block w-full px-4 py-2 text-left text-sm transition-colors hover:bg-emerald-50 hover:text-emerald-700',
+                  'block w-full cursor-pointer px-4 py-2 text-left text-sm transition-colors hover:bg-emerald-50 hover:text-emerald-700',
                   model.selectedId === item.id
                     ? 'bg-emerald-50/50 font-semibold text-emerald-600'
                     : 'text-gray-700',

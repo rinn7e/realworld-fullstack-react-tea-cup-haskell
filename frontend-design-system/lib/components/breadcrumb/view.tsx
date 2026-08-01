@@ -39,7 +39,7 @@ export const view = ({
                     onSelect(item)
                   }
                 }}
-                className='transition-colors hover:text-emerald-600 hover:underline'
+                className='cursor-pointer transition-colors hover:text-emerald-600 hover:underline'
               >
                 {item.label}
               </a>
