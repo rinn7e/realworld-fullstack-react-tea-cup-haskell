@@ -1,5 +1,5 @@
 import { Button, Hero, Navbar, Title } from '@rinn7e/realworld-design-system'
-import { Code2, Sparkles } from 'lucide-react'
+import { Code2, Pencil, Settings, Sparkles, UserCircle2 } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
@@ -12,11 +12,40 @@ interface Props {
 }
 export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `{Navbar.view({
-  brand: <span className='font-extrabold text-lg text-green-600 tracking-tight'>conduit</span>,
-  startItems: [
-    { id: 'home', label: 'Home', isActive: true },
-    { id: 'editor', label: 'New Article' },
-    { id: 'settings', label: 'Settings' },
+  brand: (
+    <span className='text-xl font-bold tracking-tight text-green-600'>
+      conduit
+    </span>
+  ),
+  endItems: [
+    { id: 'home', label: 'Home' },
+    {
+      id: 'editor',
+      label: (
+        <span className='flex items-center gap-[4px]'>
+          <Pencil size={14} />
+          <span>New Article</span>
+        </span>
+      ),
+    },
+    {
+      id: 'settings',
+      label: (
+        <span className='flex items-center gap-[4px]'>
+          <Settings size={14} />
+          <span>Settings</span>
+        </span>
+      ),
+    },
+    {
+      id: 'profile',
+      label: (
+        <span className='flex items-center gap-[8px]'>
+          <UserCircle2 size={26} className='text-gray-300' />
+          <span>admin</span>
+        </span>
+      ),
+    },
   ],
   model: model.navbarModel,
   dispatch: (subMsg) => dispatch({ _tag: 'NavbarMsg', subMsg }),
@@ -77,24 +106,48 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
 
         {sectionView({
           title: 'Top Navigation Header',
-          children: () => (
-            <div className='w-full overflow-hidden rounded-lg border border-gray-200'>
-              {Navbar.view({
+          boxClassName:
+            'px-0 pt-0 pb-6 w-full bg-white border-2 border-dotted border-gray-300 rounded-lg overflow-hidden',
+          children: () =>
+            Navbar.view({
                 brand: (
-                  <span className='text-lg font-extrabold tracking-tight text-green-600'>
+                  <span className='text-xl font-bold tracking-tight text-green-600'>
                     conduit
                   </span>
                 ),
-                startItems: [
-                  { id: 'home', label: 'Home', isActive: true },
-                  { id: 'editor', label: 'New Article' },
-                  { id: 'settings', label: 'Settings' },
+                endItems: [
+                  { id: 'home', label: 'Home' },
+                  {
+                    id: 'editor',
+                    label: (
+                      <span className='flex items-center gap-[4px]'>
+                        <Pencil size={14} />
+                        <span>New Article</span>
+                      </span>
+                    ),
+                  },
+                  {
+                    id: 'settings',
+                    label: (
+                      <span className='flex items-center gap-[4px]'>
+                        <Settings size={14} />
+                        <span>Settings</span>
+                      </span>
+                    ),
+                  },
+                  {
+                    id: 'profile',
+                    label: (
+                      <span className='flex items-center gap-[8px]'>
+                        <UserCircle2 size={26} className='text-gray-300' />
+                        <span>admin</span>
+                      </span>
+                    ),
+                  },
                 ],
                 model: model.navbarModel,
                 dispatch: (subMsg) => dispatch({ _tag: 'NavbarMsg', subMsg }),
-              })}
-            </div>
-          ),
+              }),
         })}
 
         {model.showCode && (

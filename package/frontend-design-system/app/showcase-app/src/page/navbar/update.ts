@@ -4,7 +4,7 @@ import { Cmd } from 'tea-cup-fp'
 import type { Model, Msg } from './type'
 
 export const init = (): [Model, Cmd<Msg>] => {
-  const [navbarModel] = Navbar.init()
+  const [navbarModel] = Navbar.init('settings')
   return [{ showCode: true, navbarModel }, Cmd.none()]
 }
 
