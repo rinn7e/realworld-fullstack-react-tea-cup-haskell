@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@plugin '@rinn7e/realworld-design-system/plugin';
+@source '../../node_modules/@rinn7e/realworld-design-system';
 
 @theme {
   --color-brand-primary: #5cb85c;

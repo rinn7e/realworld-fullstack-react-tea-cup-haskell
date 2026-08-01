@@ -1,3 +1,4 @@
+import { Content, Tag, Title } from '@rinn7e/realworld-design-system'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
@@ -84,15 +85,16 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
         data-test='article-link'
       >
         <div className='flex flex-col gap-[4px]'>
-          <h1 className='line-clamp-2 text-xl font-bold text-gray-900'>
-            {model.title}
-          </h1>
-          <p
-            className='line-clamp-3 text-sm text-gray-500'
-            data-test='article-description'
-          >
-            {model.description}
-          </p>
+          {Title.view({
+            size: 4,
+            className: 'line-clamp-2',
+            children: () => model.title,
+          })}
+          {Content.view({
+            size: 'normal',
+            className: 'line-clamp-3 text-sm text-gray-500',
+            children: () => model.description,
+          })}
         </div>
         <div className='flex items-center justify-between'>
           <span className='text-xs text-gray-400'>
@@ -101,12 +103,14 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
           </span>
           <ul className='flex flex-wrap gap-[4px]' data-test='tag-list'>
             {model.tagList.map((tag) => (
-              <li
-                key={tag}
-                className='rounded-full border border-gray-300 px-[8px] py-[2px] text-xs text-gray-400'
-                data-test='article-tag'
-              >
-                {tag}
+              <li key={tag} data-test='article-tag'>
+                {Tag.view({
+                  variant: 'default',
+                  isOutline: true,
+                  isRounded: true,
+                  size: 'small',
+                  children: () => tag,
+                })}
               </li>
             ))}
           </ul>

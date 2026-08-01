@@ -19,6 +19,7 @@ export type TagProps = {
   size?: TagSize
   isRounded?: boolean
   isLight?: boolean
+  isOutline?: boolean
   onDelete?: () => void
   onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void
   className?: string

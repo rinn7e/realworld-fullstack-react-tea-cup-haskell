@@ -1,9 +1,0 @@
-packages:
-  - '.'
-  - 'app/*'
-
-allowBuilds:
-  esbuild: true
-  fp-ts-routing: true
-  '@rinn7e/fp-ts-routing': true
-  fp-ts-routing@https://codeload.github.com/rinn7e/fp-ts-routing/tar.gz/0d9ec901639572171d6ada5b75aeee6ff945dc43: true

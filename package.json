@@ -1,0 +1,16 @@
+{
+  "name": "realworld-fullstack-react-tea-cup-haskell",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monorepo for RealWorld fullstack React + TEA-Cup implementation",
+  "scripts": {
+    "build": "pnpm --filter \"*\" build",
+    "check": "pnpm --filter \"*\" check",
+    "check-circular": "pnpm --filter \"*\" check-circular",
+    "lint": "pnpm --filter \"*\" lint",
+    "format": "pnpm --filter \"*\" format"
+  },
+  "devDependencies": {
+    "madge": "^8.0.0"
+  }
+}

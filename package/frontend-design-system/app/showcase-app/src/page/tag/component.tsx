@@ -147,6 +147,50 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           ),
         })}
 
+        {/* Section 3: Outline Variants */}
+        {sectionView({
+          title: 'Outline Variants',
+          children: () => (
+            <div className='flex flex-wrap items-center gap-2.5'>
+              {Tag.view({
+                variant: 'default',
+                isOutline: true,
+                children: () => 'default',
+              })}
+              {Tag.view({
+                variant: 'primary',
+                isOutline: true,
+                children: () => 'conduit',
+              })}
+              {Tag.view({
+                variant: 'link',
+                isOutline: true,
+                children: () => 'react',
+              })}
+              {Tag.view({
+                variant: 'info',
+                isOutline: true,
+                children: () => 'haskell',
+              })}
+              {Tag.view({
+                variant: 'success',
+                isOutline: true,
+                children: () => 'elm',
+              })}
+              {Tag.view({
+                variant: 'warning',
+                isOutline: true,
+                children: () => 'fp-ts',
+              })}
+              {Tag.view({
+                variant: 'danger',
+                isOutline: true,
+                children: () => 'tea-cup',
+              })}
+            </div>
+          ),
+        })}
+
         {/* Section 3: Sizes & Shapes */}
         {sectionView({
           title: 'Sizes & Shapes',

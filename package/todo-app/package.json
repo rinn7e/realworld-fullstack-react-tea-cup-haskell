@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@capacitor/core": "^6.0.0",
-    "@rinn7e/tea-cup-prelude": "link:../../../tea-cup-package/tea-cup-prelude",
+    "@rinn7e/tea-cup-prelude": "0.1.0-alpha.1",
     "clsx": "^2.1.1",
     "fp-ts": "^2.16.0",
     "lucide-react": "^0.435.0",

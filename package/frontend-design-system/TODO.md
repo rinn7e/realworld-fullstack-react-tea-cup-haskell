@@ -1,6 +1,6 @@
-- [ ] fix outdated installation process in readme
+- [x] fix outdated installation process in readme
 
-- [ ] make all react node lazy
+- [x] make all react node lazy
 
 ui: ReactNode
 
