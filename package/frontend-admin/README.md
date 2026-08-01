@@ -14,39 +14,7 @@
 
 ### Installation & Setup
 
-To run the application locally, you must clone **both** this application repository and its sibling library package repository (`tea-cup-package`) as sibling directories under the same parent folder.
-
-#### 1. Clone Sibling Repositories
-
-Ensure your local directory layout is structured as siblings:
-
-```text
-parent-directory/
-├── realworld-fullstack-react-tea-cup-haskell/  <-- This repository
-└── tea-cup-package/                           <-- Sibling library repository
-```
-
-Clone the sibling package repository if you haven't already:
-
-```bash
-git clone https://github.com/rinn7e/tea-cup-package.git
-```
-
-#### 2. Build the Shared Libraries
-
-Before running the application, build the shared `tea-cup-package` libraries first:
-
-```bash
-cd tea-cup-package
-pnpm install
-pnpm build
-cd ../realworld-fullstack-react-tea-cup-haskell/frontend-admin
-```
-
-#### 3. Install Admin Dependencies
-
-1. Go to the `frontend-admin` directory.
-2. Install dependencies:
+1. Install dependencies from the monorepo root (or package folder):
    ```bash
    pnpm install
    ```
