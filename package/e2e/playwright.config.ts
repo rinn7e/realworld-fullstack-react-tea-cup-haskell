@@ -16,7 +16,7 @@ export default defineConfig({
     ...(!isRemoteApi
       ? [
           {
-            command: `direnv exec . make server`,
+            command: `direnv exec . make api`,
             url: 'http://localhost:3000/api/tags',
             cwd: process.env.BACKEND_PATH || '../backend',
             reuseExistingServer: !process.env.CI,

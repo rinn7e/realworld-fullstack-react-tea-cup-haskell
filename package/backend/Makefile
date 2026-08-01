@@ -83,28 +83,28 @@ resetdb:
 
 # Populate database with seed data
 seed:
-	nix develop -c "psql \"\$$DB_CONN\" -f resource/seed.sql"
+	nix develop -c bash -c 'psql "$$DB_CONN" -f resource/seed.sql'
 
 # Generate a new migration (Usage: make migrate-generate NAME=add_users)
 migrate-generate:
 	@if [ -z "$(NAME)" ]; then echo "Error: NAME is required. Usage: make migrate-generate NAME=some_name"; exit 1; fi
-	nix develop -c "cabal run migrate-exe -- generate $(NAME)"
+	nix develop -c cabal run migrate-exe -- generate $(NAME)
 
 # Run all pending up migrations
 migrate-up:
-	nix develop -c "cabal run migrate-exe -- up"
+	nix develop -c cabal run migrate-exe -- up
 
 # Run a single pending up migration
 migrate-up-one:
-	nix develop -c "cabal run migrate-exe -- up-one"
+	nix develop -c cabal run migrate-exe -- up-one
 
 # Run a single down migration
 migrate-down-one:
-	nix develop -c "cabal run migrate-exe -- down-one"
+	nix develop -c cabal run migrate-exe -- down-one
 
 # Check migration status and schema mismatches
 migrate-status:
-	nix develop -c "cabal run migrate-exe -- status"
+	nix develop -c cabal run migrate-exe -- status
 
 # Lint Haskell code
 lint:
