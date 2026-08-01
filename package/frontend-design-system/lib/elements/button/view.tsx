@@ -1,5 +1,6 @@
-import React from 'react'
 import { Loader2 } from 'lucide-react'
+import React from 'react'
+
 import { cn } from '../../theme'
 import type { ButtonProps } from './type'
 
@@ -78,7 +79,7 @@ export const view = ({
       disabled={isDisabled || isLoading}
       onClick={onClick}
       className={cn(
-        'inline-flex cursor-pointer items-center justify-center border shadow-2xs transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60 select-none',
+        'inline-flex cursor-pointer items-center justify-center border shadow-2xs transition-all duration-150 select-none focus:ring-1 focus:ring-offset-1 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60',
         colorClass,
         sizeStyles[size],
         isRounded ? 'rounded-full' : 'rounded',

@@ -1,7 +1,7 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@source "./**/*.{ts,tsx}";
+@source './**/*.{ts,tsx}';
 
 @theme {
-  --font-titillium: "Titillium Web", sans-serif;
+  --font-titillium: 'Titillium Web', sans-serif;
 }

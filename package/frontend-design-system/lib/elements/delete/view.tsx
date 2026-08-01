@@ -1,5 +1,6 @@
-import React from 'react'
 import { X } from 'lucide-react'
+import React from 'react'
+
 import { cn } from '../../theme'
 import type { DeleteProps } from './type'
 
@@ -22,7 +23,7 @@ export const view = ({
       onClick={onClick}
       aria-label='delete'
       className={cn(
-        'inline-flex cursor-pointer items-center justify-center rounded-full bg-gray-900/20 text-white transition-all hover:bg-gray-900/40 focus:outline-none focus:ring-2 focus:ring-gray-400',
+        'inline-flex cursor-pointer items-center justify-center rounded-full bg-gray-900/20 text-white transition-all hover:bg-gray-900/40 focus:ring-2 focus:ring-gray-400 focus:outline-none',
         sizeStyles[size],
         className,
       )}

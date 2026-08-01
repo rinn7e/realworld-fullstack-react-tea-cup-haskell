@@ -17,8 +17,7 @@ export type Model = {
 }
 
 export type Msg =
-  | { _tag: 'SelectTab'; id: string }
-  | { _tag: 'SelectItem'; id: string }
+  { _tag: 'SelectTab'; id: string } | { _tag: 'SelectItem'; id: string }
 
 export type PanelProps = {
   heading: React.ReactNode

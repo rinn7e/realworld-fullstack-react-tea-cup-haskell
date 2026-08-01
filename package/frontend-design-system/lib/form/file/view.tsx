@@ -1,5 +1,6 @@
-import React from 'react'
 import { Upload } from 'lucide-react'
+import React from 'react'
+
 import { cn } from '../../theme'
 import type { FileProps } from './type'
 
@@ -17,7 +18,7 @@ export const view = ({
     <label
       data-component='File'
       className={cn(
-        'inline-flex items-center rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-xs transition-colors hover:bg-gray-50 focus-within:ring-2 focus-within:ring-emerald-500/20',
+        'inline-flex items-center rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-xs transition-colors focus-within:ring-2 focus-within:ring-emerald-500/20 hover:bg-gray-50',
         isDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
         className,
       )}

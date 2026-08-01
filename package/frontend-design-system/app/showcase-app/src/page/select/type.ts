@@ -4,5 +4,4 @@ export type Model = {
 }
 
 export type Msg =
-  | { _tag: 'ToggleShowCode' }
-  | { _tag: 'UpdateValue'; value: string }
+  { _tag: 'ToggleShowCode' } | { _tag: 'UpdateValue'; value: string }

@@ -1,11 +1,8 @@
-import React from 'react'
-import {
-  Button,
-  Hero,
-  Title,
-} from '@rinn7e/realworld-design-system'
+import { Button, Hero, Title } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
+import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
+
 import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
@@ -41,14 +38,15 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
 {Button.view({ isFullWidth: true, children: 'Full Width Button' })}`
 
   return (
-    <div data-component='ButtonPage' className='w-full text-left space-y-8'>
+    <div data-component='ButtonPage' className='w-full space-y-8 text-left'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className:
+          'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
-            <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
+            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / BUTTON
             </div>
             {Title.view({
@@ -57,17 +55,19 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Button',
             })}
             <p className='text-base text-gray-600'>
-              Essential button element with support for all color variants, sizes, styles (outlined, rounded), and states (loading, disabled).
+              Essential button element with support for all color variants,
+              sizes, styles (outlined, rounded), and states (loading, disabled).
             </p>
           </>
         ),
       })}
 
-      <div className='flex flex-col gap-6 w-full'>
-        <div className='flex items-center justify-between w-full'>
+      <div className='flex w-full flex-col gap-6'>
+        <div className='flex w-full items-center justify-between'>
           {Title.view({
             size: 5,
-            className: 'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
+            className:
+              'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
             children: (
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
@@ -79,7 +79,8 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
-            className: 'flex items-center gap-1 font-semibold text-green-600 hover:underline',
+            className:
+              'flex items-center gap-1 font-semibold text-green-600 hover:underline',
             children: (
               <>
                 <Code2 className='h-3.5 w-3.5' />
@@ -110,13 +111,41 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Outlined Style',
           children: (
             <div className='flex flex-wrap items-center gap-3'>
-              {Button.view({ variant: 'default', isOutlined: true, children: 'Default' })}
-              {Button.view({ variant: 'primary', isOutlined: true, children: 'Primary' })}
-              {Button.view({ variant: 'link', isOutlined: true, children: 'Link' })}
-              {Button.view({ variant: 'info', isOutlined: true, children: 'Info' })}
-              {Button.view({ variant: 'success', isOutlined: true, children: 'Success' })}
-              {Button.view({ variant: 'warning', isOutlined: true, children: 'Warning' })}
-              {Button.view({ variant: 'danger', isOutlined: true, children: 'Danger' })}
+              {Button.view({
+                variant: 'default',
+                isOutlined: true,
+                children: 'Default',
+              })}
+              {Button.view({
+                variant: 'primary',
+                isOutlined: true,
+                children: 'Primary',
+              })}
+              {Button.view({
+                variant: 'link',
+                isOutlined: true,
+                children: 'Link',
+              })}
+              {Button.view({
+                variant: 'info',
+                isOutlined: true,
+                children: 'Info',
+              })}
+              {Button.view({
+                variant: 'success',
+                isOutlined: true,
+                children: 'Success',
+              })}
+              {Button.view({
+                variant: 'warning',
+                isOutlined: true,
+                children: 'Warning',
+              })}
+              {Button.view({
+                variant: 'danger',
+                isOutlined: true,
+                children: 'Danger',
+              })}
             </div>
           ),
         })}
@@ -127,16 +156,52 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           children: (
             <div className='space-y-4'>
               <div className='flex flex-wrap items-center gap-3'>
-                {Button.view({ variant: 'primary', size: 'small', children: 'Small' })}
-                {Button.view({ variant: 'primary', size: 'normal', children: 'Normal' })}
-                {Button.view({ variant: 'primary', size: 'medium', children: 'Medium' })}
-                {Button.view({ variant: 'primary', size: 'large', children: 'Large' })}
+                {Button.view({
+                  variant: 'primary',
+                  size: 'small',
+                  children: 'Small',
+                })}
+                {Button.view({
+                  variant: 'primary',
+                  size: 'normal',
+                  children: 'Normal',
+                })}
+                {Button.view({
+                  variant: 'primary',
+                  size: 'medium',
+                  children: 'Medium',
+                })}
+                {Button.view({
+                  variant: 'primary',
+                  size: 'large',
+                  children: 'Large',
+                })}
               </div>
               <div className='flex flex-wrap items-center gap-3 pt-2'>
-                {Button.view({ variant: 'primary', isRounded: true, size: 'small', children: 'Rounded Small' })}
-                {Button.view({ variant: 'primary', isRounded: true, size: 'normal', children: 'Rounded Normal' })}
-                {Button.view({ variant: 'primary', isRounded: true, size: 'medium', children: 'Rounded Medium' })}
-                {Button.view({ variant: 'primary', isRounded: true, size: 'large', children: 'Rounded Large' })}
+                {Button.view({
+                  variant: 'primary',
+                  isRounded: true,
+                  size: 'small',
+                  children: 'Rounded Small',
+                })}
+                {Button.view({
+                  variant: 'primary',
+                  isRounded: true,
+                  size: 'normal',
+                  children: 'Rounded Normal',
+                })}
+                {Button.view({
+                  variant: 'primary',
+                  isRounded: true,
+                  size: 'medium',
+                  children: 'Rounded Medium',
+                })}
+                {Button.view({
+                  variant: 'primary',
+                  isRounded: true,
+                  size: 'large',
+                  children: 'Rounded Large',
+                })}
               </div>
             </div>
           ),
@@ -146,18 +211,28 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
         {sectionView({
           title: 'States & Width',
           children: (
-            <div className='space-y-4 w-full'>
+            <div className='w-full space-y-4'>
               <div className='flex flex-wrap items-center gap-3'>
-                {Button.view({ variant: 'success', isDisabled: true, children: 'Disabled Button' })}
+                {Button.view({
+                  variant: 'success',
+                  isDisabled: true,
+                  children: 'Disabled Button',
+                })}
                 {Button.view({
                   variant: 'danger',
                   isLoading: model.isLoading,
                   onClick: () => dispatch({ _tag: 'ToggleLoading' }),
-                  children: model.isLoading ? 'Processing...' : 'Click to Toggle Loading',
+                  children: model.isLoading
+                    ? 'Processing...'
+                    : 'Click to Toggle Loading',
                 })}
               </div>
               <div className='pt-2'>
-                {Button.view({ variant: 'primary', isFullWidth: true, children: 'Full Width Button' })}
+                {Button.view({
+                  variant: 'primary',
+                  isFullWidth: true,
+                  children: 'Full Width Button',
+                })}
               </div>
             </div>
           ),
@@ -169,7 +244,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500'>Button Component Code</span>
             </div>
-            <pre className='whitespace-pre-wrap font-mono text-xs leading-relaxed text-gray-300'>
+            <pre className='font-mono text-xs leading-relaxed whitespace-pre-wrap text-gray-300'>
               <code>{code}</code>
             </pre>
           </div>

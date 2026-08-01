@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { RadioProps } from './type'
 
@@ -11,12 +12,15 @@ export const view = ({
   className,
 }: RadioProps): React.ReactElement => {
   return (
-    <div data-component='Radio' className={cn('flex flex-col gap-2', className)}>
+    <div
+      data-component='Radio'
+      className={cn('flex flex-col gap-2', className)}
+    >
       {options.map((opt) => (
         <label
           key={opt.value}
           className={cn(
-            'inline-flex select-none items-center gap-2 text-sm font-medium text-gray-700',
+            'inline-flex items-center gap-2 text-sm font-medium text-gray-700 select-none',
             isDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
           )}
         >

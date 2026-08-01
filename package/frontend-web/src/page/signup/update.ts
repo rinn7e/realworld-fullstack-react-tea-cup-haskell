@@ -1,7 +1,6 @@
 import * as RD from '@devexperts/remote-data-ts'
 import * as Form from '@rinn7e/tea-cup-form'
 import { attemptTE } from '@rinn7e/tea-cup-prelude'
-import { pipe } from 'fp-ts/lib/function'
 import { Cmd } from 'tea-cup-fp'
 
 import { signup } from '@/common/api'

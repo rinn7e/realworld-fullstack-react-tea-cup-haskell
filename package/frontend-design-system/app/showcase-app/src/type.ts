@@ -1,7 +1,5 @@
 import type { Menu, Navbar } from '@rinn7e/realworld-design-system'
 
-import type * as HomePage from './page/home/type'
-import type * as NotFoundPage from './page/not-found/type'
 import type * as BlockPage from './page/block/type'
 import type * as BoxPage from './page/box/type'
 import type * as BreadcrumbPage from './page/breadcrumb/type'
@@ -18,6 +16,7 @@ import type * as FieldPage from './page/field/type'
 import type * as FilePage from './page/file/type'
 import type * as FooterPage from './page/footer/type'
 import type * as HeroPage from './page/hero/type'
+import type * as HomePage from './page/home/type'
 import type * as IconPage from './page/icon/type'
 import type * as ImagePage from './page/image/type'
 import type * as InputPage from './page/input/type'
@@ -27,6 +26,7 @@ import type * as MenuPage from './page/menu/type'
 import type * as MessagePage from './page/message/type'
 import type * as ModalPage from './page/modal/type'
 import type * as NavbarPage from './page/navbar/type'
+import type * as NotFoundPage from './page/not-found/type'
 import type * as NotificationPage from './page/notification/type'
 import type * as PaginationPage from './page/pagination/type'
 import type * as PanelPage from './page/panel/type'
@@ -42,18 +42,16 @@ import type * as TitlePage from './page/title/type'
 import type { AppRoute } from './route/type'
 
 export type SectionCategory =
-  | 'elements'
-  | 'components'
-  | 'form'
-  | 'layout'
-  | 'grid'
-  | 'misc'
+  'elements' | 'components' | 'form' | 'layout' | 'grid' | 'misc'
 
 export type PageModel =
   | { readonly _tag: 'HomePageModel'; readonly model: HomePage.Model }
   | { readonly _tag: 'BlockPageModel'; readonly model: BlockPage.Model }
   | { readonly _tag: 'BoxPageModel'; readonly model: BoxPage.Model }
-  | { readonly _tag: 'BreadcrumbPageModel'; readonly model: BreadcrumbPage.Model }
+  | {
+      readonly _tag: 'BreadcrumbPageModel'
+      readonly model: BreadcrumbPage.Model
+    }
   | { readonly _tag: 'ButtonPageModel'; readonly model: ButtonPage.Model }
   | { readonly _tag: 'CardPageModel'; readonly model: CardPage.Model }
   | { readonly _tag: 'CheckboxPageModel'; readonly model: CheckboxPage.Model }
@@ -61,7 +59,10 @@ export type PageModel =
   | { readonly _tag: 'ContainerPageModel'; readonly model: ContainerPage.Model }
   | { readonly _tag: 'ContentPageModel'; readonly model: ContentPage.Model }
   | { readonly _tag: 'DeletePageModel'; readonly model: DeletePage.Model }
-  | { readonly _tag: 'DotLoadingPageModel'; readonly model: DotLoadingPage.Model }
+  | {
+      readonly _tag: 'DotLoadingPageModel'
+      readonly model: DotLoadingPage.Model
+    }
   | { readonly _tag: 'DropdownPageModel'; readonly model: DropdownPage.Model }
   | { readonly _tag: 'FieldPageModel'; readonly model: FieldPage.Model }
   | { readonly _tag: 'FilePageModel'; readonly model: FilePage.Model }
@@ -71,13 +72,22 @@ export type PageModel =
   | { readonly _tag: 'ImagePageModel'; readonly model: ImagePage.Model }
   | { readonly _tag: 'InputPageModel'; readonly model: InputPage.Model }
   | { readonly _tag: 'LevelPageModel'; readonly model: LevelPage.Model }
-  | { readonly _tag: 'MediaObjectPageModel'; readonly model: MediaObjectPage.Model }
+  | {
+      readonly _tag: 'MediaObjectPageModel'
+      readonly model: MediaObjectPage.Model
+    }
   | { readonly _tag: 'MenuPageModel'; readonly model: MenuPage.Model }
   | { readonly _tag: 'MessagePageModel'; readonly model: MessagePage.Model }
   | { readonly _tag: 'ModalPageModel'; readonly model: ModalPage.Model }
   | { readonly _tag: 'NavbarPageModel'; readonly model: NavbarPage.Model }
-  | { readonly _tag: 'NotificationPageModel'; readonly model: NotificationPage.Model }
-  | { readonly _tag: 'PaginationPageModel'; readonly model: PaginationPage.Model }
+  | {
+      readonly _tag: 'NotificationPageModel'
+      readonly model: NotificationPage.Model
+    }
+  | {
+      readonly _tag: 'PaginationPageModel'
+      readonly model: PaginationPage.Model
+    }
   | { readonly _tag: 'PanelPageModel'; readonly model: PanelPage.Model }
   | { readonly _tag: 'ProgressPageModel'; readonly model: ProgressPage.Model }
   | { readonly _tag: 'RadioPageModel'; readonly model: RadioPage.Model }
@@ -126,12 +136,18 @@ export type Msg =
   | { readonly _tag: 'ImagePageMsg'; readonly subMsg: ImagePage.Msg }
   | { readonly _tag: 'InputPageMsg'; readonly subMsg: InputPage.Msg }
   | { readonly _tag: 'LevelPageMsg'; readonly subMsg: LevelPage.Msg }
-  | { readonly _tag: 'MediaObjectPageMsg'; readonly subMsg: MediaObjectPage.Msg }
+  | {
+      readonly _tag: 'MediaObjectPageMsg'
+      readonly subMsg: MediaObjectPage.Msg
+    }
   | { readonly _tag: 'MenuPageMsg'; readonly subMsg: MenuPage.Msg }
   | { readonly _tag: 'MessagePageMsg'; readonly subMsg: MessagePage.Msg }
   | { readonly _tag: 'ModalPageMsg'; readonly subMsg: ModalPage.Msg }
   | { readonly _tag: 'NavbarPageMsg'; readonly subMsg: NavbarPage.Msg }
-  | { readonly _tag: 'NotificationPageMsg'; readonly subMsg: NotificationPage.Msg }
+  | {
+      readonly _tag: 'NotificationPageMsg'
+      readonly subMsg: NotificationPage.Msg
+    }
   | { readonly _tag: 'PaginationPageMsg'; readonly subMsg: PaginationPage.Msg }
   | { readonly _tag: 'PanelPageMsg'; readonly subMsg: PanelPage.Msg }
   | { readonly _tag: 'ProgressPageMsg'; readonly subMsg: ProgressPage.Msg }

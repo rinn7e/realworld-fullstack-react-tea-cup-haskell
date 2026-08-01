@@ -1,9 +1,9 @@
-import './index.css'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { ProgramWithNav } from 'react-tea-cup'
 import { Sub } from 'tea-cup-fp'
 
+import './index.css'
 import type { Model, Msg } from './type'
 import { init, update } from './update'
 import { view } from './view'

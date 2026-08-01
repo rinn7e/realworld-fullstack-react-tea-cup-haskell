@@ -1,9 +1,13 @@
 import { Cmd } from 'tea-cup-fp'
+
 import type { Model, Msg } from './type'
 
 export const init = (
   initialSelectedId: string | null = null,
-): [Model, Cmd<Msg>] => [{ isOpen: false, selectedId: initialSelectedId }, Cmd.none()]
+): [Model, Cmd<Msg>] => [
+  { isOpen: false, selectedId: initialSelectedId },
+  Cmd.none(),
+]
 
 export const update =
   (msg: Msg) =>

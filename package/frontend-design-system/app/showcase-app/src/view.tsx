@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Column,
   Columns,
@@ -9,10 +8,9 @@ import {
   Navbar,
 } from '@rinn7e/realworld-design-system'
 import { BookOpen, Layers, LayoutGrid, Search, Sparkles } from 'lucide-react'
-import { Sidebar } from './component/sidebar'
+import React from 'react'
 
-import { HomePage } from './page/home/component'
-import { NotFoundPage } from './page/not-found/component'
+import { Sidebar } from './component/sidebar'
 import { BlockPage } from './page/block/component'
 import { BoxPage } from './page/box/component'
 import { BreadcrumbPage } from './page/breadcrumb/component'
@@ -29,6 +27,7 @@ import { FieldPage } from './page/field/component'
 import { FilePage } from './page/file/component'
 import { FooterPage } from './page/footer/component'
 import { HeroPage } from './page/hero/component'
+import { HomePage } from './page/home/component'
 import { IconPage } from './page/icon/component'
 import { ImagePage } from './page/image/component'
 import { InputPage } from './page/input/component'
@@ -38,6 +37,7 @@ import { MenuPage } from './page/menu/component'
 import { MessagePage } from './page/message/component'
 import { ModalPage } from './page/modal/component'
 import { NavbarPage } from './page/navbar/component'
+import { NotFoundPage } from './page/not-found/component'
 import { NotificationPage } from './page/notification/component'
 import { PaginationPage } from './page/pagination/component'
 import { PanelPage } from './page/panel/component'
@@ -141,7 +141,8 @@ export const view = (
   ]
 
   const activeComponent =
-    model.route.page._tag === 'HomePage' || model.route.page._tag === 'NotFoundPage'
+    model.route.page._tag === 'HomePage' ||
+    model.route.page._tag === 'NotFoundPage'
       ? ''
       : model.route.page._tag.replace(/Page$/, '').toLowerCase()
 
@@ -186,7 +187,9 @@ export const view = (
         return (
           <BreadcrumbPage
             model={model.pageModel.model}
-            dispatch={(subMsg) => dispatch({ _tag: 'BreadcrumbPageMsg', subMsg })}
+            dispatch={(subMsg) =>
+              dispatch({ _tag: 'BreadcrumbPageMsg', subMsg })
+            }
           />
         )
       case 'ButtonPageModel':
@@ -221,7 +224,9 @@ export const view = (
         return (
           <ContainerPage
             model={model.pageModel.model}
-            dispatch={(subMsg) => dispatch({ _tag: 'ContainerPageMsg', subMsg })}
+            dispatch={(subMsg) =>
+              dispatch({ _tag: 'ContainerPageMsg', subMsg })
+            }
           />
         )
       case 'ContentPageModel':
@@ -235,7 +240,9 @@ export const view = (
         return (
           <DotLoadingPage
             model={model.pageModel.model}
-            dispatch={(subMsg) => dispatch({ _tag: 'DotLoadingPageMsg', subMsg })}
+            dispatch={(subMsg) =>
+              dispatch({ _tag: 'DotLoadingPageMsg', subMsg })
+            }
           />
         )
       case 'DeletePageModel':
@@ -312,7 +319,9 @@ export const view = (
         return (
           <MediaObjectPage
             model={model.pageModel.model}
-            dispatch={(subMsg) => dispatch({ _tag: 'MediaObjectPageMsg', subMsg })}
+            dispatch={(subMsg) =>
+              dispatch({ _tag: 'MediaObjectPageMsg', subMsg })
+            }
           />
         )
       case 'MenuPageModel':
@@ -347,14 +356,18 @@ export const view = (
         return (
           <NotificationPage
             model={model.pageModel.model}
-            dispatch={(subMsg) => dispatch({ _tag: 'NotificationPageMsg', subMsg })}
+            dispatch={(subMsg) =>
+              dispatch({ _tag: 'NotificationPageMsg', subMsg })
+            }
           />
         )
       case 'PaginationPageModel':
         return (
           <PaginationPage
             model={model.pageModel.model}
-            dispatch={(subMsg) => dispatch({ _tag: 'PaginationPageMsg', subMsg })}
+            dispatch={(subMsg) =>
+              dispatch({ _tag: 'PaginationPageMsg', subMsg })
+            }
           />
         )
       case 'PanelPageModel':
@@ -434,13 +447,16 @@ export const view = (
   }
 
   return (
-    <div data-component='ShowcaseApp' className='flex min-h-screen flex-col bg-white font-sans text-gray-900'>
+    <div
+      data-component='ShowcaseApp'
+      className='flex min-h-screen flex-col bg-white font-sans text-gray-900'
+    >
       {/* Top Navbar Header */}
       {Navbar.view({
         brand: (
           <button
             onClick={() => navigateRoute({ page: { _tag: 'HomePage' } })}
-            className='cursor-pointer font-titillium text-2xl font-bold tracking-tight text-green-600 hover:opacity-90'
+            className='font-titillium cursor-pointer text-2xl font-bold tracking-tight text-green-600 hover:opacity-90'
           >
             conduit
           </button>

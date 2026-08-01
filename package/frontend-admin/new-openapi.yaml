@@ -31,17 +31,17 @@ components:
         updatedAt:
           $ref: '#/components/schemas/UTCTime'
       required:
-      - id
-      - slug
-      - title
-      - description
-      - body
-      - tagList
-      - createdAt
-      - updatedAt
-      - favorited
-      - favoritesCount
-      - author
+        - id
+        - slug
+        - title
+        - description
+        - body
+        - tagList
+        - createdAt
+        - updatedAt
+        - favorited
+        - favoritesCount
+        - author
       type: object
     AdminArticleListResponse:
       properties:
@@ -54,8 +54,8 @@ components:
           minimum: -9223372036854775808
           type: integer
       required:
-      - articles
-      - articlesCount
+        - articles
+        - articlesCount
       type: object
     AdminCommentListResponse:
       properties:
@@ -68,8 +68,8 @@ components:
           minimum: -9223372036854775808
           type: integer
       required:
-      - comments
-      - totalCount
+        - comments
+        - totalCount
       type: object
     AdminCommentResponse:
       properties:
@@ -86,11 +86,11 @@ components:
           minimum: -9223372036854775808
           type: integer
       required:
-      - id
-      - body
-      - createdAt
-      - articleSlug
-      - authorUsername
+        - id
+        - body
+        - createdAt
+        - articleSlug
+        - authorUsername
       type: object
     AdminUserListResponse:
       properties:
@@ -103,8 +103,8 @@ components:
             $ref: '#/components/schemas/AdminUserResponse'
           type: array
       required:
-      - users
-      - totalCount
+        - users
+        - totalCount
       type: object
     AdminUserResponse:
       properties:
@@ -123,10 +123,10 @@ components:
         username:
           type: string
       required:
-      - id
-      - username
-      - email
-      - role
+        - id
+        - username
+        - email
+        - role
       type: object
     DashboardStatsResponse:
       properties:
@@ -151,18 +151,18 @@ components:
           minimum: -9223372036854775808
           type: integer
       required:
-      - totalUsers
-      - totalArticles
-      - totalComments
-      - totalVisitors
-      - activeUsers24h
+        - totalUsers
+        - totalArticles
+        - totalComments
+        - totalVisitors
+        - activeUsers24h
       type: object
     LogLevel:
       enum:
-      - info
-      - warning
-      - error
-      - fatal
+        - info
+        - warning
+        - error
+        - fatal
       type: string
     LogListResponse:
       properties:
@@ -175,8 +175,8 @@ components:
           minimum: -9223372036854775808
           type: integer
       required:
-      - logs
-      - totalCount
+        - logs
+        - totalCount
       type: object
     LogResponse:
       properties:
@@ -197,11 +197,11 @@ components:
           minimum: -9223372036854775808
           type: integer
       required:
-      - id
-      - level
-      - message
-      - source
-      - timestamp
+        - id
+        - level
+        - message
+        - source
+        - timestamp
       type: object
     LoginUserRequest:
       properties:
@@ -212,11 +212,11 @@ components:
             password:
               type: string
           required:
-          - email
-          - password
+            - email
+            - password
           type: object
       required:
-      - user
+        - user
       type: object
     UTCTime:
       example: 2016-07-22T00:00:00Z
@@ -227,7 +227,7 @@ components:
         role:
           type: string
       required:
-      - role
+        - role
       type: object
     User:
       properties:
@@ -242,16 +242,16 @@ components:
         username:
           type: string
       required:
-      - email
-      - token
-      - username
+        - email
+        - token
+        - username
       type: object
     UserResponse:
       properties:
         user:
           $ref: '#/components/schemas/User'
       required:
-      - user
+        - user
       type: object
     VisitorListResponse:
       properties:
@@ -264,8 +264,8 @@ components:
             $ref: '#/components/schemas/VisitorResponse'
           type: array
       required:
-      - visitors
-      - totalCount
+        - visitors
+        - totalCount
       type: object
     VisitorResponse:
       properties:
@@ -282,11 +282,11 @@ components:
         userAgent:
           type: string
       required:
-      - id
-      - ip
-      - userAgent
-      - path
-      - timestamp
+        - id
+        - ip
+        - userAgent
+        - path
+        - timestamp
       type: object
     VisitorStatResponse:
       properties:
@@ -297,8 +297,8 @@ components:
           minimum: -9223372036854775808
           type: integer
       required:
-      - name
-      - visitors
+        - name
+        - visitors
       type: object
   securitySchemes:
     jwt:
@@ -316,35 +316,35 @@ paths:
     get:
       description: Retrieve all articles in the system for administrative review
       parameters:
-      - in: query
-        name: limit
-        required: false
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      - in: query
-        name: offset
-        required: false
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      - in: query
-        name: tag
-        required: false
-        schema:
-          type: string
-      - in: query
-        name: author
-        required: false
-        schema:
-          type: string
-      - in: query
-        name: search
-        required: false
-        schema:
-          type: string
+        - in: query
+          name: limit
+          required: false
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
+        - in: query
+          name: tag
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: author
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: search
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -356,16 +356,16 @@ paths:
           description: Invalid `search` or `author` or `tag` or `offset` or `limit`
       summary: Get All Articles
       tags:
-      - Admin Articles
+        - Admin Articles
   /api/admin/articles/{slug}:
     delete:
       description: Administrative takedown of an offensive article
       parameters:
-      - in: path
-        name: slug
-        required: true
-        schema:
-          type: string
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -375,36 +375,37 @@ paths:
           description: '`slug` not found'
       summary: Delete Article
       tags:
-      - Admin Articles
+        - Admin Articles
   /api/admin/comments:
     get:
-      description: Retrieve all comments in the system with optional author and article
+      description:
+        Retrieve all comments in the system with optional author and article
         filters
       parameters:
-      - in: query
-        name: limit
-        required: false
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      - in: query
-        name: offset
-        required: false
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      - in: query
-        name: author
-        required: false
-        schema:
-          type: string
-      - in: query
-        name: articleSlug
-        required: false
-        schema:
-          type: string
+        - in: query
+          name: limit
+          required: false
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
+        - in: query
+          name: author
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: articleSlug
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -416,18 +417,18 @@ paths:
           description: Invalid `articleSlug` or `author` or `offset` or `limit`
       summary: Get All Comments
       tags:
-      - Admin Comments
+        - Admin Comments
   /api/admin/comments/{id}:
     delete:
       description: Administrative deletion of an offensive comment globally
       parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
+        - in: path
+          name: id
+          required: true
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
       responses:
         '200':
           content:
@@ -437,7 +438,7 @@ paths:
           description: '`id` not found'
       summary: Delete Comment
       tags:
-      - Admin Comments
+        - Admin Comments
   /api/admin/dashboard/stats:
     get:
       description: Get dashboard card and visitor metrics
@@ -450,17 +451,18 @@ paths:
           description: ''
       summary: Get Dashboard Stats
       tags:
-      - Admin Dashboard
+        - Admin Dashboard
   /api/admin/dashboard/visitor-stats:
     get:
-      description: Get time-series visitor counts filtered by range (24h, week, month,
+      description:
+        Get time-series visitor counts filtered by range (24h, week, month,
         year)
       parameters:
-      - in: query
-        name: filter
-        required: false
-        schema:
-          type: string
+        - in: query
+          name: filter
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -474,7 +476,7 @@ paths:
           description: Invalid `filter`
       summary: Get Visitor Stats
       tags:
-      - Admin Dashboard
+        - Admin Dashboard
   /api/admin/login:
     post:
       description: Login with administrative credentials
@@ -494,40 +496,40 @@ paths:
           description: Invalid `body`
       summary: Admin Login
       tags:
-      - Admin Authentication
+        - Admin Authentication
   /api/admin/logs:
     get:
       description: Get paginated system audit and moderator logs using limit and offset
       parameters:
-      - in: query
-        name: limit
-        required: false
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      - in: query
-        name: offset
-        required: false
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      - in: query
-        name: level
-        required: false
-        schema:
-          enum:
-          - info
-          - warning
-          - error
-          - fatal
-          type: string
-      - in: query
-        name: source
-        required: false
-        schema:
-          type: string
+        - in: query
+          name: limit
+          required: false
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
+        - in: query
+          name: level
+          required: false
+          schema:
+            enum:
+              - info
+              - warning
+              - error
+              - fatal
+            type: string
+        - in: query
+          name: source
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -539,7 +541,7 @@ paths:
           description: Invalid `source` or `level` or `offset` or `limit`
       summary: Get Paginated Logs
       tags:
-      - Admin Dashboard
+        - Admin Dashboard
   /api/admin/user:
     get:
       description: Get currently logged-in administrator details
@@ -552,35 +554,35 @@ paths:
           description: ''
       summary: Get Current Admin
       tags:
-      - Admin Authentication
+        - Admin Authentication
   /api/admin/users:
     get:
       description: Retrieve all registered users with pagination and keyword filters
       parameters:
-      - in: query
-        name: limit
-        required: false
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      - in: query
-        name: offset
-        required: false
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      - in: query
-        name: username
-        required: false
-        schema:
-          type: string
-      - in: query
-        name: email
-        required: false
-        schema:
-          type: string
+        - in: query
+          name: limit
+          required: false
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
+        - in: query
+          name: username
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: email
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -592,18 +594,18 @@ paths:
           description: Invalid `email` or `username` or `offset` or `limit`
       summary: Get All Users
       tags:
-      - Admin Users
+        - Admin Users
   /api/admin/users/{id}:
     delete:
       description: Permanently delete a user from the platform
       parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
+        - in: path
+          name: id
+          required: true
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
       responses:
         '200':
           content:
@@ -613,18 +615,18 @@ paths:
           description: '`id` not found'
       summary: Delete User
       tags:
-      - Admin Users
+        - Admin Users
   /api/admin/users/{id}/role:
     put:
       description: Promote a user to Admin or demote to User
       parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
+        - in: path
+          name: id
+          required: true
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
       requestBody:
         content:
           application/json;charset=utf-8:
@@ -643,35 +645,35 @@ paths:
           description: '`id` not found'
       summary: Update User Role
       tags:
-      - Admin Users
+        - Admin Users
   /api/admin/visitors:
     get:
       description: Get paginated visitor traffic records using limit and offset
       parameters:
-      - in: query
-        name: limit
-        required: false
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      - in: query
-        name: offset
-        required: false
-        schema:
-          maximum: 9223372036854775807
-          minimum: -9223372036854775808
-          type: integer
-      - in: query
-        name: ip
-        required: false
-        schema:
-          type: string
-      - in: query
-        name: path
-        required: false
-        schema:
-          type: string
+        - in: query
+          name: limit
+          required: false
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
+        - in: query
+          name: offset
+          required: false
+          schema:
+            maximum: 9223372036854775807
+            minimum: -9223372036854775808
+            type: integer
+        - in: query
+          name: ip
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: path
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           content:
@@ -683,6 +685,6 @@ paths:
           description: Invalid `path` or `ip` or `offset` or `limit`
       summary: Get Paginated Visitor Logs
       tags:
-      - Admin Dashboard
+        - Admin Dashboard
 security:
-- jwt: []
+  - jwt: []

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { MenuProps } from './type'
 
@@ -12,7 +13,7 @@ export const view = ({
     <aside data-component='Menu' className={cn('w-full text-sm', className)}>
       {categories.map((cat, idx) => (
         <div key={idx} className='mb-4 last:mb-0'>
-          <p className='mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-gray-500'>
+          <p className='mb-2 px-3 text-xs font-semibold tracking-wider text-gray-500 uppercase'>
             {cat.title}
           </p>
           <ul className='space-y-1'>

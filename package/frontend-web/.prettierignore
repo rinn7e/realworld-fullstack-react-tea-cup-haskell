@@ -1,10 +1,4 @@
-dist/
-dist-auth
-node_modules/
-size-plugin.json
-package-lock.json
-src/style/tailwind-output.css
-journal/
-src/generated
-src/package
-deprecated
+pnpm-lock.yaml
+node_modules
+dist
+.pnpm-store

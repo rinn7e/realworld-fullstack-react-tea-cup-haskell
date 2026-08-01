@@ -1,5 +1,6 @@
-import React from 'react'
 import { ChevronDown } from 'lucide-react'
+import React from 'react'
+
 import { cn } from '../../theme'
 import type { DropdownProps } from './type'
 
@@ -13,11 +14,14 @@ export const view = ({
   const selectedItem = items.find((i) => i.id === model.selectedId)
 
   return (
-    <div data-component='Dropdown' className={cn('relative inline-block text-left', className)}>
+    <div
+      data-component='Dropdown'
+      className={cn('relative inline-block text-left', className)}
+    >
       <button
         type='button'
         onClick={() => dispatch({ _tag: 'Toggle' })}
-        className='inline-flex cursor-pointer items-center gap-2 rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20'
+        className='inline-flex cursor-pointer items-center gap-2 rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none'
       >
         <span>{selectedItem ? selectedItem.label : triggerLabel}</span>
         <ChevronDown

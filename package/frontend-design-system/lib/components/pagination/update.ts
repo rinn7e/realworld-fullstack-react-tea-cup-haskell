@@ -1,10 +1,11 @@
 import { Cmd } from 'tea-cup-fp'
+
 import type { Model, Msg } from './type'
 
-export const init = (
-  currentPage = 1,
-  totalPages = 10,
-): [Model, Cmd<Msg>] => [{ currentPage, totalPages }, Cmd.none()]
+export const init = (currentPage = 1, totalPages = 10): [Model, Cmd<Msg>] => [
+  { currentPage, totalPages },
+  Cmd.none(),
+]
 
 export const update =
   (msg: Msg) =>

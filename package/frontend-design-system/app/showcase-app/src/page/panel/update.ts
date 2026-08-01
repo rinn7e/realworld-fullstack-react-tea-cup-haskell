@@ -1,5 +1,6 @@
 import { Panel } from '@rinn7e/realworld-design-system'
 import { Cmd } from 'tea-cup-fp'
+
 import type { Model, Msg } from './type'
 
 export const init = (): [Model, Cmd<Msg>] => {
@@ -13,7 +14,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       return [{ ...model, showCode: !model.showCode }, Cmd.none()]
     case 'PanelMsg': {
       const [panelModel, cmd] = Panel.update(msg.subMsg)(model.panelModel)
-      return [{ ...model, panelModel }, cmd.map((subMsg: Panel.Msg) => ({ _tag: 'PanelMsg', subMsg }))]
+      return [
+        { ...model, panelModel },
+        cmd.map((subMsg: Panel.Msg) => ({ _tag: 'PanelMsg', subMsg })),
+      ]
     }
   }
 }

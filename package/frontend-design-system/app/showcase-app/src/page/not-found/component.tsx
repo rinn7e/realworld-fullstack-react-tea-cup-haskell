@@ -1,5 +1,6 @@
-import React from 'react'
 import { Box, Button, Title } from '@rinn7e/realworld-design-system'
+import React from 'react'
+
 import type { AppRoute } from '../../route/type'
 
 interface Props {
@@ -24,7 +25,8 @@ export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
               children: 'Page Not Found',
             })}
             <p className='text-sm text-gray-600'>
-              The component page you are looking for does not exist in our design system catalog.
+              The component page you are looking for does not exist in our
+              design system catalog.
             </p>
             <div className='pt-2'>
               {Button.view({

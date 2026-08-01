@@ -1,12 +1,7 @@
 import React from 'react'
 
 export type MessageVariant =
-  | 'default'
-  | 'primary'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | 'danger'
+  'default' | 'primary' | 'info' | 'success' | 'warning' | 'danger'
 
 export type MessageProps = {
   header?: React.ReactNode

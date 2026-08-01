@@ -1,12 +1,8 @@
-import React from 'react'
-import {
-  Button,
-  Hero,
-  Textarea,
-  Title,
-} from '@rinn7e/realworld-design-system'
+import { Button, Hero, Textarea, Title } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
+import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
+
 import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
@@ -29,14 +25,15 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
 {Textarea.view({ isDisabled: true, value: 'Read-only content body', rows: 3 })}`
 
   return (
-    <div data-component='TextareaPage' className='w-full text-left space-y-8'>
+    <div data-component='TextareaPage' className='w-full space-y-8 text-left'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className:
+          'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
-            <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
+            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               FORM / TEXTAREA
             </div>
             {Title.view({
@@ -45,17 +42,19 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Textarea',
             })}
             <p className='text-base text-gray-600'>
-              Multi-line text input control with support for interactive state, row sizes, validation errors, and disabled states.
+              Multi-line text input control with support for interactive state,
+              row sizes, validation errors, and disabled states.
             </p>
           </>
         ),
       })}
 
-      <div className='flex flex-col gap-6 w-full'>
-        <div className='flex items-center justify-between w-full'>
+      <div className='flex w-full flex-col gap-6'>
+        <div className='flex w-full items-center justify-between'>
           {Title.view({
             size: 5,
-            className: 'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
+            className:
+              'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
             children: (
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
@@ -67,7 +66,8 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
-            className: 'flex items-center gap-1 font-semibold text-green-600 hover:underline',
+            className:
+              'flex items-center gap-1 font-semibold text-green-600 hover:underline',
             children: (
               <>
                 <Code2 className='h-3.5 w-3.5' />
@@ -86,10 +86,14 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
                 value: model.value,
                 rows: 4,
                 placeholder: 'Write your article body (in markdown format)...',
-                onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }),
+                onChange: (e) =>
+                  dispatch({ _tag: 'UpdateValue', value: e.target.value }),
               })}
               <p className='text-xs text-gray-500'>
-                Character Count: <span className='font-mono font-bold text-gray-800'>{model.value.length}</span>
+                Character Count:{' '}
+                <span className='font-mono font-bold text-gray-800'>
+                  {model.value.length}
+                </span>
               </p>
             </div>
           ),
@@ -101,12 +105,24 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
           children: (
             <div className='w-full space-y-4'>
               <div>
-                <span className='text-xs font-medium text-gray-500 mb-1 block'>Error State</span>
-                {Textarea.view({ isError: true, value: 'Cannot submit empty post content.', rows: 3 })}
+                <span className='mb-1 block text-xs font-medium text-gray-500'>
+                  Error State
+                </span>
+                {Textarea.view({
+                  isError: true,
+                  value: 'Cannot submit empty post content.',
+                  rows: 3,
+                })}
               </div>
               <div>
-                <span className='text-xs font-medium text-gray-500 mb-1 block'>Disabled State</span>
-                {Textarea.view({ isDisabled: true, value: 'System read-only logs and article notes.', rows: 3 })}
+                <span className='mb-1 block text-xs font-medium text-gray-500'>
+                  Disabled State
+                </span>
+                {Textarea.view({
+                  isDisabled: true,
+                  value: 'System read-only logs and article notes.',
+                  rows: 3,
+                })}
               </div>
             </div>
           ),
@@ -118,7 +134,7 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500'>Textarea Component Code</span>
             </div>
-            <pre className='whitespace-pre-wrap font-mono text-xs leading-relaxed text-gray-300'>
+            <pre className='font-mono text-xs leading-relaxed whitespace-pre-wrap text-gray-300'>
               <code>{code}</code>
             </pre>
           </div>

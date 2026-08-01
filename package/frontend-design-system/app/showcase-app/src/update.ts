@@ -2,8 +2,6 @@ import { Menu, Navbar } from '@rinn7e/realworld-design-system'
 import { newUrl } from 'react-tea-cup'
 import { Cmd, Task } from 'tea-cup-fp'
 
-import * as HomePage from './page/home/update'
-import * as NotFoundPage from './page/not-found/update'
 import * as BlockPage from './page/block/update'
 import * as BoxPage from './page/box/update'
 import * as BreadcrumbPage from './page/breadcrumb/update'
@@ -20,6 +18,7 @@ import * as FieldPage from './page/field/update'
 import * as FilePage from './page/file/update'
 import * as FooterPage from './page/footer/update'
 import * as HeroPage from './page/hero/update'
+import * as HomePage from './page/home/update'
 import * as IconPage from './page/icon/update'
 import * as ImagePage from './page/image/update'
 import * as InputPage from './page/input/update'
@@ -29,6 +28,7 @@ import * as MenuPage from './page/menu/update'
 import * as MessagePage from './page/message/update'
 import * as ModalPage from './page/modal/update'
 import * as NavbarPage from './page/navbar/update'
+import * as NotFoundPage from './page/not-found/update'
 import * as NotificationPage from './page/notification/update'
 import * as PaginationPage from './page/pagination/update'
 import * as PanelPage from './page/panel/update'
@@ -41,14 +41,17 @@ import * as TabsPage from './page/tabs/update'
 import * as TagPage from './page/tag/update'
 import * as TextareaPage from './page/textarea/update'
 import * as TitlePage from './page/title/update'
-
 import { parseAppRoute, toUrlString } from './route/parser'
 import { type AppRoute, AppRouteEq } from './route/type'
 import type { Model, Msg } from './type'
 
 const pageTagToComponentId = (pageTag: string): string => {
   const match = pageTag.replace(/Page$/, '')
-  return match === 'DotLoading' ? 'dot-loading' : match === 'MediaObject' ? 'media-object' : match.toLowerCase()
+  return match === 'DotLoading'
+    ? 'dot-loading'
+    : match === 'MediaObject'
+      ? 'media-object'
+      : match.toLowerCase()
 }
 
 export const initPageModel =
@@ -574,10 +577,9 @@ const navigate =
     const [updatedModel, updatedCmd] = initPageModel(newRoute)(model)
 
     const urlCmd = isInternal
-      ? Task.perform(
-          newUrl(toUrlString(newRoute)),
-          (): Msg => ({ _tag: 'NoOp' }),
-        )
+      ? Task.perform(newUrl(toUrlString(newRoute)), (): Msg => ({
+          _tag: 'NoOp',
+        }))
       : Cmd.none<Msg>()
 
     return [
@@ -667,188 +669,418 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
     case 'BlockPageMsg': {
       if (model.pageModel._tag !== 'BlockPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = BlockPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'BlockPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'BlockPageMsg', subMsg }))]
+      const [subModel, cmd] = BlockPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'BlockPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'BlockPageMsg', subMsg })),
+      ]
     }
     case 'BoxPageMsg': {
       if (model.pageModel._tag !== 'BoxPageModel') return [model, Cmd.none()]
       const [subModel, cmd] = BoxPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'BoxPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'BoxPageMsg', subMsg }))]
+      return [
+        { ...model, pageModel: { _tag: 'BoxPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'BoxPageMsg', subMsg })),
+      ]
     }
     case 'ButtonPageMsg': {
       if (model.pageModel._tag !== 'ButtonPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = ButtonPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'ButtonPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'ButtonPageMsg', subMsg }))]
+      const [subModel, cmd] = ButtonPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'ButtonPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'ButtonPageMsg', subMsg })),
+      ]
     }
     case 'ContentPageMsg': {
-      if (model.pageModel._tag !== 'ContentPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = ContentPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'ContentPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'ContentPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'ContentPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = ContentPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'ContentPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'ContentPageMsg', subMsg })),
+      ]
     }
     case 'DeletePageMsg': {
       if (model.pageModel._tag !== 'DeletePageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = DeletePage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'DeletePageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'DeletePageMsg', subMsg }))]
+      const [subModel, cmd] = DeletePage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'DeletePageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'DeletePageMsg', subMsg })),
+      ]
     }
     case 'IconPageMsg': {
       if (model.pageModel._tag !== 'IconPageModel') return [model, Cmd.none()]
       const [subModel, cmd] = IconPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'IconPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'IconPageMsg', subMsg }))]
+      return [
+        { ...model, pageModel: { _tag: 'IconPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'IconPageMsg', subMsg })),
+      ]
     }
     case 'ImagePageMsg': {
       if (model.pageModel._tag !== 'ImagePageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = ImagePage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'ImagePageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'ImagePageMsg', subMsg }))]
+      const [subModel, cmd] = ImagePage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'ImagePageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'ImagePageMsg', subMsg })),
+      ]
     }
     case 'NotificationPageMsg': {
-      if (model.pageModel._tag !== 'NotificationPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = NotificationPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'NotificationPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'NotificationPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'NotificationPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = NotificationPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        {
+          ...model,
+          pageModel: { _tag: 'NotificationPageModel', model: subModel },
+        },
+        cmd.map((subMsg) => ({ _tag: 'NotificationPageMsg', subMsg })),
+      ]
     }
     case 'ProgressPageMsg': {
-      if (model.pageModel._tag !== 'ProgressPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = ProgressPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'ProgressPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'ProgressPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'ProgressPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = ProgressPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'ProgressPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'ProgressPageMsg', subMsg })),
+      ]
     }
     case 'TablePageMsg': {
       if (model.pageModel._tag !== 'TablePageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = TablePage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'TablePageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'TablePageMsg', subMsg }))]
+      const [subModel, cmd] = TablePage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'TablePageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'TablePageMsg', subMsg })),
+      ]
     }
     case 'TagPageMsg': {
       if (model.pageModel._tag !== 'TagPageModel') return [model, Cmd.none()]
       const [subModel, cmd] = TagPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'TagPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'TagPageMsg', subMsg }))]
+      return [
+        { ...model, pageModel: { _tag: 'TagPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'TagPageMsg', subMsg })),
+      ]
     }
     case 'TitlePageMsg': {
       if (model.pageModel._tag !== 'TitlePageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = TitlePage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'TitlePageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'TitlePageMsg', subMsg }))]
+      const [subModel, cmd] = TitlePage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'TitlePageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'TitlePageMsg', subMsg })),
+      ]
     }
     case 'BreadcrumbPageMsg': {
-      if (model.pageModel._tag !== 'BreadcrumbPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = BreadcrumbPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'BreadcrumbPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'BreadcrumbPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'BreadcrumbPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = BreadcrumbPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        {
+          ...model,
+          pageModel: { _tag: 'BreadcrumbPageModel', model: subModel },
+        },
+        cmd.map((subMsg) => ({ _tag: 'BreadcrumbPageMsg', subMsg })),
+      ]
     }
     case 'CardPageMsg': {
       if (model.pageModel._tag !== 'CardPageModel') return [model, Cmd.none()]
       const [subModel, cmd] = CardPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'CardPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'CardPageMsg', subMsg }))]
+      return [
+        { ...model, pageModel: { _tag: 'CardPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'CardPageMsg', subMsg })),
+      ]
     }
     case 'DropdownPageMsg': {
-      if (model.pageModel._tag !== 'DropdownPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = DropdownPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'DropdownPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'DropdownPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'DropdownPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = DropdownPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'DropdownPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'DropdownPageMsg', subMsg })),
+      ]
     }
     case 'MenuPageMsg': {
       if (model.pageModel._tag !== 'MenuPageModel') return [model, Cmd.none()]
       const [subModel, cmd] = MenuPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'MenuPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'MenuPageMsg', subMsg }))]
+      return [
+        { ...model, pageModel: { _tag: 'MenuPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'MenuPageMsg', subMsg })),
+      ]
     }
     case 'MessagePageMsg': {
-      if (model.pageModel._tag !== 'MessagePageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = MessagePage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'MessagePageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'MessagePageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'MessagePageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = MessagePage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'MessagePageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'MessagePageMsg', subMsg })),
+      ]
     }
     case 'ModalPageMsg': {
       if (model.pageModel._tag !== 'ModalPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = ModalPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'ModalPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'ModalPageMsg', subMsg }))]
+      const [subModel, cmd] = ModalPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'ModalPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'ModalPageMsg', subMsg })),
+      ]
     }
     case 'NavbarPageMsg': {
       if (model.pageModel._tag !== 'NavbarPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = NavbarPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'NavbarPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'NavbarPageMsg', subMsg }))]
+      const [subModel, cmd] = NavbarPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'NavbarPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'NavbarPageMsg', subMsg })),
+      ]
     }
     case 'PaginationPageMsg': {
-      if (model.pageModel._tag !== 'PaginationPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = PaginationPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'PaginationPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'PaginationPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'PaginationPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = PaginationPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        {
+          ...model,
+          pageModel: { _tag: 'PaginationPageModel', model: subModel },
+        },
+        cmd.map((subMsg) => ({ _tag: 'PaginationPageMsg', subMsg })),
+      ]
     }
     case 'PanelPageMsg': {
       if (model.pageModel._tag !== 'PanelPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = PanelPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'PanelPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'PanelPageMsg', subMsg }))]
+      const [subModel, cmd] = PanelPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'PanelPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'PanelPageMsg', subMsg })),
+      ]
     }
     case 'TabsPageMsg': {
       if (model.pageModel._tag !== 'TabsPageModel') return [model, Cmd.none()]
       const [subModel, cmd] = TabsPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'TabsPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'TabsPageMsg', subMsg }))]
+      return [
+        { ...model, pageModel: { _tag: 'TabsPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'TabsPageMsg', subMsg })),
+      ]
     }
     case 'FieldPageMsg': {
       if (model.pageModel._tag !== 'FieldPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = FieldPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'FieldPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'FieldPageMsg', subMsg }))]
+      const [subModel, cmd] = FieldPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'FieldPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'FieldPageMsg', subMsg })),
+      ]
     }
     case 'InputPageMsg': {
       if (model.pageModel._tag !== 'InputPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = InputPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'InputPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'InputPageMsg', subMsg }))]
+      const [subModel, cmd] = InputPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'InputPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'InputPageMsg', subMsg })),
+      ]
     }
     case 'TextareaPageMsg': {
-      if (model.pageModel._tag !== 'TextareaPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = TextareaPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'TextareaPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'TextareaPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'TextareaPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = TextareaPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'TextareaPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'TextareaPageMsg', subMsg })),
+      ]
     }
     case 'SelectPageMsg': {
       if (model.pageModel._tag !== 'SelectPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = SelectPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'SelectPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'SelectPageMsg', subMsg }))]
+      const [subModel, cmd] = SelectPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'SelectPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'SelectPageMsg', subMsg })),
+      ]
     }
     case 'CheckboxPageMsg': {
-      if (model.pageModel._tag !== 'CheckboxPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = CheckboxPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'CheckboxPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'CheckboxPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'CheckboxPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = CheckboxPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'CheckboxPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'CheckboxPageMsg', subMsg })),
+      ]
     }
     case 'RadioPageMsg': {
       if (model.pageModel._tag !== 'RadioPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = RadioPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'RadioPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'RadioPageMsg', subMsg }))]
+      const [subModel, cmd] = RadioPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'RadioPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'RadioPageMsg', subMsg })),
+      ]
     }
     case 'FilePageMsg': {
       if (model.pageModel._tag !== 'FilePageModel') return [model, Cmd.none()]
       const [subModel, cmd] = FilePage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'FilePageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'FilePageMsg', subMsg }))]
+      return [
+        { ...model, pageModel: { _tag: 'FilePageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'FilePageMsg', subMsg })),
+      ]
     }
     case 'ContainerPageMsg': {
-      if (model.pageModel._tag !== 'ContainerPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = ContainerPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'ContainerPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'ContainerPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'ContainerPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = ContainerPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        {
+          ...model,
+          pageModel: { _tag: 'ContainerPageModel', model: subModel },
+        },
+        cmd.map((subMsg) => ({ _tag: 'ContainerPageMsg', subMsg })),
+      ]
     }
     case 'HeroPageMsg': {
       if (model.pageModel._tag !== 'HeroPageModel') return [model, Cmd.none()]
       const [subModel, cmd] = HeroPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'HeroPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'HeroPageMsg', subMsg }))]
+      return [
+        { ...model, pageModel: { _tag: 'HeroPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'HeroPageMsg', subMsg })),
+      ]
     }
     case 'SectionPageMsg': {
-      if (model.pageModel._tag !== 'SectionPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = SectionPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'SectionPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'SectionPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'SectionPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = SectionPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'SectionPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'SectionPageMsg', subMsg })),
+      ]
     }
     case 'LevelPageMsg': {
       if (model.pageModel._tag !== 'LevelPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = LevelPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'LevelPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'LevelPageMsg', subMsg }))]
+      const [subModel, cmd] = LevelPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'LevelPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'LevelPageMsg', subMsg })),
+      ]
     }
     case 'MediaObjectPageMsg': {
-      if (model.pageModel._tag !== 'MediaObjectPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = MediaObjectPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'MediaObjectPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'MediaObjectPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'MediaObjectPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = MediaObjectPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        {
+          ...model,
+          pageModel: { _tag: 'MediaObjectPageModel', model: subModel },
+        },
+        cmd.map((subMsg) => ({ _tag: 'MediaObjectPageMsg', subMsg })),
+      ]
     }
     case 'FooterPageMsg': {
       if (model.pageModel._tag !== 'FooterPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = FooterPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'FooterPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'FooterPageMsg', subMsg }))]
+      const [subModel, cmd] = FooterPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'FooterPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'FooterPageMsg', subMsg })),
+      ]
     }
     case 'ColumnsPageMsg': {
-      if (model.pageModel._tag !== 'ColumnsPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = ColumnsPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'ColumnsPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'ColumnsPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'ColumnsPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = ColumnsPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'ColumnsPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'ColumnsPageMsg', subMsg })),
+      ]
     }
     case 'DotLoadingPageMsg': {
-      if (model.pageModel._tag !== 'DotLoadingPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = DotLoadingPage.update(msg.subMsg, model.pageModel.model)
-      return [{ ...model, pageModel: { _tag: 'DotLoadingPageModel', model: subModel } }, cmd.map((subMsg) => ({ _tag: 'DotLoadingPageMsg', subMsg }))]
+      if (model.pageModel._tag !== 'DotLoadingPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = DotLoadingPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        {
+          ...model,
+          pageModel: { _tag: 'DotLoadingPageModel', model: subModel },
+        },
+        cmd.map((subMsg) => ({ _tag: 'DotLoadingPageMsg', subMsg })),
+      ]
     }
 
     case 'NotFoundPageMsg': {
@@ -878,10 +1110,14 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     case 'MenuMsg': {
       const [menuModel, cmd] = Menu.update(msg.subMsg)(model.menuModel)
       if (msg.subMsg._tag === 'Select') {
-        const item = msg.subMsg.id as any
-        const pageTagName = item.split('-').map((s: string) => s.charAt(0).toUpperCase() + s.slice(1)).join('') + 'Page'
+        const item = msg.subMsg.id as string
+        const pageTagName =
+          item
+            .split('-')
+            .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
+            .join('') + 'Page'
         const nextRoute: AppRoute = {
-          page: { _tag: pageTagName } as any,
+          page: { _tag: pageTagName } as unknown as AppRoute['page'],
         }
         return changeRouteHandler(nextRoute, true)({ ...model, menuModel })
       }

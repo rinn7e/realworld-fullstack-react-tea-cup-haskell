@@ -1,5 +1,6 @@
-import React from 'react'
 import { Menu, X } from 'lucide-react'
+import React from 'react'
+
 import { cn } from '../../theme'
 import type { NavbarProps } from './type'
 
@@ -34,7 +35,7 @@ export const view = ({
                 className={cn(
                   'cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-colors',
                   model.activeId === item.id
-                    ? 'bg-emerald-50 text-emerald-600 font-semibold'
+                    ? 'bg-emerald-50 font-semibold text-emerald-600'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                 )}
               >
@@ -75,14 +76,14 @@ export const view = ({
               className={cn(
                 'block w-full cursor-pointer rounded-md px-3 py-2 text-left text-base font-medium',
                 model.activeId === item.id
-                  ? 'bg-emerald-50 text-emerald-600 font-semibold'
+                  ? 'bg-emerald-50 font-semibold text-emerald-600'
                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
               )}
             >
               {item.label}
             </button>
           ))}
-          <div className='pt-2 space-y-2'>
+          <div className='space-y-2 pt-2'>
             {endItems.map((item) => (
               <div key={item.id} className='px-3 py-1'>
                 {item.label}

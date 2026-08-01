@@ -1,8 +1,12 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { LevelItemProps, LevelProps } from './type'
 
-export const view = ({ children, className }: LevelProps): React.ReactElement => {
+export const view = ({
+  children,
+  className,
+}: LevelProps): React.ReactElement => {
   return (
     <div
       data-component='Level'
@@ -16,13 +20,19 @@ export const view = ({ children, className }: LevelProps): React.ReactElement =>
   )
 }
 
-export const leftView = ({ children, className }: LevelProps): React.ReactElement => {
+export const leftView = ({
+  children,
+  className,
+}: LevelProps): React.ReactElement => {
   return (
     <div className={cn('flex items-center gap-3', className)}>{children}</div>
   )
 }
 
-export const rightView = ({ children, className }: LevelProps): React.ReactElement => {
+export const rightView = ({
+  children,
+  className,
+}: LevelProps): React.ReactElement => {
   return (
     <div className={cn('flex items-center gap-3', className)}>{children}</div>
   )

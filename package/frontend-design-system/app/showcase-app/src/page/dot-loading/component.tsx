@@ -1,5 +1,6 @@
-import React from 'react'
 import { DotLoading, Hero, Title } from '@rinn7e/realworld-design-system'
+import React from 'react'
+
 import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
@@ -10,14 +11,15 @@ interface Props {
 
 export const DotLoadingPage: React.FC<Props> = () => {
   return (
-    <div data-component='DotLoadingPage' className='w-full text-left space-y-8'>
+    <div data-component='DotLoadingPage' className='w-full space-y-8 text-left'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className:
+          'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
-            <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
+            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               MISC / DOT LOADING
             </div>
             {Title.view({
@@ -32,7 +34,7 @@ export const DotLoadingPage: React.FC<Props> = () => {
         ),
       })}
 
-      <div className='flex flex-col gap-6 w-full'>
+      <div className='flex w-full flex-col gap-6'>
         {sectionView({
           title: '3-Dot Inline Loading Animation',
           children: (

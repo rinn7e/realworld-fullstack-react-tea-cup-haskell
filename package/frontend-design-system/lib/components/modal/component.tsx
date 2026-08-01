@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { view as DeleteView } from '../../elements/delete/view'
 import { cn } from '../../theme'
 import type { ModalProps } from './type'
@@ -16,7 +17,10 @@ export const view = ({
   }
 
   return (
-    <div data-component='Modal' className='fixed inset-0 z-50 flex items-center justify-center p-4'>
+    <div
+      data-component='Modal'
+      className='fixed inset-0 z-50 flex items-center justify-center p-4'
+    >
       <div
         className='fixed inset-0 cursor-pointer bg-gray-900/60 backdrop-blur-xs transition-opacity'
         onClick={() => dispatch({ _tag: 'Close' })}

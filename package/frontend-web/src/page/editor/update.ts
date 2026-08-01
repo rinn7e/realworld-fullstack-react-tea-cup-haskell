@@ -170,10 +170,10 @@ export const init = (
       { ...model, requestRd: RD.pending },
       Cmd.batch([
         formCmd.map((subMsg): Msg => ({ _tag: 'FormMsg', subMsg })),
-        attemptTE(
-          getArticle(token, slug.value),
-          (result) => ({ _tag: 'GetArticleResponse', result }),
-        ),
+        attemptTE(getArticle(token, slug.value), (result) => ({
+          _tag: 'GetArticleResponse',
+          result,
+        })),
       ]),
     ]
   }

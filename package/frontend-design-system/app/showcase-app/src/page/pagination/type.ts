@@ -6,5 +6,4 @@ export type Model = {
 }
 
 export type Msg =
-  | { _tag: 'ToggleShowCode' }
-  | { _tag: 'PaginationMsg'; subMsg: Pagination.Msg }
+  { _tag: 'ToggleShowCode' } | { _tag: 'PaginationMsg'; subMsg: Pagination.Msg }

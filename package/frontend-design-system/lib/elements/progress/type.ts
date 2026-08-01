@@ -1,10 +1,5 @@
 export type ProgressVariant =
-  | 'primary'
-  | 'link'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | 'danger'
+  'primary' | 'link' | 'info' | 'success' | 'warning' | 'danger'
 
 export type ProgressSize = 'xsmall' | 'small' | 'normal' | 'medium' | 'large'
 

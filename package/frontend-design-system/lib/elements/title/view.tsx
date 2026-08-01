@@ -1,14 +1,33 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { TitleProps } from './type'
 
 const sizeStyles: Record<number, { title: string; subtitle: string }> = {
-  1: { title: 'text-4xl font-extrabold sm:text-5xl', subtitle: 'text-2xl text-gray-500 font-normal' },
-  2: { title: 'text-3xl font-extrabold sm:text-4xl', subtitle: 'text-xl text-gray-500 font-normal' },
-  3: { title: 'text-2xl font-bold sm:text-3xl', subtitle: 'text-lg text-gray-500 font-normal' },
-  4: { title: 'text-xl font-bold', subtitle: 'text-base text-gray-500 font-normal' },
-  5: { title: 'text-lg font-semibold', subtitle: 'text-sm text-gray-500 font-normal' },
-  6: { title: 'text-base font-semibold', subtitle: 'text-xs text-gray-500 font-normal' },
+  1: {
+    title: 'text-4xl font-extrabold sm:text-5xl',
+    subtitle: 'text-2xl text-gray-500 font-normal',
+  },
+  2: {
+    title: 'text-3xl font-extrabold sm:text-4xl',
+    subtitle: 'text-xl text-gray-500 font-normal',
+  },
+  3: {
+    title: 'text-2xl font-bold sm:text-3xl',
+    subtitle: 'text-lg text-gray-500 font-normal',
+  },
+  4: {
+    title: 'text-xl font-bold',
+    subtitle: 'text-base text-gray-500 font-normal',
+  },
+  5: {
+    title: 'text-lg font-semibold',
+    subtitle: 'text-sm text-gray-500 font-normal',
+  },
+  6: {
+    title: 'text-base font-semibold',
+    subtitle: 'text-xs text-gray-500 font-normal',
+  },
 }
 
 export const view = ({
@@ -26,18 +45,46 @@ export const view = ({
 
   switch (size) {
     case 1:
-      return <h1 data-component='Title' className={fullClass}>{children}</h1>
+      return (
+        <h1 data-component='Title' className={fullClass}>
+          {children}
+        </h1>
+      )
     case 2:
-      return <h2 data-component='Title' className={fullClass}>{children}</h2>
+      return (
+        <h2 data-component='Title' className={fullClass}>
+          {children}
+        </h2>
+      )
     case 3:
-      return <h3 data-component='Title' className={fullClass}>{children}</h3>
+      return (
+        <h3 data-component='Title' className={fullClass}>
+          {children}
+        </h3>
+      )
     case 4:
-      return <h4 data-component='Title' className={fullClass}>{children}</h4>
+      return (
+        <h4 data-component='Title' className={fullClass}>
+          {children}
+        </h4>
+      )
     case 5:
-      return <h5 data-component='Title' className={fullClass}>{children}</h5>
+      return (
+        <h5 data-component='Title' className={fullClass}>
+          {children}
+        </h5>
+      )
     case 6:
-      return <h6 data-component='Title' className={fullClass}>{children}</h6>
+      return (
+        <h6 data-component='Title' className={fullClass}>
+          {children}
+        </h6>
+      )
     default:
-      return <h3 data-component='Title' className={fullClass}>{children}</h3>
+      return (
+        <h3 data-component='Title' className={fullClass}>
+          {children}
+        </h3>
+      )
   }
 }

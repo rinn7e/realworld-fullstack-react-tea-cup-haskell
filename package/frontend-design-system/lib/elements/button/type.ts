@@ -1,13 +1,7 @@
 import type { ReactNode } from 'react'
 
 export type ButtonVariant =
-  | 'default'
-  | 'primary'
-  | 'link'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | 'danger'
+  'default' | 'primary' | 'link' | 'info' | 'success' | 'warning' | 'danger'
 
 export type ButtonSize = 'small' | 'normal' | 'medium' | 'large'
 

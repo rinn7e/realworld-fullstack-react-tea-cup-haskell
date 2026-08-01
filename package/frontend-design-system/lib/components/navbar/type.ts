@@ -12,9 +12,7 @@ export type Model = {
   activeId: string | null
 }
 
-export type Msg =
-  | { _tag: 'ToggleBurger' }
-  | { _tag: 'SelectTab'; id: string }
+export type Msg = { _tag: 'ToggleBurger' } | { _tag: 'SelectTab'; id: string }
 
 export type NavbarProps = {
   brand: React.ReactNode

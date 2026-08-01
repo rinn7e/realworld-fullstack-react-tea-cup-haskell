@@ -1,8 +1,8 @@
 import * as Pagination from '@rinn7e/tea-cup-pagination'
 import { EqAlways } from '@rinn7e/tea-cup-prelude'
-import * as B from 'fp-ts/lib/boolean'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as O from 'fp-ts/lib/Option'
+import * as B from 'fp-ts/lib/boolean'
 import * as S from 'fp-ts/lib/string'
 import { type Dispatcher } from 'tea-cup-fp'
 

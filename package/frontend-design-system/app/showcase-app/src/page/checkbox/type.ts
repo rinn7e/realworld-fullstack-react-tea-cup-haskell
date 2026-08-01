@@ -3,6 +3,4 @@ export type Model = {
   checked: boolean
 }
 
-export type Msg =
-  | { _tag: 'ToggleShowCode' }
-  | { _tag: 'ToggleChecked' }
+export type Msg = { _tag: 'ToggleShowCode' } | { _tag: 'ToggleChecked' }

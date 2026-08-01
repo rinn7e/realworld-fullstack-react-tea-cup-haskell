@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { PanelProps } from './type'
 
@@ -30,7 +31,7 @@ export const view = ({
               type='button'
               onClick={() => dispatch({ _tag: 'SelectTab', id: tab.id })}
               className={cn(
-                'cursor-pointer px-4 py-2.5 font-medium transition-colors border-b-2 -mb-px',
+                '-mb-px cursor-pointer border-b-2 px-4 py-2.5 font-medium transition-colors',
                 model.activeTabId === tab.id
                   ? 'border-emerald-600 font-semibold text-emerald-600'
                   : 'border-transparent text-gray-500 hover:text-gray-900',

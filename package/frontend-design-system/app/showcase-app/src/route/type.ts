@@ -119,7 +119,46 @@ export type ColumnsPage = { readonly _tag: 'ColumnsPage' }
 export type DotLoadingPage = { readonly _tag: 'DotLoadingPage' }
 export type NotFoundPage = { readonly _tag: 'NotFoundPage' }
 
-export type AppPage = HomePage | BlockPage | BoxPage | ButtonPage | ContentPage | DeletePage | IconPage | ImagePage | NotificationPage | ProgressPage | TablePage | TagPage | TitlePage | BreadcrumbPage | CardPage | DropdownPage | MenuPage | MessagePage | ModalPage | NavbarPage | PaginationPage | PanelPage | TabsPage | FieldPage | InputPage | TextareaPage | SelectPage | CheckboxPage | RadioPage | FilePage | ContainerPage | HeroPage | SectionPage | LevelPage | MediaObjectPage | FooterPage | ColumnsPage | DotLoadingPage | NotFoundPage
+export type AppPage =
+  | HomePage
+  | BlockPage
+  | BoxPage
+  | ButtonPage
+  | ContentPage
+  | DeletePage
+  | IconPage
+  | ImagePage
+  | NotificationPage
+  | ProgressPage
+  | TablePage
+  | TagPage
+  | TitlePage
+  | BreadcrumbPage
+  | CardPage
+  | DropdownPage
+  | MenuPage
+  | MessagePage
+  | ModalPage
+  | NavbarPage
+  | PaginationPage
+  | PanelPage
+  | TabsPage
+  | FieldPage
+  | InputPage
+  | TextareaPage
+  | SelectPage
+  | CheckboxPage
+  | RadioPage
+  | FilePage
+  | ContainerPage
+  | HeroPage
+  | SectionPage
+  | LevelPage
+  | MediaObjectPage
+  | FooterPage
+  | ColumnsPage
+  | DotLoadingPage
+  | NotFoundPage
 
 export type AppRoute = {
   page: AppPage
@@ -133,19 +172,25 @@ export const contentPage = (): ContentPage => ({ _tag: 'ContentPage' })
 export const deletePage = (): DeletePage => ({ _tag: 'DeletePage' })
 export const iconPage = (): IconPage => ({ _tag: 'IconPage' })
 export const imagePage = (): ImagePage => ({ _tag: 'ImagePage' })
-export const notificationPage = (): NotificationPage => ({ _tag: 'NotificationPage' })
+export const notificationPage = (): NotificationPage => ({
+  _tag: 'NotificationPage',
+})
 export const progressPage = (): ProgressPage => ({ _tag: 'ProgressPage' })
 export const tablePage = (): TablePage => ({ _tag: 'TablePage' })
 export const tagPage = (): TagPage => ({ _tag: 'TagPage' })
 export const titlePage = (): TitlePage => ({ _tag: 'TitlePage' })
-export const breadcrumbPage = (): BreadcrumbPage => ({ _tag: 'BreadcrumbPage' })
+export const breadcrumbPage = (): BreadcrumbPage => ({
+  _tag: 'BreadcrumbPage',
+})
 export const cardPage = (): CardPage => ({ _tag: 'CardPage' })
 export const dropdownPage = (): DropdownPage => ({ _tag: 'DropdownPage' })
 export const menuPage = (): MenuPage => ({ _tag: 'MenuPage' })
 export const messagePage = (): MessagePage => ({ _tag: 'MessagePage' })
 export const modalPage = (): ModalPage => ({ _tag: 'ModalPage' })
 export const navbarPage = (): NavbarPage => ({ _tag: 'NavbarPage' })
-export const paginationPage = (): PaginationPage => ({ _tag: 'PaginationPage' })
+export const paginationPage = (): PaginationPage => ({
+  _tag: 'PaginationPage',
+})
 export const panelPage = (): PanelPage => ({ _tag: 'PanelPage' })
 export const tabsPage = (): TabsPage => ({ _tag: 'TabsPage' })
 export const fieldPage = (): FieldPage => ({ _tag: 'FieldPage' })
@@ -159,10 +204,14 @@ export const containerPage = (): ContainerPage => ({ _tag: 'ContainerPage' })
 export const heroPage = (): HeroPage => ({ _tag: 'HeroPage' })
 export const sectionPage = (): SectionPage => ({ _tag: 'SectionPage' })
 export const levelPage = (): LevelPage => ({ _tag: 'LevelPage' })
-export const mediaObjectPage = (): MediaObjectPage => ({ _tag: 'MediaObjectPage' })
+export const mediaObjectPage = (): MediaObjectPage => ({
+  _tag: 'MediaObjectPage',
+})
 export const footerPage = (): FooterPage => ({ _tag: 'FooterPage' })
 export const columnsPage = (): ColumnsPage => ({ _tag: 'ColumnsPage' })
-export const dotLoadingPage = (): DotLoadingPage => ({ _tag: 'DotLoadingPage' })
+export const dotLoadingPage = (): DotLoadingPage => ({
+  _tag: 'DotLoadingPage',
+})
 export const notFoundPage = (): NotFoundPage => ({ _tag: 'NotFoundPage' })
 
 export const AppPageEq: EqClass.Eq<AppPage> = {

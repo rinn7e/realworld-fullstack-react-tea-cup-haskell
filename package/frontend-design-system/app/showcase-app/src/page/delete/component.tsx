@@ -1,12 +1,8 @@
-import React from 'react'
-import {
-  Button,
-  Delete,
-  Hero,
-  Title,
-} from '@rinn7e/realworld-design-system'
+import { Button, Delete, Hero, Title } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
+import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
+
 import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
@@ -23,14 +19,15 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
 {Delete.view({ size: 'large', onClick: () => alert('Deleted!') })}`
 
   return (
-    <div data-component='DeletePage' className='w-full text-left space-y-8'>
+    <div data-component='DeletePage' className='w-full space-y-8 text-left'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className:
+          'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
-            <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
+            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / DELETE
             </div>
             {Title.view({
@@ -39,17 +36,19 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Delete',
             })}
             <p className='text-base text-gray-600'>
-              Standalone delete cross icon button element with small to large size support.
+              Standalone delete cross icon button element with small to large
+              size support.
             </p>
           </>
         ),
       })}
 
-      <div className='flex flex-col gap-6 w-full'>
-        <div className='flex items-center justify-between w-full'>
+      <div className='flex w-full flex-col gap-6'>
+        <div className='flex w-full items-center justify-between'>
           {Title.view({
             size: 5,
-            className: 'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
+            className:
+              'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
             children: (
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
@@ -61,7 +60,8 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
-            className: 'flex items-center gap-1 font-semibold text-green-600 hover:underline',
+            className:
+              'flex items-center gap-1 font-semibold text-green-600 hover:underline',
             children: (
               <>
                 <Code2 className='h-3.5 w-3.5' />
@@ -76,8 +76,14 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
           children: (
             <div className='flex items-center gap-6'>
               {Delete.view({ size: 'small', onClick: () => alert('Deleted!') })}
-              {Delete.view({ size: 'normal', onClick: () => alert('Deleted!') })}
-              {Delete.view({ size: 'medium', onClick: () => alert('Deleted!') })}
+              {Delete.view({
+                size: 'normal',
+                onClick: () => alert('Deleted!'),
+              })}
+              {Delete.view({
+                size: 'medium',
+                onClick: () => alert('Deleted!'),
+              })}
               {Delete.view({ size: 'large', onClick: () => alert('Deleted!') })}
             </div>
           ),
@@ -89,7 +95,7 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500'>Delete Component Code</span>
             </div>
-            <pre className='whitespace-pre-wrap font-mono text-xs leading-relaxed text-gray-300'>
+            <pre className='font-mono text-xs leading-relaxed whitespace-pre-wrap text-gray-300'>
               <code>{code}</code>
             </pre>
           </div>

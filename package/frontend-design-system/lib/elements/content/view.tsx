@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { ContentProps } from './type'
 
@@ -18,7 +19,7 @@ export const view = ({
     <div
       data-component='Content'
       className={cn(
-        'prose max-w-none text-gray-700 space-y-4',
+        'prose max-w-none space-y-4 text-gray-700',
         sizeStyles[size],
         className,
       )}

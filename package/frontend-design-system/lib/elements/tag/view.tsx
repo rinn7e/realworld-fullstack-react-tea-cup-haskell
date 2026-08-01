@@ -1,15 +1,31 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import { view as DeleteView } from '../delete/view'
 import type { TagProps } from './type'
 
 const variantStyles: Record<string, { solid: string; light: string }> = {
-  default: { solid: 'bg-gray-400 text-white', light: 'bg-gray-100 text-gray-700' },
-  primary: { solid: 'bg-green-600 text-white', light: 'bg-green-50 text-green-700' },
-  link: { solid: 'bg-green-700 text-white', light: 'bg-green-50 text-green-800' },
+  default: {
+    solid: 'bg-gray-400 text-white',
+    light: 'bg-gray-100 text-gray-700',
+  },
+  primary: {
+    solid: 'bg-green-600 text-white',
+    light: 'bg-green-50 text-green-700',
+  },
+  link: {
+    solid: 'bg-green-700 text-white',
+    light: 'bg-green-50 text-green-800',
+  },
   info: { solid: 'bg-sky-500 text-white', light: 'bg-sky-50 text-sky-700' },
-  success: { solid: 'bg-green-600 text-white', light: 'bg-green-50 text-green-700' },
-  warning: { solid: 'bg-amber-400 text-gray-900', light: 'bg-amber-50 text-amber-800' },
+  success: {
+    solid: 'bg-green-600 text-white',
+    light: 'bg-green-50 text-green-700',
+  },
+  warning: {
+    solid: 'bg-amber-400 text-gray-900',
+    light: 'bg-amber-50 text-amber-800',
+  },
   danger: { solid: 'bg-red-600 text-white', light: 'bg-red-50 text-red-700' },
 }
 

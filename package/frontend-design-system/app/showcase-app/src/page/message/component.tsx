@@ -1,12 +1,8 @@
-import React from 'react'
-import {
-  Button,
-  Hero,
-  Message,
-  Title,
-} from '@rinn7e/realworld-design-system'
+import { Button, Hero, Message, Title } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
+import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
+
 import { sectionView } from '../../component/section-view'
 import type { Model, Msg } from './type'
 
@@ -31,14 +27,15 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
 {Message.view({ variant: 'primary', header: 'Dismissible', onDelete: () => {}, children: 'Click X to dismiss.' })}`
 
   return (
-    <div data-component='MessagePage' className='w-full text-left space-y-8'>
+    <div data-component='MessagePage' className='w-full space-y-8 text-left'>
       {Hero.view({
         variant: 'default',
         size: 'small',
-        className: 'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
+        className:
+          'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
         children: (
           <>
-            <div className='mb-1 text-xs font-bold uppercase tracking-wider text-green-600'>
+            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               COMPONENTS / MESSAGE
             </div>
             {Title.view({
@@ -47,17 +44,19 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
               children: 'Message',
             })}
             <p className='text-base text-gray-600'>
-              Callout message boxes with optional headers, color themes, and dismiss buttons.
+              Callout message boxes with optional headers, color themes, and
+              dismiss buttons.
             </p>
           </>
         ),
       })}
 
-      <div className='flex flex-col gap-6 w-full'>
-        <div className='flex items-center justify-between w-full'>
+      <div className='flex w-full flex-col gap-6'>
+        <div className='flex w-full items-center justify-between'>
           {Title.view({
             size: 5,
-            className: 'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
+            className:
+              'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
             children: (
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
@@ -69,7 +68,8 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
             variant: 'link',
             size: 'small',
             onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
-            className: 'flex items-center gap-1 font-semibold text-green-600 hover:underline',
+            className:
+              'flex items-center gap-1 font-semibold text-green-600 hover:underline',
             children: (
               <>
                 <Code2 className='h-3.5 w-3.5' />
@@ -84,12 +84,39 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Color Variants (Header & Body)',
           children: (
             <div className='w-full space-y-4'>
-              {Message.view({ variant: 'default', header: 'Note', children: 'Default callout message body detailing general instructions.' })}
-              {Message.view({ variant: 'primary', header: 'Primary Note', children: 'Primary callout message highlighting important features.' })}
-              {Message.view({ variant: 'info', header: 'System Information', children: 'Maintenance is scheduled for tonight at 02:00 UTC.' })}
-              {Message.view({ variant: 'success', header: 'Success', children: 'Your account was upgraded to Pro successfully!' })}
-              {Message.view({ variant: 'warning', header: 'Warning', children: 'Your subscription expires in 3 days. Please renew.' })}
-              {Message.view({ variant: 'danger', header: 'Connection Error', children: 'Unable to reach backend servers. Please try again later.' })}
+              {Message.view({
+                variant: 'default',
+                header: 'Note',
+                children:
+                  'Default callout message body detailing general instructions.',
+              })}
+              {Message.view({
+                variant: 'primary',
+                header: 'Primary Note',
+                children:
+                  'Primary callout message highlighting important features.',
+              })}
+              {Message.view({
+                variant: 'info',
+                header: 'System Information',
+                children: 'Maintenance is scheduled for tonight at 02:00 UTC.',
+              })}
+              {Message.view({
+                variant: 'success',
+                header: 'Success',
+                children: 'Your account was upgraded to Pro successfully!',
+              })}
+              {Message.view({
+                variant: 'warning',
+                header: 'Warning',
+                children: 'Your subscription expires in 3 days. Please renew.',
+              })}
+              {Message.view({
+                variant: 'danger',
+                header: 'Connection Error',
+                children:
+                  'Unable to reach backend servers. Please try again later.',
+              })}
             </div>
           ),
         })}
@@ -99,8 +126,18 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Body Only & Dismissible Messages',
           children: (
             <div className='w-full space-y-4'>
-              {Message.view({ variant: 'info', children: 'Standalone callout message body without a header container.' })}
-              {Message.view({ variant: 'primary', header: 'Dismissible Notice', onDelete: () => alert('Message closed!'), children: 'Click the X button on the top right to close this message box.' })}
+              {Message.view({
+                variant: 'info',
+                children:
+                  'Standalone callout message body without a header container.',
+              })}
+              {Message.view({
+                variant: 'primary',
+                header: 'Dismissible Notice',
+                onDelete: () => alert('Message closed!'),
+                children:
+                  'Click the X button on the top right to close this message box.',
+              })}
             </div>
           ),
         })}
@@ -111,7 +148,7 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500'>Message Component Code</span>
             </div>
-            <pre className='whitespace-pre-wrap font-mono text-xs leading-relaxed text-gray-300'>
+            <pre className='font-mono text-xs leading-relaxed whitespace-pre-wrap text-gray-300'>
               <code>{code}</code>
             </pre>
           </div>

@@ -3,5 +3,4 @@ export type Model = {
 }
 
 export type Msg =
-  | { _tag: 'SelectTab'; tab: 'overview' | 'catalog' }
-  | { _tag: 'NoOp' }
+  { _tag: 'SelectTab'; tab: 'overview' | 'catalog' } | { _tag: 'NoOp' }

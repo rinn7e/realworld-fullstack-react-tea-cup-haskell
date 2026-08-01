@@ -1,6 +1,6 @@
-import { ChevronDown, ChevronRight } from 'lucide-react'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
-import React, { useState } from 'react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
+import React from 'react'
 
 import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'
 import { VisitorEq, type VisitorSortAttr } from '@/common/api/type/visitor'
@@ -48,7 +48,7 @@ export const VisitorPageComponent: React.FC<Props> = ({
           </button>
         </div>
         {model.isDescriptionOpen && (
-          <p className='max-w-[640px] animate-in fade-in slide-in-from-top-1 text-[14px] leading-relaxed text-slate-500 duration-200 dark:text-slate-400'>
+          <p className='animate-in fade-in slide-in-from-top-1 max-w-[640px] text-[14px] leading-relaxed text-slate-500 duration-200 dark:text-slate-400'>
             Each entry here represents a{' '}
             <span className='font-semibold text-slate-700 dark:text-slate-200'>
               unique device

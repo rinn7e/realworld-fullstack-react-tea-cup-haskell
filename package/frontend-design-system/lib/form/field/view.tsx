@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { FieldProps } from './type'
 
@@ -11,9 +12,12 @@ export const view = ({
   className,
 }: FieldProps): React.ReactElement => {
   return (
-    <div data-component='Field' className={cn('mb-4 last:mb-0', isExpanded && 'w-full', className)}>
+    <div
+      data-component='Field'
+      className={cn('mb-4 last:mb-0', isExpanded && 'w-full', className)}
+    >
       {label && (
-        <label className='mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-700'>
+        <label className='mb-1.5 block text-xs font-semibold tracking-wider text-gray-700 uppercase'>
           {label}
         </label>
       )}

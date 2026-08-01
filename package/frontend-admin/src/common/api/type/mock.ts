@@ -71,7 +71,6 @@ const generateVisitors = (count: number): Visitor[] => {
   })
 }
 
-
 export const mockUsers = generateUsers(50)
 export const mockArticles = generateArticles(50, mockUsers)
 export const mockComments = generateComments(50, mockUsers)

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import { view as DeleteView } from '../delete/view'
 import type { NotificationProps } from './type'
@@ -30,7 +31,7 @@ export const view = ({
     >
       <div className='flex-1 pr-6'>{children}</div>
       {onDelete && (
-        <div className='absolute right-3 top-3'>
+        <div className='absolute top-3 right-3'>
           {DeleteView({ size: 'small', onClick: onDelete })}
         </div>
       )}

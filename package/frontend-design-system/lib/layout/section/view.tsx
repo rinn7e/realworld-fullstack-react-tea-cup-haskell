@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { SectionProps } from './type'
 
@@ -14,7 +15,10 @@ export const view = ({
   className,
 }: SectionProps): React.ReactElement => {
   return (
-    <section data-component='Section' className={cn('w-full', sizeStyles[size], className)}>
+    <section
+      data-component='Section'
+      className={cn('w-full', sizeStyles[size], className)}
+    >
       {children}
     </section>
   )

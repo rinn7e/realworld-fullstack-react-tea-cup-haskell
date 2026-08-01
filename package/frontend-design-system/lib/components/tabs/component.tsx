@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { TabsProps } from './type'
 
@@ -18,7 +19,7 @@ export const view = ({
         className,
       )}
     >
-      <ul className='flex flex-wrap -mb-px gap-2'>
+      <ul className='-mb-px flex flex-wrap gap-2'>
         {items.map((item) => {
           const isActive = model.activeId === item.id
           if (isBoxed) {

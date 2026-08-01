@@ -38,6 +38,7 @@ Then run `pnpm install` in your consuming application.
 ### 3. Peer Dependencies
 
 Ensure your application has the following installed:
+
 - `react` (>= 19.0.0)
 - `react-dom` (>= 19.0.0)
 - `react-tea-cup` (>= 5.0.0)
@@ -50,9 +51,9 @@ Ensure your application has the following installed:
 Add the design system plugin and `@source` scanner to your application's CSS file (e.g., `index.css`):
 
 ```css
-@import "tailwindcss";
-@plugin "@rinn7e/realworld-design-system/plugin";
-@source "../node_modules/@rinn7e/realworld-design-system";
+@import 'tailwindcss';
+@plugin '@rinn7e/realworld-design-system/plugin';
+@source '../node_modules/@rinn7e/realworld-design-system';
 ```
 
 ---
@@ -64,9 +65,9 @@ Add the design system plugin and `@source` scanner to your application's CSS fil
 In your application's main CSS entrypoint (e.g. `src/index.css`), include the Tailwind v4 directives:
 
 ```css
-@import "tailwindcss";
-@plugin "@rinn7e/realworld-design-system/plugin";
-@source "../node_modules/@rinn7e/realworld-design-system";
+@import 'tailwindcss';
+@plugin '@rinn7e/realworld-design-system/plugin';
+@source '../node_modules/@rinn7e/realworld-design-system';
 ```
 
 Include Google Fonts (`Titillium Web` and `Inter`) in your `index.html`:
@@ -92,56 +93,72 @@ Stateless view functions are invoked directly as function calls inside your JSX 
 import { Button } from '@rinn7e/realworld-design-system'
 
 // Primary Conduit Green Button
-{Button.view({
-  variant: 'primary',
-  children: 'Publish Article',
-  onClick: () => dispatch({ type: 'PUBLISH_CLICKED' }),
-})}
+{
+  Button.view({
+    variant: 'primary',
+    children: 'Publish Article',
+    onClick: () => dispatch({ type: 'PUBLISH_CLICKED' }),
+  })
+}
 
 // Outlined Pill Button
-{Button.view({
-  variant: 'primary',
-  isOutlined: true,
-  isRounded: true,
-  children: 'Follow Author',
-})}
+{
+  Button.view({
+    variant: 'primary',
+    isOutlined: true,
+    isRounded: true,
+    children: 'Follow Author',
+  })
+}
 
 // Loading State Button
-{Button.view({
-  variant: 'primary',
-  isLoading: true,
-  children: 'Saving...',
-})}
+{
+  Button.view({
+    variant: 'primary',
+    isLoading: true,
+    children: 'Saving...',
+  })
+}
 ```
 
 #### B. Grid Layout (`Columns.view` & `Column.view`)
 
 ```tsx
-import { Columns, Column, Box, Title, Content } from '@rinn7e/realworld-design-system'
+import {
+  Box,
+  Column,
+  Columns,
+  Content,
+  Title,
+} from '@rinn7e/realworld-design-system'
 
-{Columns.view({
-  children: (
-    <>
-      {Column.view({
-        size: 'one-quarter',
-        children: Box.view({
-          children: <p>Sidebar Navigation</p>,
-        }),
-      })}
-      {Column.view({
-        size: 'three-quarters',
-        children: Box.view({
-          children: (
-            <>
-              {Title.view({ size: 3, children: 'Main Dashboard' })}
-              {Content.view({ children: <p>Dashboard article content goes here.</p> })}
-            </>
-          ),
-        }),
-      })}
-    </>
-  ),
-})}
+{
+  Columns.view({
+    children: (
+      <>
+        {Column.view({
+          size: 'one-quarter',
+          children: Box.view({
+            children: <p>Sidebar Navigation</p>,
+          }),
+        })}
+        {Column.view({
+          size: 'three-quarters',
+          children: Box.view({
+            children: (
+              <>
+                {Title.view({ size: 3, children: 'Main Dashboard' })}
+                {Content.view({
+                  children: <p>Dashboard article content goes here.</p>,
+                })}
+              </>
+            ),
+          }),
+        })}
+      </>
+    ),
+  })
+}
 ```
 
 #### C. Notification Banner (`Notification.view`)
@@ -149,11 +166,13 @@ import { Columns, Column, Box, Title, Content } from '@rinn7e/realworld-design-s
 ```tsx
 import { Notification } from '@rinn7e/realworld-design-system'
 
-{Notification.view({
-  variant: 'success',
-  children: 'Your profile settings have been updated successfully!',
-  onDismiss: () => dispatch({ type: 'DISMISS_ALERT' }),
-})}
+{
+  Notification.view({
+    variant: 'success',
+    children: 'Your profile settings have been updated successfully!',
+    onDismiss: () => dispatch({ type: 'DISMISS_ALERT' }),
+  })
+}
 ```
 
 ---
@@ -194,19 +213,21 @@ const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 }
 
 // 4. Render Navbar view
-{Navbar.view({
-  brand: {
-    name: 'conduit',
-    href: '#/',
-  },
-  items: [
-    { id: 'home', label: 'Home', href: '#/' },
-    { id: 'editor', label: 'New Article', href: '#/editor' },
-    { id: 'settings', label: 'Settings', href: '#/settings' },
-  ],
-  model: model.navbarModel,
-  dispatch: (navMsg) => dispatch({ type: 'NAVBAR_MSG', msg: navMsg }),
-})}
+{
+  Navbar.view({
+    brand: {
+      name: 'conduit',
+      href: '#/',
+    },
+    items: [
+      { id: 'home', label: 'Home', href: '#/' },
+      { id: 'editor', label: 'New Article', href: '#/editor' },
+      { id: 'settings', label: 'Settings', href: '#/settings' },
+    ],
+    model: model.navbarModel,
+    dispatch: (navMsg) => dispatch({ type: 'NAVBAR_MSG', msg: navMsg }),
+  })
+}
 ```
 
 ---
@@ -219,27 +240,31 @@ All form renderers are stateless views designed for drop-in use with `@rinn7e/te
 import { Field, Input, Textarea } from '@rinn7e/realworld-design-system'
 
 // Controlled Input Field with Icon & Error Helper
-{Field.view({
-  label: 'Email Address',
-  helpText: 'We will never share your email.',
-  children: Input.view({
-    type: 'email',
-    value: model.email,
-    placeholder: 'Email',
-    onChange: (val) => dispatch({ type: 'EMAIL_CHANGED', value: val }),
-  }),
-})}
+{
+  Field.view({
+    label: 'Email Address',
+    helpText: 'We will never share your email.',
+    children: Input.view({
+      type: 'email',
+      value: model.email,
+      placeholder: 'Email',
+      onChange: (val) => dispatch({ type: 'EMAIL_CHANGED', value: val }),
+    }),
+  })
+}
 
 // Textarea Field
-{Field.view({
-  label: 'Article Body',
-  children: Textarea.view({
-    value: model.body,
-    rows: 8,
-    placeholder: 'Write your article (in markdown)...',
-    onChange: (val) => dispatch({ type: 'BODY_CHANGED', value: val }),
-  }),
-})}
+{
+  Field.view({
+    label: 'Article Body',
+    children: Textarea.view({
+      value: model.body,
+      rows: 8,
+      placeholder: 'Write your article (in markdown)...',
+      onChange: (val) => dispatch({ type: 'BODY_CHANGED', value: val }),
+    }),
+  })
+}
 ```
 
 ---
@@ -247,6 +272,7 @@ import { Field, Input, Textarea } from '@rinn7e/realworld-design-system'
 ## 🎨 Philosophy & Design Architecture
 
 ### 1. Bulma CSS Design System Foundation
+
 `frontend-design-system` follows the **Bulma CSS Design System** specification, providing a clean, responsive, CSS-first component architecture divided into 5 core categories:
 
 1. **Elements**: Primitive UI building blocks (`Block`, `Box`, `Button`, `Content`, `Delete`, `Icon`, `Image`, `Notification`, `Progress`, `Table`, `Tag`, `Title`).
@@ -262,6 +288,7 @@ import { Field, Input, Textarea } from '@rinn7e/realworld-design-system'
 The library strictly segregates UI rendering into two explicit patterns:
 
 #### A. Pure Stateless UI Views (`type.ts` + `view.tsx`)
+
 - **Applies to**: Elements, Layout Containers, Grid Cells, and Form Renderers.
 - **Pattern**: Pure, controlled presentation views invoked directly via function calls (e.g. `{Button.view({...})}`, `{Navbar.view({...})}`). State is held in the caller application's `Model`.
 - **File Layout**:
@@ -270,6 +297,7 @@ The library strictly segregates UI rendering into two explicit patterns:
   - `lib/<category>/<component-name>/index.ts`: Public module exports (`export { view } from './view'`).
 
 #### B. Complex TEA Sub-Components (`type.ts` + `update.ts` + `component.tsx`)
+
 - **Applies to**: Interactive components with stateful workflows (`Dropdown`, `Modal`, `Navbar`, `Pagination`, `Panel`, `Tabs`, `Menu`).
 - **Pattern**: Pure Elm Architecture (TEA) sub-components providing explicit `Model`, `Msg`, `init`, `update`, and `view` functions.
 - **File Layout**:
@@ -292,6 +320,7 @@ To ensure optimal performance and minimal package bundle sizes, `@rinn7e/realwor
 ## 🛠️ Development & Script Guide
 
 ### Showcase Documentation Web App
+
 Launch the interactive `react-tea-cup` documentation website showcasing all components on port `5175` with live **Canvas** previews and **Code Snippets**:
 
 ```bash
@@ -304,6 +333,7 @@ pnpm run dev
 ```
 
 ### Library Scripts
+
 Run from the root of `frontend-design-system`:
 
 - **Typecheck**:

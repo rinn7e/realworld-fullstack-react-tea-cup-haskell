@@ -1,13 +1,7 @@
 import type { ReactNode } from 'react'
 
 export type HeroVariant =
-  | 'default'
-  | 'primary'
-  | 'link'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | 'danger'
+  'default' | 'primary' | 'link' | 'info' | 'success' | 'warning' | 'danger'
 
 export type HeroSize = 'small' | 'medium' | 'large' | 'fullheight'
 

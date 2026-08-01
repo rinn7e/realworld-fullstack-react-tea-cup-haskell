@@ -105,7 +105,7 @@ export const mkPaginationConfig = (
                       key={v.id}
                       className='cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-white/5'
                       onClick={() =>
-                         itemDispatch(v, {
+                        itemDispatch(v, {
                           _tag: 'SelectVisitor',
                           visitor: O.some(v),
                         })
@@ -128,8 +128,13 @@ export const mkPaginationConfig = (
                       <td className='text-theme-secondary px-[24px] py-[16px] font-medium dark:text-white'>
                         {v.ip}
                       </td>
-                      <td className='px-[24px] py-[16px] font-mono text-[13px] text-slate-500 dark:text-slate-200' title={v.fingerprint}>
-                        {v.fingerprint ? `${v.fingerprint.substring(0, 8)}...` : '-'}
+                      <td
+                        className='px-[24px] py-[16px] font-mono text-[13px] text-slate-500 dark:text-slate-200'
+                        title={v.fingerprint}
+                      >
+                        {v.fingerprint
+                          ? `${v.fingerprint.substring(0, 8)}...`
+                          : '-'}
                       </td>
                       <td className='px-[24px] py-[16px] font-mono text-[12px] text-slate-500 dark:text-slate-200'>
                         {v.path}

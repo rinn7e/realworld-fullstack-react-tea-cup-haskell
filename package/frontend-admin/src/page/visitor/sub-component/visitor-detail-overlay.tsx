@@ -7,11 +7,11 @@ import { type Visitor } from '@/common/api/type/visitor'
 import { type Msg } from '../type'
 import { DetailRow } from './detail-row'
 
-const FingerprintBreakdown: React.FC<{ fingerprint: string; ip: string; userAgent: string }> = ({
-  fingerprint,
-  ip,
-  userAgent,
-}) => (
+const FingerprintBreakdown: React.FC<{
+  fingerprint: string
+  ip: string
+  userAgent: string
+}> = ({ fingerprint, ip, userAgent }) => (
   <div>
     <DetailRow label='Fingerprint' value={fingerprint || '-'} mono />
     <div className='mt-[10px] rounded-[10px] border border-slate-100 bg-slate-50 p-[16px] dark:border-white/10 dark:bg-black/20'>
@@ -19,20 +19,34 @@ const FingerprintBreakdown: React.FC<{ fingerprint: string; ip: string; userAgen
         How is this calculated?
       </div>
       <div className='font-mono text-[12px] text-slate-500 dark:text-slate-300'>
-        SHA-256( IP &nbsp;<span className='text-slate-300 dark:text-slate-500'>|</span>&nbsp; User-Agent &nbsp;<span className='text-slate-300 dark:text-slate-500'>|</span>&nbsp; Accept-Language )
+        SHA-256( IP &nbsp;
+        <span className='text-slate-300 dark:text-slate-500'>|</span>&nbsp;
+        User-Agent &nbsp;
+        <span className='text-slate-300 dark:text-slate-500'>|</span>&nbsp;
+        Accept-Language )
       </div>
       <div className='mt-[10px] grid grid-cols-1 gap-[6px]'>
         <div className='flex items-start gap-[8px] text-[12px]'>
-          <span className='mt-[1px] shrink-0 rounded bg-blue-100 px-[6px] py-[1px] font-mono text-[11px] text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'>IP</span>
-          <span className='break-all text-slate-500 dark:text-slate-300'>{ip}</span>
+          <span className='mt-[1px] shrink-0 rounded bg-blue-100 px-[6px] py-[1px] font-mono text-[11px] text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'>
+            IP
+          </span>
+          <span className='break-all text-slate-500 dark:text-slate-300'>
+            {ip}
+          </span>
         </div>
         <div className='flex items-start gap-[8px] text-[12px]'>
-          <span className='mt-[1px] shrink-0 rounded bg-violet-100 px-[6px] py-[1px] font-mono text-[11px] text-violet-600 dark:bg-violet-900/40 dark:text-violet-300'>UA</span>
-          <span className='break-all text-slate-500 dark:text-slate-300'>{userAgent}</span>
+          <span className='mt-[1px] shrink-0 rounded bg-violet-100 px-[6px] py-[1px] font-mono text-[11px] text-violet-600 dark:bg-violet-900/40 dark:text-violet-300'>
+            UA
+          </span>
+          <span className='break-all text-slate-500 dark:text-slate-300'>
+            {userAgent}
+          </span>
         </div>
       </div>
       <p className='mt-[10px] text-[11px] leading-relaxed text-slate-400 dark:text-slate-500'>
-        Each unique combination of IP address, browser User-Agent, and Accept-Language header produces the same hash — identifying the same device across visits without storing personal data.
+        Each unique combination of IP address, browser User-Agent, and
+        Accept-Language header produces the same hash — identifying the same
+        device across visits without storing personal data.
       </p>
     </div>
   </div>

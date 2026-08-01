@@ -1,5 +1,6 @@
-import React from 'react'
 import { Box, Menu } from '@rinn7e/realworld-design-system'
+import React from 'react'
+
 import type { AppRoute } from '../route/type'
 
 export interface SidebarProps {
@@ -30,7 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
                   .join('') + 'Page'
               navigateRoute({
-                page: { _tag: pageTagName } as any,
+                page: { _tag: pageTagName } as unknown as AppRoute['page'],
               })
             }
           },

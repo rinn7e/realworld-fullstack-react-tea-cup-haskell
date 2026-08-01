@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { CheckboxProps } from './type'
 
@@ -15,7 +16,7 @@ export const view = ({
     <label
       data-component='Checkbox'
       className={cn(
-        'inline-flex select-none items-center gap-2 text-sm font-medium text-gray-700',
+        'inline-flex items-center gap-2 text-sm font-medium text-gray-700 select-none',
         isDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
         className,
       )}

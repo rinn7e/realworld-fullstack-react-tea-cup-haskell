@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../theme'
 import type { ColumnsProps } from './type'
 
@@ -11,7 +12,7 @@ export const view = ({
     <div
       data-component='Columns'
       className={cn(
-        'flex flex-col md:flex-row gap-4',
+        'flex flex-col gap-4 md:flex-row',
         isMultiline && 'flex-wrap',
         className,
       )}
