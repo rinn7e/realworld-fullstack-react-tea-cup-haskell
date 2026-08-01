@@ -90,7 +90,7 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                   size: 'small',
                   className: 'text-gray-600',
                   children:
-                    'Complete coverage of Bulma-styled elements, components, forms, layouts, and grid systems exported as pure TypeScript functions.',
+                    'Complete coverage of elements, components, forms, layouts, and grid systems exported as pure TypeScript functions.',
                 }),
               }),
             })}

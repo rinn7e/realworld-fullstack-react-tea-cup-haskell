@@ -182,10 +182,7 @@ Implementations **must** expose this on `window.__conduit_debug__`:
 interface ConduitDebug {
   getToken(): string | null
   getAuthState():
-    | 'authenticated'
-    | 'unauthenticated'
-    | 'unavailable'
-    | 'loading'
+    'authenticated' | 'unauthenticated' | 'unavailable' | 'loading'
   getCurrentUser(): {
     username: string
     email: string

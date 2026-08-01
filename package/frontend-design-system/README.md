@@ -1,6 +1,6 @@
 # `@rinn7e/realworld-design-system`
 
-A comprehensive, Bulma-inspired design system component library and custom UI renderer suite built for RealWorld frontend applications.
+A comprehensive design system component library and custom UI renderer suite built for RealWorld frontend applications.
 
 ---
 
@@ -271,15 +271,16 @@ import { Field, Input, Textarea } from '@rinn7e/realworld-design-system'
 
 ## 🎨 Philosophy & Design Architecture
 
-### 1. Bulma CSS Design System Foundation
+### 1. Component Grouping & Architecture
 
-`frontend-design-system` follows the **Bulma CSS Design System** specification, providing a clean, responsive, CSS-first component architecture divided into 5 core categories:
+The component grouping and categorization in `frontend-design-system` is inspired by Bulma, providing a clean, responsive, CSS-first architecture organized into 6 core categories:
 
 1. **Elements**: Primitive UI building blocks (`Block`, `Box`, `Button`, `Content`, `Delete`, `Icon`, `Image`, `Notification`, `Progress`, `Table`, `Tag`, `Title`).
 2. **Components**: Interactive and composite navigation/content structures (`Breadcrumb`, `Card`, `Dropdown`, `Menu`, `Message`, `Modal`, `Navbar`, `Pagination`, `Panel`, `Tabs`).
 3. **Form**: Form controls and field containers (`Field`, `Input`, `Textarea`, `Select`, `Checkbox`, `Radio`, `File`).
 4. **Layout**: Page layout containers (`Container`, `Hero`, `Section`, `Level`, `MediaObject`, `Footer`).
 5. **Grid**: Flexbox multi-column layout system (`Columns`, `Column`).
+6. **Misc**: Custom standalone utility components (`DotLoading`).
 
 ---
 

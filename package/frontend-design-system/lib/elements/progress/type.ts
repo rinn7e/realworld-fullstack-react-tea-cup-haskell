@@ -10,8 +10,8 @@ export type ProgressProps = {
   size?: ProgressSize
   /**
    * NOTE: When `isIndeterminate` is set to true, this component functions as an
-   * IndeterminateProgressBar, which is a custom non-Bulma extension beyond standard
-   * Bulma CSS design system specifications.
+   * IndeterminateProgressBar, which is an extension beyond standard
+   * CSS design system specifications.
    */
   isIndeterminate?: boolean
   className?: string

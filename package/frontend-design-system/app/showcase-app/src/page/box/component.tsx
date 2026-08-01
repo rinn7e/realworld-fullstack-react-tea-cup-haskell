@@ -23,7 +23,7 @@ export const BoxPage: React.FC<Props> = ({ model, dispatch }) => {
   children: (
     <>
       {Title.view({ size: 4, className: 'mb-1 font-bold text-gray-900', children: 'Interactive Box Container' })}
-      {Content.view({ size: 'normal', className: 'text-gray-600', children: 'This is a classic Bulma-styled box container.' })}
+      {Content.view({ size: 'normal', className: 'text-gray-600', children: 'This is a classic box container.' })}
     </>
   ),
 })}`
@@ -96,7 +96,7 @@ export const BoxPage: React.FC<Props> = ({ model, dispatch }) => {
                     {Content.view({
                       size: 'normal',
                       className: 'text-gray-600',
-                      children: 'This is a classic Bulma-styled box container.',
+                      children: 'This is a classic box container.',
                     })}
                   </>
                 ),

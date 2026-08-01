@@ -20,10 +20,7 @@ import { Page } from '@playwright/test'
  */
 
 export type AuthState =
-  | 'authenticated'
-  | 'unauthenticated'
-  | 'unavailable'
-  | 'loading'
+  'authenticated' | 'unauthenticated' | 'unavailable' | 'loading'
 
 export interface User {
   username: string
@@ -31,6 +28,16 @@ export interface User {
   bio: string | null
   image: string | null
   token: string
+}
+
+declare global {
+  interface Window {
+    __conduit_debug__?: {
+      getToken: () => string | null
+      getAuthState: () => AuthState
+      getCurrentUser: () => User | null
+    }
+  }
 }
 
 /**
