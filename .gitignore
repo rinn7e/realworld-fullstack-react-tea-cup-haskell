@@ -12,6 +12,7 @@ ehthumbs.db
 # IDEs and Editors
 .vscode/
 .idea/
+.antigravitycli
 *.suo
 *.ntvs*
 *.njsproj
