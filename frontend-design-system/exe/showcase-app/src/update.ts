@@ -1,154 +1,247 @@
-import {
-  Dropdown,
-  Menu,
-  Modal,
-  Navbar,
-  Pagination,
-  Panel,
-  Tabs,
-} from '@rinn7e/realworld-design-system'
-import { Cmd } from 'tea-cup-fp'
+import { Menu, Navbar } from '@rinn7e/realworld-design-system'
+import { newUrl } from 'react-tea-cup'
+import { Cmd, Task } from 'tea-cup-fp'
 
+import * as ButtonPage from './page/button/update'
+import * as ComponentPage from './page/component/update'
+import * as HomePage from './page/home/update'
+import * as NotFoundPage from './page/not-found/update'
+import { parseAppRoute, toUrlString } from './route/parser'
+import { type AppRoute, AppRouteEq } from './route/type'
 import type { Model, Msg } from './type'
 
-export const init = (): [Model, Cmd<Msg>] => {
-  const [dropdownModel] = Dropdown.init('opt1')
-  const [menuModel] = Menu.init('button')
-  const [modalModel] = Modal.init(false)
-  const [navbarModel] = Navbar.init('home')
-  const [paginationModel] = Pagination.init(1, 5)
-  const [panelModel] = Panel.init('all', 'p1')
-  const [tabsModel] = Tabs.init('tab1')
+export const initPageModel =
+  (newRoute: AppRoute) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const activeMenuId =
+      newRoute.page._tag === 'ComponentPage' ? newRoute.page.component : ''
+    const [menuModel] = Menu.init(activeMenuId)
 
-  return [
-    {
-      activeCategory: 'elements',
-      activeComponent: 'button',
-      searchQuery: '',
-      showCode: true,
-      dropdownModel,
-      menuModel,
-      modalModel,
-      navbarModel,
-      paginationModel,
-      panelModel,
-      tabsModel,
-      inputValue: 'Hello RealWorld',
-      textareaValue: 'Design system inspired by Bulma built with Tailwind CSS',
-      selectValue: 'option1',
-      checkboxChecked: true,
-      radioValue: 'radio1',
-      fileName: 'avatar.jpg',
-    },
-    Cmd.none(),
-  ]
+    switch (newRoute.page._tag) {
+      case 'HomePage': {
+        const [homeModel, homeCmd] = HomePage.init()
+        return [
+          {
+            ...model,
+            route: newRoute,
+            menuModel,
+            pageModel: { _tag: 'HomePageModel', model: homeModel },
+          },
+          homeCmd.map((subMsg) => ({ _tag: 'HomePageMsg', subMsg })),
+        ]
+      }
+
+      case 'ComponentPage': {
+        if (newRoute.page.component === 'button') {
+          const [buttonModel, buttonCmd] = ButtonPage.init()
+          return [
+            {
+              ...model,
+              route: newRoute,
+              menuModel,
+              pageModel: { _tag: 'ButtonPageModel', model: buttonModel },
+            },
+            buttonCmd.map((subMsg) => ({ _tag: 'ButtonPageMsg', subMsg })),
+          ]
+        }
+
+        const [componentModel, componentCmd] = ComponentPage.init(
+          newRoute.page.component,
+        )
+        return [
+          {
+            ...model,
+            route: newRoute,
+            menuModel,
+            pageModel: { _tag: 'ComponentPageModel', model: componentModel },
+          },
+          componentCmd.map((subMsg) => ({
+            _tag: 'ComponentPageMsg',
+            subMsg,
+          })),
+        ]
+      }
+
+      default: {
+        const [notFoundModel, notFoundCmd] = NotFoundPage.init()
+        return [
+          {
+            ...model,
+            route: newRoute,
+            menuModel,
+            pageModel: { _tag: 'NotFoundPageModel', model: notFoundModel },
+          },
+          notFoundCmd.map((subMsg) => ({ _tag: 'NotFoundPageMsg', subMsg })),
+        ]
+      }
+    }
+  }
+
+const navigate =
+  (newRoute: AppRoute, isInternal: boolean) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const [updatedModel, updatedCmd] = initPageModel(newRoute)(model)
+
+    const urlCmd = isInternal
+      ? Task.perform(
+          newUrl(toUrlString(newRoute)),
+          (): Msg => ({ _tag: 'NoOp' }),
+        )
+      : Cmd.none<Msg>()
+
+    return [
+      {
+        ...updatedModel,
+        isInternal,
+      },
+      Cmd.batch([urlCmd, updatedCmd]),
+    ]
+  }
+
+const execChangeRoute =
+  (newRoute: AppRoute, isInternal: boolean) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (!AppRouteEq.equals(model.route, newRoute)) {
+      return navigate(newRoute, isInternal)(model)
+    } else {
+      if (isInternal) {
+        return navigate(newRoute, isInternal)(model)
+      } else {
+        return [model, Cmd.none()]
+      }
+    }
+  }
+
+const changeRouteHandler =
+  (newRoute: AppRoute, isInternal: boolean) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    return execChangeRoute(newRoute, isInternal)(model)
+  }
+
+export const init = (location: Location): [Model, Cmd<Msg>] => {
+  const route = parseAppRoute('', location.href)
+  const [navbarModel] = Navbar.init()
+  const [menuModel] = Menu.init('')
+
+  const baseModel: Model = {
+    route,
+    isInternal: false,
+    pageModel: { _tag: 'NotFoundPageModel', model: {} },
+    searchQuery: '',
+    navbarModel,
+    menuModel,
+  }
+
+  return navigate(route, true)(baseModel)
 }
 
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
-    case 'SelectCategory':
-      return [{ ...model, activeCategory: msg.category }, Cmd.none()]
-    case 'SelectComponent': {
-      const [newMenuModel] = Menu.update({
-        _tag: 'Select',
-        id: msg.component,
-      })(model.menuModel)
-      return [
-        { ...model, activeComponent: msg.component, menuModel: newMenuModel },
-        Cmd.none(),
-      ]
+    case 'NoOp':
+      return [model, Cmd.none()]
+
+    case 'Init':
+      return init(msg.location)
+
+    case 'UrlChange': {
+      if (model.isInternal) {
+        return [{ ...model, isInternal: false }, Cmd.none()]
+      } else {
+        const route = parseAppRoute('', msg.location.href)
+        return changeRouteHandler(route, false)(model)
+      }
     }
+
+    case 'ChangeRoute': {
+      return changeRouteHandler(msg.route, true)(model)
+    }
+
     case 'UpdateSearch':
       return [{ ...model, searchQuery: msg.query }, Cmd.none()]
-    case 'ToggleShowCode':
-      return [{ ...model, showCode: !model.showCode }, Cmd.none()]
 
-    case 'DropdownMsg': {
-      const [newSubModel, cmd] = Dropdown.update(msg.subMsg)(
-        model.dropdownModel,
+    case 'HomePageMsg': {
+      if (model.pageModel._tag !== 'HomePageModel') return [model, Cmd.none()]
+      const [homeModel, cmd] = HomePage.update(
+        msg.subMsg,
+        model.pageModel.model,
       )
       return [
-        { ...model, dropdownModel: newSubModel },
-        cmd.map((subMsg: Dropdown.Msg) => ({
-          _tag: 'DropdownMsg' as const,
-          subMsg,
-        })),
+        {
+          ...model,
+          pageModel: { _tag: 'HomePageModel', model: homeModel },
+        },
+        cmd.map((subMsg) => ({ _tag: 'HomePageMsg', subMsg })),
       ]
     }
-    case 'MenuMsg': {
-      const [newSubModel, cmd] = Menu.update(msg.subMsg)(model.menuModel)
+
+    case 'ButtonPageMsg': {
+      if (model.pageModel._tag !== 'ButtonPageModel') return [model, Cmd.none()]
+      const [buttonModel, cmd] = ButtonPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
       return [
-        { ...model, menuModel: newSubModel },
-        cmd.map((subMsg: Menu.Msg) => ({
-          _tag: 'MenuMsg' as const,
-          subMsg,
-        })),
+        {
+          ...model,
+          pageModel: { _tag: 'ButtonPageModel', model: buttonModel },
+        },
+        cmd.map((subMsg) => ({ _tag: 'ButtonPageMsg', subMsg })),
       ]
     }
-    case 'ModalMsg': {
-      const [newSubModel, cmd] = Modal.update(msg.subMsg)(model.modalModel)
+
+    case 'ComponentPageMsg': {
+      if (model.pageModel._tag !== 'ComponentPageModel')
+        return [model, Cmd.none()]
+      const [componentModel, cmd] = ComponentPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
       return [
-        { ...model, modalModel: newSubModel },
-        cmd.map((subMsg: Modal.Msg) => ({
-          _tag: 'ModalMsg' as const,
-          subMsg,
-        })),
+        {
+          ...model,
+          pageModel: { _tag: 'ComponentPageModel', model: componentModel },
+        },
+        cmd.map((subMsg) => ({ _tag: 'ComponentPageMsg', subMsg })),
       ]
     }
+
+    case 'NotFoundPageMsg': {
+      if (model.pageModel._tag !== 'NotFoundPageModel')
+        return [model, Cmd.none()]
+      const [notFoundModel, cmd] = NotFoundPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        {
+          ...model,
+          pageModel: { _tag: 'NotFoundPageModel', model: notFoundModel },
+        },
+        cmd.map((subMsg) => ({ _tag: 'NotFoundPageMsg', subMsg })),
+      ]
+    }
+
     case 'NavbarMsg': {
-      const [newSubModel, cmd] = Navbar.update(msg.subMsg)(model.navbarModel)
+      const [navbarModel, cmd] = Navbar.update(msg.subMsg)(model.navbarModel)
       return [
-        { ...model, navbarModel: newSubModel },
-        cmd.map((subMsg: Navbar.Msg) => ({
-          _tag: 'NavbarMsg' as const,
-          subMsg,
-        })),
-      ]
-    }
-    case 'PaginationMsg': {
-      const [newSubModel, cmd] = Pagination.update(msg.subMsg)(
-        model.paginationModel,
-      )
-      return [
-        { ...model, paginationModel: newSubModel },
-        cmd.map((subMsg: Pagination.Msg) => ({
-          _tag: 'PaginationMsg' as const,
-          subMsg,
-        })),
-      ]
-    }
-    case 'PanelMsg': {
-      const [newSubModel, cmd] = Panel.update(msg.subMsg)(model.panelModel)
-      return [
-        { ...model, panelModel: newSubModel },
-        cmd.map((subMsg: Panel.Msg) => ({
-          _tag: 'PanelMsg' as const,
-          subMsg,
-        })),
-      ]
-    }
-    case 'TabsMsg': {
-      const [newSubModel, cmd] = Tabs.update(msg.subMsg)(model.tabsModel)
-      return [
-        { ...model, tabsModel: newSubModel },
-        cmd.map((subMsg: Tabs.Msg) => ({
-          _tag: 'TabsMsg' as const,
-          subMsg,
-        })),
+        { ...model, navbarModel },
+        cmd.map((subMsg: Navbar.Msg) => ({ _tag: 'NavbarMsg', subMsg })),
       ]
     }
 
-    case 'UpdateInput':
-      return [{ ...model, inputValue: msg.value }, Cmd.none()]
-    case 'UpdateTextarea':
-      return [{ ...model, textareaValue: msg.value }, Cmd.none()]
-    case 'UpdateSelect':
-      return [{ ...model, selectValue: msg.value }, Cmd.none()]
-    case 'ToggleCheckbox':
-      return [{ ...model, checkboxChecked: !model.checkboxChecked }, Cmd.none()]
-    case 'UpdateRadio':
-      return [{ ...model, radioValue: msg.value }, Cmd.none()]
-    case 'UpdateFile':
-      return [{ ...model, fileName: msg.name }, Cmd.none()]
+    case 'MenuMsg': {
+      const [menuModel, cmd] = Menu.update(msg.subMsg)(model.menuModel)
+      if (msg.subMsg._tag === 'Select') {
+        const item = msg.subMsg.id as any
+        const nextRoute: AppRoute = {
+          page: { _tag: 'ComponentPage', component: item },
+        }
+        return changeRouteHandler(nextRoute, true)({ ...model, menuModel })
+      }
+      return [
+        { ...model, menuModel },
+        cmd.map((subMsg: Menu.Msg) => ({ _tag: 'MenuMsg', subMsg })),
+      ]
+    }
   }
 }

@@ -1,2 +1,8 @@
+packages:
+  - '.'
+  - 'exe/*'
+
 allowBuilds:
-  esbuild: set this to true or false
+  esbuild: true
+  fp-ts-routing: true
+  "@rinn7e/fp-ts-routing": true

@@ -22,8 +22,8 @@
     "check-circular": "madge --circular lib/",
     "clean": "rimraf dist node_modules/.cache",
     "lint": "eslint lib/",
-    "showcase:dev": "cd exe/showcase-app && vite",
-    "showcase:build": "cd exe/showcase-app && vite build"
+    "showcase:dev": "cd exe/showcase-app && npm run dev",
+    "showcase:build": "cd exe/showcase-app && npm run build"
   },
   "dependencies": {
     "clsx": "^2.1.1",
