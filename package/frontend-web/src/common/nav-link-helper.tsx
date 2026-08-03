@@ -1,4 +1,4 @@
-import { Image } from '@rinn7e/realworld-design-system'
+import { Image, Navbar } from '@rinn7e/realworld-design-system'
 import type { Option } from 'fp-ts/lib/Option'
 import { Menu, Pencil, Settings } from 'lucide-react'
 import React from 'react'
@@ -6,7 +6,6 @@ import React from 'react'
 import type { User } from '@/common/api'
 import type { NavItemData } from '@/common/type/nav-item'
 import { homePage, toUrlString } from '@/common/type/route'
-import type { Model as NavbarModel } from '@/component/navbar'
 import type { Model, Msg } from '@/type'
 
 import {
@@ -78,7 +77,7 @@ export const toDesktopNavItems = (model: Model): NavItemData<Msg>[] => {
   })
 }
 
-export const toNavbarModel = (model: Model): NavbarModel<Msg> => ({
+export const toNavbarModel = (model: Model): Navbar.Model<Msg> => ({
   brandNavItem: toBrandNavItem(model),
   desktopNavItems: toDesktopNavItems(model),
   mobileNavItems: toMobileNavItems(model),

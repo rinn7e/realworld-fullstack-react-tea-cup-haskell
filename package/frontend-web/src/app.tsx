@@ -1,3 +1,4 @@
+import { Navbar } from '@rinn7e/realworld-design-system'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
@@ -9,7 +10,6 @@ import {
 } from './common/nav-link-helper'
 import { DebugPanelComponent } from './component/debug-panel/component'
 import { Footer } from './component/footer'
-import { NavbarMemo } from './component/navbar/component'
 import { SidebarMemo } from './component/sidebar/component'
 import { ArticlePageMemo } from './page/article/component'
 import { EditorPageMemo } from './page/editor/component'
@@ -39,7 +39,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
           isNavOpen && 'h-dvh overflow-hidden',
         )}
       >
-        <NavbarMemo model={navbarModel} dispatch={dispatch} />
+        <Navbar.NavbarMemo model={navbarModel} dispatch={dispatch} />
         <main className='flex-grow'>{renderPage(model, dispatch)}</main>
         <Footer />
       </div>
