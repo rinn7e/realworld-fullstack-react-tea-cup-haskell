@@ -443,7 +443,7 @@ export const view = (
       {/* Top Navbar Header */}
       <NavbarMemo
         config={{ desktopNavItems: [], mobileNavItems: [] }}
-        dispatch={dispatch}
+        dispatch={() => {}}
       />
 
       {/* Main Layout Container */}

@@ -1,9 +1,13 @@
+import * as A from 'fp-ts/lib/Array'
 import { EqAlways } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import type { Dispatcher } from 'tea-cup-fp'
 
 import * as Animate from '@/common/type/animate'
-import { type NavItemData as DsNavItemData, mkNavItemDataEq as mkDsNavItemDataEq } from '@rinn7e/realworld-design-system/type/nav-item'
+import {
+  type NavItemData as DsNavItemData,
+  NavItemDataEq as DsNavItemDataEq,
+} from '@rinn7e/realworld-design-system/type/nav-item'
 
 export type Model = {
   status: Animate.Animate<null>
@@ -17,20 +21,14 @@ export type Msg =
   | { _tag: 'Toggle'; open: boolean }
   | { _tag: 'SetState'; state: Animate.AnimateState }
 
-export type Props<PMsg> = {
+export type Props = {
   model: Model
   dispatch: Dispatcher<Msg>
-  items: DsNavItemData<PMsg>[]
+  items: DsNavItemData[]
 }
 
-export const mkPropsEq = <PMsg>(msgEq: EqClass.Eq<PMsg>): EqClass.Eq<Props<PMsg>> => {
-  const itemEq = mkDsNavItemDataEq(msgEq)
-  return {
-    equals: (x, y) =>
-      ModelEq.equals(x.model, y.model) &&
-      x.items.length === y.items.length &&
-      x.items.every((item, i) => itemEq.equals(item, y.items[i])),
-  }
-}
-
-export const PropsEq: EqClass.Eq<Props<unknown>> = mkPropsEq(EqAlways)
+export const PropsEq: EqClass.Eq<Props> = EqClass.struct<Required<Props>>({
+  model: ModelEq,
+  dispatch: EqClass.eqStrict,
+  items: A.getEq(DsNavItemDataEq),
+}) as unknown as EqClass.Eq<Props>

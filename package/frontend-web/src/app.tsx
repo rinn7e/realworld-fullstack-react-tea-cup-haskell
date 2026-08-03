@@ -39,13 +39,16 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
           isNavOpen && 'h-dvh overflow-hidden',
         )}
       >
-        <DsNavbarMemo config={navbarConfig} dispatch={dispatch} />
+        <DsNavbarMemo
+          config={navbarConfig}
+          dispatch={(subMsg) => dispatch({ _tag: 'NavbarMsg', subMsg })}
+        />
         <main className='flex-grow'>{renderPage(model, dispatch)}</main>
         <Footer />
       </div>
       <SidebarMemo
         model={model.sidebar}
-        items={desktopNavItems}
+        items={desktopNavItems.map((n) => n.data)}
         dispatch={(subMsg) => dispatch({ _tag: 'SidebarMsg', subMsg })}
       />
       <DebugPanelComponent

@@ -24,6 +24,8 @@ import {
   parseAppRoute,
   toUrlString,
 } from '@/common/type/route'
+import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
+import { findNavItemRoute, toNavbarConfig } from '@/common/nav-link-helper'
 import * as DebugPanel from '@/component/debug-panel'
 import * as Sidebar from '@/component/sidebar'
 import * as ArticlePage from '@/page/article/update'
@@ -80,6 +82,7 @@ export const init = (
     isInternal: false,
     debugPanel: DebugPanel.init(),
     sidebar: Sidebar.init(),
+    navbar: DsNavbar.init()[0],
   }
   const initCmd = Cmd.batch([trackVisitorCmd(token, route)])
 
@@ -702,7 +705,46 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         sidebarCmd.map((subMsg) => ({ _tag: 'SidebarMsg', subMsg })),
       ]
     }
+    case 'NavbarMsg':
+      return navbarMsgHandler(msg.subMsg, model)
   }
+}
+
+// Child Msg interception handler
+
+const navbarMsgHandler = (
+  subMsg: Extract<Msg, { _tag: 'NavbarMsg' }>['subMsg'],
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  const [navbarModel, navbarCmd] = DsNavbar.update(subMsg)(model.navbar)
+
+  return pipe(
+    [
+      { ...model, navbar: navbarModel },
+      navbarCmd.map((m): Msg => ({ _tag: 'NavbarMsg', subMsg: m })),
+    ] as [Model, Cmd<Msg>],
+    updateAndCmd((m) => {
+      if (subMsg._tag === 'ClickNavItem') {
+        const item = subMsg.item
+        if (item.key === 'toggle-sidebar') {
+          const [sidebarModel, sidebarCmd] = Sidebar.update(
+            { _tag: 'Toggle', open: true },
+            m.sidebar,
+          )
+          return [
+            { ...m, sidebar: sidebarModel },
+            sidebarCmd.map((subMsg) => ({ _tag: 'SidebarMsg' as const, subMsg })),
+          ]
+        } else {
+          const targetRoute = findNavItemRoute(m, item.key)
+          if (targetRoute) {
+            return changeRouteHandler(targetRoute, true)(m)
+          }
+        }
+      }
+      return [m, Cmd.none()]
+    }),
+  )
 }
 
 // Child Msg interception handler

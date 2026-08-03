@@ -1,19 +1,25 @@
-import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
 import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
+import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
+import type { NavItemData as DsNavItemData } from '@rinn7e/realworld-design-system/type/nav-item'
 import type { Option } from 'fp-ts/lib/Option'
 import { Menu, Pencil, Settings } from 'lucide-react'
 import React from 'react'
 
 import type { User } from '@/common/api'
+import type { AppRoute } from '@/common/type/route'
 import { homePage, toUrlString } from '@/common/type/route'
-import type { NavItemData as DsNavItemData } from '@rinn7e/realworld-design-system/type/nav-item'
-import type { Model, Msg } from '@/type'
+import type { Model } from '@/type'
 
 import {
   type NavLinkIcon,
   navLinkAuths,
   navLinkUnauths,
 } from './nav-link'
+
+export type NavItem = {
+  data: DsNavItemData
+  route?: AppRoute
+}
 
 export const renderNavLinkIcon = (
   icon?: NavLinkIcon,
@@ -38,29 +44,32 @@ export const renderNavLinkIcon = (
   return null
 }
 
-export const toBrandNavItem = (_model: Model): DsNavItemData<Msg> => ({
-  key: 'site-logo',
-  label: 'conduit',
-  href: toUrlString({ page: homePage() }),
-  isActive: false,
-  onClick: { _tag: 'ChangeRoute', route: { page: homePage() } },
-})
-
-export const toMobileNavItems = (_model: Model): DsNavItemData<Msg>[] => [
-  {
-    key: 'toggle-sidebar',
-    label: '',
-    href: '',
-    isActive: false,
-    onClick: {
-      _tag: 'SidebarMsg',
-      subMsg: { _tag: 'Toggle', open: true },
+export const toBrandNavItem = (_model: Model): NavItem => {
+  const route: AppRoute = { page: homePage() }
+  return {
+    data: {
+      key: 'site-logo',
+      label: 'conduit',
+      href: toUrlString(route),
+      isActive: false,
     },
-    icon: <Menu size={24} />,
+    route,
+  }
+}
+
+export const toMobileNavItems = (_model: Model): NavItem[] => [
+  {
+    data: {
+      key: 'toggle-sidebar',
+      label: '',
+      href: '',
+      isActive: false,
+      icon: <Menu size={24} />,
+    },
   },
 ]
 
-export const toDesktopNavItems = (model: Model): DsNavItemData<Msg>[] => {
+export const toDesktopNavItems = (model: Model): NavItem[] => {
   const userOpt = model.shared.user
   const pageTag = model.pageModel._tag
   const navLinksData = userOpt._tag === 'Some' ? navLinkAuths : navLinkUnauths
@@ -68,19 +77,41 @@ export const toDesktopNavItems = (model: Model): DsNavItemData<Msg>[] => {
   return navLinksData.map((linkData) => {
     const route = linkData.route(userOpt)
     return {
-      key: linkData.key,
-      label: linkData.label(userOpt),
-      href: toUrlString(route),
-      onClick: { _tag: 'ChangeRoute', route },
-      isActive: pageTag === linkData.pageTag,
-      icon: renderNavLinkIcon(linkData.icon, userOpt),
+      data: {
+        key: linkData.key,
+        label: linkData.label(userOpt),
+        href: toUrlString(route),
+        isActive: pageTag === linkData.pageTag,
+        icon: renderNavLinkIcon(linkData.icon, userOpt),
+      },
+      route,
     }
   })
 }
 
-export const toNavbarConfig = (model: Model): DsNavbar.Config<Msg> => ({
-  brandNavItem: toBrandNavItem(model),
-  desktopNavItems: toDesktopNavItems(model),
-  mobileNavItems: toMobileNavItems(model),
-  unavailableMode: model.unavailableMode,
-})
+export const toNavbarConfig = (model: Model): DsNavbar.Config => {
+  const brand = toBrandNavItem(model)
+  const desktop = toDesktopNavItems(model)
+  const mobile = toMobileNavItems(model)
+
+  return {
+    brandNavItem: brand.data,
+    desktopNavItems: desktop.map((n) => n.data),
+    mobileNavItems: mobile.map((n) => n.data),
+    unavailableMode: model.unavailableMode,
+  }
+}
+
+export const findNavItemRoute = (
+  model: Model,
+  itemKey: string,
+): AppRoute | null => {
+  const brand = toBrandNavItem(model)
+  if (brand.data.key === itemKey && brand.route) return brand.route
+
+  const desktop = toDesktopNavItems(model)
+  const found = desktop.find((n) => n.data.key === itemKey)
+  if (found && found.route) return found.route
+
+  return null
+}

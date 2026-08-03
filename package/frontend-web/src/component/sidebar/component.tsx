@@ -1,22 +1,17 @@
 import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { X } from 'lucide-react'
-import React, { useContext } from 'react'
+import React, { memo } from 'react'
 import { createPortal } from 'react-dom'
-
-import { SetGlobalMsgContext } from '@/common/global-context'
-import { memoStrategy } from '@/common/util'
-import { GenericLink as DsGenericLink } from '@rinn7e/realworld-design-system/component/generic-link'
 
 import type { Props } from './type'
 import { PropsEq } from './type'
 
-export const SidebarComponent = <PMsg,>({
+export const SidebarComponent: React.FC<Props> = ({
   model,
   dispatch,
   items,
-}: Props<PMsg>) => {
-  const setGlobalMsg = useContext(SetGlobalMsgContext)
+}) => {
   const state = model.status.state._tag
   const isVisible = state !== 'Invisible'
 
@@ -67,20 +62,19 @@ export const SidebarComponent = <PMsg,>({
 
               return (
                 <li key={item.key}>
-                  <DsGenericLink
+                  <a
                     className={cn(
                       baseCls,
                       item.isActive ? activeCls : inactiveCls,
                     )}
                     href={item.href}
-                    dispatch={setGlobalMsg as unknown as (msg: PMsg) => void}
-                    msg={item.onClick}
                     data-test='nav-link'
                     aria-current={item.isActive ? 'page' : undefined}
+                    onClick={() => dispatch({ _tag: 'Toggle', open: false })}
                   >
                     {item.icon}
                     {item.label}
-                  </DsGenericLink>
+                  </a>
                 </li>
               )
             })}
@@ -92,7 +86,4 @@ export const SidebarComponent = <PMsg,>({
   )
 }
 
-export const SidebarMemo = memoStrategy(
-  SidebarComponent,
-  PropsEq.equals as (x: Props<unknown>, y: Props<unknown>) => boolean,
-) as <PMsg>(props: Props<PMsg>) => React.ReactElement | null
+export const SidebarMemo = memo(SidebarComponent, PropsEq.equals)

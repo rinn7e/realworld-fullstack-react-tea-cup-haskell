@@ -1,8 +1,8 @@
-import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import * as Navbar from '@rinn7e/realworld-design-system/component/navbar'
 import { NavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
 import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2, Menu, Pencil, Settings, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -16,34 +16,34 @@ interface Props {
 }
 
 export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
-  const navbarConfig: Navbar.Config<string> = {
+  const navbarConfig: Navbar.Config = {
     brandNavItem: {
       key: 'brand',
       label: 'conduit',
       href: '#',
       isActive: false,
-      onClick: 'nav:brand' },
+    },
     desktopNavItems: [
       {
         key: 'home',
         label: 'Home',
         href: '#',
         isActive: true,
-        onClick: 'nav:home' },
+      },
       {
         key: 'editor',
         label: 'New Article',
         href: '#',
         isActive: false,
-        onClick: 'nav:editor',
-        icon: <Pencil size={14} /> },
+        icon: <Pencil size={14} />,
+      },
       {
         key: 'settings',
         label: 'Settings',
         href: '#',
         isActive: false,
-        onClick: 'nav:settings',
-        icon: <Settings size={14} /> },
+        icon: <Settings size={14} />,
+      },
     ],
     mobileNavItems: [
       {
@@ -51,29 +51,37 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
         label: '',
         href: '#',
         isActive: false,
-        onClick: 'nav:mobile-menu',
-        icon: <Menu size={24} /> },
-    ] }
+        icon: <Menu size={24} />,
+      },
+    ],
+  }
 
-  const code = `const navbarConfig: Navbar.Config<Msg> = {
+  const code = `const navbarConfig: Navbar.Config = {
   brandNavItem: {
     key: 'site-logo',
     label: 'conduit',
     href: '/',
     isActive: false,
-    onClick: { _tag: 'ChangeRoute', route: homeRoute } },
+  },
   desktopNavItems: [
     {
       key: 'home',
       label: 'Home',
       href: '/',
       isActive: true,
-      onClick: { _tag: 'ChangeRoute', route: homeRoute } },
-  ] }`
+    },
+  ],
+}`
 
   return (
     <div data-component='NavbarPage' className='w-full space-y-8 text-left'>
-      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <HeroMemo
+        variant='default'
+        size='small'
+        className='rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full'
+        children={() => (
+          <>
+            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               COMPONENTS / NAVBAR
             </div>
             <TitleMemo
@@ -83,7 +91,10 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
             />
             <p className='text-base text-gray-600'>
               Top navigation header with brand, desktop links, and mobile items.
-            </p></>)} />
+            </p>
+          </>
+        )}
+      />
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
@@ -119,9 +130,10 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <NavbarMemo
               config={navbarConfig}
-              dispatch={(msg: string) => dispatch({ _tag: 'NavbarMsg', msg })}
+              dispatch={(subMsg) => dispatch({ _tag: 'NavbarMsg', subMsg })}
             />
-          ) })}
+          ),
+        })}
 
         {model.showCode && (
           <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>

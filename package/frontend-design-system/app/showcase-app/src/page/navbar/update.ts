@@ -16,7 +16,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     case 'ToggleShowCode':
       return [{ ...model, showCode: !model.showCode }, Cmd.none()]
     case 'NavbarMsg': {
-      console.log('Showcase nav clicked:', msg.msg)
+      console.log('Showcase nav clicked:', msg.subMsg)
       return [model, Cmd.none()]
     }
   }

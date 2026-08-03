@@ -1,20 +1,16 @@
 import React, { memo } from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
 
-import { GenericLink } from '../generic-link'
-import type { NavItemData } from '../../type/nav-item'
 import { cn } from '../../theme'
+import type { NavItemData } from '../../type/nav-item'
+import { GenericLink } from '../generic-link'
 
-import type { Props } from './type'
-import { PropsEq } from './type'
+import type { Msg, NavbarProps } from './type'
+import { NavbarPropsEq } from './type'
 
-export const NavLinks = <PMsg,>({
-  items,
-  dispatch,
-}: {
-  items: NavItemData<PMsg>[]
-  dispatch: Dispatcher<PMsg>
-}) => {
+export const NavLinks: React.FC<{
+  items: NavItemData[]
+  dispatch: (msg: Msg) => void
+}> = ({ items, dispatch }) => {
   const activeCls = 'text-green-600'
   const inactiveCls = 'text-gray-500 hover:text-gray-900'
 
@@ -31,7 +27,7 @@ export const NavLinks = <PMsg,>({
               className={cn(baseCls, item.isActive ? activeCls : inactiveCls)}
               href={item.href}
               dispatch={dispatch}
-              msg={item.onClick}
+              msg={{ _tag: 'ClickNavItem', item }}
               data-test='nav-link'
               aria-current={item.isActive ? 'page' : undefined}
             >
@@ -45,17 +41,24 @@ export const NavLinks = <PMsg,>({
   )
 }
 
-export const NavbarComponent = <PMsg,>({
+export const NavbarComponent: React.FC<NavbarProps> = ({
   config,
   dispatch,
-}: Props<PMsg>) => {
+  className,
+  key,
+  dataTest,
+}) => {
   const { brandNavItem, desktopNavItems, mobileNavItems, unavailableMode } =
     config
 
   return (
     <nav
-      className='sticky top-0 z-20 border-b border-gray-100 bg-white shadow-sm'
-      data-test='navbar'
+      key={key}
+      className={cn(
+        'sticky top-0 z-20 border-b border-gray-100 bg-white shadow-sm',
+        className,
+      )}
+      data-test={dataTest || 'navbar'}
     >
       <div className='mx-auto max-w-[1152px] px-[16px]'>
         <div className='flex h-[56px] items-center justify-between'>
@@ -64,7 +67,7 @@ export const NavbarComponent = <PMsg,>({
               className='text-xl font-bold tracking-tight text-green-600'
               href={brandNavItem.href}
               dispatch={dispatch}
-              msg={brandNavItem.onClick}
+              msg={{ _tag: 'ClickNavItem', item: brandNavItem }}
               data-test='site-logo'
             >
               {brandNavItem.label}
@@ -89,7 +92,7 @@ export const NavbarComponent = <PMsg,>({
                 className='rounded p-[8px] text-gray-500 hover:text-gray-900'
                 href={item.href || '#'}
                 dispatch={dispatch}
-                msg={item.onClick}
+                msg={{ _tag: 'ClickNavItem', item }}
               >
                 {item.icon}
                 {item.label}
@@ -107,7 +110,4 @@ export const NavbarComponent = <PMsg,>({
   )
 }
 
-export const NavbarMemo = memo(
-  NavbarComponent,
-  PropsEq.equals as (x: Props<unknown>, y: Props<unknown>) => boolean,
-) as <PMsg>(props: Props<PMsg>) => React.ReactElement | null
+export const NavbarMemo = memo(NavbarComponent, NavbarPropsEq.equals)

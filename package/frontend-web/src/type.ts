@@ -1,3 +1,4 @@
+import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import type { Option } from 'fp-ts/lib/Option'
 
 import type { User, UserWithToken } from '@/common/api/type'
@@ -32,6 +33,7 @@ export type Model = {
   isInternal: boolean
   debugPanel: DebugPanel.Model
   sidebar: Sidebar.Model
+  navbar: DsNavbar.Model
 }
 
 export type Msg =
@@ -55,4 +57,4 @@ export type Msg =
   | { _tag: 'EditorPageMsg'; subMsg: EditorPage.Msg }
   | { _tag: 'DebugPanelMsg'; subMsg: DebugPanel.Msg }
   | { _tag: 'SidebarMsg'; subMsg: Sidebar.Msg }
-
+  | { _tag: 'NavbarMsg'; subMsg: DsNavbar.Msg }

@@ -1,54 +1,53 @@
-import type { Eq } from 'fp-ts/lib/Eq'
-import type { Dispatcher } from 'tea-cup-fp'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as string from 'fp-ts/lib/string'
+import type React from 'react'
 
-import {
-  EqAlways,
-  type NavItemData,
-  mkNavItemDataEq,
-} from '../../type/nav-item'
+import { NavItemDataEq, type NavItemData } from '../../type/nav-item'
 
-// TODO: no longer pass PMsg
-// convert navbar to TEA-cup
-// parent caller will be responsible for child msg interception instead of passing PMsg
-export type Config<PMsg> = {
-  brandNavItem?: NavItemData<PMsg>
-  desktopNavItems: NavItemData<PMsg>[]
-  mobileNavItems: NavItemData<PMsg>[]
+export type Config = {
+  brandNavItem?: NavItemData
+  desktopNavItems: NavItemData[]
+  mobileNavItems: NavItemData[]
   unavailableMode?: boolean
 }
 
-export const mkConfigEq = <PMsg>(msgEq: Eq<PMsg>): Eq<Config<PMsg>> => {
-  const itemEq = mkNavItemDataEq(msgEq)
-  return {
-    equals: (x, y) =>
-      x.unavailableMode === y.unavailableMode &&
-      ((!x.brandNavItem && !y.brandNavItem) ||
-        (Boolean(x.brandNavItem) &&
-          Boolean(y.brandNavItem) &&
-          itemEq.equals(x.brandNavItem!, y.brandNavItem!))) &&
-      x.desktopNavItems.length === y.desktopNavItems.length &&
-      x.desktopNavItems.every((item, i) =>
-        itemEq.equals(item, y.desktopNavItems[i]),
-      ) &&
-      x.mobileNavItems.length === y.mobileNavItems.length &&
-      x.mobileNavItems.every((item, i) =>
-        itemEq.equals(item, y.mobileNavItems[i]),
-      ),
-  }
+export const ConfigEq: EqClass.Eq<Config> = {
+  equals: (x, y) =>
+    x.unavailableMode === y.unavailableMode &&
+    ((!x.brandNavItem && !y.brandNavItem) ||
+      (Boolean(x.brandNavItem) &&
+        Boolean(y.brandNavItem) &&
+        NavItemDataEq.equals(x.brandNavItem!, y.brandNavItem!))) &&
+    x.desktopNavItems.length === y.desktopNavItems.length &&
+    x.desktopNavItems.every((item, i) =>
+      NavItemDataEq.equals(item, y.desktopNavItems[i]),
+    ) &&
+    x.mobileNavItems.length === y.mobileNavItems.length &&
+    x.mobileNavItems.every((item, i) =>
+      NavItemDataEq.equals(item, y.mobileNavItems[i]),
+    ),
 }
 
-export const ConfigEq: Eq<Config<unknown>> = mkConfigEq(EqAlways)
+export type Model = null
 
-export type Props<PMsg> = {
-  config: Config<PMsg>
-  dispatch: Dispatcher<PMsg>
+export const ModelEq: EqClass.Eq<Model> = EqClass.eqStrict
+
+export type Msg = { _tag: 'ClickNavItem'; item: NavItemData }
+
+export type NavbarProps = {
+  config: Config
+  dispatch: (msg: Msg) => void
+  className?: string
+  key?: React.Key
+  dataTest?: string
 }
 
-export const mkPropsEq = <PMsg>(msgEq: Eq<PMsg>): Eq<Props<PMsg>> => {
-  const configEq = mkConfigEq(msgEq)
-  return {
-    equals: (x, y) => configEq.equals(x.config, y.config),
-  }
-}
-
-export const PropsEq: Eq<Props<unknown>> = mkPropsEq(EqAlways)
+export const NavbarPropsEq: EqClass.Eq<NavbarProps> = EqClass.struct<
+  Required<NavbarProps>
+>({
+  config: ConfigEq,
+  dispatch: EqClass.eqStrict,
+  className: string.Eq,
+  key: EqClass.eqStrict,
+  dataTest: string.Eq,
+}) as unknown as EqClass.Eq<NavbarProps>
