@@ -100,6 +100,7 @@
     "showcase:build": "cd app/showcase-app && npm run build"
   },
   "dependencies": {
+    "@rinn7e/tea-cup-prelude": "0.1.0-alpha.1",
     "clsx": "^2.1.1",
     "fp-ts": "^2.16.11",
     "lucide-react": "^0.475.0",

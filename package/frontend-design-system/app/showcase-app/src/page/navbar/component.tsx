@@ -1,8 +1,8 @@
-import * as Navbar from '@rinn7e/realworld-design-system/component/navbar'
-import { NavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
-import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
+import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
+import { NavbarMemo as DsNavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2, Menu, Pencil, Settings, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
-  const navbarConfig: Navbar.Config = {
+  const navbarConfig: DsNavbar.Config = {
     brandNavItem: {
       key: 'brand',
       label: 'conduit',
@@ -56,7 +56,7 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
     ],
   }
 
-  const code = `const navbarConfig: Navbar.Config = {
+  const code = `const navbarConfig: DsNavbar.Config = {
   brandNavItem: {
     key: 'site-logo',
     label: 'conduit',
@@ -75,16 +75,16 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='NavbarPage' className='w-full space-y-8 text-left'>
-      <HeroMemo
+      <DsHeroMemo
         variant='default'
         size='small'
-        className='rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full'
+        className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6'
         children={() => (
           <>
             <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               COMPONENTS / NAVBAR
             </div>
-            <TitleMemo
+            <DsTitleMemo
               size={2}
               className='mb-2 font-extrabold text-gray-900'
               children={() => 'Navbar'}
@@ -98,7 +98,7 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
-          <TitleMemo
+          <DsTitleMemo
             size={5}
             className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
             children={() => (
@@ -108,7 +108,7 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
               </>
             )}
           />
-          <ButtonMemo
+          <DsButtonMemo
             color='green'
             variant='link'
             size='small'
@@ -128,7 +128,7 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
           boxClassName:
             'px-0 pt-0 pb-6 w-full bg-white border-2 border-dotted border-gray-300 rounded-lg overflow-hidden',
           children: () => (
-            <NavbarMemo
+            <DsNavbarMemo
               config={navbarConfig}
               dispatch={(subMsg) => dispatch({ _tag: 'NavbarMsg', subMsg })}
             />

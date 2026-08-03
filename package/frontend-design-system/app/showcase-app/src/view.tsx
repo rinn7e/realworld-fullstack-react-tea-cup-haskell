@@ -1,9 +1,9 @@
-import * as Menu from '@rinn7e/realworld-design-system/component/menu'
-import { NavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
-import { ColumnMemo } from '@rinn7e/realworld-design-system/grid/column/component'
-import { ColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
-import { ContainerMemo } from '@rinn7e/realworld-design-system/layout/container/component'
-import { FooterMemo } from '@rinn7e/realworld-design-system/layout/footer/component'
+import * as DsMenu from '@rinn7e/realworld-design-system/component/menu'
+import { NavbarMemo as DsNavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
+import { ColumnMemo as DsColumnMemo } from '@rinn7e/realworld-design-system/grid/column/component'
+import { ColumnsMemo as DsColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
+import { ContainerMemo as DsContainerMemo } from '@rinn7e/realworld-design-system/layout/container/component'
+import { FooterMemo as DsFooterMemo } from '@rinn7e/realworld-design-system/layout/footer/component'
 import { BookOpen, Layers, LayoutGrid, Sparkles } from 'lucide-react'
 import React from 'react'
 
@@ -34,6 +34,7 @@ import { MenuPage } from './page/menu/component'
 import { MessagePage } from './page/message/component'
 import { ModalPage } from './page/modal/component'
 import { NavbarPage } from './page/navbar/component'
+import { SidebarPage } from './page/sidebar/component'
 import { NotFoundPage } from './page/not-found/component'
 import { NotificationPage } from './page/notification/component'
 import { PaginationPage } from './page/pagination/component'
@@ -90,6 +91,7 @@ export const view = (
         { id: 'message', name: 'Message' },
         { id: 'modal', name: 'Modal' },
         { id: 'navbar', name: 'Navbar' },
+        { id: 'sidebar', name: 'Sidebar' },
         { id: 'pagination', name: 'Pagination' },
         { id: 'panel', name: 'Panel' },
         { id: 'tabs', name: 'Tabs' },
@@ -137,7 +139,7 @@ export const view = (
       ? ''
       : model.route.page._tag.replace(/Page$/, '').toLowerCase()
 
-  const menuCategories: Menu.MenuCategory[] = categories.map((cat) => ({
+  const menuCategories: DsMenu.MenuCategory[] = categories.map((cat) => ({
     title: cat.title,
     items: cat.items.map((item) => ({
       id: item.id,
@@ -341,6 +343,13 @@ export const view = (
             dispatch={(subMsg) => dispatch({ _tag: 'NavbarPageMsg', subMsg })}
           />
         )
+      case 'SidebarPageModel':
+        return (
+          <SidebarPage
+            model={model.pageModel.model}
+            dispatch={(subMsg) => dispatch({ _tag: 'SidebarPageMsg', subMsg })}
+          />
+        )
       case 'NotificationPageModel':
         return (
           <NotificationPage
@@ -441,19 +450,19 @@ export const view = (
       className='flex min-h-screen flex-col bg-white font-sans text-gray-900'
     >
       {/* Top Navbar Header */}
-      <NavbarMemo
+      <DsNavbarMemo
         config={{ desktopNavItems: [], mobileNavItems: [] }}
         dispatch={() => {}}
       />
 
       {/* Main Layout Container */}
-      <ContainerMemo className='my-8 flex-1 w-full'>
+      <DsContainerMemo className='my-8 flex-1 w-full'>
         {() => (
-          <ColumnsMemo>
+          <DsColumnsMemo>
             {() => (
               <>
                 {/* Left Sidebar Navigation */}
-                <ColumnMemo className='w-full md:w-56 md:shrink-0 md:grow-0'>
+                <DsColumnMemo className='w-full md:w-56 md:shrink-0 md:grow-0'>
                   {() => (
                     <Sidebar
                       menuCategories={menuCategories}
@@ -461,20 +470,20 @@ export const view = (
                       navigateRoute={navigateRoute}
                     />
                   )}
-                </ColumnMemo>
+                </DsColumnMemo>
 
                 {/* Main Page Area */}
-                <ColumnMemo className='flex-1 min-w-0'>
+                <DsColumnMemo className='flex-1 min-w-0'>
                   {() => <div className='w-full'>{renderPage()}</div>}
-                </ColumnMemo>
+                </DsColumnMemo>
               </>
             )}
-          </ColumnsMemo>
+          </DsColumnsMemo>
         )}
-      </ContainerMemo>
+      </DsContainerMemo>
 
       {/* Footer */}
-      <FooterMemo />
+      <DsFooterMemo />
     </div>
   )
 }

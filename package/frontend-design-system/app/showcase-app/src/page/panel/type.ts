@@ -1,9 +1,9 @@
-import { Panel } from '@rinn7e/realworld-design-system'
+import { Panel as DsPanel } from '@rinn7e/realworld-design-system'
 
 export type Model = {
   showCode: boolean
-  panelModel: Panel.Model
+  panelModel: DsPanel.Model
 }
 
 export type Msg =
-  { _tag: 'ToggleShowCode' } | { _tag: 'PanelMsg'; subMsg: Panel.Msg }
+  { _tag: 'ToggleShowCode' } | { _tag: 'PanelMsg'; subMsg: DsPanel.Msg }

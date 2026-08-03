@@ -1,8 +1,8 @@
-import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
-import * as Tabs from '@rinn7e/realworld-design-system/component/tabs'
-import { TabsMemo } from '@rinn7e/realworld-design-system/component/tabs/component'
-import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
+import * as DsTabs from '@rinn7e/realworld-design-system/component/tabs'
+import { TabsMemo as DsTabsMemo } from '@rinn7e/realworld-design-system/component/tabs/component'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const TabsPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `<TabsMemo
+  const code = `<DsTabsMemo
   items={[
     { id: 'your_feed', label: 'Your Feed' },
     { id: 'global_feed', label: 'Global Feed' },
@@ -28,10 +28,10 @@ export const TabsPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='TabsPage' className='w-full space-y-8 text-left'>
-      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               COMPONENTS / TABS
             </div>
-            <TitleMemo
+            <DsTitleMemo
               size={2}
               className='mb-2 font-extrabold text-gray-900'
               children={() => 'Tabs'}
@@ -42,7 +42,7 @@ export const TabsPage: React.FC<Props> = ({ model, dispatch }) => {
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
-          <TitleMemo
+          <DsTitleMemo
             size={5}
             className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
             children={() => (
@@ -52,7 +52,7 @@ export const TabsPage: React.FC<Props> = ({ model, dispatch }) => {
               </>
             )}
           />
-          <ButtonMemo
+          <DsButtonMemo
             color='green'
             variant='link'
             size='small'
@@ -71,14 +71,14 @@ export const TabsPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Interactive Tab Bar',
           children: () => (
             <div className='w-full'>
-              <TabsMemo
+              <DsTabsMemo
                 items={[
                   { id: 'your_feed', label: 'Your Feed' },
                   { id: 'global_feed', label: 'Global Feed' },
                   { id: 'tag_feed', label: '#react' },
                 ]}
                 model={model.tabsModel}
-                dispatch={(subMsg: Tabs.Msg) =>
+                dispatch={(subMsg: DsTabs.Msg) =>
                   dispatch({ _tag: 'TabsMsg', subMsg })
                 }
               />

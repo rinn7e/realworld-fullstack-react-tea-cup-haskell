@@ -1,9 +1,9 @@
-import { Dropdown } from '@rinn7e/realworld-design-system'
+import { Dropdown as DsDropdown } from '@rinn7e/realworld-design-system'
 
 export type Model = {
   showCode: boolean
-  dropdownModel: Dropdown.Model
+  dropdownModel: DsDropdown.Model
 }
 
 export type Msg =
-  { _tag: 'ToggleShowCode' } | { _tag: 'DropdownMsg'; subMsg: Dropdown.Msg }
+  { _tag: 'ToggleShowCode' } | { _tag: 'DropdownMsg'; subMsg: DsDropdown.Msg }

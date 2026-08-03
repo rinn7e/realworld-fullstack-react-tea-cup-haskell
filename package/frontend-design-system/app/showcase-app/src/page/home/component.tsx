@@ -1,12 +1,12 @@
-import { ColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
-import { ColumnMemo } from '@rinn7e/realworld-design-system/grid/column/component'
-import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
-import { CardMemo } from '@rinn7e/realworld-design-system/component/card/component'
-import { BoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
-import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { ContentMemo } from '@rinn7e/realworld-design-system/element/content/component'
-import { TagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
-import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { ColumnsMemo as DsColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
+import { ColumnMemo as DsColumnMemo } from '@rinn7e/realworld-design-system/grid/column/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
+import { CardMemo as DsCardMemo } from '@rinn7e/realworld-design-system/component/card/component'
+import { BoxMemo as DsBoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { ContentMemo as DsContentMemo } from '@rinn7e/realworld-design-system/element/content/component'
+import { TagMemo as DsTagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { BookOpen, Code2, Layers, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -24,20 +24,20 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
   return (
     <div data-component='HomePage' className='w-full space-y-8'>
       {/* Hero Banner Intro */}
-      <HeroMemo
+      <DsHeroMemo
         variant='primary'
         size='medium'
         className='w-full rounded-xl p-8 shadow-md text-left'
         children={() => (
           <div className='space-y-4'>
             <div className='flex items-center gap-2'>
-              <TagMemo
+              <DsTagMemo
                 color='gray'
                 size='normal'
                 isRounded={true}
                 children={() => '@rinn7e/realworld-design-system'}
               />
-              <TagMemo
+              <DsTagMemo
                 color='gray'
                 variant='light'
                 size='small'
@@ -45,7 +45,7 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                 children={() => 'v0.1.0'}
               />
             </div>
-            <TitleMemo
+            <DsTitleMemo
               size={1}
               className='font-titillium font-extrabold text-white tracking-tight'
               children={() => 'Conduit RealWorld Design System'}
@@ -56,7 +56,7 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
               Architecture (TEA).
             </p>
             <div className='flex items-center gap-4 pt-2'>
-              <ButtonMemo
+              <DsButtonMemo
                 color='white'
                 variant='solid'
                 size='medium'
@@ -74,12 +74,12 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
       />
 
       {/* Grid of Key Features */}
-      <ColumnsMemo>
+      <DsColumnsMemo>
         {() => (
           <>
-            <ColumnMemo size='one-third'>
+            <DsColumnMemo size='one-third'>
               {() => (
-                <CardMemo
+                <DsCardMemo
                   header={
                     <div className='flex items-center gap-2 text-base font-bold text-green-600'>
                       <Layers className='h-5 w-5' />
@@ -88,7 +88,7 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                   }
                 >
                   {() => (
-                    <ContentMemo
+                    <DsContentMemo
                       size='small'
                       className='text-gray-600'
                       children={() =>
@@ -96,12 +96,12 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                       }
                     />
                   )}
-                </CardMemo>
+                </DsCardMemo>
               )}
-            </ColumnMemo>
-            <ColumnMemo size='one-third'>
+            </DsColumnMemo>
+            <DsColumnMemo size='one-third'>
               {() => (
-                <CardMemo
+                <DsCardMemo
                   header={
                     <div className='flex items-center gap-2 text-base font-bold text-sky-600'>
                       <Sparkles className='h-5 w-5' />
@@ -110,7 +110,7 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                   }
                 >
                   {() => (
-                    <ContentMemo
+                    <DsContentMemo
                       size='small'
                       className='text-gray-600'
                       children={() =>
@@ -118,12 +118,12 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                       }
                     />
                   )}
-                </CardMemo>
+                </DsCardMemo>
               )}
-            </ColumnMemo>
-            <ColumnMemo size='one-third'>
+            </DsColumnMemo>
+            <DsColumnMemo size='one-third'>
               {() => (
-                <CardMemo
+                <DsCardMemo
                   header={
                     <div className='flex items-center gap-2 text-base font-bold text-amber-600'>
                       <Code2 className='h-5 w-5' />
@@ -132,7 +132,7 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                   }
                 >
                   {() => (
-                    <ContentMemo
+                    <DsContentMemo
                       size='small'
                       className='text-gray-600'
                       children={() =>
@@ -140,27 +140,27 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                       }
                     />
                   )}
-                </CardMemo>
+                </DsCardMemo>
               )}
-            </ColumnMemo>
+            </DsColumnMemo>
           </>
         )}
-      </ColumnsMemo>
+      </DsColumnsMemo>
 
       {/* Quick Start Card */}
-      <BoxMemo
+      <DsBoxMemo
         className='p-6 bg-gray-50 border border-gray-200 rounded-lg text-left'
         children={() => (
           <div className='space-y-4'>
             <div className='flex items-center gap-2'>
               <BookOpen className='h-5 w-5 text-green-600' />
-              <TitleMemo
+              <DsTitleMemo
                 size={4}
                 className='font-bold text-gray-900'
                 children={() => 'Quick Start'}
               />
             </div>
-            <ContentMemo
+            <DsContentMemo
               children={() => (
                 <div className='space-y-3 text-sm text-gray-700'>
                   <p>Install the package into your project workspace:</p>
@@ -172,10 +172,10 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                     functions:
                   </p>
                   <pre className='rounded-md bg-gray-900 p-3 font-mono text-xs text-gray-200'>
-                    {`import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+                    {`import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
  
 // Render in your React TEA view function
-<ButtonMemo color='green' variant='solid' children={() => 'Submit'} />`}
+<DsButtonMemo color='green' variant='solid' children={() => 'Submit'} />`}
                   </pre>
                 </div>
               )}

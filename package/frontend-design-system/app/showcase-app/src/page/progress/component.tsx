@@ -1,7 +1,7 @@
-import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
-import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { ProgressMemo } from '@rinn7e/realworld-design-system/element/progress/component'
-import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { ProgressMemo as DsProgressMemo } from '@rinn7e/realworld-design-system/element/progress/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -16,32 +16,32 @@ interface Props {
 
 export const ProgressPage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `// Standard Progress Bar (Determinate)
-<ProgressMemo value={60} max={100} variant='primary' />
+<DsProgressMemo value={60} max={100} variant='primary' />
 
 // Color Variants
-<ProgressMemo value={30} variant='primary' />
-<ProgressMemo value={45} variant='link' />
-<ProgressMemo value={60} variant='info' />
-<ProgressMemo value={75} variant='success' />
-<ProgressMemo value={90} variant='warning' />
-<ProgressMemo value={100} variant='danger' />
+<DsProgressMemo value={30} variant='primary' />
+<DsProgressMemo value={45} variant='link' />
+<DsProgressMemo value={60} variant='info' />
+<DsProgressMemo value={75} variant='success' />
+<DsProgressMemo value={90} variant='warning' />
+<DsProgressMemo value={100} variant='danger' />
 
 // Sizes
-<ProgressMemo value={50} size='xsmall' />
-<ProgressMemo value={50} size='small' />
-<ProgressMemo value={50} size='normal' />
-<ProgressMemo value={50} size='medium' />
-<ProgressMemo value={50} size='large' />
+<DsProgressMemo value={50} size='xsmall' />
+<DsProgressMemo value={50} size='small' />
+<DsProgressMemo value={50} size='normal' />
+<DsProgressMemo value={50} size='medium' />
+<DsProgressMemo value={50} size='large' />
 
 // Indeterminate Progress Bar
-<ProgressMemo isIndeterminate={true} variant='primary' />`
+<DsProgressMemo isIndeterminate={true} variant='primary' />`
 
   return (
     <div data-component='ProgressPage' className='w-full space-y-8 text-left'>
-      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / PROGRESS
             </div>
-            <TitleMemo
+            <DsTitleMemo
               size={2}
               className='mb-2 font-extrabold text-gray-900'
               children={() => 'Progress'}
@@ -53,7 +53,7 @@ export const ProgressPage: React.FC<Props> = ({ model, dispatch }) => {
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
-          <TitleMemo
+          <DsTitleMemo
             size={5}
             className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
             children={() => (
@@ -63,7 +63,7 @@ export const ProgressPage: React.FC<Props> = ({ model, dispatch }) => {
               </>
             )}
           />
-          <ButtonMemo
+          <DsButtonMemo
             color='green'
             variant='link'
             size='small'
@@ -87,37 +87,37 @@ export const ProgressPage: React.FC<Props> = ({ model, dispatch }) => {
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Primary (30%)
                 </span>
-                <ProgressMemo value={30} max={100} variant='primary' />
+                <DsProgressMemo value={30} max={100} variant='primary' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Link (45%)
                 </span>
-                <ProgressMemo value={45} max={100} variant='link' />
+                <DsProgressMemo value={45} max={100} variant='link' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Info (60%)
                 </span>
-                <ProgressMemo value={60} max={100} variant='info' />
+                <DsProgressMemo value={60} max={100} variant='info' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Success (75%)
                 </span>
-                <ProgressMemo value={75} max={100} variant='success' />
+                <DsProgressMemo value={75} max={100} variant='success' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Warning (90%)
                 </span>
-                <ProgressMemo value={90} max={100} variant='warning' />
+                <DsProgressMemo value={90} max={100} variant='warning' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Danger (100%)
                 </span>
-                <ProgressMemo value={100} max={100} variant='danger' />
+                <DsProgressMemo value={100} max={100} variant='danger' />
               </div>
             </div>
           ) })}
@@ -131,31 +131,31 @@ export const ProgressPage: React.FC<Props> = ({ model, dispatch }) => {
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Very small
                 </span>
-                <ProgressMemo value={50} size='xsmall' variant='primary' />
+                <DsProgressMemo value={50} size='xsmall' variant='primary' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Small
                 </span>
-                <ProgressMemo value={50} size='small' variant='primary' />
+                <DsProgressMemo value={50} size='small' variant='primary' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Normal
                 </span>
-                <ProgressMemo value={50} size='normal' variant='primary' />
+                <DsProgressMemo value={50} size='normal' variant='primary' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Medium
                 </span>
-                <ProgressMemo value={50} size='medium' variant='primary' />
+                <DsProgressMemo value={50} size='medium' variant='primary' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Large
                 </span>
-                <ProgressMemo value={50} size='large' variant='primary' />
+                <DsProgressMemo value={50} size='large' variant='primary' />
               </div>
             </div>
           ) })}
@@ -169,19 +169,19 @@ export const ProgressPage: React.FC<Props> = ({ model, dispatch }) => {
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Indeterminate Primary
                 </span>
-                <ProgressMemo isIndeterminate={true} variant='primary' />
+                <DsProgressMemo isIndeterminate={true} variant='primary' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Indeterminate Info
                 </span>
-                <ProgressMemo isIndeterminate={true} variant='info' />
+                <DsProgressMemo isIndeterminate={true} variant='info' />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Indeterminate Success
                 </span>
-                <ProgressMemo isIndeterminate={true} variant='success' />
+                <DsProgressMemo isIndeterminate={true} variant='success' />
               </div>
             </div>
           ) })}

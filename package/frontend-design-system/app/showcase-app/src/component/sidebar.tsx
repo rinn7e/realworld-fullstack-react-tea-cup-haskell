@@ -1,29 +1,30 @@
-import { BoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
-import * as Menu from '@rinn7e/realworld-design-system/component/menu'
-import { MenuMemo } from '@rinn7e/realworld-design-system/component/menu/component'
+import * as DsMenu from '@rinn7e/realworld-design-system/component/menu'
+import { MenuMemo as DsMenuMemo } from '@rinn7e/realworld-design-system/component/menu/component'
+import { BoxMemo as DsBoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
 import React from 'react'
 
 import type { AppRoute } from '../route/type'
 
 export interface SidebarProps {
-  menuCategories: Menu.MenuCategory[]
-  menuModel: Menu.Model
+  menuCategories: DsMenu.MenuCategory[]
+  menuModel: DsMenu.Model
   navigateRoute: (route: AppRoute) => void
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   menuCategories,
   menuModel,
-  navigateRoute }) => {
+  navigateRoute,
+}) => {
   return (
     <div data-component='ShowcaseSidebar' className='w-full'>
-      <BoxMemo
-        className='p-4 w-full text-left bg-gray-50/50 border border-gray-200/80 rounded-lg'
+      <DsBoxMemo
+        className='w-full border border-gray-200/80 bg-gray-50/50 p-4 text-left rounded-lg'
         children={() => (
-          <MenuMemo
+          <DsMenuMemo
             categories={menuCategories}
             model={menuModel}
-            dispatch={(subMsg: Menu.Msg) => {
+            dispatch={(subMsg: DsMenu.Msg) => {
               if (subMsg._tag === 'Select') {
                 const compId = subMsg.id as string
                 const pageTagName =
@@ -32,7 +33,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
                     .join('') + 'Page'
                 navigateRoute({
-                  page: { _tag: pageTagName } as unknown as AppRoute['page'] })
+                  page: { _tag: pageTagName } as unknown as AppRoute['page'],
+                })
               }
             }}
           />

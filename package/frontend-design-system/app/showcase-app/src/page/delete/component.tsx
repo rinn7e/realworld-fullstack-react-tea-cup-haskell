@@ -1,7 +1,7 @@
-import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
-import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { DeleteMemo } from '@rinn7e/realworld-design-system/element/delete/component'
-import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { DeleteMemo as DsDeleteMemo } from '@rinn7e/realworld-design-system/element/delete/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -16,17 +16,17 @@ interface Props {
 
 export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `// Delete Button Sizes
-<DeleteMemo size='small' onClick={() => alert('Deleted!')} />
-<DeleteMemo size='normal' onClick={() => alert('Deleted!')} />
-<DeleteMemo size='medium' onClick={() => alert('Deleted!')} />
-<DeleteMemo size='large' onClick={() => alert('Deleted!')} />`
+<DsDeleteMemo size='small' onClick={() => alert('Deleted!')} />
+<DsDeleteMemo size='normal' onClick={() => alert('Deleted!')} />
+<DsDeleteMemo size='medium' onClick={() => alert('Deleted!')} />
+<DsDeleteMemo size='large' onClick={() => alert('Deleted!')} />`
 
   return (
     <div data-component='DeletePage' className='w-full space-y-8 text-left'>
-      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / DELETE
             </div>
-            <TitleMemo
+            <DsTitleMemo
               size={2}
               className='mb-2 font-extrabold text-gray-900'
               children={() => 'Delete'}
@@ -38,7 +38,7 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
-          <TitleMemo
+          <DsTitleMemo
             size={5}
             className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
             children={() => (
@@ -48,7 +48,7 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
               </>
             )}
           />
-          <ButtonMemo
+          <DsButtonMemo
             color='green'
             variant='link'
             size='small'
@@ -67,16 +67,16 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Delete Icon Button Sizes',
           children: () => (
             <div className='flex items-center gap-6'>
-              <DeleteMemo size='small' onClick={() => alert('Deleted!')} />
-              <DeleteMemo
+              <DsDeleteMemo size='small' onClick={() => alert('Deleted!')} />
+              <DsDeleteMemo
                 size='normal'
                 onClick={() => alert('Deleted!')}
               />
-              <DeleteMemo
+              <DsDeleteMemo
                 size='medium'
                 onClick={() => alert('Deleted!')}
               />
-              <DeleteMemo size='large' onClick={() => alert('Deleted!')} />
+              <DsDeleteMemo size='large' onClick={() => alert('Deleted!')} />
             </div>
           ) })}
 

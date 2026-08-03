@@ -331,6 +331,9 @@ importers:
 
   package/frontend-design-system:
     dependencies:
+      '@rinn7e/tea-cup-prelude':
+        specifier: 0.1.0-alpha.1
+        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -4872,6 +4875,18 @@ snapshots:
       io-ts-types: 0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11)))
       react: 19.2.8
       react-tea-cup: 5.1.1(react@19.2.8)(tea-cup-fp@1.1.1)
+      tailwind-merge: 3.6.0
+      tea-cup-fp: 1.1.1
+
+  '@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)':
+    dependencies:
+      '@devexperts/remote-data-ts': 2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))
+      clsx: 2.1.1
+      fp-ts: 2.16.11
+      io-ts: 2.2.22(fp-ts@2.16.11)
+      io-ts-types: 0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11)))
+      react: 19.2.8
+      react-tea-cup: 5.1.3(react@19.2.8)(tea-cup-fp@1.1.1)
       tailwind-merge: 3.6.0
       tea-cup-fp: 1.1.1
 

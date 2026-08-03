@@ -26,6 +26,7 @@ import type * as MenuPage from './page/menu/type'
 import type * as MessagePage from './page/message/type'
 import type * as ModalPage from './page/modal/type'
 import type * as NavbarPage from './page/navbar/type'
+import type * as SidebarPage from './page/sidebar/type'
 import type * as NotFoundPage from './page/not-found/type'
 import type * as NotificationPage from './page/notification/type'
 import type * as PaginationPage from './page/pagination/type'
@@ -80,6 +81,7 @@ export type PageModel =
   | { readonly _tag: 'MessagePageModel'; readonly model: MessagePage.Model }
   | { readonly _tag: 'ModalPageModel'; readonly model: ModalPage.Model }
   | { readonly _tag: 'NavbarPageModel'; readonly model: NavbarPage.Model }
+  | { readonly _tag: 'SidebarPageModel'; readonly model: SidebarPage.Model }
   | {
       readonly _tag: 'NotificationPageModel'
       readonly model: NotificationPage.Model
@@ -143,6 +145,7 @@ export type Msg =
   | { readonly _tag: 'MessagePageMsg'; readonly subMsg: MessagePage.Msg }
   | { readonly _tag: 'ModalPageMsg'; readonly subMsg: ModalPage.Msg }
   | { readonly _tag: 'NavbarPageMsg'; readonly subMsg: NavbarPage.Msg }
+  | { readonly _tag: 'SidebarPageMsg'; readonly subMsg: SidebarPage.Msg }
   | {
       readonly _tag: 'NotificationPageMsg'
       readonly subMsg: NotificationPage.Msg

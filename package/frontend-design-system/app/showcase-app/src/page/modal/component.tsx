@@ -1,8 +1,8 @@
-import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
-import * as Modal from '@rinn7e/realworld-design-system/component/modal'
-import { ModalMemo } from '@rinn7e/realworld-design-system/component/modal/component'
-import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
+import * as DsModal from '@rinn7e/realworld-design-system/component/modal'
+import { ModalMemo as DsModalMemo } from '@rinn7e/realworld-design-system/component/modal/component'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -16,26 +16,26 @@ interface Props {
 }
 
 export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `<ButtonMemo
+  const code = `<DsButtonMemo
   color='green'
   variant='solid'
   onClick={() => dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } })}
   children={() => 'Open Modal'}
 />
-<ModalMemo
+<DsModalMemo
   title='Confirm Delete'
   model={model.modalModel}
   dispatch={(subMsg) => dispatch({ _tag: 'ModalMsg', subMsg })}
 >
   {() => <p className='text-sm text-gray-600'>Are you sure you want to delete this article?</p>}
-</ModalMemo>`
+</DsModalMemo>`
 
   return (
     <div data-component='ModalPage' className='w-full space-y-8 text-left'>
-      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               COMPONENTS / MODAL
             </div>
-            <TitleMemo
+            <DsTitleMemo
               size={2}
               className='mb-2 font-extrabold text-gray-900'
               children={() => 'Modal'}
@@ -47,7 +47,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
-          <TitleMemo
+          <DsTitleMemo
             size={5}
             className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
             children={() => (
@@ -57,7 +57,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
               </>
             )}
           />
-          <ButtonMemo
+          <DsButtonMemo
             color='green'
             variant='link'
             size='small'
@@ -77,7 +77,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='flex w-full justify-center py-4'>
               <div>
-                <ButtonMemo
+                <DsButtonMemo
                   color='green'
                   variant='solid'
                   onClick={() =>
@@ -85,10 +85,10 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
                   }
                   children={() => 'Open Modal'}
                 />
-                <ModalMemo
+                <DsModalMemo
                   title='Confirm Action'
                   model={model.modalModel}
-                  dispatch={(subMsg: Modal.Msg) =>
+                  dispatch={(subMsg: DsModal.Msg) =>
                     dispatch({ _tag: 'ModalMsg', subMsg })
                   }
                 >
@@ -97,7 +97,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
                       Are you sure you want to delete this article?
                     </p>
                   )}
-                </ModalMemo>
+                </DsModalMemo>
               </div>
             </div>
           ) })}

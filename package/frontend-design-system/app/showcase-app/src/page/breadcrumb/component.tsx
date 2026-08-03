@@ -1,7 +1,7 @@
-import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
-import { BreadcrumbMemo } from '@rinn7e/realworld-design-system/component/breadcrumb/component'
-import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
+import { BreadcrumbMemo as DsBreadcrumbMemo } from '@rinn7e/realworld-design-system/component/breadcrumb/component'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { Code2 } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `<BreadcrumbMemo
+  const code = `<DsBreadcrumbMemo
   items={[
     { label: 'Home', href: '#' },
     { label: 'Components', href: '#' },
@@ -25,13 +25,13 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='BreadcrumbPage' className='w-full space-y-8'>
-      <HeroMemo
+      <DsHeroMemo
         variant='default'
         size='small'
         children={() => (
           <div className='flex items-center justify-between'>
             <div>
-              <TitleMemo
+              <DsTitleMemo
                 size={2}
                 className='font-bold text-gray-900'
                 children={() => 'Breadcrumb Component'}
@@ -40,7 +40,7 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
                 Breadcrumb navigation bar component.
               </p>
             </div>
-            <ButtonMemo
+            <DsButtonMemo
               color='green'
               variant={model.showCode ? 'outline' : 'solid'}
               onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
@@ -61,7 +61,7 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Standard Breadcrumb Navigation',
           children: () => (
             <div className='w-full'>
-              <BreadcrumbMemo
+              <DsBreadcrumbMemo
                 items={[
                   { label: 'Home', href: '#' },
                   { label: 'Components', href: '#' },

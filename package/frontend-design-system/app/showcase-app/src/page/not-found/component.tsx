@@ -1,6 +1,6 @@
-import { BoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
-import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { BoxMemo as DsBoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import React from 'react'
 
 import type { AppRoute } from '../../route/type'
@@ -12,16 +12,16 @@ interface Props {
 export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
   return (
     <div className='flex flex-col items-center justify-center py-16 text-center'>
-      <BoxMemo
+      <DsBoxMemo
         className='p-10 max-w-md space-y-4'
         children={() => (
           <>
-            <TitleMemo
+            <DsTitleMemo
               size={1}
               className='text-green-600 font-extrabold'
               children={() => '404'}
             />
-            <TitleMemo
+            <DsTitleMemo
               size={4}
               className='text-gray-800 font-bold'
               children={() => 'Page Not Found'}
@@ -31,7 +31,7 @@ export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
               design system catalog.
             </p>
             <div className='pt-2'>
-              <ButtonMemo
+              <DsButtonMemo
                 color='green'
                 variant='solid'
                 onClick={() => navigateRoute({ page: { _tag: 'HomePage' } })}

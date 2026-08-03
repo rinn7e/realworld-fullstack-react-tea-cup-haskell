@@ -23,6 +23,7 @@ export type SidebarProps = {
   model: Model
   items: NavItemData[]
   dispatch: (msg: Msg) => void
+  placement?: 'left' | 'right'
   className?: string
   key?: React.Key
   dataTest?: string
@@ -34,6 +35,7 @@ export const SidebarPropsEq: EqClass.Eq<SidebarProps> = EqClass.struct<
   model: ModelEq,
   items: A.getEq(NavItemDataEq),
   dispatch: EqClass.eqStrict,
+  placement: string.Eq,
   className: string.Eq,
   key: EqClass.eqStrict,
   dataTest: string.Eq,

@@ -1,17 +1,7 @@
-import { Cmd, Task } from 'tea-cup-fp'
+import { delayCmd } from '@rinn7e/tea-cup-prelude'
+import { Cmd } from 'tea-cup-fp'
 
 import type { Model, Msg } from './type'
-
-export const delayCmd = <Msg,>(ms: number, msg: Msg): Cmd<Msg> =>
-  Task.attempt(
-    Task.fromLambda(
-      () =>
-        new Promise<null>((resolve) => {
-          setTimeout(() => resolve(null), ms)
-        }),
-    ),
-    () => msg,
-  )
 
 export const init = (): [Model, Cmd<Msg>] => [
   {

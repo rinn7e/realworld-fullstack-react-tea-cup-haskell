@@ -1,6 +1,6 @@
-import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
-import { DotLoadingMemo } from '@rinn7e/realworld-design-system/misc/dot-loading/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
+import { DotLoadingMemo as DsDotLoadingMemo } from '@rinn7e/realworld-design-system/misc/dot-loading/component'
 import React from 'react'
 
 import { sectionView } from '../../component/section-view'
@@ -14,7 +14,7 @@ interface Props {
 export const DotLoadingPage: React.FC<Props> = () => {
   return (
     <div data-component='DotLoadingPage' className='w-full space-y-8 text-left'>
-      <HeroMemo
+      <DsHeroMemo
         variant='default'
         size='small'
         className='rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full'
@@ -23,7 +23,7 @@ export const DotLoadingPage: React.FC<Props> = () => {
             <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               MISC / DOT LOADING
             </div>
-            <TitleMemo
+            <DsTitleMemo
               size={2}
               className='mb-2 font-extrabold text-gray-900'
               children={() => 'Dot Loading'}
@@ -41,10 +41,10 @@ export const DotLoadingPage: React.FC<Props> = () => {
           children: () => (
             <div className='flex flex-col gap-4'>
               <div className='flex items-center gap-2 text-lg text-gray-700'>
-                Loading content <DotLoadingMemo />
+                Loading content <DsDotLoadingMemo />
               </div>
               <div className='flex items-center gap-2 text-sm font-medium text-green-600'>
-                Fetching data <DotLoadingMemo className='text-green-600' />
+                Fetching data <DsDotLoadingMemo className='text-green-600' />
               </div>
             </div>
           ),

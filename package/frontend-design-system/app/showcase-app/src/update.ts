@@ -1,4 +1,4 @@
-import { Menu } from '@rinn7e/realworld-design-system'
+import { Menu as DsMenu } from '@rinn7e/realworld-design-system'
 import { newUrl } from 'react-tea-cup'
 import { Cmd, Task } from 'tea-cup-fp'
 
@@ -28,6 +28,7 @@ import * as MenuPage from './page/menu/update'
 import * as MessagePage from './page/message/update'
 import * as ModalPage from './page/modal/update'
 import * as NavbarPage from './page/navbar/update'
+import * as SidebarPage from './page/sidebar/update'
 import * as NotFoundPage from './page/not-found/update'
 import * as NotificationPage from './page/notification/update'
 import * as PaginationPage from './page/pagination/update'
@@ -58,7 +59,7 @@ export const initPageModel =
   (newRoute: AppRoute) =>
   (model: Model): [Model, Cmd<Msg>] => {
     const activeMenuId = pageTagToComponentId(newRoute.page._tag)
-    const [menuModel] = Menu.init(activeMenuId)
+    const [menuModel] = DsMenu.init(activeMenuId)
 
     switch (newRoute.page._tag) {
       case 'HomePage': {
@@ -318,6 +319,19 @@ export const initPageModel =
             pageModel: { _tag: 'NavbarPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'NavbarPageMsg', subMsg })),
+        ]
+      }
+
+      case 'SidebarPage': {
+        const [subModel, subCmd] = SidebarPage.init()
+        return [
+          {
+            ...model,
+            route: newRoute,
+            menuModel,
+            pageModel: { _tag: 'SidebarPageModel', model: subModel },
+          },
+          subCmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
         ]
       }
 
@@ -613,7 +627,7 @@ const changeRouteHandler =
 
 export const init = (location: Location): [Model, Cmd<Msg>] => {
   const route = parseAppRoute('', location.href)
-  const [menuModel] = Menu.init('')
+  const [menuModel] = DsMenu.init('')
 
   const baseModel: Model = {
     route,
@@ -871,6 +885,17 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         cmd.map((subMsg) => ({ _tag: 'NavbarPageMsg', subMsg })),
       ]
     }
+    case 'SidebarPageMsg': {
+      if (model.pageModel._tag !== 'SidebarPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = SidebarPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'SidebarPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
+      ]
+    }
     case 'PaginationPageMsg': {
       if (model.pageModel._tag !== 'PaginationPageModel')
         return [model, Cmd.none()]
@@ -1098,7 +1123,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'MenuMsg': {
-      const [menuModel, cmd] = Menu.update(msg.subMsg)(model.menuModel)
+      const [menuModel, cmd] = DsMenu.update(msg.subMsg)(model.menuModel)
       if (msg.subMsg._tag === 'Select') {
         const item = msg.subMsg.id as string
         const pageTagName =
@@ -1113,7 +1138,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
       return [
         { ...model, menuModel },
-        cmd.map((subMsg: Menu.Msg) => ({ _tag: 'MenuMsg', subMsg })),
+        cmd.map((subMsg: DsMenu.Msg) => ({ _tag: 'MenuMsg', subMsg })),
       ]
     }
   }

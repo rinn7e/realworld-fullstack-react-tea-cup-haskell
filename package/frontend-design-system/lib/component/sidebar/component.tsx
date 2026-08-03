@@ -1,9 +1,9 @@
+import { cn } from '@rinn7e/tea-cup-prelude'
 import { X } from 'lucide-react'
 import React, { memo } from 'react'
 import { createPortal } from 'react-dom'
 
 import { ButtonMemo as DsButtonMemo } from '../../element/button/component'
-import { cn } from '../../theme'
 import { GenericLink } from '../generic-link'
 
 import type { SidebarProps } from './type'
@@ -13,6 +13,7 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
   model,
   items,
   dispatch,
+  placement = 'right',
   className,
   key,
   dataTest,
@@ -24,16 +25,21 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
     return null
   }
 
+  const isLeft = placement === 'left'
+
   const backdropCls = cn(
     'absolute inset-0 bg-black/50',
     state === 'AnimateIn' && 'animate-fade-in',
     state === 'AnimateOut' && 'animate-fade-out',
   )
 
+  const slideInCls = isLeft ? 'animate-slide-in-left' : 'animate-slide-in'
+  const slideOutCls = isLeft ? 'animate-slide-out-left' : 'animate-slide-out'
+
   const sidebarCls = cn(
     'relative flex flex-col w-[280px] h-full bg-white shadow-xl p-[16px] overflow-y-auto',
-    state === 'AnimateIn' && 'animate-slide-in',
-    state === 'AnimateOut' && 'animate-slide-out',
+    state === 'AnimateIn' && slideInCls,
+    state === 'AnimateOut' && slideOutCls,
     className,
   )
 
@@ -44,7 +50,10 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
     <div
       key={key}
       data-test={dataTest || 'sidebar'}
-      className='absolute inset-0 z-[100] flex justify-end overflow-hidden'
+      className={cn(
+        'absolute inset-0 z-[100] flex overflow-hidden',
+        isLeft ? 'justify-start' : 'justify-end',
+      )}
     >
       {/* backdrop */}
       <div

@@ -1,6 +1,6 @@
-import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
-import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import {
   Code2,
   Download,
@@ -22,33 +22,33 @@ interface Props {
 
 export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `// Solid Style (variant = 'solid')
-<ButtonMemo color='white' variant='solid' children={() => 'White'} />
-<ButtonMemo color='green' variant='solid' children={() => 'Green'} />
+<DsButtonMemo color='white' variant='solid' children={() => 'White'} />
+<DsButtonMemo color='green' variant='solid' children={() => 'Green'} />
 
 // Outline Style (variant = 'outline')
-<ButtonMemo color='white' variant='outline' children={() => 'White'} />
-<ButtonMemo color='green' variant='outline' children={() => 'Green'} />
+<DsButtonMemo color='white' variant='outline' children={() => 'White'} />
+<DsButtonMemo color='green' variant='outline' children={() => 'Green'} />
 
 // Link Style (variant = 'link')
-<ButtonMemo color='white' variant='link' children={() => 'White Link'} />
-<ButtonMemo color='green' variant='link' children={() => 'Green Link'} />
+<DsButtonMemo color='white' variant='link' children={() => 'White Link'} />
+<DsButtonMemo color='green' variant='link' children={() => 'Green Link'} />
 
 // Sizes & Shapes
-<ButtonMemo size='small' children={() => 'Small'} />
-<ButtonMemo size='normal' children={() => 'Normal'} />
-<ButtonMemo isRounded={true} children={() => 'Rounded'} />
+<DsButtonMemo size='small' children={() => 'Small'} />
+<DsButtonMemo size='normal' children={() => 'Normal'} />
+<DsButtonMemo isRounded={true} children={() => 'Rounded'} />
 
 // States & Width
-<ButtonMemo isDisabled={true} children={() => 'Disabled'} />
-<ButtonMemo isLoading={true} children={() => 'Loading'} />
-<ButtonMemo isFullWidth={true} children={() => 'Full Width Button'} />`
+<DsButtonMemo isDisabled={true} children={() => 'Disabled'} />
+<DsButtonMemo isLoading={true} children={() => 'Loading'} />
+<DsButtonMemo isFullWidth={true} children={() => 'Full Width Button'} />`
 
   return (
     <div data-component='ButtonPage' className='w-full space-y-8 text-left'>
-      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / BUTTON
             </div>
-            <TitleMemo
+            <DsTitleMemo
               size={2}
               className='mb-2 font-extrabold text-gray-900'
               children={() => 'Button'}
@@ -62,7 +62,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
-          <TitleMemo
+          <DsTitleMemo
             size={5}
             className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
             children={() => (
@@ -72,7 +72,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
               </>
             )}
           />
-          <ButtonMemo
+          <DsButtonMemo
             color='green'
             variant='link'
             size='small'
@@ -92,17 +92,17 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Solid Variant (variant = "solid")',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <ButtonMemo color='white' variant='solid' children={() => 'White'} />
-              <ButtonMemo color='green' variant='solid' children={() => 'Green'} />
-              <ButtonMemo
+              <DsButtonMemo color='white' variant='solid' children={() => 'White'} />
+              <DsButtonMemo color='green' variant='solid' children={() => 'Green'} />
+              <DsButtonMemo
                 color='dark-green'
                 variant='solid'
                 children={() => 'Dark Green'}
               />
-              <ButtonMemo color='sky' variant='solid' children={() => 'Sky'} />
-              <ButtonMemo color='amber' variant='solid' children={() => 'Amber'} />
-              <ButtonMemo color='red' variant='solid' children={() => 'Red'} />
-              <ButtonMemo color='gray' variant='solid' children={() => 'Gray'} />
+              <DsButtonMemo color='sky' variant='solid' children={() => 'Sky'} />
+              <DsButtonMemo color='amber' variant='solid' children={() => 'Amber'} />
+              <DsButtonMemo color='red' variant='solid' children={() => 'Red'} />
+              <DsButtonMemo color='gray' variant='solid' children={() => 'Gray'} />
             </div>
           ) })}
 
@@ -111,17 +111,17 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Outline Variant (variant = "outline")',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <ButtonMemo color='white' variant='outline' children={() => 'White'} />
-              <ButtonMemo color='green' variant='outline' children={() => 'Green'} />
-              <ButtonMemo
+              <DsButtonMemo color='white' variant='outline' children={() => 'White'} />
+              <DsButtonMemo color='green' variant='outline' children={() => 'Green'} />
+              <DsButtonMemo
                 color='dark-green'
                 variant='outline'
                 children={() => 'Dark Green'}
               />
-              <ButtonMemo color='sky' variant='outline' children={() => 'Sky'} />
-              <ButtonMemo color='amber' variant='outline' children={() => 'Amber'} />
-              <ButtonMemo color='red' variant='outline' children={() => 'Red'} />
-              <ButtonMemo color='gray' variant='outline' children={() => 'Gray'} />
+              <DsButtonMemo color='sky' variant='outline' children={() => 'Sky'} />
+              <DsButtonMemo color='amber' variant='outline' children={() => 'Amber'} />
+              <DsButtonMemo color='red' variant='outline' children={() => 'Red'} />
+              <DsButtonMemo color='gray' variant='outline' children={() => 'Gray'} />
             </div>
           ) })}
 
@@ -130,17 +130,17 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Link Variant (variant = "link")',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <ButtonMemo color='white' variant='link' children={() => 'White'} />
-              <ButtonMemo color='green' variant='link' children={() => 'Green'} />
-              <ButtonMemo
+              <DsButtonMemo color='white' variant='link' children={() => 'White'} />
+              <DsButtonMemo color='green' variant='link' children={() => 'Green'} />
+              <DsButtonMemo
                 color='dark-green'
                 variant='link'
                 children={() => 'Dark Green'}
               />
-              <ButtonMemo color='sky' variant='link' children={() => 'Sky'} />
-              <ButtonMemo color='amber' variant='link' children={() => 'Amber'} />
-              <ButtonMemo color='red' variant='link' children={() => 'Red'} />
-              <ButtonMemo color='gray' variant='link' children={() => 'Gray'} />
+              <DsButtonMemo color='sky' variant='link' children={() => 'Sky'} />
+              <DsButtonMemo color='amber' variant='link' children={() => 'Amber'} />
+              <DsButtonMemo color='red' variant='link' children={() => 'Red'} />
+              <DsButtonMemo color='gray' variant='link' children={() => 'Gray'} />
             </div>
           ) })}
 
@@ -149,17 +149,17 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Ghost Variant (variant = "ghost")',
           children: () => (
             <div className='flex flex-wrap items-center gap-3 rounded bg-gray-800 p-4'>
-              <ButtonMemo color='white' variant='ghost' children={() => 'White'} />
-              <ButtonMemo color='green' variant='ghost' children={() => 'Green'} />
-              <ButtonMemo
+              <DsButtonMemo color='white' variant='ghost' children={() => 'White'} />
+              <DsButtonMemo color='green' variant='ghost' children={() => 'Green'} />
+              <DsButtonMemo
                 color='dark-green'
                 variant='ghost'
                 children={() => 'Dark Green'}
               />
-              <ButtonMemo color='sky' variant='ghost' children={() => 'Sky'} />
-              <ButtonMemo color='amber' variant='ghost' children={() => 'Amber'} />
-              <ButtonMemo color='red' variant='ghost' children={() => 'Red'} />
-              <ButtonMemo color='gray' variant='ghost' children={() => 'Gray'} />
+              <DsButtonMemo color='sky' variant='ghost' children={() => 'Sky'} />
+              <DsButtonMemo color='amber' variant='ghost' children={() => 'Amber'} />
+              <DsButtonMemo color='red' variant='ghost' children={() => 'Red'} />
+              <DsButtonMemo color='gray' variant='ghost' children={() => 'Gray'} />
             </div>
           ) })}
 
@@ -168,27 +168,27 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Button Sizes',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <ButtonMemo
+              <DsButtonMemo
                 color='green'
                 size='xsmall'
                 children={() => 'XSmall (xs)'}
               />
-              <ButtonMemo
+              <DsButtonMemo
                 color='green'
                 size='small'
                 children={() => 'Small (sm)'}
               />
-              <ButtonMemo
+              <DsButtonMemo
                 color='green'
                 size='normal'
                 children={() => 'Normal (base)'}
               />
-              <ButtonMemo
+              <DsButtonMemo
                 color='green'
                 size='medium'
                 children={() => 'Medium (md)'}
               />
-              <ButtonMemo
+              <DsButtonMemo
                 color='green'
                 size='large'
                 children={() => 'Large (lg)'}
@@ -201,17 +201,17 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Shapes & Rounded Pill',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <ButtonMemo
+              <DsButtonMemo
                 color='green'
                 isRounded={false}
                 children={() => 'Standard Square'}
               />
-              <ButtonMemo
+              <DsButtonMemo
                 color='green'
                 isRounded={true}
                 children={() => 'Rounded Pill'}
               />
-              <ButtonMemo
+              <DsButtonMemo
                 color='sky'
                 variant='outline'
                 isRounded={true}
@@ -225,7 +225,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Icons inside Buttons',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <ButtonMemo
+              <DsButtonMemo
                 color='green'
                 children={() => (
                   <span className='flex items-center gap-1.5'>
@@ -234,7 +234,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
                   </span>
                 )}
               />
-              <ButtonMemo
+              <DsButtonMemo
                 color='sky'
                 variant='outline'
                 children={() => (
@@ -244,7 +244,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
                   </span>
                 )}
               />
-              <ButtonMemo
+              <DsButtonMemo
                 color='red'
                 variant='solid'
                 children={() => (
@@ -254,7 +254,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
                   </span>
                 )}
               />
-              <ButtonMemo
+              <DsButtonMemo
                 color='amber'
                 children={() => (
                   <span className='flex items-center gap-1.5'>
@@ -263,7 +263,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
                   </span>
                 )}
               />
-              <ButtonMemo
+              <DsButtonMemo
                 color='dark-green'
                 isRounded={true}
                 children={() => (
@@ -282,17 +282,17 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='space-y-4'>
               <div className='flex flex-wrap items-center gap-3'>
-                <ButtonMemo
+                <DsButtonMemo
                   color='green'
                   isLoading={true}
                   children={() => 'Loading State'}
                 />
-                <ButtonMemo
+                <DsButtonMemo
                   color='green'
                   isDisabled={true}
                   children={() => 'Disabled State'}
                 />
-                <ButtonMemo
+                <DsButtonMemo
                   color='red'
                   variant='outline'
                   isDisabled={true}
@@ -300,7 +300,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
                 />
               </div>
               <div>
-                <ButtonMemo
+                <DsButtonMemo
                   color='green'
                   isFullWidth={true}
                   children={() => 'Full Width Button Block'}

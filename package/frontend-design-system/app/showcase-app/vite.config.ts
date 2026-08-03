@@ -8,10 +8,6 @@ export default defineConfig({
   resolve: {
     extensions: ['.mjs', '.js', '.ts', '.tsx', '.jsx'],
     alias: {
-      '@rinn7e/realworld-design-system/styles.css': path.resolve(
-        __dirname,
-        '../../dist/styles.css',
-      ),
       '@rinn7e/realworld-design-system/plugin': path.resolve(
         __dirname,
         '../../dist/plugin.mjs',

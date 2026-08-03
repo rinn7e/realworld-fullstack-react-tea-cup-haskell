@@ -158,6 +158,10 @@ export default defineConfig({
           __dirname,
           'lib/component/tabs/component.tsx',
         ),
+        'component/sidebar': path.resolve(
+          __dirname,
+          'lib/component/sidebar/index.ts',
+        ),
         'component/sidebar/component': path.resolve(
           __dirname,
           'lib/component/sidebar/component.tsx',
