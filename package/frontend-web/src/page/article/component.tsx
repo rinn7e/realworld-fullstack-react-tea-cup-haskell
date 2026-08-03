@@ -1,5 +1,7 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { Button, Image, Tag } from '@rinn7e/realworld-design-system'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Image from '@rinn7e/realworld-design-system/element/image/view'
+import * as Tag from '@rinn7e/realworld-design-system/element/tag/view'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'

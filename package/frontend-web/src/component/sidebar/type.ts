@@ -3,7 +3,7 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import type { Dispatcher } from 'tea-cup-fp'
 
 import * as Animate from '@/common/type/animate'
-import { type NavItemData, mkNavItemDataEq } from '@/common/type/nav-item'
+import { type NavItemData, mkNavItemDataEq } from '@rinn7e/realworld-design-system/type/nav-item'
 
 export type Model = {
   status: Animate.Animate<null>

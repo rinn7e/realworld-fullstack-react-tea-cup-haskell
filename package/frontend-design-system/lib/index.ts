@@ -1,5 +1,4 @@
 export * from './theme'
-export * from './common'
 
 // Element
 export * as Block from './element/block'

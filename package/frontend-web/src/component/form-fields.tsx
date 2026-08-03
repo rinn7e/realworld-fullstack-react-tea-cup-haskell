@@ -1,4 +1,4 @@
-import { Button } from '@rinn7e/realworld-design-system'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
 import * as Form from '@rinn7e/tea-cup-form'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as E from 'fp-ts/lib/Either'
@@ -106,7 +106,7 @@ export const standardInputUi =
           Button.view({
             color: 'gray',
             variant: 'ghost',
-            onClick: (e) =>
+            onClick: (e: React.MouseEvent<HTMLButtonElement>) =>
               props.dispatch({
                 _tag: 'SetRevealPassword',
                 reveal: !variant.reveal,

@@ -1,4 +1,4 @@
-import { Button } from '@rinn7e/realworld-design-system'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
 import { Heart } from 'lucide-react'
 import React from 'react'
 

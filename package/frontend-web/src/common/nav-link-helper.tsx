@@ -1,11 +1,12 @@
-import { Image, Navbar } from '@rinn7e/realworld-design-system'
+import * as Image from '@rinn7e/realworld-design-system/element/image/view'
+import * as Navbar from '@rinn7e/realworld-design-system/component/navbar'
 import type { Option } from 'fp-ts/lib/Option'
 import { Menu, Pencil, Settings } from 'lucide-react'
 import React from 'react'
 
 import type { User } from '@/common/api'
-import type { NavItemData } from '@/common/type/nav-item'
 import { homePage, toUrlString } from '@/common/type/route'
+import type { NavItemData } from '@rinn7e/realworld-design-system/type/nav-item'
 import type { Model, Msg } from '@/type'
 
 import {

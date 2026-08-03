@@ -5,7 +5,7 @@ import {
   EqAlways,
   type NavItemData,
   mkNavItemDataEq,
-} from '../../common/nav-item'
+} from '../../type/nav-item'
 
 export type Config<PMsg> = {
   brandNavItem?: NavItemData<PMsg>

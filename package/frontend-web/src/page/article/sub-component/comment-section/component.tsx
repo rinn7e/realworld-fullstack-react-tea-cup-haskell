@@ -1,5 +1,6 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { Button, Image } from '@rinn7e/realworld-design-system'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Image from '@rinn7e/realworld-design-system/element/image/view'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Trash2 } from 'lucide-react'

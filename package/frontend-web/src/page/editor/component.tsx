@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { Button } from '@rinn7e/realworld-design-system'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
 import { FormItemMemo } from '@rinn7e/tea-cup-form/component'
 import React from 'react'
 

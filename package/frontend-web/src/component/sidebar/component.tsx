@@ -1,4 +1,4 @@
-import { Button } from '@rinn7e/realworld-design-system'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { X } from 'lucide-react'
 import React, { useContext } from 'react'

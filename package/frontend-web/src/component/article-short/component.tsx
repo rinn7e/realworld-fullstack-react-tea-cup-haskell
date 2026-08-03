@@ -1,4 +1,7 @@
-import { Content, Image, Tag, Title } from '@rinn7e/realworld-design-system'
+import * as Content from '@rinn7e/realworld-design-system/element/content/view'
+import * as Image from '@rinn7e/realworld-design-system/element/image/view'
+import * as Tag from '@rinn7e/realworld-design-system/element/tag/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 

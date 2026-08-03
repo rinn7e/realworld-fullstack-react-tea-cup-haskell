@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { Tag } from '@rinn7e/realworld-design-system'
+import * as Tag from '@rinn7e/realworld-design-system/element/tag/view'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
@@ -115,7 +115,7 @@ const HomePageComponent = ({ model, shared, dispatch }: Props) => {
                           variant: 'light',
                           isRounded: true,
                           size: 'small',
-                          onClick: (e) => {
+                          onClick: (e: React.MouseEvent<HTMLElement>) => {
                             e.preventDefault()
                             dispatch({
                               _tag: 'ChangeTab',

@@ -1,4 +1,4 @@
-import { Navbar } from '@rinn7e/realworld-design-system'
+import { NavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
@@ -39,7 +39,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
           isNavOpen && 'h-dvh overflow-hidden',
         )}
       >
-        <Navbar.NavbarMemo config={navbarConfig} dispatch={dispatch} />
+        <NavbarMemo config={navbarConfig} dispatch={dispatch} />
         <main className='flex-grow'>{renderPage(model, dispatch)}</main>
         <Footer />
       </div>

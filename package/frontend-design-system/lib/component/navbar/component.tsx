@@ -1,8 +1,8 @@
 import React, { memo } from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
-import { GenericLink } from '../../common/generic-link'
-import type { NavItemData } from '../../common/nav-item'
+import { GenericLink } from '../generic-link'
+import type { NavItemData } from '../../type/nav-item'
 import { cn } from '../../theme'
 
 import type { Props } from './type'

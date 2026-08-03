@@ -1,5 +1,6 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { Button, Image } from '@rinn7e/realworld-design-system'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Image from '@rinn7e/realworld-design-system/element/image/view'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
