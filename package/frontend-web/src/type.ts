@@ -2,6 +2,7 @@ import type { Option } from 'fp-ts/lib/Option'
 
 import type { User, UserWithToken } from '@/common/api/type'
 import type * as DebugPanel from '@/component/debug-panel'
+import type * as Sidebar from '@/component/sidebar'
 import type * as ArticlePage from '@/page/article/type'
 import type * as EditorPage from '@/page/editor/type'
 import type * as HomePage from '@/page/home/type'
@@ -10,7 +11,6 @@ import type * as ProfilePage from '@/page/profile/type'
 import type * as SettingsPage from '@/page/settings/type'
 import type * as SignupPage from '@/page/signup/type'
 
-import { type Animate, type AnimateState } from './common/type/animate'
 import { type AppRoute } from './common/type/route'
 import { type Shared } from './common/type/shared'
 
@@ -31,7 +31,7 @@ export type Model = {
   pageModel: PageModel
   isInternal: boolean
   debugPanel: DebugPanel.Model
-  navbarMobileOpen: Animate<null>
+  sidebar: Sidebar.Model
 }
 
 export type Msg =
@@ -54,5 +54,5 @@ export type Msg =
   | { _tag: 'ProfilePageMsg'; subMsg: ProfilePage.Msg }
   | { _tag: 'EditorPageMsg'; subMsg: EditorPage.Msg }
   | { _tag: 'DebugPanelMsg'; subMsg: DebugPanel.Msg }
-  | { _tag: 'ToggleNavbarMobile'; open: boolean }
-  | { _tag: 'SetNavbarMobileState'; state: AnimateState }
+  | { _tag: 'SidebarMsg'; subMsg: Sidebar.Msg }
+

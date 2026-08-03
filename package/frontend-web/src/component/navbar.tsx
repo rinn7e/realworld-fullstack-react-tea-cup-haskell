@@ -3,15 +3,15 @@ import { cn } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
 import type { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
-import { Menu, Pencil, Settings, X } from 'lucide-react'
+import { Menu, Pencil, Settings } from 'lucide-react'
 import React from 'react'
-import { createPortal } from 'react-dom'
 import type { Dispatcher } from 'tea-cup-fp'
 
 import type { User } from '@/common/api'
 import { homePage } from '@/common/type/route'
 import { assetPath } from '@/common/util'
 import { Link } from '@/component/link'
+import { SidebarComponent } from '@/component/sidebar'
 import type { Model, Msg } from '@/type'
 
 interface Props {
@@ -150,22 +150,6 @@ export const Navbar: React.FC<Props> = ({ model, dispatch }) => {
     </>
   )
 
-  const animate = model.navbarMobileOpen
-  const state = animate.state._tag
-  const isVisible = state !== 'Invisible'
-
-  const backdropCls = cn(
-    'absolute inset-0 bg-black/50',
-    state === 'AnimateIn' && 'animate-fade-in',
-    state === 'AnimateOut' && 'animate-fade-out',
-  )
-
-  const sidebarCls = cn(
-    'relative flex flex-col w-[280px] h-full bg-white shadow-xl p-[16px] overflow-y-auto',
-    state === 'AnimateIn' && 'animate-slide-in',
-    state === 'AnimateOut' && 'animate-slide-out',
-  )
-
   return (
     <nav
       className='sticky top-0 z-20 border-b border-gray-100 bg-white shadow-sm'
@@ -195,7 +179,11 @@ export const Navbar: React.FC<Props> = ({ model, dispatch }) => {
           {Button.view({
             color: 'gray',
             variant: 'ghost',
-            onClick: () => dispatch({ _tag: 'ToggleNavbarMobile', open: true }),
+            onClick: () =>
+              dispatch({
+                _tag: 'SidebarMsg',
+                subMsg: { _tag: 'Toggle', open: true },
+              }),
             className: 'p-[8px] lg:hidden',
             children: () => <Menu size={24} />,
           })}
@@ -207,39 +195,13 @@ export const Navbar: React.FC<Props> = ({ model, dispatch }) => {
         </div>
       </div>
 
-      {/* mobile sidebar portal */}
-      {isVisible &&
-        createPortal(
-          <div className='absolute inset-0 z-[100] flex justify-end overflow-hidden'>
-            {/* backdrop */}
-            <div
-              className={backdropCls}
-              onClick={() =>
-                dispatch({ _tag: 'ToggleNavbarMobile', open: false })
-              }
-            />
-            {/* sidebar content */}
-            <div className={sidebarCls}>
-              <div className='flex flex-col gap-[16px]'>
-                <div className='flex items-center justify-between'>
-                  <span className='text-xl font-bold text-green-600'>
-                    conduit
-                  </span>
-                  {Button.view({
-                    color: 'gray',
-                    variant: 'ghost',
-                    onClick: () =>
-                      dispatch({ _tag: 'ToggleNavbarMobile', open: false }),
-                    className: 'p-[8px]',
-                    children: () => <X size={24} />,
-                  })}
-                </div>
-                <ul className='flex flex-col gap-[8px]'>{links(true)}</ul>
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
+      {/* mobile sidebar portal component */}
+      <SidebarComponent
+        model={model.sidebar}
+        dispatch={(subMsg) => dispatch({ _tag: 'SidebarMsg', subMsg })}
+      >
+        <ul className='flex flex-col gap-[8px]'>{links(true)}</ul>
+      </SidebarComponent>
     </nav>
   )
 }

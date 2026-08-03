@@ -25,6 +25,7 @@ import {
   toUrlString,
 } from '@/common/type/route'
 import * as DebugPanel from '@/component/debug-panel'
+import * as Sidebar from '@/component/sidebar'
 import * as ArticlePage from '@/page/article/update'
 import * as EditorPage from '@/page/editor/update'
 import * as HomePage from '@/page/home/update'
@@ -78,7 +79,7 @@ export const init = (
     pageModel: { _tag: 'NotFoundPageModel' },
     isInternal: false,
     debugPanel: DebugPanel.init(),
-    navbarMobileOpen: { internal: null, state: { _tag: 'Invisible' } },
+    sidebar: Sidebar.init(),
   }
   const initCmd = Cmd.batch([trackVisitorCmd(token, route)])
 
@@ -144,10 +145,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'HomePageModel', model: homeModel },
-            navbarMobileOpen: {
-              internal: null,
-              state: { _tag: 'Invisible' },
-            },
+            sidebar: Sidebar.init(),
           },
           homeCmd.map((msg) => ({ _tag: 'HomePageMsg', subMsg: msg })),
         ]
@@ -162,10 +160,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'ArticlePageModel', model: articleModel },
-            navbarMobileOpen: {
-              internal: null,
-              state: { _tag: 'Invisible' },
-            },
+            sidebar: Sidebar.init(),
           },
           articleCmd.map((msg) => ({
             _tag: 'ArticlePageMsg',
@@ -180,10 +175,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'LoginPageModel', model: loginModel },
-            navbarMobileOpen: {
-              internal: null,
-              state: { _tag: 'Invisible' },
-            },
+            sidebar: Sidebar.init(),
           },
           loginCmd.map((msg) => ({ _tag: 'LoginPageMsg', subMsg: msg })),
         ]
@@ -195,10 +187,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'SignupPageModel', model: signupModel },
-            navbarMobileOpen: {
-              internal: null,
-              state: { _tag: 'Invisible' },
-            },
+            sidebar: Sidebar.init(),
           },
           signupCmd.map((msg) => ({ _tag: 'SignupPageMsg', subMsg: msg })),
         ]
@@ -215,10 +204,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'SettingsPageModel', model: settingsModel },
-            navbarMobileOpen: {
-              internal: null,
-              state: { _tag: 'Invisible' },
-            },
+            sidebar: Sidebar.init(),
           },
           settingsCmd.map((msg) => ({
             _tag: 'SettingsPageMsg',
@@ -237,10 +223,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'ProfilePageModel', model: profileModel },
-            navbarMobileOpen: {
-              internal: null,
-              state: { _tag: 'Invisible' },
-            },
+            sidebar: Sidebar.init(),
           },
           profileCmd.map((msg) => ({
             _tag: 'ProfilePageMsg',
@@ -261,10 +244,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'EditorPageModel', model: editorModel },
-            navbarMobileOpen: {
-              internal: null,
-              state: { _tag: 'Invisible' },
-            },
+            sidebar: Sidebar.init(),
           },
           editorCmd.map((msg) => ({ _tag: 'EditorPageMsg', subMsg: msg })),
         ]
@@ -275,10 +255,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'NotFoundPageModel' },
-            navbarMobileOpen: {
-              internal: null,
-              state: { _tag: 'Invisible' },
-            },
+            sidebar: Sidebar.init(),
           },
           Cmd.none(),
         ]
@@ -395,7 +372,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
           {
             ...model,
             isInternal: false,
-            navbarMobileOpen: { internal: null, state: { _tag: 'Invisible' } },
+            sidebar: Sidebar.init(),
           },
           Cmd.none(),
         ]
@@ -712,42 +689,19 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         },
         Cmd.none(),
       ]
-    case 'ToggleNavbarMobile': {
-      if (msg.open) {
-        return [
-          {
-            ...model,
-            navbarMobileOpen: { internal: null, state: { _tag: 'AnimateIn' } },
-          },
-          delayCmd(150, {
-            _tag: 'SetNavbarMobileState',
-            state: { _tag: 'Visible' },
-          }),
-        ]
-      } else {
-        return [
-          {
-            ...model,
-            navbarMobileOpen: {
-              ...model.navbarMobileOpen,
-              state: { _tag: 'AnimateOut' },
-            },
-          },
-          delayCmd(150, {
-            _tag: 'SetNavbarMobileState',
-            state: { _tag: 'Invisible' },
-          }),
-        ]
-      }
-    }
-    case 'SetNavbarMobileState':
+    case 'SidebarMsg': {
+      const [sidebarModel, sidebarCmd] = Sidebar.update(
+        msg.subMsg,
+        model.sidebar,
+      )
       return [
         {
           ...model,
-          navbarMobileOpen: { ...model.navbarMobileOpen, state: msg.state },
+          sidebar: sidebarModel,
         },
-        Cmd.none(),
+        sidebarCmd.map((subMsg) => ({ _tag: 'SidebarMsg', subMsg })),
       ]
+    }
   }
 }
 

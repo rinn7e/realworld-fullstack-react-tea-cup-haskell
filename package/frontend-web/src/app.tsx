@@ -22,7 +22,7 @@ interface Props {
 }
 
 export const App: React.FC<Props> = ({ model, dispatch }) => {
-  const isNavOpen = model.navbarMobileOpen.state._tag !== 'Invisible'
+  const isNavOpen = model.sidebar.status.state._tag !== 'Invisible'
 
   return (
     <SetGlobalMsgContext value={dispatch}>
