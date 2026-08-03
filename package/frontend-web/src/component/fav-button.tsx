@@ -1,4 +1,4 @@
-import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { Heart } from 'lucide-react'
 import React from 'react'
 
@@ -14,40 +14,42 @@ const normalFavButtonGreen = ({
   favorited,
   favoritesCount,
   onClick,
-}: FavButtonProps): React.ReactElement =>
-  Button.view({
-    color: 'green',
-    variant: favorited ? 'solid' : 'outline',
-    size: 'xsmall',
-    dataTest: 'fav-button',
-    onClick,
-    children: () => (
+}: FavButtonProps): React.ReactElement => (
+  <DsButtonMemo
+    color='green'
+    variant={favorited ? 'solid' : 'outline'}
+    size='xsmall'
+    dataTest='fav-button'
+    onClick={onClick}
+    children={() => (
       <span className='flex items-center gap-1'>
         <Heart size={12} fill={favorited ? 'currentColor' : 'none'} />
         <span>{favoritesCount}</span>
       </span>
-    ),
-  })
+    )}
+  />
+)
 
 const detailFavButtonGreen = ({
   favorited,
   favoritesCount,
   onClick,
-}: FavButtonProps): React.ReactElement =>
-  Button.view({
-    color: 'green',
-    variant: favorited ? 'solid' : 'outline',
-    size: 'xsmall',
-    dataTest: 'fav-button',
-    onClick,
-    children: () => (
+}: FavButtonProps): React.ReactElement => (
+  <DsButtonMemo
+    color='green'
+    variant={favorited ? 'solid' : 'outline'}
+    size='xsmall'
+    dataTest='fav-button'
+    onClick={onClick}
+    children={() => (
       <span className='flex items-center gap-1.5'>
         <Heart size={13} fill={favorited ? 'currentColor' : 'none'} />
         <span>{favorited ? 'Unfavorite Article' : 'Favorite Article'}</span>
         <span>({favoritesCount})</span>
       </span>
-    ),
-  })
+    )}
+  />
+)
 
 export const favButtonView = ({
   variant = 'normal',

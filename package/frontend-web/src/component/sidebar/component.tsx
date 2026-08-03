@@ -1,4 +1,4 @@
-import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { X } from 'lucide-react'
 import React, { useContext } from 'react'
@@ -6,8 +6,7 @@ import { createPortal } from 'react-dom'
 
 import { SetGlobalMsgContext } from '@/common/global-context'
 import { memoStrategy } from '@/common/util'
-import { GenericLink } from '@rinn7e/realworld-design-system/component/generic-link'
-import type { Msg as AppMsg } from '@/type'
+import { GenericLink as DsGenericLink } from '@rinn7e/realworld-design-system/component/generic-link'
 
 import type { Props } from './type'
 import { PropsEq } from './type'
@@ -52,13 +51,13 @@ export const SidebarComponent = <PMsg,>({
         <div className='flex flex-col gap-[16px]'>
           <div className='flex items-center justify-between'>
             <span className='text-xl font-bold text-green-600'>conduit</span>
-            {Button.view({
-              color: 'gray',
-              variant: 'ghost',
-              onClick: () => dispatch({ _tag: 'Toggle', open: false }),
-              className: 'p-[8px]',
-              children: () => <X size={24} />,
-            })}
+            <DsButtonMemo
+              color='gray'
+              variant='ghost'
+              onClick={() => dispatch({ _tag: 'Toggle', open: false })}
+              className='p-[8px]'
+              children={() => <X size={24} />}
+            />
           </div>
           <ul className='flex flex-col gap-[8px]'>
             {items.map((item) => {
@@ -68,7 +67,7 @@ export const SidebarComponent = <PMsg,>({
 
               return (
                 <li key={item.key}>
-                  <GenericLink
+                  <DsGenericLink
                     className={cn(
                       baseCls,
                       item.isActive ? activeCls : inactiveCls,
@@ -81,7 +80,7 @@ export const SidebarComponent = <PMsg,>({
                   >
                     {item.icon}
                     {item.label}
-                  </GenericLink>
+                  </DsGenericLink>
                 </li>
               )
             })}

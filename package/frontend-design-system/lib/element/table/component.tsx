@@ -1,9 +1,10 @@
+import { memo } from 'react'
 import React from 'react'
 
 import { cn } from '../../theme'
-import type { TableProps } from './type'
+import { type TableProps, TablePropsEq } from './type'
 
-export const view = ({
+export const TableComponent: React.FC<TableProps> = ({
   isBordered = false,
   isStriped = false,
   isHoverable = false,
@@ -12,7 +13,7 @@ export const view = ({
   className,
   key,
   dataTest,
-}: TableProps): React.ReactElement => {
+}) => {
   return (
     <div
       key={key}
@@ -36,3 +37,5 @@ export const view = ({
     </div>
   )
 }
+
+export const TableMemo = memo(TableComponent, TablePropsEq.equals)

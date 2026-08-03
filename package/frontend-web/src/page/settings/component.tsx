@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { FormItemMemo } from '@rinn7e/tea-cup-form/component'
 import React from 'react'
 
@@ -85,25 +85,25 @@ const SettingsPageComponent = ({ model, dispatch }: Props) => {
           )}
 
           <div className='flex justify-end pt-[16px]'>
-            {Button.view({
-              type: 'submit',
-              isLoading: RD.isPending(model.requestRd),
-              children: () => 'Update Settings',
-            })}
+            <DsButtonMemo
+              type='submit'
+              isLoading={RD.isPending(model.requestRd)}
+              children={() => 'Update Settings'}
+            />
           </div>
         </form>
 
         <hr className='border-gray-200' />
 
         <div className='flex flex-col items-start'>
-          {Button.view({
-            color: 'red',
-            variant: 'outline',
-            dataTest: 'logout-btn',
-            onClick: () => dispatch({ _tag: 'Logout' }),
-            className: 'self-start',
-            children: () => 'Or click here to logout.',
-          })}
+          <DsButtonMemo
+            color='red'
+            variant='outline'
+            dataTest='logout-btn'
+            onClick={() => dispatch({ _tag: 'Logout' })}
+            className='self-start'
+            children={() => 'Or click here to logout.'}
+          />
         </div>
       </div>
     </div>

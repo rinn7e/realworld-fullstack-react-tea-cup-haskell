@@ -1,8 +1,9 @@
+import { memo } from 'react'
 import React from 'react'
 
 import { cn } from '../../theme'
-import { view as DeleteView } from '../delete/view'
-import type { TagColor, TagProps, TagVariant } from './type'
+import { DeleteMemo } from '../delete/component'
+import { type TagColor, type TagProps, type TagVariant, TagPropsEq } from './type'
 
 type TagColorStyle = {
   solid: string
@@ -83,7 +84,7 @@ const getHoverClass = (c: TagColorStyle, variant: TagVariant): string => {
   return c.solidHover
 }
 
-export const view = ({
+export const TagComponent: React.FC<TagProps> = ({
   color = 'gray',
   variant = 'solid',
   size = 'normal',
@@ -94,7 +95,7 @@ export const view = ({
   key,
   dataTest,
   className,
-}: TagProps): React.ReactElement => {
+}) => {
   const c = colorStyles[color] ?? colorStyles.gray
   const styleClass = getStyleClass(c, variant)
   const hoverClass = onClick ? getHoverClass(c, variant) : ''
@@ -116,7 +117,9 @@ export const view = ({
       )}
     >
       <span>{children?.()}</span>
-      {onDelete && DeleteView({ size: 'small', onClick: onDelete })}
+      {onDelete && <DeleteMemo size='small' onClick={onDelete} />}
     </span>
   )
 }
+
+export const TagMemo = memo(TagComponent, TagPropsEq.equals)

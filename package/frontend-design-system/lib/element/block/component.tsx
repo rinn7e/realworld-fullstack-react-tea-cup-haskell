@@ -1,14 +1,15 @@
-import type React from 'react'
+import { memo } from 'react'
+import React from 'react'
 
 import { cn } from '../../theme'
-import type { BlockProps } from './type'
+import { type BlockProps, BlockPropsEq } from './type'
 
-export const view = ({
+export const BlockComponent: React.FC<BlockProps> = ({
   children,
   className,
   key,
   dataTest,
-}: BlockProps): React.ReactElement => {
+}) => {
   return (
     <div
       key={key}
@@ -20,3 +21,5 @@ export const view = ({
     </div>
   )
 }
+
+export const BlockMemo = memo(BlockComponent, BlockPropsEq.equals)

@@ -1,8 +1,9 @@
+import { memo } from 'react'
 import React from 'react'
 
 import { cn } from '../../theme'
-import { view as DeleteView } from '../delete/view'
-import type { NotificationProps } from './type'
+import { DeleteMemo } from '../delete/component'
+import { type NotificationProps, NotificationPropsEq } from './type'
 
 const variantStyles: Record<string, string> = {
   default: 'bg-gray-100 text-gray-800 border-gray-200',
@@ -14,14 +15,14 @@ const variantStyles: Record<string, string> = {
   danger: 'bg-rose-500 text-white border-rose-600',
 }
 
-export const view = ({
+export const NotificationComponent: React.FC<NotificationProps> = ({
   variant = 'default',
   children,
   onDelete,
   className,
   key,
   dataTest,
-}: NotificationProps): React.ReactElement => {
+}) => {
   return (
     <div
       key={key}
@@ -36,9 +37,11 @@ export const view = ({
       <div className='flex-1 pr-6'>{children()}</div>
       {onDelete && (
         <div className='absolute top-3 right-3'>
-          {DeleteView({ size: 'small', onClick: onDelete })}
+          <DeleteMemo size='small' onClick={onDelete} />
         </div>
       )}
     </div>
   )
 }
+
+export const NotificationMemo = memo(NotificationComponent, NotificationPropsEq.equals)

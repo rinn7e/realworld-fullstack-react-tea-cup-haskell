@@ -1,4 +1,4 @@
-import * as Box from '@rinn7e/realworld-design-system/element/box/view'
+import { BoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
 import * as Menu from '@rinn7e/realworld-design-system/component/menu'
 import { MenuMemo } from '@rinn7e/realworld-design-system/component/menu/component'
 import React from 'react'
@@ -18,10 +18,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   return (
     <div data-component='ShowcaseSidebar' className='w-full'>
-      {Box.view({
-        className:
-          'p-4 w-full text-left bg-gray-50/50 border border-gray-200/80 rounded-lg',
-        children: () => (
+      <BoxMemo
+        className='p-4 w-full text-left bg-gray-50/50 border border-gray-200/80 rounded-lg'
+        children={() => (
           <MenuMemo
             categories={menuCategories}
             model={menuModel}
@@ -39,8 +38,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }
             }}
           />
-        ),
-      })}
+        )}
+      />
     </div>
   )
 }

@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import React, { useEffect, useState } from 'react'
 
 import { cn } from '../../theme'
-import type { ImageProps } from './type'
+import { type ImageProps, ImagePropsEq } from './type'
 
 const ratioStyles: Record<string, string> = {
   square: 'aspect-square object-cover',
@@ -11,7 +12,7 @@ const ratioStyles: Record<string, string> = {
   rounded: 'rounded-full aspect-square object-cover',
 }
 
-export const View: React.FC<ImageProps> = ({
+export const ImageComponent: React.FC<ImageProps> = ({
   src,
   defaultSrc,
   fallbackSrc,
@@ -54,3 +55,5 @@ export const View: React.FC<ImageProps> = ({
     />
   )
 }
+
+export const ImageMemo = memo(ImageComponent, ImagePropsEq.equals)

@@ -1,6 +1,6 @@
 import * as RD from '@devexperts/remote-data-ts'
-import * as Button from '@rinn7e/realworld-design-system/element/button/view'
-import * as Image from '@rinn7e/realworld-design-system/element/image/view'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Trash2 } from 'lucide-react'
@@ -56,7 +56,7 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
               O.fold(
                 () => null,
                 (u) => (
-                  <Image.View
+                  <DsImageMemo
                     src={u.image ? assetPath(u.image) : null}
                     defaultSrc={assetPath('/default-avatar.svg')}
                     className='h-[20px] w-[20px] rounded-full object-cover'
@@ -66,12 +66,12 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                 ),
               ),
             )}
-            {Button.view({
-              type: 'submit',
-              color: 'green',
-              size: 'xsmall',
-              children: () => 'Post Comment',
-            })}
+            <DsButtonMemo
+              type='submit'
+              color='green'
+              size='xsmall'
+              children={() => 'Post Comment'}
+            />
           </div>
         </form>
       )}
@@ -117,7 +117,7 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                         },
                       }}
                     >
-                      <Image.View
+                      <DsImageMemo
                         src={
                           comment.author.image
                             ? assetPath(comment.author.image)
@@ -147,18 +147,19 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                     {isLoggedIn &&
                       user.value.username === comment.author.username && (
                         <span className='ml-auto'>
-                          {Button.view({
-                            color: 'gray',
-                            variant: 'ghost',
-                            dataTest: 'delete-comment-btn',
-                            onClick: () =>
+                          <DsButtonMemo
+                            color='gray'
+                            variant='ghost'
+                            dataTest='delete-comment-btn'
+                            onClick={() =>
                               dispatch({
                                 _tag: 'DeleteComment',
                                 id: comment.id,
-                              }),
-                            className: 'hover:text-red-500',
-                            children: () => <Trash2 size={12} />,
-                          })}
+                              })
+                            }
+                            className='hover:text-red-500'
+                            children={() => <Trash2 size={12} />}
+                          />
                         </span>
                       )}
                   </div>

@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import * as Tag from '@rinn7e/realworld-design-system/element/tag/view'
+import { TagMemo as DsTagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
@@ -107,24 +107,24 @@ const HomePageComponent = ({ model, shared, dispatch }: Props) => {
                       className='flex flex-wrap gap-[4px]'
                       data-test='tag-list'
                     >
-                      {data.tags.map((tag) =>
-                        Tag.view({
-                          key: tag,
-                          dataTest: 'tag-pill',
-                          color: 'gray',
-                          variant: 'light',
-                          isRounded: true,
-                          size: 'small',
-                          onClick: (e: React.MouseEvent<HTMLElement>) => {
+                      {data.tags.map((tag) => (
+                        <DsTagMemo
+                          key={tag}
+                          dataTest='tag-pill'
+                          color='gray'
+                          variant='light'
+                          isRounded={true}
+                          size='small'
+                          onClick={(e: React.MouseEvent<HTMLSpanElement>) => {
                             e.preventDefault()
                             dispatch({
                               _tag: 'ChangeTab',
                               tab: tagFeedTab(tag),
                             })
-                          },
-                          children: () => tag,
-                        }),
-                      )}
+                          }}
+                          children={() => tag}
+                        />
+                      ))}
                     </div>
                   ),
                 ),

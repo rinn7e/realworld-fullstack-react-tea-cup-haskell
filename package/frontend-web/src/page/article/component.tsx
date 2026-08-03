@@ -1,7 +1,7 @@
 import * as RD from '@devexperts/remote-data-ts'
-import * as Button from '@rinn7e/realworld-design-system/element/button/view'
-import * as Image from '@rinn7e/realworld-design-system/element/image/view'
-import * as Tag from '@rinn7e/realworld-design-system/element/tag/view'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
+import { TagMemo as DsTagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
@@ -53,7 +53,7 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                     },
                   }}
                 >
-                  <Image.View
+                  <DsImageMemo
                     src={author.image ? assetPath(author.image) : null}
                     defaultSrc={assetPath('/default-avatar.svg')}
                     className='h-[36px] w-[36px] rounded-full object-cover'
@@ -84,45 +84,50 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                 </div>
                 <div className='flex flex-wrap items-center gap-[8px]'>
                   {isLoggedIn &&
-                    (author.following
-                      ? Button.view({
-                          color: 'gray',
-                          variant: 'outline',
-                          size: 'xsmall',
-                          onClick: () =>
+                      ? (
+                        <DsButtonMemo
+                          color='gray'
+                          variant='outline'
+                          size='xsmall'
+                          onClick={() =>
                             dispatch({
                               _tag: 'UnfollowAuthor',
                               username: author.username,
-                            }),
-                          className: isLight
+                            })
+                          }
+                          className={isLight
                             ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
-                            : undefined,
-                          children: () => (
+                            : undefined}
+                          children={() => (
                             <>
                               <UserMinus size={13} className='mr-1' /> Unfollow{' '}
                               {author.username}
                             </>
-                          ),
-                        })
-                      : Button.view({
-                          color: 'gray',
-                          variant: 'outline',
-                          size: 'xsmall',
-                          onClick: () =>
+                          )}
+                        />
+                      )
+                      : (
+                        <DsButtonMemo
+                          color='gray'
+                          variant='outline'
+                          size='xsmall'
+                          onClick={() =>
                             dispatch({
                               _tag: 'FollowAuthor',
                               username: author.username,
-                            }),
-                          className: isLight
+                            })
+                          }
+                          className={isLight
                             ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
-                            : undefined,
-                          children: () => (
+                            : undefined}
+                          children={() => (
                             <>
                               <UserPlus size={13} className='mr-1' /> Follow{' '}
                               {author.username}
                             </>
-                          ),
-                        }))}
+                          )}
+                        />
+                      ))}
                   {favButtonView({
                     variant: 'detail',
                     isLight,
@@ -155,21 +160,19 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                       >
                         <Pencil size={13} /> Edit Article
                       </Link>
-                      {Button.view({
-                        color: 'red',
-                        variant: 'outline',
-                        size: 'xsmall',
-                        onClick: () => dispatch({ _tag: 'DeleteArticle' }),
-                        dataTest: 'article-delete-btn',
-                        className: isLight
-                          ? 'hover:bg-red-900'
-                          : 'hover:bg-red-50',
-                        children: () => (
+                      <DsButtonMemo
+                        color='red'
+                        variant='outline'
+                        size='xsmall'
+                        onClick={() => dispatch({ _tag: 'DeleteArticle' })}
+                        dataTest='article-delete-btn'
+                        className={isLight ? 'hover:bg-red-900' : 'hover:bg-red-50'}
+                        children={() => (
                           <>
                             <Trash2 size={13} className='mr-1' /> Delete Article
                           </>
-                        ),
-                      })}
+                        )}
+                      />
                     </>
                   )}
                 </div>
@@ -201,17 +204,17 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                       className='flex flex-wrap gap-[4px]'
                       data-test='tag-list'
                     >
-                      {data.article.tagList.map((tag) =>
-                        Tag.view({
-                          key: tag,
-                          dataTest: 'article-tag',
-                          color: 'gray',
-                          variant: 'outline',
-                          isRounded: true,
-                          size: 'small',
-                          children: () => tag,
-                        }),
-                      )}
+                      {data.article.tagList.map((tag) => (
+                        <DsTagMemo
+                          key={tag}
+                          dataTest='article-tag'
+                          color='gray'
+                          variant='outline'
+                          isRounded={true}
+                          size='small'
+                          children={() => tag}
+                        />
+                      ))}
                     </div>
                   </div>
 

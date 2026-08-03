@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import React from 'react'
 
 import { cn } from '../../theme'
-import type { ContentProps } from './type'
+import { type ContentProps, ContentPropsEq } from './type'
 
 const sizeStyles: Record<string, string> = {
   small: 'text-xs leading-relaxed',
@@ -10,13 +11,13 @@ const sizeStyles: Record<string, string> = {
   large: 'text-lg leading-relaxed',
 }
 
-export const view = ({
+export const ContentComponent: React.FC<ContentProps> = ({
   size = 'normal',
   children,
   className,
   key,
   dataTest,
-}: ContentProps): React.ReactElement => {
+}) => {
   return (
     <div
       key={key}
@@ -32,3 +33,5 @@ export const view = ({
     </div>
   )
 }
+
+export const ContentMemo = memo(ContentComponent, ContentPropsEq.equals)

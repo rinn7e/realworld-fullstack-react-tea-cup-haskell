@@ -1,14 +1,15 @@
+import { memo } from 'react'
 import React from 'react'
 
 import { cn } from '../../theme'
-import type { BoxProps } from './type'
+import { type BoxProps, BoxPropsEq } from './type'
 
-export const view = ({
+export const BoxComponent: React.FC<BoxProps> = ({
   children,
   className,
   key,
   dataTest,
-}: BoxProps): React.ReactElement => {
+}) => {
   return (
     <div
       key={key}
@@ -23,3 +24,5 @@ export const view = ({
     </div>
   )
 }
+
+export const BoxMemo = memo(BoxComponent, BoxPropsEq.equals)

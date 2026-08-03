@@ -1,4 +1,7 @@
 import React from 'react'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
+import * as string from 'fp-ts/lib/string'
 
 export type TagColor = 'gray' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red'
 
@@ -18,3 +21,16 @@ export type TagProps = {
   dataTest?: string
   className?: string
 }
+
+export const TagPropsEq: EqClass.Eq<TagProps> = EqClass.struct<Required<TagProps>>({
+  children: EqClass.eqStrict,
+  color: string.Eq,
+  variant: string.Eq,
+  size: string.Eq,
+  isRounded: boolean.Eq,
+  onDelete: EqClass.eqStrict,
+  onClick: EqClass.eqStrict,
+  key: EqClass.eqStrict,
+  dataTest: string.Eq,
+  className: string.Eq,
+}) as unknown as EqClass.Eq<TagProps>

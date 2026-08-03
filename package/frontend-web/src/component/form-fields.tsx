@@ -1,4 +1,4 @@
-import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import * as Form from '@rinn7e/tea-cup-form'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as E from 'fp-ts/lib/Either'
@@ -102,20 +102,23 @@ export const standardInputUi =
           }
           onKeyDown={onKeyDown}
         />
-        {variant._tag === 'Password' &&
-          Button.view({
-            color: 'gray',
-            variant: 'ghost',
-            onClick: (e: React.MouseEvent<HTMLButtonElement>) =>
+        {variant._tag === 'Password' && (
+          <DsButtonMemo
+            color='gray'
+            variant='ghost'
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
               props.dispatch({
                 _tag: 'SetRevealPassword',
                 reveal: !variant.reveal,
                 event: e,
-              }),
-            className: 'absolute right-[6px] p-2',
-            children: () =>
-              variant.reveal ? <EyeOff size={20} /> : <Eye size={20} />,
-          })}
+              })
+            }
+            className='absolute right-[6px] p-2'
+            children={() =>
+              variant.reveal ? <EyeOff size={20} /> : <Eye size={20} />
+            }
+          />
+        )}
       </div>
     )
 
@@ -189,21 +192,22 @@ export const textPillInputUi =
               data-test='tag-pill'
             >
               {tag}
-              {Button.view({
-                color: 'gray',
-                variant: 'ghost',
-                onClick: () =>
+              <DsButtonMemo
+                color='gray'
+                variant='ghost'
+                onClick={() =>
                   props.dispatch({
                     _tag: 'RemovePill',
                     index,
-                  }),
-                className: 'p-0 hover:text-red-500',
-                children: () => (
+                  })
+                }
+                className='p-0 hover:text-red-500'
+                children={() => (
                   <i>
                     <X size={14} />
                   </i>
-                ),
-              })}
+                )}
+              />
             </span>
           ))}
           <input

@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { FormItemMemo } from '@rinn7e/tea-cup-form/component'
 import React from 'react'
 
@@ -68,11 +68,11 @@ const EditorPageComponent = ({ model, dispatch }: Props) => {
         )}
 
         <div className='flex justify-end pt-[24px]'>
-          {Button.view({
-            type: 'submit',
-            isLoading: RD.isPending(model.requestRd),
-            children: () => 'Publish Article',
-          })}
+          <DsButtonMemo
+            type='submit'
+            isLoading={RD.isPending(model.requestRd)}
+            children={() => 'Publish Article'}
+          />
         </div>
       </form>
     </div>

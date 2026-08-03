@@ -1,7 +1,7 @@
-import * as Content from '@rinn7e/realworld-design-system/element/content/view'
-import * as Image from '@rinn7e/realworld-design-system/element/image/view'
-import * as Tag from '@rinn7e/realworld-design-system/element/tag/view'
-import * as Title from '@rinn7e/realworld-design-system/element/title/view'
+import { ContentMemo as DsContentMemo } from '@rinn7e/realworld-design-system/element/content/component'
+import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
+import { TagMemo as DsTagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
+import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
@@ -37,7 +37,7 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
               },
             }}
           >
-            <Image.View
+            <DsImageMemo
               src={model.author.image ? assetPath(model.author.image) : null}
               defaultSrc={assetPath('/default-avatar.svg')}
               className='h-[32px] w-[32px] rounded-full object-cover'
@@ -87,16 +87,16 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
         data-test='article-link'
       >
         <div className='flex flex-col gap-[4px]'>
-          {Title.view({
-            size: 4,
-            className: 'line-clamp-2',
-            children: () => model.title,
-          })}
-          {Content.view({
-            size: 'normal',
-            className: 'line-clamp-3 text-sm text-gray-500',
-            children: () => model.description,
-          })}
+          <DsTitleMemo
+            size={4}
+            className='line-clamp-2'
+            children={() => model.title}
+          />
+          <DsContentMemo
+            size='normal'
+            className='line-clamp-3 text-sm text-gray-500'
+            children={() => model.description}
+          />
         </div>
         <div className='flex items-center justify-between'>
           <span className='text-xs text-gray-400'>
@@ -104,17 +104,17 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
             <DotLoading className='gap-[0px]' />
           </span>
           <div className='flex flex-wrap gap-[4px]' data-test='tag-list'>
-            {model.tagList.map((tag) =>
-              Tag.view({
-                key: tag,
-                dataTest: 'article-tag',
-                color: 'gray',
-                variant: 'outline',
-                isRounded: true,
-                size: 'small',
-                children: () => tag,
-              }),
-            )}
+            {model.tagList.map((tag) => (
+              <DsTagMemo
+                key={tag}
+                dataTest='article-tag'
+                color='gray'
+                variant='outline'
+                isRounded={true}
+                size='small'
+                children={() => tag}
+              />
+            ))}
           </div>
         </div>
       </Link>

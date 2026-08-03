@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import React from 'react'
 
 import { cn } from '../../theme'
-import type { ProgressProps } from './type'
+import { type ProgressProps, ProgressPropsEq } from './type'
 
 const variantStyles: Record<string, string> = {
   primary: 'bg-emerald-500',
@@ -20,7 +21,7 @@ const sizeStyles: Record<string, string> = {
   large: 'h-6',
 }
 
-export const view = ({
+export const ProgressComponent: React.FC<ProgressProps> = ({
   value = 0,
   max = 100,
   variant = 'primary',
@@ -29,7 +30,7 @@ export const view = ({
   className,
   key,
   dataTest,
-}: ProgressProps): React.ReactElement => {
+}) => {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100))
 
   return (
@@ -62,3 +63,5 @@ export const view = ({
     </div>
   )
 }
+
+export const ProgressMemo = memo(ProgressComponent, ProgressPropsEq.equals)

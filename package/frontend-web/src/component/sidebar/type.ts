@@ -3,7 +3,7 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import type { Dispatcher } from 'tea-cup-fp'
 
 import * as Animate from '@/common/type/animate'
-import { type NavItemData, mkNavItemDataEq } from '@rinn7e/realworld-design-system/type/nav-item'
+import { type NavItemData as DsNavItemData, mkNavItemDataEq as mkDsNavItemDataEq } from '@rinn7e/realworld-design-system/type/nav-item'
 
 export type Model = {
   status: Animate.Animate<null>
@@ -20,11 +20,11 @@ export type Msg =
 export type Props<PMsg> = {
   model: Model
   dispatch: Dispatcher<Msg>
-  items: NavItemData<PMsg>[]
+  items: DsNavItemData<PMsg>[]
 }
 
 export const mkPropsEq = <PMsg>(msgEq: EqClass.Eq<PMsg>): EqClass.Eq<Props<PMsg>> => {
-  const itemEq = mkNavItemDataEq(msgEq)
+  const itemEq = mkDsNavItemDataEq(msgEq)
   return {
     equals: (x, y) =>
       ModelEq.equals(x.model, y.model) &&

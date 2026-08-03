@@ -1,6 +1,6 @@
 import * as RD from '@devexperts/remote-data-ts'
-import * as Button from '@rinn7e/realworld-design-system/element/button/view'
-import * as Image from '@rinn7e/realworld-design-system/element/image/view'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
@@ -51,7 +51,7 @@ const ProfilePageComponent = ({
               >
                 <div className='mx-auto flex max-w-[1152px] flex-col items-center gap-[12px] px-[16px]'>
                   {/* Avatar */}
-                  <Image.View
+                  <DsImageMemo
                     src={
                       data.profile.image ? assetPath(data.profile.image) : null
                     }
@@ -110,26 +110,27 @@ const ProfilePageComponent = ({
                         <Settings size={13} /> Edit Profile Settings
                       </Link>
                     ) : (
-                      Button.view({
-                        color: 'gray',
-                        variant: 'outline',
-                        size: 'small',
-                        dataTest: 'follow-btn',
-                        onClick: () =>
+                      <DsButtonMemo
+                        color='gray'
+                        variant='outline'
+                        size='small'
+                        dataTest='follow-btn'
+                        onClick={() =>
                           dispatch({
                             _tag: data.profile.following
                               ? 'Unfollow'
                               : 'Follow',
-                          }),
-                        children: () => (
+                          })
+                        }
+                        children={() => (
                           <>
                             <UserPlus size={13} className='mr-1.5' />
                             {data.profile.following
                               ? `Unfollow ${data.profile.username}`
                               : `Follow ${data.profile.username}`}
                           </>
-                        ),
-                      })
+                        )}
+                      />
                     )}
                   </div>
                 </div>

@@ -1,8 +1,9 @@
 import { Loader2 } from 'lucide-react'
+import { memo } from 'react'
 import React from 'react'
 
 import { cn } from '../../theme'
-import type { ButtonColor, ButtonProps, ButtonVariant } from './type'
+import { type ButtonColor, type ButtonProps, type ButtonVariant, ButtonPropsEq } from './type'
 
 const colorStyles: Record<ButtonColor, Record<ButtonVariant, string>> = {
   white: {
@@ -78,7 +79,7 @@ const sizeStyles: Record<string, string> = {
   large: 'px-6 py-3 text-lg font-semibold',
 }
 
-export const view = ({
+export const ButtonComponent: React.FC<ButtonProps> = ({
   color = 'green',
   variant = 'solid',
   size = 'normal',
@@ -92,7 +93,7 @@ export const view = ({
   className,
   key,
   dataTest,
-}: ButtonProps): React.ReactElement => {
+}) => {
   const styles = colorStyles[color] || colorStyles.green
   const colorClass = styles[variant] || styles.solid
 
@@ -126,3 +127,5 @@ export const view = ({
     </button>
   )
 }
+
+export const ButtonMemo = memo(ButtonComponent, ButtonPropsEq.equals)

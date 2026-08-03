@@ -1,5 +1,5 @@
 import * as RD from '@devexperts/remote-data-ts'
-import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { FormItemMemo } from '@rinn7e/tea-cup-form/component'
 import React from 'react'
 
@@ -77,12 +77,12 @@ const SignupPageComponent = ({ model, dispatch }: Props) => {
           )}
 
           <div className='pt-[16px]'>
-            {Button.view({
-              type: 'submit',
-              isFullWidth: true,
-              isLoading: RD.isPending(model.requestRd),
-              children: () => 'Sign up',
-            })}
+            <DsButtonMemo
+              type='submit'
+              isFullWidth={true}
+              isLoading={RD.isPending(model.requestRd)}
+              children={() => 'Sign up'}
+            />
           </div>
         </form>
       </div>
