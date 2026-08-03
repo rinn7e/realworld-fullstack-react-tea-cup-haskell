@@ -1,16 +1,21 @@
-import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { cn } from '@rinn7e/tea-cup-prelude'
 import { X } from 'lucide-react'
 import React, { memo } from 'react'
 import { createPortal } from 'react-dom'
 
-import type { Props } from './type'
-import { PropsEq } from './type'
+import { ButtonMemo as DsButtonMemo } from '../../element/button/component'
+import { cn } from '../../theme'
+import { GenericLink } from '../generic-link'
 
-export const SidebarComponent: React.FC<Props> = ({
+import type { SidebarProps } from './type'
+import { SidebarPropsEq } from './type'
+
+export const SidebarComponent: React.FC<SidebarProps> = ({
   model,
-  dispatch,
   items,
+  dispatch,
+  className,
+  key,
+  dataTest,
 }) => {
   const state = model.status.state._tag
   const isVisible = state !== 'Invisible'
@@ -29,13 +34,18 @@ export const SidebarComponent: React.FC<Props> = ({
     'relative flex flex-col w-[280px] h-full bg-white shadow-xl p-[16px] overflow-y-auto',
     state === 'AnimateIn' && 'animate-slide-in',
     state === 'AnimateOut' && 'animate-slide-out',
+    className,
   )
 
   const activeCls = 'text-green-600'
   const inactiveCls = 'text-gray-500 hover:text-gray-900'
 
   return createPortal(
-    <div className='absolute inset-0 z-[100] flex justify-end overflow-hidden'>
+    <div
+      key={key}
+      data-test={dataTest || 'sidebar'}
+      className='absolute inset-0 z-[100] flex justify-end overflow-hidden'
+    >
       {/* backdrop */}
       <div
         className={backdropCls}
@@ -62,19 +72,20 @@ export const SidebarComponent: React.FC<Props> = ({
 
               return (
                 <li key={item.key}>
-                  <a
+                  <GenericLink
                     className={cn(
                       baseCls,
                       item.isActive ? activeCls : inactiveCls,
                     )}
                     href={item.href}
+                    dispatch={dispatch}
+                    msg={{ _tag: 'ClickItem', item }}
                     data-test='nav-link'
                     aria-current={item.isActive ? 'page' : undefined}
-                    onClick={() => dispatch({ _tag: 'Toggle', open: false })}
                   >
                     {item.icon}
                     {item.label}
-                  </a>
+                  </GenericLink>
                 </li>
               )
             })}
@@ -86,4 +97,4 @@ export const SidebarComponent: React.FC<Props> = ({
   )
 }
 
-export const SidebarMemo = memo(SidebarComponent, PropsEq.equals)
+export const SidebarMemo = memo(SidebarComponent, SidebarPropsEq.equals)

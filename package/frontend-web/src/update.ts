@@ -27,7 +27,7 @@ import {
 import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import { findNavItemRoute, toNavbarConfig } from '@/common/nav-link-helper'
 import * as DebugPanel from '@/component/debug-panel'
-import * as Sidebar from '@/component/sidebar'
+import * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
 import * as ArticlePage from '@/page/article/update'
 import * as EditorPage from '@/page/editor/update'
 import * as HomePage from '@/page/home/update'
@@ -81,7 +81,7 @@ export const init = (
     pageModel: { _tag: 'NotFoundPageModel' },
     isInternal: false,
     debugPanel: DebugPanel.init(),
-    sidebar: Sidebar.init(),
+    sidebar: DsSidebar.init()[0],
     navbar: DsNavbar.init()[0],
   }
   const initCmd = Cmd.batch([trackVisitorCmd(token, route)])
@@ -148,7 +148,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'HomePageModel', model: homeModel },
-            sidebar: Sidebar.init(),
+            sidebar: DsSidebar.init()[0],
           },
           homeCmd.map((msg) => ({ _tag: 'HomePageMsg', subMsg: msg })),
         ]
@@ -163,7 +163,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'ArticlePageModel', model: articleModel },
-            sidebar: Sidebar.init(),
+            sidebar: DsSidebar.init()[0],
           },
           articleCmd.map((msg) => ({
             _tag: 'ArticlePageMsg',
@@ -178,7 +178,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'LoginPageModel', model: loginModel },
-            sidebar: Sidebar.init(),
+            sidebar: DsSidebar.init()[0],
           },
           loginCmd.map((msg) => ({ _tag: 'LoginPageMsg', subMsg: msg })),
         ]
@@ -190,7 +190,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'SignupPageModel', model: signupModel },
-            sidebar: Sidebar.init(),
+            sidebar: DsSidebar.init()[0],
           },
           signupCmd.map((msg) => ({ _tag: 'SignupPageMsg', subMsg: msg })),
         ]
@@ -207,7 +207,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'SettingsPageModel', model: settingsModel },
-            sidebar: Sidebar.init(),
+            sidebar: DsSidebar.init()[0],
           },
           settingsCmd.map((msg) => ({
             _tag: 'SettingsPageMsg',
@@ -226,7 +226,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'ProfilePageModel', model: profileModel },
-            sidebar: Sidebar.init(),
+            sidebar: DsSidebar.init()[0],
           },
           profileCmd.map((msg) => ({
             _tag: 'ProfilePageMsg',
@@ -247,7 +247,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'EditorPageModel', model: editorModel },
-            sidebar: Sidebar.init(),
+            sidebar: DsSidebar.init()[0],
           },
           editorCmd.map((msg) => ({ _tag: 'EditorPageMsg', subMsg: msg })),
         ]
@@ -258,7 +258,7 @@ export const initPageModel =
             ...model,
             route: newRoute,
             pageModel: { _tag: 'NotFoundPageModel' },
-            sidebar: Sidebar.init(),
+            sidebar: DsSidebar.init()[0],
           },
           Cmd.none(),
         ]
@@ -375,7 +375,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
           {
             ...model,
             isInternal: false,
-            sidebar: Sidebar.init(),
+            sidebar: DsSidebar.init()[0],
           },
           Cmd.none(),
         ]
@@ -692,22 +692,36 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         },
         Cmd.none(),
       ]
-    case 'SidebarMsg': {
-      const [sidebarModel, sidebarCmd] = Sidebar.update(
-        msg.subMsg,
-        model.sidebar,
-      )
-      return [
-        {
-          ...model,
-          sidebar: sidebarModel,
-        },
-        sidebarCmd.map((subMsg) => ({ _tag: 'SidebarMsg', subMsg })),
-      ]
-    }
+    case 'SidebarMsg':
+      return sidebarMsgHandler(msg.subMsg, model)
     case 'NavbarMsg':
       return navbarMsgHandler(msg.subMsg, model)
   }
+}
+
+// Child Msg interception handler
+
+const sidebarMsgHandler = (
+  subMsg: Extract<Msg, { _tag: 'SidebarMsg' }>['subMsg'],
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  const [sidebarModel, sidebarCmd] = DsSidebar.update(subMsg)(model.sidebar)
+
+  return pipe(
+    [
+      { ...model, sidebar: sidebarModel },
+      sidebarCmd.map((m): Msg => ({ _tag: 'SidebarMsg', subMsg: m })),
+    ] as [Model, Cmd<Msg>],
+    updateAndCmd((m) => {
+      if (subMsg._tag === 'ClickItem') {
+        const targetRoute = findNavItemRoute(m, subMsg.item.key)
+        if (targetRoute) {
+          return changeRouteHandler(targetRoute, true)(m)
+        }
+      }
+      return [m, Cmd.none()]
+    }),
+  )
 }
 
 // Child Msg interception handler
@@ -727,10 +741,9 @@ const navbarMsgHandler = (
       if (subMsg._tag === 'ClickNavItem') {
         const item = subMsg.item
         if (item.key === 'toggle-sidebar') {
-          const [sidebarModel, sidebarCmd] = Sidebar.update(
+          const [sidebarModel, sidebarCmd] = DsSidebar.update(
             { _tag: 'Toggle', open: true },
-            m.sidebar,
-          )
+          )(m.sidebar)
           return [
             { ...m, sidebar: sidebarModel },
             sidebarCmd.map((subMsg) => ({ _tag: 'SidebarMsg' as const, subMsg })),

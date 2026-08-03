@@ -158,6 +158,10 @@ export default defineConfig({
           __dirname,
           'lib/component/tabs/component.tsx',
         ),
+        'component/sidebar/component': path.resolve(
+          __dirname,
+          'lib/component/sidebar/component.tsx',
+        ),
         // Form components
         'form/checkbox/component': path.resolve(
           __dirname,
@@ -193,6 +197,10 @@ export default defineConfig({
           __dirname,
           'lib/misc/dot-loading/component.tsx',
         ),
+
+        // Shared types
+        'type/animate': path.resolve(__dirname, 'lib/type/animate.ts'),
+        'type/nav-item': path.resolve(__dirname, 'lib/type/nav-item.ts'),
       },
       name: 'RealWorldDesignSystem',
       fileName: (format, entryName) =>
