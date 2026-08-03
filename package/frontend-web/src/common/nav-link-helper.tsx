@@ -77,7 +77,7 @@ export const toDesktopNavItems = (model: Model): NavItemData<Msg>[] => {
   })
 }
 
-export const toNavbarModel = (model: Model): Navbar.Model<Msg> => ({
+export const toNavbarConfig = (model: Model): Navbar.Config<Msg> => ({
   brandNavItem: toBrandNavItem(model),
   desktopNavItems: toDesktopNavItems(model),
   mobileNavItems: toMobileNavItems(model),

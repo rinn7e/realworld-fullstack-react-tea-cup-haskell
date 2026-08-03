@@ -1,4 +1,4 @@
-import { Menu, Navbar } from '@rinn7e/realworld-design-system'
+import { Menu } from '@rinn7e/realworld-design-system'
 import { newUrl } from 'react-tea-cup'
 import { Cmd, Task } from 'tea-cup-fp'
 
@@ -613,7 +613,6 @@ const changeRouteHandler =
 
 export const init = (location: Location): [Model, Cmd<Msg>] => {
   const route = parseAppRoute('', location.href)
-  const [navbarModel] = Navbar.init()
   const [menuModel] = Menu.init('')
 
   const baseModel: Model = {
@@ -621,7 +620,6 @@ export const init = (location: Location): [Model, Cmd<Msg>] => {
     isInternal: false,
     pageModel: { _tag: 'NotFoundPageModel', model: {} },
     searchQuery: '',
-    navbarModel,
     menuModel,
   }
 
@@ -1096,14 +1094,6 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
           pageModel: { _tag: 'NotFoundPageModel', model: notFoundModel },
         },
         cmd.map((subMsg) => ({ _tag: 'NotFoundPageMsg', subMsg })),
-      ]
-    }
-
-    case 'NavbarMsg': {
-      const [navbarModel, cmd] = Navbar.update(msg.subMsg)(model.navbarModel)
-      return [
-        { ...model, navbarModel },
-        cmd.map((subMsg: Navbar.Msg) => ({ _tag: 'NavbarMsg', subMsg })),
       ]
     }
 

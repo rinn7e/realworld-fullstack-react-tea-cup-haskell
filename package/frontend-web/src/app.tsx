@@ -6,7 +6,7 @@ import { type Dispatcher } from 'tea-cup-fp'
 import { SetGlobalMsgContext } from './common/global-context'
 import {
   toDesktopNavItems,
-  toNavbarModel,
+  toNavbarConfig,
 } from './common/nav-link-helper'
 import { DebugPanelComponent } from './component/debug-panel/component'
 import { Footer } from './component/footer'
@@ -29,7 +29,7 @@ interface Props {
 export const App: React.FC<Props> = ({ model, dispatch }) => {
   const isNavOpen = model.sidebar.status.state._tag !== 'Invisible'
   const desktopNavItems = toDesktopNavItems(model)
-  const navbarModel = toNavbarModel(model)
+  const navbarConfig = toNavbarConfig(model)
 
   return (
     <SetGlobalMsgContext value={dispatch}>
@@ -39,7 +39,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
           isNavOpen && 'h-dvh overflow-hidden',
         )}
       >
-        <Navbar.NavbarMemo model={navbarModel} dispatch={dispatch} />
+        <Navbar.NavbarMemo config={navbarConfig} dispatch={dispatch} />
         <main className='flex-grow'>{renderPage(model, dispatch)}</main>
         <Footer />
       </div>

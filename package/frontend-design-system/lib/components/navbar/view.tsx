@@ -1,10 +1,11 @@
 import React, { memo } from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
+import { GenericLink } from '../../common/generic-link'
+import type { NavItemData } from '../../common/nav-item'
 import { cn } from '../../theme'
 
-import { GenericLink } from './generic-link'
-import type { NavItemData, Props } from './type'
+import type { Props } from './type'
 import { PropsEq } from './type'
 
 export const NavLinks = <PMsg,>({
@@ -45,11 +46,11 @@ export const NavLinks = <PMsg,>({
 }
 
 export const NavbarComponent = <PMsg,>({
-  model,
+  config,
   dispatch,
 }: Props<PMsg>) => {
   const { brandNavItem, desktopNavItems, mobileNavItems, unavailableMode } =
-    model
+    config
 
   return (
     <nav

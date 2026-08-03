@@ -1,5 +1,5 @@
 import { Button, Hero, Navbar, Title } from '@rinn7e/realworld-design-system'
-import { Code2, Sparkles } from 'lucide-react'
+import { Code2, Menu, Pencil, Settings, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
@@ -11,10 +11,101 @@ interface Props {
   dispatch: Dispatcher<Msg>
 }
 export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `<Navbar.NavbarMemo
-  model={model.navbarModel}
-  dispatch={(msg) => dispatch({ _tag: 'NavbarMsg', msg })}
+  const navbarConfig: Navbar.Config<string> = {
+    brandNavItem: {
+      key: 'brand',
+      label: 'conduit',
+      href: '#',
+      isActive: false,
+      onClick: 'nav:brand',
+    },
+    desktopNavItems: [
+      {
+        key: 'home',
+        label: 'Home',
+        href: '#',
+        isActive: true,
+        onClick: 'nav:home',
+      },
+      {
+        key: 'editor',
+        label: 'New Article',
+        href: '#',
+        isActive: false,
+        onClick: 'nav:editor',
+        icon: <Pencil size={14} />,
+      },
+      {
+        key: 'settings',
+        label: 'Settings',
+        href: '#',
+        isActive: false,
+        onClick: 'nav:settings',
+        icon: <Settings size={14} />,
+      },
+    ],
+    mobileNavItems: [
+      {
+        key: 'menu',
+        label: '',
+        href: '#',
+        isActive: false,
+        onClick: 'nav:mobile-menu',
+        icon: <Menu size={24} />,
+      },
+    ],
+  }
+
+  const code = `const navbarConfig: Navbar.Config<Msg> = {
+  brandNavItem: {
+    key: 'site-logo',
+    label: 'conduit',
+    href: '/',
+    isActive: false,
+    onClick: { _tag: 'ChangeRoute', route: homeRoute },
+  },
+  desktopNavItems: [
+    {
+      key: 'home',
+      label: 'Home',
+      href: '/',
+      isActive: true,
+      onClick: { _tag: 'ChangeRoute', route: homeRoute },
+    },
+    {
+      key: 'editor',
+      label: 'New Article',
+      href: '/editor',
+      isActive: false,
+      onClick: { _tag: 'ChangeRoute', route: editorRoute },
+      icon: <Pencil size={14} />,
+    },
+    {
+      key: 'settings',
+      label: 'Settings',
+      href: '/settings',
+      isActive: false,
+      onClick: { _tag: 'ChangeRoute', route: settingsRoute },
+      icon: <Settings size={14} />,
+    },
+  ],
+  mobileNavItems: [
+    {
+      key: 'toggle-sidebar',
+      label: '',
+      href: '',
+      isActive: false,
+      onClick: { _tag: 'ToggleSidebar' },
+      icon: <Menu size={24} />,
+    },
+  ],
+}
+
+<Navbar.NavbarMemo
+  config={navbarConfig}
+  dispatch={dispatch}
 />`
+
   return (
     <div data-component='NavbarPage' className='w-full space-y-8 text-left'>
       {Hero.view({
@@ -74,7 +165,7 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
             'px-0 pt-0 pb-6 w-full bg-white border-2 border-dotted border-gray-300 rounded-lg overflow-hidden',
           children: () => (
             <Navbar.NavbarMemo
-              model={model.navbarModel}
+              config={navbarConfig}
               dispatch={(msg) => dispatch({ _tag: 'NavbarMsg', msg })}
             />
           ),

@@ -3,11 +3,10 @@ import {
   Columns,
   Container,
   Footer,
-  Input,
   Menu,
   Navbar,
 } from '@rinn7e/realworld-design-system'
-import { BookOpen, Layers, LayoutGrid, Search, Sparkles } from 'lucide-react'
+import { BookOpen, Layers, LayoutGrid, Sparkles } from 'lucide-react'
 import React from 'react'
 
 import { Sidebar } from './component/sidebar'
@@ -452,51 +451,10 @@ export const view = (
       className='flex min-h-screen flex-col bg-white font-sans text-gray-900'
     >
       {/* Top Navbar Header */}
-      {Navbar.view({
-        brand: (
-          <button
-            onClick={() => navigateRoute({ page: { _tag: 'HomePage' } })}
-            className='font-titillium cursor-pointer text-2xl font-bold tracking-tight text-green-600 hover:opacity-90'
-          >
-            conduit
-          </button>
-        ),
-        startItems: [
-          {
-            id: 'design-system',
-            label: (
-              <button
-                onClick={() => navigateRoute({ page: { _tag: 'HomePage' } })}
-                className='cursor-pointer font-semibold text-gray-700 hover:text-green-600'
-              >
-                Design System Showcase
-              </button>
-            ),
-          },
-        ],
-        endItems: [
-          {
-            id: 'search',
-            label: (
-              <div className='relative flex items-center'>
-                <Search className='absolute left-3 h-4 w-4 text-gray-400' />
-                {Input.view({
-                  value: model.searchQuery,
-                  placeholder: 'Search components…',
-                  size: 'small',
-                  isRounded: true,
-                  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                    dispatch({ _tag: 'UpdateSearch', query: e.target.value }),
-                  className: 'w-52 pl-9',
-                })}
-              </div>
-            ),
-          },
-        ],
-        model: model.navbarModel,
-        dispatch: (subMsg: Navbar.Msg) =>
-          dispatch({ _tag: 'NavbarMsg', subMsg }),
-      })}
+      <Navbar.NavbarMemo
+        config={{ desktopNavItems: [], mobileNavItems: [] }}
+        dispatch={dispatch}
+      />
 
       {/* Main Layout Container */}
       {Container.view({

@@ -1,44 +1,20 @@
-import * as EqClass from 'fp-ts/lib/Eq'
-import type { ReactNode } from 'react'
+import type { Eq } from 'fp-ts/lib/Eq'
 import type { Dispatcher } from 'tea-cup-fp'
 
-export type NavItemData<PMsg> = {
-  key: string
-  label: string
-  href: string
-  isActive: boolean
-  onClick: PMsg
-  icon?: ReactNode
-}
+import {
+  EqAlways,
+  type NavItemData,
+  mkNavItemDataEq,
+} from '../../common/nav-item'
 
-export const mkNavItemDataEq = <PMsg>(
-  msgEq: EqClass.Eq<PMsg>,
-): EqClass.Eq<NavItemData<PMsg>> => ({
-  equals: (x, y) =>
-    x.key === y.key &&
-    x.label === y.label &&
-    x.href === y.href &&
-    x.isActive === y.isActive &&
-    msgEq.equals(x.onClick, y.onClick),
-})
-
-export const EqAlways: EqClass.Eq<unknown> = {
-  equals: () => true,
-}
-
-export const NavItemDataEq: EqClass.Eq<NavItemData<unknown>> =
-  mkNavItemDataEq(EqAlways)
-
-export type Model<PMsg> = {
+export type Config<PMsg> = {
   brandNavItem?: NavItemData<PMsg>
   desktopNavItems: NavItemData<PMsg>[]
   mobileNavItems: NavItemData<PMsg>[]
   unavailableMode?: boolean
 }
 
-export const mkModelEq = <PMsg>(
-  msgEq: EqClass.Eq<PMsg>,
-): EqClass.Eq<Model<PMsg>> => {
+export const mkConfigEq = <PMsg>(msgEq: Eq<PMsg>): Eq<Config<PMsg>> => {
   const itemEq = mkNavItemDataEq(msgEq)
   return {
     equals: (x, y) =>
@@ -58,20 +34,18 @@ export const mkModelEq = <PMsg>(
   }
 }
 
-export const ModelEq: EqClass.Eq<Model<unknown>> = mkModelEq(EqAlways)
+export const ConfigEq: Eq<Config<unknown>> = mkConfigEq(EqAlways)
 
 export type Props<PMsg> = {
-  model: Model<PMsg>
+  config: Config<PMsg>
   dispatch: Dispatcher<PMsg>
 }
 
-export const mkPropsEq = <PMsg>(
-  msgEq: EqClass.Eq<PMsg>,
-): EqClass.Eq<Props<PMsg>> => {
-  const modelEq = mkModelEq(msgEq)
+export const mkPropsEq = <PMsg>(msgEq: Eq<PMsg>): Eq<Props<PMsg>> => {
+  const configEq = mkConfigEq(msgEq)
   return {
-    equals: (x, y) => modelEq.equals(x.model, y.model),
+    equals: (x, y) => configEq.equals(x.config, y.config),
   }
 }
 
-export const PropsEq: EqClass.Eq<Props<unknown>> = mkPropsEq(EqAlways)
+export const PropsEq: Eq<Props<unknown>> = mkPropsEq(EqAlways)

@@ -1,4 +1,4 @@
-import type { Menu, Navbar } from '@rinn7e/realworld-design-system'
+import type { Menu } from '@rinn7e/realworld-design-system'
 
 import type * as BlockPage from './page/block/type'
 import type * as BoxPage from './page/box/type'
@@ -105,7 +105,6 @@ export type Model = {
   readonly isInternal: boolean
   readonly pageModel: PageModel
   readonly searchQuery: string
-  readonly navbarModel: Navbar.Model
   readonly menuModel: Menu.Model
 }
 
@@ -160,5 +159,4 @@ export type Msg =
   | { readonly _tag: 'TextareaPageMsg'; readonly subMsg: TextareaPage.Msg }
   | { readonly _tag: 'TitlePageMsg'; readonly subMsg: TitlePage.Msg }
   | { readonly _tag: 'NotFoundPageMsg'; readonly subMsg: NotFoundPage.Msg }
-  | { readonly _tag: 'NavbarMsg'; readonly subMsg: Navbar.Msg }
   | { readonly _tag: 'MenuMsg'; readonly subMsg: Menu.Msg }
