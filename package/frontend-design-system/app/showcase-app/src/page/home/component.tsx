@@ -1,12 +1,12 @@
+import { ColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
+import { ColumnMemo } from '@rinn7e/realworld-design-system/grid/column/component'
+import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { CardMemo } from '@rinn7e/realworld-design-system/component/card/component'
 import { BoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
 import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { ContentMemo } from '@rinn7e/realworld-design-system/element/content/component'
 import { TagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
 import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import * as Column from '@rinn7e/realworld-design-system/grid/column/view'
-import * as Columns from '@rinn7e/realworld-design-system/grid/columns/view'
-import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
 import { BookOpen, Code2, Layers, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -24,11 +24,11 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
   return (
     <div data-component='HomePage' className='w-full space-y-8'>
       {/* Hero Banner Intro */}
-      {Hero.view({
-        variant: 'primary',
-        size: 'medium',
-        className: 'w-full rounded-xl p-8 shadow-md text-left',
-        children: () => (
+      <HeroMemo
+        variant='primary'
+        size='medium'
+        className='w-full rounded-xl p-8 shadow-md text-left'
+        children={() => (
           <div className='space-y-4'>
             <div className='flex items-center gap-2'>
               <TagMemo
@@ -63,21 +63,22 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                 isRounded={true}
                 onClick={() =>
                   navigateRoute({
-                    page: { _tag: 'ButtonPage' } })
+                    page: { _tag: 'ButtonPage' },
+                  })
                 }
                 children={() => 'Explore Components →'}
               />
             </div>
           </div>
-        ) })}
+        )}
+      />
 
       {/* Grid of Key Features */}
-      {Columns.view({
-        children: () => (
+      <ColumnsMemo>
+        {() => (
           <>
-            {Column.view({
-              size: 'one-third',
-              children: () => (
+            <ColumnMemo size='one-third'>
+              {() => (
                 <CardMemo
                   header={
                     <div className='flex items-center gap-2 text-base font-bold text-green-600'>
@@ -96,10 +97,10 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                     />
                   )}
                 </CardMemo>
-              ) })}
-            {Column.view({
-              size: 'one-third',
-              children: () => (
+              )}
+            </ColumnMemo>
+            <ColumnMemo size='one-third'>
+              {() => (
                 <CardMemo
                   header={
                     <div className='flex items-center gap-2 text-base font-bold text-sky-600'>
@@ -118,10 +119,10 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                     />
                   )}
                 </CardMemo>
-              ) })}
-            {Column.view({
-              size: 'one-third',
-              children: () => (
+              )}
+            </ColumnMemo>
+            <ColumnMemo size='one-third'>
+              {() => (
                 <CardMemo
                   header={
                     <div className='flex items-center gap-2 text-base font-bold text-amber-600'>
@@ -140,9 +141,11 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
                     />
                   )}
                 </CardMemo>
-              ) })}
+              )}
+            </ColumnMemo>
           </>
-        ) })}
+        )}
+      </ColumnsMemo>
 
       {/* Quick Start Card */}
       <BoxMemo

@@ -1,7 +1,7 @@
+import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { TagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
 import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -35,14 +35,7 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='TagPage' className='w-full space-y-8 text-left'>
-      {Hero.view({
-        variant: 'default',
-        size: 'small',
-        className:
-          'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
-        children: () => (
-          <>
-            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / TAG
             </div>
             <TitleMemo
@@ -53,9 +46,7 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
             <p className='text-base text-gray-600'>
               Small tag badges for labels, categories, keyword filters, and
               deletable chips.
-            </p>
-          </>
-        ) })}
+            </p></>)} />
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>

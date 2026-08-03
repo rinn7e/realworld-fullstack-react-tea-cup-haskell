@@ -158,6 +158,41 @@ export default defineConfig({
           __dirname,
           'lib/component/tabs/component.tsx',
         ),
+        // Form components
+        'form/checkbox/component': path.resolve(
+          __dirname,
+          'lib/form/checkbox/component.tsx',
+        ),
+        'form/field/component': path.resolve(
+          __dirname,
+          'lib/form/field/component.tsx',
+        ),
+        'form/file/component': path.resolve(
+          __dirname,
+          'lib/form/file/component.tsx',
+        ),
+        'form/input/component': path.resolve(
+          __dirname,
+          'lib/form/input/component.tsx',
+        ),
+        'form/radio/component': path.resolve(
+          __dirname,
+          'lib/form/radio/component.tsx',
+        ),
+        'form/select/component': path.resolve(
+          __dirname,
+          'lib/form/select/component.tsx',
+        ),
+        'form/textarea/component': path.resolve(
+          __dirname,
+          'lib/form/textarea/component.tsx',
+        ),
+
+        // Misc components
+        'misc/dot-loading/component': path.resolve(
+          __dirname,
+          'lib/misc/dot-loading/component.tsx',
+        ),
       },
       name: 'RealWorldDesignSystem',
       fileName: (format, entryName) =>

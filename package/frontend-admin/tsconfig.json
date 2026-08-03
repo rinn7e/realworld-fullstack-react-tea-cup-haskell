@@ -19,8 +19,11 @@
     "allowJs": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@rinn7e/realworld-design-system": ["../frontend-design-system/lib/index.ts"],
+      "@rinn7e/realworld-design-system/*": ["../frontend-design-system/lib/*"]
     }
   },
   "include": ["node_modules/vite/client.d.ts", "src/**/*", "vite.config.ts"],

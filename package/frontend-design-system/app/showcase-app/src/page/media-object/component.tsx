@@ -1,8 +1,8 @@
+import { MediaObjectMemo } from '@rinn7e/realworld-design-system/layout/media-object/component'
+import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { ImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
 import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
-import * as MediaObject from '@rinn7e/realworld-design-system/layout/media-object/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const MediaObjectPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{MediaObject.view({
+  const code = `{<MediaObjectMemo
   left: (
     <ImageMemo
       src='https://api.realworld.io/images/demo-avatar.png'
@@ -35,14 +35,7 @@ export const MediaObjectPage: React.FC<Props> = ({ model, dispatch }) => {
       data-component='MediaObjectPage'
       className='w-full space-y-8 text-left'
     >
-      {Hero.view({
-        variant: 'default',
-        size: 'small',
-        className:
-          'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
-        children: () => (
-          <>
-            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               LAYOUT / MEDIA OBJECT
             </div>
             <TitleMemo
@@ -53,9 +46,7 @@ export const MediaObjectPage: React.FC<Props> = ({ model, dispatch }) => {
             <p className='text-base text-gray-600'>
               Comment/post item container with left avatar media and right
               content text body.
-            </p>
-          </>
-        ) })}
+            </p></>)} />
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
@@ -88,14 +79,14 @@ export const MediaObjectPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Article Comment Media Object',
           children: () => (
             <div className='w-full'>
-              {MediaObject.view({
-                left: (
+              <MediaObjectMemo
+                left={
                   <ImageMemo
                     src='https://api.realworld.io/images/demo-avatar.png'
                     ratio='rounded'
                   />
-                ),
-                children: () => (
+                }
+                children={() => (
                   <div>
                     <h4 className='font-bold text-gray-900'>Gerard Quan</h4>
                     <p className='mt-1 text-sm text-gray-600'>
@@ -103,7 +94,8 @@ export const MediaObjectPage: React.FC<Props> = ({ model, dispatch }) => {
                       Haskell!
                     </p>
                   </div>
-                ) })}
+                )}
+              />
             </div>
           ) })}
 

@@ -1,7 +1,7 @@
+import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { BreadcrumbMemo } from '@rinn7e/realworld-design-system/component/breadcrumb/component'
 import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
 import { Code2 } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -25,10 +25,10 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='BreadcrumbPage' className='w-full space-y-8'>
-      {Hero.view({
-        variant: 'default',
-        size: 'small',
-        children: () => (
+      <HeroMemo
+        variant='default'
+        size='small'
+        children={() => (
           <div className='flex items-center justify-between'>
             <div>
               <TitleMemo
@@ -53,7 +53,8 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
               )}
             />
           </div>
-        ) })}
+        )}
+      />
 
       <div className='space-y-6'>
         {sectionView({

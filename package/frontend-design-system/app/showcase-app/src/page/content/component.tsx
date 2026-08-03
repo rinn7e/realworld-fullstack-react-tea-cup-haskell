@@ -1,7 +1,7 @@
+import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { ContentMemo } from '@rinn7e/realworld-design-system/element/content/component'
 import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -28,14 +28,7 @@ export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='ContentPage' className='w-full space-y-8 text-left'>
-      {Hero.view({
-        variant: 'default',
-        size: 'small',
-        className:
-          'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
-        children: () => (
-          <>
-            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / CONTENT
             </div>
             <TitleMemo
@@ -46,9 +39,7 @@ export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
             <p className='text-base text-gray-600'>
               Typography content wrapper for rich text formatting and article
               content.
-            </p>
-          </>
-        ) })}
+            </p></>)} />
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>

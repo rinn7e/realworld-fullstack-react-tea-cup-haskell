@@ -1,7 +1,7 @@
+import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { IconMemo } from '@rinn7e/realworld-design-system/element/icon/component'
 import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
 import { Code2, Search, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -15,19 +15,12 @@ interface Props {
 }
 
 export const IconPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `<IconMemo children={() => <Sparkles className='h-6 w-6 text-green-600' />} />
-<IconMemo children={() => <Search className='h-6 w-6 text-sky-500' />} />`
+  const code = `<IconMemo children={() => <Sparkles className='h-6 w-6 text-green-600' /> />
+<IconMemo children={() => <Search className='h-6 w-6 text-sky-500' /> />`
 
   return (
     <div data-component='IconPage' className='w-full space-y-8 text-left'>
-      {Hero.view({
-        variant: 'default',
-        size: 'small',
-        className:
-          'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
-        children: () => (
-          <>
-            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / ICON
             </div>
             <TitleMemo
@@ -38,9 +31,7 @@ export const IconPage: React.FC<Props> = ({ model, dispatch }) => {
             <p className='text-base text-gray-600'>
               Icon wrapper container for Lucide icons with consistent sizing and
               alignment.
-            </p>
-          </>
-        ) })}
+            </p></>)} />
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>

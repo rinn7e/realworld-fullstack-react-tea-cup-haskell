@@ -71,6 +71,16 @@
       "types": "./dist/type/*.d.ts",
       "import": "./dist/type/*.mjs",
       "require": "./dist/type/*.js"
+    },
+    "./misc/*": {
+      "types": "./dist/misc/*/index.d.ts",
+      "import": "./dist/misc/*/index.mjs",
+      "require": "./dist/misc/*/index.js"
+    },
+    "./misc/*/*": {
+      "types": "./dist/misc/*/*.d.ts",
+      "import": "./dist/misc/*/*.mjs",
+      "require": "./dist/misc/*/*.js"
     }
   },
   "files": [

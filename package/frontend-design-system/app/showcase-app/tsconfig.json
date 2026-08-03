@@ -19,7 +19,8 @@
     "baseUrl": ".",
     "paths": {
       "../../lib": ["../../lib/index.ts"],
-      "@rinn7e/realworld-design-system": ["../../lib/index.ts"]
+      "@rinn7e/realworld-design-system": ["../../lib/index.ts"],
+      "@rinn7e/realworld-design-system/*": ["../../lib/*"]
     }
   },
   "include": ["src"]

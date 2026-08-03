@@ -1,6 +1,7 @@
+import { TextareaMemo } from '@rinn7e/realworld-design-system/form/textarea/component'
+import { HeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import {  Hero, Textarea } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -14,39 +15,30 @@ interface Props {
 }
 export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `// Interactive Textarea
-{Textarea.view({
+{<TextareaMemo
   value: model.value,
   rows: 4,
   placeholder: 'Write your article in markdown...',
   onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }) })}
 
 // State Variations
-{Textarea.view({ isError: true, value: 'Invalid markdown content', rows: 3 })}
-{Textarea.view({ isDisabled: true, value: 'Read-only content body', rows: 3 })}`
+{<TextareaMemo isError: true, value: 'Invalid markdown content', rows: 3 })}
+{<TextareaMemo isDisabled: true, value: 'Read-only content body', rows: 3 })}`
   return (
     <div data-component='TextareaPage' className='w-full space-y-8 text-left'>
-      {Hero.view({
-        variant: 'default',
-        size: 'small',
-        className:
-          'rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full',
-        children: () => (
-          <>
-            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <HeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               FORM / TEXTAREA
             </div>
-            {<TitleMemo size={2} className='mb-2 font-extrabold text-gray-900' children={() => 'Textarea'} />}
+            <TitleMemo size={2} className='mb-2 font-extrabold text-gray-900' children={() => 'Textarea'} />
             <p className='text-base text-gray-600'>
               Multi-line text input control with support for interactive state,
               row sizes, validation errors, and disabled states.
-            </p>
-          </>
-        ) })}
+            </p></>)} />
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
-          {<TitleMemo size={5} className="flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600" children={() => (<><Sparkles className="h-4 w-4 text-green-600" /><span>Interactive Playground &amp; Code</span></>)} />}
-          {<ButtonMemo color="green" variant="link" size="small" onClick={() => dispatch({ _tag: "ToggleShowCode" })} className="flex items-center gap-1 font-semibold text-green-600 hover:underline" children={() => (<><Code2 className="h-3.5 w-3.5" /><span>{model.showCode ? "Hide Code" : "Show Code"}</span></>)} />}
+          <TitleMemo size={5} className="flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600" children={() => (<><Sparkles className="h-4 w-4 text-green-600" /><span>Interactive Playground &amp; Code</span></>)} />
+          <ButtonMemo color="green" variant="link" size="small" onClick={() => dispatch({ _tag: "ToggleShowCode" })} className="flex items-center gap-1 font-semibold text-green-600 hover:underline" children={() => (<><Code2 className="h-3.5 w-3.5" /><span>{model.showCode ? "Hide Code" : "Show Code"}</span></>)} />
         </div>
 
         {/* Section 1: Interactive Textarea */}
@@ -54,12 +46,14 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Interactive Textarea',
           children: () => (
             <div className='w-full space-y-3'>
-              {Textarea.view({
-                value: model.value,
-                rows: 4,
-                placeholder: 'Write your article body (in markdown format)...',
-                onChange: (e) =>
-                  dispatch({ _tag: 'UpdateValue', value: e.target.value }) })}
+              <TextareaMemo
+                value={model.value}
+                rows={4}
+                placeholder='Write your article body (in markdown format)...'
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  dispatch({ _tag: 'UpdateValue', value: e.target.value })
+                }
+              />
               <p className='text-xs text-gray-500'>
                 Character Count:{' '}
                 <span className='font-mono font-bold text-gray-800'>
@@ -78,19 +72,21 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Error State
                 </span>
-                {Textarea.view({
-                  isError: true,
-                  value: 'Cannot submit empty post content.',
-                  rows: 3 })}
+                <TextareaMemo
+                  isError={true}
+                  value='Cannot submit empty post content.'
+                  rows={3}
+                />
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
                   Disabled State
                 </span>
-                {Textarea.view({
-                  isDisabled: true,
-                  value: 'System read-only logs and article notes.',
-                  rows: 3 })}
+                <TextareaMemo
+                  isDisabled={true}
+                  value='System read-only logs and article notes.'
+                  rows={3}
+                />
               </div>
             </div>
           ) })}

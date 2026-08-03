@@ -1,9 +1,9 @@
 import * as Menu from '@rinn7e/realworld-design-system/component/menu'
 import { NavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
-import * as Column from '@rinn7e/realworld-design-system/grid/column/view'
-import * as Columns from '@rinn7e/realworld-design-system/grid/columns/view'
-import * as Container from '@rinn7e/realworld-design-system/layout/container/view'
-import * as Footer from '@rinn7e/realworld-design-system/layout/footer/view'
+import { ColumnMemo } from '@rinn7e/realworld-design-system/grid/column/component'
+import { ColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
+import { ContainerMemo } from '@rinn7e/realworld-design-system/layout/container/component'
+import { FooterMemo } from '@rinn7e/realworld-design-system/layout/footer/component'
 import { BookOpen, Layers, LayoutGrid, Sparkles } from 'lucide-react'
 import React from 'react'
 
@@ -447,32 +447,34 @@ export const view = (
       />
 
       {/* Main Layout Container */}
-      {Container.view({
-        className: 'my-8 flex-1 w-full',
-        children: () =>
-          Columns.view({
-            children: () => (
+      <ContainerMemo className='my-8 flex-1 w-full'>
+        {() => (
+          <ColumnsMemo>
+            {() => (
               <>
                 {/* Left Sidebar Navigation */}
-                {Column.view({
-                  className: 'w-full md:w-56 md:shrink-0 md:grow-0',
-                  children: () => (
+                <ColumnMemo className='w-full md:w-56 md:shrink-0 md:grow-0'>
+                  {() => (
                     <Sidebar
                       menuCategories={menuCategories}
                       menuModel={model.menuModel}
                       navigateRoute={navigateRoute}
                     />
-                  ) })}
+                  )}
+                </ColumnMemo>
 
                 {/* Main Page Area */}
-                {Column.view({
-                  className: 'flex-1 min-w-0',
-                  children: () => <div className='w-full'>{renderPage()}</div> })}
+                <ColumnMemo className='flex-1 min-w-0'>
+                  {() => <div className='w-full'>{renderPage()}</div>}
+                </ColumnMemo>
               </>
-            ) }) })}
+            )}
+          </ColumnsMemo>
+        )}
+      </ContainerMemo>
 
       {/* Footer */}
-      {Footer.view({})}
+      <FooterMemo />
     </div>
   )
 }
