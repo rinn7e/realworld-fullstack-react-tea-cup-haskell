@@ -1,4 +1,7 @@
-import { Button, Hero, Message, Title } from '@rinn7e/realworld-design-system'
+import { MessageMemo } from '@rinn7e/realworld-design-system/component/message/component'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -83,42 +86,36 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Color Variants (Header & Body)',
           children: () => (
             <div className='w-full space-y-4'>
-              {Message.view({
-                variant: 'default',
-                header: 'Note',
-                children: () =>
-                  'Default callout message body detailing general instructions.',
-              })}
-              {Message.view({
-                variant: 'primary',
-                header: 'Primary Note',
-                children: () =>
-                  'Primary callout message highlighting important features.',
-              })}
-              {Message.view({
-                variant: 'info',
-                header: 'System Information',
-                children: () =>
-                  'Maintenance is scheduled for tonight at 02:00 UTC.',
-              })}
-              {Message.view({
-                variant: 'success',
-                header: 'Success',
-                children: () =>
-                  'Your account was upgraded to Pro successfully!',
-              })}
-              {Message.view({
-                variant: 'warning',
-                header: 'Warning',
-                children: () =>
-                  'Your subscription expires in 3 days. Please renew.',
-              })}
-              {Message.view({
-                variant: 'danger',
-                header: 'Connection Error',
-                children: () =>
-                  'Unable to reach backend servers. Please try again later.',
-              })}
+              <MessageMemo variant='default' header='Note'>
+                {() =>
+                  'Default callout message body detailing general instructions.'
+                }
+              </MessageMemo>
+              <MessageMemo variant='primary' header='Primary Note'>
+                {() =>
+                  'Primary callout message highlighting important features.'
+                }
+              </MessageMemo>
+              <MessageMemo variant='info' header='System Information'>
+                {() =>
+                  'Maintenance is scheduled for tonight at 02:00 UTC.'
+                }
+              </MessageMemo>
+              <MessageMemo variant='success' header='Success'>
+                {() =>
+                  'Your account was upgraded to Pro successfully!'
+                }
+              </MessageMemo>
+              <MessageMemo variant='warning' header='Warning'>
+                {() =>
+                  'Your subscription expires in 3 days. Please renew.'
+                }
+              </MessageMemo>
+              <MessageMemo variant='danger' header='Connection Error'>
+                {() =>
+                  'Unable to reach backend servers. Please try again later.'
+                }
+              </MessageMemo>
             </div>
           ),
         })}
@@ -128,18 +125,20 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Body Only & Dismissible Messages',
           children: () => (
             <div className='w-full space-y-4'>
-              {Message.view({
-                variant: 'info',
-                children: () =>
-                  'Standalone callout message body without a header container.',
-              })}
-              {Message.view({
-                variant: 'primary',
-                header: 'Dismissible Notice',
-                onDelete: () => alert('Message closed!'),
-                children: () =>
-                  'Click the X button on the top right to close this message box.',
-              })}
+              <MessageMemo variant='info'>
+                {() =>
+                  'Standalone callout message body without a header container.'
+                }
+              </MessageMemo>
+              <MessageMemo
+                variant='primary'
+                header='Dismissible Notice'
+                onDelete={() => alert('Message closed!')}
+              >
+                {() =>
+                  'Click the X button on the top right to close this message box.'
+                }
+              </MessageMemo>
             </div>
           ),
         })}

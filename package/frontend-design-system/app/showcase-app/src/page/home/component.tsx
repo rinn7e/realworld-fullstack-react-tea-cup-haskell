@@ -1,14 +1,12 @@
-import {
-  Box,
-  Button,
-  Card,
-  Column,
-  Columns,
-  Content,
-  Hero,
-  Tag,
-  Title,
-} from '@rinn7e/realworld-design-system'
+import { CardMemo } from '@rinn7e/realworld-design-system/component/card/component'
+import * as Box from '@rinn7e/realworld-design-system/element/box/view'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Column from '@rinn7e/realworld-design-system/grid/column/view'
+import * as Columns from '@rinn7e/realworld-design-system/grid/columns/view'
+import * as Content from '@rinn7e/realworld-design-system/element/content/view'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
+import * as Tag from '@rinn7e/realworld-design-system/element/tag/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import { BookOpen, Code2, Layers, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -81,60 +79,69 @@ export const HomePage: React.FC<Props> = ({ navigateRoute }) => {
           <>
             {Column.view({
               size: 'one-third',
-              children: () =>
-                Card.view({
-                  header: (
+              children: () => (
+                <CardMemo
+                  header={
                     <div className='flex items-center gap-2 text-base font-bold text-green-600'>
                       <Layers className='h-5 w-5' />
                       <span>35 RealWorld Elements</span>
                     </div>
-                  ),
-                  children: () =>
+                  }
+                >
+                  {() =>
                     Content.view({
                       size: 'small',
                       className: 'text-gray-600',
                       children: () =>
                         'Complete coverage of elements, components, forms, layouts, and grid systems exported as pure TypeScript functions.',
-                    }),
-                }),
+                    })
+                  }
+                </CardMemo>
+              ),
             })}
             {Column.view({
               size: 'one-third',
-              children: () =>
-                Card.view({
-                  header: (
+              children: () => (
+                <CardMemo
+                  header={
                     <div className='flex items-center gap-2 text-base font-bold text-sky-600'>
                       <Sparkles className='h-5 w-5' />
                       <span>Pure Tailwind CSS v4</span>
                     </div>
-                  ),
-                  children: () =>
+                  }
+                >
+                  {() =>
                     Content.view({
                       size: 'small',
                       className: 'text-gray-600',
                       children: () =>
                         'Zero runtime CSS-in-JS dependencies! Built cleanly with Tailwind v4 utilities and automated source scanning.',
-                    }),
-                }),
+                    })
+                  }
+                </CardMemo>
+              ),
             })}
             {Column.view({
               size: 'one-third',
-              children: () =>
-                Card.view({
-                  header: (
+              children: () => (
+                <CardMemo
+                  header={
                     <div className='flex items-center gap-2 text-base font-bold text-amber-600'>
                       <Code2 className='h-5 w-5' />
                       <span>Elm Architecture (TEA)</span>
                     </div>
-                  ),
-                  children: () =>
+                  }
+                >
+                  {() =>
                     Content.view({
                       size: 'small',
                       className: 'text-gray-600',
                       children: () =>
                         'Stateless presentation view functions designed for tea-cup state machines and deterministic frontend updates.',
-                    }),
-                }),
+                    })
+                  }
+                </CardMemo>
+              ),
             })}
           </>
         ),

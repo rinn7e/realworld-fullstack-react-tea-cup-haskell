@@ -73,6 +73,42 @@ export default defineConfig({
           'lib/element/title/view.tsx',
         ),
 
+        // Grid views
+        'grid/column/view': path.resolve(
+          __dirname,
+          'lib/grid/column/view.tsx',
+        ),
+        'grid/columns/view': path.resolve(
+          __dirname,
+          'lib/grid/columns/view.tsx',
+        ),
+
+        // Layout views
+        'layout/container/view': path.resolve(
+          __dirname,
+          'lib/layout/container/view.tsx',
+        ),
+        'layout/footer/view': path.resolve(
+          __dirname,
+          'lib/layout/footer/view.tsx',
+        ),
+        'layout/hero/view': path.resolve(
+          __dirname,
+          'lib/layout/hero/view.tsx',
+        ),
+        'layout/level/view': path.resolve(
+          __dirname,
+          'lib/layout/level/view.tsx',
+        ),
+        'layout/media-object/view': path.resolve(
+          __dirname,
+          'lib/layout/media-object/view.tsx',
+        ),
+        'layout/section/view': path.resolve(
+          __dirname,
+          'lib/layout/section/view.tsx',
+        ),
+
         // Component entries
         'component/generic-link': path.resolve(
           __dirname,
@@ -86,41 +122,41 @@ export default defineConfig({
           __dirname,
           'lib/component/navbar/component.tsx',
         ),
-        'component/breadcrumb/view': path.resolve(
+        'component/breadcrumb/component': path.resolve(
           __dirname,
-          'lib/component/breadcrumb/view.tsx',
+          'lib/component/breadcrumb/component.tsx',
         ),
-        'component/card/view': path.resolve(
+        'component/card/component': path.resolve(
           __dirname,
-          'lib/component/card/view.tsx',
+          'lib/component/card/component.tsx',
         ),
-        'component/dropdown/view': path.resolve(
+        'component/dropdown/component': path.resolve(
           __dirname,
-          'lib/component/dropdown/view.tsx',
+          'lib/component/dropdown/component.tsx',
         ),
-        'component/menu/view': path.resolve(
+        'component/menu/component': path.resolve(
           __dirname,
-          'lib/component/menu/view.tsx',
+          'lib/component/menu/component.tsx',
         ),
-        'component/message/view': path.resolve(
+        'component/message/component': path.resolve(
           __dirname,
-          'lib/component/message/view.tsx',
+          'lib/component/message/component.tsx',
         ),
-        'component/modal/view': path.resolve(
+        'component/modal/component': path.resolve(
           __dirname,
-          'lib/component/modal/view.tsx',
+          'lib/component/modal/component.tsx',
         ),
-        'component/pagination/view': path.resolve(
+        'component/pagination/component': path.resolve(
           __dirname,
-          'lib/component/pagination/view.tsx',
+          'lib/component/pagination/component.tsx',
         ),
-        'component/panel/view': path.resolve(
+        'component/panel/component': path.resolve(
           __dirname,
-          'lib/component/panel/view.tsx',
+          'lib/component/panel/component.tsx',
         ),
-        'component/tabs/view': path.resolve(
+        'component/tabs/component': path.resolve(
           __dirname,
-          'lib/component/tabs/view.tsx',
+          'lib/component/tabs/component.tsx',
         ),
       },
       name: 'RealWorldDesignSystem',

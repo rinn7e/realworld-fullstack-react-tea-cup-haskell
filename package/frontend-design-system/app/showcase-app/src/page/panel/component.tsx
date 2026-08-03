@@ -1,4 +1,8 @@
-import { Button, Hero, Panel, Title } from '@rinn7e/realworld-design-system'
+import * as Panel from '@rinn7e/realworld-design-system/component/panel'
+import { PanelMemo } from '@rinn7e/realworld-design-system/component/panel/component'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -81,21 +85,23 @@ export const PanelPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='flex w-full justify-center'>
               <div className='w-full max-w-md'>
-                {Panel.view({
-                  heading: 'Repositories',
-                  tabs: [
+                <PanelMemo
+                  heading='Repositories'
+                  tabs={[
                     { id: 'all', label: 'All' },
                     { id: 'public', label: 'Public' },
                     { id: 'private', label: 'Private' },
-                  ],
-                  blocks: [
+                  ]}
+                  blocks={[
                     { id: 'p1', label: 'realworld-design-system' },
                     { id: 'p2', label: 'frontend-web' },
                     { id: 'p3', label: 'backend-servant' },
-                  ],
-                  model: model.panelModel,
-                  dispatch: (subMsg) => dispatch({ _tag: 'PanelMsg', subMsg }),
-                })}
+                  ]}
+                  model={model.panelModel}
+                  dispatch={(subMsg: Panel.Msg) =>
+                    dispatch({ _tag: 'PanelMsg', subMsg })
+                  }
+                />
               </div>
             </div>
           ),

@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { cn } from '../../theme'
 import type { TabsProps } from './type'
+import { TabsPropsEq } from './type'
 
-export const view = ({
+export const TabsComponent = ({
   items,
   isBoxed = false,
   isToggle = false,
@@ -88,3 +89,5 @@ export const view = ({
     </div>
   )
 }
+
+export const TabsMemo = memo(TabsComponent, TabsPropsEq.equals)

@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { cn } from '../../theme'
 import type { MenuProps } from './type'
+import { MenuPropsEq } from './type'
 
-export const view = ({
+export const MenuComponent = ({
   categories,
   model,
   dispatch,
@@ -49,3 +50,5 @@ export const view = ({
     </aside>
   )
 }
+
+export const MenuMemo = memo(MenuComponent, MenuPropsEq.equals)

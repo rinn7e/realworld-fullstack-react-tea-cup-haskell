@@ -1,4 +1,8 @@
-import { Button, Hero, Navbar, Title } from '@rinn7e/realworld-design-system'
+import * as Navbar from '@rinn7e/realworld-design-system/component/navbar'
+import { NavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import { Code2, Menu, Pencil, Settings, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -164,9 +168,9 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
           boxClassName:
             'px-0 pt-0 pb-6 w-full bg-white border-2 border-dotted border-gray-300 rounded-lg overflow-hidden',
           children: () => (
-            <Navbar.NavbarMemo
+            <NavbarMemo
               config={navbarConfig}
-              dispatch={(msg) => dispatch({ _tag: 'NavbarMsg', msg })}
+              dispatch={(msg: string) => dispatch({ _tag: 'NavbarMsg', msg })}
             />
           ),
         })}

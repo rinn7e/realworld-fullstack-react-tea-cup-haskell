@@ -1,11 +1,9 @@
-import {
-  Column,
-  Columns,
-  Container,
-  Footer,
-  Menu,
-  Navbar,
-} from '@rinn7e/realworld-design-system'
+import * as Menu from '@rinn7e/realworld-design-system/component/menu'
+import { NavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
+import * as Column from '@rinn7e/realworld-design-system/grid/column/view'
+import * as Columns from '@rinn7e/realworld-design-system/grid/columns/view'
+import * as Container from '@rinn7e/realworld-design-system/layout/container/view'
+import * as Footer from '@rinn7e/realworld-design-system/layout/footer/view'
 import { BookOpen, Layers, LayoutGrid, Sparkles } from 'lucide-react'
 import React from 'react'
 
@@ -451,7 +449,7 @@ export const view = (
       className='flex min-h-screen flex-col bg-white font-sans text-gray-900'
     >
       {/* Top Navbar Header */}
-      <Navbar.NavbarMemo
+      <NavbarMemo
         config={{ desktopNavItems: [], mobileNavItems: [] }}
         dispatch={dispatch}
       />

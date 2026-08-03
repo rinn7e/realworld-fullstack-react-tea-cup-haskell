@@ -1,4 +1,8 @@
-import { Button, Hero, Tabs, Title } from '@rinn7e/realworld-design-system'
+import * as Tabs from '@rinn7e/realworld-design-system/component/tabs'
+import { TabsMemo } from '@rinn7e/realworld-design-system/component/tabs/component'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -78,15 +82,17 @@ export const TabsPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='flex w-full justify-center'>
               <div className='w-full'>
-                {Tabs.view({
-                  items: [
+                <TabsMemo
+                  items={[
                     { id: 'your_feed', label: 'Your Feed' },
                     { id: 'global_feed', label: 'Global Feed' },
                     { id: 'tag_feed', label: '#react' },
-                  ],
-                  model: model.tabsModel,
-                  dispatch: (subMsg) => dispatch({ _tag: 'TabsMsg', subMsg }),
-                })}
+                  ]}
+                  model={model.tabsModel}
+                  dispatch={(subMsg: Tabs.Msg) =>
+                    dispatch({ _tag: 'TabsMsg', subMsg })
+                  }
+                />
               </div>
             </div>
           ),

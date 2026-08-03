@@ -1,8 +1,9 @@
 import { ChevronRight } from 'lucide-react'
-import React from 'react'
+import React, { memo } from 'react'
 
 import { cn } from '../../theme'
 import type { BreadcrumbProps } from './type'
+import { BreadcrumbPropsEq } from './type'
 
 const alignStyles: Record<string, string> = {
   left: 'justify-start',
@@ -10,7 +11,7 @@ const alignStyles: Record<string, string> = {
   right: 'justify-end',
 }
 
-export const view = ({
+export const BreadcrumbComponent = ({
   items,
   align = 'left',
   onSelect,
@@ -59,3 +60,8 @@ export const view = ({
     </nav>
   )
 }
+
+export const BreadcrumbMemo = memo(
+  BreadcrumbComponent,
+  BreadcrumbPropsEq.equals,
+)

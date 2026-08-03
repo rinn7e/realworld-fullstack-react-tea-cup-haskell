@@ -1,4 +1,6 @@
-import { Box, Menu } from '@rinn7e/realworld-design-system'
+import * as Box from '@rinn7e/realworld-design-system/element/box/view'
+import * as Menu from '@rinn7e/realworld-design-system/component/menu'
+import { MenuMemo } from '@rinn7e/realworld-design-system/component/menu/component'
 import React from 'react'
 
 import type { AppRoute } from '../route/type'
@@ -19,11 +21,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {Box.view({
         className:
           'p-4 w-full text-left bg-gray-50/50 border border-gray-200/80 rounded-lg',
-        children: () =>
-          Menu.view({
-            categories: menuCategories,
-            model: menuModel,
-            dispatch: (subMsg: Menu.Msg) => {
+        children: () => (
+          <MenuMemo
+            categories={menuCategories}
+            model={menuModel}
+            dispatch={(subMsg: Menu.Msg) => {
               if (subMsg._tag === 'Select') {
                 const compId = subMsg.id as string
                 const pageTagName =
@@ -35,8 +37,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   page: { _tag: pageTagName } as unknown as AppRoute['page'],
                 })
               }
-            },
-          }),
+            }}
+          />
+        ),
       })}
     </div>
   )

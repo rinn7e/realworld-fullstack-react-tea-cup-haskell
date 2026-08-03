@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { cn } from '../../theme'
 import type { PanelProps } from './type'
+import { PanelPropsEq } from './type'
 
-export const view = ({
+export const PanelComponent = ({
   heading = 'Repositories',
   tabs = [],
   blocks = [],
@@ -68,3 +69,5 @@ export const view = ({
     </nav>
   )
 }
+
+export const PanelMemo = memo(PanelComponent, PanelPropsEq.equals)

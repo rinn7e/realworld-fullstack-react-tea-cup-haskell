@@ -259,7 +259,7 @@ For any component (or page), split it into the following files:
 **4. `index.ts`**
 
 - Re-exports everything from `./type` and `./update`.
-- **Do NOT** export the view component here; callers should import it directly from `./component.tsx`.
+- **NEVER** `export * from './component'` in `index.ts`. Callers must import view components directly from `/component` (or `./component.tsx`).
 
 For complex components (like pages):
 

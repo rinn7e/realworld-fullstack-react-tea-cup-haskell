@@ -1,9 +1,8 @@
-import {
-  Button,
-  Hero,
-  Pagination,
-  Title,
-} from '@rinn7e/realworld-design-system'
+import * as Pagination from '@rinn7e/realworld-design-system/component/pagination'
+import { PaginationMemo } from '@rinn7e/realworld-design-system/component/pagination/component'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -80,11 +79,12 @@ export const PaginationPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='flex w-full justify-center'>
               <div className='w-full'>
-                {Pagination.view({
-                  model: model.paginationModel,
-                  dispatch: (subMsg) =>
-                    dispatch({ _tag: 'PaginationMsg', subMsg }),
-                })}
+                <PaginationMemo
+                  model={model.paginationModel}
+                  dispatch={(subMsg: Pagination.Msg) =>
+                    dispatch({ _tag: 'PaginationMsg', subMsg })
+                  }
+                />
               </div>
             </div>
           ),

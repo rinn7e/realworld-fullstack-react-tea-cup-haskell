@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { view as DeleteView } from '../../element/delete/view'
 import { cn } from '../../theme'
 import type { MessageProps } from './type'
+import { MessagePropsEq } from './type'
 
 const variantStyles: Record<string, { header: string; body: string }> = {
   default: {
@@ -31,7 +32,7 @@ const variantStyles: Record<string, { header: string; body: string }> = {
   },
 }
 
-export const view = ({
+export const MessageComponent = ({
   header,
   children,
   variant = 'default',
@@ -68,3 +69,5 @@ export const view = ({
     </article>
   )
 }
+
+export const MessageMemo = memo(MessageComponent, MessagePropsEq.equals)

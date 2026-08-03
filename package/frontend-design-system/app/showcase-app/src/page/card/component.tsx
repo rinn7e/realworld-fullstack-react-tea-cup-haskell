@@ -1,10 +1,8 @@
-import {
-  Button,
-  Card,
-  Content,
-  Hero,
-  Title,
-} from '@rinn7e/realworld-design-system'
+import { CardMemo } from '@rinn7e/realworld-design-system/component/card/component'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Content from '@rinn7e/realworld-design-system/element/content/view'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -89,21 +87,22 @@ export const CardPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='flex w-full justify-center'>
               <div className='w-full max-w-md'>
-                {Card.view({
-                  header: 'How to Build a Design System',
-                  footer: (
+                <CardMemo
+                  header='How to Build a Design System'
+                  footer={
                     <div className='flex w-full items-center justify-between text-xs text-gray-500'>
                       <span>Author: Albert Chen</span>
                       <span>5 min read</span>
                     </div>
-                  ),
-                  children: () =>
+                  }
+                >
+                  {() =>
                     Content.view({
-                      size: 'normal',
                       children: () =>
-                        'An introduction to modular component design architecture built with React, Tailwind CSS v4, and the Elm Architecture.',
-                    }),
-                })}
+                        'Building a reusable React design system requires careful consideration of subpath exports, component modularity, and strict TypeScript types.',
+                    })
+                  }
+                </CardMemo>
               </div>
             </div>
           ),

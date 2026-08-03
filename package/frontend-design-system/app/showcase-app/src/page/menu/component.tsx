@@ -1,4 +1,8 @@
-import { Button, Hero, Menu, Title } from '@rinn7e/realworld-design-system'
+import * as Menu from '@rinn7e/realworld-design-system/component/menu'
+import { MenuMemo } from '@rinn7e/realworld-design-system/component/menu/component'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -77,8 +81,8 @@ export const MenuPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Vertical Navigation Menu',
           children: () => (
             <div className='w-full max-w-xs'>
-              {Menu.view({
-                categories: [
+              <MenuMemo
+                categories={[
                   {
                     title: 'General',
                     items: [
@@ -90,10 +94,12 @@ export const MenuPage: React.FC<Props> = ({ model, dispatch }) => {
                     title: 'Administration',
                     items: [{ id: 'users', label: 'Manage Users' }],
                   },
-                ],
-                model: model.menuModel,
-                dispatch: (subMsg) => dispatch({ _tag: 'MenuMsg', subMsg }),
-              })}
+                ]}
+                model={model.menuModel}
+                dispatch={(subMsg: Menu.Msg) =>
+                  dispatch({ _tag: 'MenuMsg', subMsg })
+                }
+              />
             </div>
           ),
         })}

@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { view as DeleteView } from '../../element/delete/view'
 import { cn } from '../../theme'
 import type { ModalProps } from './type'
+import { ModalPropsEq } from './type'
 
-export const view = ({
+export const ModalComponent = ({
   title,
   children,
   footer,
@@ -54,3 +55,5 @@ export const view = ({
     </div>
   )
 }
+
+export const ModalMemo = memo(ModalComponent, ModalPropsEq.equals)

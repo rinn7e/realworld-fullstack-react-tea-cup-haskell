@@ -1,10 +1,11 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import React from 'react'
+import React, { memo } from 'react'
 
 import { cn } from '../../theme'
 import type { PaginationProps } from './type'
+import { PaginationPropsEq } from './type'
 
-export const view = ({
+export const PaginationComponent = ({
   model,
   dispatch,
   className,
@@ -64,3 +65,8 @@ export const view = ({
     </nav>
   )
 }
+
+export const PaginationMemo = memo(
+  PaginationComponent,
+  PaginationPropsEq.equals,
+)

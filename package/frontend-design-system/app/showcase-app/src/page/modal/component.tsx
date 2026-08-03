@@ -1,4 +1,8 @@
-import { Button, Hero, Modal, Title } from '@rinn7e/realworld-design-system'
+import * as Modal from '@rinn7e/realworld-design-system/component/modal'
+import { ModalMemo } from '@rinn7e/realworld-design-system/component/modal/component'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -86,16 +90,19 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
                     dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } }),
                   children: () => 'Open Modal',
                 })}
-                {Modal.view({
-                  title: 'Confirm Action',
-                  model: model.modalModel,
-                  dispatch: (subMsg) => dispatch({ _tag: 'ModalMsg', subMsg }),
-                  children: () => (
+                <ModalMemo
+                  title='Confirm Action'
+                  model={model.modalModel}
+                  dispatch={(subMsg: Modal.Msg) =>
+                    dispatch({ _tag: 'ModalMsg', subMsg })
+                  }
+                >
+                  {() => (
                     <p className='text-sm text-gray-600'>
                       Are you sure you want to delete this article?
                     </p>
-                  ),
-                })}
+                  )}
+                </ModalMemo>
               </div>
             </div>
           ),

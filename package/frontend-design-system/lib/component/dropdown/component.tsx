@@ -1,10 +1,11 @@
 import { ChevronDown } from 'lucide-react'
-import React from 'react'
+import React, { memo } from 'react'
 
 import { cn } from '../../theme'
 import type { DropdownProps } from './type'
+import { DropdownPropsEq } from './type'
 
-export const view = ({
+export const DropdownComponent = ({
   triggerLabel,
   items,
   model,
@@ -62,3 +63,5 @@ export const view = ({
     </div>
   )
 }
+
+export const DropdownMemo = memo(DropdownComponent, DropdownPropsEq.equals)

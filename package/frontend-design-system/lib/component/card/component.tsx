@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { cn } from '../../theme'
 import type { CardProps } from './type'
+import { CardPropsEq } from './type'
 
-export const view = ({
+export const CardComponent = ({
   header,
   image,
   children,
@@ -37,3 +38,5 @@ export const view = ({
     </div>
   )
 }
+
+export const CardMemo = memo(CardComponent, CardPropsEq.equals)

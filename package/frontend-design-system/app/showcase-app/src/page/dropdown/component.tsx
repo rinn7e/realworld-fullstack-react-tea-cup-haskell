@@ -1,4 +1,8 @@
-import { Button, Dropdown, Hero, Title } from '@rinn7e/realworld-design-system'
+import * as Dropdown from '@rinn7e/realworld-design-system/component/dropdown'
+import { DropdownMemo } from '@rinn7e/realworld-design-system/component/dropdown/component'
+import * as Button from '@rinn7e/realworld-design-system/element/button/view'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
+import * as Title from '@rinn7e/realworld-design-system/element/title/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -79,16 +83,18 @@ export const DropdownPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Interactive Dropdown Menu',
           children: () => (
             <div className='flex w-full justify-center py-4'>
-              {Dropdown.view({
-                triggerLabel: 'Select Action',
-                items: [
+              <DropdownMemo
+                triggerLabel='Select Action'
+                items={[
                   { id: 'edit', label: 'Edit Article' },
                   { id: 'share', label: 'Share Link' },
                   { id: 'delete', label: 'Delete Article' },
-                ],
-                model: model.dropdownModel,
-                dispatch: (subMsg) => dispatch({ _tag: 'DropdownMsg', subMsg }),
-              })}
+                ]}
+                model={model.dropdownModel}
+                dispatch={(subMsg: Dropdown.Msg) =>
+                  dispatch({ _tag: 'DropdownMsg', subMsg })
+                }
+              />
             </div>
           ),
         })}
