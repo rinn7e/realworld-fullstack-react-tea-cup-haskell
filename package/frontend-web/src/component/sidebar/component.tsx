@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom'
 
 import { SetGlobalMsgContext } from '@/common/global-context'
 import { memoStrategy } from '@/common/util'
-import { GenericLink } from '@/component/generic-link'
+import { GenericLink } from '@rinn7e/realworld-design-system/component/generic-link'
 import type { Msg as AppMsg } from '@/type'
 
 import type { Props } from './type'

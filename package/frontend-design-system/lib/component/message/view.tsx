@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { view as DeleteView } from '../../elements/delete/view'
+import { view as DeleteView } from '../../element/delete/view'
 import { cn } from '../../theme'
 import type { MessageProps } from './type'
 

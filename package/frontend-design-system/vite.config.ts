@@ -19,6 +19,10 @@ export default defineConfig({
       entry: {
         index: path.resolve(__dirname, 'lib/index.ts'),
         plugin: path.resolve(__dirname, 'lib/plugin.ts'),
+        'generic-link': path.resolve(
+          __dirname,
+          'lib/component/generic-link/index.tsx',
+        ),
       },
       name: 'RealWorldDesignSystem',
       fileName: (format, entryName) =>

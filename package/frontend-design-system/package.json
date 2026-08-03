@@ -16,6 +16,11 @@
       "types": "./dist/plugin.d.ts",
       "import": "./dist/plugin.mjs",
       "require": "./dist/plugin.js"
+    },
+    "./component/generic-link": {
+      "types": "./dist/component/generic-link/index.d.ts",
+      "import": "./dist/generic-link.mjs",
+      "require": "./dist/generic-link.js"
     }
   },
   "files": [
