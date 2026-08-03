@@ -1,4 +1,7 @@
-import { Button, Delete, Hero, Title } from '@rinn7e/realworld-design-system'
+import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { DeleteMemo } from '@rinn7e/realworld-design-system/element/delete/component'
+import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -10,12 +13,14 @@ interface Props {
   model: Model
   dispatch: Dispatcher<Msg>
 }
+
 export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `// Delete Button Sizes
-{Delete.view({ size: 'small', onClick: () => alert('Deleted!') })}
-{Delete.view({ size: 'normal', onClick: () => alert('Deleted!') })}
-{Delete.view({ size: 'medium', onClick: () => alert('Deleted!') })}
-{Delete.view({ size: 'large', onClick: () => alert('Deleted!') })}`
+<DeleteMemo size='small' onClick={() => alert('Deleted!')} />
+<DeleteMemo size='normal' onClick={() => alert('Deleted!')} />
+<DeleteMemo size='medium' onClick={() => alert('Deleted!')} />
+<DeleteMemo size='large' onClick={() => alert('Deleted!')} />`
+
   return (
     <div data-component='DeletePage' className='w-full space-y-8 text-left'>
       {Hero.view({
@@ -28,65 +33,61 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
             <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / DELETE
             </div>
-            {Title.view({
-              size: 2,
-              className: 'mb-2 font-extrabold text-gray-900',
-              children: () => 'Delete',
-            })}
+            <TitleMemo
+              size={2}
+              className='mb-2 font-extrabold text-gray-900'
+              children={() => 'Delete'}
+            />
             <p className='text-base text-gray-600'>
               Standalone delete cross icon button element with small to large
               size support.
             </p>
           </>
-        ),
-      })}
+        ) })}
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
-          {Title.view({
-            size: 5,
-            className:
-              'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
-            children: () => (
+          <TitleMemo
+            size={5}
+            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
+            children={() => (
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
                 <span>Interactive Playground &amp; Code</span>
               </>
-            ),
-          })}
-          {Button.view({
-            color: 'green',
-            variant: 'link',
-            size: 'small',
-            onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
-            className:
-              'flex items-center gap-1 font-semibold text-green-600 hover:underline',
-            children: () => (
+            )}
+          />
+          <ButtonMemo
+            color='green'
+            variant='link'
+            size='small'
+            onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
+            className='flex items-center gap-1 font-semibold text-green-600 hover:underline'
+            children={() => (
               <>
                 <Code2 className='h-3.5 w-3.5' />
                 <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
               </>
-            ),
-          })}
+            )}
+          />
         </div>
 
         {sectionView({
           title: 'Delete Icon Button Sizes',
           children: () => (
             <div className='flex items-center gap-6'>
-              {Delete.view({ size: 'small', onClick: () => alert('Deleted!') })}
-              {Delete.view({
-                size: 'normal',
-                onClick: () => alert('Deleted!'),
-              })}
-              {Delete.view({
-                size: 'medium',
-                onClick: () => alert('Deleted!'),
-              })}
-              {Delete.view({ size: 'large', onClick: () => alert('Deleted!') })}
+              <DeleteMemo size='small' onClick={() => alert('Deleted!')} />
+              <DeleteMemo
+                size='normal'
+                onClick={() => alert('Deleted!')}
+              />
+              <DeleteMemo
+                size='medium'
+                onClick={() => alert('Deleted!')}
+              />
+              <DeleteMemo size='large' onClick={() => alert('Deleted!')} />
             </div>
-          ),
-        })}
+          ) })}
 
         {model.showCode && (
           <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>

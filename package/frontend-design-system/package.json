@@ -18,34 +18,59 @@
       "require": "./dist/plugin.js"
     },
     "./component/*": {
-      "types": ["./dist/component/*/index.d.ts", "./dist/component/*.d.ts"],
-      "import": ["./dist/component/*/index.mjs", "./dist/component/*.mjs"],
-      "require": ["./dist/component/*/index.js", "./dist/component/*.js"]
+      "types": "./dist/component/*/index.d.ts",
+      "import": "./dist/component/*/index.mjs",
+      "require": "./dist/component/*/index.js"
+    },
+    "./component/*/*": {
+      "types": "./dist/component/*/*.d.ts",
+      "import": "./dist/component/*/*.mjs",
+      "require": "./dist/component/*/*.js"
     },
     "./element/*": {
-      "types": ["./dist/element/*/index.d.ts", "./dist/element/*.d.ts"],
-      "import": ["./dist/element/*/index.mjs", "./dist/element/*.mjs"],
-      "require": ["./dist/element/*/index.js", "./dist/element/*.js"]
+      "types": "./dist/element/*/index.d.ts",
+      "import": "./dist/element/*/index.mjs",
+      "require": "./dist/element/*/index.js"
+    },
+    "./element/*/*": {
+      "types": "./dist/element/*/*.d.ts",
+      "import": "./dist/element/*/*.mjs",
+      "require": "./dist/element/*/*.js"
     },
     "./form/*": {
-      "types": ["./dist/form/*/index.d.ts", "./dist/form/*.d.ts"],
-      "import": ["./dist/form/*/index.mjs", "./dist/form/*.mjs"],
-      "require": ["./dist/form/*/index.js", "./dist/form/*.js"]
+      "types": "./dist/form/*/index.d.ts",
+      "import": "./dist/form/*/index.mjs",
+      "require": "./dist/form/*/index.js"
+    },
+    "./form/*/*": {
+      "types": "./dist/form/*/*.d.ts",
+      "import": "./dist/form/*/*.mjs",
+      "require": "./dist/form/*/*.js"
     },
     "./grid/*": {
-      "types": ["./dist/grid/*/index.d.ts", "./dist/grid/*.d.ts"],
-      "import": ["./dist/grid/*/index.mjs", "./dist/grid/*.mjs"],
-      "require": ["./dist/grid/*/index.js", "./dist/grid/*.js"]
+      "types": "./dist/grid/*/index.d.ts",
+      "import": "./dist/grid/*/index.mjs",
+      "require": "./dist/grid/*/index.js"
+    },
+    "./grid/*/*": {
+      "types": "./dist/grid/*/*.d.ts",
+      "import": "./dist/grid/*/*.mjs",
+      "require": "./dist/grid/*/*.js"
     },
     "./layout/*": {
-      "types": ["./dist/layout/*/index.d.ts", "./dist/layout/*.d.ts"],
-      "import": ["./dist/layout/*/index.mjs", "./dist/layout/*.mjs"],
-      "require": ["./dist/layout/*/index.js", "./dist/layout/*.js"]
+      "types": "./dist/layout/*/index.d.ts",
+      "import": "./dist/layout/*/index.mjs",
+      "require": "./dist/layout/*/index.js"
+    },
+    "./layout/*/*": {
+      "types": "./dist/layout/*/*.d.ts",
+      "import": "./dist/layout/*/*.mjs",
+      "require": "./dist/layout/*/*.js"
     },
     "./type/*": {
-      "types": ["./dist/type/*/index.d.ts", "./dist/type/*.d.ts"],
-      "import": ["./dist/type/*/index.mjs", "./dist/type/*.mjs"],
-      "require": ["./dist/type/*/index.js", "./dist/type/*.js"]
+      "types": "./dist/type/*.d.ts",
+      "import": "./dist/type/*.mjs",
+      "require": "./dist/type/*.js"
     }
   },
   "files": [

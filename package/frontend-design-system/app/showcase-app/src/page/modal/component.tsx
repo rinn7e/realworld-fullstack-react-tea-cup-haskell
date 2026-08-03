@@ -1,8 +1,8 @@
 import * as Modal from '@rinn7e/realworld-design-system/component/modal'
 import { ModalMemo } from '@rinn7e/realworld-design-system/component/modal/component'
 import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
 import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -14,16 +14,22 @@ interface Props {
   model: Model
   dispatch: Dispatcher<Msg>
 }
+
 export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `{Button.view({
-            color: 'green',
-            variant: 'solid', onClick: () => dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } }), children: 'Open Modal' })}
-{Modal.view({
-  title: 'Confirm Delete',
-  model: model.modalModel,
-  dispatch: (subMsg) => dispatch({ _tag: 'ModalMsg', subMsg }),
-  children: <p className='text-sm text-gray-600'>Are you sure you want to delete this article?</p>,
-})}`
+  const code = `<ButtonMemo
+  color='green'
+  variant='solid'
+  onClick={() => dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } })}
+  children={() => 'Open Modal'}
+/>
+<ModalMemo
+  title='Confirm Delete'
+  model={model.modalModel}
+  dispatch={(subMsg) => dispatch({ _tag: 'ModalMsg', subMsg })}
+>
+  {() => <p className='text-sm text-gray-600'>Are you sure you want to delete this article?</p>}
+</ModalMemo>`
+
   return (
     <div data-component='ModalPage' className='w-full space-y-8 text-left'>
       {Hero.view({
@@ -36,46 +42,43 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
             <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               COMPONENTS / MODAL
             </div>
-            {Title.view({
-              size: 2,
-              className: 'mb-2 font-extrabold text-gray-900',
-              children: () => 'Modal',
-            })}
+            <TitleMemo
+              size={2}
+              className='mb-2 font-extrabold text-gray-900'
+              children={() => 'Modal'}
+            />
             <p className='text-base text-gray-600'>
               Classic modal dialog overlay with header, body, and backdrop close
               controls.
             </p>
           </>
-        ),
-      })}
+        ) })}
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
-          {Title.view({
-            size: 5,
-            className:
-              'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
-            children: () => (
+          <TitleMemo
+            size={5}
+            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
+            children={() => (
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
                 <span>Interactive Playground &amp; Code</span>
               </>
-            ),
-          })}
-          {Button.view({
-            color: 'green',
-            variant: 'link',
-            size: 'small',
-            onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
-            className:
-              'flex items-center gap-1 font-semibold text-green-600 hover:underline',
-            children: () => (
+            )}
+          />
+          <ButtonMemo
+            color='green'
+            variant='link'
+            size='small'
+            onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
+            className='flex items-center gap-1 font-semibold text-green-600 hover:underline'
+            children={() => (
               <>
                 <Code2 className='h-3.5 w-3.5' />
                 <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
               </>
-            ),
-          })}
+            )}
+          />
         </div>
 
         {sectionView({
@@ -83,13 +86,14 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='flex w-full justify-center py-4'>
               <div>
-                {Button.view({
-                  color: 'green',
-                  variant: 'solid',
-                  onClick: () =>
-                    dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } }),
-                  children: () => 'Open Modal',
-                })}
+                <ButtonMemo
+                  color='green'
+                  variant='solid'
+                  onClick={() =>
+                    dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } })
+                  }
+                  children={() => 'Open Modal'}
+                />
                 <ModalMemo
                   title='Confirm Action'
                   model={model.modalModel}
@@ -105,8 +109,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
                 </ModalMemo>
               </div>
             </div>
-          ),
-        })}
+          ) })}
 
         {model.showCode && (
           <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>

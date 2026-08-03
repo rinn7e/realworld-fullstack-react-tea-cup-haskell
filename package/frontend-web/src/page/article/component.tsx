@@ -84,50 +84,53 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                 </div>
                 <div className='flex flex-wrap items-center gap-[8px]'>
                   {isLoggedIn &&
-                      ? (
-                        <DsButtonMemo
-                          color='gray'
-                          variant='outline'
-                          size='xsmall'
-                          onClick={() =>
-                            dispatch({
-                              _tag: 'UnfollowAuthor',
-                              username: author.username,
-                            })
-                          }
-                          className={isLight
+                    (author.following ? (
+                      <DsButtonMemo
+                        color='gray'
+                        variant='outline'
+                        size='xsmall'
+                        onClick={() =>
+                          dispatch({
+                            _tag: 'UnfollowAuthor',
+                            username: author.username,
+                          })
+                        }
+                        className={
+                          isLight
                             ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
-                            : undefined}
-                          children={() => (
-                            <>
-                              <UserMinus size={13} className='mr-1' /> Unfollow{' '}
-                              {author.username}
-                            </>
-                          )}
-                        />
-                      )
-                      : (
-                        <DsButtonMemo
-                          color='gray'
-                          variant='outline'
-                          size='xsmall'
-                          onClick={() =>
-                            dispatch({
-                              _tag: 'FollowAuthor',
-                              username: author.username,
-                            })
-                          }
-                          className={isLight
+                            : undefined
+                        }
+                        children={() => (
+                          <>
+                            <UserMinus size={13} className='mr-1' /> Unfollow{' '}
+                            {author.username}
+                          </>
+                        )}
+                      />
+                    ) : (
+                      <DsButtonMemo
+                        color='gray'
+                        variant='outline'
+                        size='xsmall'
+                        onClick={() =>
+                          dispatch({
+                            _tag: 'FollowAuthor',
+                            username: author.username,
+                          })
+                        }
+                        className={
+                          isLight
                             ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
-                            : undefined}
-                          children={() => (
-                            <>
-                              <UserPlus size={13} className='mr-1' /> Follow{' '}
-                              {author.username}
-                            </>
-                          )}
-                        />
-                      ))}
+                            : undefined
+                        }
+                        children={() => (
+                          <>
+                            <UserPlus size={13} className='mr-1' /> Follow{' '}
+                            {author.username}
+                          </>
+                        )}
+                      />
+                    ))}
                   {favButtonView({
                     variant: 'detail',
                     isLight,

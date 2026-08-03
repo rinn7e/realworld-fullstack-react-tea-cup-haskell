@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 
-import { view as DeleteView } from '../../element/delete/view'
+import { DeleteMemo } from '../../element/delete/component'
 import { cn } from '../../theme'
 import type { MessageProps } from './type'
 import { MessagePropsEq } from './type'
@@ -61,8 +61,7 @@ export const MessageComponent = ({
             v.header,
           )}
         >
-          <span>{header}</span>
-          {onDelete && DeleteView({ size: 'small', onClick: onDelete })}
+          {onDelete && <DeleteMemo size='small' onClick={onDelete} />}
         </div>
       )}
       <div className='p-4'>{children()}</div>

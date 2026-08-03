@@ -23,54 +23,54 @@ export default defineConfig({
         // Type
         'type/nav-item': path.resolve(__dirname, 'lib/type/nav-item.ts'),
 
-        // Element views
-        'element/block/view': path.resolve(
+        // Element components
+        'element/block/component': path.resolve(
           __dirname,
-          'lib/element/block/view.tsx',
+          'lib/element/block/component.tsx',
         ),
-        'element/box/view': path.resolve(
+        'element/box/component': path.resolve(
           __dirname,
-          'lib/element/box/view.tsx',
+          'lib/element/box/component.tsx',
         ),
-        'element/button/view': path.resolve(
+        'element/button/component': path.resolve(
           __dirname,
-          'lib/element/button/view.tsx',
+          'lib/element/button/component.tsx',
         ),
-        'element/content/view': path.resolve(
+        'element/content/component': path.resolve(
           __dirname,
-          'lib/element/content/view.tsx',
+          'lib/element/content/component.tsx',
         ),
-        'element/delete/view': path.resolve(
+        'element/delete/component': path.resolve(
           __dirname,
-          'lib/element/delete/view.tsx',
+          'lib/element/delete/component.tsx',
         ),
-        'element/icon/view': path.resolve(
+        'element/icon/component': path.resolve(
           __dirname,
-          'lib/element/icon/view.tsx',
+          'lib/element/icon/component.tsx',
         ),
-        'element/image/view': path.resolve(
+        'element/image/component': path.resolve(
           __dirname,
-          'lib/element/image/view.tsx',
+          'lib/element/image/component.tsx',
         ),
-        'element/notification/view': path.resolve(
+        'element/notification/component': path.resolve(
           __dirname,
-          'lib/element/notification/view.tsx',
+          'lib/element/notification/component.tsx',
         ),
-        'element/progress/view': path.resolve(
+        'element/progress/component': path.resolve(
           __dirname,
-          'lib/element/progress/view.tsx',
+          'lib/element/progress/component.tsx',
         ),
-        'element/table/view': path.resolve(
+        'element/table/component': path.resolve(
           __dirname,
-          'lib/element/table/view.tsx',
+          'lib/element/table/component.tsx',
         ),
-        'element/tag/view': path.resolve(
+        'element/tag/component': path.resolve(
           __dirname,
-          'lib/element/tag/view.tsx',
+          'lib/element/tag/component.tsx',
         ),
-        'element/title/view': path.resolve(
+        'element/title/component': path.resolve(
           __dirname,
-          'lib/element/title/view.tsx',
+          'lib/element/title/component.tsx',
         ),
 
         // Grid views

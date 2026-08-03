@@ -1,4 +1,6 @@
-import { Button, Hero, Textarea, Title } from '@rinn7e/realworld-design-system'
+import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
+import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import {  Hero, Textarea } from '@rinn7e/realworld-design-system'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -16,8 +18,7 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
   value: model.value,
   rows: 4,
   placeholder: 'Write your article in markdown...',
-  onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }),
-})}
+  onChange: (e) => dispatch({ _tag: 'UpdateValue', value: e.target.value }) })}
 
 // State Variations
 {Textarea.view({ isError: true, value: 'Invalid markdown content', rows: 3 })}
@@ -34,46 +35,18 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
             <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               FORM / TEXTAREA
             </div>
-            {Title.view({
-              size: 2,
-              className: 'mb-2 font-extrabold text-gray-900',
-              children: () => 'Textarea',
-            })}
+            {<TitleMemo size={2} className='mb-2 font-extrabold text-gray-900' children={() => 'Textarea'} />}
             <p className='text-base text-gray-600'>
               Multi-line text input control with support for interactive state,
               row sizes, validation errors, and disabled states.
             </p>
           </>
-        ),
-      })}
+        ) })}
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
-          {Title.view({
-            size: 5,
-            className:
-              'flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600',
-            children: () => (
-              <>
-                <Sparkles className='h-4 w-4 text-green-600' />
-                <span>Interactive Playground &amp; Code</span>
-              </>
-            ),
-          })}
-          {Button.view({
-            color: 'green',
-            variant: 'link',
-            size: 'small',
-            onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
-            className:
-              'flex items-center gap-1 font-semibold text-green-600 hover:underline',
-            children: () => (
-              <>
-                <Code2 className='h-3.5 w-3.5' />
-                <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
-              </>
-            ),
-          })}
+          {<TitleMemo size={5} className="flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600" children={() => (<><Sparkles className="h-4 w-4 text-green-600" /><span>Interactive Playground &amp; Code</span></>)} />}
+          {<ButtonMemo color="green" variant="link" size="small" onClick={() => dispatch({ _tag: "ToggleShowCode" })} className="flex items-center gap-1 font-semibold text-green-600 hover:underline" children={() => (<><Code2 className="h-3.5 w-3.5" /><span>{model.showCode ? "Hide Code" : "Show Code"}</span></>)} />}
         </div>
 
         {/* Section 1: Interactive Textarea */}
@@ -86,8 +59,7 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
                 rows: 4,
                 placeholder: 'Write your article body (in markdown format)...',
                 onChange: (e) =>
-                  dispatch({ _tag: 'UpdateValue', value: e.target.value }),
-              })}
+                  dispatch({ _tag: 'UpdateValue', value: e.target.value }) })}
               <p className='text-xs text-gray-500'>
                 Character Count:{' '}
                 <span className='font-mono font-bold text-gray-800'>
@@ -95,8 +67,7 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
                 </span>
               </p>
             </div>
-          ),
-        })}
+          ) })}
 
         {/* Section 2: Validation & Disabled States */}
         {sectionView({
@@ -110,8 +81,7 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
                 {Textarea.view({
                   isError: true,
                   value: 'Cannot submit empty post content.',
-                  rows: 3,
-                })}
+                  rows: 3 })}
               </div>
               <div>
                 <span className='mb-1 block text-xs font-medium text-gray-500'>
@@ -120,12 +90,10 @@ export const TextareaPage: React.FC<Props> = ({ model, dispatch }) => {
                 {Textarea.view({
                   isDisabled: true,
                   value: 'System read-only logs and article notes.',
-                  rows: 3,
-                })}
+                  rows: 3 })}
               </div>
             </div>
-          ),
-        })}
+          ) })}
 
         {model.showCode && (
           <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>

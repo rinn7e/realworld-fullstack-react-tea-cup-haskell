@@ -1,4 +1,5 @@
-import { DotLoading, Hero, Title } from '@rinn7e/realworld-design-system'
+import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { DotLoading, Hero } from '@rinn7e/realworld-design-system'
 import React from 'react'
 
 import { sectionView } from '../../component/section-view'
@@ -21,17 +22,12 @@ export const DotLoadingPage: React.FC<Props> = () => {
             <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               MISC / DOT LOADING
             </div>
-            {Title.view({
-              size: 2,
-              className: 'mb-2 font-extrabold text-gray-900',
-              children: () => 'Dot Loading',
-            })}
+            {<TitleMemo size={2} className='mb-2 font-extrabold text-gray-900' children={() => 'Dot Loading'} />}
             <p className='text-base text-gray-600'>
               Subtle inline text 3-dot loading animation element.
             </p>
           </>
-        ),
-      })}
+        ) })}
 
       <div className='flex w-full flex-col gap-6'>
         {sectionView({
@@ -45,8 +41,7 @@ export const DotLoadingPage: React.FC<Props> = () => {
                 Fetching data <DotLoading.view className='text-green-600' />
               </div>
             </div>
-          ),
-        })}
+          ) })}
       </div>
     </div>
   )

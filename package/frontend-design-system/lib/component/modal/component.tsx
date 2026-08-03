@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 
-import { view as DeleteView } from '../../element/delete/view'
+import { DeleteMemo } from '../../element/delete/component'
 import { cn } from '../../theme'
 import type { ModalProps } from './type'
 import { ModalPropsEq } from './type'
@@ -39,10 +39,10 @@ export const ModalComponent = ({
         {title && (
           <div className='flex items-center justify-between border-b border-gray-100 px-6 py-4'>
             <h3 className='text-lg font-bold text-gray-900'>{title}</h3>
-            {DeleteView({
-              size: 'normal',
-              onClick: () => dispatch({ _tag: 'Close' }),
-            })}
+            <DeleteMemo
+              size='normal'
+              onClick={() => dispatch({ _tag: 'Close' })}
+            />
           </div>
         )}
         <div className='p-6'>{children()}</div>

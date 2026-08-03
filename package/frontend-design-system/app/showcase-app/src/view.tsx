@@ -77,8 +77,7 @@ export const view = (
         { id: 'table', name: 'Table' },
         { id: 'tag', name: 'Tag' },
         { id: 'title', name: 'Title' },
-      ],
-    },
+      ] },
     {
       id: 'components',
       title: 'Components',
@@ -94,8 +93,7 @@ export const view = (
         { id: 'pagination', name: 'Pagination' },
         { id: 'panel', name: 'Panel' },
         { id: 'tabs', name: 'Tabs' },
-      ],
-    },
+      ] },
     {
       id: 'form',
       title: 'Form',
@@ -108,8 +106,7 @@ export const view = (
         { id: 'checkbox', name: 'Checkbox' },
         { id: 'radio', name: 'Radio' },
         { id: 'file', name: 'File' },
-      ],
-    },
+      ] },
     {
       id: 'layout',
       title: 'Layout',
@@ -121,20 +118,17 @@ export const view = (
         { id: 'level', name: 'Level' },
         { id: 'media-object', name: 'Media Object' },
         { id: 'footer', name: 'Footer' },
-      ],
-    },
+      ] },
     {
       id: 'grid',
       title: 'Grid',
       icon: <LayoutGrid className='h-4 w-4 text-green-600' />,
-      items: [{ id: 'columns', name: 'Columns' }],
-    },
+      items: [{ id: 'columns', name: 'Columns' }] },
     {
       id: 'misc',
       title: 'Misc',
       icon: <Sparkles className='h-4 w-4 text-green-600' />,
-      items: [{ id: 'dot-loading', name: 'Dot Loading' }],
-    },
+      items: [{ id: 'dot-loading', name: 'Dot Loading' }] },
   ]
 
   const activeComponent =
@@ -148,9 +142,7 @@ export const view = (
     items: cat.items.map((item) => ({
       id: item.id,
       label: item.name,
-      isActive: activeComponent === item.id,
-    })),
-  }))
+      isActive: activeComponent === item.id })) }))
 
   const navigateRoute = (route: AppRoute) => {
     dispatch({ _tag: 'ChangeRoute', route })
@@ -470,18 +462,14 @@ export const view = (
                       menuModel={model.menuModel}
                       navigateRoute={navigateRoute}
                     />
-                  ),
-                })}
+                  ) })}
 
                 {/* Main Page Area */}
                 {Column.view({
                   className: 'flex-1 min-w-0',
-                  children: () => <div className='w-full'>{renderPage()}</div>,
-                })}
+                  children: () => <div className='w-full'>{renderPage()}</div> })}
               </>
-            ),
-          }),
-      })}
+            ) }) })}
 
       {/* Footer */}
       {Footer.view({})}

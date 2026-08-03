@@ -14,8 +14,7 @@ export interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({
   menuCategories,
   menuModel,
-  navigateRoute,
-}) => {
+  navigateRoute }) => {
   return (
     <div data-component='ShowcaseSidebar' className='w-full'>
       <BoxMemo
@@ -33,8 +32,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
                     .join('') + 'Page'
                 navigateRoute({
-                  page: { _tag: pageTagName } as unknown as AppRoute['page'],
-                })
+                  page: { _tag: pageTagName } as unknown as AppRoute['page'] })
               }
             }}
           />

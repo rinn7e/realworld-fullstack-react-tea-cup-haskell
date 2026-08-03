@@ -1,7 +1,7 @@
 import { BreadcrumbMemo } from '@rinn7e/realworld-design-system/component/breadcrumb/component'
 import { ButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
 import { TitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import * as Hero from '@rinn7e/realworld-design-system/layout/hero/view'
 import { Code2 } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -13,6 +13,7 @@ interface Props {
   model: Model
   dispatch: Dispatcher<Msg>
 }
+
 export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `<BreadcrumbMemo
   items={[
@@ -21,6 +22,7 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
     { label: 'Breadcrumb', isActive: true },
   ]}
 />`
+
   return (
     <div data-component='BreadcrumbPage' className='w-full space-y-8'>
       {Hero.view({
@@ -29,30 +31,29 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
         children: () => (
           <div className='flex items-center justify-between'>
             <div>
-              {Title.view({
-                size: 2,
-                className: 'font-bold text-gray-900',
-                children: () => 'Breadcrumb Component',
-              })}
+              <TitleMemo
+                size={2}
+                className='font-bold text-gray-900'
+                children={() => 'Breadcrumb Component'}
+              />
               <p className='mt-1 text-sm text-gray-500'>
                 Breadcrumb navigation bar component.
               </p>
             </div>
-            {Button.view({
-              color: 'green',
-              variant: model.showCode ? 'outline' : 'solid',
-              onClick: () => dispatch({ _tag: 'ToggleShowCode' }),
-              className: 'gap-2',
-              children: () => (
+            <ButtonMemo
+              color='green'
+              variant={model.showCode ? 'outline' : 'solid'}
+              onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
+              className='gap-2'
+              children={() => (
                 <>
                   <Code2 className='h-4 w-4' />
                   <span>{model.showCode ? 'Hide Code' : 'View Code'}</span>
                 </>
-              ),
-            })}
+              )}
+            />
           </div>
-        ),
-      })}
+        ) })}
 
       <div className='space-y-6'>
         {sectionView({
@@ -67,8 +68,7 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
                 ]}
               />
             </div>
-          ),
-        })}
+          ) })}
 
         {model.showCode && (
           <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
