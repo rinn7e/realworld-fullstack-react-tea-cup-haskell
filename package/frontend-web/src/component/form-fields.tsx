@@ -114,10 +114,9 @@ export const standardInputUi =
               })
             }
             className='absolute right-[6px] p-2'
-            children={() =>
-              variant.reveal ? <EyeOff size={20} /> : <Eye size={20} />
-            }
-          />
+          >
+            {variant.reveal ? <EyeOff size={20} /> : <Eye size={20} />}
+          </DsButtonMemo>
         )}
       </div>
     )
@@ -202,12 +201,11 @@ export const textPillInputUi =
                   })
                 }
                 className='p-0 hover:text-red-500'
-                children={() => (
-                  <i>
-                    <X size={14} />
-                  </i>
-                )}
-              />
+              >
+                <i>
+                  <X size={14} />
+                </i>
+              </DsButtonMemo>
             </span>
           ))}
           <input

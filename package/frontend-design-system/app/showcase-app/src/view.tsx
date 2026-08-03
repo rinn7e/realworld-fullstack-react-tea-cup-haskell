@@ -75,7 +75,6 @@ export const view = (
           <HomePage
             model={model.pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'HomePageMsg', subMsg })}
-            navigateRoute={navigateRoute}
           />
         )
       case 'BlockPageModel':

@@ -122,8 +122,9 @@ const HomePageComponent = ({ model, shared, dispatch }: Props) => {
                               tab: tagFeedTab(tag),
                             })
                           }}
-                          children={() => tag}
-                        />
+                        >
+                          {tag}
+                        </DsTagMemo>
                       ))}
                     </div>
                   ),

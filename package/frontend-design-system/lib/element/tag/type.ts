@@ -10,7 +10,7 @@ export type TagVariant = 'solid' | 'light' | 'outline'
 export type TagSize = 'small' | 'normal' | 'medium' | 'large'
 
 export type TagProps = {
-  children?: () => React.ReactNode
+  children?: React.ReactNode
   color?: TagColor
   variant?: TagVariant
   size?: TagSize

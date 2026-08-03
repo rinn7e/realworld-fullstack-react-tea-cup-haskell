@@ -70,9 +70,7 @@ const EditorPageComponent = ({ model, dispatch }: Props) => {
         <div className='flex justify-end pt-[24px]'>
           <DsButtonMemo
             type='submit'
-            isLoading={RD.isPending(model.requestRd)}
-            children={() => 'Publish Article'}
-          />
+            isLoading={RD.isPending(model.requestRd)}>Publish Article</DsButtonMemo>
         </div>
       </form>
     </div>

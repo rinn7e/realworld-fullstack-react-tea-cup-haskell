@@ -19,8 +19,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `// Striped & Bordered Table
 <DsTableMemo
   isStriped={true}
-  isBordered={true}
-  children={() => (
+  isBordered={true}>
     <>
       <thead>
         <tr className='bg-gray-50 border-b border-gray-200'>
@@ -34,54 +33,48 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
         <tr>
           <td className='p-3 text-gray-900 font-medium'>How to build a web app</td>
           <td className='p-3 text-gray-600'>Gerard Quan</td>
-          <td className='p-3'><DsTagMemo color='green' children={() => 'react'} /></td>
-          <td className='p-3'><DsTagMemo color='green' variant='light' children={() => 'Published'} /></td>
+          <td className='p-3'><DsTagMemo color='green'>react</DsTagMemo></td>
+          <td className='p-3'><DsTagMemo color='green' variant='light'>Published</DsTagMemo></td>
         </tr>
       </tbody>
     </>
-  )}
-/>`
+  </DsTableMemo>`
 
   return (
     <div data-component='TablePage' className='w-full space-y-8 text-left'>
-      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full">
+<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / TABLE
             </div>
             <DsTitleMemo
               size={2}
-              className='mb-2 font-extrabold text-gray-900'
-              children={() => 'Table'}
-            />
+              className='mb-2 font-extrabold text-gray-900'>Table</DsTitleMemo>
             <p className='text-base text-gray-600'>
               Styled data table for tabular data with support for striped rows,
               borders, hover states, and badge elements.
-            </p></>)} />
+            </p></>
+</DsHeroMemo>
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
           <DsTitleMemo
             size={5}
-            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
-            children={() => (
+            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'>
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
                 <span>Interactive Playground &amp; Code</span>
               </>
-            )}
-          />
+            </DsTitleMemo>
           <DsButtonMemo
             color='green'
             variant='link'
             size='small'
             onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
             className='flex items-center gap-1 font-semibold text-green-600 hover:underline'
-            children={() => (
-              <>
-                <Code2 className='h-3.5 w-3.5' />
-                <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
-              </>
-            )}
-          />
+          >
+            <Code2 className='h-3.5 w-3.5' />
+            <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
+          </DsButtonMemo>
         </div>
 
         {/* Section 1: Striped & Bordered Data Table */}
@@ -93,8 +86,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
               <DsTableMemo
                 isBordered={true}
                 isStriped={true}
-                isHoverable={true}
-                children={() => (
+                isHoverable={true}>
                   <>
                     <thead>
                       <tr className='border-b border-gray-200 bg-gray-50'>
@@ -123,17 +115,13 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         <td className='p-3 text-gray-600'>Gerard Quan</td>
                         <td className='p-3'>
                           <DsTagMemo
-                            color='green'
-                            children={() => 'react'}
-                          />
+                            color='green'>react</DsTagMemo>
                         </td>
                         <td className='p-3 font-mono text-gray-700'>1,240</td>
                         <td className='p-3'>
                           <DsTagMemo
                             color='green'
-                            variant='light'
-                            children={() => 'Published'}
-                          />
+                            variant='light'>Published</DsTagMemo>
                         </td>
                       </tr>
                       <tr className='border-b border-gray-100'>
@@ -143,17 +131,13 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         <td className='p-3 text-gray-600'>Anson Cheung</td>
                         <td className='p-3'>
                           <DsTagMemo
-                            color='sky'
-                            children={() => 'haskell'}
-                          />
+                            color='sky'>haskell</DsTagMemo>
                         </td>
                         <td className='p-3 font-mono text-gray-700'>892</td>
                         <td className='p-3'>
                           <DsTagMemo
                             color='green'
-                            variant='light'
-                            children={() => 'Published'}
-                          />
+                            variant='light'>Published</DsTagMemo>
                         </td>
                       </tr>
                       <tr className='border-b border-gray-100'>
@@ -163,23 +147,18 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         <td className='p-3 text-gray-600'>Albert Chen</td>
                         <td className='p-3'>
                           <DsTagMemo
-                            color='dark-green'
-                            children={() => 'fp-ts'}
-                          />
+                            color='dark-green'>fp-ts</DsTagMemo>
                         </td>
                         <td className='p-3 font-mono text-gray-700'>415</td>
                         <td className='p-3'>
                           <DsTagMemo
                             color='amber'
-                            variant='light'
-                            children={() => 'Draft'}
-                          />
+                            variant='light'>Draft</DsTagMemo>
                         </td>
                       </tr>
                     </tbody>
                   </>
-                )}
-              />
+                </DsTableMemo>
             </div>
           ) })}
 

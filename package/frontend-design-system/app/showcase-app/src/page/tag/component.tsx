@@ -16,63 +16,58 @@ interface Props {
 
 export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
   const code = `// Solid Colors
-<DsTagMemo color="gray" children={() => 'gray'} />
-<DsTagMemo color="green" children={() => 'green'} />
+<DsTagMemo color="gray">gray</DsTagMemo>
+<DsTagMemo color="green">green</DsTagMemo>
 
 // Light Variants
-<DsTagMemo color="gray" variant="light" children={() => 'gray'} />
-<DsTagMemo color="green" variant="light" children={() => 'green'} />
+<DsTagMemo color="gray" variant="light">gray</DsTagMemo>
+<DsTagMemo color="green" variant="light">green</DsTagMemo>
 
 // Outline Variants
-<DsTagMemo color="gray" variant="outline" children={() => 'gray'} />
-<DsTagMemo color="green" variant="outline" children={() => 'green'} />
+<DsTagMemo color="gray" variant="outline">gray</DsTagMemo>
+<DsTagMemo color="green" variant="outline">green</DsTagMemo>
 
 // Clickable (hover state)
-<DsTagMemo color="green" variant="light" onClick={() => ...} children={() => 'click me'} />
+<DsTagMemo color="green" variant="light" onClick={() => ...} >click me</DsTagMemo>
 
 // Deletable
-<DsTagMemo color="green" onDelete={() => ...} children={() => 'conduit'} />`
+<DsTagMemo color="green" onDelete={() => ...} >conduit</DsTagMemo>`
 
   return (
     <div data-component='TagPage' className='w-full space-y-8 text-left'>
-      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full">
+<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / TAG
             </div>
             <DsTitleMemo
               size={2}
-              className='mb-2 font-extrabold text-gray-900'
-              children={() => 'Tag'}
-            />
+              className='mb-2 font-extrabold text-gray-900'>Tag</DsTitleMemo>
             <p className='text-base text-gray-600'>
               Small tag badges for labels, categories, keyword filters, and
               deletable chips.
-            </p></>)} />
+            </p></>
+</DsHeroMemo>
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
           <DsTitleMemo
             size={5}
-            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
-            children={() => (
+            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'>
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
                 <span>Interactive Playground &amp; Code</span>
               </>
-            )}
-          />
+            </DsTitleMemo>
           <DsButtonMemo
             color='green'
             variant='link'
             size='small'
             onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
             className='flex items-center gap-1 font-semibold text-green-600 hover:underline'
-            children={() => (
-              <>
-                <Code2 className='h-3.5 w-3.5' />
-                <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
-              </>
-            )}
-          />
+          >
+            <Code2 className='h-3.5 w-3.5' />
+            <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
+          </DsButtonMemo>
         </div>
 
         {/* Section 1: Solid Colors */}
@@ -80,12 +75,12 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Solid Colors',
           children: () => (
             <div className='flex flex-wrap items-center gap-2.5'>
-              <DsTagMemo color='gray' children={() => 'gray'} />
-              <DsTagMemo color='green' children={() => 'green'} />
-              <DsTagMemo color='dark-green' children={() => 'dark-green'} />
-              <DsTagMemo color='sky' children={() => 'sky'} />
-              <DsTagMemo color='amber' children={() => 'amber'} />
-              <DsTagMemo color='red' children={() => 'red'} />
+              <DsTagMemo color='gray'>gray</DsTagMemo>
+              <DsTagMemo color='green'>green</DsTagMemo>
+              <DsTagMemo color='dark-green'>dark-green</DsTagMemo>
+              <DsTagMemo color='sky'>sky</DsTagMemo>
+              <DsTagMemo color='amber'>amber</DsTagMemo>
+              <DsTagMemo color='red'>red</DsTagMemo>
             </div>
           ) })}
 
@@ -94,16 +89,14 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Light Variants',
           children: () => (
             <div className='flex flex-wrap items-center gap-2.5'>
-              <DsTagMemo color='gray' variant='light' children={() => 'gray'} />
-              <DsTagMemo color='green' variant='light' children={() => 'green'} />
+              <DsTagMemo color='gray' variant='light'>gray</DsTagMemo>
+              <DsTagMemo color='green' variant='light'>green</DsTagMemo>
               <DsTagMemo
                 color='dark-green'
-                variant='light'
-                children={() => 'dark-green'}
-              />
-              <DsTagMemo color='sky' variant='light' children={() => 'sky'} />
-              <DsTagMemo color='amber' variant='light' children={() => 'amber'} />
-              <DsTagMemo color='red' variant='light' children={() => 'red'} />
+                variant='light'>dark-green</DsTagMemo>
+              <DsTagMemo color='sky' variant='light'>sky</DsTagMemo>
+              <DsTagMemo color='amber' variant='light'>amber</DsTagMemo>
+              <DsTagMemo color='red' variant='light'>red</DsTagMemo>
             </div>
           ) })}
 
@@ -112,24 +105,18 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Outline Variants',
           children: () => (
             <div className='flex flex-wrap items-center gap-2.5'>
-              <DsTagMemo color='gray' variant='outline' children={() => 'gray'} />
+              <DsTagMemo color='gray' variant='outline'>gray</DsTagMemo>
               <DsTagMemo
                 color='green'
-                variant='outline'
-                children={() => 'green'}
-              />
+                variant='outline'>green</DsTagMemo>
               <DsTagMemo
                 color='dark-green'
-                variant='outline'
-                children={() => 'dark-green'}
-              />
-              <DsTagMemo color='sky' variant='outline' children={() => 'sky'} />
+                variant='outline'>dark-green</DsTagMemo>
+              <DsTagMemo color='sky' variant='outline'>sky</DsTagMemo>
               <DsTagMemo
                 color='amber'
-                variant='outline'
-                children={() => 'amber'}
-              />
-              <DsTagMemo color='red' variant='outline' children={() => 'red'} />
+                variant='outline'>amber</DsTagMemo>
+              <DsTagMemo color='red' variant='outline'>red</DsTagMemo>
             </div>
           ) })}
 
@@ -139,44 +126,32 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='space-y-4'>
               <div className='flex flex-wrap items-center gap-2.5'>
-                <DsTagMemo color='green' size='small' children={() => 'Small Tag'} />
+                <DsTagMemo color='green' size='small'>Small Tag</DsTagMemo>
                 <DsTagMemo
                   color='green'
-                  size='normal'
-                  children={() => 'Normal Tag'}
-                />
+                  size='normal'>Normal Tag</DsTagMemo>
                 <DsTagMemo
                   color='green'
-                  size='medium'
-                  children={() => 'Medium Tag'}
-                />
-                <DsTagMemo color='green' size='large' children={() => 'Large Tag'} />
+                  size='medium'>Medium Tag</DsTagMemo>
+                <DsTagMemo color='green' size='large'>Large Tag</DsTagMemo>
               </div>
               <div className='flex flex-wrap items-center gap-2.5 pt-2'>
                 <DsTagMemo
                   color='sky'
                   isRounded={true}
-                  size='small'
-                  children={() => 'Rounded Small'}
-                />
+                  size='small'>Rounded Small</DsTagMemo>
                 <DsTagMemo
                   color='sky'
                   isRounded={true}
-                  size='normal'
-                  children={() => 'Rounded Normal'}
-                />
+                  size='normal'>Rounded Normal</DsTagMemo>
                 <DsTagMemo
                   color='sky'
                   isRounded={true}
-                  size='medium'
-                  children={() => 'Rounded Medium'}
-                />
+                  size='medium'>Rounded Medium</DsTagMemo>
                 <DsTagMemo
                   color='sky'
                   isRounded={true}
-                  size='large'
-                  children={() => 'Rounded Large'}
-                />
+                  size='large'>Rounded Large</DsTagMemo>
               </div>
             </div>
           ) })}
@@ -189,24 +164,20 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
               <DsTagMemo
                 color='green'
                 onDelete={() => alert('Deleted conduit tag!')}
-                children={() => 'conduit'}
-              />
+                >conduit</DsTagMemo>
               <DsTagMemo
                 color='dark-green'
                 onDelete={() => alert('Deleted react tag!')}
-                children={() => 'react'}
-              />
+                >react</DsTagMemo>
               <DsTagMemo
                 color='sky'
                 variant='light'
                 onDelete={() => alert('Deleted haskell tag!')}
-                children={() => 'haskell'}
-              />
+                >haskell</DsTagMemo>
               <DsTagMemo
                 color='red'
                 onDelete={() => alert('Deleted tea-cup tag!')}
-                children={() => 'tea-cup'}
-              />
+                >tea-cup</DsTagMemo>
             </div>
           ) })}
 
@@ -227,36 +198,30 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
                   color='gray'
                   variant='light'
                   onClick={() => alert('clicked gray')}
-                  children={() => 'gray'}
-                />
+                  >gray</DsTagMemo>
                 <DsTagMemo
                   color='green'
                   onClick={() => alert('clicked green')}
-                  children={() => 'green'}
-                />
+                  >green</DsTagMemo>
                 <DsTagMemo
                   color='dark-green'
                   variant='light'
                   onClick={() => alert('clicked dark-green')}
-                  children={() => 'dark-green'}
-                />
+                  >dark-green</DsTagMemo>
                 <DsTagMemo
                   color='sky'
                   onClick={() => alert('clicked sky')}
-                  children={() => 'sky'}
-                />
+                  >sky</DsTagMemo>
                 <DsTagMemo
                   color='amber'
                   variant='light'
                   onClick={() => alert('clicked amber')}
-                  children={() => 'amber'}
-                />
+                  >amber</DsTagMemo>
                 <DsTagMemo
                   color='red'
                   variant='outline'
                   onClick={() => alert('clicked red')}
-                  children={() => 'red'}
-                />
+                  >red</DsTagMemo>
               </div>
             </div>
           ) })}

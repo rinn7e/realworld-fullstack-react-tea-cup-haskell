@@ -69,9 +69,7 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
             <DsButtonMemo
               type='submit'
               color='green'
-              size='xsmall'
-              children={() => 'Post Comment'}
-            />
+              size='xsmall'>Post Comment</DsButtonMemo>
           </div>
         </form>
       )}
@@ -158,8 +156,9 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                               })
                             }
                             className='hover:text-red-500'
-                            children={() => <Trash2 size={12} />}
-                          />
+                          >
+                            <Trash2 size={12} />
+                          </DsButtonMemo>
                         </span>
                       )}
                   </div>

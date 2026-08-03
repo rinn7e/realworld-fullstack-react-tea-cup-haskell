@@ -13,19 +13,14 @@ export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
   return (
     <div className='flex flex-col items-center justify-center py-16 text-center'>
       <DsBoxMemo
-        className='p-10 max-w-md space-y-4'
-        children={() => (
+        className='p-10 max-w-md space-y-4'>
           <>
             <DsTitleMemo
               size={1}
-              className='text-green-600 font-extrabold'
-              children={() => '404'}
-            />
+              className='text-green-600 font-extrabold'>404</DsTitleMemo>
             <DsTitleMemo
               size={4}
-              className='text-gray-800 font-bold'
-              children={() => 'Page Not Found'}
-            />
+              className='text-gray-800 font-bold'>Page Not Found</DsTitleMemo>
             <p className='text-sm text-gray-600'>
               The component page you are looking for does not exist in our
               design system catalog.
@@ -35,12 +30,10 @@ export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
                 color='green'
                 variant='solid'
                 onClick={() => navigateRoute({ page: { _tag: 'HomePage' } })}
-                children={() => 'Return to Home Overview'}
-              />
+                >Return to Home Overview</DsButtonMemo>
             </div>
           </>
-        )}
-      />
+        </DsBoxMemo>
     </div>
   )
 }

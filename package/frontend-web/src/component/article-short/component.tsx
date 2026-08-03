@@ -87,16 +87,15 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
         data-test='article-link'
       >
         <div className='flex flex-col gap-[4px]'>
-          <DsTitleMemo
-            size={4}
-            className='line-clamp-2'
-            children={() => model.title}
-          />
+          <DsTitleMemo size={4} className='line-clamp-2'>
+            {model.title}
+          </DsTitleMemo>
           <DsContentMemo
             size='normal'
             className='line-clamp-3 text-sm text-gray-500'
-            children={() => model.description}
-          />
+          >
+            {model.description}
+          </DsContentMemo>
         </div>
         <div className='flex items-center justify-between'>
           <span className='text-xs text-gray-400'>
@@ -112,8 +111,9 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
                 variant='outline'
                 isRounded={true}
                 size='small'
-                children={() => tag}
-              />
+              >
+                {tag}
+              </DsTagMemo>
             ))}
           </div>
         </div>

@@ -100,13 +100,10 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                             ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
                             : undefined
                         }
-                        children={() => (
-                          <>
-                            <UserMinus size={13} className='mr-1' /> Unfollow{' '}
-                            {author.username}
-                          </>
-                        )}
-                      />
+                      >
+                        <UserMinus size={13} className='mr-1' /> Unfollow{' '}
+                        {author.username}
+                      </DsButtonMemo>
                     ) : (
                       <DsButtonMemo
                         color='gray'
@@ -123,13 +120,10 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                             ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
                             : undefined
                         }
-                        children={() => (
-                          <>
-                            <UserPlus size={13} className='mr-1' /> Follow{' '}
-                            {author.username}
-                          </>
-                        )}
-                      />
+                      >
+                        <UserPlus size={13} className='mr-1' /> Follow{' '}
+                        {author.username}
+                      </DsButtonMemo>
                     ))}
                   {favButtonView({
                     variant: 'detail',
@@ -170,12 +164,9 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                         onClick={() => dispatch({ _tag: 'DeleteArticle' })}
                         dataTest='article-delete-btn'
                         className={isLight ? 'hover:bg-red-900' : 'hover:bg-red-50'}
-                        children={() => (
-                          <>
-                            <Trash2 size={13} className='mr-1' /> Delete Article
-                          </>
-                        )}
-                      />
+                      >
+                        <Trash2 size={13} className='mr-1' /> Delete Article
+                      </DsButtonMemo>
                     </>
                   )}
                 </div>
@@ -214,9 +205,7 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                           color='gray'
                           variant='outline'
                           isRounded={true}
-                          size='small'
-                          children={() => tag}
-                        />
+                          size='small'>{tag}</DsTagMemo>
                       ))}
                     </div>
                   </div>

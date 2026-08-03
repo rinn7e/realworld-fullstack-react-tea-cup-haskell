@@ -80,9 +80,7 @@ const SignupPageComponent = ({ model, dispatch }: Props) => {
             <DsButtonMemo
               type='submit'
               isFullWidth={true}
-              isLoading={RD.isPending(model.requestRd)}
-              children={() => 'Sign up'}
-            />
+              isLoading={RD.isPending(model.requestRd)}>Sign up</DsButtonMemo>
           </div>
         </form>
       </div>

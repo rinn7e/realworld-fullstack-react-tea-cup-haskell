@@ -25,36 +25,27 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='BreadcrumbPage' className='w-full space-y-8'>
-      <DsHeroMemo
-        variant='default'
-        size='small'
-        children={() => (
-          <div className='flex items-center justify-between'>
-            <div>
-              <DsTitleMemo
-                size={2}
-                className='font-bold text-gray-900'
-                children={() => 'Breadcrumb Component'}
-              />
-              <p className='mt-1 text-sm text-gray-500'>
-                Breadcrumb navigation bar component.
-              </p>
-            </div>
-            <DsButtonMemo
-              color='green'
-              variant={model.showCode ? 'outline' : 'solid'}
-              onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
-              className='gap-2'
-              children={() => (
-                <>
-                  <Code2 className='h-4 w-4' />
-                  <span>{model.showCode ? 'Hide Code' : 'View Code'}</span>
-                </>
-              )}
-            />
+      <DsHeroMemo variant='default' size='small'>
+        <div className='flex items-center justify-between'>
+          <div>
+            <DsTitleMemo size={2} className='font-bold text-gray-900'>
+              Breadcrumb Component
+            </DsTitleMemo>
+            <p className='mt-1 text-sm text-gray-500'>
+              Breadcrumb navigation bar component.
+            </p>
           </div>
-        )}
-      />
+          <DsButtonMemo
+            color='green'
+            variant={model.showCode ? 'outline' : 'solid'}
+            onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
+            className='gap-2'
+          >
+            <Code2 className='h-4 w-4' />
+            <span>{model.showCode ? 'Hide Code' : 'View Code'}</span>
+          </DsButtonMemo>
+        </div>
+      </DsHeroMemo>
 
       <div className='space-y-6'>
         {sectionView({
@@ -69,7 +60,8 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
                 ]}
               />
             </div>
-          ) })}
+          ),
+        })}
 
         {model.showCode && (
           <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>

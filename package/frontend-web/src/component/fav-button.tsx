@@ -21,13 +21,12 @@ const normalFavButtonGreen = ({
     size='xsmall'
     dataTest='fav-button'
     onClick={onClick}
-    children={() => (
-      <span className='flex items-center gap-1'>
-        <Heart size={12} fill={favorited ? 'currentColor' : 'none'} />
-        <span>{favoritesCount}</span>
-      </span>
-    )}
-  />
+  >
+    <span className='flex items-center gap-1'>
+      <Heart size={12} fill={favorited ? 'currentColor' : 'none'} />
+      <span>{favoritesCount}</span>
+    </span>
+  </DsButtonMemo>
 )
 
 const detailFavButtonGreen = ({
@@ -41,14 +40,13 @@ const detailFavButtonGreen = ({
     size='xsmall'
     dataTest='fav-button'
     onClick={onClick}
-    children={() => (
-      <span className='flex items-center gap-1.5'>
-        <Heart size={13} fill={favorited ? 'currentColor' : 'none'} />
-        <span>{favorited ? 'Unfavorite Article' : 'Favorite Article'}</span>
-        <span>({favoritesCount})</span>
-      </span>
-    )}
-  />
+  >
+    <span className='flex items-center gap-1.5'>
+      <Heart size={13} fill={favorited ? 'currentColor' : 'none'} />
+      <span>{favorited ? 'Unfavorite Article' : 'Favorite Article'}</span>
+      <span>({favoritesCount})</span>
+    </span>
+  </DsButtonMemo>
 )
 
 export const favButtonView = ({

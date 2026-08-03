@@ -112,7 +112,6 @@ const ProfilePageComponent = ({
                     ) : (
                       <DsButtonMemo
                         color='gray'
-                        variant='outline'
                         size='small'
                         dataTest='follow-btn'
                         onClick={() =>
@@ -122,15 +121,12 @@ const ProfilePageComponent = ({
                               : 'Follow',
                           })
                         }
-                        children={() => (
-                          <>
-                            <UserPlus size={13} className='mr-1.5' />
-                            {data.profile.following
-                              ? `Unfollow ${data.profile.username}`
-                              : `Follow ${data.profile.username}`}
-                          </>
-                        )}
-                      />
+                      >
+                        <UserPlus size={13} className='mr-1.5' />
+                        {data.profile.following
+                          ? `Unfollow ${data.profile.username}`
+                          : `Follow ${data.profile.username}`}
+                      </DsButtonMemo>
                     )}
                   </div>
                 </div>

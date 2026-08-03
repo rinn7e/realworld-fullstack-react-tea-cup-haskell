@@ -28,44 +28,39 @@ export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='ContentPage' className='w-full space-y-8 text-left'>
-      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full">
+<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               ELEMENTS / CONTENT
             </div>
             <DsTitleMemo
               size={2}
-              className='mb-2 font-extrabold text-gray-900'
-              children={() => 'Content'}
-            />
+              className='mb-2 font-extrabold text-gray-900'>Content</DsTitleMemo>
             <p className='text-base text-gray-600'>
               Typography content wrapper for rich text formatting and article
               content.
-            </p></>)} />
+            </p></>
+</DsHeroMemo>
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
           <DsTitleMemo
             size={5}
-            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
-            children={() => (
+            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'>
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
                 <span>Interactive Playground &amp; Code</span>
               </>
-            )}
-          />
+            </DsTitleMemo>
           <DsButtonMemo
             color='green'
             variant='link'
             size='small'
             onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
             className='flex items-center gap-1 font-semibold text-green-600 hover:underline'
-            children={() => (
-              <>
-                <Code2 className='h-3.5 w-3.5' />
-                <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
-              </>
-            )}
-          />
+          >
+            <Code2 className='h-3.5 w-3.5' />
+            <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
+          </DsButtonMemo>
         </div>
 
         {sectionView({
@@ -73,8 +68,7 @@ export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='w-full'>
               <DsContentMemo
-                size='normal'
-                children={() => (
+                size='normal'>
                   <div>
                     <h3 className='mb-2 text-lg font-bold text-gray-900'>
                       Rich Article Content
@@ -84,8 +78,7 @@ export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
                       copy, markdown articles, and documentation text.
                     </p>
                   </div>
-                )}
-              />
+                </DsContentMemo>
             </div>
           ) })}
 

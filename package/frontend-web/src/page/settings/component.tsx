@@ -87,9 +87,7 @@ const SettingsPageComponent = ({ model, dispatch }: Props) => {
           <div className='flex justify-end pt-[16px]'>
             <DsButtonMemo
               type='submit'
-              isLoading={RD.isPending(model.requestRd)}
-              children={() => 'Update Settings'}
-            />
+              isLoading={RD.isPending(model.requestRd)}>Update Settings</DsButtonMemo>
           </div>
         </form>
 
@@ -102,8 +100,9 @@ const SettingsPageComponent = ({ model, dispatch }: Props) => {
             dataTest='logout-btn'
             onClick={() => dispatch({ _tag: 'Logout' })}
             className='self-start'
-            children={() => 'Or click here to logout.'}
-          />
+          >
+            Or click here to logout.
+          </DsButtonMemo>
         </div>
       </div>
     </div>

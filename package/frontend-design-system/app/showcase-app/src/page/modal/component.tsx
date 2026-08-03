@@ -20,8 +20,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
   color='green'
   variant='solid'
   onClick={() => dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } })}
-  children={() => 'Open Modal'}
-/>
+  >Open Modal</DsTagMemo>
 <DsModalMemo
   title='Confirm Delete'
   model={model.modalModel}
@@ -32,44 +31,39 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='ModalPage' className='w-full space-y-8 text-left'>
-      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full">
+<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
               COMPONENTS / MODAL
             </div>
             <DsTitleMemo
               size={2}
-              className='mb-2 font-extrabold text-gray-900'
-              children={() => 'Modal'}
-            />
+              className='mb-2 font-extrabold text-gray-900'>Modal</DsTitleMemo>
             <p className='text-base text-gray-600'>
               Classic modal dialog overlay with header, body, and backdrop close
               controls.
-            </p></>)} />
+            </p></>
+</DsHeroMemo>
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
           <DsTitleMemo
             size={5}
-            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
-            children={() => (
+            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'>
               <>
                 <Sparkles className='h-4 w-4 text-green-600' />
                 <span>Interactive Playground &amp; Code</span>
               </>
-            )}
-          />
+            </DsTitleMemo>
           <DsButtonMemo
             color='green'
             variant='link'
             size='small'
             onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
             className='flex items-center gap-1 font-semibold text-green-600 hover:underline'
-            children={() => (
-              <>
-                <Code2 className='h-3.5 w-3.5' />
-                <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
-              </>
-            )}
-          />
+          >
+            <Code2 className='h-3.5 w-3.5' />
+            <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
+          </DsButtonMemo>
         </div>
 
         {sectionView({
@@ -83,8 +77,7 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
                   onClick={() =>
                     dispatch({ _tag: 'ModalMsg', subMsg: { _tag: 'Open' } })
                   }
-                  children={() => 'Open Modal'}
-                />
+                  >Open Modal</DsButtonMemo>
                 <DsModalMemo
                   title='Confirm Action'
                   model={model.modalModel}
@@ -92,11 +85,9 @@ export const ModalPage: React.FC<Props> = ({ model, dispatch }) => {
                     dispatch({ _tag: 'ModalMsg', subMsg })
                   }
                 >
-                  {() => (
-                    <p className='text-sm text-gray-600'>
-                      Are you sure you want to delete this article?
-                    </p>
-                  )}
+                  <p className='text-sm text-gray-600'>
+                    Are you sure you want to delete this article?
+                  </p>
                 </DsModalMemo>
               </div>
             </div>

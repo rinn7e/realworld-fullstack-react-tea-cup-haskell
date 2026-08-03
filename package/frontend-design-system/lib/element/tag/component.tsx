@@ -116,7 +116,7 @@ export const TagComponent: React.FC<TagProps> = ({
         className,
       )}
     >
-      <span>{children?.()}</span>
+      <span>{children}</span>
       {onDelete && <DeleteMemo size='small' onClick={onDelete} />}
     </span>
   )

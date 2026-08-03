@@ -49,7 +49,7 @@ export const HeroComponent: React.FC<HeroProps> = ({
       <div className='mx-auto max-w-4xl'>
         {title && <h1 className='mb-2 text-4xl font-bold tracking-tight'>{title}</h1>}
         {subtitle && <p className='text-lg opacity-90'>{subtitle}</p>}
-        {children?.()}
+        {children}
       </div>
 
       {footer && <div className='mt-4'>{footer}</div>}
