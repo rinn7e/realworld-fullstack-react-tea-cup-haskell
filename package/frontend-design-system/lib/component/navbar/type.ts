@@ -7,6 +7,9 @@ import {
   mkNavItemDataEq,
 } from '../../type/nav-item'
 
+// TODO: no longer pass PMsg
+// convert navbar to TEA-cup
+// parent caller will be responsible for child msg interception instead of passing PMsg
 export type Config<PMsg> = {
   brandNavItem?: NavItemData<PMsg>
   desktopNavItems: NavItemData<PMsg>[]
