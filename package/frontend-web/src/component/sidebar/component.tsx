@@ -1,20 +1,23 @@
 import { Button } from '@rinn7e/realworld-design-system'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { X } from 'lucide-react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { createPortal } from 'react-dom'
 
+import { SetGlobalMsgContext } from '@/common/global-context'
 import { memoStrategy } from '@/common/util'
-import { Link } from '@/component/link'
+import { GenericLink } from '@/component/generic-link'
+import type { Msg as AppMsg } from '@/type'
 
 import type { Props } from './type'
 import { PropsEq } from './type'
 
-export const SidebarComponent: React.FC<Props> = ({
+export const SidebarComponent = <PMsg,>({
   model,
   dispatch,
   items,
-}) => {
+}: Props<PMsg>) => {
+  const setGlobalMsg = useContext(SetGlobalMsgContext)
   const state = model.status.state._tag
   const isVisible = state !== 'Invisible'
 
@@ -65,18 +68,20 @@ export const SidebarComponent: React.FC<Props> = ({
 
               return (
                 <li key={item.key}>
-                  <Link
+                  <GenericLink
                     className={cn(
                       baseCls,
                       item.isActive ? activeCls : inactiveCls,
                     )}
-                    route={item.route}
+                    href={item.href}
+                    dispatch={setGlobalMsg as unknown as (msg: PMsg) => void}
+                    msg={item.onClick}
                     data-test='nav-link'
                     aria-current={item.isActive ? 'page' : undefined}
                   >
                     {item.icon}
                     {item.label}
-                  </Link>
+                  </GenericLink>
                 </li>
               )
             })}
@@ -88,4 +93,7 @@ export const SidebarComponent: React.FC<Props> = ({
   )
 }
 
-export const SidebarMemo = memoStrategy(SidebarComponent, PropsEq.equals)
+export const SidebarMemo = memoStrategy(
+  SidebarComponent,
+  PropsEq.equals as (x: Props<unknown>, y: Props<unknown>) => boolean,
+) as <PMsg>(props: Props<PMsg>) => React.ReactElement | null

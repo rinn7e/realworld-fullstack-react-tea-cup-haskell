@@ -1,11 +1,13 @@
 import { Image } from '@rinn7e/realworld-design-system'
 import type { Option } from 'fp-ts/lib/Option'
-import { Pencil, Settings } from 'lucide-react'
+import { Menu, Pencil, Settings } from 'lucide-react'
 import React from 'react'
 
 import type { User } from '@/common/api'
-import type { SidebarItemData } from '@/component/sidebar'
-import type { Model } from '@/type'
+import type { NavItemData } from '@/common/type/nav-item'
+import { homePage, toUrlString } from '@/common/type/route'
+import type { Model as NavbarModel } from '@/component/navbar'
+import type { Model, Msg } from '@/type'
 
 import {
   type NavLinkIcon,
@@ -36,16 +38,49 @@ export const renderNavLinkIcon = (
   return null
 }
 
-export const toSidebarItems = (model: Model): SidebarItemData[] => {
+export const toBrandNavItem = (_model: Model): NavItemData<Msg> => ({
+  key: 'site-logo',
+  label: 'conduit',
+  href: toUrlString({ page: homePage() }),
+  isActive: false,
+  onClick: { _tag: 'ChangeRoute', route: { page: homePage() } },
+})
+
+export const toMobileNavItems = (_model: Model): NavItemData<Msg>[] => [
+  {
+    key: 'toggle-sidebar',
+    label: '',
+    href: '',
+    isActive: false,
+    onClick: {
+      _tag: 'SidebarMsg',
+      subMsg: { _tag: 'Toggle', open: true },
+    },
+    icon: <Menu size={24} />,
+  },
+]
+
+export const toDesktopNavItems = (model: Model): NavItemData<Msg>[] => {
   const userOpt = model.shared.user
   const pageTag = model.pageModel._tag
   const navLinksData = userOpt._tag === 'Some' ? navLinkAuths : navLinkUnauths
 
-  return navLinksData.map((linkData) => ({
-    key: linkData.key,
-    label: linkData.label(userOpt),
-    route: linkData.route(userOpt),
-    isActive: pageTag === linkData.pageTag,
-    icon: renderNavLinkIcon(linkData.icon, userOpt),
-  }))
+  return navLinksData.map((linkData) => {
+    const route = linkData.route(userOpt)
+    return {
+      key: linkData.key,
+      label: linkData.label(userOpt),
+      href: toUrlString(route),
+      onClick: { _tag: 'ChangeRoute', route },
+      isActive: pageTag === linkData.pageTag,
+      icon: renderNavLinkIcon(linkData.icon, userOpt),
+    }
+  })
 }
+
+export const toNavbarModel = (model: Model): NavbarModel<Msg> => ({
+  brandNavItem: toBrandNavItem(model),
+  desktopNavItems: toDesktopNavItems(model),
+  mobileNavItems: toMobileNavItems(model),
+  unavailableMode: model.unavailableMode,
+})

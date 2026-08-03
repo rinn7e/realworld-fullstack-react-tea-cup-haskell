@@ -3,7 +3,10 @@ import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { SetGlobalMsgContext } from './common/global-context'
-import { toSidebarItems } from './common/nav-link-helper'
+import {
+  toDesktopNavItems,
+  toNavbarModel,
+} from './common/nav-link-helper'
 import { DebugPanelComponent } from './component/debug-panel/component'
 import { Footer } from './component/footer'
 import { NavbarMemo } from './component/navbar/component'
@@ -25,7 +28,8 @@ interface Props {
 
 export const App: React.FC<Props> = ({ model, dispatch }) => {
   const isNavOpen = model.sidebar.status.state._tag !== 'Invisible'
-  const navItems = toSidebarItems(model)
+  const desktopNavItems = toDesktopNavItems(model)
+  const navbarModel = toNavbarModel(model)
 
   return (
     <SetGlobalMsgContext value={dispatch}>
@@ -35,22 +39,13 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
           isNavOpen && 'h-dvh overflow-hidden',
         )}
       >
-        <NavbarMemo
-          items={navItems}
-          unavailableMode={model.unavailableMode}
-          onToggleSidebar={() =>
-            dispatch({
-              _tag: 'SidebarMsg',
-              subMsg: { _tag: 'Toggle', open: true },
-            })
-          }
-        />
+        <NavbarMemo model={navbarModel} dispatch={dispatch} />
         <main className='flex-grow'>{renderPage(model, dispatch)}</main>
         <Footer />
       </div>
       <SidebarMemo
         model={model.sidebar}
-        items={navItems}
+        items={desktopNavItems}
         dispatch={(subMsg) => dispatch({ _tag: 'SidebarMsg', subMsg })}
       />
       <DebugPanelComponent
