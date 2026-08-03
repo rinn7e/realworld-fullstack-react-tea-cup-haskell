@@ -38,6 +38,7 @@ export type NavbarProps = {
   config: Config
   dispatch: (msg: Msg) => void
   className?: string
+  containerClassName?: string
   key?: React.Key
   dataTest?: string
 }
@@ -48,6 +49,7 @@ export const NavbarPropsEq: EqClass.Eq<NavbarProps> = EqClass.struct<
   config: ConfigEq,
   dispatch: EqClass.eqStrict,
   className: string.Eq,
+  containerClassName: string.Eq,
   key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<NavbarProps>

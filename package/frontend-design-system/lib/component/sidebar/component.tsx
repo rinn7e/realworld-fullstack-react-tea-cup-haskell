@@ -100,21 +100,19 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
             'p-1 text-gray-500 hover:text-gray-700',
             isCollapsed && 'mx-auto',
           )}
-          children={() => {
-            if (align === 'right') {
-              return isCollapsed ? (
-                <PanelRightOpen size={20} />
-              ) : (
-                <PanelRightClose size={20} />
-              )
-            }
-            return isCollapsed ? (
-              <PanelLeftOpen size={20} />
+        >
+          {align === 'right' ? (
+            isCollapsed ? (
+              <PanelRightOpen size={20} />
             ) : (
-              <PanelLeftClose size={20} />
+              <PanelRightClose size={20} />
             )
-          }}
-        />
+          ) : isCollapsed ? (
+            <PanelLeftOpen size={20} />
+          ) : (
+            <PanelLeftClose size={20} />
+          )}
+        </DsButtonMemo>
       </div>
 
       {/* Nav List */}

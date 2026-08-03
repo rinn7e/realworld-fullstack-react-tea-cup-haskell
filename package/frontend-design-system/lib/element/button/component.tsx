@@ -96,7 +96,6 @@ export const ButtonComponent: React.FC<ButtonProps> = ({
 }) => {
   const styles = colorStyles[color] || colorStyles.green
   const colorClass = styles[variant] || styles.solid
-
   return (
     <button
       key={key}
@@ -116,13 +115,13 @@ export const ButtonComponent: React.FC<ButtonProps> = ({
     >
       {isLoading ? (
         <>
-          <span className='opacity-0'>{children()}</span>
+          <span className='opacity-0'>{children}</span>
           <div className='absolute inset-0 flex items-center justify-center'>
             <Loader2 className='h-4 w-4 animate-spin' />
           </div>
         </>
       ) : (
-        children()
+        children
       )}
     </button>
   )

@@ -25,7 +25,7 @@ export const FieldComponent: React.FC<FieldProps> = ({
           {label}
         </label>
       )}
-      {children()}
+      {children}
       {errorText ? (
         <p className='mt-1 text-xs text-red-600'>{errorText}</p>
       ) : (

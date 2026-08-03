@@ -3,7 +3,7 @@ import React from 'react'
 
 export interface SectionViewOptions {
   title: string
-  children: () => React.ReactNode
+  children?: () => React.ReactNode
   boxClassName?: string
 }
 
@@ -17,7 +17,9 @@ export const sectionView = ({
       <h3 className='text-sm font-semibold tracking-wider text-gray-700 uppercase'>
         {title}
       </h3>
-      <DsContentMemo className={boxClassName} children={children} />
+      <DsContentMemo className={boxClassName}>
+        {children ? children() : null}
+      </DsContentMemo>
     </div>
   )
 }

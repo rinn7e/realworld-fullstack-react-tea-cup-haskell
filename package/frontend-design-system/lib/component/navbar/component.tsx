@@ -45,6 +45,7 @@ export const NavbarComponent: React.FC<NavbarProps> = ({
   config,
   dispatch,
   className,
+  containerClassName,
   key,
   dataTest,
 }) => {
@@ -61,7 +62,7 @@ export const NavbarComponent: React.FC<NavbarProps> = ({
         className,
       )}
     >
-      <div className='mx-auto px-4 w-full xl:w-[70%]'>
+      <div className={cn('mx-auto px-4 max-w-7xl', containerClassName)}>
         <div className='flex h-[56px] items-center justify-between'>
           {brandNavItem && (
             <GenericLink

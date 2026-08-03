@@ -29,7 +29,7 @@ export const ContentComponent: React.FC<ContentProps> = ({
         className,
       )}
     >
-      {children()}
+      {children}
     </div>
   )
 }

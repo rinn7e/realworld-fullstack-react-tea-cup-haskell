@@ -17,7 +17,7 @@ export const BlockComponent: React.FC<BlockProps> = ({
       data-component='Block'
       className={cn('mb-6 last:mb-0', className)}
     >
-      {children()}
+      {children}
     </div>
   )
 }

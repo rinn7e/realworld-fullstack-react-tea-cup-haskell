@@ -21,7 +21,7 @@ export const ContainerComponent: React.FC<ContainerProps> = ({
         className,
       )}
     >
-      {children()}
+      {children}
     </div>
   )
 }

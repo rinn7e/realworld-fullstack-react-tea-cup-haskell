@@ -20,7 +20,7 @@ export const BoxComponent: React.FC<BoxProps> = ({
         className,
       )}
     >
-      {children()}
+      {children}
     </div>
   )
 }

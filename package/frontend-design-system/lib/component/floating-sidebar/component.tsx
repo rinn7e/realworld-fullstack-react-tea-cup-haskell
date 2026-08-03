@@ -71,8 +71,9 @@ export const FloatingSidebarComponent: React.FC<FloatingSidebarProps> = ({
               variant='ghost'
               onClick={() => dispatch({ _tag: 'Toggle', open: false })}
               className='p-[8px]'
-              children={() => <X size={24} />}
-            />
+            >
+              <X size={24} />
+            </DsButtonMemo>
           </div>
           <ul className='flex flex-col gap-[8px]'>
             {items.map((item) => {

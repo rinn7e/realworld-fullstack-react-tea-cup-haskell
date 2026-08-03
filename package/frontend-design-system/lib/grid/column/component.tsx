@@ -30,7 +30,7 @@ export const ColumnComponent: React.FC<ColumnProps> = ({
         className,
       )}
     >
-      {children()}
+      {children}
     </div>
   )
 }

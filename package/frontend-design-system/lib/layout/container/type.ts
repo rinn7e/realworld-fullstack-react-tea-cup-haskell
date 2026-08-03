@@ -4,7 +4,7 @@ import * as string from 'fp-ts/string'
 import type React from 'react'
 
 export type ContainerProps = {
-  children: () => React.ReactNode
+  children?: React.ReactNode
   isFluid?: boolean
   className?: string
   key?: React.Key

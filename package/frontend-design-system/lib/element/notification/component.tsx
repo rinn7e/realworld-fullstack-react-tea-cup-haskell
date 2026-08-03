@@ -34,7 +34,7 @@ export const NotificationComponent: React.FC<NotificationProps> = ({
         className,
       )}
     >
-      <div className='flex-1 pr-6'>{children()}</div>
+      <div className='flex-1 pr-6'>{children}</div>
       {onDelete && (
         <div className='absolute top-3 right-3'>
           <DeleteMemo size='small' onClick={onDelete} />

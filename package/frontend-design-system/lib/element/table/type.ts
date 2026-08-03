@@ -4,7 +4,7 @@ import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
 
 export type TableProps = {
-  children: () => React.ReactNode
+  children?: React.ReactNode
   isBordered?: boolean
   isStriped?: boolean
   isNarrow?: boolean

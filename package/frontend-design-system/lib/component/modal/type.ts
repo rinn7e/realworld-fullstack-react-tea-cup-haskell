@@ -13,7 +13,7 @@ export type Msg = { _tag: 'Open' } | { _tag: 'Close' }
 
 export type ModalProps = {
   title?: string
-  children: () => React.ReactNode
+  children?: React.ReactNode
   footer?: React.ReactNode
   model: Model
   dispatch: (msg: Msg) => void

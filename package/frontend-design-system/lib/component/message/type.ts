@@ -11,7 +11,7 @@ export type MessageVariant =
 
 export type MessageProps = {
   header?: React.ReactNode
-  children: () => React.ReactNode
+  children?: React.ReactNode
   variant?: MessageVariant
   onDelete?: () => void
   className?: string

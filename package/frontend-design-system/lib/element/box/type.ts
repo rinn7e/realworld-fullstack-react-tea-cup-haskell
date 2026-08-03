@@ -3,7 +3,7 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as string from 'fp-ts/lib/string'
 
 export type BoxProps = {
-  children: () => React.ReactNode
+  children?: React.ReactNode
   className?: string
   key?: React.Key
   dataTest?: string

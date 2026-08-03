@@ -19,7 +19,7 @@ export type ButtonProps = {
   isFullWidth?: boolean
   isLoading?: boolean
   isDisabled?: boolean
-  children: () => ReactNode
+  children?: ReactNode
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   type?: 'button' | 'submit' | 'reset'
   className?: string

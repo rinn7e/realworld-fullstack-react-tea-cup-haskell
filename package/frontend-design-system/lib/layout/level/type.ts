@@ -5,7 +5,7 @@ import type React from 'react'
 import type { ReactNode } from 'react'
 
 export type LevelProps = {
-  children: () => ReactNode
+  children?: ReactNode
   className?: string
   key?: React.Key
   dataTest?: string
@@ -13,7 +13,7 @@ export type LevelProps = {
 
 export type LevelItemProps = {
   hasTextCentered?: boolean
-  children: () => ReactNode
+  children?: ReactNode
   className?: string
   key?: React.Key
   dataTest?: string

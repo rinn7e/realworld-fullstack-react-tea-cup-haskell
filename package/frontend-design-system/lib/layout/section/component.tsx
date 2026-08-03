@@ -22,7 +22,7 @@ export const SectionComponent: React.FC<SectionProps> = ({
       data-component='Section'
       className={cn('w-full', sizeStyles[size], className)}
     >
-      {children()}
+      {children}
     </section>
   )
 }

@@ -24,7 +24,7 @@ export const LevelComponent: React.FC<LevelProps> = ({
         className,
       )}
     >
-      {children()}
+      {children}
     </div>
   )
 }
@@ -47,7 +47,7 @@ export const LevelItemComponent: React.FC<LevelItemProps> = ({
         className,
       )}
     >
-      {children()}
+      {children}
     </div>
   )
 }

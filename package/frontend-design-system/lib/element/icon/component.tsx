@@ -29,7 +29,7 @@ export const IconComponent: React.FC<IconProps> = ({
         className,
       )}
     >
-      {children()}
+      {children}
     </span>
   )
 }

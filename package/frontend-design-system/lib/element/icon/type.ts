@@ -5,7 +5,7 @@ import * as string from 'fp-ts/lib/string'
 export type IconSize = 'small' | 'normal' | 'medium' | 'large'
 
 export type IconProps = {
-  children: () => React.ReactNode
+  children?: React.ReactNode
   size?: IconSize
   className?: string
   key?: React.Key

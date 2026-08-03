@@ -425,54 +425,45 @@ export const view = (
           ],
           mobileNavItems: [],
         }}
+        containerClassName='max-w-none w-full xl:w-[70%]'
         dispatch={(subMsg) => dispatch({ _tag: 'TopNavbarMsg', subMsg })}
       />
 
       {/* Main Layout Container */}
       <DsContainerMemo className='my-8 w-full max-w-none flex-1 xl:w-[70%]'>
-        {() => (
-          <DsColumnsMemo>
-            {() => (
-              <>
-                {/* Left Sidebar Navigation */}
-                <DsColumnMemo className='w-full md:w-auto md:shrink-0 md:grow-0'>
-                  {() => (
-                    <DsSidebarMemo
-                      model={model.sidebarModel}
-                      categories={getSidebarCategories(activeComponent)}
-                      brandTitle='Showcase'
-                      dispatch={(subMsg) =>
-                        dispatch({ _tag: 'SidebarMsg', subMsg })
-                      }
-                      className='rounded-lg border border-gray-200/80 bg-white shadow-sm'
-                    />
-                  )}
-                </DsColumnMemo>
+        <DsColumnsMemo>
+          {/* Left Sidebar Navigation */}
+          <DsColumnMemo className='w-full md:w-auto md:shrink-0 md:grow-0'>
+            <DsSidebarMemo
+              model={model.sidebarModel}
+              categories={getSidebarCategories(activeComponent)}
+              brandTitle='Showcase'
+              dispatch={(subMsg) =>
+                dispatch({ _tag: 'SidebarMsg', subMsg })
+              }
+              className='rounded-lg border border-gray-200/80 bg-white shadow-sm'
+            />
+          </DsColumnMemo>
 
-                {/* Main Page Area */}
-                <DsColumnMemo className='min-w-0 flex-1'>
-                  {() => <div className='w-full'>{renderPage()}</div>}
-                </DsColumnMemo>
+          {/* Main Page Area */}
+          <DsColumnMemo className='min-w-0 flex-1'>
+            <div className='w-full'>{renderPage()}</div>
+          </DsColumnMemo>
 
-                {/* Right Sidebar Navigation */}
-                <DsColumnMemo className='w-full md:w-auto md:shrink-0 md:grow-0'>
-                  {() => (
-                    <DsSidebarMemo
-                      model={model.rightSidebarModel}
-                      categories={getRightSidebarCategories()}
-                      brandTitle='Setting'
-                      align='right'
-                      dispatch={(subMsg) =>
-                        dispatch({ _tag: 'RightSidebarMsg', subMsg })
-                      }
-                      className='rounded-lg border border-gray-200/80 bg-white shadow-sm'
-                    />
-                  )}
-                </DsColumnMemo>
-              </>
-            )}
-          </DsColumnsMemo>
-        )}
+          {/* Right Sidebar Navigation */}
+          <DsColumnMemo className='w-full md:w-auto md:shrink-0 md:grow-0'>
+            <DsSidebarMemo
+              model={model.rightSidebarModel}
+              categories={getRightSidebarCategories()}
+              brandTitle='Setting'
+              align='right'
+              dispatch={(subMsg) =>
+                dispatch({ _tag: 'RightSidebarMsg', subMsg })
+              }
+              className='rounded-lg border border-gray-200/80 bg-white shadow-sm'
+            />
+          </DsColumnMemo>
+        </DsColumnsMemo>
       </DsContainerMemo>
 
       {/* Footer */}

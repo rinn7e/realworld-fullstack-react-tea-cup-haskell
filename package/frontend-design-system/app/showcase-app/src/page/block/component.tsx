@@ -15,83 +15,70 @@ interface Props {
 }
 
 export const BlockPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `<DsBlockMemo
-  children={() => (
-    <div className='p-4 bg-gray-50 border border-gray-200 rounded text-sm text-gray-700'>
-      First layout block container with margin spacing.
-    </div>
-  )}
-/>
-<DsBlockMemo
-  children={() => (
-    <div className='p-4 bg-gray-50 border border-gray-200 rounded text-sm text-gray-700'>
-      Second layout block container.
-    </div>
-  )}
-/>`
+  const code = `<DsBlockMemo>
+  <div className='p-4 bg-gray-50 border border-gray-200 rounded text-sm text-gray-700'>
+    First layout block container with margin spacing.
+  </div>
+</DsBlockMemo>
+<DsBlockMemo>
+  <div className='p-4 bg-gray-50 border border-gray-200 rounded text-sm text-gray-700'>
+    Second layout block container.
+  </div>
+</DsBlockMemo>`
 
   return (
     <div data-component='BlockPage' className='w-full space-y-8 text-left'>
-      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full" children={() => (<><div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
-              ELEMENTS / BLOCK
-            </div>
-            <DsTitleMemo
-              size={2}
-              className='mb-2 font-extrabold text-gray-900'
-              children={() => 'Block'}
-            />
-            <p className='text-base text-gray-600'>
-              Simple layout block element with vertical bottom spacing to
-              separate elements.
-            </p></>)} />
+      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full">
+        <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+          ELEMENTS / BLOCK
+        </div>
+        <DsTitleMemo size={2} className='mb-2 font-extrabold text-gray-900'>
+          Block
+        </DsTitleMemo>
+        <p className='text-base text-gray-600'>
+          Simple layout block element with vertical bottom spacing to
+          separate elements.
+        </p>
+      </DsHeroMemo>
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
           <DsTitleMemo
             size={5}
             className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
-            children={() => (
-              <>
-                <Sparkles className='h-4 w-4 text-green-600' />
-                <span>Interactive Playground &amp; Code</span>
-              </>
-            )}
-          />
+          >
+            <Sparkles className='h-4 w-4 text-green-600' />
+            <span>Interactive Playground &amp; Code</span>
+          </DsTitleMemo>
           <DsButtonMemo
             color='green'
             variant='link'
             size='small'
             onClick={() => dispatch({ _tag: 'ToggleShowCode' })}
             className='flex items-center gap-1 font-semibold text-green-600 hover:underline'
-            children={() => (
-              <>
-                <Code2 className='h-3.5 w-3.5' />
-                <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
-              </>
-            )}
-          />
+          >
+            <Code2 className='h-3.5 w-3.5' />
+            <span>{model.showCode ? 'Hide Code' : 'Show Code'}</span>
+          </DsButtonMemo>
         </div>
 
         {sectionView({
           title: 'Layout Block Spacing',
           children: () => (
             <div className='w-full space-y-3'>
-              <DsBlockMemo
-                children={() => (
-                  <p className='rounded border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700'>
-                    First Layout Block Container
-                  </p>
-                )}
-              />
-              <DsBlockMemo
-                children={() => (
-                  <p className='rounded border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700'>
-                    Second Layout Block Container
-                  </p>
-                )}
-              />
+              <DsBlockMemo>
+                <p className='rounded border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700'>
+                  First Layout Block Container
+                </p>
+              </DsBlockMemo>
+              <DsBlockMemo>
+                <p className='rounded border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700'>
+                  Second Layout Block Container
+                </p>
+              </DsBlockMemo>
             </div>
-          ) })}
+          ),
+        })}
 
         {model.showCode && (
           <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
