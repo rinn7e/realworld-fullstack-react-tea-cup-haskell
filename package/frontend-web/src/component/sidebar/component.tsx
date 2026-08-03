@@ -3,20 +3,17 @@ import { cn } from '@rinn7e/tea-cup-prelude'
 import { X } from 'lucide-react'
 import React from 'react'
 import { createPortal } from 'react-dom'
-import type { Dispatcher } from 'tea-cup-fp'
 
-import type { Model, Msg } from './type'
+import { memoStrategy } from '@/common/util'
+import { Link } from '@/component/link'
 
-export interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-  children?: React.ReactNode
-}
+import type { Props } from './type'
+import { PropsEq } from './type'
 
 export const SidebarComponent: React.FC<Props> = ({
   model,
   dispatch,
-  children,
+  items,
 }) => {
   const state = model.status.state._tag
   const isVisible = state !== 'Invisible'
@@ -36,6 +33,9 @@ export const SidebarComponent: React.FC<Props> = ({
     state === 'AnimateIn' && 'animate-slide-in',
     state === 'AnimateOut' && 'animate-slide-out',
   )
+
+  const activeCls = 'text-green-600'
+  const inactiveCls = 'text-gray-500 hover:text-gray-900'
 
   return createPortal(
     <div className='absolute inset-0 z-[100] flex justify-end overflow-hidden'>
@@ -57,10 +57,35 @@ export const SidebarComponent: React.FC<Props> = ({
               children: () => <X size={24} />,
             })}
           </div>
-          {children}
+          <ul className='flex flex-col gap-[8px]'>
+            {items.map((item) => {
+              const baseCls = item.icon
+                ? 'flex items-center gap-[6px] rounded px-[12px] py-[6px] text-sm'
+                : 'block rounded px-[12px] py-[6px] text-sm'
+
+              return (
+                <li key={item.key}>
+                  <Link
+                    className={cn(
+                      baseCls,
+                      item.isActive ? activeCls : inactiveCls,
+                    )}
+                    route={item.route}
+                    data-test='nav-link'
+                    aria-current={item.isActive ? 'page' : undefined}
+                  >
+                    {item.icon}
+                    {item.label}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
         </div>
       </div>
     </div>,
     document.body,
   )
 }
+
+export const SidebarMemo = memoStrategy(SidebarComponent, PropsEq.equals)
