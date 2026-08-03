@@ -1,3 +1,6 @@
+import * as boolean from 'fp-ts/boolean'
+import * as EqClass from 'fp-ts/Eq'
+import * as string from 'fp-ts/string'
 import type React from 'react'
 import type { ReactNode } from 'react'
 
@@ -8,3 +11,13 @@ export type ColumnsProps = {
   key?: React.Key
   dataTest?: string
 }
+
+export const ColumnsPropsEq: EqClass.Eq<ColumnsProps> = EqClass.struct<
+  Required<ColumnsProps>
+>({
+  isMultiline: boolean.Eq,
+  children: EqClass.eqStrict,
+  className: string.Eq,
+  key: EqClass.eqStrict,
+  dataTest: string.Eq,
+}) as unknown as EqClass.Eq<ColumnsProps>

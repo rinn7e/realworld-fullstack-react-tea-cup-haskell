@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import type { ColumnProps } from './type'
+import { ColumnPropsEq, type ColumnProps } from './type'
 
 const sizeStyles: Record<string, string> = {
   full: 'w-full',
@@ -12,13 +12,13 @@ const sizeStyles: Record<string, string> = {
   'three-quarters': 'w-full md:w-3/4',
 }
 
-export const view = ({
+export const ColumnComponent: React.FC<ColumnProps> = ({
   size,
   children,
   className,
   key,
   dataTest,
-}: ColumnProps): React.ReactElement => {
+}) => {
   return (
     <div
       key={key}
@@ -33,3 +33,5 @@ export const view = ({
     </div>
   )
 }
+
+export const ColumnMemo = memo(ColumnComponent, ColumnPropsEq.equals)

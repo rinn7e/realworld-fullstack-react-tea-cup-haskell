@@ -73,40 +73,40 @@ export default defineConfig({
           'lib/element/title/component.tsx',
         ),
 
-        // Grid views
-        'grid/column/view': path.resolve(
+        // Grid components
+        'grid/column/component': path.resolve(
           __dirname,
-          'lib/grid/column/view.tsx',
+          'lib/grid/column/component.tsx',
         ),
-        'grid/columns/view': path.resolve(
+        'grid/columns/component': path.resolve(
           __dirname,
-          'lib/grid/columns/view.tsx',
+          'lib/grid/columns/component.tsx',
         ),
 
-        // Layout views
-        'layout/container/view': path.resolve(
+        // Layout components
+        'layout/container/component': path.resolve(
           __dirname,
-          'lib/layout/container/view.tsx',
+          'lib/layout/container/component.tsx',
         ),
-        'layout/footer/view': path.resolve(
+        'layout/footer/component': path.resolve(
           __dirname,
-          'lib/layout/footer/view.tsx',
+          'lib/layout/footer/component.tsx',
         ),
-        'layout/hero/view': path.resolve(
+        'layout/hero/component': path.resolve(
           __dirname,
-          'lib/layout/hero/view.tsx',
+          'lib/layout/hero/component.tsx',
         ),
-        'layout/level/view': path.resolve(
+        'layout/level/component': path.resolve(
           __dirname,
-          'lib/layout/level/view.tsx',
+          'lib/layout/level/component.tsx',
         ),
-        'layout/media-object/view': path.resolve(
+        'layout/media-object/component': path.resolve(
           __dirname,
-          'lib/layout/media-object/view.tsx',
+          'lib/layout/media-object/component.tsx',
         ),
-        'layout/section/view': path.resolve(
+        'layout/section/component': path.resolve(
           __dirname,
-          'lib/layout/section/view.tsx',
+          'lib/layout/section/component.tsx',
         ),
 
         // Component entries
