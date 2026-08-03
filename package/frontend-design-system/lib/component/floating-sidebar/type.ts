@@ -19,7 +19,7 @@ export type Msg =
   | { _tag: 'SetState'; state: Animate.AnimateState }
   | { _tag: 'ClickItem'; item: NavItemData }
 
-export type SidebarProps = {
+export type FloatingSidebarProps = {
   model: Model
   items: NavItemData[]
   dispatch: (msg: Msg) => void
@@ -29,14 +29,13 @@ export type SidebarProps = {
   dataTest?: string
 }
 
-export const SidebarPropsEq: EqClass.Eq<SidebarProps> = EqClass.struct<
-  Required<SidebarProps>
->({
-  model: ModelEq,
-  items: A.getEq(NavItemDataEq),
-  dispatch: EqClass.eqStrict,
-  placement: string.Eq,
-  className: string.Eq,
-  key: EqClass.eqStrict,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<SidebarProps>
+export const FloatingSidebarPropsEq: EqClass.Eq<FloatingSidebarProps> =
+  EqClass.struct<Required<FloatingSidebarProps>>({
+    model: ModelEq,
+    items: A.getEq(NavItemDataEq),
+    dispatch: EqClass.eqStrict,
+    placement: string.Eq,
+    className: string.Eq,
+    key: EqClass.eqStrict,
+    dataTest: string.Eq,
+  }) as unknown as EqClass.Eq<FloatingSidebarProps>

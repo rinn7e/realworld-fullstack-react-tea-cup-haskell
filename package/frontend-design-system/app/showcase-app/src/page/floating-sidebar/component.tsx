@@ -1,4 +1,4 @@
-import { SidebarMemo as DsSidebarMemo } from '@rinn7e/realworld-design-system/component/sidebar/component'
+import { FloatingSidebarMemo as DsFloatingSidebarMemo } from '@rinn7e/realworld-design-system/component/floating-sidebar/component'
 import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
@@ -15,7 +15,7 @@ interface Props {
   dispatch: Dispatcher<Msg>
 }
 
-export const SidebarPage: React.FC<Props> = ({ model, dispatch }) => {
+export const FloatingSidebarPage: React.FC<Props> = ({ model, dispatch }) => {
   const items: DsNavItemData[] = [
     {
       key: 'home',
@@ -40,13 +40,13 @@ export const SidebarPage: React.FC<Props> = ({ model, dispatch }) => {
     },
   ]
 
-  const code = `const [sidebarModel, sidebarCmd] = DsSidebar.init()
+  const code = `const [sidebarModel, sidebarCmd] = DsFloatingSidebar.init()
 
 <DsButtonMemo onClick={() => dispatch({ _tag: 'OpenSidebar' })}>
   Open Sidebar
 </DsButtonMemo>
 
-<DsSidebarMemo
+<DsFloatingSidebarMemo
   model={model.sidebar}
   items={items}
   placement="${model.placement}"
@@ -54,7 +54,7 @@ export const SidebarPage: React.FC<Props> = ({ model, dispatch }) => {
 />`
 
   return (
-    <div data-component='SidebarPage' className='w-full space-y-8 text-left'>
+    <div data-component='FloatingSidebarPage' className='w-full space-y-8 text-left'>
       <DsHeroMemo
         variant='default'
         size='small'
@@ -62,12 +62,12 @@ export const SidebarPage: React.FC<Props> = ({ model, dispatch }) => {
         children={() => (
           <>
             <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
-              COMPONENTS / SIDEBAR
+              COMPONENTS / FLOATING SIDEBAR
             </div>
             <DsTitleMemo
               size={2}
               className='mb-2 font-extrabold text-gray-900'
-              children={() => 'Sidebar'}
+              children={() => 'Floating Sidebar'}
             />
             <p className='text-base text-gray-600'>
               Slide-over mobile navigation drawer supporting left or right side placements with animated backdrop and item links.
@@ -146,11 +146,11 @@ export const SidebarPage: React.FC<Props> = ({ model, dispatch }) => {
                 variant='solid'
                 onClick={() => dispatch({ _tag: 'OpenSidebar' })}
                 children={() =>
-                  `Open ${model.placement === 'left' ? 'Left' : 'Right'} Sidebar Drawer`
+                  `Open ${model.placement === 'left' ? 'Left' : 'Right'} Floating Sidebar`
                 }
               />
 
-              <DsSidebarMemo
+              <DsFloatingSidebarMemo
                 model={model.sidebar}
                 items={items}
                 placement={model.placement}
@@ -164,7 +164,7 @@ export const SidebarPage: React.FC<Props> = ({ model, dispatch }) => {
           <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
             <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
-              <span className='text-gray-500'>Sidebar Component Code</span>
+              <span className='text-gray-500'>Floating Sidebar Component Code</span>
             </div>
             <pre className='font-mono text-xs leading-relaxed whitespace-pre-wrap text-gray-300'>
               <code>{code}</code>

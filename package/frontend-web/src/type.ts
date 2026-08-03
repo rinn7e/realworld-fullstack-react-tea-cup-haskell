@@ -1,5 +1,5 @@
+import type * as DsFloatingSidebar from '@rinn7e/realworld-design-system/component/floating-sidebar'
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
-import type * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
 import type { Option } from 'fp-ts/lib/Option'
 
 import type { User, UserWithToken } from '@/common/api/type'
@@ -32,7 +32,7 @@ export type Model = {
   pageModel: PageModel
   isInternal: boolean
   debugPanel: DebugPanel.Model
-  sidebar: DsSidebar.Model
+  sidebar: DsFloatingSidebar.Model
   navbar: DsNavbar.Model
 }
 
@@ -56,5 +56,5 @@ export type Msg =
   | { _tag: 'ProfilePageMsg'; subMsg: ProfilePage.Msg }
   | { _tag: 'EditorPageMsg'; subMsg: EditorPage.Msg }
   | { _tag: 'DebugPanelMsg'; subMsg: DebugPanel.Msg }
-  | { _tag: 'SidebarMsg'; subMsg: DsSidebar.Msg }
+  | { _tag: 'SidebarMsg'; subMsg: DsFloatingSidebar.Msg }
   | { _tag: 'NavbarMsg'; subMsg: DsNavbar.Msg }

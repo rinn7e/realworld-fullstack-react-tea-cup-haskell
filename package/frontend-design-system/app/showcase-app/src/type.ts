@@ -1,4 +1,4 @@
-import type { Menu } from '@rinn7e/realworld-design-system'
+import type { Menu as DsMenu } from '@rinn7e/realworld-design-system'
 
 import type * as BlockPage from './page/block/type'
 import type * as BoxPage from './page/box/type'
@@ -14,6 +14,7 @@ import type * as DotLoadingPage from './page/dot-loading/type'
 import type * as DropdownPage from './page/dropdown/type'
 import type * as FieldPage from './page/field/type'
 import type * as FilePage from './page/file/type'
+import type * as FloatingSidebarPage from './page/floating-sidebar/type'
 import type * as FooterPage from './page/footer/type'
 import type * as HeroPage from './page/hero/type'
 import type * as HomePage from './page/home/type'
@@ -26,7 +27,6 @@ import type * as MenuPage from './page/menu/type'
 import type * as MessagePage from './page/message/type'
 import type * as ModalPage from './page/modal/type'
 import type * as NavbarPage from './page/navbar/type'
-import type * as SidebarPage from './page/sidebar/type'
 import type * as NotFoundPage from './page/not-found/type'
 import type * as NotificationPage from './page/notification/type'
 import type * as PaginationPage from './page/pagination/type'
@@ -43,7 +43,12 @@ import type * as TitlePage from './page/title/type'
 import type { AppRoute } from './route/type'
 
 export type SectionCategory =
-  'elements' | 'components' | 'form' | 'layout' | 'grid' | 'misc'
+  | 'elements'
+  | 'components'
+  | 'form'
+  | 'layout'
+  | 'grid'
+  | 'misc'
 
 export type PageModel =
   | { readonly _tag: 'HomePageModel'; readonly model: HomePage.Model }
@@ -81,7 +86,10 @@ export type PageModel =
   | { readonly _tag: 'MessagePageModel'; readonly model: MessagePage.Model }
   | { readonly _tag: 'ModalPageModel'; readonly model: ModalPage.Model }
   | { readonly _tag: 'NavbarPageModel'; readonly model: NavbarPage.Model }
-  | { readonly _tag: 'SidebarPageModel'; readonly model: SidebarPage.Model }
+  | {
+      readonly _tag: 'FloatingSidebarPageModel'
+      readonly model: FloatingSidebarPage.Model
+    }
   | {
       readonly _tag: 'NotificationPageModel'
       readonly model: NotificationPage.Model
@@ -107,7 +115,7 @@ export type Model = {
   readonly isInternal: boolean
   readonly pageModel: PageModel
   readonly searchQuery: string
-  readonly menuModel: Menu.Model
+  readonly menuModel: DsMenu.Model
 }
 
 export type Msg =
@@ -145,7 +153,10 @@ export type Msg =
   | { readonly _tag: 'MessagePageMsg'; readonly subMsg: MessagePage.Msg }
   | { readonly _tag: 'ModalPageMsg'; readonly subMsg: ModalPage.Msg }
   | { readonly _tag: 'NavbarPageMsg'; readonly subMsg: NavbarPage.Msg }
-  | { readonly _tag: 'SidebarPageMsg'; readonly subMsg: SidebarPage.Msg }
+  | {
+      readonly _tag: 'FloatingSidebarPageMsg'
+      readonly subMsg: FloatingSidebarPage.Msg
+    }
   | {
       readonly _tag: 'NotificationPageMsg'
       readonly subMsg: NotificationPage.Msg
@@ -162,4 +173,4 @@ export type Msg =
   | { readonly _tag: 'TextareaPageMsg'; readonly subMsg: TextareaPage.Msg }
   | { readonly _tag: 'TitlePageMsg'; readonly subMsg: TitlePage.Msg }
   | { readonly _tag: 'NotFoundPageMsg'; readonly subMsg: NotFoundPage.Msg }
-  | { readonly _tag: 'MenuMsg'; readonly subMsg: Menu.Msg }
+  | { readonly _tag: 'MenuMsg'; readonly subMsg: DsMenu.Msg }

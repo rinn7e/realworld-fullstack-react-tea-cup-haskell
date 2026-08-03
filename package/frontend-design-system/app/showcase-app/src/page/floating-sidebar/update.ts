@@ -1,10 +1,10 @@
-import * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
+import * as DsFloatingSidebar from '@rinn7e/realworld-design-system/component/floating-sidebar'
 import { Cmd } from 'tea-cup-fp'
 
 import type { Model, Msg } from './type'
 
 export const init = (): [Model, Cmd<Msg>] => {
-  const [sidebarModel, sidebarCmd] = DsSidebar.init()
+  const [sidebarModel, sidebarCmd] = DsFloatingSidebar.init()
   return [
     {
       showCode: true,
@@ -22,7 +22,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     case 'SetPlacement':
       return [{ ...model, placement: msg.placement }, Cmd.none()]
     case 'OpenSidebar': {
-      const [sidebarModel, sidebarCmd] = DsSidebar.update({
+      const [sidebarModel, sidebarCmd] = DsFloatingSidebar.update({
         _tag: 'Toggle',
         open: true,
       })(model.sidebar)
@@ -32,7 +32,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       ]
     }
     case 'SidebarMsg': {
-      const [sidebarModel, sidebarCmd] = DsSidebar.update(msg.subMsg)(
+      const [sidebarModel, sidebarCmd] = DsFloatingSidebar.update(msg.subMsg)(
         model.sidebar,
       )
       return [

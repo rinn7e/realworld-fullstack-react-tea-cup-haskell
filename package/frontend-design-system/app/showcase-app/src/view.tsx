@@ -34,7 +34,7 @@ import { MenuPage } from './page/menu/component'
 import { MessagePage } from './page/message/component'
 import { ModalPage } from './page/modal/component'
 import { NavbarPage } from './page/navbar/component'
-import { SidebarPage } from './page/sidebar/component'
+import { FloatingSidebarPage } from './page/floating-sidebar/component'
 import { NotFoundPage } from './page/not-found/component'
 import { NotificationPage } from './page/notification/component'
 import { PaginationPage } from './page/pagination/component'
@@ -91,7 +91,7 @@ export const view = (
         { id: 'message', name: 'Message' },
         { id: 'modal', name: 'Modal' },
         { id: 'navbar', name: 'Navbar' },
-        { id: 'sidebar', name: 'Sidebar' },
+        { id: 'floating-sidebar', name: 'Floating Sidebar' },
         { id: 'pagination', name: 'Pagination' },
         { id: 'panel', name: 'Panel' },
         { id: 'tabs', name: 'Tabs' },
@@ -343,11 +343,11 @@ export const view = (
             dispatch={(subMsg) => dispatch({ _tag: 'NavbarPageMsg', subMsg })}
           />
         )
-      case 'SidebarPageModel':
+      case 'FloatingSidebarPageModel':
         return (
-          <SidebarPage
+          <FloatingSidebarPage
             model={model.pageModel.model}
-            dispatch={(subMsg) => dispatch({ _tag: 'SidebarPageMsg', subMsg })}
+            dispatch={(subMsg) => dispatch({ _tag: 'FloatingSidebarPageMsg', subMsg })}
           />
         )
       case 'NotificationPageModel':

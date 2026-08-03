@@ -6,10 +6,10 @@ import { createPortal } from 'react-dom'
 import { ButtonMemo as DsButtonMemo } from '../../element/button/component'
 import { GenericLink } from '../generic-link'
 
-import type { SidebarProps } from './type'
-import { SidebarPropsEq } from './type'
+import type { FloatingSidebarProps } from './type'
+import { FloatingSidebarPropsEq } from './type'
 
-export const SidebarComponent: React.FC<SidebarProps> = ({
+export const FloatingSidebarComponent: React.FC<FloatingSidebarProps> = ({
   model,
   items,
   dispatch,
@@ -49,7 +49,7 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
   return createPortal(
     <div
       key={key}
-      data-test={dataTest || 'sidebar'}
+      data-test={dataTest || 'floating-sidebar'}
       className={cn(
         'absolute inset-0 z-[100] flex overflow-hidden',
         isLeft ? 'justify-start' : 'justify-end',
@@ -106,4 +106,7 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
   )
 }
 
-export const SidebarMemo = memo(SidebarComponent, SidebarPropsEq.equals)
+export const FloatingSidebarMemo = memo(
+  FloatingSidebarComponent,
+  FloatingSidebarPropsEq.equals,
+)

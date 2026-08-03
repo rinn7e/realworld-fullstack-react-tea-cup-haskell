@@ -40,7 +40,7 @@ import {
   messagePage,
   modalPage,
   navbarPage,
-  sidebarPage,
+  floatingSidebarPage,
   notFoundPage,
   notificationPage,
   paginationPage,
@@ -90,7 +90,7 @@ const menuMatch = lit('menu').and(end)
 const messageMatch = lit('message').and(end)
 const modalMatch = lit('modal').and(end)
 const navbarMatch = lit('navbar').and(end)
-const sidebarMatch = lit('sidebar').and(end)
+const floatingSidebarMatch = lit('floating-sidebar').and(end)
 const paginationMatch = lit('pagination').and(end)
 const panelMatch = lit('panel').and(end)
 const tabsMatch = lit('tabs').and(end)
@@ -136,7 +136,7 @@ const appRouter: Parser<AppPage> = zero<AppPage>()
   .alt(messageMatch.parser.map(() => messagePage()))
   .alt(modalMatch.parser.map(() => modalPage()))
   .alt(navbarMatch.parser.map(() => navbarPage()))
-  .alt(sidebarMatch.parser.map(() => sidebarPage()))
+  .alt(floatingSidebarMatch.parser.map(() => floatingSidebarPage()))
   .alt(paginationMatch.parser.map(() => paginationPage()))
   .alt(panelMatch.parser.map(() => panelPage()))
   .alt(tabsMatch.parser.map(() => tabsPage()))
@@ -207,8 +207,8 @@ export const toUrlString = (r: AppRoute): string => {
         return format(modalMatch.formatter, {})
       case 'NavbarPage':
         return format(navbarMatch.formatter, {})
-      case 'SidebarPage':
-        return format(sidebarMatch.formatter, {})
+      case 'FloatingSidebarPage':
+        return format(floatingSidebarMatch.formatter, {})
       case 'PaginationPage':
         return format(paginationMatch.formatter, {})
       case 'PanelPage':

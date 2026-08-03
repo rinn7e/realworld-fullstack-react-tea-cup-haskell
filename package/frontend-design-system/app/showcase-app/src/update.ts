@@ -28,7 +28,7 @@ import * as MenuPage from './page/menu/update'
 import * as MessagePage from './page/message/update'
 import * as ModalPage from './page/modal/update'
 import * as NavbarPage from './page/navbar/update'
-import * as SidebarPage from './page/sidebar/update'
+import * as FloatingSidebarPage from './page/floating-sidebar/update'
 import * as NotFoundPage from './page/not-found/update'
 import * as NotificationPage from './page/notification/update'
 import * as PaginationPage from './page/pagination/update'
@@ -322,16 +322,16 @@ export const initPageModel =
         ]
       }
 
-      case 'SidebarPage': {
-        const [subModel, subCmd] = SidebarPage.init()
+      case 'FloatingSidebarPage': {
+        const [subModel, subCmd] = FloatingSidebarPage.init()
         return [
           {
             ...model,
             route: newRoute,
             menuModel,
-            pageModel: { _tag: 'SidebarPageModel', model: subModel },
+            pageModel: { _tag: 'FloatingSidebarPageModel', model: subModel },
           },
-          subCmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
+          subCmd.map((subMsg) => ({ _tag: 'FloatingSidebarPageMsg', subMsg })),
         ]
       }
 
@@ -885,15 +885,15 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         cmd.map((subMsg) => ({ _tag: 'NavbarPageMsg', subMsg })),
       ]
     }
-    case 'SidebarPageMsg': {
-      if (model.pageModel._tag !== 'SidebarPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = SidebarPage.update(
+    case 'FloatingSidebarPageMsg': {
+      if (model.pageModel._tag !== 'FloatingSidebarPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = FloatingSidebarPage.update(
         msg.subMsg,
         model.pageModel.model,
       )
       return [
-        { ...model, pageModel: { _tag: 'SidebarPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
+        { ...model, pageModel: { _tag: 'FloatingSidebarPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'FloatingSidebarPageMsg', subMsg })),
       ]
     }
     case 'PaginationPageMsg': {

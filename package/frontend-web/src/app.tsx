@@ -10,7 +10,7 @@ import {
 } from './common/nav-link-helper'
 import { DebugPanelComponent } from './component/debug-panel/component'
 import { Footer } from './component/footer'
-import { SidebarMemo as DsSidebarMemo } from '@rinn7e/realworld-design-system/component/sidebar/component'
+import { FloatingSidebarMemo as DsFloatingFloatingSidebarMemo } from '@rinn7e/realworld-design-system/component/floating-sidebar/component'
 import { ArticlePageMemo } from './page/article/component'
 import { EditorPageMemo } from './page/editor/component'
 import { HomePageMemo } from './page/home/component'
@@ -46,7 +46,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
         <main className='flex-grow'>{renderPage(model, dispatch)}</main>
         <Footer />
       </div>
-      <DsSidebarMemo
+      <DsFloatingFloatingSidebarMemo
         model={model.sidebar}
         items={desktopNavItems.map((n) => n.data)}
         dispatch={(subMsg) => dispatch({ _tag: 'SidebarMsg', subMsg })}
