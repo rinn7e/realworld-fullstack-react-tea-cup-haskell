@@ -5,8 +5,9 @@ export interface Props<PMsg>
   extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string
   className?: string
-  dispatch: Dispatcher<PMsg>
-  msg: PMsg
+  dispatch?: Dispatcher<PMsg>
+  msg?: PMsg
+  isNewTab?: boolean
   children: React.ReactNode
 }
 
@@ -17,6 +18,7 @@ export const GenericLink = <PMsg,>({
   className,
   dispatch,
   msg,
+  isNewTab,
   children,
   ...rest
 }: Props<PMsg>) => {
@@ -25,9 +27,27 @@ export const GenericLink = <PMsg,>({
       {...rest}
       href={href}
       className={className}
+      target={isNewTab ? '_blank' : rest.target}
+      rel={isNewTab ? 'noopener noreferrer' : rest.rel}
       onClick={(e) => {
+        if (isNewTab) {
+          e.preventDefault()
+          window.open(href, '_blank', 'noopener,noreferrer')
+          if (msg !== undefined && dispatch) {
+            dispatch(msg)
+          }
+          return
+        }
+
+        if (msg === undefined) {
+          // when msg is undefined, call href directly (normal browser navigation)
+          return
+        }
+
         e.preventDefault()
-        dispatch(msg)
+        if (dispatch) {
+          dispatch(msg)
+        }
       }}
     >
       {children}

@@ -9,6 +9,7 @@ export type NavItemData = {
   href: string
   isActive: boolean
   icon?: ReactNode
+  isNewTab?: boolean
 }
 
 export const NavItemDataEq: EqClass.Eq<NavItemData> = EqClass.struct<
@@ -19,4 +20,5 @@ export const NavItemDataEq: EqClass.Eq<NavItemData> = EqClass.struct<
   href: string.Eq,
   isActive: boolean.Eq,
   icon: EqClass.eqStrict,
+  isNewTab: boolean.Eq,
 }) as unknown as EqClass.Eq<NavItemData>

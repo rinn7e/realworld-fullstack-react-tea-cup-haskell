@@ -50,6 +50,7 @@ export const FloatingSidebarComponent: React.FC<FloatingSidebarProps> = ({
     <div
       key={key}
       data-test={dataTest || 'floating-sidebar'}
+      data-component='FloatingSidebar'
       className={cn(
         'absolute inset-0 z-[100] flex overflow-hidden',
         isLeft ? 'justify-start' : 'justify-end',

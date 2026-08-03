@@ -21,6 +21,7 @@ export type ComponentItem =
   | 'modal'
   | 'navbar'
   | 'floating-sidebar'
+  | 'sidebar'
   | 'pagination'
   | 'panel'
   | 'tabs'
@@ -61,6 +62,7 @@ export const ALL_COMPONENT_ITEMS: ComponentItem[] = [
   'modal',
   'navbar',
   'floating-sidebar',
+  'sidebar',
   'pagination',
   'panel',
   'tabs',
@@ -102,6 +104,7 @@ export type MessagePage = { readonly _tag: 'MessagePage' }
 export type ModalPage = { readonly _tag: 'ModalPage' }
 export type NavbarPage = { readonly _tag: 'NavbarPage' }
 export type FloatingSidebarPage = { readonly _tag: 'FloatingSidebarPage' }
+export type SidebarPage = { readonly _tag: 'SidebarPage' }
 export type PaginationPage = { readonly _tag: 'PaginationPage' }
 export type PanelPage = { readonly _tag: 'PanelPage' }
 export type TabsPage = { readonly _tag: 'TabsPage' }
@@ -144,6 +147,7 @@ export type AppPage =
   | ModalPage
   | NavbarPage
   | FloatingSidebarPage
+  | SidebarPage
   | PaginationPage
   | PanelPage
   | TabsPage
@@ -195,6 +199,7 @@ export const navbarPage = (): NavbarPage => ({ _tag: 'NavbarPage' })
 export const floatingSidebarPage = (): FloatingSidebarPage => ({
   _tag: 'FloatingSidebarPage',
 })
+export const sidebarPage = (): SidebarPage => ({ _tag: 'SidebarPage' })
 export const paginationPage = (): PaginationPage => ({
   _tag: 'PaginationPage',
 })

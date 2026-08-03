@@ -23,6 +23,7 @@ export const ColumnComponent: React.FC<ColumnProps> = ({
     <div
       key={key}
       data-test={dataTest}
+      data-component='Column'
       className={cn(
         'flex-1',
         size ? sizeStyles[size] : 'w-full md:w-auto',

@@ -14,6 +14,7 @@ export const ColumnsComponent: React.FC<ColumnsProps> = ({
     <div
       key={key}
       data-test={dataTest}
+      data-component='Columns'
       className={cn(
         'flex flex-col gap-4 md:flex-row',
         isMultiline && 'flex-wrap',

@@ -13,6 +13,7 @@ export const FooterComponent: React.FC<FooterProps> = ({
     <footer
       key={key}
       data-test={dataTest}
+      data-component='Footer'
       className={cn('bg-white py-6 text-gray-500', className)}
     >
       {children?.()}

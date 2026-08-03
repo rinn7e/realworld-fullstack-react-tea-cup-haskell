@@ -15,6 +15,7 @@ export const MediaObjectComponent: React.FC<MediaObjectProps> = ({
     <article
       key={key}
       data-test={dataTest}
+      data-component='MediaObject'
       className={cn('flex items-start gap-4', className)}
     >
       {left && <div className='shrink-0'>{left}</div>}

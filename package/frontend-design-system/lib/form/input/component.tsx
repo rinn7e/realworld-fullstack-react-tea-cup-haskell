@@ -32,6 +32,7 @@ export const InputComponent: React.FC<InputProps> = ({
     <input
       key={key}
       data-test={dataTest}
+      data-component='Input'
       type={type}
       value={value}
       placeholder={placeholder}

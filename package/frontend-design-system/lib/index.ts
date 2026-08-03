@@ -25,6 +25,7 @@ export * as Modal from './component/modal'
 export * as Navbar from './component/navbar'
 export * as Pagination from './component/pagination'
 export * as Panel from './component/panel'
+export * as Sidebar from './component/sidebar'
 export * as Tabs from './component/tabs'
 
 // Form

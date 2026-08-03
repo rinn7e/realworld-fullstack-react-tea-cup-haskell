@@ -1,4 +1,5 @@
-import type { Menu as DsMenu } from '@rinn7e/realworld-design-system'
+import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
+import type * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
 
 import type * as BlockPage from './page/block/type'
 import type * as BoxPage from './page/box/type'
@@ -15,6 +16,7 @@ import type * as DropdownPage from './page/dropdown/type'
 import type * as FieldPage from './page/field/type'
 import type * as FilePage from './page/file/type'
 import type * as FloatingSidebarPage from './page/floating-sidebar/type'
+import type * as SidebarPage from './page/sidebar/type'
 import type * as FooterPage from './page/footer/type'
 import type * as HeroPage from './page/hero/type'
 import type * as HomePage from './page/home/type'
@@ -90,6 +92,7 @@ export type PageModel =
       readonly _tag: 'FloatingSidebarPageModel'
       readonly model: FloatingSidebarPage.Model
     }
+  | { readonly _tag: 'SidebarPageModel'; readonly model: SidebarPage.Model }
   | {
       readonly _tag: 'NotificationPageModel'
       readonly model: NotificationPage.Model
@@ -115,7 +118,8 @@ export type Model = {
   readonly isInternal: boolean
   readonly pageModel: PageModel
   readonly searchQuery: string
-  readonly menuModel: DsMenu.Model
+  readonly sidebarModel: DsSidebar.Model
+  readonly rightSidebarModel: DsSidebar.Model
 }
 
 export type Msg =
@@ -124,6 +128,9 @@ export type Msg =
   | { readonly _tag: 'UrlChange'; readonly location: Location }
   | { readonly _tag: 'ChangeRoute'; readonly route: AppRoute }
   | { readonly _tag: 'UpdateSearch'; readonly query: string }
+  | { readonly _tag: 'SidebarMsg'; readonly subMsg: DsSidebar.Msg }
+  | { readonly _tag: 'RightSidebarMsg'; readonly subMsg: DsSidebar.Msg }
+  | { readonly _tag: 'TopNavbarMsg'; readonly subMsg: DsNavbar.Msg }
   | { readonly _tag: 'HomePageMsg'; readonly subMsg: HomePage.Msg }
   | { readonly _tag: 'BlockPageMsg'; readonly subMsg: BlockPage.Msg }
   | { readonly _tag: 'BoxPageMsg'; readonly subMsg: BoxPage.Msg }
@@ -157,6 +164,7 @@ export type Msg =
       readonly _tag: 'FloatingSidebarPageMsg'
       readonly subMsg: FloatingSidebarPage.Msg
     }
+  | { readonly _tag: 'SidebarPageMsg'; readonly subMsg: SidebarPage.Msg }
   | {
       readonly _tag: 'NotificationPageMsg'
       readonly subMsg: NotificationPage.Msg
@@ -173,4 +181,3 @@ export type Msg =
   | { readonly _tag: 'TextareaPageMsg'; readonly subMsg: TextareaPage.Msg }
   | { readonly _tag: 'TitlePageMsg'; readonly subMsg: TitlePage.Msg }
   | { readonly _tag: 'NotFoundPageMsg'; readonly subMsg: NotFoundPage.Msg }
-  | { readonly _tag: 'MenuMsg'; readonly subMsg: DsMenu.Msg }

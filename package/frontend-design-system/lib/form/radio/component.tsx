@@ -17,6 +17,7 @@ export const RadioComponent: React.FC<RadioProps> = ({
     <div
       key={key}
       data-test={dataTest}
+      data-component='Radio'
       className={cn('flex flex-col gap-2', className)}
     >
       {options.map((opt) => (

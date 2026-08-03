@@ -166,6 +166,14 @@ export default defineConfig({
           __dirname,
           'lib/component/floating-sidebar/component.tsx',
         ),
+        'component/sidebar': path.resolve(
+          __dirname,
+          'lib/component/sidebar/index.ts',
+        ),
+        'component/sidebar/component': path.resolve(
+          __dirname,
+          'lib/component/sidebar/component.tsx',
+        ),
         // Form components
         'form/checkbox/component': path.resolve(
           __dirname,

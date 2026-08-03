@@ -36,6 +36,7 @@ export const HeroComponent: React.FC<HeroProps> = ({
     <section
       key={key}
       data-test={dataTest}
+      data-component='Hero'
       className={cn(
         'relative w-full text-center transition-colors',
         variantStyles[variant],

@@ -62,3 +62,70 @@
        dataTest: EqClass.eqStrict,
      })
      ```
+
+4. **Extract Complex Message Handlers into Top-Level Handler Functions**:
+   - **Why**: Large, inline `switch (msg._tag)` cases in `update.ts` (such as complex sub-component or layout message handling logic) degrade readability and testability. Always extract multi-step or conditional update logic into clean, top-level helper functions (e.g. `sidebarMsgHandler = (msg) => (model) => ...`).
+   - **Example**:
+     ```typescript
+     // ❌ Bad: Inline complex logic inside switch case
+     case 'SidebarMsg': {
+       const [sidebarModel, sidebarCmd] = DsSidebar.update(msg.subMsg)(model.sidebarModel)
+       // ... multi-step route updates and conditional batching inline ...
+       return [updatedModel, Cmd.batch([...])]
+     }
+
+     // ✅ Good: Clean top-level handler function
+     const sidebarMsgHandler =
+       (msg: DsSidebar.Msg) =>
+       (model: Model): [Model, Cmd<Msg>] => {
+         const [sidebarModel, sidebarCmd] = DsSidebar.update(msg)(model.sidebarModel)
+         // ...
+         return [updatedModel, Cmd.batch([...])]
+       }
+
+     // Inside switch:
+     case 'SidebarMsg':
+       return sidebarMsgHandler(msg.subMsg)(model)
+     ```
+
+5. **Always Include `data-component` Attribute on Root Element**:
+   - **Why**: Every design system view component MUST render a `data-component="<ComponentName>"` attribute on its root DOM element. This enables automated testing, DOM inspection, and debugging tools to easily identify design system components.
+   - **Example**:
+     ```typescript
+     // ❌ Bad: Missing data-component attribute
+     export const ContainerComponent: React.FC<ContainerProps> = ({ key, dataTest, ... }) => (
+       <div key={key} data-test={dataTest} className={...}>
+     )
+
+     // ✅ Good: Always include data-component="<ComponentName>"
+     export const ContainerComponent: React.FC<ContainerProps> = ({ key, dataTest, ... }) => (
+       <div key={key} data-test={dataTest} data-component="Container" className={...}>
+     )
+     ```
+
+6. **Never Use Mutable Variables (`let`) - Follow Pure FP Patterns**:
+   - **Why**: Functional programming principles require immutability. Do not declare mutable state or variables using `let` (e.g. `let targetPage = ...`). Instead, use pure functions, switch expressions, ternary operators, or helper mapping functions with `const` bindings.
+   - **Example**:
+     ```typescript
+     // ❌ Bad: Using mutable let variable
+     let targetPage: AppRoute['page'] = { _tag: 'HomePage' }
+     if (key === 'elements') {
+       targetPage = { _tag: 'BlockPage' }
+     } else if (key === 'components') {
+       targetPage = { _tag: 'BreadcrumbPage' }
+     }
+
+     // ✅ Good: Pure FP helper mapping function with const
+     const getTargetPage = (key: string): AppRoute['page'] => {
+       switch (key) {
+         case 'elements':
+           return { _tag: 'BlockPage' }
+         case 'components':
+           return { _tag: 'BreadcrumbPage' }
+         default:
+           return { _tag: 'HomePage' }
+       }
+     }
+     const targetPage = getTargetPage(key)
+     ```
+

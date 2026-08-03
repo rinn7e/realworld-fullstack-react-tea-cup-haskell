@@ -19,6 +19,7 @@ export const SectionComponent: React.FC<SectionProps> = ({
     <section
       key={key}
       data-test={dataTest}
+      data-component='Section'
       className={cn('w-full', sizeStyles[size], className)}
     >
       {children()}

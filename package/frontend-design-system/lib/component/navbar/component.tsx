@@ -54,13 +54,14 @@ export const NavbarComponent: React.FC<NavbarProps> = ({
   return (
     <nav
       key={key}
+      data-test={dataTest}
+      data-component='Navbar'
       className={cn(
         'sticky top-0 z-20 border-b border-gray-100 bg-white shadow-sm',
         className,
       )}
-      data-test={dataTest || 'navbar'}
     >
-      <div className='mx-auto max-w-[1152px] px-[16px]'>
+      <div className='mx-auto px-4 w-full xl:w-[70%]'>
         <div className='flex h-[56px] items-center justify-between'>
           {brandNavItem && (
             <GenericLink

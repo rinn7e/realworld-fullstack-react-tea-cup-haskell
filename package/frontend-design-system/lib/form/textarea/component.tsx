@@ -22,6 +22,7 @@ export const TextareaComponent: React.FC<TextareaProps> = ({
     <textarea
       key={key}
       data-test={dataTest}
+      data-component='Textarea'
       value={value}
       placeholder={placeholder}
       rows={rows}

@@ -18,6 +18,7 @@ export const CheckboxComponent: React.FC<CheckboxProps> = ({
     <label
       key={key}
       data-test={dataTest}
+      data-component='Checkbox'
       className={cn(
         'inline-flex items-center gap-2 text-sm text-gray-700 select-none',
         isDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',

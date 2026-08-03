@@ -41,6 +41,7 @@ import {
   modalPage,
   navbarPage,
   floatingSidebarPage,
+  sidebarPage,
   notFoundPage,
   notificationPage,
   paginationPage,
@@ -58,10 +59,11 @@ import {
 
 export const removeBaseUrl = (href: string): string => {
   const url = new URL(href)
-  let pathname = url.pathname
-  if (pathname !== '/' && pathname.endsWith('/')) {
-    pathname = pathname.slice(0, -1)
-  }
+  const rawPathname = url.pathname
+  const pathname =
+    rawPathname !== '/' && rawPathname.endsWith('/')
+      ? rawPathname.slice(0, -1)
+      : rawPathname
   return (pathname || '/') + url.search
 }
 
@@ -91,6 +93,7 @@ const messageMatch = lit('message').and(end)
 const modalMatch = lit('modal').and(end)
 const navbarMatch = lit('navbar').and(end)
 const floatingSidebarMatch = lit('floating-sidebar').and(end)
+const sidebarMatch = lit('sidebar').and(end)
 const paginationMatch = lit('pagination').and(end)
 const panelMatch = lit('panel').and(end)
 const tabsMatch = lit('tabs').and(end)
@@ -137,6 +140,7 @@ const appRouter: Parser<AppPage> = zero<AppPage>()
   .alt(modalMatch.parser.map(() => modalPage()))
   .alt(navbarMatch.parser.map(() => navbarPage()))
   .alt(floatingSidebarMatch.parser.map(() => floatingSidebarPage()))
+  .alt(sidebarMatch.parser.map(() => sidebarPage()))
   .alt(paginationMatch.parser.map(() => paginationPage()))
   .alt(panelMatch.parser.map(() => panelPage()))
   .alt(tabsMatch.parser.map(() => tabsPage()))
@@ -209,6 +213,8 @@ export const toUrlString = (r: AppRoute): string => {
         return format(navbarMatch.formatter, {})
       case 'FloatingSidebarPage':
         return format(floatingSidebarMatch.formatter, {})
+      case 'SidebarPage':
+        return format(sidebarMatch.formatter, {})
       case 'PaginationPage':
         return format(paginationMatch.formatter, {})
       case 'PanelPage':

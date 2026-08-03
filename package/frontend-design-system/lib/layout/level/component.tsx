@@ -18,6 +18,7 @@ export const LevelComponent: React.FC<LevelProps> = ({
     <div
       key={key}
       data-test={dataTest}
+      data-component='Level'
       className={cn(
         'flex flex-col items-center justify-between gap-4 md:flex-row',
         className,
@@ -39,6 +40,7 @@ export const LevelItemComponent: React.FC<LevelItemProps> = ({
     <div
       key={key}
       data-test={dataTest}
+      data-component='LevelItem'
       className={cn(
         'flex items-center justify-center',
         hasTextCentered && 'text-center',

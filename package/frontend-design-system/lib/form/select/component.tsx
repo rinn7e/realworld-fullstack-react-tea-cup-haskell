@@ -18,6 +18,7 @@ export const SelectComponent: React.FC<SelectProps> = ({
     <select
       key={key}
       data-test={dataTest}
+      data-component='Select'
       value={value}
       disabled={isDisabled}
       multiple={isMultiple}

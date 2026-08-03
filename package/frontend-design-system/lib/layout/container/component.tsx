@@ -14,6 +14,7 @@ export const ContainerComponent: React.FC<ContainerProps> = ({
     <div
       key={key}
       data-test={dataTest}
+      data-component='Container'
       className={cn(
         'mx-auto px-4',
         isFluid ? 'w-full' : 'max-w-7xl',

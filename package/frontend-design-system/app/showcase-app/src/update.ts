@@ -1,4 +1,5 @@
-import { Menu as DsMenu } from '@rinn7e/realworld-design-system'
+import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
+import * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
 import { newUrl } from 'react-tea-cup'
 import { Cmd, Task } from 'tea-cup-fp'
 
@@ -29,6 +30,7 @@ import * as MessagePage from './page/message/update'
 import * as ModalPage from './page/modal/update'
 import * as NavbarPage from './page/navbar/update'
 import * as FloatingSidebarPage from './page/floating-sidebar/update'
+import * as SidebarPage from './page/sidebar/update'
 import * as NotFoundPage from './page/not-found/update'
 import * as NotificationPage from './page/notification/update'
 import * as PaginationPage from './page/pagination/update'
@@ -46,21 +48,9 @@ import { parseAppRoute, toUrlString } from './route/parser'
 import { type AppRoute, AppRouteEq } from './route/type'
 import type { Model, Msg } from './type'
 
-const pageTagToComponentId = (pageTag: string): string => {
-  const match = pageTag.replace(/Page$/, '')
-  return match === 'DotLoading'
-    ? 'dot-loading'
-    : match === 'MediaObject'
-      ? 'media-object'
-      : match.toLowerCase()
-}
-
 export const initPageModel =
   (newRoute: AppRoute) =>
   (model: Model): [Model, Cmd<Msg>] => {
-    const activeMenuId = pageTagToComponentId(newRoute.page._tag)
-    const [menuModel] = DsMenu.init(activeMenuId)
-
     switch (newRoute.page._tag) {
       case 'HomePage': {
         const [homeModel, homeCmd] = HomePage.init()
@@ -68,7 +58,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'HomePageModel', model: homeModel },
           },
           homeCmd.map((subMsg) => ({ _tag: 'HomePageMsg', subMsg })),
@@ -81,7 +70,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'BlockPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'BlockPageMsg', subMsg })),
@@ -94,7 +82,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'BoxPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'BoxPageMsg', subMsg })),
@@ -107,7 +94,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'ButtonPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'ButtonPageMsg', subMsg })),
@@ -120,7 +106,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'ContentPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'ContentPageMsg', subMsg })),
@@ -133,7 +118,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'DeletePageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'DeletePageMsg', subMsg })),
@@ -146,7 +130,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'IconPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'IconPageMsg', subMsg })),
@@ -159,7 +142,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'ImagePageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'ImagePageMsg', subMsg })),
@@ -172,7 +154,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'NotificationPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'NotificationPageMsg', subMsg })),
@@ -185,7 +166,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'ProgressPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'ProgressPageMsg', subMsg })),
@@ -198,7 +178,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'TablePageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'TablePageMsg', subMsg })),
@@ -211,7 +190,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'TagPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'TagPageMsg', subMsg })),
@@ -224,7 +202,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'TitlePageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'TitlePageMsg', subMsg })),
@@ -237,7 +214,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'BreadcrumbPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'BreadcrumbPageMsg', subMsg })),
@@ -250,7 +226,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'CardPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'CardPageMsg', subMsg })),
@@ -263,7 +238,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'DropdownPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'DropdownPageMsg', subMsg })),
@@ -276,7 +250,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'MenuPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'MenuPageMsg', subMsg })),
@@ -289,7 +262,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'MessagePageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'MessagePageMsg', subMsg })),
@@ -302,7 +274,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'ModalPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'ModalPageMsg', subMsg })),
@@ -315,7 +286,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'NavbarPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'NavbarPageMsg', subMsg })),
@@ -328,10 +298,21 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'FloatingSidebarPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'FloatingSidebarPageMsg', subMsg })),
+        ]
+      }
+
+      case 'SidebarPage': {
+        const [subModel, subCmd] = SidebarPage.init()
+        return [
+          {
+            ...model,
+            route: newRoute,
+            pageModel: { _tag: 'SidebarPageModel', model: subModel },
+          },
+          subCmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
         ]
       }
 
@@ -341,7 +322,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'PaginationPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'PaginationPageMsg', subMsg })),
@@ -354,7 +334,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'PanelPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'PanelPageMsg', subMsg })),
@@ -367,7 +346,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'TabsPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'TabsPageMsg', subMsg })),
@@ -380,7 +358,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'FieldPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'FieldPageMsg', subMsg })),
@@ -393,7 +370,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'InputPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'InputPageMsg', subMsg })),
@@ -406,7 +382,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'TextareaPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'TextareaPageMsg', subMsg })),
@@ -419,7 +394,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'SelectPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'SelectPageMsg', subMsg })),
@@ -432,7 +406,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'CheckboxPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'CheckboxPageMsg', subMsg })),
@@ -445,7 +418,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'RadioPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'RadioPageMsg', subMsg })),
@@ -458,7 +430,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'FilePageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'FilePageMsg', subMsg })),
@@ -471,7 +442,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'ContainerPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'ContainerPageMsg', subMsg })),
@@ -484,7 +454,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'HeroPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'HeroPageMsg', subMsg })),
@@ -497,7 +466,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'SectionPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'SectionPageMsg', subMsg })),
@@ -510,7 +478,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'LevelPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'LevelPageMsg', subMsg })),
@@ -523,7 +490,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'MediaObjectPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'MediaObjectPageMsg', subMsg })),
@@ -536,7 +502,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'FooterPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'FooterPageMsg', subMsg })),
@@ -549,7 +514,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'ColumnsPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'ColumnsPageMsg', subMsg })),
@@ -562,7 +526,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'DotLoadingPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'DotLoadingPageMsg', subMsg })),
@@ -576,7 +539,6 @@ export const initPageModel =
           {
             ...model,
             route: newRoute,
-            menuModel,
             pageModel: { _tag: 'NotFoundPageModel', model: notFoundModel },
           },
           notFoundCmd.map((subMsg) => ({ _tag: 'NotFoundPageMsg', subMsg })),
@@ -625,19 +587,117 @@ const changeRouteHandler =
     return execChangeRoute(newRoute, isInternal)(model)
   }
 
+const sidebarMsgHandler =
+  (msg: DsSidebar.Msg) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const [sidebarModel, sidebarCmd] = DsSidebar.update(msg)(
+      model.sidebarModel,
+    )
+    const updatedModel = { ...model, sidebarModel }
+    const subCmd = sidebarCmd.map((subMsg) => ({
+      _tag: 'SidebarMsg' as const,
+      subMsg,
+    }))
+    if (msg._tag === 'ClickItem') {
+      const compId = msg.item.key
+      const pageTagName =
+        compId
+          .split('-')
+          .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join('') + 'Page'
+      const nextRoute: AppRoute = {
+        page: { _tag: pageTagName } as unknown as AppRoute['page'],
+      }
+      const [navModel, navCmd] = changeRouteHandler(
+        nextRoute,
+        true,
+      )(updatedModel)
+      return [navModel, Cmd.batch([subCmd, navCmd])]
+    }
+    return [updatedModel, subCmd]
+  }
+
+const rightSidebarMsgHandler =
+  (msg: DsSidebar.Msg) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const [rightSidebarModel, sidebarCmd] = DsSidebar.update(msg)(
+      model.rightSidebarModel,
+    )
+    const updatedModel = { ...model, rightSidebarModel }
+    const subCmd = sidebarCmd.map((subMsg) => ({
+      _tag: 'RightSidebarMsg' as const,
+      subMsg,
+    }))
+    if (msg._tag === 'ClickItem') {
+      const compId = msg.item.key
+      const pageTagName =
+        compId
+          .split('-')
+          .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join('') + 'Page'
+      const nextRoute: AppRoute = {
+        page: { _tag: pageTagName } as unknown as AppRoute['page'],
+      }
+      const [navModel, navCmd] = changeRouteHandler(
+        nextRoute,
+        true,
+      )(updatedModel)
+      return [navModel, Cmd.batch([subCmd, navCmd])]
+    }
+    return [updatedModel, subCmd]
+  }
+
+const getTargetPage = (key: string): AppRoute['page'] => {
+  switch (key) {
+    case 'elements':
+      return { _tag: 'BlockPage' }
+    case 'components':
+      return { _tag: 'BreadcrumbPage' }
+    case 'form':
+      return { _tag: 'FieldPage' }
+    case 'home':
+    case 'brand':
+    default:
+      return { _tag: 'HomePage' }
+  }
+}
+
+const topNavbarMsgHandler =
+  (msg: DsNavbar.Msg) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (msg._tag === 'ClickNavItem') {
+      const targetPage = getTargetPage(msg.item.key)
+      return changeRouteHandler({ page: targetPage }, true)(model)
+    }
+    return [model, Cmd.none()]
+  }
+
 export const init = (location: Location): [Model, Cmd<Msg>] => {
   const route = parseAppRoute('', location.href)
-  const [menuModel] = DsMenu.init('')
+  const [sidebarModel, sidebarCmd] = DsSidebar.init(false)
+  const [rightSidebarModel, rightSidebarCmd] = DsSidebar.init(false)
 
   const baseModel: Model = {
     route,
     isInternal: false,
     pageModel: { _tag: 'NotFoundPageModel', model: {} },
     searchQuery: '',
-    menuModel,
+    sidebarModel,
+    rightSidebarModel,
   }
 
-  return navigate(route, true)(baseModel)
+  const [navModel, navCmd] = navigate(route, true)(baseModel)
+  return [
+    navModel,
+    Cmd.batch([
+      sidebarCmd.map((subMsg) => ({ _tag: 'SidebarMsg' as const, subMsg })),
+      rightSidebarCmd.map((subMsg) => ({
+        _tag: 'RightSidebarMsg' as const,
+        subMsg,
+      })),
+      navCmd,
+    ]),
+  ]
 }
 
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
@@ -896,6 +956,17 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         cmd.map((subMsg) => ({ _tag: 'FloatingSidebarPageMsg', subMsg })),
       ]
     }
+    case 'SidebarPageMsg': {
+      if (model.pageModel._tag !== 'SidebarPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = SidebarPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'SidebarPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
+      ]
+    }
     case 'PaginationPageMsg': {
       if (model.pageModel._tag !== 'PaginationPageModel')
         return [model, Cmd.none()]
@@ -1122,24 +1193,14 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       ]
     }
 
-    case 'MenuMsg': {
-      const [menuModel, cmd] = DsMenu.update(msg.subMsg)(model.menuModel)
-      if (msg.subMsg._tag === 'Select') {
-        const item = msg.subMsg.id as string
-        const pageTagName =
-          item
-            .split('-')
-            .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
-            .join('') + 'Page'
-        const nextRoute: AppRoute = {
-          page: { _tag: pageTagName } as unknown as AppRoute['page'],
-        }
-        return changeRouteHandler(nextRoute, true)({ ...model, menuModel })
-      }
-      return [
-        { ...model, menuModel },
-        cmd.map((subMsg: DsMenu.Msg) => ({ _tag: 'MenuMsg', subMsg })),
-      ]
-    }
+    case 'SidebarMsg':
+      return sidebarMsgHandler(msg.subMsg)(model)
+
+    case 'RightSidebarMsg':
+      return rightSidebarMsgHandler(msg.subMsg)(model)
+
+    case 'TopNavbarMsg':
+      return topNavbarMsgHandler(msg.subMsg)(model)
   }
+  return [model, Cmd.none()]
 }
