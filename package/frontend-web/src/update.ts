@@ -723,9 +723,18 @@ const sidebarMsgHandler = (
     ] as [Model, Cmd<Msg>],
     updateAndCmd((m) => {
       if (subMsg._tag === 'ClickItem') {
-        const targetRoute = findNavItemRoute(m, subMsg.item.key)
-        if (targetRoute) {
-          return changeRouteHandler(targetRoute, true)(m)
+        const item = subMsg.item
+        if (item.key === 'theme-light') {
+          return changeColorSchemeHandler('light')(m)
+        } else if (item.key === 'theme-dark') {
+          return changeColorSchemeHandler('dark')(m)
+        } else if (item.key === 'theme-auto') {
+          return changeColorSchemeHandler('auto')(m)
+        } else {
+          const targetRoute = findNavItemRoute(m, item.key)
+          if (targetRoute) {
+            return changeRouteHandler(targetRoute, true)(m)
+          }
         }
       }
       return [m, Cmd.none()]

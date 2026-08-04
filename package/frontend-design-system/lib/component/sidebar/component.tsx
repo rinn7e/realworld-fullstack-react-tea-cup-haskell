@@ -47,50 +47,57 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
       ? model.expandedKeys.includes(item.key)
       : false
 
-    const handleClick = (e: React.MouseEvent) => {
-      if (hasChildren) {
-        e.preventDefault()
-        dispatch({ _tag: 'ToggleExpand', key: item.key })
-      }
-      dispatch({ _tag: 'ClickItem', item })
-    }
+    const itemCls = cn(
+      'flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors cursor-pointer select-none text-left',
+      item.isActive ? activeCls : inactiveCls,
+      isCollapsed && 'justify-center px-0',
+      depth > 0 && !isCollapsed && 'pl-7 text-xs',
+    )
+
+    const navContent = (
+      <>
+        <div className='flex items-center gap-3 truncate'>
+          <span className='shrink-0'>{item.icon}</span>
+          {!isCollapsed && <span className='truncate'>{item.label}</span>}
+        </div>
+
+        {hasChildren && !isCollapsed && (
+          <span className='shrink-0 text-gray-400 dark:text-slate-500'>
+            {isExpanded ? (
+              <ChevronDown size={14} />
+            ) : (
+              <ChevronRight size={14} />
+            )}
+          </span>
+        )}
+      </>
+    )
 
     return (
       <li key={item.key} className='space-y-1'>
-        <GenericLink
-          className={cn(
-            'flex cursor-pointer items-center justify-between rounded-md px-3 py-2 text-sm transition-colors select-none',
-            item.isActive ? activeCls : inactiveCls,
-            isCollapsed && 'justify-center px-0',
-            depth > 0 && !isCollapsed && 'pl-7 text-xs',
-          )}
-          href={hasChildren ? undefined : item.href}
-          onClick={handleClick}
-          dispatch={dispatch}
-          msg={
-            hasChildren || item.isNewTab
-              ? undefined
-              : { _tag: 'ClickItem', item }
-          }
-          isNewTab={item.isNewTab}
-          data-test='nav-link'
-          aria-current={item.isActive ? 'page' : undefined}
-        >
-          <div className='flex items-center gap-3 truncate'>
-            <span className='shrink-0'>{item.icon}</span>
-            {!isCollapsed && <span className='truncate'>{item.label}</span>}
-          </div>
-
-          {hasChildren && !isCollapsed && (
-            <span className='shrink-0 text-gray-400 dark:text-slate-500'>
-              {isExpanded ? (
-                <ChevronDown size={14} />
-              ) : (
-                <ChevronRight size={14} />
-              )}
-            </span>
-          )}
-        </GenericLink>
+        {hasChildren ? (
+          <button
+            type='button'
+            className={itemCls}
+            onClick={() => dispatch({ _tag: 'ClickItem', item })}
+            data-test='nav-link'
+            aria-current={item.isActive ? 'page' : undefined}
+          >
+            {navContent}
+          </button>
+        ) : (
+          <GenericLink
+            className={itemCls}
+            href={item.href ?? '#'}
+            dispatch={dispatch}
+            msg={item.isNewTab ? undefined : { _tag: 'ClickItem', item }}
+            isNewTab={item.isNewTab}
+            data-test='nav-link'
+            aria-current={item.isActive ? 'page' : undefined}
+          >
+            {navContent}
+          </GenericLink>
+        )}
 
         {hasChildren && isExpanded && !isCollapsed && (
           <ul className='ml-3 space-y-1 border-l border-gray-100 pl-2 dark:border-slate-800'>

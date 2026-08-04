@@ -114,6 +114,7 @@ export const toDesktopNavItems = (model: Model): NavItem[] => {
           label: 'Light',
           isActive: model.colorScheme === 'light',
           icon: <Sun size={16} className='text-amber-500' />,
+          shouldCloseOnSelect: false,
         },
         {
           key: 'theme-dark',
@@ -122,12 +123,14 @@ export const toDesktopNavItems = (model: Model): NavItem[] => {
           icon: (
             <Moon size={16} className='text-purple-600 dark:text-purple-400' />
           ),
+          shouldCloseOnSelect: false,
         },
         {
           key: 'theme-auto',
           label: 'System',
           isActive: model.colorScheme === 'auto',
           icon: <Monitor size={16} className='text-emerald-500' />,
+          shouldCloseOnSelect: false,
         },
       ],
     },

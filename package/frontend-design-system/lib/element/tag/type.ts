@@ -6,7 +6,7 @@ import React from 'react'
 export type TagColor =
   'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red' | 'gray'
 
-export type TagVariant = 'solid' | 'light' | 'outline'
+export type TagVariant = 'solid' | 'outline'
 
 export type TagSize = 'small' | 'normal' | 'medium' | 'large'
 

@@ -147,3 +147,29 @@
 
 8. **Never Include `key` in Component Props or Destructure `key` in View Functions**:
    - **Why**: React treats `key` as a special reserved prop used internally by the reconciler. In React components, `key` is handled directly by JSX at invocation call sites (`<DsButtonMemo key={item.key} />`) and is NOT accessible inside `props`. Component `Props` types MUST NOT declare `key?: React.Key` and view components MUST NOT destructure `key` from props or pass `key={key}` to child DOM nodes.
+
+9. **Never Call `dispatch` Multiple Times in a Single Event Handler**:
+   - **Why**: In The Elm Architecture (TEA), every user interaction event handler MUST dispatch at most ONE single `Msg`. Stacking multiple `dispatch` calls inside an event handler (e.g. `dispatch(Msg1); dispatch(Msg2)`) violates atomic state updates and risks out-of-order state transitions. Any compound behavior (such as toggling an item's expanded state in addition to item click logic) MUST be handled cleanly inside the pure `update` function in response to a single `Msg`.
+   - **Example**:
+     ```typescript
+     // ❌ Bad: Calling dispatch multiple times in one onClick
+     onClick={() => {
+       dispatch({ _tag: 'ToggleExpand', key: item.key })
+       dispatch({ _tag: 'ClickItem', item })
+     }}
+
+     // ✅ Good: Single dispatch call, update function handles expansion state transition
+     onClick={() => dispatch({ _tag: 'ClickItem', item })}
+
+     // In update.ts:
+     case 'ClickItem': {
+       const expandedKeys = model.expandedKeys || []
+       const isExpanded = expandedKeys.includes(msg.item.key)
+       const nextKeys = msg.item.children?.length
+         ? isExpanded
+           ? expandedKeys.filter((k) => k !== msg.item.key)
+           : [...expandedKeys, msg.item.key]
+         : expandedKeys
+       return [{ ...model, expandedKeys: nextKeys }, Cmd.none()]
+     }
+     ```

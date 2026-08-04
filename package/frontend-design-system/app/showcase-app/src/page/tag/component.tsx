@@ -15,28 +15,19 @@ interface Props {
 }
 
 export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `// Solid Colors (white, green, dark-green, sky, amber, red, gray)
-<DsTagMemo color="white">white</DsTagMemo>
-<DsTagMemo color="green">green</DsTagMemo>
-<DsTagMemo color="dark-green">dark-green</DsTagMemo>
-<DsTagMemo color="sky">sky</DsTagMemo>
-<DsTagMemo color="amber">amber</DsTagMemo>
-<DsTagMemo color="red">red</DsTagMemo>
-<DsTagMemo color="gray">gray</DsTagMemo>
-
-// Light Variants
-<DsTagMemo color="white" variant="light">white</DsTagMemo>
-<DsTagMemo color="green" variant="light">green</DsTagMemo>
-
-// Outline Variants
-<DsTagMemo color="white" variant="outline">white</DsTagMemo>
+  const code = `// Color Variants (solid, outline)
+<DsTagMemo color="green" variant="solid">green</DsTagMemo>
 <DsTagMemo color="green" variant="outline">green</DsTagMemo>
 
+// Sizes & Shapes
+<DsTagMemo color="green" size="small">Small</DsTagMemo>
+<DsTagMemo color="sky" isRounded={true}>Rounded</DsTagMemo>
+
 // Clickable (hover state)
-<DsTagMemo color="green" variant="light" onClick={() => ...} >click me</DsTagMemo>
+<DsTagMemo color="green" onClick={() => ...}>click me</DsTagMemo>
 
 // Deletable
-<DsTagMemo color="green" onDelete={() => ...} >conduit</DsTagMemo>`
+<DsTagMemo color="green" onDelete={() => ...}>conduit</DsTagMemo>`
 
   return (
     <div data-component='TagPage' className='w-full space-y-8 text-left'>
@@ -85,83 +76,59 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           </DsButtonMemo>
         </div>
 
-        {/* Section 1: Solid Colors */}
+        {/* Section 1: Color Variants */}
         {sectionView({
-          title: 'Solid Colors',
+          title: 'Color Variants',
           children: () => (
-            <div className='flex flex-wrap items-center gap-2.5'>
-              <DsTagMemo color='white'>white</DsTagMemo>
-              <DsTagMemo color='green'>green</DsTagMemo>
-              <DsTagMemo color='dark-green'>dark-green</DsTagMemo>
-              <DsTagMemo color='sky'>sky</DsTagMemo>
-              <DsTagMemo color='amber'>amber</DsTagMemo>
-              <DsTagMemo color='red'>red</DsTagMemo>
-              <DsTagMemo color='gray'>gray</DsTagMemo>
+            <div className='space-y-4'>
+              <div>
+                <div className='mb-2 text-xs font-semibold tracking-wider text-gray-400 uppercase'>
+                  Solid
+                </div>
+                <div className='flex flex-wrap items-center gap-2.5'>
+                  <DsTagMemo color='white'>white</DsTagMemo>
+                  <DsTagMemo color='green'>green</DsTagMemo>
+                  <DsTagMemo color='dark-green'>dark-green</DsTagMemo>
+                  <DsTagMemo color='sky'>sky</DsTagMemo>
+                  <DsTagMemo color='amber'>amber</DsTagMemo>
+                  <DsTagMemo color='red'>red</DsTagMemo>
+                  <DsTagMemo color='gray'>gray</DsTagMemo>
+                </div>
+              </div>
+
+              <div>
+                <div className='mb-2 text-xs font-semibold tracking-wider text-gray-400 uppercase'>
+                  Outline
+                </div>
+                <div className='flex flex-wrap items-center gap-2.5'>
+                  <DsTagMemo color='white' variant='outline'>
+                    white
+                  </DsTagMemo>
+                  <DsTagMemo color='green' variant='outline'>
+                    green
+                  </DsTagMemo>
+                  <DsTagMemo color='dark-green' variant='outline'>
+                    dark-green
+                  </DsTagMemo>
+                  <DsTagMemo color='sky' variant='outline'>
+                    sky
+                  </DsTagMemo>
+                  <DsTagMemo color='amber' variant='outline'>
+                    amber
+                  </DsTagMemo>
+                  <DsTagMemo color='red' variant='outline'>
+                    red
+                  </DsTagMemo>
+                  <DsTagMemo color='gray' variant='outline'>
+                    gray
+                  </DsTagMemo>
+                </div>
+              </div>
             </div>
           ),
         })}
 
-        {/* Section 2: Light Variants */}
-        {sectionView({
-          title: 'Light Variants',
-          children: () => (
-            <div className='flex flex-wrap items-center gap-2.5'>
-              <DsTagMemo color='white' variant='light'>
-                white
-              </DsTagMemo>
-              <DsTagMemo color='green' variant='light'>
-                green
-              </DsTagMemo>
-              <DsTagMemo color='dark-green' variant='light'>
-                dark-green
-              </DsTagMemo>
-              <DsTagMemo color='sky' variant='light'>
-                sky
-              </DsTagMemo>
-              <DsTagMemo color='amber' variant='light'>
-                amber
-              </DsTagMemo>
-              <DsTagMemo color='red' variant='light'>
-                red
-              </DsTagMemo>
-              <DsTagMemo color='gray' variant='light'>
-                gray
-              </DsTagMemo>
-            </div>
-          ),
-        })}
-
-        {/* Section 3: Outline Variants */}
-        {sectionView({
-          title: 'Outline Variants',
-          children: () => (
-            <div className='flex flex-wrap items-center gap-2.5'>
-              <DsTagMemo color='white' variant='outline'>
-                white
-              </DsTagMemo>
-              <DsTagMemo color='green' variant='outline'>
-                green
-              </DsTagMemo>
-              <DsTagMemo color='dark-green' variant='outline'>
-                dark-green
-              </DsTagMemo>
-              <DsTagMemo color='sky' variant='outline'>
-                sky
-              </DsTagMemo>
-              <DsTagMemo color='amber' variant='outline'>
-                amber
-              </DsTagMemo>
-              <DsTagMemo color='red' variant='outline'>
-                red
-              </DsTagMemo>
-              <DsTagMemo color='gray' variant='outline'>
-                gray
-              </DsTagMemo>
-            </div>
-          ),
-        })}
-
-        {/* Section 4: Sizes & Shapes */}
+        {/* Section 2: Sizes & Shapes */}
         {sectionView({
           title: 'Sizes & Shapes',
           children: () => (
@@ -198,7 +165,7 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           ),
         })}
 
-        {/* Section 5: Deletable Chips */}
+        {/* Section 3: Deletable Chips */}
         {sectionView({
           title: 'Deletable Chips',
           children: () => (
@@ -217,7 +184,6 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
               </DsTagMemo>
               <DsTagMemo
                 color='sky'
-                variant='light'
                 onDelete={() => alert('Deleted haskell tag!')}
               >
                 haskell
@@ -232,7 +198,7 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
           ),
         })}
 
-        {/* Section 6: Clickable Tags (with Hover States) */}
+        {/* Section 4: Clickable Tags (with Hover States) */}
         {sectionView({
           title: 'Clickable Tags (Hover State)',
           children: () => (
@@ -245,11 +211,7 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
                 handler. Try hovering!
               </p>
               <div className='flex flex-wrap items-center gap-2.5'>
-                <DsTagMemo
-                  color='white'
-                  variant='light'
-                  onClick={() => alert('clicked white')}
-                >
+                <DsTagMemo color='white' onClick={() => alert('clicked white')}>
                   white
                 </DsTagMemo>
                 <DsTagMemo color='green' onClick={() => alert('clicked green')}>
@@ -257,7 +219,6 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
                 </DsTagMemo>
                 <DsTagMemo
                   color='dark-green'
-                  variant='light'
                   onClick={() => alert('clicked dark-green')}
                 >
                   dark-green
@@ -265,11 +226,7 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
                 <DsTagMemo color='sky' onClick={() => alert('clicked sky')}>
                   sky
                 </DsTagMemo>
-                <DsTagMemo
-                  color='amber'
-                  variant='light'
-                  onClick={() => alert('clicked amber')}
-                >
+                <DsTagMemo color='amber' onClick={() => alert('clicked amber')}>
                   amber
                 </DsTagMemo>
                 <DsTagMemo
@@ -279,11 +236,7 @@ export const TagPage: React.FC<Props> = ({ model, dispatch }) => {
                 >
                   red
                 </DsTagMemo>
-                <DsTagMemo
-                  color='gray'
-                  variant='light'
-                  onClick={() => alert('clicked gray')}
-                >
+                <DsTagMemo color='gray' onClick={() => alert('clicked gray')}>
                   gray
                 </DsTagMemo>
               </div>

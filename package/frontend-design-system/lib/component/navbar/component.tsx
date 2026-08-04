@@ -1,81 +1,68 @@
+import { cn } from '@rinn7e/tea-cup-prelude'
+import { ChevronDown } from 'lucide-react'
 import React, { memo } from 'react'
 
-import { cn } from '../../theme'
+import { ButtonMemo as DsButtonMemo } from '../../element/button/component'
 import type { NavItemData } from '../../type/nav-item'
 import { GenericLink } from '../generic-link'
-import { PopoverMemo as DsPopoverMemo } from '../popover/component'
-import type { Model, Msg, NavbarProps } from './type'
+import type { Msg, NavbarProps } from './type'
 import { NavbarPropsEq } from './type'
 
 export const NavItemView: React.FC<{
   item: NavItemData
-  model: Model
+  model: NavbarProps['model']
   dispatch: (msg: Msg) => void
 }> = ({ item, model, dispatch }) => {
-  const activeCls = 'text-green-600 dark:text-green-400 font-semibold'
+  const activeCls = 'text-green-600 font-semibold'
   const inactiveCls =
-    'text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100'
+    'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100'
 
   if (item.children && item.children.length > 0) {
     const isOpen = model.openDropdownKey === item.key
 
-    const popoverModel = { isOpen }
-    const popoverDispatch = (popoverMsg: { _tag: string }) => {
-      if (popoverMsg._tag === 'Toggle') {
-        dispatch({ _tag: 'ToggleDropdown', key: item.key })
-      } else if (popoverMsg._tag === 'Close') {
-        dispatch({ _tag: 'CloseDropdown' })
-      }
-    }
-
-    const trigger = (
-      <button
-        type='button'
-        className={cn(
-          'flex cursor-pointer items-center gap-1.5 rounded px-[12px] py-[6px] text-sm font-medium transition-colors',
-          item.isActive ? activeCls : inactiveCls,
-        )}
-        aria-expanded={isOpen}
-      >
-        {item.icon}
-        {item.label && <span>{item.label}</span>}
-      </button>
-    )
-
     return (
-      <li>
-        <DsPopoverMemo
-          model={popoverModel}
-          dispatch={popoverDispatch}
-          trigger={trigger}
-          align='right'
-          cardClassName='w-36 p-1'
+      <li className='relative'>
+        <DsButtonMemo
+          color='gray'
+          variant='ghost'
+          size='normal'
+          onClick={() => dispatch({ _tag: 'ToggleDropdown', key: item.key })}
+          className={cn(
+            'flex items-center gap-[4px] px-[12px] py-[6px] text-sm',
+            item.isActive ? activeCls : inactiveCls,
+          )}
         >
-          <div className='flex flex-col gap-0.5'>
-            {item.children.map((child) => {
-              const isChildActive = child.isActive
-              return (
-                <button
-                  key={child.key}
-                  type='button'
-                  onClick={() => {
-                    dispatch({ _tag: 'CloseDropdown' })
-                    dispatch({ _tag: 'ClickNavItem', item: child })
-                  }}
-                  className={cn(
-                    'flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm font-medium transition-colors',
-                    isChildActive
-                      ? 'bg-emerald-100/60 font-semibold text-emerald-950 dark:bg-emerald-950/60 dark:text-emerald-300'
-                      : 'text-gray-700 hover:bg-gray-100/70 dark:text-zinc-200 dark:hover:bg-zinc-900',
-                  )}
-                >
-                  {child.icon && <span className='shrink-0'>{child.icon}</span>}
-                  <span>{child.label}</span>
-                </button>
-              )
-            })}
+          {item.icon}
+          {item.label}
+          <ChevronDown
+            size={16}
+            className={cn(
+              'transition-transform duration-200',
+              isOpen && 'rotate-180',
+            )}
+          />
+        </DsButtonMemo>
+
+        {isOpen && (
+          <div className='absolute right-0 z-30 mt-[4px] w-[180px] rounded-md border border-gray-100 bg-white p-[4px] shadow-lg dark:border-zinc-800 dark:bg-zinc-900'>
+            {item.children.map((child) => (
+              <GenericLink
+                key={child.key}
+                href={child.href || '#'}
+                className={cn(
+                  'block rounded px-[12px] py-[6px] text-sm transition-colors',
+                  child.isActive
+                    ? 'bg-green-50 font-semibold text-green-600 dark:bg-green-950/50'
+                    : 'text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800',
+                )}
+                dispatch={dispatch}
+                msg={{ _tag: 'ClickNavItem', item: child }}
+              >
+                {child.label}
+              </GenericLink>
+            ))}
           </div>
-        </DsPopoverMemo>
+        )}
       </li>
     )
   }
@@ -88,7 +75,7 @@ export const NavItemView: React.FC<{
     <li>
       <GenericLink
         className={cn(baseCls, item.isActive ? activeCls : inactiveCls)}
-        href={item.href}
+        href={item.href || '#'}
         dispatch={dispatch}
         msg={{ _tag: 'ClickNavItem', item }}
         data-test='nav-link'
@@ -103,7 +90,7 @@ export const NavItemView: React.FC<{
 
 export const NavLinks: React.FC<{
   items: NavItemData[]
-  model: Model
+  model: NavbarProps['model']
   dispatch: (msg: Msg) => void
 }> = ({ items, model, dispatch }) => {
   return (
@@ -145,7 +132,7 @@ export const NavbarComponent: React.FC<NavbarProps> = ({
           {brandNavItem && (
             <GenericLink
               className='text-xl font-bold tracking-tight text-green-600 dark:text-green-400'
-              href={brandNavItem.href}
+              href={brandNavItem.href || '#'}
               dispatch={dispatch}
               msg={{ _tag: 'ClickNavItem', item: brandNavItem }}
               data-test='site-logo'

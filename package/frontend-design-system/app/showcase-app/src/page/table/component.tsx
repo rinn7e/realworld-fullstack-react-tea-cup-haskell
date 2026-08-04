@@ -34,7 +34,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
           <td className='p-3 text-gray-900 dark:text-zinc-100 font-medium'>How to build a web app</td>
           <td className='p-3 text-gray-600 dark:text-zinc-400'>Gerard Quan</td>
           <td className='p-3'><DsTagMemo color='green'>react</DsTagMemo></td>
-          <td className='p-3'><DsTagMemo color='green' variant='light'>Published</DsTagMemo></td>
+          <td className='p-3'><DsTagMemo color='green'>Published</DsTagMemo></td>
         </tr>
       </tbody>
     </>
@@ -133,9 +133,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         1,240
                       </td>
                       <td className='p-3'>
-                        <DsTagMemo color='green' variant='light'>
-                          Published
-                        </DsTagMemo>
+                        <DsTagMemo color='green'>Published</DsTagMemo>
                       </td>
                     </tr>
                     <tr className='border-b border-gray-100 dark:border-zinc-800'>
@@ -152,9 +150,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         892
                       </td>
                       <td className='p-3'>
-                        <DsTagMemo color='green' variant='light'>
-                          Published
-                        </DsTagMemo>
+                        <DsTagMemo color='green'>Published</DsTagMemo>
                       </td>
                     </tr>
                     <tr className='border-b border-gray-100 dark:border-zinc-800'>
@@ -171,9 +167,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         415
                       </td>
                       <td className='p-3'>
-                        <DsTagMemo color='amber' variant='light'>
-                          Draft
-                        </DsTagMemo>
+                        <DsTagMemo color='amber'>Draft</DsTagMemo>
                       </td>
                     </tr>
                   </tbody>

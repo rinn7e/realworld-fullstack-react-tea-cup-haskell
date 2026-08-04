@@ -23,7 +23,16 @@ export const update =
           : [...expandedKeys, msg.key]
         return [{ ...model, expandedKeys: nextKeys }, Cmd.none()]
       }
-      case 'ClickItem':
+      case 'ClickItem': {
+        if (msg.item.children && msg.item.children.length > 0) {
+          const expandedKeys = model.expandedKeys || []
+          const isExpanded = expandedKeys.includes(msg.item.key)
+          const nextKeys = isExpanded
+            ? expandedKeys.filter((k) => k !== msg.item.key)
+            : [...expandedKeys, msg.item.key]
+          return [{ ...model, expandedKeys: nextKeys }, Cmd.none()]
+        }
         return [model, Cmd.none()]
+      }
     }
   }

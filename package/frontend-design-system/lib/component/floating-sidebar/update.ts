@@ -65,20 +65,37 @@ export const update =
           : [...expandedKeys, msg.key]
         return [{ ...model, expandedKeys: nextKeys }, Cmd.none()]
       }
-      case 'ClickItem':
-        // Should be intercepted and handled by parent component
-        return [
-          {
-            ...model,
-            status: {
+      case 'ClickItem': {
+        const hasChildren = Boolean(
+          msg.item.children && msg.item.children.length > 0,
+        )
+        const shouldCloseOnSelect = msg.item.shouldCloseOnSelect ?? true
+
+        const expandedKeys = model.expandedKeys || []
+        const isExpanded = expandedKeys.includes(msg.item.key)
+        const nextKeys = hasChildren
+          ? isExpanded
+            ? expandedKeys.filter((k) => k !== msg.item.key)
+            : [...expandedKeys, msg.item.key]
+          : expandedKeys
+
+        const shouldClose = !hasChildren && shouldCloseOnSelect
+
+        const nextStatus = shouldClose
+          ? {
               ...model.status,
-              state: { _tag: 'AnimateOut' },
-            },
-          },
-          delayCmd(150, {
-            _tag: 'SetState',
-            state: { _tag: 'Invisible' },
-          }),
-        ]
+              state: { _tag: 'AnimateOut' as const },
+            }
+          : model.status
+
+        const cmd = shouldClose
+          ? delayCmd(150, {
+              _tag: 'SetState' as const,
+              state: { _tag: 'Invisible' as const },
+            })
+          : Cmd.none<Msg>()
+
+        return [{ ...model, expandedKeys: nextKeys, status: nextStatus }, cmd]
+      }
     }
   }

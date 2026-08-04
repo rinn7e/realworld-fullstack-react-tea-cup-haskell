@@ -112,7 +112,6 @@ const HomePageComponent = ({ model, shared, dispatch }: Props) => {
                           key={tag}
                           dataTest='tag-pill'
                           color='gray'
-                          variant='light'
                           isRounded={true}
                           size='small'
                           onClick={(e: React.MouseEvent<HTMLSpanElement>) => {

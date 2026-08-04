@@ -52,49 +52,60 @@ export const FloatingSidebarComponent: React.FC<FloatingSidebarProps> = ({
       ? model.expandedKeys.includes(item.key)
       : false
 
-    const handleClick = (e: React.MouseEvent) => {
-      if (hasChildren) {
-        e.preventDefault()
-        dispatch({ _tag: 'ToggleExpand', key: item.key })
-      }
-      dispatch({ _tag: 'ClickItem', item })
-    }
-
     const baseCls = item.icon
       ? 'flex items-center gap-[6px] rounded px-[12px] py-[6px] text-sm'
       : 'block rounded px-[12px] py-[6px] text-sm'
 
+    const itemCls = cn(
+      baseCls,
+      'flex w-full items-center justify-between cursor-pointer select-none text-left',
+      item.isActive ? activeCls : inactiveCls,
+      depth > 0 && 'pl-7 text-xs',
+    )
+
+    const navContent = (
+      <>
+        <div className='flex items-center gap-[6px] truncate'>
+          {item.icon}
+          <span>{item.label}</span>
+        </div>
+
+        {hasChildren && (
+          <span className='shrink-0 text-gray-400 dark:text-zinc-500'>
+            {isExpanded ? (
+              <ChevronDown size={14} />
+            ) : (
+              <ChevronRight size={14} />
+            )}
+          </span>
+        )}
+      </>
+    )
+
     return (
       <li key={item.key} className='space-y-1'>
-        <GenericLink
-          className={cn(
-            baseCls,
-            'flex cursor-pointer items-center justify-between select-none',
-            item.isActive ? activeCls : inactiveCls,
-            depth > 0 && 'pl-7 text-xs',
-          )}
-          href={hasChildren ? undefined : item.href}
-          onClick={handleClick}
-          dispatch={dispatch}
-          msg={hasChildren ? undefined : { _tag: 'ClickItem', item }}
-          data-test='nav-link'
-          aria-current={item.isActive ? 'page' : undefined}
-        >
-          <div className='flex items-center gap-[6px] truncate'>
-            {item.icon}
-            <span>{item.label}</span>
-          </div>
-
-          {hasChildren && (
-            <span className='shrink-0 text-gray-400 dark:text-zinc-500'>
-              {isExpanded ? (
-                <ChevronDown size={14} />
-              ) : (
-                <ChevronRight size={14} />
-              )}
-            </span>
-          )}
-        </GenericLink>
+        {hasChildren ? (
+          <button
+            type='button'
+            className={itemCls}
+            onClick={() => dispatch({ _tag: 'ClickItem', item })}
+            data-test='nav-link'
+            aria-current={item.isActive ? 'page' : undefined}
+          >
+            {navContent}
+          </button>
+        ) : (
+          <GenericLink
+            className={itemCls}
+            href={item.href ?? '#'}
+            dispatch={dispatch}
+            msg={{ _tag: 'ClickItem', item }}
+            data-test='nav-link'
+            aria-current={item.isActive ? 'page' : undefined}
+          >
+            {navContent}
+          </GenericLink>
+        )}
 
         {hasChildren && isExpanded && (
           <ul className='ml-3 flex flex-col gap-1 border-l border-gray-100 pl-2 dark:border-zinc-800'>
