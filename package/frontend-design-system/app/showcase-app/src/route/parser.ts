@@ -45,6 +45,7 @@ import {
   notificationPage,
   paginationPage,
   panelPage,
+  popoverPage,
   progressPage,
   radioPage,
   sectionPage,
@@ -96,6 +97,7 @@ const floatingSidebarMatch = lit('floating-sidebar').and(end)
 const sidebarMatch = lit('sidebar').and(end)
 const paginationMatch = lit('pagination').and(end)
 const panelMatch = lit('panel').and(end)
+const popoverMatch = lit('popover').and(end)
 const tabsMatch = lit('tabs').and(end)
 const fieldMatch = lit('field').and(end)
 const inputMatch = lit('input').and(end)
@@ -143,6 +145,7 @@ const appRouter: Parser<AppPage> = zero<AppPage>()
   .alt(sidebarMatch.parser.map(() => sidebarPage()))
   .alt(paginationMatch.parser.map(() => paginationPage()))
   .alt(panelMatch.parser.map(() => panelPage()))
+  .alt(popoverMatch.parser.map(() => popoverPage()))
   .alt(tabsMatch.parser.map(() => tabsPage()))
   .alt(fieldMatch.parser.map(() => fieldPage()))
   .alt(inputMatch.parser.map(() => inputPage()))
@@ -219,6 +222,8 @@ export const toUrlString = (r: AppRoute): string => {
         return format(paginationMatch.formatter, {})
       case 'PanelPage':
         return format(panelMatch.formatter, {})
+      case 'PopoverPage':
+        return format(popoverMatch.formatter, {})
       case 'TabsPage':
         return format(tabsMatch.formatter, {})
       case 'FieldPage':

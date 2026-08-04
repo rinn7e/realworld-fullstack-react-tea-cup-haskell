@@ -14,10 +14,6 @@ export const TableComponent: React.FC<TableProps> = ({
   key,
   dataTest,
 }) => {
-  const content =
-    typeof children === 'function'
-      ? (children as () => React.ReactNode)()
-      : children
   return (
     <div
       key={key}
@@ -38,7 +34,7 @@ export const TableComponent: React.FC<TableProps> = ({
           className,
         )}
       >
-        {content}
+        {children}
       </table>
     </div>
   )

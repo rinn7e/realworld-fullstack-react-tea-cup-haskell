@@ -43,6 +43,7 @@ import { NotFoundPage } from './page/not-found/component'
 import { NotificationPage } from './page/notification/component'
 import { PaginationPage } from './page/pagination/component'
 import { PanelPage } from './page/panel/component'
+import { PopoverPage } from './page/popover/component'
 import { ProgressPage } from './page/progress/component'
 import { RadioPage } from './page/radio/component'
 import { SectionPage } from './page/section/component'
@@ -317,6 +318,13 @@ export const view = (
             dispatch={(subMsg) => dispatch({ _tag: 'PanelPageMsg', subMsg })}
           />
         )
+      case 'PopoverPageModel':
+        return (
+          <PopoverPage
+            model={model.pageModel.model}
+            dispatch={(subMsg) => dispatch({ _tag: 'PopoverPageMsg', subMsg })}
+          />
+        )
       case 'ProgressPageModel':
         return (
           <ProgressPage
@@ -448,7 +456,7 @@ export const view = (
                   key: 'theme-light',
                   label: 'Light',
                   isActive: model.colorScheme === 'light',
-                  icon: <Sun size={20} className='text-amber-500' />,
+                  icon: <Sun size={16} className='text-amber-500' />,
                 },
                 {
                   key: 'theme-dark',
@@ -456,7 +464,7 @@ export const view = (
                   isActive: model.colorScheme === 'dark',
                   icon: (
                     <Moon
-                      size={20}
+                      size={16}
                       className='text-purple-600 dark:text-purple-400'
                     />
                   ),
@@ -465,7 +473,7 @@ export const view = (
                   key: 'theme-auto',
                   label: 'System',
                   isActive: model.colorScheme === 'auto',
-                  icon: <Monitor size={20} className='text-emerald-500' />,
+                  icon: <Monitor size={16} className='text-emerald-500' />,
                 },
               ],
             },

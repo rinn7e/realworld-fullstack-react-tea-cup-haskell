@@ -154,6 +154,14 @@ export default defineConfig({
           __dirname,
           'lib/component/panel/component.tsx',
         ),
+        'component/popover': path.resolve(
+          __dirname,
+          'lib/component/popover/index.ts',
+        ),
+        'component/popover/component': path.resolve(
+          __dirname,
+          'lib/component/popover/component.tsx',
+        ),
         'component/tabs/component': path.resolve(
           __dirname,
           'lib/component/tabs/component.tsx',

@@ -32,6 +32,7 @@ import type * as NotFoundPage from './page/not-found/type'
 import type * as NotificationPage from './page/notification/type'
 import type * as PaginationPage from './page/pagination/type'
 import type * as PanelPage from './page/panel/type'
+import type * as PopoverPage from './page/popover/type'
 import type * as ProgressPage from './page/progress/type'
 import type * as RadioPage from './page/radio/type'
 import type * as SectionPage from './page/section/type'
@@ -101,6 +102,7 @@ export type PageModel =
       readonly model: PaginationPage.Model
     }
   | { readonly _tag: 'PanelPageModel'; readonly model: PanelPage.Model }
+  | { readonly _tag: 'PopoverPageModel'; readonly model: PopoverPage.Model }
   | { readonly _tag: 'ProgressPageModel'; readonly model: ProgressPage.Model }
   | { readonly _tag: 'RadioPageModel'; readonly model: RadioPage.Model }
   | { readonly _tag: 'SectionPageModel'; readonly model: SectionPage.Model }
@@ -176,6 +178,7 @@ export type Msg =
     }
   | { readonly _tag: 'PaginationPageMsg'; readonly subMsg: PaginationPage.Msg }
   | { readonly _tag: 'PanelPageMsg'; readonly subMsg: PanelPage.Msg }
+  | { readonly _tag: 'PopoverPageMsg'; readonly subMsg: PopoverPage.Msg }
   | { readonly _tag: 'ProgressPageMsg'; readonly subMsg: ProgressPage.Msg }
   | { readonly _tag: 'RadioPageMsg'; readonly subMsg: RadioPage.Msg }
   | { readonly _tag: 'SectionPageMsg'; readonly subMsg: SectionPage.Msg }

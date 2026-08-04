@@ -34,6 +34,7 @@ import * as NotFoundPage from './page/not-found/update'
 import * as NotificationPage from './page/notification/update'
 import * as PaginationPage from './page/pagination/update'
 import * as PanelPage from './page/panel/update'
+import * as PopoverPage from './page/popover/update'
 import * as ProgressPage from './page/progress/update'
 import * as RadioPage from './page/radio/update'
 import * as SectionPage from './page/section/update'
@@ -338,6 +339,18 @@ export const initPageModel =
             pageModel: { _tag: 'PanelPageModel', model: subModel },
           },
           subCmd.map((subMsg) => ({ _tag: 'PanelPageMsg', subMsg })),
+        ]
+      }
+
+      case 'PopoverPage': {
+        const [subModel, subCmd] = PopoverPage.init()
+        return [
+          {
+            ...model,
+            route: newRoute,
+            pageModel: { _tag: 'PopoverPageModel', model: subModel },
+          },
+          subCmd.map((subMsg) => ({ _tag: 'PopoverPageMsg', subMsg })),
         ]
       }
 
@@ -1044,6 +1057,18 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       return [
         { ...model, pageModel: { _tag: 'PanelPageModel', model: subModel } },
         cmd.map((subMsg) => ({ _tag: 'PanelPageMsg', subMsg })),
+      ]
+    }
+    case 'PopoverPageMsg': {
+      if (model.pageModel._tag !== 'PopoverPageModel')
+        return [model, Cmd.none()]
+      const [subModel, cmd] = PopoverPage.update(
+        msg.subMsg,
+        model.pageModel.model,
+      )
+      return [
+        { ...model, pageModel: { _tag: 'PopoverPageModel', model: subModel } },
+        cmd.map((subMsg) => ({ _tag: 'PopoverPageMsg', subMsg })),
       ]
     }
     case 'TabsPageMsg': {

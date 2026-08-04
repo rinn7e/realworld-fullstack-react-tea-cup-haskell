@@ -21,7 +21,7 @@ export const MenuComponent = ({
     >
       {categories.map((cat, idx) => (
         <div key={idx} className='mb-4 last:mb-0'>
-          <p className='mb-2 px-3 text-xs font-semibold tracking-wider text-gray-500 uppercase'>
+          <p className='mb-2 px-3 text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-zinc-400'>
             {cat.title}
           </p>
           <ul className='space-y-1'>
@@ -36,7 +36,7 @@ export const MenuComponent = ({
                       'block w-full cursor-pointer rounded-md px-3 py-1.5 text-left font-medium transition-colors',
                       isActive
                         ? 'bg-green-600 font-semibold text-white'
-                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900',
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-zinc-300 dark:hover:bg-zinc-800/80 dark:hover:text-white',
                     )}
                   >
                     {item.label}

@@ -24,6 +24,7 @@ export type ComponentItem =
   | 'sidebar'
   | 'pagination'
   | 'panel'
+  | 'popover'
   | 'tabs'
   | 'field'
   | 'input'
@@ -65,6 +66,7 @@ export const ALL_COMPONENT_ITEMS: ComponentItem[] = [
   'sidebar',
   'pagination',
   'panel',
+  'popover',
   'tabs',
   'field',
   'input',
@@ -107,6 +109,7 @@ export type FloatingSidebarPage = { readonly _tag: 'FloatingSidebarPage' }
 export type SidebarPage = { readonly _tag: 'SidebarPage' }
 export type PaginationPage = { readonly _tag: 'PaginationPage' }
 export type PanelPage = { readonly _tag: 'PanelPage' }
+export type PopoverPage = { readonly _tag: 'PopoverPage' }
 export type TabsPage = { readonly _tag: 'TabsPage' }
 export type FieldPage = { readonly _tag: 'FieldPage' }
 export type InputPage = { readonly _tag: 'InputPage' }
@@ -150,6 +153,7 @@ export type AppPage =
   | SidebarPage
   | PaginationPage
   | PanelPage
+  | PopoverPage
   | TabsPage
   | FieldPage
   | InputPage
@@ -204,6 +208,7 @@ export const paginationPage = (): PaginationPage => ({
   _tag: 'PaginationPage',
 })
 export const panelPage = (): PanelPage => ({ _tag: 'PanelPage' })
+export const popoverPage = (): PopoverPage => ({ _tag: 'PopoverPage' })
 export const tabsPage = (): TabsPage => ({ _tag: 'TabsPage' })
 export const fieldPage = (): FieldPage => ({ _tag: 'FieldPage' })
 export const inputPage = (): InputPage => ({ _tag: 'InputPage' })

@@ -32,7 +32,7 @@ export const ModalComponent = ({
       />
       <div
         className={cn(
-          'relative z-10 w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-2xl transition-all dark:border dark:border-slate-800 dark:bg-slate-900',
+          'relative z-10 w-full max-w-lg overflow-hidden rounded-lg bg-white shadow-2xl transition-all dark:border dark:border-slate-800 dark:bg-slate-900',
           className,
         )}
       >

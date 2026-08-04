@@ -3,6 +3,7 @@ import React, { memo } from 'react'
 import { cn } from '../../theme'
 import type { NavItemData } from '../../type/nav-item'
 import { GenericLink } from '../generic-link'
+import { PopoverMemo as DsPopoverMemo } from '../popover/component'
 import type { Model, Msg, NavbarProps } from './type'
 import { NavbarPropsEq } from './type'
 
@@ -18,57 +19,63 @@ export const NavItemView: React.FC<{
   if (item.children && item.children.length > 0) {
     const isOpen = model.openDropdownKey === item.key
 
-    return (
-      <li className='relative'>
-        <button
-          type='button'
-          onClick={() => dispatch({ _tag: 'ToggleDropdown', key: item.key })}
-          className={cn(
-            'flex cursor-pointer items-center gap-1.5 rounded px-[12px] py-[6px] text-sm font-medium transition-colors',
-            item.isActive ? activeCls : inactiveCls,
-          )}
-          aria-expanded={isOpen}
-        >
-          {item.icon}
-          {item.label && <span>{item.label}</span>}
-        </button>
+    const popoverModel = { isOpen }
+    const popoverDispatch = (popoverMsg: { _tag: string }) => {
+      if (popoverMsg._tag === 'Toggle') {
+        dispatch({ _tag: 'ToggleDropdown', key: item.key })
+      } else if (popoverMsg._tag === 'Close') {
+        dispatch({ _tag: 'CloseDropdown' })
+      }
+    }
 
-        {isOpen && (
-          <>
-            <div
-              className='fixed inset-0 z-40'
-              onClick={() => dispatch({ _tag: 'CloseDropdown' })}
-            />
-            <div className='absolute top-full right-0 z-50 mt-2 w-44 rounded-2xl border border-gray-100 bg-white p-1.5 shadow-xl ring-1 ring-black/5 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-2xl'>
-              <div className='flex flex-col gap-1'>
-                {item.children.map((child) => {
-                  const isChildActive = child.isActive
-                  return (
-                    <button
-                      key={child.key}
-                      type='button'
-                      onClick={() => {
-                        dispatch({ _tag: 'CloseDropdown' })
-                        dispatch({ _tag: 'ClickNavItem', item: child })
-                      }}
-                      className={cn(
-                        'flex w-full cursor-pointer items-center gap-3.5 rounded-xl px-3.5 py-2.5 text-left text-base font-medium transition-colors',
-                        isChildActive
-                          ? 'bg-emerald-100/60 font-semibold text-emerald-950 dark:bg-emerald-950/60 dark:text-emerald-300'
-                          : 'text-gray-800 hover:bg-gray-100/70 dark:text-zinc-200 dark:hover:bg-zinc-900',
-                      )}
-                    >
-                      {child.icon && (
-                        <span className='shrink-0'>{child.icon}</span>
-                      )}
-                      <span>{child.label}</span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          </>
+    const trigger = (
+      <button
+        type='button'
+        className={cn(
+          'flex cursor-pointer items-center gap-1.5 rounded px-[12px] py-[6px] text-sm font-medium transition-colors',
+          item.isActive ? activeCls : inactiveCls,
         )}
+        aria-expanded={isOpen}
+      >
+        {item.icon}
+        {item.label && <span>{item.label}</span>}
+      </button>
+    )
+
+    return (
+      <li>
+        <DsPopoverMemo
+          model={popoverModel}
+          dispatch={popoverDispatch}
+          trigger={trigger}
+          align='right'
+          cardClassName='w-36 p-1'
+        >
+          <div className='flex flex-col gap-0.5'>
+            {item.children.map((child) => {
+              const isChildActive = child.isActive
+              return (
+                <button
+                  key={child.key}
+                  type='button'
+                  onClick={() => {
+                    dispatch({ _tag: 'CloseDropdown' })
+                    dispatch({ _tag: 'ClickNavItem', item: child })
+                  }}
+                  className={cn(
+                    'flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm font-medium transition-colors',
+                    isChildActive
+                      ? 'bg-emerald-100/60 font-semibold text-emerald-950 dark:bg-emerald-950/60 dark:text-emerald-300'
+                      : 'text-gray-700 hover:bg-gray-100/70 dark:text-zinc-200 dark:hover:bg-zinc-900',
+                  )}
+                >
+                  {child.icon && <span className='shrink-0'>{child.icon}</span>}
+                  <span>{child.label}</span>
+                </button>
+              )
+            })}
+          </div>
+        </DsPopoverMemo>
       </li>
     )
   }

@@ -85,6 +85,7 @@ export const ITEM_ICONS: Record<ComponentItem, React.ReactNode> = {
   sidebar: <PanelLeft className='h-4 w-4 text-green-600' />,
   pagination: <MoreHorizontal className='h-4 w-4 text-green-600' />,
   panel: <Layout className='h-4 w-4 text-green-600' />,
+  popover: <Layers className='h-4 w-4 text-green-600' />,
   tabs: <FolderKanban className='h-4 w-4 text-green-600' />,
 
   // Form
@@ -147,6 +148,7 @@ export const SHOWCASE_CATEGORIES: ShowcaseCategory[] = [
       { id: 'sidebar', name: 'Sidebar' },
       { id: 'pagination', name: 'Pagination' },
       { id: 'panel', name: 'Panel' },
+      { id: 'popover', name: 'Popover' },
       { id: 'tabs', name: 'Tabs' },
     ],
   },
