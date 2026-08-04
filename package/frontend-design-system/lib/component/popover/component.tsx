@@ -12,12 +12,10 @@ export const PopoverComponent: React.FC<PopoverProps> = ({
   align = 'left',
   className,
   cardClassName,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Popover'
       className={cn('relative inline-block', className)}

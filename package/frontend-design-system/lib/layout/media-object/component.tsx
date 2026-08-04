@@ -8,12 +8,10 @@ export const MediaObjectComponent: React.FC<MediaObjectProps> = ({
   children,
   right,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <article
-      key={key}
       data-test={dataTest}
       data-component='MediaObject'
       className={cn('flex items-start gap-4', className)}

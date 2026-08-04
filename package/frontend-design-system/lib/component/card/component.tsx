@@ -10,12 +10,10 @@ export const CardComponent = ({
   children,
   footer,
   className,
-  key,
   dataTest,
 }: CardProps): React.ReactElement => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Card'
       className={cn(

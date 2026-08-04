@@ -28,12 +28,10 @@ export const NotificationComponent: React.FC<NotificationProps> = ({
   children,
   onDelete,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Notification'
       className={cn(

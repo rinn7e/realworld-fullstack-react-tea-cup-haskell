@@ -1,6 +1,5 @@
 import * as A from 'fp-ts/lib/Array'
 import * as EqClass from 'fp-ts/lib/Eq'
-import type React from 'react'
 
 export type MenuItem = {
   id: string
@@ -41,7 +40,6 @@ export type MenuProps = {
   model: Model
   dispatch: (msg: Msg) => void
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -52,6 +50,5 @@ export const MenuPropsEq: EqClass.Eq<MenuProps> = EqClass.struct<
   model: ModelEq,
   dispatch: EqClass.eqStrict,
   className: EqClass.eqStrict,
-  key: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
 }) as unknown as EqClass.Eq<MenuProps>

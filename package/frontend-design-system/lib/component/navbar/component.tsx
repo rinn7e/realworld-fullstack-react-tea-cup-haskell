@@ -126,7 +126,6 @@ export const NavbarComponent: React.FC<NavbarProps> = ({
   dispatch,
   className,
   containerClassName,
-  key,
   dataTest,
 }) => {
   const { brandNavItem, desktopNavItems, mobileNavItems, unavailableMode } =
@@ -134,7 +133,6 @@ export const NavbarComponent: React.FC<NavbarProps> = ({
 
   return (
     <nav
-      key={key}
       data-test={dataTest}
       data-component='Navbar'
       className={cn(

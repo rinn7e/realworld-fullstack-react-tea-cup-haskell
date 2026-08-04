@@ -13,12 +13,10 @@ export const FileComponent: React.FC<FileProps> = ({
   name,
   id,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='File'
       className={cn('inline-flex items-center gap-3', className)}

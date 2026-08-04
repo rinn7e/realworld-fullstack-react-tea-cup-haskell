@@ -5,7 +5,6 @@ import type React from 'react'
 export type BlockProps = {
   children?: React.ReactNode
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -14,6 +13,5 @@ export const BlockPropsEq: EqClass.Eq<BlockProps> = EqClass.struct<
 >({
   children: EqClass.eqStrict,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<BlockProps>

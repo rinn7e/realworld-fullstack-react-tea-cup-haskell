@@ -36,7 +36,6 @@ export const TitleComponent: React.FC<TitleProps> = ({
   size = 3,
   isSubtitle = false,
   className,
-  key,
   dataTest,
 }) => {
   const styles = sizeStyles[size] || sizeStyles[3]
@@ -52,78 +51,43 @@ export const TitleComponent: React.FC<TitleProps> = ({
   switch (size) {
     case 1:
       return (
-        <h1
-          key={key}
-          data-test={dataTest}
-          data-component='Title'
-          className={fullClass}
-        >
+        <h1 data-test={dataTest} data-component='Title' className={fullClass}>
           {children}
         </h1>
       )
     case 2:
       return (
-        <h2
-          key={key}
-          data-test={dataTest}
-          data-component='Title'
-          className={fullClass}
-        >
+        <h2 data-test={dataTest} data-component='Title' className={fullClass}>
           {children}
         </h2>
       )
     case 3:
       return (
-        <h3
-          key={key}
-          data-test={dataTest}
-          data-component='Title'
-          className={fullClass}
-        >
+        <h3 data-test={dataTest} data-component='Title' className={fullClass}>
           {children}
         </h3>
       )
     case 4:
       return (
-        <h4
-          key={key}
-          data-test={dataTest}
-          data-component='Title'
-          className={fullClass}
-        >
+        <h4 data-test={dataTest} data-component='Title' className={fullClass}>
           {children}
         </h4>
       )
     case 5:
       return (
-        <h5
-          key={key}
-          data-test={dataTest}
-          data-component='Title'
-          className={fullClass}
-        >
+        <h5 data-test={dataTest} data-component='Title' className={fullClass}>
           {children}
         </h5>
       )
     case 6:
       return (
-        <h6
-          key={key}
-          data-test={dataTest}
-          data-component='Title'
-          className={fullClass}
-        >
+        <h6 data-test={dataTest} data-component='Title' className={fullClass}>
           {children}
         </h6>
       )
     default:
       return (
-        <h3
-          key={key}
-          data-test={dataTest}
-          data-component='Title'
-          className={fullClass}
-        >
+        <h3 data-test={dataTest} data-component='Title' className={fullClass}>
           {children}
         </h3>
       )

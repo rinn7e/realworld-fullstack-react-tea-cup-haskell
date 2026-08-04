@@ -18,7 +18,6 @@ export type ModalProps = {
   model: Model
   dispatch: (msg: Msg) => void
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -31,6 +30,5 @@ export const ModalPropsEq: EqClass.Eq<ModalProps> = EqClass.struct<
   model: ModelEq,
   dispatch: EqClass.eqStrict,
   className: EqClass.eqStrict,
-  key: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
 }) as unknown as EqClass.Eq<ModalProps>

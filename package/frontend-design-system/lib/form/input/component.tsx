@@ -25,12 +25,10 @@ export const InputComponent: React.FC<InputProps> = ({
   name,
   id,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <input
-      key={key}
       data-test={dataTest}
       data-component='Input'
       type={type}

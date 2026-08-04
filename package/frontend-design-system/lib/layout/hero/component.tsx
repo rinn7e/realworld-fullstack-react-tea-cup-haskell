@@ -30,12 +30,10 @@ export const HeroComponent: React.FC<HeroProps> = ({
   footer,
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <section
-      key={key}
       data-test={dataTest}
       data-component='Hero'
       className={cn(

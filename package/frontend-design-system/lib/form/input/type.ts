@@ -20,7 +20,6 @@ export type InputProps = {
   name?: string
   id?: string
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -41,6 +40,5 @@ export const InputPropsEq: EqClass.Eq<InputProps> = EqClass.struct<
   name: string.Eq,
   id: string.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<InputProps>

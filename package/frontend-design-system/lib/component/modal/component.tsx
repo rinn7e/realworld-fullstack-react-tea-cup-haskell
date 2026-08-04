@@ -12,7 +12,6 @@ export const ModalComponent = ({
   model,
   dispatch,
   className,
-  key,
   dataTest,
 }: ModalProps): React.ReactElement | null => {
   if (!model.isOpen) {
@@ -21,7 +20,6 @@ export const ModalComponent = ({
 
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Modal'
       className='fixed inset-0 z-50 flex items-center justify-center p-4'

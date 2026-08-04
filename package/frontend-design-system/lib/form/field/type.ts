@@ -10,7 +10,6 @@ export type FieldProps = {
   isExpanded?: boolean
   children?: React.ReactNode
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -23,6 +22,5 @@ export const FieldPropsEq: EqClass.Eq<FieldProps> = EqClass.struct<
   isExpanded: boolean.Eq,
   children: EqClass.eqStrict,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<FieldProps>

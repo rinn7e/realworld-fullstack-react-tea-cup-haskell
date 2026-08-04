@@ -8,7 +8,6 @@ export type IconProps = {
   children?: React.ReactNode
   size?: IconSize
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -18,6 +17,5 @@ export const IconPropsEq: EqClass.Eq<IconProps> = EqClass.struct<
   children: EqClass.eqStrict,
   size: string.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<IconProps>

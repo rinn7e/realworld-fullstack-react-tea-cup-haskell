@@ -16,12 +16,10 @@ export const DeleteComponent: React.FC<DeleteProps> = ({
   size = 'normal',
   onClick,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <button
-      key={key}
       data-test={dataTest}
       data-component='Delete'
       type='button'

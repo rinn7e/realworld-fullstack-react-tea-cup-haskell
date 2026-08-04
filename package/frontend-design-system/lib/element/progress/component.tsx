@@ -29,14 +29,12 @@ export const ProgressComponent: React.FC<ProgressProps> = ({
   size = 'xsmall',
   isIndeterminate = false,
   className,
-  key,
   dataTest,
 }) => {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100))
 
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Progress'
       className={cn(

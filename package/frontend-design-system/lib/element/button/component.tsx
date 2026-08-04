@@ -96,14 +96,12 @@ export const ButtonComponent: React.FC<ButtonProps> = ({
   onClick,
   type = 'button',
   className,
-  key,
   dataTest,
 }) => {
   const styles = colorStyles[color] || colorStyles.green
   const colorClass = styles[variant] || styles.solid
   return (
     <button
-      key={key}
       data-test={dataTest}
       data-component='Button'
       type={type}

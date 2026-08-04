@@ -18,15 +18,18 @@ export const SidebarCategoryEq: EqClass.Eq<SidebarCategory> = EqClass.struct({
 
 export type Model = {
   collapsed: boolean
+  expandedKeys?: ReadonlyArray<string>
 }
 
 export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
   collapsed: boolean.Eq,
-})
+  expandedKeys: A.getEq(string.Eq),
+}) as unknown as EqClass.Eq<Model>
 
 export type Msg =
   | { _tag: 'ToggleCollapsed' }
   | { _tag: 'SetCollapsed'; collapsed: boolean }
+  | { _tag: 'ToggleExpand'; key: string }
   | { _tag: 'ClickItem'; item: NavItemData }
 
 export type SidebarProps = {
@@ -43,7 +46,6 @@ export type SidebarProps = {
   }
   align?: 'left' | 'right'
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -59,6 +61,5 @@ export const SidebarPropsEq: EqClass.Eq<SidebarProps> = EqClass.struct<
   userProfile: EqClass.eqStrict,
   align: string.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<SidebarProps>

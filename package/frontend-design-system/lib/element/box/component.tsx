@@ -7,12 +7,10 @@ import { type BoxProps, BoxPropsEq } from './type'
 export const BoxComponent: React.FC<BoxProps> = ({
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Box'
       className={cn(

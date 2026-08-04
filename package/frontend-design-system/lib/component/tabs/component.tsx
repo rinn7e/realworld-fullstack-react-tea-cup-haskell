@@ -11,12 +11,10 @@ export const TabsComponent = ({
   model,
   dispatch,
   className,
-  key,
   dataTest,
 }: TabsProps): React.ReactElement => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Tabs'
       className={cn(

@@ -1,9 +1,10 @@
 import { cn } from '@rinn7e/tea-cup-prelude'
-import { X } from 'lucide-react'
+import { ChevronDown, ChevronRight, X } from 'lucide-react'
 import React, { memo } from 'react'
 import { createPortal } from 'react-dom'
 
 import { ButtonMemo as DsButtonMemo } from '../../element/button/component'
+import type { NavItemData } from '../../type/nav-item'
 import { GenericLink } from '../generic-link'
 import type { FloatingSidebarProps } from './type'
 import { FloatingSidebarPropsEq } from './type'
@@ -14,7 +15,6 @@ export const FloatingSidebarComponent: React.FC<FloatingSidebarProps> = ({
   dispatch,
   placement = 'right',
   className,
-  key,
   dataTest,
 }) => {
   const state = model.status.state._tag
@@ -46,9 +46,69 @@ export const FloatingSidebarComponent: React.FC<FloatingSidebarProps> = ({
   const inactiveCls =
     'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100'
 
+  const renderFloatingItem = (item: NavItemData, depth = 0) => {
+    const hasChildren = Boolean(item.children && item.children.length > 0)
+    const isExpanded = model.expandedKeys
+      ? model.expandedKeys.includes(item.key)
+      : false
+
+    const handleClick = (e: React.MouseEvent) => {
+      if (hasChildren) {
+        e.preventDefault()
+        dispatch({ _tag: 'ToggleExpand', key: item.key })
+      }
+      dispatch({ _tag: 'ClickItem', item })
+    }
+
+    const baseCls = item.icon
+      ? 'flex items-center gap-[6px] rounded px-[12px] py-[6px] text-sm'
+      : 'block rounded px-[12px] py-[6px] text-sm'
+
+    return (
+      <li key={item.key} className='space-y-1'>
+        <GenericLink
+          className={cn(
+            baseCls,
+            'flex cursor-pointer items-center justify-between select-none',
+            item.isActive ? activeCls : inactiveCls,
+            depth > 0 && 'pl-7 text-xs',
+          )}
+          href={hasChildren ? undefined : item.href}
+          onClick={handleClick}
+          dispatch={dispatch}
+          msg={hasChildren ? undefined : { _tag: 'ClickItem', item }}
+          data-test='nav-link'
+          aria-current={item.isActive ? 'page' : undefined}
+        >
+          <div className='flex items-center gap-[6px] truncate'>
+            {item.icon}
+            <span>{item.label}</span>
+          </div>
+
+          {hasChildren && (
+            <span className='shrink-0 text-gray-400 dark:text-zinc-500'>
+              {isExpanded ? (
+                <ChevronDown size={14} />
+              ) : (
+                <ChevronRight size={14} />
+              )}
+            </span>
+          )}
+        </GenericLink>
+
+        {hasChildren && isExpanded && (
+          <ul className='ml-3 flex flex-col gap-1 border-l border-gray-100 pl-2 dark:border-zinc-800'>
+            {item.children!.map((child) =>
+              renderFloatingItem(child, depth + 1),
+            )}
+          </ul>
+        )}
+      </li>
+    )
+  }
+
   return createPortal(
     <div
-      key={key}
       data-test={dataTest || 'floating-sidebar'}
       data-component='FloatingSidebar'
       className={cn(
@@ -76,30 +136,7 @@ export const FloatingSidebarComponent: React.FC<FloatingSidebarProps> = ({
             </DsButtonMemo>
           </div>
           <ul className='flex flex-col gap-[8px]'>
-            {items.map((item) => {
-              const baseCls = item.icon
-                ? 'flex items-center gap-[6px] rounded px-[12px] py-[6px] text-sm'
-                : 'block rounded px-[12px] py-[6px] text-sm'
-
-              return (
-                <li key={item.key}>
-                  <GenericLink
-                    className={cn(
-                      baseCls,
-                      item.isActive ? activeCls : inactiveCls,
-                    )}
-                    href={item.href}
-                    dispatch={dispatch}
-                    msg={{ _tag: 'ClickItem', item }}
-                    data-test='nav-link'
-                    aria-current={item.isActive ? 'page' : undefined}
-                  >
-                    {item.icon}
-                    {item.label}
-                  </GenericLink>
-                </li>
-              )
-            })}
+            {items.map((item) => renderFloatingItem(item))}
           </ul>
         </div>
       </div>

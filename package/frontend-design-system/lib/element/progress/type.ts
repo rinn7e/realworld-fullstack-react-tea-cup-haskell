@@ -2,7 +2,6 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as number from 'fp-ts/lib/number'
 import * as string from 'fp-ts/lib/string'
-import type React from 'react'
 
 export type ProgressColor =
   'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red' | 'gray'
@@ -21,7 +20,6 @@ export type ProgressProps = {
    */
   isIndeterminate?: boolean
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -34,6 +32,5 @@ export const ProgressPropsEq: EqClass.Eq<ProgressProps> = EqClass.struct<
   size: string.Eq,
   isIndeterminate: boolean.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<ProgressProps>

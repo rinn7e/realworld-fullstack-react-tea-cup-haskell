@@ -10,12 +10,10 @@ export const FieldComponent: React.FC<FieldProps> = ({
   isExpanded,
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Field'
       className={cn('mb-4 text-left', isExpanded && 'w-full', className)}

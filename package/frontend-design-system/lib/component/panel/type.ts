@@ -46,7 +46,6 @@ export type PanelProps = {
   model: Model
   dispatch: (msg: Msg) => void
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -59,6 +58,5 @@ export const PanelPropsEq: EqClass.Eq<PanelProps> = EqClass.struct<
   model: ModelEq,
   dispatch: EqClass.eqStrict,
   className: EqClass.eqStrict,
-  key: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
 }) as unknown as EqClass.Eq<PanelProps>

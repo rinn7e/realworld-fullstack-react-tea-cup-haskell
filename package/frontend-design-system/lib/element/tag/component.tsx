@@ -108,7 +108,6 @@ export const TagComponent: React.FC<TagProps> = ({
   children,
   onDelete,
   onClick,
-  key,
   dataTest,
   className,
 }) => {
@@ -118,7 +117,6 @@ export const TagComponent: React.FC<TagProps> = ({
 
   return (
     <span
-      key={key}
       data-component='Tag'
       data-test={dataTest}
       onClick={onClick}

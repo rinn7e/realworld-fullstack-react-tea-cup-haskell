@@ -16,7 +16,6 @@ export type SelectProps = {
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
   name?: string
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -35,6 +34,5 @@ export const SelectPropsEq: EqClass.Eq<SelectProps> = EqClass.struct<
   onChange: EqClass.eqStrict,
   name: string.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<SelectProps>

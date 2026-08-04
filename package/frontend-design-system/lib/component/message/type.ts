@@ -10,7 +10,6 @@ export type MessageProps = {
   color?: MessageColor
   onDelete?: () => void
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -22,6 +21,5 @@ export const MessagePropsEq: EqClass.Eq<MessageProps> = EqClass.struct<
   color: EqClass.eqStrict,
   onDelete: EqClass.eqStrict,
   className: EqClass.eqStrict,
-  key: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
 }) as unknown as EqClass.Eq<MessageProps>

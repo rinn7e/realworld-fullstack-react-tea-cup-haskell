@@ -16,7 +16,6 @@ export type TextareaProps = {
   name?: string
   id?: string
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -34,6 +33,5 @@ export const TextareaPropsEq: EqClass.Eq<TextareaProps> = EqClass.struct<
   name: string.Eq,
   id: string.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<TextareaProps>

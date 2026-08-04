@@ -34,7 +34,6 @@ export type TabsProps = {
   isToggle?: boolean
   isFullWidth?: boolean
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -48,6 +47,5 @@ export const TabsPropsEq: EqClass.Eq<TabsProps> = EqClass.struct<
   isToggle: EqClass.eqStrict,
   isFullWidth: EqClass.eqStrict,
   className: EqClass.eqStrict,
-  key: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
 }) as unknown as EqClass.Eq<TabsProps>

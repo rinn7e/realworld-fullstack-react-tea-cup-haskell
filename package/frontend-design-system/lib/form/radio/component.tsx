@@ -10,12 +10,10 @@ export const RadioComponent: React.FC<RadioProps> = ({
   isDisabled,
   onChange,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Radio'
       className={cn('flex flex-col gap-2', className)}

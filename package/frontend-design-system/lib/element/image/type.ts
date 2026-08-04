@@ -14,7 +14,6 @@ export type ImageProps = {
   size?: number | string
   isRounded?: boolean
   className?: string
-  key?: React.Key
   dataTest?: string
   onError?: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void
 }
@@ -30,7 +29,6 @@ export const ImagePropsEq: EqClass.Eq<ImageProps> = EqClass.struct<
   size: EqClass.eqStrict,
   isRounded: boolean.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
   onError: EqClass.eqStrict,
 }) as unknown as EqClass.Eq<ImageProps>

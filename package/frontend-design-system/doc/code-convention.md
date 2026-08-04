@@ -58,7 +58,6 @@
        model: ModelEq,
        dispatch: EqClass.eqStrict,
        className: EqClass.eqStrict,
-       key: EqClass.eqStrict,
        dataTest: EqClass.eqStrict,
      })
      ```
@@ -93,13 +92,13 @@
    - **Example**:
      ```typescript
      // ❌ Bad: Missing data-component attribute
-     export const ContainerComponent: React.FC<ContainerProps> = ({ key, dataTest, ... }) => (
-       <div key={key} data-test={dataTest} className={...}>
+     export const ContainerComponent: React.FC<ContainerProps> = ({ dataTest, ... }) => (
+       <div data-test={dataTest} className={...}>
      )
 
      // ✅ Good: Always include data-component="<ComponentName>"
-     export const ContainerComponent: React.FC<ContainerProps> = ({ key, dataTest, ... }) => (
-       <div key={key} data-test={dataTest} data-component="Container" className={...}>
+     export const ContainerComponent: React.FC<ContainerProps> = ({ dataTest, ... }) => (
+       <div data-test={dataTest} data-component="Container" className={...}>
      )
      ```
 
@@ -128,3 +127,23 @@
      }
      const targetPage = getTargetPage(key)
      ```
+
+7. **Never Use React State (`useState` / `useReducer`) in Design System Components**:
+   - **Why**: Design system view components MUST be pure presentation components adhering strictly to The Elm Architecture (TEA). ALL interactive state (such as open/closed dropdowns, expanded menu items, collapsed panels) MUST be stored purely in the component's TEA `Model` and modified via `Msg` and `update` functions. Components MUST NOT use React `useState` or `useReducer`.
+   - **Example**:
+     ```typescript
+     // ❌ Bad: Using React useState for expanded keys in view component
+     const [expandedKeys, setExpandedKeys] = useState<ReadonlySet<string>>(new Set())
+
+     // ✅ Good: Pure TEA Model state driven by Msg updates
+     // In type.ts:
+     export type Model = { readonly expandedKeys?: ReadonlyArray<string> }
+     export type Msg = { readonly _tag: 'ToggleExpand'; readonly key: string }
+
+     // In view component:
+     const isExpanded = model.expandedKeys?.includes(item.key) ?? false
+     onClick={() => dispatch({ _tag: 'ToggleExpand', key: item.key })}
+     ```
+
+8. **Never Include `key` in Component Props or Destructure `key` in View Functions**:
+   - **Why**: React treats `key` as a special reserved prop used internally by the reconciler. In React components, `key` is handled directly by JSX at invocation call sites (`<DsButtonMemo key={item.key} />`) and is NOT accessible inside `props`. Component `Props` types MUST NOT declare `key?: React.Key` and view components MUST NOT destructure `key` from props or pass `key={key}` to child DOM nodes.

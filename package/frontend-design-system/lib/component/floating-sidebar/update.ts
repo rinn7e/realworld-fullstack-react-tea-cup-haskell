@@ -9,6 +9,7 @@ export const init = (): [Model, Cmd<Msg>] => [
       internal: null,
       state: { _tag: 'Invisible' },
     },
+    expandedKeys: [],
   },
   Cmd.none(),
 ]
@@ -56,6 +57,14 @@ export const update =
           },
           Cmd.none(),
         ]
+      case 'ToggleExpand': {
+        const expandedKeys = model.expandedKeys || []
+        const isExpanded = expandedKeys.includes(msg.key)
+        const nextKeys = isExpanded
+          ? expandedKeys.filter((k) => k !== msg.key)
+          : [...expandedKeys, msg.key]
+        return [{ ...model, expandedKeys: nextKeys }, Cmd.none()]
+      }
       case 'ClickItem':
         // Should be intercepted and handled by parent component
         return [

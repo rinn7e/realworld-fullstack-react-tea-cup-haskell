@@ -15,12 +15,10 @@ export const TextareaComponent: React.FC<TextareaProps> = ({
   name,
   id,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <textarea
-      key={key}
       data-test={dataTest}
       data-component='Textarea'
       value={value}

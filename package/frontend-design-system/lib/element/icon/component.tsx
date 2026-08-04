@@ -15,12 +15,10 @@ export const IconComponent: React.FC<IconProps> = ({
   size = 'normal',
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <span
-      key={key}
       data-test={dataTest}
       data-component='Icon'
       className={cn(

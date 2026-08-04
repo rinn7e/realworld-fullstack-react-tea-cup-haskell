@@ -1,6 +1,5 @@
 import * as A from 'fp-ts/lib/Array'
 import * as EqClass from 'fp-ts/lib/Eq'
-import type React from 'react'
 
 export type DropdownItem = {
   id: string
@@ -35,7 +34,6 @@ export type DropdownProps = {
   model: Model
   dispatch: (msg: Msg) => void
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -47,6 +45,5 @@ export const DropdownPropsEq: EqClass.Eq<DropdownProps> = EqClass.struct<
   model: ModelEq,
   dispatch: EqClass.eqStrict,
   className: EqClass.eqStrict,
-  key: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
 }) as unknown as EqClass.Eq<DropdownProps>

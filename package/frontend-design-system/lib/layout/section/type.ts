@@ -8,7 +8,6 @@ export type SectionProps = {
   children?: React.ReactNode
   size?: SectionSize
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -18,6 +17,5 @@ export const SectionPropsEq: EqClass.Eq<SectionProps> = EqClass.struct<
   children: EqClass.eqStrict,
   size: EqClass.eqStrict,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<SectionProps>

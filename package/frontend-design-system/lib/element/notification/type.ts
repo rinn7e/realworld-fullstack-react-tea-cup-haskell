@@ -10,7 +10,6 @@ export type NotificationProps = {
   color?: NotificationColor
   onDelete?: () => void
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -20,6 +19,5 @@ export const NotificationPropsEq: EqClass.Eq<NotificationProps> =
     color: string.Eq,
     onDelete: EqClass.eqStrict,
     className: string.Eq,
-    key: EqClass.eqStrict,
     dataTest: string.Eq,
   }) as unknown as EqClass.Eq<NotificationProps>

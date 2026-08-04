@@ -11,12 +11,10 @@ export const CheckboxComponent: React.FC<CheckboxProps> = ({
   name,
   id,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <label
-      key={key}
       data-test={dataTest}
       data-component='Checkbox'
       className={cn(

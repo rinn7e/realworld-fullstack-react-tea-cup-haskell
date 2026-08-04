@@ -18,7 +18,6 @@ export type TagProps = {
   isRounded?: boolean
   onDelete?: () => void
   onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void
-  key?: React.Key
   dataTest?: string
   className?: string
 }
@@ -33,7 +32,6 @@ export const TagPropsEq: EqClass.Eq<TagProps> = EqClass.struct<
   isRounded: boolean.Eq,
   onDelete: EqClass.eqStrict,
   onClick: EqClass.eqStrict,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
   className: string.Eq,
 }) as unknown as EqClass.Eq<TagProps>

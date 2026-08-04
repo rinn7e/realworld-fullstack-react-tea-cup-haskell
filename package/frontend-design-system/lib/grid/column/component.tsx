@@ -16,12 +16,10 @@ export const ColumnComponent: React.FC<ColumnProps> = ({
   size,
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Column'
       className={cn(

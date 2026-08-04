@@ -27,7 +27,6 @@ export type PopoverProps = {
   align?: Alignment
   className?: string
   cardClassName?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -41,6 +40,5 @@ export const PopoverPropsEq: EqClass.Eq<PopoverProps> = EqClass.struct<
   align: string.Eq as unknown as EqClass.Eq<Alignment>,
   className: string.Eq,
   cardClassName: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<PopoverProps>

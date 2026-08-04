@@ -12,12 +12,10 @@ export const SectionComponent: React.FC<SectionProps> = ({
   children,
   size = 'medium',
   className,
-  key,
   dataTest,
 }) => {
   return (
     <section
-      key={key}
       data-test={dataTest}
       data-component='Section'
       className={cn('w-full', sizeStyles[size], className)}

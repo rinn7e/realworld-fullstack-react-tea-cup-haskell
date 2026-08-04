@@ -11,7 +11,6 @@ export type TitleProps = {
   size?: TitleSize
   isSubtitle?: boolean
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -22,6 +21,5 @@ export const TitlePropsEq: EqClass.Eq<TitleProps> = EqClass.struct<
   size: number.Eq,
   isSubtitle: boolean.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<TitleProps>

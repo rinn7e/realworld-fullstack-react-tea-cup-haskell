@@ -15,12 +15,10 @@ export const ContentComponent: React.FC<ContentProps> = ({
   size = 'normal',
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Content'
       className={cn(

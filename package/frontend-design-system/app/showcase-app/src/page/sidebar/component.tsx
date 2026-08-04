@@ -60,6 +60,20 @@ export const SidebarPage: React.FC<Props> = ({ model, dispatch }) => {
       href: '#',
       isActive: false,
       icon: <Library size={18} />,
+      children: [
+        {
+          key: 'favorites',
+          label: 'Favorites',
+          href: '#',
+          isActive: false,
+        },
+        {
+          key: 'recent',
+          label: 'Recent Uploads',
+          href: '#',
+          isActive: false,
+        },
+      ],
     },
     {
       key: 'gems',

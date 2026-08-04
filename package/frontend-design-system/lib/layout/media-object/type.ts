@@ -7,7 +7,6 @@ export type MediaObjectProps = {
   children?: React.ReactNode
   right?: React.ReactNode
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -18,6 +17,5 @@ export const MediaObjectPropsEq: EqClass.Eq<MediaObjectProps> = EqClass.struct<
   children: EqClass.eqStrict,
   right: EqClass.eqStrict,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<MediaObjectProps>

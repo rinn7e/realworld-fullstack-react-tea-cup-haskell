@@ -9,7 +9,6 @@ export const PaginationComponent = ({
   model,
   dispatch,
   className,
-  key,
   dataTest,
 }: PaginationProps): React.ReactElement => {
   const pages: number[] = []
@@ -19,7 +18,6 @@ export const PaginationComponent = ({
 
   return (
     <nav
-      key={key}
       data-test={dataTest}
       data-component='Pagination'
       aria-label='Pagination'

@@ -11,14 +11,12 @@ export const DropdownComponent = ({
   model,
   dispatch,
   className,
-  key,
   dataTest,
 }: DropdownProps): React.ReactElement => {
   const selectedItem = items.find((i) => i.id === model.selectedId)
 
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Dropdown'
       className={cn('relative inline-block text-left', className)}

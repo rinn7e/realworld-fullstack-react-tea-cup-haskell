@@ -7,12 +7,10 @@ export const ColumnsComponent: React.FC<ColumnsProps> = ({
   isMultiline,
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Columns'
       className={cn(

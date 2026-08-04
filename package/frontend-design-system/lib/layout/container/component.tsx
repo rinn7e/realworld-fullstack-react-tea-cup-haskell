@@ -7,12 +7,10 @@ export const ContainerComponent: React.FC<ContainerProps> = ({
   children,
   isFluid,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Container'
       className={cn(

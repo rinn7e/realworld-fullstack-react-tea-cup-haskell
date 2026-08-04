@@ -44,7 +44,6 @@ export const MessageComponent = ({
   color = 'gray',
   onDelete,
   className,
-  key,
   dataTest,
 }: MessageProps): React.ReactElement => {
   const v = colorStyles[color] || colorStyles.gray
@@ -52,7 +51,6 @@ export const MessageComponent = ({
 
   return (
     <article
-      key={key}
       data-test={dataTest}
       data-component='Message'
       className={cn(

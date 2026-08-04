@@ -11,7 +11,6 @@ export type TableProps = {
   isHoverable?: boolean
   isFullWidth?: boolean
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -25,6 +24,5 @@ export const TablePropsEq: EqClass.Eq<TableProps> = EqClass.struct<
   isHoverable: boolean.Eq,
   isFullWidth: boolean.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<TableProps>

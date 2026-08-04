@@ -9,12 +9,10 @@ export const MenuComponent = ({
   model,
   dispatch,
   className,
-  key,
   dataTest,
 }: MenuProps): React.ReactElement => {
   return (
     <aside
-      key={key}
       data-test={dataTest}
       data-component='Menu'
       className={cn('w-full text-sm', className)}

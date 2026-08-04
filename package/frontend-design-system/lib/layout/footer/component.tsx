@@ -6,12 +6,10 @@ import { type FooterProps, FooterPropsEq } from './type'
 export const FooterComponent: React.FC<FooterProps> = ({
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <footer
-      key={key}
       data-test={dataTest}
       data-component='Footer'
       className={cn(

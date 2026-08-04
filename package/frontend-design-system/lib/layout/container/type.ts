@@ -7,7 +7,6 @@ export type ContainerProps = {
   children?: React.ReactNode
   isFluid?: boolean
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -17,6 +16,5 @@ export const ContainerPropsEq: EqClass.Eq<ContainerProps> = EqClass.struct<
   children: EqClass.eqStrict,
   isFluid: boolean.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<ContainerProps>

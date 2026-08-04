@@ -11,12 +11,10 @@ export const PanelComponent = ({
   model,
   dispatch,
   className,
-  key,
   dataTest,
 }: PanelProps): React.ReactElement => {
   return (
     <nav
-      key={key}
       data-test={dataTest}
       data-component='Panel'
       className={cn(

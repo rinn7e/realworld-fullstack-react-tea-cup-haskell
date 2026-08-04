@@ -15,7 +15,6 @@ export type RadioProps = {
   isDisabled?: boolean
   onChange?: (value: string) => void
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -28,6 +27,5 @@ export const RadioPropsEq: EqClass.Eq<RadioProps> = EqClass.struct<
   isDisabled: boolean.Eq,
   onChange: EqClass.eqStrict,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<RadioProps>

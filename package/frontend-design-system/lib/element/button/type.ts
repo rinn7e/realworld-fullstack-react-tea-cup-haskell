@@ -23,7 +23,6 @@ export type ButtonProps = {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   type?: 'button' | 'submit' | 'reset'
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -41,6 +40,5 @@ export const ButtonPropsEq: EqClass.Eq<ButtonProps> = EqClass.struct<
   onClick: EqClass.eqStrict,
   type: string.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<ButtonProps>

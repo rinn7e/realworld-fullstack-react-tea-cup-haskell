@@ -11,12 +11,10 @@ import {
 export const LevelComponent: React.FC<LevelProps> = ({
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Level'
       className={cn(
@@ -33,12 +31,10 @@ export const LevelItemComponent: React.FC<LevelItemProps> = ({
   hasTextCentered,
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='LevelItem'
       className={cn(

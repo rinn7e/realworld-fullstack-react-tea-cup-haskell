@@ -12,7 +12,6 @@ export type FileProps = {
   name?: string
   id?: string
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -27,6 +26,5 @@ export const FilePropsEq: EqClass.Eq<FileProps> = EqClass.struct<
   name: string.Eq,
   id: string.Eq,
   className: string.Eq,
-  key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<FileProps>

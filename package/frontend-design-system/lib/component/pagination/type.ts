@@ -1,5 +1,4 @@
 import * as EqClass from 'fp-ts/lib/Eq'
-import type React from 'react'
 
 export type Model = {
   currentPage: number
@@ -18,7 +17,6 @@ export type PaginationProps = {
   dispatch: (msg: Msg) => void
   onPageChange?: (page: number) => void
   className?: string
-  key?: React.Key
   dataTest?: string
 }
 
@@ -29,6 +27,5 @@ export const PaginationPropsEq: EqClass.Eq<PaginationProps> = EqClass.struct<
   dispatch: EqClass.eqStrict,
   onPageChange: EqClass.eqStrict,
   className: EqClass.eqStrict,
-  key: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
 }) as unknown as EqClass.Eq<PaginationProps>

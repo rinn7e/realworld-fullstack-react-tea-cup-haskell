@@ -11,12 +11,10 @@ export const TableComponent: React.FC<TableProps> = ({
   isFullWidth = true,
   children,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <div
-      key={key}
       data-test={dataTest}
       data-component='Table'
       className='w-full overflow-x-auto rounded-lg border border-gray-200 shadow-2xs dark:border-zinc-800 dark:bg-black'

@@ -11,12 +11,10 @@ export const SelectComponent: React.FC<SelectProps> = ({
   onChange,
   name,
   className,
-  key,
   dataTest,
 }) => {
   return (
     <select
-      key={key}
       data-test={dataTest}
       data-component='Select'
       value={value}
