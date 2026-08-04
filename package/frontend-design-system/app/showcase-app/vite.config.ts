@@ -16,10 +16,7 @@ export default defineConfig({
         __dirname,
         '../../dist/index.mjs',
       ),
-      '@rinn7e/realworld-design-system': path.resolve(
-        __dirname,
-        '../../dist',
-      ),
+      '@rinn7e/realworld-design-system': path.resolve(__dirname, '../../dist'),
     },
   },
   server: {

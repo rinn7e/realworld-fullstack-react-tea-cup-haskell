@@ -1,6 +1,6 @@
-import React from 'react'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as string from 'fp-ts/lib/string'
+import React from 'react'
 
 export type DeleteSize = 'small' | 'normal' | 'medium' | 'large'
 
@@ -12,7 +12,9 @@ export type DeleteProps = {
   dataTest?: string
 }
 
-export const DeletePropsEq: EqClass.Eq<DeleteProps> = EqClass.struct<Required<DeleteProps>>({
+export const DeletePropsEq: EqClass.Eq<DeleteProps> = EqClass.struct<
+  Required<DeleteProps>
+>({
   size: string.Eq,
   onClick: EqClass.eqStrict,
   className: string.Eq,

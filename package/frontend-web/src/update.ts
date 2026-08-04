@@ -1,9 +1,6 @@
-import {
-  delayCmd,
-  msgCmd,
-  taskFromTE,
-  updateAndCmd,
-} from '@rinn7e/tea-cup-prelude'
+import * as DsFloatingSidebar from '@rinn7e/realworld-design-system/component/floating-sidebar'
+import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
+import { msgCmd, taskFromTE, updateAndCmd } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { newUrl } from 'react-tea-cup'
@@ -16,6 +13,7 @@ import {
   trackVisitor,
 } from '@/common/api'
 import { getToken, removeToken, saveToken } from '@/common/cache'
+import { findNavItemRoute } from '@/common/nav-link-helper'
 import {
   type AppRoute,
   AppRouteEq,
@@ -24,10 +22,7 @@ import {
   parseAppRoute,
   toUrlString,
 } from '@/common/type/route'
-import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
-import { findNavItemRoute, toNavbarConfig } from '@/common/nav-link-helper'
 import * as DebugPanel from '@/component/debug-panel'
-import * as DsFloatingSidebar from '@rinn7e/realworld-design-system/component/floating-sidebar'
 import * as ArticlePage from '@/page/article/update'
 import * as EditorPage from '@/page/editor/update'
 import * as HomePage from '@/page/home/update'
@@ -705,7 +700,9 @@ const sidebarMsgHandler = (
   subMsg: Extract<Msg, { _tag: 'SidebarMsg' }>['subMsg'],
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const [sidebarModel, sidebarCmd] = DsFloatingSidebar.update(subMsg)(model.sidebar)
+  const [sidebarModel, sidebarCmd] = DsFloatingSidebar.update(subMsg)(
+    model.sidebar,
+  )
 
   return pipe(
     [
@@ -741,12 +738,16 @@ const navbarMsgHandler = (
       if (subMsg._tag === 'ClickNavItem') {
         const item = subMsg.item
         if (item.key === 'toggle-sidebar') {
-          const [sidebarModel, sidebarCmd] = DsFloatingSidebar.update(
-            { _tag: 'Toggle', open: true },
-          )(m.sidebar)
+          const [sidebarModel, sidebarCmd] = DsFloatingSidebar.update({
+            _tag: 'Toggle',
+            open: true,
+          })(m.sidebar)
           return [
             { ...m, sidebar: sidebarModel },
-            sidebarCmd.map((subMsg) => ({ _tag: 'SidebarMsg' as const, subMsg })),
+            sidebarCmd.map((subMsg) => ({
+              _tag: 'SidebarMsg' as const,
+              subMsg,
+            })),
           ]
         } else {
           const targetRoute = findNavItemRoute(m, item.key)

@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { ContainerPropsEq, type ContainerProps } from './type'
+import { type ContainerProps, ContainerPropsEq } from './type'
 
 export const ContainerComponent: React.FC<ContainerProps> = ({
   children,

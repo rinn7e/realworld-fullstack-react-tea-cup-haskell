@@ -11,8 +11,24 @@
       href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@700&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <script>
+      ;(function () {
+        try {
+          var scheme = localStorage.getItem('showcase-color-scheme') || 'auto'
+          var isDark =
+            scheme === 'dark' ||
+            (scheme === 'auto' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (isDark) {
+            document.documentElement.classList.add('dark')
+          }
+        } catch (e) {}
+      })()
+    </script>
   </head>
-  <body class="bg-gray-50 font-sans text-gray-900 antialiased">
+  <body
+    class="bg-gray-50 text-gray-900 antialiased dark:bg-slate-950 dark:text-slate-100"
+  >
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { SelectPropsEq, type SelectProps } from './type'
+import { type SelectProps, SelectPropsEq } from './type'
 
 export const SelectComponent: React.FC<SelectProps> = ({
   options,
@@ -25,7 +25,7 @@ export const SelectComponent: React.FC<SelectProps> = ({
       onChange={onChange}
       name={name}
       className={cn(
-        'w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20',
+        'w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none',
         isDisabled && 'cursor-not-allowed bg-gray-100 opacity-60',
         className,
       )}

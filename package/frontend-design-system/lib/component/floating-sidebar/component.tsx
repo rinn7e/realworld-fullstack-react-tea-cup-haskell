@@ -5,7 +5,6 @@ import { createPortal } from 'react-dom'
 
 import { ButtonMemo as DsButtonMemo } from '../../element/button/component'
 import { GenericLink } from '../generic-link'
-
 import type { FloatingSidebarProps } from './type'
 import { FloatingSidebarPropsEq } from './type'
 

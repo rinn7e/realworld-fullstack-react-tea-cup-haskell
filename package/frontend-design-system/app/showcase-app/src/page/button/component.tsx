@@ -1,6 +1,6 @@
-import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import {
   Code2,
   Download,
@@ -46,7 +46,11 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='ButtonPage' className='w-full space-y-8 text-left'>
-      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full">
+      <DsHeroMemo
+        variant='default'
+        size='small'
+        className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6'
+      >
         <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
           ELEMENTS / BUTTON
         </div>
@@ -55,9 +59,8 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
         </DsTitleMemo>
         <p className='text-base text-gray-600'>
           Essential button element with support for color palettes (white,
-          green, dark-green, sky, amber, red, gray), variants (solid,
-          outline, link, ghost), sizes, shapes, and states (loading,
-          disabled).
+          green, dark-green, sky, amber, red, gray), variants (solid, outline,
+          link, ghost), sizes, shapes, and states (loading, disabled).
         </p>
       </DsHeroMemo>
 
@@ -65,7 +68,7 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
         <div className='flex w-full items-center justify-between'>
           <DsTitleMemo
             size={5}
-            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
+            className='flex items-center gap-2 font-bold tracking-wider text-gray-600 uppercase'
           >
             <Sparkles className='h-4 w-4 text-green-600' />
             <span>Interactive Playground &amp; Code</span>
@@ -87,13 +90,27 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Solid Variant (variant = "solid")',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='white' variant='solid'>White</DsButtonMemo>
-              <DsButtonMemo color='green' variant='solid'>Green</DsButtonMemo>
-              <DsButtonMemo color='dark-green' variant='solid'>Dark Green</DsButtonMemo>
-              <DsButtonMemo color='sky' variant='solid'>Sky</DsButtonMemo>
-              <DsButtonMemo color='amber' variant='solid'>Amber</DsButtonMemo>
-              <DsButtonMemo color='red' variant='solid'>Red</DsButtonMemo>
-              <DsButtonMemo color='gray' variant='solid'>Gray</DsButtonMemo>
+              <DsButtonMemo color='white' variant='solid'>
+                White
+              </DsButtonMemo>
+              <DsButtonMemo color='green' variant='solid'>
+                Green
+              </DsButtonMemo>
+              <DsButtonMemo color='dark-green' variant='solid'>
+                Dark Green
+              </DsButtonMemo>
+              <DsButtonMemo color='sky' variant='solid'>
+                Sky
+              </DsButtonMemo>
+              <DsButtonMemo color='amber' variant='solid'>
+                Amber
+              </DsButtonMemo>
+              <DsButtonMemo color='red' variant='solid'>
+                Red
+              </DsButtonMemo>
+              <DsButtonMemo color='gray' variant='solid'>
+                Gray
+              </DsButtonMemo>
             </div>
           ),
         })}
@@ -103,13 +120,27 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Outline Variant (variant = "outline")',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='white' variant='outline'>White</DsButtonMemo>
-              <DsButtonMemo color='green' variant='outline'>Green</DsButtonMemo>
-              <DsButtonMemo color='dark-green' variant='outline'>Dark Green</DsButtonMemo>
-              <DsButtonMemo color='sky' variant='outline'>Sky</DsButtonMemo>
-              <DsButtonMemo color='amber' variant='outline'>Amber</DsButtonMemo>
-              <DsButtonMemo color='red' variant='outline'>Red</DsButtonMemo>
-              <DsButtonMemo color='gray' variant='outline'>Gray</DsButtonMemo>
+              <DsButtonMemo color='white' variant='outline'>
+                White
+              </DsButtonMemo>
+              <DsButtonMemo color='green' variant='outline'>
+                Green
+              </DsButtonMemo>
+              <DsButtonMemo color='dark-green' variant='outline'>
+                Dark Green
+              </DsButtonMemo>
+              <DsButtonMemo color='sky' variant='outline'>
+                Sky
+              </DsButtonMemo>
+              <DsButtonMemo color='amber' variant='outline'>
+                Amber
+              </DsButtonMemo>
+              <DsButtonMemo color='red' variant='outline'>
+                Red
+              </DsButtonMemo>
+              <DsButtonMemo color='gray' variant='outline'>
+                Gray
+              </DsButtonMemo>
             </div>
           ),
         })}
@@ -119,13 +150,27 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Link Variant (variant = "link")',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='white' variant='link'>White</DsButtonMemo>
-              <DsButtonMemo color='green' variant='link'>Green</DsButtonMemo>
-              <DsButtonMemo color='dark-green' variant='link'>Dark Green</DsButtonMemo>
-              <DsButtonMemo color='sky' variant='link'>Sky</DsButtonMemo>
-              <DsButtonMemo color='amber' variant='link'>Amber</DsButtonMemo>
-              <DsButtonMemo color='red' variant='link'>Red</DsButtonMemo>
-              <DsButtonMemo color='gray' variant='link'>Gray</DsButtonMemo>
+              <DsButtonMemo color='white' variant='link'>
+                White
+              </DsButtonMemo>
+              <DsButtonMemo color='green' variant='link'>
+                Green
+              </DsButtonMemo>
+              <DsButtonMemo color='dark-green' variant='link'>
+                Dark Green
+              </DsButtonMemo>
+              <DsButtonMemo color='sky' variant='link'>
+                Sky
+              </DsButtonMemo>
+              <DsButtonMemo color='amber' variant='link'>
+                Amber
+              </DsButtonMemo>
+              <DsButtonMemo color='red' variant='link'>
+                Red
+              </DsButtonMemo>
+              <DsButtonMemo color='gray' variant='link'>
+                Gray
+              </DsButtonMemo>
             </div>
           ),
         })}
@@ -135,13 +180,27 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Ghost Variant (variant = "ghost")',
           children: () => (
             <div className='flex flex-wrap items-center gap-3 rounded bg-gray-800 p-4'>
-              <DsButtonMemo color='white' variant='ghost'>White</DsButtonMemo>
-              <DsButtonMemo color='green' variant='ghost'>Green</DsButtonMemo>
-              <DsButtonMemo color='dark-green' variant='ghost'>Dark Green</DsButtonMemo>
-              <DsButtonMemo color='sky' variant='ghost'>Sky</DsButtonMemo>
-              <DsButtonMemo color='amber' variant='ghost'>Amber</DsButtonMemo>
-              <DsButtonMemo color='red' variant='ghost'>Red</DsButtonMemo>
-              <DsButtonMemo color='gray' variant='ghost'>Gray</DsButtonMemo>
+              <DsButtonMemo color='white' variant='ghost'>
+                White
+              </DsButtonMemo>
+              <DsButtonMemo color='green' variant='ghost'>
+                Green
+              </DsButtonMemo>
+              <DsButtonMemo color='dark-green' variant='ghost'>
+                Dark Green
+              </DsButtonMemo>
+              <DsButtonMemo color='sky' variant='ghost'>
+                Sky
+              </DsButtonMemo>
+              <DsButtonMemo color='amber' variant='ghost'>
+                Amber
+              </DsButtonMemo>
+              <DsButtonMemo color='red' variant='ghost'>
+                Red
+              </DsButtonMemo>
+              <DsButtonMemo color='gray' variant='ghost'>
+                Gray
+              </DsButtonMemo>
             </div>
           ),
         })}
@@ -151,11 +210,21 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Button Sizes',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='green' size='xsmall'>XSmall (xs)</DsButtonMemo>
-              <DsButtonMemo color='green' size='small'>Small (sm)</DsButtonMemo>
-              <DsButtonMemo color='green' size='normal'>Normal (base)</DsButtonMemo>
-              <DsButtonMemo color='green' size='medium'>Medium (md)</DsButtonMemo>
-              <DsButtonMemo color='green' size='large'>Large (lg)</DsButtonMemo>
+              <DsButtonMemo color='green' size='xsmall'>
+                XSmall (xs)
+              </DsButtonMemo>
+              <DsButtonMemo color='green' size='small'>
+                Small (sm)
+              </DsButtonMemo>
+              <DsButtonMemo color='green' size='normal'>
+                Normal (base)
+              </DsButtonMemo>
+              <DsButtonMemo color='green' size='medium'>
+                Medium (md)
+              </DsButtonMemo>
+              <DsButtonMemo color='green' size='large'>
+                Large (lg)
+              </DsButtonMemo>
             </div>
           ),
         })}
@@ -165,9 +234,15 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Shapes & Rounded Pill',
           children: () => (
             <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='green' isRounded={false}>Standard Square</DsButtonMemo>
-              <DsButtonMemo color='green' isRounded={true}>Rounded Pill</DsButtonMemo>
-              <DsButtonMemo color='sky' variant='outline' isRounded={true}>Outline Rounded</DsButtonMemo>
+              <DsButtonMemo color='green' isRounded={false}>
+                Standard Square
+              </DsButtonMemo>
+              <DsButtonMemo color='green' isRounded={true}>
+                Rounded Pill
+              </DsButtonMemo>
+              <DsButtonMemo color='sky' variant='outline' isRounded={true}>
+                Outline Rounded
+              </DsButtonMemo>
             </div>
           ),
         })}
@@ -217,12 +292,20 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='space-y-4'>
               <div className='flex flex-wrap items-center gap-3'>
-                <DsButtonMemo color='green' isLoading={true}>Loading State</DsButtonMemo>
-                <DsButtonMemo color='green' isDisabled={true}>Disabled State</DsButtonMemo>
-                <DsButtonMemo color='red' variant='outline' isDisabled={true}>Disabled Outline</DsButtonMemo>
+                <DsButtonMemo color='green' isLoading={true}>
+                  Loading State
+                </DsButtonMemo>
+                <DsButtonMemo color='green' isDisabled={true}>
+                  Disabled State
+                </DsButtonMemo>
+                <DsButtonMemo color='red' variant='outline' isDisabled={true}>
+                  Disabled Outline
+                </DsButtonMemo>
               </div>
               <div>
-                <DsButtonMemo color='green' isFullWidth={true}>Full Width Button Block</DsButtonMemo>
+                <DsButtonMemo color='green' isFullWidth={true}>
+                  Full Width Button Block
+                </DsButtonMemo>
               </div>
             </div>
           ),

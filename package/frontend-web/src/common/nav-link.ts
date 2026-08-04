@@ -2,8 +2,7 @@ import * as O from 'fp-ts/lib/Option'
 import type { Option } from 'fp-ts/lib/Option'
 
 import type { User } from '@/common/api'
-import type { AppRoute } from '@/common/type/route'
-import { homePage } from '@/common/type/route'
+import { type AppRoute, homePage } from '@/common/type/route'
 import { assetPath } from '@/common/util'
 
 export type NavLinkIcon =
@@ -62,8 +61,7 @@ export const navLinkAuths: NavLinkData[] = [
   },
   {
     key: 'profile',
-    label: (userOpt) =>
-      userOpt._tag === 'Some' ? userOpt.value.username : '',
+    label: (userOpt) => (userOpt._tag === 'Some' ? userOpt.value.username : ''),
     route: (userOpt) =>
       userOpt._tag === 'Some'
         ? {

@@ -8,13 +8,13 @@ export type TabItem = {
   icon?: React.ReactNode
 }
 
-export const TabItemEq: EqClass.Eq<TabItem> = EqClass.struct<
-  Required<TabItem>
->({
-  id: EqClass.eqString,
-  label: EqClass.eqStrict,
-  icon: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<TabItem>
+export const TabItemEq: EqClass.Eq<TabItem> = EqClass.struct<Required<TabItem>>(
+  {
+    id: EqClass.eqString,
+    label: EqClass.eqStrict,
+    icon: EqClass.eqStrict,
+  },
+) as unknown as EqClass.Eq<TabItem>
 
 export type Model = {
   activeId: string

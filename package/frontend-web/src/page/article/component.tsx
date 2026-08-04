@@ -163,7 +163,9 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                         size='xsmall'
                         onClick={() => dispatch({ _tag: 'DeleteArticle' })}
                         dataTest='article-delete-btn'
-                        className={isLight ? 'hover:bg-red-900' : 'hover:bg-red-50'}
+                        className={
+                          isLight ? 'hover:bg-red-900' : 'hover:bg-red-50'
+                        }
                       >
                         <Trash2 size={13} className='mr-1' /> Delete Article
                       </DsButtonMemo>
@@ -205,7 +207,10 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                           color='gray'
                           variant='outline'
                           isRounded={true}
-                          size='small'>{tag}</DsTagMemo>
+                          size='small'
+                        >
+                          {tag}
+                        </DsTagMemo>
                       ))}
                     </div>
                   </div>

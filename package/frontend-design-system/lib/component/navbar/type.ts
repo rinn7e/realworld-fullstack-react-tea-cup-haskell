@@ -2,7 +2,7 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
-import { NavItemDataEq, type NavItemData } from '../../type/nav-item'
+import { type NavItemData, NavItemDataEq } from '../../type/nav-item'
 
 export type Config = {
   brandNavItem?: NavItemData
@@ -39,6 +39,7 @@ export type NavbarProps = {
   dispatch: (msg: Msg) => void
   className?: string
   containerClassName?: string
+  endSlot?: React.ReactNode
   key?: React.Key
   dataTest?: string
 }
@@ -50,6 +51,7 @@ export const NavbarPropsEq: EqClass.Eq<NavbarProps> = EqClass.struct<
   dispatch: EqClass.eqStrict,
   className: string.Eq,
   containerClassName: string.Eq,
+  endSlot: EqClass.eqStrict,
   key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<NavbarProps>

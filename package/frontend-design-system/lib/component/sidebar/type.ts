@@ -1,10 +1,10 @@
 import * as A from 'fp-ts/lib/Array'
-import * as boolean from 'fp-ts/lib/boolean'
 import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
-import { NavItemDataEq, type NavItemData } from '../../type/nav-item'
+import { type NavItemData, NavItemDataEq } from '../../type/nav-item'
 
 export type SidebarCategory = {
   title: string

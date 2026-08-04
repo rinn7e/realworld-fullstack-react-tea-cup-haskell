@@ -16,7 +16,6 @@ import type * as DropdownPage from './page/dropdown/type'
 import type * as FieldPage from './page/field/type'
 import type * as FilePage from './page/file/type'
 import type * as FloatingSidebarPage from './page/floating-sidebar/type'
-import type * as SidebarPage from './page/sidebar/type'
 import type * as FooterPage from './page/footer/type'
 import type * as HeroPage from './page/hero/type'
 import type * as HomePage from './page/home/type'
@@ -37,20 +36,17 @@ import type * as ProgressPage from './page/progress/type'
 import type * as RadioPage from './page/radio/type'
 import type * as SectionPage from './page/section/type'
 import type * as SelectPage from './page/select/type'
+import type * as SidebarPage from './page/sidebar/type'
 import type * as TablePage from './page/table/type'
 import type * as TabsPage from './page/tabs/type'
 import type * as TagPage from './page/tag/type'
 import type * as TextareaPage from './page/textarea/type'
 import type * as TitlePage from './page/title/type'
 import type { AppRoute } from './route/type'
+import type { ColorScheme } from './util/theme-util'
 
 export type SectionCategory =
-  | 'elements'
-  | 'components'
-  | 'form'
-  | 'layout'
-  | 'grid'
-  | 'misc'
+  'elements' | 'components' | 'form' | 'layout' | 'grid' | 'misc'
 
 export type PageModel =
   | { readonly _tag: 'HomePageModel'; readonly model: HomePage.Model }
@@ -64,7 +60,10 @@ export type PageModel =
   | { readonly _tag: 'CardPageModel'; readonly model: CardPage.Model }
   | { readonly _tag: 'CheckboxPageModel'; readonly model: CheckboxPage.Model }
   | { readonly _tag: 'ColumnsPageModel'; readonly model: ColumnsPage.Model }
-  | { readonly _tag: 'ContainerPageModel'; readonly model: ContainerPage.Model }
+  | {
+      readonly _tag: 'ContainerPageModel'
+      readonly model: ContainerPage.Model
+    }
   | { readonly _tag: 'ContentPageModel'; readonly model: ContentPage.Model }
   | { readonly _tag: 'DeletePageModel'; readonly model: DeletePage.Model }
   | {
@@ -120,6 +119,7 @@ export type Model = {
   readonly searchQuery: string
   readonly sidebarModel: DsSidebar.Model
   readonly rightSidebarModel: DsSidebar.Model
+  readonly colorScheme: ColorScheme
 }
 
 export type Msg =
@@ -128,6 +128,7 @@ export type Msg =
   | { readonly _tag: 'UrlChange'; readonly location: Location }
   | { readonly _tag: 'ChangeRoute'; readonly route: AppRoute }
   | { readonly _tag: 'UpdateSearch'; readonly query: string }
+  | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
   | { readonly _tag: 'SidebarMsg'; readonly subMsg: DsSidebar.Msg }
   | { readonly _tag: 'RightSidebarMsg'; readonly subMsg: DsSidebar.Msg }
   | { readonly _tag: 'TopNavbarMsg'; readonly subMsg: DsNavbar.Msg }

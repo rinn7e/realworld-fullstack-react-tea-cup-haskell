@@ -1,7 +1,7 @@
-import React from 'react'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
+import React from 'react'
 
 export type TableProps = {
   children?: React.ReactNode
@@ -15,7 +15,9 @@ export type TableProps = {
   dataTest?: string
 }
 
-export const TablePropsEq: EqClass.Eq<TableProps> = EqClass.struct<Required<TableProps>>({
+export const TablePropsEq: EqClass.Eq<TableProps> = EqClass.struct<
+  Required<TableProps>
+>({
   children: EqClass.eqStrict,
   isBordered: boolean.Eq,
   isStriped: boolean.Eq,

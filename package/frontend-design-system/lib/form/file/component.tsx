@@ -2,7 +2,7 @@ import { Upload } from 'lucide-react'
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { FilePropsEq, type FileProps } from './type'
+import { type FileProps, FilePropsEq } from './type'
 
 export const FileComponent: React.FC<FileProps> = ({
   filename,
@@ -25,7 +25,7 @@ export const FileComponent: React.FC<FileProps> = ({
     >
       <label
         className={cn(
-          'inline-flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500/20',
+          'inline-flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-green-700 focus:ring-2 focus:ring-green-500/20 focus:outline-none',
           isDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
         )}
       >

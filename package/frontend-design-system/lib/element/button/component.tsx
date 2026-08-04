@@ -3,7 +3,12 @@ import { memo } from 'react'
 import React from 'react'
 
 import { cn } from '../../theme'
-import { type ButtonColor, type ButtonProps, type ButtonVariant, ButtonPropsEq } from './type'
+import {
+  type ButtonColor,
+  type ButtonProps,
+  ButtonPropsEq,
+  type ButtonVariant,
+} from './type'
 
 const colorStyles: Record<ButtonColor, Record<ButtonVariant, string>> = {
   white: {

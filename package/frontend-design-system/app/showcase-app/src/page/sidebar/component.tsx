@@ -88,32 +88,32 @@ export const SidebarPage: React.FC<Props> = ({ model, dispatch }) => {
       <DsHeroMemo
         variant='default'
         size='small'
-        className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6'>
-
-          <>
-            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
-              COMPONENTS / SIDEBAR
-            </div>
-            <DsTitleMemo
-              size={2}
-              className='mb-2 font-extrabold text-gray-900'>Sidebar</DsTitleMemo>
-            <p className='text-base text-gray-600'>
-              In-DOM collapsible vertical navigation sidebar layout component.
-            </p>
-          </>
-        
-</DsHeroMemo>
+        className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6'
+      >
+        <>
+          <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+            COMPONENTS / SIDEBAR
+          </div>
+          <DsTitleMemo size={2} className='mb-2 font-extrabold text-gray-900'>
+            Sidebar
+          </DsTitleMemo>
+          <p className='text-base text-gray-600'>
+            In-DOM collapsible vertical navigation sidebar layout component.
+          </p>
+        </>
+      </DsHeroMemo>
 
       <div className='flex w-full flex-col gap-6'>
         <div className='flex w-full items-center justify-between'>
           <DsTitleMemo
             size={5}
-            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'>
-              <>
-                <Sparkles className='h-4 w-4 text-green-600' />
-                <span>In-DOM Collapsible Sidebar Layout</span>
-              </>
-            </DsTitleMemo>
+            className='flex items-center gap-2 font-bold tracking-wider text-gray-600 uppercase'
+          >
+            <>
+              <Sparkles className='h-4 w-4 text-green-600' />
+              <span>In-DOM Collapsible Sidebar Layout</span>
+            </>
+          </DsTitleMemo>
           <DsButtonMemo
             color='green'
             variant='link'
@@ -131,7 +131,7 @@ export const SidebarPage: React.FC<Props> = ({ model, dispatch }) => {
           boxClassName:
             'p-0 w-full bg-gray-50 border-2 border-dotted border-gray-300 rounded-lg overflow-hidden h-[450px] flex',
           children: () => (
-            <div className='flex w-full h-full'>
+            <div className='flex h-full w-full'>
               <DsSidebarMemo
                 model={model.sidebar}
                 items={items}
@@ -142,12 +142,14 @@ export const SidebarPage: React.FC<Props> = ({ model, dispatch }) => {
                 }}
                 dispatch={(subMsg) => dispatch({ _tag: 'SidebarMsg', subMsg })}
               />
-              <div className='flex-1 p-6 bg-white overflow-y-auto'>
-                <h4 className='text-base font-bold text-gray-800 mb-2'>
+              <div className='flex-1 overflow-y-auto bg-white p-6'>
+                <h4 className='mb-2 text-base font-bold text-gray-800'>
                   Main Content Area
                 </h4>
-                <p className='text-sm text-gray-600 leading-relaxed'>
-                  Notice how the sidebar occupies layout DOM space alongside this main content area. Toggle the sidebar collapse button in the header to collapse/expand!
+                <p className='text-sm leading-relaxed text-gray-600'>
+                  Notice how the sidebar occupies layout DOM space alongside
+                  this main content area. Toggle the sidebar collapse button in
+                  the header to collapse/expand!
                 </p>
               </div>
             </div>

@@ -1,5 +1,5 @@
-import * as boolean from 'fp-ts/lib/boolean'
 import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
 import type { ReactNode } from 'react'
 

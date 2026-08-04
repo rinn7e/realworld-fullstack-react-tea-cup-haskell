@@ -78,7 +78,10 @@ const LoginPageComponent = ({ model, dispatch }: Props) => {
               type='submit'
               isFullWidth={true}
               isLoading={RD.isPending(model.requestRd)}
-              dataTest='login-btn'>Sign in</DsButtonMemo>
+              dataTest='login-btn'
+            >
+              Sign in
+            </DsButtonMemo>
           </div>
         </form>
       </div>

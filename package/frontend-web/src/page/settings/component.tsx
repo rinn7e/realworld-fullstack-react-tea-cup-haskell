@@ -87,7 +87,10 @@ const SettingsPageComponent = ({ model, dispatch }: Props) => {
           <div className='flex justify-end pt-[16px]'>
             <DsButtonMemo
               type='submit'
-              isLoading={RD.isPending(model.requestRd)}>Update Settings</DsButtonMemo>
+              isLoading={RD.isPending(model.requestRd)}
+            >
+              Update Settings
+            </DsButtonMemo>
           </div>
         </form>
 

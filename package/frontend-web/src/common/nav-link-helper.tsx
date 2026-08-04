@@ -1,4 +1,4 @@
-import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
+import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
 import type { NavItemData as DsNavItemData } from '@rinn7e/realworld-design-system/type/nav-item'
 import type { Option } from 'fp-ts/lib/Option'
@@ -6,15 +6,10 @@ import { Menu, Pencil, Settings } from 'lucide-react'
 import React from 'react'
 
 import type { User } from '@/common/api'
-import type { AppRoute } from '@/common/type/route'
-import { homePage, toUrlString } from '@/common/type/route'
+import { type AppRoute, homePage, toUrlString } from '@/common/type/route'
 import type { Model } from '@/type'
 
-import {
-  type NavLinkIcon,
-  navLinkAuths,
-  navLinkUnauths,
-} from './nav-link'
+import { type NavLinkIcon, navLinkAuths, navLinkUnauths } from './nav-link'
 
 export type NavItem = {
   data: DsNavItemData

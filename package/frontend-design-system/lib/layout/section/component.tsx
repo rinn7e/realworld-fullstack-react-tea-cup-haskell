@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { SectionPropsEq, type SectionProps } from './type'
+import { type SectionProps, SectionPropsEq } from './type'
 
 const sizeStyles: Record<string, string> = {
   medium: 'py-9 px-6',

@@ -1,8 +1,8 @@
-import React from 'react'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as number from 'fp-ts/lib/number'
 import * as string from 'fp-ts/lib/string'
+import React from 'react'
 
 export type TitleSize = 1 | 2 | 3 | 4 | 5 | 6
 
@@ -15,7 +15,9 @@ export type TitleProps = {
   dataTest?: string
 }
 
-export const TitlePropsEq: EqClass.Eq<TitleProps> = EqClass.struct<Required<TitleProps>>({
+export const TitlePropsEq: EqClass.Eq<TitleProps> = EqClass.struct<
+  Required<TitleProps>
+>({
   children: EqClass.eqStrict,
   size: number.Eq,
   isSubtitle: boolean.Eq,

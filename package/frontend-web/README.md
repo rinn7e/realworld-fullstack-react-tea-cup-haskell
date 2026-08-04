@@ -20,8 +20,8 @@ A functional, type-safe implementation of the RealWorld Medium.com clone spec bu
    ```bash
    pnpm install
    ```
-3. Ensure you have a local [RealWorld backend](https://github.com/gothinkster/realworld) running (usually on `http://localhost:8000/api`).
-4. Run the development server:
+2. Ensure you have a local [RealWorld backend](https://github.com/gothinkster/realworld) running (usually on `http://localhost:8000/api`).
+3. Run the development server:
    ```bash
    pnpm dev
    ```

@@ -44,4 +44,7 @@ export const NotificationComponent: React.FC<NotificationProps> = ({
   )
 }
 
-export const NotificationMemo = memo(NotificationComponent, NotificationPropsEq.equals)
+export const NotificationMemo = memo(
+  NotificationComponent,
+  NotificationPropsEq.equals,
+)

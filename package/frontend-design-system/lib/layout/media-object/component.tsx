@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { MediaObjectPropsEq, type MediaObjectProps } from './type'
+import { type MediaObjectProps, MediaObjectPropsEq } from './type'
 
 export const MediaObjectComponent: React.FC<MediaObjectProps> = ({
   left,
@@ -25,4 +25,7 @@ export const MediaObjectComponent: React.FC<MediaObjectProps> = ({
   )
 }
 
-export const MediaObjectMemo = memo(MediaObjectComponent, MediaObjectPropsEq.equals)
+export const MediaObjectMemo = memo(
+  MediaObjectComponent,
+  MediaObjectPropsEq.equals,
+)

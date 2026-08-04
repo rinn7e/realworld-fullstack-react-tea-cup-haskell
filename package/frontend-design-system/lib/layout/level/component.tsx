@@ -2,10 +2,10 @@ import React, { memo } from 'react'
 
 import { cn } from '../../theme'
 import {
-  LevelItemPropsEq,
-  LevelPropsEq,
   type LevelItemProps,
+  LevelItemPropsEq,
   type LevelProps,
+  LevelPropsEq,
 } from './type'
 
 export const LevelComponent: React.FC<LevelProps> = ({

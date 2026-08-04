@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { ColumnPropsEq, type ColumnProps } from './type'
+import { type ColumnProps, ColumnPropsEq } from './type'
 
 const sizeStyles: Record<string, string> = {
   full: 'w-full',

@@ -1,8 +1,8 @@
-import type React from 'react'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as number from 'fp-ts/lib/number'
 import * as string from 'fp-ts/lib/string'
+import type React from 'react'
 
 export type ProgressVariant =
   'primary' | 'link' | 'info' | 'success' | 'warning' | 'danger'
@@ -25,7 +25,9 @@ export type ProgressProps = {
   dataTest?: string
 }
 
-export const ProgressPropsEq: EqClass.Eq<ProgressProps> = EqClass.struct<Required<ProgressProps>>({
+export const ProgressPropsEq: EqClass.Eq<ProgressProps> = EqClass.struct<
+  Required<ProgressProps>
+>({
   value: number.Eq,
   max: number.Eq,
   variant: string.Eq,

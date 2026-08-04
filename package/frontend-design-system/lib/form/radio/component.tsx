@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { RadioPropsEq, type RadioProps } from './type'
+import { type RadioProps, RadioPropsEq } from './type'
 
 export const RadioComponent: React.FC<RadioProps> = ({
   name,

@@ -1,16 +1,13 @@
+import { FloatingSidebarMemo as DsFloatingFloatingSidebarMemo } from '@rinn7e/realworld-design-system/component/floating-sidebar/component'
 import { NavbarMemo as DsNavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { SetGlobalMsgContext } from './common/global-context'
-import {
-  toDesktopNavItems,
-  toNavbarConfig,
-} from './common/nav-link-helper'
+import { toDesktopNavItems, toNavbarConfig } from './common/nav-link-helper'
 import { DebugPanelComponent } from './component/debug-panel/component'
 import { Footer } from './component/footer'
-import { FloatingSidebarMemo as DsFloatingFloatingSidebarMemo } from '@rinn7e/realworld-design-system/component/floating-sidebar/component'
 import { ArticlePageMemo } from './page/article/component'
 import { EditorPageMemo } from './page/editor/component'
 import { HomePageMemo } from './page/home/component'

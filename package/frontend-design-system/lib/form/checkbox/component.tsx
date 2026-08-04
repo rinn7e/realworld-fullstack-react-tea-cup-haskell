@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { CheckboxPropsEq, type CheckboxProps } from './type'
+import { type CheckboxProps, CheckboxPropsEq } from './type'
 
 export const CheckboxComponent: React.FC<CheckboxProps> = ({
   label,

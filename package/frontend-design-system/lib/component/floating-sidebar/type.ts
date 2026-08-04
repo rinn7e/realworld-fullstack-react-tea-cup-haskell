@@ -4,7 +4,7 @@ import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
 import * as Animate from '../../type/animate'
-import { NavItemDataEq, type NavItemData } from '../../type/nav-item'
+import { type NavItemData, NavItemDataEq } from '../../type/nav-item'
 
 export type Model = {
   status: Animate.Animate<null>

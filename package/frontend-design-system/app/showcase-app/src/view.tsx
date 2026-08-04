@@ -4,6 +4,8 @@ import { ColumnMemo as DsColumnMemo } from '@rinn7e/realworld-design-system/grid
 import { ColumnsMemo as DsColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
 import { ContainerMemo as DsContainerMemo } from '@rinn7e/realworld-design-system/layout/container/component'
 import { FooterMemo as DsFooterMemo } from '@rinn7e/realworld-design-system/layout/footer/component'
+import { Monitor, Moon, Sun } from 'lucide-react'
+import type React from 'react'
 
 import {
   SHOWCASE_CATEGORIES,
@@ -53,6 +55,24 @@ import { TextareaPage } from './page/textarea/component'
 import { TitlePage } from './page/title/component'
 import type { AppRoute } from './route/type'
 import type { Model, Msg } from './type'
+import type { ColorScheme } from './util/theme-util'
+
+const nextSchemeMap: Record<ColorScheme, ColorScheme> = {
+  light: 'dark',
+  dark: 'auto',
+  auto: 'light',
+}
+
+const colorSchemeIcon = (scheme: ColorScheme) => {
+  switch (scheme) {
+    case 'light':
+      return <Sun size={15} className='text-amber-500' />
+    case 'dark':
+      return <Moon size={15} className='text-sky-400' />
+    case 'auto':
+      return <Monitor size={15} className='text-green-500' />
+  }
+}
 
 export const view = (
   dispatch: (msg: Msg) => void,
@@ -373,7 +393,7 @@ export const view = (
   return (
     <div
       data-component='ShowcaseApp'
-      className='flex min-h-screen flex-col bg-white font-sans text-gray-900'
+      className='flex min-h-screen flex-col bg-white font-sans text-gray-900 dark:bg-slate-950 dark:text-slate-100'
     >
       {/* Top Navbar Header */}
       <DsNavbarMemo
@@ -425,6 +445,22 @@ export const view = (
           mobileNavItems: [],
         }}
         containerClassName='max-w-none w-full xl:w-[70%]'
+        endSlot={
+          <button
+            type='button'
+            onClick={() =>
+              dispatch({
+                _tag: 'SetColorScheme',
+                scheme: nextSchemeMap[model.colorScheme],
+              })
+            }
+            className='ml-2 flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-100 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700'
+            title={`Color Scheme: ${model.colorScheme} (Click to switch)`}
+          >
+            {colorSchemeIcon(model.colorScheme)}
+            <span className='capitalize'>{model.colorScheme}</span>
+          </button>
+        }
         dispatch={(subMsg) => dispatch({ _tag: 'TopNavbarMsg', subMsg })}
       />
 
@@ -437,10 +473,8 @@ export const view = (
               model={model.sidebarModel}
               categories={getSidebarCategories(activeComponent)}
               brandTitle='Showcase'
-              dispatch={(subMsg) =>
-                dispatch({ _tag: 'SidebarMsg', subMsg })
-              }
-              className='rounded-lg border border-gray-200/80 bg-white shadow-sm'
+              dispatch={(subMsg) => dispatch({ _tag: 'SidebarMsg', subMsg })}
+              className='rounded-lg border border-gray-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900'
             />
           </DsColumnMemo>
 
@@ -459,7 +493,7 @@ export const view = (
               dispatch={(subMsg) =>
                 dispatch({ _tag: 'RightSidebarMsg', subMsg })
               }
-              className='rounded-lg border border-gray-200/80 bg-white shadow-sm'
+              className='rounded-lg border border-gray-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900'
             />
           </DsColumnMemo>
         </DsColumnsMemo>

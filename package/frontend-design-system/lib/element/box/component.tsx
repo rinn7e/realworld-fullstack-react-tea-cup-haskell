@@ -16,7 +16,7 @@ export const BoxComponent: React.FC<BoxProps> = ({
       data-test={dataTest}
       data-component='Box'
       className={cn(
-        'rounded-xl border border-gray-200 bg-white p-6 text-gray-800 shadow-xs transition-all hover:shadow-md',
+        'rounded-xl border border-gray-200 bg-white p-6 text-gray-800 shadow-xs transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100',
         className,
       )}
     >

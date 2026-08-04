@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { TextareaPropsEq, type TextareaProps } from './type'
+import { type TextareaProps, TextareaPropsEq } from './type'
 
 export const TextareaComponent: React.FC<TextareaProps> = ({
   value,
@@ -33,7 +33,7 @@ export const TextareaComponent: React.FC<TextareaProps> = ({
       name={name}
       id={id}
       className={cn(
-        'w-full rounded-md border bg-white p-3 text-sm text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500/20',
+        'w-full rounded-md border bg-white p-3 text-sm text-gray-900 transition-colors focus:ring-2 focus:ring-green-500/20 focus:outline-none',
         isError
           ? 'border-red-500 text-red-900 focus:border-red-500'
           : 'border-gray-300 focus:border-green-500',

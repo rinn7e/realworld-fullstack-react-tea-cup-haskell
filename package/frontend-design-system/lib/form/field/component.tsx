@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { FieldPropsEq, type FieldProps } from './type'
+import { type FieldProps, FieldPropsEq } from './type'
 
 export const FieldComponent: React.FC<FieldProps> = ({
   label,

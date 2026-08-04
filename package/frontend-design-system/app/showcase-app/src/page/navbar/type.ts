@@ -5,5 +5,4 @@ export type Model = {
 }
 
 export type Msg =
-  | { _tag: 'ToggleShowCode' }
-  | { _tag: 'NavbarMsg'; subMsg: DsNavbar.Msg }
+  { _tag: 'ToggleShowCode' } | { _tag: 'NavbarMsg'; subMsg: DsNavbar.Msg }

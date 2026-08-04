@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { FooterPropsEq, type FooterProps } from './type'
+import { type FooterProps, FooterPropsEq } from './type'
 
 export const FooterComponent: React.FC<FooterProps> = ({
   children,

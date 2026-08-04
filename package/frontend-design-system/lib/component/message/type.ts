@@ -2,12 +2,7 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import type React from 'react'
 
 export type MessageVariant =
-  | 'default'
-  | 'primary'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | 'danger'
+  'default' | 'primary' | 'info' | 'success' | 'warning' | 'danger'
 
 export type MessageProps = {
   header?: React.ReactNode

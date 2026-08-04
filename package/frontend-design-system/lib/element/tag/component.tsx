@@ -3,7 +3,12 @@ import React from 'react'
 
 import { cn } from '../../theme'
 import { DeleteMemo } from '../delete/component'
-import { type TagColor, type TagProps, type TagVariant, TagPropsEq } from './type'
+import {
+  type TagColor,
+  type TagProps,
+  TagPropsEq,
+  type TagVariant,
+} from './type'
 
 type TagColorStyle = {
   solid: string

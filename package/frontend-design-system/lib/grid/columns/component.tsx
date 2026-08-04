@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { ColumnsPropsEq, type ColumnsProps } from './type'
+import { type ColumnsProps, ColumnsPropsEq } from './type'
 
 export const ColumnsComponent: React.FC<ColumnsProps> = ({
   isMultiline,

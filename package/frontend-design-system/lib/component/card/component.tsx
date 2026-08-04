@@ -19,19 +19,19 @@ export const CardComponent = ({
       data-test={dataTest}
       data-component='Card'
       className={cn(
-        'overflow-hidden rounded-xl border border-gray-200 bg-white text-gray-800 shadow-xs transition-all hover:shadow-md',
+        'overflow-hidden rounded-xl border border-gray-200 bg-white text-gray-800 shadow-xs transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100',
         className,
       )}
     >
       {header && (
-        <div className='border-b border-gray-100 px-5 py-3.5 font-semibold text-gray-900'>
+        <div className='border-b border-gray-100 px-5 py-3.5 font-semibold text-gray-900 dark:border-slate-800 dark:text-slate-100'>
           {header}
         </div>
       )}
       {image && <div className='w-full overflow-hidden'>{image}</div>}
       <div className='p-5'>{children}</div>
       {footer && (
-        <div className='border-t border-gray-100 bg-gray-50/50 px-5 py-3 text-xs text-gray-500'>
+        <div className='border-t border-gray-100 bg-gray-50/50 px-5 py-3 text-xs text-gray-500 dark:border-slate-800 dark:bg-slate-800/40 dark:text-slate-400'>
           {footer}
         </div>
       )}

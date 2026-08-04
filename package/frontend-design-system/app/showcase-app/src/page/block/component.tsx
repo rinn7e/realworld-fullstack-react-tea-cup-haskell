@@ -1,7 +1,7 @@
-import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { BlockMemo as DsBlockMemo } from '@rinn7e/realworld-design-system/element/block/component'
 import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2, Sparkles } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -28,7 +28,11 @@ export const BlockPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='BlockPage' className='w-full space-y-8 text-left'>
-      <DsHeroMemo variant="default" size="small" className="rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full">
+      <DsHeroMemo
+        variant='default'
+        size='small'
+        className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6'
+      >
         <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
           ELEMENTS / BLOCK
         </div>
@@ -36,8 +40,8 @@ export const BlockPage: React.FC<Props> = ({ model, dispatch }) => {
           Block
         </DsTitleMemo>
         <p className='text-base text-gray-600'>
-          Simple layout block element with vertical bottom spacing to
-          separate elements.
+          Simple layout block element with vertical bottom spacing to separate
+          elements.
         </p>
       </DsHeroMemo>
 
@@ -45,7 +49,7 @@ export const BlockPage: React.FC<Props> = ({ model, dispatch }) => {
         <div className='flex w-full items-center justify-between'>
           <DsTitleMemo
             size={5}
-            className='flex items-center gap-2 font-bold uppercase tracking-wider text-gray-600'
+            className='flex items-center gap-2 font-bold tracking-wider text-gray-600 uppercase'
           >
             <Sparkles className='h-4 w-4 text-green-600' />
             <span>Interactive Playground &amp; Code</span>

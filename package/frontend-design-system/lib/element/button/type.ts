@@ -1,8 +1,8 @@
-import type React from 'react'
-import type { ReactNode } from 'react'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
+import type React from 'react'
+import type { ReactNode } from 'react'
 
 export type ButtonColor =
   'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red' | 'gray'
@@ -27,7 +27,9 @@ export type ButtonProps = {
   dataTest?: string
 }
 
-export const ButtonPropsEq: EqClass.Eq<ButtonProps> = EqClass.struct<Required<ButtonProps>>({
+export const ButtonPropsEq: EqClass.Eq<ButtonProps> = EqClass.struct<
+  Required<ButtonProps>
+>({
   color: string.Eq,
   variant: string.Eq,
   size: string.Eq,

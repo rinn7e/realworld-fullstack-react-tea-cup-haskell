@@ -17,6 +17,7 @@ import * as DotLoadingPage from './page/dot-loading/update'
 import * as DropdownPage from './page/dropdown/update'
 import * as FieldPage from './page/field/update'
 import * as FilePage from './page/file/update'
+import * as FloatingSidebarPage from './page/floating-sidebar/update'
 import * as FooterPage from './page/footer/update'
 import * as HeroPage from './page/hero/update'
 import * as HomePage from './page/home/update'
@@ -29,8 +30,6 @@ import * as MenuPage from './page/menu/update'
 import * as MessagePage from './page/message/update'
 import * as ModalPage from './page/modal/update'
 import * as NavbarPage from './page/navbar/update'
-import * as FloatingSidebarPage from './page/floating-sidebar/update'
-import * as SidebarPage from './page/sidebar/update'
 import * as NotFoundPage from './page/not-found/update'
 import * as NotificationPage from './page/notification/update'
 import * as PaginationPage from './page/pagination/update'
@@ -39,6 +38,7 @@ import * as ProgressPage from './page/progress/update'
 import * as RadioPage from './page/radio/update'
 import * as SectionPage from './page/section/update'
 import * as SelectPage from './page/select/update'
+import * as SidebarPage from './page/sidebar/update'
 import * as TablePage from './page/table/update'
 import * as TabsPage from './page/tabs/update'
 import * as TagPage from './page/tag/update'
@@ -47,6 +47,11 @@ import * as TitlePage from './page/title/update'
 import { parseAppRoute, toUrlString } from './route/parser'
 import { type AppRoute, AppRouteEq } from './route/type'
 import type { Model, Msg } from './type'
+import {
+  applyColorScheme,
+  loadColorScheme,
+  saveColorScheme,
+} from './util/theme-util'
 
 export const initPageModel =
   (newRoute: AppRoute) =>
@@ -590,9 +595,7 @@ const changeRouteHandler =
 const sidebarMsgHandler =
   (msg: DsSidebar.Msg) =>
   (model: Model): [Model, Cmd<Msg>] => {
-    const [sidebarModel, sidebarCmd] = DsSidebar.update(msg)(
-      model.sidebarModel,
-    )
+    const [sidebarModel, sidebarCmd] = DsSidebar.update(msg)(model.sidebarModel)
     const updatedModel = { ...model, sidebarModel }
     const subCmd = sidebarCmd.map((subMsg) => ({
       _tag: 'SidebarMsg' as const,
@@ -676,6 +679,8 @@ export const init = (location: Location): [Model, Cmd<Msg>] => {
   const route = parseAppRoute('', location.href)
   const [sidebarModel, sidebarCmd] = DsSidebar.init(false)
   const [rightSidebarModel, rightSidebarCmd] = DsSidebar.init(false)
+  const colorScheme = loadColorScheme()
+  applyColorScheme(colorScheme)
 
   const baseModel: Model = {
     route,
@@ -684,6 +689,7 @@ export const init = (location: Location): [Model, Cmd<Msg>] => {
     searchQuery: '',
     sidebarModel,
     rightSidebarModel,
+    colorScheme,
   }
 
   const [navModel, navCmd] = navigate(route, true)(baseModel)
@@ -704,6 +710,12 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
     case 'NoOp':
       return [model, Cmd.none()]
+
+    case 'SetColorScheme': {
+      saveColorScheme(msg.scheme)
+      applyColorScheme(msg.scheme)
+      return [{ ...model, colorScheme: msg.scheme }, Cmd.none()]
+    }
 
     case 'Init':
       return init(msg.location)
@@ -946,18 +958,23 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       ]
     }
     case 'FloatingSidebarPageMsg': {
-      if (model.pageModel._tag !== 'FloatingSidebarPageModel') return [model, Cmd.none()]
+      if (model.pageModel._tag !== 'FloatingSidebarPageModel')
+        return [model, Cmd.none()]
       const [subModel, cmd] = FloatingSidebarPage.update(
         msg.subMsg,
         model.pageModel.model,
       )
       return [
-        { ...model, pageModel: { _tag: 'FloatingSidebarPageModel', model: subModel } },
+        {
+          ...model,
+          pageModel: { _tag: 'FloatingSidebarPageModel', model: subModel },
+        },
         cmd.map((subMsg) => ({ _tag: 'FloatingSidebarPageMsg', subMsg })),
       ]
     }
     case 'SidebarPageMsg': {
-      if (model.pageModel._tag !== 'SidebarPageModel') return [model, Cmd.none()]
+      if (model.pageModel._tag !== 'SidebarPageModel')
+        return [model, Cmd.none()]
       const [subModel, cmd] = SidebarPage.update(
         msg.subMsg,
         model.pageModel.model,

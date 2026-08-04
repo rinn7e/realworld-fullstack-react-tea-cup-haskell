@@ -37,8 +37,7 @@ export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
 })
 
 export type Msg =
-  | { _tag: 'SelectTab'; id: string }
-  | { _tag: 'SelectItem'; id: string }
+  { _tag: 'SelectTab'; id: string } | { _tag: 'SelectItem'; id: string }
 
 export type PanelProps = {
   heading: React.ReactNode

@@ -1,7 +1,7 @@
-import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { BreadcrumbMemo as DsBreadcrumbMemo } from '@rinn7e/realworld-design-system/component/breadcrumb/component'
 import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2 } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'

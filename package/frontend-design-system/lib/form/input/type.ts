@@ -1,5 +1,5 @@
-import * as boolean from 'fp-ts/boolean'
 import * as EqClass from 'fp-ts/Eq'
+import * as boolean from 'fp-ts/boolean'
 import * as string from 'fp-ts/string'
 import type React from 'react'
 

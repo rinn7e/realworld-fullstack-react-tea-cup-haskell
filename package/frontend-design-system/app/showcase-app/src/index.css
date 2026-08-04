@@ -1,3 +1,6 @@
 @import 'tailwindcss';
 @plugin '@rinn7e/realworld-design-system';
 @source '../node_modules/@rinn7e/realworld-design-system';
+
+/* Class-based dark mode (.dark on <html>) */
+@variant dark (&:where(.dark, .dark *));

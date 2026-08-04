@@ -1,11 +1,11 @@
-import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
-import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { CardMemo as DsCardMemo } from '@rinn7e/realworld-design-system/component/card/component'
+import { BoxMemo as DsBoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
+import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { ContentMemo as DsContentMemo } from '@rinn7e/realworld-design-system/element/content/component'
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import { BoxMemo as DsBoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
 import { ColumnMemo as DsColumnMemo } from '@rinn7e/realworld-design-system/grid/column/component'
 import { ColumnsMemo as DsColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
+import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { ArrowRight, BookOpen, Layers, Layout, Palette } from 'lucide-react'
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
@@ -21,19 +21,26 @@ export const HomePage: React.FC<Props> = () => {
   return (
     <div data-component='HomePage' className='w-full space-y-8 text-left'>
       {/* Hero Banner */}
-      <DsHeroMemo variant="primary" size="medium" className="rounded-xl bg-gradient-to-r from-green-600 to-emerald-700 text-white shadow-lg px-8 py-12 w-full">
+      <DsHeroMemo
+        variant='primary'
+        size='medium'
+        className='w-full rounded-xl bg-gradient-to-r from-green-600 to-emerald-700 px-8 py-12 text-white shadow-lg'
+      >
         <div className='max-w-2xl space-y-4'>
-          <div className='inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm'>
+          <div className='inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-semibold tracking-wider text-white uppercase backdrop-blur-sm'>
             Design System &amp; Component Library
           </div>
-          <DsTitleMemo size={1} className='text-4xl font-extrabold text-white sm:text-5xl'>
+          <DsTitleMemo
+            size={1}
+            className='text-4xl font-extrabold text-white sm:text-5xl'
+          >
             RealWorld Design System
           </DsTitleMemo>
           <p className='text-lg font-medium text-green-100/90'>
             A pure React &amp; Tailwind CSS component design system built for
             the Elm Architecture (TEA) and FP pattern applications.
           </p>
-          <div className='pt-2 flex items-center gap-3'>
+          <div className='flex items-center gap-3 pt-2'>
             <DsButtonMemo
               color='white'
               variant='solid'
@@ -59,9 +66,8 @@ export const HomePage: React.FC<Props> = () => {
                 Elements
               </DsTitleMemo>
               <DsContentMemo size='small' className='text-gray-600'>
-                Atomic building blocks including Buttons, Inputs, Titles,
-                Icons, Notifications, and Tables with strict color and size
-                variants.
+                Atomic building blocks including Buttons, Inputs, Titles, Icons,
+                Notifications, and Tables with strict color and size variants.
               </DsContentMemo>
             </div>
           </DsCardMemo>
@@ -77,8 +83,8 @@ export const HomePage: React.FC<Props> = () => {
                 Components
               </DsTitleMemo>
               <DsContentMemo size='small' className='text-gray-600'>
-                Composite UI components like Cards, Modals, Breadcrumbs,
-                Navbar, Sidebars, and Menus with clear pure state models.
+                Composite UI components like Cards, Modals, Breadcrumbs, Navbar,
+                Sidebars, and Menus with clear pure state models.
               </DsContentMemo>
             </div>
           </DsCardMemo>
@@ -103,7 +109,7 @@ export const HomePage: React.FC<Props> = () => {
       </DsColumnsMemo>
 
       {/* Quick Start Card */}
-      <DsBoxMemo className='p-6 bg-gray-50 border border-gray-200 rounded-lg text-left'>
+      <DsBoxMemo className='rounded-lg border border-gray-200 bg-gray-50 p-6 text-left'>
         <div className='space-y-4'>
           <div className='flex items-center gap-2'>
             <BookOpen className='h-5 w-5 text-green-600' />

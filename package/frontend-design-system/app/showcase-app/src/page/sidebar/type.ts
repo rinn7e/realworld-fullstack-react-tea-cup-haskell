@@ -6,5 +6,4 @@ export type Model = {
 }
 
 export type Msg =
-  | { _tag: 'ToggleShowCode' }
-  | { _tag: 'SidebarMsg'; subMsg: DsSidebar.Msg }
+  { _tag: 'ToggleShowCode' } | { _tag: 'SidebarMsg'; subMsg: DsSidebar.Msg }

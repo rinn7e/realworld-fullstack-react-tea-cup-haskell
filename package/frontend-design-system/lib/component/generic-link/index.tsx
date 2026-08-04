@@ -1,8 +1,9 @@
 import React from 'react'
 import type { Dispatcher } from 'tea-cup-fp'
 
-export interface Props<PMsg>
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface Props<
+  PMsg,
+> extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string
   className?: string
   dispatch?: Dispatcher<PMsg>

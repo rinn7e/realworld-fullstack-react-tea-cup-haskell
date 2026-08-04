@@ -27,9 +27,7 @@ export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
 })
 
 export type Msg =
-  | { _tag: 'Toggle' }
-  | { _tag: 'Close' }
-  | { _tag: 'Select'; id: string }
+  { _tag: 'Toggle' } | { _tag: 'Close' } | { _tag: 'Select'; id: string }
 
 export type DropdownProps = {
   triggerLabel: string

@@ -17,21 +17,20 @@ export const DotLoadingPage: React.FC<Props> = () => {
       <DsHeroMemo
         variant='default'
         size='small'
-        className='rounded-lg bg-gray-50 border border-gray-200 px-6 py-6 w-full'>
-
-          <>
-            <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
-              MISC / DOT LOADING
-            </div>
-            <DsTitleMemo
-              size={2}
-              className='mb-2 font-extrabold text-gray-900'>Dot Loading</DsTitleMemo>
-            <p className='text-base text-gray-600'>
-              Subtle inline text 3-dot loading animation element.
-            </p>
-          </>
-        
-</DsHeroMemo>
+        className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6'
+      >
+        <>
+          <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+            MISC / DOT LOADING
+          </div>
+          <DsTitleMemo size={2} className='mb-2 font-extrabold text-gray-900'>
+            Dot Loading
+          </DsTitleMemo>
+          <p className='text-base text-gray-600'>
+            Subtle inline text 3-dot loading animation element.
+          </p>
+        </>
+      </DsHeroMemo>
 
       <div className='flex w-full flex-col gap-6'>
         {sectionView({

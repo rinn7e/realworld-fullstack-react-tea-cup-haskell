@@ -11,7 +11,6 @@ import React, { memo } from 'react'
 import { ButtonMemo as DsButtonMemo } from '../../element/button/component'
 import type { NavItemData } from '../../type/nav-item'
 import { GenericLink } from '../generic-link'
-
 import type { SidebarCategory, SidebarProps } from './type'
 import { SidebarPropsEq } from './type'
 
@@ -30,8 +29,10 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
 }) => {
   const isCollapsed = model.collapsed
 
-  const activeCls = 'bg-green-50 text-green-600 font-semibold'
-  const inactiveCls = 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+  const activeCls =
+    'bg-green-50 text-green-600 font-semibold dark:bg-green-950/40 dark:text-green-400'
+  const inactiveCls =
+    'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100'
 
   const normalizedCategories: SidebarCategory[] = categories
     ? categories
@@ -66,10 +67,10 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
       data-test={dataTest || 'sidebar'}
       data-component='Sidebar'
       className={cn(
-        'flex flex-col h-full bg-white transition-all duration-300 ease-in-out shrink-0 select-none overflow-hidden',
+        'flex h-full shrink-0 flex-col overflow-hidden bg-white transition-all duration-300 ease-in-out select-none dark:bg-slate-900',
         align === 'right'
-          ? 'border-l border-gray-200'
-          : 'border-r border-gray-200',
+          ? 'border-l border-gray-200 dark:border-slate-800'
+          : 'border-r border-gray-200 dark:border-slate-800',
         isCollapsed ? 'w-[64px]' : 'w-[240px]',
         className,
       )}
@@ -77,14 +78,14 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
       {/* Header / Brand */}
       <div
         className={cn(
-          'flex items-center justify-between h-14 px-3 border-b border-gray-100 shrink-0',
+          'flex h-14 shrink-0 items-center justify-between border-b border-gray-100 px-3 dark:border-slate-800',
           align === 'right' && 'flex-row-reverse',
         )}
       >
         {!isCollapsed ? (
-          <div className='flex items-center gap-2 overflow-hidden truncate'>
+          <div className='flex items-center gap-2 truncate overflow-hidden'>
             {brandLogo}
-            <span className='text-lg font-bold text-green-600 truncate'>
+            <span className='truncate text-lg font-bold text-green-600 dark:text-green-400'>
               {brandTitle}
             </span>
           </div>
@@ -97,7 +98,7 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
           size='small'
           onClick={() => dispatch({ _tag: 'ToggleCollapsed' })}
           className={cn(
-            'p-1 text-gray-500 hover:text-gray-700',
+            'p-1 text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200',
             isCollapsed && 'mx-auto',
           )}
         >
@@ -116,17 +117,19 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
       </div>
 
       {/* Nav List */}
-      <div className='flex-1 overflow-y-auto p-2 space-y-3'>
+      <div className='flex-1 space-y-3 overflow-y-auto p-2'>
         {normalizedCategories.map((cat, idx) => (
           <div key={cat.title || idx} className='space-y-1'>
             {cat.title && (
               <>
                 {!isCollapsed ? (
-                  <div className='px-3 pt-2 pb-1 text-[11px] font-bold text-gray-400 uppercase tracking-wider text-left'>
+                  <div className='px-3 pt-2 pb-1 text-left text-[11px] font-bold tracking-wider text-gray-400 uppercase dark:text-slate-500'>
                     {cat.title}
                   </div>
                 ) : (
-                  idx > 0 && <div className='my-1 border-t border-gray-100' />
+                  idx > 0 && (
+                    <div className='my-1 border-t border-gray-100 dark:border-slate-800' />
+                  )
                 )}
               </>
             )}
@@ -139,17 +142,17 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
 
       {/* User Footer Section */}
       {userProfile && (
-        <div className='border-t border-gray-100 p-3 flex items-center gap-3 overflow-hidden shrink-0'>
-          <div className='flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-600 font-semibold text-xs shrink-0 overflow-hidden'>
+        <div className='flex shrink-0 items-center gap-3 overflow-hidden border-t border-gray-100 p-3 dark:border-slate-800'>
+          <div className='flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs font-semibold text-gray-600 dark:bg-slate-800 dark:text-slate-300'>
             {userProfile.avatar || <UserIcon size={18} />}
           </div>
           {!isCollapsed && (
-            <div className='flex flex-col truncate min-w-0 text-left'>
-              <span className='text-xs font-semibold text-gray-800 truncate'>
+            <div className='flex min-w-0 flex-col truncate text-left'>
+              <span className='truncate text-xs font-semibold text-gray-800 dark:text-slate-200'>
                 {userProfile.name}
               </span>
               {userProfile.subtitle && (
-                <span className='text-[10px] text-gray-500 truncate'>
+                <span className='truncate text-[10px] text-gray-500 dark:text-slate-400'>
                   {userProfile.subtitle}
                 </span>
               )}

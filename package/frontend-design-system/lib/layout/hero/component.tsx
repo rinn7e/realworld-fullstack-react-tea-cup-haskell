@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { HeroPropsEq, type HeroProps } from './type'
+import { type HeroProps, HeroPropsEq } from './type'
 
 const variantStyles: Record<string, string> = {
   default: 'bg-gray-100 text-gray-800',
@@ -47,7 +47,9 @@ export const HeroComponent: React.FC<HeroProps> = ({
       {header && <div className='mb-4'>{header}</div>}
 
       <div className='mx-auto max-w-4xl'>
-        {title && <h1 className='mb-2 text-4xl font-bold tracking-tight'>{title}</h1>}
+        {title && (
+          <h1 className='mb-2 text-4xl font-bold tracking-tight'>{title}</h1>
+        )}
         {subtitle && <p className='text-lg opacity-90'>{subtitle}</p>}
         {children}
       </div>

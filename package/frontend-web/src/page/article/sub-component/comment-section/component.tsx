@@ -66,10 +66,9 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                 ),
               ),
             )}
-            <DsButtonMemo
-              type='submit'
-              color='green'
-              size='xsmall'>Post Comment</DsButtonMemo>
+            <DsButtonMemo type='submit' color='green' size='xsmall'>
+              Post Comment
+            </DsButtonMemo>
           </div>
         </form>
       )}
