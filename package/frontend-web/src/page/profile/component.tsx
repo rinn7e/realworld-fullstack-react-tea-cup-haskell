@@ -46,7 +46,7 @@ const ProfilePageComponent = ({
             <>
               {/* Header Banner */}
               <div
-                className='border-b border-gray-200 bg-gray-50 py-[40px] text-center shadow-inner'
+                className='border-b border-gray-200 bg-gray-50 py-[40px] text-center shadow-inner dark:border-zinc-800 dark:bg-zinc-950'
                 data-test='user-info-section'
               >
                 <div className='mx-auto flex max-w-[1152px] flex-col items-center gap-[12px] px-[16px]'>
@@ -56,16 +56,16 @@ const ProfilePageComponent = ({
                       data.profile.image ? assetPath(data.profile.image) : null
                     }
                     defaultSrc={assetPath('/default-avatar.svg')}
-                    className='h-[96px] w-[96px] rounded-full border-[4px] border-white object-cover shadow-sm'
+                    className='h-[96px] w-[96px] rounded-full border-[4px] border-white object-cover shadow-sm dark:border-zinc-800'
                     dataTest='profile-avatar'
                     alt=''
                   />
                   <div className='flex flex-col gap-[4px]'>
-                    <h4 className='text-2xl font-bold text-gray-900'>
+                    <h4 className='text-2xl font-bold text-gray-900 dark:text-zinc-100'>
                       {data.profile.username}
                     </h4>
                     <p
-                      className='max-w-[600px] text-sm text-gray-500'
+                      className='max-w-[600px] text-sm text-gray-500 dark:text-zinc-400'
                       data-test='user-bio'
                     >
                       {data.profile.bio || ''}
@@ -104,7 +104,7 @@ const ProfilePageComponent = ({
                     {isCurrentUser ? (
                       <Link
                         route={{ page: { _tag: 'SettingsPage' } }}
-                        className='inline-flex items-center gap-[6px] rounded border border-gray-400 px-[12px] py-[6px] text-sm text-gray-600 transition-colors hover:border-gray-600'
+                        className='inline-flex items-center gap-[6px] rounded border border-gray-400 px-[12px] py-[6px] text-sm text-gray-600 transition-colors hover:border-gray-600 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500'
                         data-test='edit-profile-settings'
                       >
                         <Settings size={13} /> Edit Profile Settings
@@ -134,14 +134,14 @@ const ProfilePageComponent = ({
 
               {/* Main Content */}
               <div className='mx-auto flex w-full max-w-[1152px] flex-col gap-[24px] px-[16px] py-[24px]'>
-                <div className='flex border-b border-gray-200'>
+                <div className='flex border-b border-gray-200 dark:border-zinc-800'>
                   <a
                     href='#'
                     className={cn(
                       'border-b-2 px-[16px] py-[8px] text-sm font-medium transition-colors',
                       !model.showFavorites
                         ? 'border-green-600 text-green-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700',
+                        : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200',
                     )}
                     data-test='profile-tab'
                     aria-current={!model.showFavorites ? 'page' : undefined}
@@ -158,7 +158,7 @@ const ProfilePageComponent = ({
                       'border-b-2 px-[16px] py-[8px] text-sm font-medium transition-colors',
                       model.showFavorites
                         ? 'border-green-600 text-green-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700',
+                        : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200',
                     )}
                     data-test='profile-tab'
                     aria-current={model.showFavorites ? 'page' : undefined}

@@ -39,7 +39,7 @@ export const ProgressComponent: React.FC<ProgressProps> = ({
       data-test={dataTest}
       data-component='Progress'
       className={cn(
-        'relative w-full overflow-hidden rounded-full bg-gray-200',
+        'relative w-full overflow-hidden rounded-full bg-gray-200 dark:bg-zinc-800',
         sizeStyles[size],
         className,
       )}

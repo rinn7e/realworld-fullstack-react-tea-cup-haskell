@@ -9,6 +9,7 @@
 - [Mutable Variables (let)](#mutable-variables-let)
 - [Algebraic Data Types (ADTs)](#algebraic-data-types-adts)
 - [Sum-Type Eq Instances](#sum-type-eq-instances)
+- [Side-Effects and IO in TEA Architecture](#side-effects-and-io-in-tea-architecture)
 - [TEA Child Msg Interception](#tea-child-msg-interception)
 - [File Structure and Splitting](#file-structure-and-splitting)
   - [Tea Cup Components](#tea-cup-components)
@@ -166,6 +167,41 @@ export const SystemMessageEq: EqClass.Eq<SystemMessage> = {
     }
   },
 }
+```
+
+---
+
+## Side-Effects and IO in TEA Architecture
+
+All side-effects and IO operations (such as `localStorage` reads/writes, DOM mutations, or HTTP requests) **MUST** be executed inside pure Elm commands (`Cmd`), and **NEVER** imperatively inside update handler functions.
+
+```ts
+// ❌ Direct imperative IO inside update handler
+const changeColorSchemeHandler =
+  (scheme: ColorScheme) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    saveColorScheme(scheme) // ❌ Imperative IO side-effect inside update!
+    applyColorScheme(scheme) // ❌ Imperative DOM mutation inside update!
+    return [{ ...model, colorScheme: scheme }, Cmd.none()]
+  }
+
+// ✅ Pure TEA architecture: IO wrapped inside Cmd via cmdSucceed
+export const setColorSchemeCmd = (
+  scheme: ColorScheme,
+): Cmd<{ readonly _tag: 'NoOp' }> =>
+  cmdSucceed(() => {
+    saveColorScheme(scheme)
+    applyColorScheme(scheme)
+  })
+
+const changeColorSchemeHandler =
+  (scheme: ColorScheme) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    return [
+      { ...model, colorScheme: scheme },
+      setColorSchemeCmd(scheme).map((subMsg): Msg => subMsg),
+    ]
+  }
 ```
 
 ---

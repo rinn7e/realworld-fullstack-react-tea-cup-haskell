@@ -26,7 +26,7 @@ const SignupPageComponent = ({ model, dispatch }: Props) => {
     >
       <div className='flex w-full max-w-[448px] flex-col gap-[24px]'>
         <div className='flex flex-col gap-[8px]'>
-          <h1 className='text-center text-3xl font-bold text-gray-900'>
+          <h1 className='text-center text-3xl font-bold text-gray-900 dark:text-zinc-100'>
             Sign up
           </h1>
           <p className='text-center text-sm'>

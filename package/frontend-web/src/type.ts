@@ -11,6 +11,7 @@ import type * as LoginPage from '@/page/login/type'
 import type * as ProfilePage from '@/page/profile/type'
 import type * as SettingsPage from '@/page/settings/type'
 import type * as SignupPage from '@/page/signup/type'
+import type { ColorScheme } from '@/util/theme-util'
 
 import { type AppRoute } from './common/type/route'
 import { type Shared } from './common/type/shared'
@@ -34,10 +35,12 @@ export type Model = {
   debugPanel: DebugPanel.Model
   sidebar: DsFloatingSidebar.Model
   navbar: DsNavbar.Model
+  colorScheme: ColorScheme
 }
 
 export type Msg =
   | { _tag: 'NoOp' }
+  | { _tag: 'ChangeColorScheme'; scheme: ColorScheme }
   | {
       _tag: 'Init'
       location: Location

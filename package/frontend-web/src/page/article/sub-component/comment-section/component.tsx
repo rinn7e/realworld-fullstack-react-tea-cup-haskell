@@ -25,7 +25,7 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
     <div className='flex w-full max-w-[700px] flex-col gap-[24px]'>
       {isLoggedIn && (
         <form
-          className='flex flex-col overflow-hidden rounded border border-gray-200'
+          className='flex flex-col overflow-hidden rounded border border-gray-200 dark:border-zinc-800'
           data-test='comment-form'
           onSubmit={(e) => {
             e.preventDefault()
@@ -33,7 +33,7 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
           }}
         >
           <textarea
-            className='min-h-[100px] w-full resize-none p-[12px] text-sm text-gray-800 outline-none'
+            className='min-h-[100px] w-full resize-none bg-transparent p-[12px] text-sm text-gray-800 outline-none dark:text-zinc-100'
             data-test='comment-textarea'
             rows={3}
             placeholder='Write a comment...'
@@ -50,7 +50,7 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
             <ErrorMessages error={model.newCommentError} />
           )}
 
-          <div className='flex items-center justify-between border-t border-gray-100 bg-gray-50 px-[12px] py-[8px]'>
+          <div className='flex items-center justify-between border-t border-gray-100 bg-gray-50 px-[12px] py-[8px] dark:border-zinc-800 dark:bg-zinc-900'>
             {pipe(
               user,
               O.fold(
@@ -96,15 +96,15 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
               {commentsData.comments.map((comment) => (
                 <div
                   key={comment.id}
-                  className='overflow-hidden rounded border border-gray-200'
+                  className='overflow-hidden rounded border border-gray-200 dark:border-zinc-800'
                   data-test='comment-card'
                 >
                   <div className='p-[16px]'>
-                    <p className='text-sm whitespace-pre-wrap text-gray-800'>
+                    <p className='text-sm whitespace-pre-wrap text-gray-800 dark:text-zinc-200'>
                       {comment.body}
                     </p>
                   </div>
-                  <div className='card-footer flex items-center gap-[8px] border-t border-gray-100 bg-gray-50 px-[16px] py-[8px] text-xs'>
+                  <div className='card-footer flex items-center gap-[8px] border-t border-gray-100 bg-gray-50 px-[16px] py-[8px] text-xs dark:border-zinc-800 dark:bg-zinc-900'>
                     <Link
                       route={{
                         page: {
@@ -138,7 +138,7 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                     >
                       {comment.author.username}
                     </Link>
-                    <span className='text-gray-400'>
+                    <span className='text-gray-400 dark:text-zinc-500'>
                       {new Date(comment.createdAt).toDateString()}
                     </span>
                     {isLoggedIn &&

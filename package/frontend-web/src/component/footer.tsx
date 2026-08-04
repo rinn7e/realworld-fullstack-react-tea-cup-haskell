@@ -6,7 +6,7 @@ import { Link } from '@/component/link'
 
 export const Footer: React.FC = () => {
   return (
-    <footer className='border-t border-gray-100 bg-gray-50 py-[24px]'>
+    <footer className='border-t border-gray-100 bg-gray-50 py-[24px] dark:border-zinc-800 dark:bg-zinc-950'>
       <div
         className={cn(
           // shared
@@ -22,25 +22,25 @@ export const Footer: React.FC = () => {
           conduit
         </Link>
         <div className='flex flex-col gap-[4px] lg:items-end'>
-          <span className='text-xs text-gray-400'>
+          <span className='text-xs text-gray-400 dark:text-zinc-500'>
             An interactive learning project from{' '}
             <a
               href='https://thinkster.io'
               target='_blank'
               rel='noopener noreferrer'
-              className='underline hover:text-gray-600'
+              className='underline hover:text-gray-600 dark:hover:text-zinc-300'
             >
               Thinkster
             </a>
             . Code &amp; design licensed under MIT.
           </span>
-          <span className='text-xs text-gray-400'>
+          <span className='text-xs text-gray-400 dark:text-zinc-500'>
             Built using{' '}
             <a
               href='https://github.com/vankeisb/react-tea-cup'
               target='_blank'
               rel='noopener noreferrer'
-              className='underline hover:text-gray-600'
+              className='underline hover:text-gray-600 dark:hover:text-zinc-300'
             >
               react-tea-cup
             </a>
@@ -49,18 +49,18 @@ export const Footer: React.FC = () => {
               href='https://github.com/rinn7e'
               target='_blank'
               rel='noopener noreferrer'
-              className='underline hover:text-gray-600'
+              className='underline hover:text-gray-600 dark:hover:text-zinc-300'
             >
               rinn7e
             </a>
           </span>
-          <span className='text-xs text-gray-400'>
+          <span className='text-xs text-gray-400 dark:text-zinc-500'>
             Source code can be found{' '}
             <a
               href='https://github.com/rinn7e/tea-cup-realworld'
               target='_blank'
               rel='noopener noreferrer'
-              className='underline hover:text-gray-600'
+              className='underline hover:text-gray-600 dark:hover:text-zinc-300'
             >
               here
             </a>

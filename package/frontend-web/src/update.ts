@@ -31,6 +31,11 @@ import * as ProfilePage from '@/page/profile/update'
 import * as SettingsPage from '@/page/settings/update'
 import * as SignupPage from '@/page/signup/update'
 import type { Model, Msg } from '@/type'
+import {
+  type ColorScheme,
+  loadColorScheme,
+  setColorSchemeCmd,
+} from '@/util/theme-util'
 
 // Initialization
 // ---------------------------------------------
@@ -66,6 +71,7 @@ export const init = (
   if (!isUnavailable && token._tag === 'None') {
     removeToken()
   }
+  const initialColorScheme = loadColorScheme()
   const model: Model = {
     route,
     unavailableMode: isUnavailable,
@@ -78,8 +84,12 @@ export const init = (
     debugPanel: DebugPanel.init(),
     sidebar: DsFloatingSidebar.init()[0],
     navbar: DsNavbar.init()[0],
+    colorScheme: initialColorScheme,
   }
-  const initCmd = Cmd.batch([trackVisitorCmd(token, route)])
+  const initCmd = Cmd.batch([
+    trackVisitorCmd(token, route),
+    setColorSchemeCmd(initialColorScheme).map((): Msg => ({ _tag: 'NoOp' })),
+  ])
 
   return pipe([model, initCmd], updateAndCmd(navigate(route, true)))
 }
@@ -679,6 +689,8 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [model, Cmd.none()]
       }
     }
+    case 'ChangeColorScheme':
+      return changeColorSchemeHandler(msg.scheme)(model)
     case 'DebugPanelMsg':
       return [
         {
@@ -749,6 +761,12 @@ const navbarMsgHandler = (
               subMsg,
             })),
           ]
+        } else if (item.key === 'theme-light') {
+          return changeColorSchemeHandler('light')(m)
+        } else if (item.key === 'theme-dark') {
+          return changeColorSchemeHandler('dark')(m)
+        } else if (item.key === 'theme-auto') {
+          return changeColorSchemeHandler('auto')(m)
         } else {
           const targetRoute = findNavItemRoute(m, item.key)
           if (targetRoute) {
@@ -760,6 +778,15 @@ const navbarMsgHandler = (
     }),
   )
 }
+
+const changeColorSchemeHandler =
+  (scheme: ColorScheme) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    return [
+      { ...model, colorScheme: scheme },
+      setColorSchemeCmd(scheme).map((subMsg): Msg => subMsg),
+    ]
+  }
 
 // Child Msg interception handler
 

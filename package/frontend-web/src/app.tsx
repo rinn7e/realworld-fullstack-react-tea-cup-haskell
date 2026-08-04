@@ -32,7 +32,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
     <SetGlobalMsgContext value={dispatch}>
       <div
         className={cn(
-          'yo flex min-h-dvh flex-col',
+          'yo flex min-h-dvh flex-col bg-white text-gray-900 transition-colors dark:bg-zinc-950 dark:text-zinc-100',
           isNavOpen && 'h-dvh overflow-hidden',
         )}
       >

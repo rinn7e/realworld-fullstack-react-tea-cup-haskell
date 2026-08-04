@@ -26,7 +26,7 @@ const SettingsPageComponent = ({ model, dispatch }: Props) => {
       data-test='settings-page'
     >
       <div className='flex w-full max-w-[448px] flex-col gap-[24px]'>
-        <h1 className='text-center text-3xl font-bold text-gray-900'>
+        <h1 className='text-center text-3xl font-bold text-gray-900 dark:text-zinc-100'>
           Your Settings
         </h1>
 
@@ -94,7 +94,7 @@ const SettingsPageComponent = ({ model, dispatch }: Props) => {
           </div>
         </form>
 
-        <hr className='border-gray-200' />
+        <hr className='border-gray-200 dark:border-zinc-800' />
 
         <div className='flex flex-col items-start'>
           <DsButtonMemo

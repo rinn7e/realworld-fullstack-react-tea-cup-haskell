@@ -23,7 +23,7 @@ export const standardInputUi =
       : 'border-gray-300 focus:border-green-500 focus:ring-green-500'
     const testId = extra.testId ?? props.key + '-input'
     const inputClass = cn(
-      'w-full rounded border px-[12px] bg-white outline-none focus:ring-1 transition-colors',
+      'w-full rounded border px-[12px] bg-white text-gray-900 outline-none focus:ring-1 transition-colors dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100',
       validationClass,
       sizeClass,
     )
@@ -154,7 +154,7 @@ export const textPillInputUi =
       : 'border-gray-300 focus-within:border-green-500 focus-within:ring-green-500'
 
     const containerClass = cn(
-      'flex flex-wrap items-center gap-[6px] w-full rounded border px-[12px] bg-white outline-none focus-within:ring-1 transition-colors min-h-[46px]',
+      'flex flex-wrap items-center gap-[6px] w-full rounded border px-[12px] bg-white text-gray-900 outline-none focus-within:ring-1 transition-colors min-h-[46px] dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100',
       validationClass,
     )
 
@@ -187,7 +187,7 @@ export const textPillInputUi =
           {props.allValues.map((tag: string, index: number) => (
             <span
               key={`${tag}-${index}`}
-              className='flex items-center gap-[4px] rounded-full bg-gray-200 px-[8px] py-[2px] text-sm text-gray-700'
+              className='flex items-center gap-[4px] rounded-full bg-gray-200 px-[8px] py-[2px] text-sm text-gray-700 dark:bg-zinc-800 dark:text-zinc-200'
               data-test='tag-pill'
             >
               {tag}

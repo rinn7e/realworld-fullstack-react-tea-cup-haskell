@@ -2,6 +2,9 @@
 @plugin '@rinn7e/realworld-design-system/plugin';
 @source '../../node_modules/@rinn7e/realworld-design-system';
 
+/* Class-based dark mode (.dark on <html>) */
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-brand-primary: #5cb85c;
   --color-brand-secondary: #000;
@@ -15,6 +18,6 @@
   }
 
   body {
-    @apply relative text-base text-[#373a3c] antialiased;
+    @apply relative text-base text-[#373a3c] antialiased dark:bg-zinc-950 dark:text-zinc-100;
   }
 }

@@ -191,7 +191,7 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                 <div className='mx-auto flex w-full max-w-[1152px] flex-col gap-[32px] px-[16px] py-[32px]'>
                   <div className='flex flex-col gap-[16px]'>
                     <div
-                      className='prose prose-gray prose-img:rounded-lg max-w-none'
+                      className='prose prose-gray dark:prose-invert prose-img:rounded-lg max-w-none'
                       data-test='article-body'
                     >
                       <ReactMarkdown>{data.article.body ?? ''}</ReactMarkdown>
@@ -215,7 +215,7 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                     </div>
                   </div>
 
-                  <hr className='border-gray-200' />
+                  <hr className='border-gray-200 dark:border-zinc-800' />
 
                   <div className='flex flex-col items-center gap-[32px]'>
                     {articleMeta(false)}

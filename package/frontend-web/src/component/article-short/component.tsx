@@ -20,7 +20,7 @@ export interface Props {
 export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
   return (
     <div
-      className='flex flex-col gap-[12px] border-b border-gray-200 py-[24px]'
+      className='flex flex-col gap-[12px] border-b border-gray-200 py-[24px] dark:border-zinc-800'
       data-test='article-preview'
     >
       <div className='flex items-center justify-between'>
@@ -60,7 +60,7 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
               {model.author.username}
             </Link>
             <span
-              className='date text-xs text-gray-400'
+              className='date text-xs text-gray-400 dark:text-zinc-500'
               data-test='article-date'
             >
               {new Date(model.createdAt).toDateString()}
@@ -87,18 +87,18 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
         data-test='article-link'
       >
         <div className='flex flex-col gap-[4px]'>
-          <DsTitleMemo size={4} className='line-clamp-2'>
+          <DsTitleMemo size={4} className='line-clamp-2 dark:text-zinc-100'>
             {model.title}
           </DsTitleMemo>
           <DsContentMemo
             size='normal'
-            className='line-clamp-3 text-sm text-gray-500'
+            className='line-clamp-3 text-sm text-gray-500 dark:text-zinc-400'
           >
             {model.description}
           </DsContentMemo>
         </div>
         <div className='flex items-center justify-between'>
-          <span className='text-xs text-gray-400'>
+          <span className='text-xs text-gray-400 dark:text-zinc-500'>
             Read more
             <DotLoading className='gap-[0px]' />
           </span>
