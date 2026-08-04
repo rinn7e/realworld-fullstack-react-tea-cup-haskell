@@ -5,6 +5,7 @@ import React, { memo } from 'react'
 import { ButtonMemo as DsButtonMemo } from '../../element/button/component'
 import type { NavItemData } from '../../type/nav-item'
 import { GenericLink } from '../generic-link'
+import { PopoverMemo as DsPopoverMemo } from '../popover/component'
 import type { Msg, NavbarProps } from './type'
 import { NavbarPropsEq } from './type'
 
@@ -20,49 +21,60 @@ export const NavItemView: React.FC<{
   if (item.children && item.children.length > 0) {
     const isOpen = model.openDropdownKey === item.key
 
-    return (
-      <li className='relative'>
-        <DsButtonMemo
-          color='gray'
-          variant='ghost'
-          size='normal'
-          onClick={() => dispatch({ _tag: 'ToggleDropdown', key: item.key })}
-          className={cn(
-            'flex items-center gap-[4px] px-[12px] py-[6px] text-sm',
-            item.isActive ? activeCls : inactiveCls,
-          )}
-        >
-          {item.icon}
-          {item.label}
-          <ChevronDown
-            size={16}
-            className={cn(
-              'transition-transform duration-200',
-              isOpen && 'rotate-180',
-            )}
-          />
-        </DsButtonMemo>
-
-        {isOpen && (
-          <div className='absolute right-0 z-30 mt-[4px] w-[180px] rounded-md border border-gray-100 bg-white p-[4px] shadow-lg dark:border-zinc-800 dark:bg-zinc-900'>
-            {item.children.map((child) => (
-              <GenericLink
-                key={child.key}
-                href={child.href || '#'}
-                className={cn(
-                  'block rounded px-[12px] py-[6px] text-sm transition-colors',
-                  child.isActive
-                    ? 'bg-green-50 font-semibold text-green-600 dark:bg-green-950/50'
-                    : 'text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800',
-                )}
-                dispatch={dispatch}
-                msg={{ _tag: 'ClickNavItem', item: child }}
-              >
-                {child.label}
-              </GenericLink>
-            ))}
-          </div>
+    const trigger = (
+      <DsButtonMemo
+        color='gray'
+        variant='ghost'
+        size='normal'
+        className={cn(
+          'flex items-center gap-[4px] px-[12px] py-[6px] text-sm',
+          item.isActive ? activeCls : inactiveCls,
         )}
+      >
+        {item.icon}
+        {item.label}
+        <ChevronDown
+          size={16}
+          className={cn(
+            'transition-transform duration-200',
+            isOpen && 'rotate-180',
+          )}
+        />
+      </DsButtonMemo>
+    )
+
+    return (
+      <li>
+        <DsPopoverMemo
+          model={{ isOpen }}
+          align='right'
+          dispatch={(pMsg) => {
+            if (pMsg._tag === 'Toggle') {
+              dispatch({ _tag: 'ToggleDropdown', key: item.key })
+            } else if (pMsg._tag === 'Close') {
+              dispatch({ _tag: 'CloseDropdown' })
+            }
+          }}
+          trigger={trigger}
+          cardClassName='w-[180px]'
+        >
+          {item.children.map((child) => (
+            <GenericLink
+              key={child.key}
+              href={child.href || '#'}
+              className={cn(
+                'block rounded px-[12px] py-[6px] text-sm transition-colors',
+                child.isActive
+                  ? 'bg-green-50 font-semibold text-green-600 dark:bg-green-950/50'
+                  : 'text-gray-600 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-800',
+              )}
+              dispatch={dispatch}
+              msg={{ _tag: 'ClickNavItem', item: child }}
+            >
+              {child.label}
+            </GenericLink>
+          ))}
+        </DsPopoverMemo>
       </li>
     )
   }
