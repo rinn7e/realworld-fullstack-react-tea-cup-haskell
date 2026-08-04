@@ -57,20 +57,16 @@ import type { AppRoute } from './route/type'
 import type { Model, Msg } from './type'
 import type { ColorScheme } from './util/theme-util'
 
-const nextSchemeMap: Record<ColorScheme, ColorScheme> = {
-  light: 'dark',
-  dark: 'auto',
-  auto: 'light',
-}
-
-const colorSchemeIcon = (scheme: ColorScheme) => {
+const colorSchemeIcon = (scheme: ColorScheme, size = 15) => {
   switch (scheme) {
     case 'light':
-      return <Sun size={15} className='text-amber-500' />
+      return <Sun size={size} className='text-amber-500' />
     case 'dark':
-      return <Moon size={15} className='text-sky-400' />
+      return (
+        <Moon size={size} className='text-purple-600 dark:text-purple-400' />
+      )
     case 'auto':
-      return <Monitor size={15} className='text-green-500' />
+      return <Monitor size={size} className='text-emerald-500' />
   }
 }
 
@@ -397,6 +393,7 @@ export const view = (
     >
       {/* Top Navbar Header */}
       <DsNavbarMemo
+        model={model.topNavbarModel}
         config={{
           brandNavItem: {
             key: 'brand',
@@ -441,26 +438,41 @@ export const view = (
                   (i) => i.id === activeComponent,
                 ),
             },
+            {
+              key: 'theme',
+              label: '',
+              isActive: false,
+              icon: colorSchemeIcon(model.colorScheme, 20),
+              children: [
+                {
+                  key: 'theme-light',
+                  label: 'Light',
+                  isActive: model.colorScheme === 'light',
+                  icon: <Sun size={20} className='text-amber-500' />,
+                },
+                {
+                  key: 'theme-dark',
+                  label: 'Dark',
+                  isActive: model.colorScheme === 'dark',
+                  icon: (
+                    <Moon
+                      size={20}
+                      className='text-purple-600 dark:text-purple-400'
+                    />
+                  ),
+                },
+                {
+                  key: 'theme-auto',
+                  label: 'System',
+                  isActive: model.colorScheme === 'auto',
+                  icon: <Monitor size={20} className='text-emerald-500' />,
+                },
+              ],
+            },
           ],
           mobileNavItems: [],
         }}
         containerClassName='max-w-none w-full xl:w-[70%]'
-        endSlot={
-          <button
-            type='button'
-            onClick={() =>
-              dispatch({
-                _tag: 'SetColorScheme',
-                scheme: nextSchemeMap[model.colorScheme],
-              })
-            }
-            className='ml-2 flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800'
-            title={`Color Scheme: ${model.colorScheme} (Click to switch)`}
-          >
-            {colorSchemeIcon(model.colorScheme)}
-            <span className='capitalize'>{model.colorScheme}</span>
-          </button>
-        }
         dispatch={(subMsg) => dispatch({ _tag: 'TopNavbarMsg', subMsg })}
       />
 

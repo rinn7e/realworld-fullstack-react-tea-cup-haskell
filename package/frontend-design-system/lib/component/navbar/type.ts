@@ -28,18 +28,26 @@ export const ConfigEq: EqClass.Eq<Config> = {
     ),
 }
 
-export type Model = null
+export type Model = {
+  readonly openDropdownKey: string | null
+}
 
-export const ModelEq: EqClass.Eq<Model> = EqClass.eqStrict
+export const ModelEq: EqClass.Eq<Model> = {
+  equals: (x, y) => x.openDropdownKey === y.openDropdownKey,
+}
 
-export type Msg = { _tag: 'ClickNavItem'; item: NavItemData }
+export type Msg =
+  | { readonly _tag: 'NoOp' }
+  | { readonly _tag: 'ClickNavItem'; readonly item: NavItemData }
+  | { readonly _tag: 'ToggleDropdown'; readonly key: string }
+  | { readonly _tag: 'CloseDropdown' }
 
 export type NavbarProps = {
   config: Config
+  model: Model
   dispatch: (msg: Msg) => void
   className?: string
   containerClassName?: string
-  endSlot?: React.ReactNode
   key?: React.Key
   dataTest?: string
 }
@@ -48,10 +56,10 @@ export const NavbarPropsEq: EqClass.Eq<NavbarProps> = EqClass.struct<
   Required<NavbarProps>
 >({
   config: ConfigEq,
+  model: ModelEq,
   dispatch: EqClass.eqStrict,
   className: string.Eq,
   containerClassName: string.Eq,
-  endSlot: EqClass.eqStrict,
   key: EqClass.eqStrict,
   dataTest: string.Eq,
 }) as unknown as EqClass.Eq<NavbarProps>

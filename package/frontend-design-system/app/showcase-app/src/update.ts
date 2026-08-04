@@ -1,4 +1,4 @@
-import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
+import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
 import { newUrl } from 'react-tea-cup'
 import { Cmd, Task } from 'tea-cup-fp'
@@ -47,11 +47,7 @@ import * as TitlePage from './page/title/update'
 import { parseAppRoute, toUrlString } from './route/parser'
 import { type AppRoute, AppRouteEq } from './route/type'
 import type { Model, Msg } from './type'
-import {
-  applyColorScheme,
-  loadColorScheme,
-  saveColorScheme,
-} from './util/theme-util'
+import { loadColorScheme, setColorSchemeCmd } from './util/theme-util'
 
 export const initPageModel =
   (newRoute: AppRoute) =>
@@ -668,19 +664,45 @@ const getTargetPage = (key: string): AppRoute['page'] => {
 const topNavbarMsgHandler =
   (msg: DsNavbar.Msg) =>
   (model: Model): [Model, Cmd<Msg>] => {
+    const [nextNavbarModel, navbarCmd] = DsNavbar.update(msg)(
+      model.topNavbarModel,
+    )
+    const updatedModel = { ...model, topNavbarModel: nextNavbarModel }
+
     if (msg._tag === 'ClickNavItem') {
+      if (msg.item.key === 'theme-light') {
+        return [
+          { ...updatedModel, colorScheme: 'light' },
+          setColorSchemeCmd('light'),
+        ]
+      }
+      if (msg.item.key === 'theme-dark') {
+        return [
+          { ...updatedModel, colorScheme: 'dark' },
+          setColorSchemeCmd('dark'),
+        ]
+      }
+      if (msg.item.key === 'theme-auto') {
+        return [
+          { ...updatedModel, colorScheme: 'auto' },
+          setColorSchemeCmd('auto'),
+        ]
+      }
       const targetPage = getTargetPage(msg.item.key)
-      return changeRouteHandler({ page: targetPage }, true)(model)
+      return changeRouteHandler({ page: targetPage }, true)(updatedModel)
     }
-    return [model, Cmd.none()]
+    return [
+      updatedModel,
+      navbarCmd.map((subMsg) => ({ _tag: 'TopNavbarMsg' as const, subMsg })),
+    ]
   }
 
 export const init = (location: Location): [Model, Cmd<Msg>] => {
   const route = parseAppRoute('', location.href)
   const [sidebarModel, sidebarCmd] = DsSidebar.init(false)
   const [rightSidebarModel, rightSidebarCmd] = DsSidebar.init(false)
+  const [topNavbarModel, topNavbarCmd] = DsNavbar.init()
   const colorScheme = loadColorScheme()
-  applyColorScheme(colorScheme)
 
   const baseModel: Model = {
     route,
@@ -689,7 +711,9 @@ export const init = (location: Location): [Model, Cmd<Msg>] => {
     searchQuery: '',
     sidebarModel,
     rightSidebarModel,
+    topNavbarModel,
     colorScheme,
+    isThemeMenuOpen: false,
   }
 
   const [navModel, navCmd] = navigate(route, true)(baseModel)
@@ -701,7 +725,12 @@ export const init = (location: Location): [Model, Cmd<Msg>] => {
         _tag: 'RightSidebarMsg' as const,
         subMsg,
       })),
+      topNavbarCmd.map((subMsg) => ({
+        _tag: 'TopNavbarMsg' as const,
+        subMsg,
+      })),
       navCmd,
+      setColorSchemeCmd(colorScheme),
     ]),
   ]
 }
@@ -712,10 +741,17 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       return [model, Cmd.none()]
 
     case 'SetColorScheme': {
-      saveColorScheme(msg.scheme)
-      applyColorScheme(msg.scheme)
-      return [{ ...model, colorScheme: msg.scheme }, Cmd.none()]
+      return [
+        { ...model, colorScheme: msg.scheme, isThemeMenuOpen: false },
+        setColorSchemeCmd(msg.scheme),
+      ]
     }
+
+    case 'ToggleThemeMenu':
+      return [{ ...model, isThemeMenuOpen: !model.isThemeMenuOpen }, Cmd.none()]
+
+    case 'CloseThemeMenu':
+      return [{ ...model, isThemeMenuOpen: false }, Cmd.none()]
 
     case 'Init':
       return init(msg.location)

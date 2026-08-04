@@ -100,7 +100,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
               >
                 <>
                   <thead>
-                    <tr className='border-b border-gray-200 bg-gray-50'>
+                    <tr className='border-b border-gray-200 bg-gray-50 dark:border-zinc-800 dark:bg-zinc-900'>
                       <th className='p-3 text-left font-semibold text-gray-700 dark:text-zinc-300'>
                         Article Title
                       </th>
@@ -118,8 +118,8 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr className='border-b border-gray-100'>
+                  <tbody className='divide-y divide-gray-100 dark:divide-zinc-800'>
+                    <tr className='border-b border-gray-100 dark:border-zinc-800'>
                       <td className='p-3 font-semibold text-gray-900 dark:text-zinc-100'>
                         How to build web applications that scale
                       </td>
@@ -138,7 +138,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         </DsTagMemo>
                       </td>
                     </tr>
-                    <tr className='border-b border-gray-100'>
+                    <tr className='border-b border-gray-100 dark:border-zinc-800'>
                       <td className='p-3 font-semibold text-gray-900 dark:text-zinc-100'>
                         The Elm Architecture in React and Haskell
                       </td>
@@ -157,7 +157,7 @@ export const TablePage: React.FC<Props> = ({ model, dispatch }) => {
                         </DsTagMemo>
                       </td>
                     </tr>
-                    <tr className='border-b border-gray-100'>
+                    <tr className='border-b border-gray-100 dark:border-zinc-800'>
                       <td className='p-3 font-semibold text-gray-900 dark:text-zinc-100'>
                         Functional Programming with fp-ts and io-ts
                       </td>

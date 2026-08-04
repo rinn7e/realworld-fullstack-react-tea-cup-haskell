@@ -1,3 +1,6 @@
+import { cmdSucceed } from '@rinn7e/tea-cup-prelude'
+import type { Cmd } from 'tea-cup-fp'
+
 export type ColorScheme = 'light' | 'dark' | 'auto'
 
 const COLOR_SCHEME_KEY = 'showcase-color-scheme'
@@ -29,3 +32,9 @@ export const applyColorScheme = (scheme: ColorScheme): void => {
     root.classList.remove('dark')
   }
 }
+
+export const setColorSchemeCmd = (scheme: ColorScheme): Cmd<{ _tag: 'NoOp' }> =>
+  cmdSucceed(() => {
+    saveColorScheme(scheme)
+    applyColorScheme(scheme)
+  })

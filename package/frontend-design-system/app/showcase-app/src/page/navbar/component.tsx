@@ -125,6 +125,7 @@ export const NavbarPage: React.FC<Props> = ({ model, dispatch }) => {
             'px-0 pt-0 pb-6 w-full bg-white border-2 border-dotted border-gray-300 dark:bg-zinc-950 dark:border-zinc-800 dark:bg-zinc-950 dark:border-zinc-800 rounded-lg overflow-hidden',
           children: () => (
             <DsNavbarMemo
+              model={model.navbarModel}
               config={navbarConfig}
               dispatch={(subMsg) => dispatch({ _tag: 'NavbarMsg', subMsg })}
             />

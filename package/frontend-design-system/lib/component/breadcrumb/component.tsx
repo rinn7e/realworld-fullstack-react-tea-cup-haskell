@@ -29,15 +29,20 @@ export const BreadcrumbComponent = ({
     >
       <ol
         className={cn(
-          'flex items-center gap-1 text-sm text-gray-500',
+          'flex items-center gap-1 text-sm text-gray-500 dark:text-zinc-400',
           alignStyles[align],
         )}
       >
         {items.map((item, idx) => (
           <li key={idx} className='inline-flex items-center gap-1'>
-            {idx > 0 && <ChevronRight className='h-4 w-4 text-gray-400' />}
+            {idx > 0 && (
+              <ChevronRight className='h-4 w-4 text-gray-400 dark:text-zinc-600' />
+            )}
             {item.isActive ? (
-              <span className='font-semibold text-gray-900' aria-current='page'>
+              <span
+                className='font-semibold text-gray-900 dark:text-zinc-100'
+                aria-current='page'
+              >
                 {item.label}
               </span>
             ) : (
@@ -49,7 +54,7 @@ export const BreadcrumbComponent = ({
                     onSelect(item)
                   }
                 }}
-                className='cursor-pointer transition-colors hover:text-emerald-600 hover:underline'
+                className='cursor-pointer transition-colors hover:text-emerald-600 hover:underline dark:hover:text-emerald-400'
               >
                 {item.label}
               </a>

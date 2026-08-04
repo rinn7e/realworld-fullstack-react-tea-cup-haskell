@@ -4,7 +4,7 @@ import type { Dispatcher } from 'tea-cup-fp'
 export interface Props<
   PMsg,
 > extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  href: string
+  href?: string
   className?: string
   dispatch?: Dispatcher<PMsg>
   msg?: PMsg
@@ -23,6 +23,23 @@ export const GenericLink = <PMsg,>({
   children,
   ...rest
 }: Props<PMsg>) => {
+  if (href === undefined) {
+    return (
+      <button
+        type='button'
+        {...(rest as unknown as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+        className={className}
+        onClick={() => {
+          if (msg !== undefined && dispatch) {
+            dispatch(msg)
+          }
+        }}
+      >
+        {children}
+      </button>
+    )
+  }
+
   return (
     <a
       {...rest}

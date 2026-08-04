@@ -119,7 +119,9 @@ export type Model = {
   readonly searchQuery: string
   readonly sidebarModel: DsSidebar.Model
   readonly rightSidebarModel: DsSidebar.Model
+  readonly topNavbarModel: DsNavbar.Model
   readonly colorScheme: ColorScheme
+  readonly isThemeMenuOpen: boolean
 }
 
 export type Msg =
@@ -129,6 +131,8 @@ export type Msg =
   | { readonly _tag: 'ChangeRoute'; readonly route: AppRoute }
   | { readonly _tag: 'UpdateSearch'; readonly query: string }
   | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
+  | { readonly _tag: 'ToggleThemeMenu' }
+  | { readonly _tag: 'CloseThemeMenu' }
   | { readonly _tag: 'SidebarMsg'; readonly subMsg: DsSidebar.Msg }
   | { readonly _tag: 'RightSidebarMsg'; readonly subMsg: DsSidebar.Msg }
   | { readonly _tag: 'TopNavbarMsg'; readonly subMsg: DsNavbar.Msg }

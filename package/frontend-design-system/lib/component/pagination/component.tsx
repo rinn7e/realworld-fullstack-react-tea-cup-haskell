@@ -31,7 +31,7 @@ export const PaginationComponent = ({
         onClick={() =>
           dispatch({ _tag: 'SetPage', page: model.currentPage - 1 })
         }
-        className='inline-flex cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white p-2 text-gray-700 shadow-2xs hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40'
+        className='inline-flex cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white p-2 text-gray-700 shadow-2xs hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900'
       >
         <ChevronLeft className='h-4 w-4' />
       </button>
@@ -44,8 +44,8 @@ export const PaginationComponent = ({
           className={cn(
             'inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-md font-semibold transition-colors',
             p === model.currentPage
-              ? 'bg-emerald-600 text-white shadow-2xs'
-              : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
+              ? 'bg-emerald-600 text-white shadow-2xs dark:bg-emerald-600'
+              : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900',
           )}
         >
           {p}
@@ -58,7 +58,7 @@ export const PaginationComponent = ({
         onClick={() =>
           dispatch({ _tag: 'SetPage', page: model.currentPage + 1 })
         }
-        className='inline-flex cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white p-2 text-gray-700 shadow-2xs hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40'
+        className='inline-flex cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white p-2 text-gray-700 shadow-2xs hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900'
       >
         <ChevronRight className='h-4 w-4' />
       </button>

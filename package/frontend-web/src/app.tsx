@@ -37,6 +37,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
         )}
       >
         <DsNavbarMemo
+          model={model.navbar}
           config={navbarConfig}
           dispatch={(subMsg) => dispatch({ _tag: 'NavbarMsg', subMsg })}
         />
