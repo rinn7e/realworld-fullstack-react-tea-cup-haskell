@@ -24,7 +24,7 @@ export const ContentComponent: React.FC<ContentProps> = ({
       data-test={dataTest}
       data-component='Content'
       className={cn(
-        'prose max-w-none space-y-4 text-gray-700 dark:text-slate-300',
+        'prose dark:prose-invert max-w-none space-y-4 text-gray-700 dark:text-zinc-200',
         sizeStyles[size],
         className,
       )}

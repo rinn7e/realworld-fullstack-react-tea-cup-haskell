@@ -4,7 +4,8 @@ import { cn } from '../../theme'
 import { type HeroProps, HeroPropsEq } from './type'
 
 const variantStyles: Record<string, string> = {
-  default: 'bg-gray-100 text-gray-800',
+  default:
+    'bg-gray-100 text-gray-800 dark:bg-zinc-950 dark:text-zinc-100 dark:border dark:border-zinc-800',
   primary: 'bg-green-600 text-white',
   link: 'bg-sky-500 text-white',
   info: 'bg-blue-500 text-white',

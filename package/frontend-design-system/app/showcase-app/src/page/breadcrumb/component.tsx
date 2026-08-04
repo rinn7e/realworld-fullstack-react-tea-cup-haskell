@@ -28,10 +28,13 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
       <DsHeroMemo variant='default' size='small'>
         <div className='flex items-center justify-between'>
           <div>
-            <DsTitleMemo size={2} className='font-bold text-gray-900'>
+            <DsTitleMemo
+              size={2}
+              className='font-bold text-gray-900 dark:text-zinc-100'
+            >
               Breadcrumb Component
             </DsTitleMemo>
-            <p className='mt-1 text-sm text-gray-500'>
+            <p className='mt-1 text-sm text-gray-500 dark:text-zinc-400'>
               Breadcrumb navigation bar component.
             </p>
           </div>
@@ -67,7 +70,9 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
           <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
             <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
-              <span className='text-gray-500'>Breadcrumb Component Code</span>
+              <span className='text-gray-500 dark:text-zinc-400'>
+                Breadcrumb Component Code
+              </span>
             </div>
             <pre className='font-mono text-xs leading-relaxed whitespace-pre-wrap text-gray-300'>
               <code>{code}</code>

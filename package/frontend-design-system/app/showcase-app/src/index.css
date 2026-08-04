@@ -4,3 +4,7 @@
 
 /* Class-based dark mode (.dark on <html>) */
 @variant dark (&:where(.dark, .dark *));
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased dark:bg-black dark:text-zinc-100;
+}

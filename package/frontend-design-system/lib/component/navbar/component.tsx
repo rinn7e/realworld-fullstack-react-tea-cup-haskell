@@ -59,7 +59,7 @@ export const NavbarComponent: React.FC<NavbarProps> = ({
       data-test={dataTest}
       data-component='Navbar'
       className={cn(
-        'sticky top-0 z-20 border-b border-gray-100 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900',
+        'sticky top-0 z-20 border-b border-gray-100 bg-white shadow-sm dark:border-zinc-800 dark:bg-black',
         className,
       )}
     >

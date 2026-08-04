@@ -17,16 +17,19 @@ export const DotLoadingPage: React.FC<Props> = () => {
       <DsHeroMemo
         variant='default'
         size='small'
-        className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6'
+        className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
         <>
           <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
             MISC / DOT LOADING
           </div>
-          <DsTitleMemo size={2} className='mb-2 font-extrabold text-gray-900'>
+          <DsTitleMemo
+            size={2}
+            className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+          >
             Dot Loading
           </DsTitleMemo>
-          <p className='text-base text-gray-600'>
+          <p className='text-base text-gray-600 dark:text-zinc-400'>
             Subtle inline text 3-dot loading animation element.
           </p>
         </>
@@ -37,7 +40,7 @@ export const DotLoadingPage: React.FC<Props> = () => {
           title: '3-Dot Inline Loading Animation',
           children: () => (
             <div className='flex flex-col gap-4'>
-              <div className='flex items-center gap-2 text-lg text-gray-700'>
+              <div className='flex items-center gap-2 text-lg text-gray-700 dark:text-zinc-300'>
                 Loading content <DsDotLoadingMemo />
               </div>
               <div className='flex items-center gap-2 text-sm font-medium text-green-600'>

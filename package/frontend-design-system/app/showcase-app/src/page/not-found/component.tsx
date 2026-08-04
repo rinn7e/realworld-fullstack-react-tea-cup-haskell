@@ -17,10 +17,13 @@ export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
           <DsTitleMemo size={1} className='font-extrabold text-green-600'>
             404
           </DsTitleMemo>
-          <DsTitleMemo size={4} className='font-bold text-gray-800'>
+          <DsTitleMemo
+            size={4}
+            className='font-bold text-gray-800 dark:text-zinc-200'
+          >
             Page Not Found
           </DsTitleMemo>
-          <p className='text-sm text-gray-600'>
+          <p className='text-sm text-gray-600 dark:text-zinc-400'>
             The component page you are looking for does not exist in our design
             system catalog.
           </p>

@@ -393,7 +393,7 @@ export const view = (
   return (
     <div
       data-component='ShowcaseApp'
-      className='flex min-h-screen flex-col bg-white font-sans text-gray-900 dark:bg-slate-950 dark:text-slate-100'
+      className='flex min-h-screen flex-col bg-white font-sans text-gray-900 dark:bg-black dark:text-zinc-100'
     >
       {/* Top Navbar Header */}
       <DsNavbarMemo
@@ -454,7 +454,7 @@ export const view = (
                 scheme: nextSchemeMap[model.colorScheme],
               })
             }
-            className='ml-2 flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-100 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700'
+            className='ml-2 flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800'
             title={`Color Scheme: ${model.colorScheme} (Click to switch)`}
           >
             {colorSchemeIcon(model.colorScheme)}
@@ -474,7 +474,7 @@ export const view = (
               categories={getSidebarCategories(activeComponent)}
               brandTitle='Showcase'
               dispatch={(subMsg) => dispatch({ _tag: 'SidebarMsg', subMsg })}
-              className='rounded-lg border border-gray-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900'
+              className='rounded-lg border border-gray-200/80 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950'
             />
           </DsColumnMemo>
 
@@ -493,7 +493,7 @@ export const view = (
               dispatch={(subMsg) =>
                 dispatch({ _tag: 'RightSidebarMsg', subMsg })
               }
-              className='rounded-lg border border-gray-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900'
+              className='rounded-lg border border-gray-200/80 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950'
             />
           </DsColumnMemo>
         </DsColumnsMemo>

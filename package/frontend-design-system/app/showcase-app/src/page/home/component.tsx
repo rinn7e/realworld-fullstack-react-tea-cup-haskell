@@ -62,10 +62,16 @@ export const HomePage: React.FC<Props> = () => {
               <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 text-green-600'>
                 <Layers className='h-6 w-6' />
               </div>
-              <DsTitleMemo size={4} className='font-bold text-gray-900'>
+              <DsTitleMemo
+                size={4}
+                className='font-bold text-gray-900 dark:text-zinc-100'
+              >
                 Elements
               </DsTitleMemo>
-              <DsContentMemo size='small' className='text-gray-600'>
+              <DsContentMemo
+                size='small'
+                className='text-gray-600 dark:text-zinc-400'
+              >
                 Atomic building blocks including Buttons, Inputs, Titles, Icons,
                 Notifications, and Tables with strict color and size variants.
               </DsContentMemo>
@@ -79,10 +85,16 @@ export const HomePage: React.FC<Props> = () => {
               <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 text-blue-600'>
                 <Layout className='h-6 w-6' />
               </div>
-              <DsTitleMemo size={4} className='font-bold text-gray-900'>
+              <DsTitleMemo
+                size={4}
+                className='font-bold text-gray-900 dark:text-zinc-100'
+              >
                 Components
               </DsTitleMemo>
-              <DsContentMemo size='small' className='text-gray-600'>
+              <DsContentMemo
+                size='small'
+                className='text-gray-600 dark:text-zinc-400'
+              >
                 Composite UI components like Cards, Modals, Breadcrumbs, Navbar,
                 Sidebars, and Menus with clear pure state models.
               </DsContentMemo>
@@ -96,10 +108,16 @@ export const HomePage: React.FC<Props> = () => {
               <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 text-purple-600'>
                 <Palette className='h-6 w-6' />
               </div>
-              <DsTitleMemo size={4} className='font-bold text-gray-900'>
+              <DsTitleMemo
+                size={4}
+                className='font-bold text-gray-900 dark:text-zinc-100'
+              >
                 Form &amp; Layout
               </DsTitleMemo>
-              <DsContentMemo size='small' className='text-gray-600'>
+              <DsContentMemo
+                size='small'
+                className='text-gray-600 dark:text-zinc-400'
+              >
                 Responsive layout containers, flex grid columns, level
                 containers, and form field inputs.
               </DsContentMemo>
@@ -109,16 +127,19 @@ export const HomePage: React.FC<Props> = () => {
       </DsColumnsMemo>
 
       {/* Quick Start Card */}
-      <DsBoxMemo className='rounded-lg border border-gray-200 bg-gray-50 p-6 text-left'>
+      <DsBoxMemo className='rounded-lg border border-gray-200 bg-gray-50 p-6 text-left dark:border-zinc-800 dark:bg-zinc-950'>
         <div className='space-y-4'>
           <div className='flex items-center gap-2'>
             <BookOpen className='h-5 w-5 text-green-600' />
-            <DsTitleMemo size={4} className='font-bold text-gray-900'>
+            <DsTitleMemo
+              size={4}
+              className='font-bold text-gray-900 dark:text-zinc-100'
+            >
               Quick Start
             </DsTitleMemo>
           </div>
           <DsContentMemo>
-            <div className='space-y-3 text-sm text-gray-700'>
+            <div className='space-y-3 text-sm text-gray-700 dark:text-zinc-300'>
               <p>Install the package into your project workspace:</p>
               <pre className='rounded-md bg-gray-900 p-3 font-mono text-xs text-green-400'>
                 pnpm add @rinn7e/realworld-design-system

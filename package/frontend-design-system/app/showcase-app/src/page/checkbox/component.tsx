@@ -28,16 +28,19 @@ export const CheckboxPage: React.FC<Props> = ({ model, dispatch }) => {
       <DsHeroMemo
         variant='default'
         size='small'
-        className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6'
+        className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
         <>
           <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
             FORM / CHECKBOX
           </div>
-          <DsTitleMemo size={2} className='mb-2 font-extrabold text-gray-900'>
+          <DsTitleMemo
+            size={2}
+            className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+          >
             Checkbox
           </DsTitleMemo>
-          <p className='text-base text-gray-600'>
+          <p className='text-base text-gray-600 dark:text-zinc-400'>
             Custom styled checkbox input control supporting interactive state,
             labels, and disabled states.
           </p>
@@ -48,7 +51,7 @@ export const CheckboxPage: React.FC<Props> = ({ model, dispatch }) => {
         <div className='flex w-full items-center justify-between'>
           <DsTitleMemo
             size={5}
-            className='flex items-center gap-2 font-bold tracking-wider text-gray-600 uppercase'
+            className='flex items-center gap-2 font-bold tracking-wider text-gray-600 uppercase dark:text-zinc-400'
           >
             <>
               <Sparkles className='h-4 w-4 text-green-600' />
@@ -77,9 +80,9 @@ export const CheckboxPage: React.FC<Props> = ({ model, dispatch }) => {
                 checked={model.checked}
                 onChange={() => dispatch({ _tag: 'ToggleChecked' })}
               />
-              <p className='text-xs text-gray-500'>
+              <p className='text-xs text-gray-500 dark:text-zinc-400'>
                 Current State:{' '}
-                <span className='font-mono font-bold text-gray-800'>
+                <span className='font-mono font-bold text-gray-800 dark:text-zinc-200'>
                   {model.checked ? 'Checked' : 'Unchecked'}
                 </span>
               </p>
@@ -110,7 +113,9 @@ export const CheckboxPage: React.FC<Props> = ({ model, dispatch }) => {
           <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
             <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
-              <span className='text-gray-500'>Checkbox Component Code</span>
+              <span className='text-gray-500 dark:text-zinc-400'>
+                Checkbox Component Code
+              </span>
             </div>
             <pre className='font-mono text-xs leading-relaxed whitespace-pre-wrap text-gray-300'>
               <code>{code}</code>
