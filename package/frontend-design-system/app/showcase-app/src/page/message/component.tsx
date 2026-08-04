@@ -13,24 +13,21 @@ interface Props {
   model: Model
   dispatch: Dispatcher<Msg>
 }
+
 export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `// With Header & Body
-{Message.view({ variant: 'default', header: 'Note', children: 'Standard message text content.' })}
-{Message.view({ variant: 'primary', header: 'Primary Note', children: 'Primary callout message body.' })}
-{Message.view({ variant: 'info', header: 'System Update', children: 'System maintenance scheduled.' })}
-{Message.view({ variant: 'success', header: 'Success', children: 'Account setup complete.' })}
-{Message.view({ variant: 'warning', header: 'Warning', children: 'Please verify your email.' })}
-{Message.view({ variant: 'danger', header: 'Error', children: 'Failed to process transaction.' })}
+  const code = `// Color Variants (white, green, dark-green, sky, amber, red, gray)
+<DsMessageMemo color='white' header='White Message'>White message container content.</DsMessageMemo>
+<DsMessageMemo color='green' header='Green Message'>Green message container content.</DsMessageMemo>
+<DsMessageMemo color='dark-green' header='Dark Green Message'>Dark green message container content.</DsMessageMemo>
+<DsMessageMemo color='sky' header='Sky Message'>Sky message container content.</DsMessageMemo>
+<DsMessageMemo color='amber' header='Amber Message'>Amber message container content.</DsMessageMemo>
+<DsMessageMemo color='red' header='Red Message'>Red message container content.</DsMessageMemo>
+<DsMessageMemo color='gray' header='Gray Message'>Gray message container content.</DsMessageMemo>`
 
-// Body Only (No Header)
-{Message.view({ variant: 'info', children: 'Standalone callout message body without a header.' })}
-
-// Dismissible Message Callout
-{Message.view({ variant: 'primary', header: 'Dismissible', onDelete: () => {}, children: 'Click X to dismiss.' })}`
   return (
     <div data-component='MessagePage' className='w-full space-y-8 text-left'>
       <DsHeroMemo
-        variant='default'
+        color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
@@ -45,8 +42,8 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
             Message
           </DsTitleMemo>
           <p className='text-base text-gray-600 dark:text-zinc-400'>
-            Callout message boxes with optional headers, color themes, and
-            dismiss buttons.
+            Structured message container with colored headers, body text, and
+            optional dismiss actions.
           </p>
         </>
       </DsHeroMemo>
@@ -74,47 +71,47 @@ export const MessagePage: React.FC<Props> = ({ model, dispatch }) => {
           </DsButtonMemo>
         </div>
 
-        {/* Section 1: Color Variants with Headers */}
+        {/* Section 1: Color Variants */}
         {sectionView({
-          title: 'Color Variants (Header & Body)',
+          title: 'Color Variants',
           children: () => (
-            <div className='w-full space-y-4'>
-              <DsMessageMemo variant='default' header='Note'>
-                Default callout message body detailing general instructions.
+            <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-2'>
+              <DsMessageMemo color='white' header='White Message'>
+                White message header and body block.
               </DsMessageMemo>
-              <DsMessageMemo variant='primary' header='Primary Note'>
-                Primary callout message highlighting important features.
+              <DsMessageMemo color='green' header='Green Message'>
+                Green message header and body block.
               </DsMessageMemo>
-              <DsMessageMemo variant='info' header='System Information'>
-                Maintenance is scheduled for tonight at 02:00 UTC.
+              <DsMessageMemo color='dark-green' header='Dark Green Message'>
+                Dark green message header and body block.
               </DsMessageMemo>
-              <DsMessageMemo variant='success' header='Success'>
-                Your account was upgraded to Pro successfully!
+              <DsMessageMemo color='sky' header='Sky Message'>
+                Sky message header and body block.
               </DsMessageMemo>
-              <DsMessageMemo variant='warning' header='Warning'>
-                Your subscription expires in 3 days. Please renew.
+              <DsMessageMemo color='amber' header='Amber Message'>
+                Amber message header and body block.
               </DsMessageMemo>
-              <DsMessageMemo variant='danger' header='Connection Error'>
-                Unable to reach backend servers. Please try again later.
+              <DsMessageMemo color='red' header='Red Message'>
+                Red message header and body block.
+              </DsMessageMemo>
+              <DsMessageMemo color='gray' header='Gray Message'>
+                Gray message header and body block.
               </DsMessageMemo>
             </div>
           ),
         })}
 
-        {/* Section 2: Body Only & Dismissible Messages */}
+        {/* Section 2: Dismissible Message */}
         {sectionView({
-          title: 'Body Only & Dismissible Messages',
+          title: 'Dismissible Message',
           children: () => (
-            <div className='w-full space-y-4'>
-              <DsMessageMemo variant='info'>
-                Standalone callout message body without a header container.
-              </DsMessageMemo>
+            <div className='w-full'>
               <DsMessageMemo
-                variant='primary'
-                header='Dismissible Notice'
-                onDelete={() => alert('Message closed!')}
+                color='green'
+                header='System Maintenance Notice'
+                onDelete={() => alert('Message dismissed!')}
               >
-                Click the X button on the top right to close this message box.
+                Scheduled maintenance will take place tonight at 02:00 UTC.
               </DsMessageMemo>
             </div>
           ),

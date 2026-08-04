@@ -20,13 +20,16 @@ type TagColorStyle = {
 }
 
 const colorStyles: Record<TagColor, TagColorStyle> = {
-  gray: {
-    solid: 'bg-gray-400 text-white',
-    solidHover: 'hover:bg-gray-500',
-    light: 'bg-gray-200 text-gray-700',
-    lightHover: 'hover:bg-gray-300 hover:text-gray-800',
-    outline: 'border border-gray-300 bg-transparent text-gray-400',
-    outlineHover: 'hover:border-gray-400 hover:text-gray-600',
+  white: {
+    solid:
+      'bg-white text-gray-800 border border-gray-200 dark:bg-zinc-900 dark:text-zinc-100 dark:border-zinc-800',
+    solidHover: 'hover:bg-gray-100 dark:hover:bg-zinc-800',
+    light:
+      'bg-white/80 text-gray-700 border border-gray-100 dark:bg-zinc-900/80 dark:text-zinc-300 dark:border-zinc-800',
+    lightHover: 'hover:bg-gray-100 hover:text-gray-900',
+    outline:
+      'border border-gray-300 bg-transparent text-gray-700 dark:border-zinc-700 dark:text-zinc-200',
+    outlineHover: 'hover:border-gray-500 hover:text-gray-900',
   },
   green: {
     solid: 'bg-green-600 text-white',
@@ -37,12 +40,12 @@ const colorStyles: Record<TagColor, TagColorStyle> = {
     outlineHover: 'hover:border-green-700 hover:text-green-700',
   },
   'dark-green': {
-    solid: 'bg-green-700 text-white',
-    solidHover: 'hover:bg-green-800',
+    solid: 'bg-green-800 text-white',
+    solidHover: 'hover:bg-green-900',
     light: 'bg-green-50 text-green-800',
     lightHover: 'hover:bg-green-100 hover:text-green-900',
-    outline: 'border border-green-700 bg-transparent text-green-700',
-    outlineHover: 'hover:border-green-800 hover:text-green-800',
+    outline: 'border border-green-800 bg-transparent text-green-800',
+    outlineHover: 'hover:border-green-900 hover:text-green-900',
   },
   sky: {
     solid: 'bg-sky-500 text-white',
@@ -53,12 +56,12 @@ const colorStyles: Record<TagColor, TagColorStyle> = {
     outlineHover: 'hover:border-sky-600 hover:text-sky-700',
   },
   amber: {
-    solid: 'bg-amber-400 text-gray-900',
-    solidHover: 'hover:bg-amber-500',
+    solid: 'bg-amber-500 text-white',
+    solidHover: 'hover:bg-amber-600',
     light: 'bg-amber-50 text-amber-800',
     lightHover: 'hover:bg-amber-100 hover:text-amber-900',
-    outline: 'border border-amber-400 bg-transparent text-amber-700',
-    outlineHover: 'hover:border-amber-500 hover:text-amber-800',
+    outline: 'border border-amber-500 bg-transparent text-amber-700',
+    outlineHover: 'hover:border-amber-600 hover:text-amber-800',
   },
   red: {
     solid: 'bg-red-600 text-white',
@@ -67,6 +70,14 @@ const colorStyles: Record<TagColor, TagColorStyle> = {
     lightHover: 'hover:bg-red-100 hover:text-red-800',
     outline: 'border border-red-600 bg-transparent text-red-600',
     outlineHover: 'hover:border-red-700 hover:text-red-700',
+  },
+  gray: {
+    solid: 'bg-gray-200 text-gray-700',
+    solidHover: 'hover:bg-gray-300',
+    light: 'bg-gray-100 text-gray-600',
+    lightHover: 'hover:bg-gray-200 hover:text-gray-800',
+    outline: 'border border-gray-400 bg-transparent text-gray-600',
+    outlineHover: 'hover:border-gray-600 hover:text-gray-800',
   },
 }
 

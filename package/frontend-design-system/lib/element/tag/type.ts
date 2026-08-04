@@ -3,7 +3,8 @@ import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
 import React from 'react'
 
-export type TagColor = 'gray' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red'
+export type TagColor =
+  'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red' | 'gray'
 
 export type TagVariant = 'solid' | 'light' | 'outline'
 

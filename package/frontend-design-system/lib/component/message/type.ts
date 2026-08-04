@@ -1,13 +1,13 @@
 import * as EqClass from 'fp-ts/lib/Eq'
 import type React from 'react'
 
-export type MessageVariant =
-  'default' | 'primary' | 'info' | 'success' | 'warning' | 'danger'
+export type MessageColor =
+  'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red' | 'gray'
 
 export type MessageProps = {
   header?: React.ReactNode
   children?: React.ReactNode
-  variant?: MessageVariant
+  color?: MessageColor
   onDelete?: () => void
   className?: string
   key?: React.Key
@@ -19,7 +19,7 @@ export const MessagePropsEq: EqClass.Eq<MessageProps> = EqClass.struct<
 >({
   header: EqClass.eqStrict,
   children: EqClass.eqStrict,
-  variant: EqClass.eqStrict,
+  color: EqClass.eqStrict,
   onDelete: EqClass.eqStrict,
   className: EqClass.eqStrict,
   key: EqClass.eqStrict,

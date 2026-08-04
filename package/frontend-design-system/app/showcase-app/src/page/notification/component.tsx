@@ -15,17 +15,17 @@ interface Props {
 }
 
 export const NotificationPage: React.FC<Props> = ({ model, dispatch }) => {
-  const code = `// Standard Notifications
-<DsNotificationMemo variant='default'>Default notification banner alert.</DsNotificationMemo>
-<DsNotificationMemo variant='primary'>Primary notification banner alert.</DsNotificationMemo>
-<DsNotificationMemo variant='link'>Link notification banner alert.</DsNotificationMemo>
-<DsNotificationMemo variant='info'>Info notification banner alert.</DsNotificationMemo>
-<DsNotificationMemo variant='success'>Success! Your settings were saved successfully.</DsNotificationMemo>
-<DsNotificationMemo variant='warning'>Warning! Please review your form inputs.</DsNotificationMemo>
-<DsNotificationMemo variant='danger'>Danger! An error occurred while processing.</DsNotificationMemo>
+  const code = `// Standard Notifications (white, green, dark-green, sky, amber, red, gray)
+<DsNotificationMemo color='white'>White notification banner alert.</DsNotificationMemo>
+<DsNotificationMemo color='green'>Green notification banner alert.</DsNotificationMemo>
+<DsNotificationMemo color='dark-green'>Dark green notification banner alert.</DsNotificationMemo>
+<DsNotificationMemo color='sky'>Sky notification banner alert.</DsNotificationMemo>
+<DsNotificationMemo color='amber'>Amber notification banner alert.</DsNotificationMemo>
+<DsNotificationMemo color='red'>Red notification banner alert.</DsNotificationMemo>
+<DsNotificationMemo color='gray'>Gray notification banner alert.</DsNotificationMemo>
 
 // Dismissible Notifications
-<DsNotificationMemo variant='primary' onDelete={() => {}} >Dismissible notification</DsTagMemo>`
+<DsNotificationMemo color='green' onDelete={() => {}}>Dismissible notification</DsNotificationMemo>`
 
   return (
     <div
@@ -33,7 +33,7 @@ export const NotificationPage: React.FC<Props> = ({ model, dispatch }) => {
       className='w-full space-y-8 text-left'
     >
       <DsHeroMemo
-        variant='default'
+        color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
@@ -82,26 +82,26 @@ export const NotificationPage: React.FC<Props> = ({ model, dispatch }) => {
           title: 'Color Variants',
           children: () => (
             <div className='w-full space-y-3'>
-              <DsNotificationMemo variant='default'>
-                Default notification banner alert.
+              <DsNotificationMemo color='white'>
+                White notification banner alert.
               </DsNotificationMemo>
-              <DsNotificationMemo variant='primary'>
-                Primary notification banner alert.
+              <DsNotificationMemo color='green'>
+                Green notification banner alert.
               </DsNotificationMemo>
-              <DsNotificationMemo variant='link'>
-                Link notification banner alert.
+              <DsNotificationMemo color='dark-green'>
+                Dark green notification banner alert.
               </DsNotificationMemo>
-              <DsNotificationMemo variant='info'>
-                Info notification banner alert.
+              <DsNotificationMemo color='sky'>
+                Sky notification banner alert.
               </DsNotificationMemo>
-              <DsNotificationMemo variant='success'>
-                Success! Your article was published successfully.
+              <DsNotificationMemo color='amber'>
+                Amber notification banner alert.
               </DsNotificationMemo>
-              <DsNotificationMemo variant='warning'>
-                Warning! Please review your form inputs before submitting.
+              <DsNotificationMemo color='red'>
+                Red notification banner alert.
               </DsNotificationMemo>
-              <DsNotificationMemo variant='danger'>
-                Danger! Could not save changes to backend API.
+              <DsNotificationMemo color='gray'>
+                Gray notification banner alert.
               </DsNotificationMemo>
             </div>
           ),
@@ -113,28 +113,28 @@ export const NotificationPage: React.FC<Props> = ({ model, dispatch }) => {
           children: () => (
             <div className='w-full space-y-3'>
               <DsNotificationMemo
-                variant='primary'
-                onDelete={() => alert('Dismissed primary alert!')}
+                color='green'
+                onDelete={() => alert('Dismissed green alert!')}
               >
-                Primary notification with dismiss button
+                Green notification with dismiss button
               </DsNotificationMemo>
               <DsNotificationMemo
-                variant='info'
-                onDelete={() => alert('Dismissed info alert!')}
+                color='sky'
+                onDelete={() => alert('Dismissed sky alert!')}
               >
-                Info notification with dismiss button
+                Sky notification with dismiss button
               </DsNotificationMemo>
               <DsNotificationMemo
-                variant='success'
-                onDelete={() => alert('Dismissed success alert!')}
+                color='amber'
+                onDelete={() => alert('Dismissed amber alert!')}
               >
-                Success notification with dismiss button
+                Amber notification with dismiss button
               </DsNotificationMemo>
               <DsNotificationMemo
-                variant='danger'
-                onDelete={() => alert('Dismissed danger alert!')}
+                color='red'
+                onDelete={() => alert('Dismissed red alert!')}
               >
-                Danger notification with dismiss button
+                Red notification with dismiss button
               </DsNotificationMemo>
             </div>
           ),

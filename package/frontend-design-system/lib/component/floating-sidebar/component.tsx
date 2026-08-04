@@ -27,7 +27,7 @@ export const FloatingSidebarComponent: React.FC<FloatingSidebarProps> = ({
   const isLeft = placement === 'left'
 
   const backdropCls = cn(
-    'absolute inset-0 bg-black/50',
+    'fixed inset-0 bg-black/50 dark:bg-zinc-950/80',
     state === 'AnimateIn' && 'animate-fade-in',
     state === 'AnimateOut' && 'animate-fade-out',
   )
@@ -36,14 +36,15 @@ export const FloatingSidebarComponent: React.FC<FloatingSidebarProps> = ({
   const slideOutCls = isLeft ? 'animate-slide-out-left' : 'animate-slide-out'
 
   const sidebarCls = cn(
-    'relative flex flex-col w-[280px] h-full bg-white shadow-xl p-[16px] overflow-y-auto',
+    'relative flex flex-col w-[280px] h-full bg-white dark:bg-zinc-900 shadow-2xl p-[16px] overflow-y-auto',
     state === 'AnimateIn' && slideInCls,
     state === 'AnimateOut' && slideOutCls,
     className,
   )
 
-  const activeCls = 'text-green-600'
-  const inactiveCls = 'text-gray-500 hover:text-gray-900'
+  const activeCls = 'text-green-600 font-semibold'
+  const inactiveCls =
+    'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100'
 
   return createPortal(
     <div
@@ -51,7 +52,7 @@ export const FloatingSidebarComponent: React.FC<FloatingSidebarProps> = ({
       data-test={dataTest || 'floating-sidebar'}
       data-component='FloatingSidebar'
       className={cn(
-        'absolute inset-0 z-[100] flex overflow-hidden',
+        'fixed inset-0 z-[100] flex overflow-hidden',
         isLeft ? 'justify-start' : 'justify-end',
       )}
     >

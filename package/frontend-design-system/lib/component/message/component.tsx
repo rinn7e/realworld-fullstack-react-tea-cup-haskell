@@ -2,47 +2,52 @@ import React, { memo } from 'react'
 
 import { DeleteMemo } from '../../element/delete/component'
 import { cn } from '../../theme'
-import type { MessageProps } from './type'
+import type { MessageColor, MessageProps } from './type'
 import { MessagePropsEq } from './type'
 
-const variantStyles: Record<string, { header: string; body: string }> = {
-  default: {
-    header: 'bg-gray-200 text-gray-800 dark:bg-zinc-800 dark:text-zinc-100',
-    body: 'bg-gray-50/70 text-gray-700 border-gray-200 dark:bg-zinc-950 dark:text-zinc-300 dark:border-zinc-800',
+const colorStyles: Record<MessageColor, { header: string; body: string }> = {
+  white: {
+    header:
+      'bg-white text-gray-800 border-gray-200 dark:bg-zinc-900 dark:text-zinc-100',
+    body: 'bg-white text-gray-700 border-gray-200 dark:bg-zinc-950 dark:text-zinc-300 dark:border-zinc-800',
   },
-  primary: {
-    header: 'bg-emerald-600 text-white dark:bg-emerald-700',
-    body: 'bg-emerald-50/60 text-emerald-950 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-200 dark:border-emerald-900/60',
+  green: {
+    header: 'bg-green-600 text-white dark:bg-green-700',
+    body: 'bg-green-50/60 text-green-950 border-green-200 dark:bg-green-950/40 dark:text-green-200 dark:border-green-900/60',
   },
-  info: {
+  'dark-green': {
+    header: 'bg-green-800 text-white dark:bg-green-900',
+    body: 'bg-green-100/60 text-green-950 border-green-300 dark:bg-green-950/60 dark:text-green-100 dark:border-green-800/60',
+  },
+  sky: {
     header: 'bg-sky-500 text-white dark:bg-sky-600',
     body: 'bg-sky-50/60 text-sky-950 border-sky-200 dark:bg-sky-950/40 dark:text-sky-200 dark:border-sky-900/60',
   },
-  success: {
-    header: 'bg-green-600 text-white dark:bg-green-700',
-    body: 'bg-green-50/60 text-green-950 border-green-200 dark:bg-green-200/20 dark:text-green-200 dark:border-green-900/60',
-  },
-  warning: {
+  amber: {
     header:
-      'bg-amber-500 text-amber-950 font-bold dark:bg-amber-600 dark:text-amber-950',
+      'bg-amber-500 text-white font-bold dark:bg-amber-600 dark:text-white',
     body: 'bg-amber-50/60 text-amber-950 border-amber-200 dark:bg-amber-950/40 dark:text-amber-200 dark:border-amber-900/60',
   },
-  danger: {
-    header: 'bg-rose-600 text-white dark:bg-rose-700',
-    body: 'bg-rose-50/60 text-rose-950 border-rose-200 dark:bg-rose-950/40 dark:text-rose-200 dark:border-rose-900/60',
+  red: {
+    header: 'bg-red-600 text-white dark:bg-red-700',
+    body: 'bg-red-50/60 text-red-950 border-red-200 dark:bg-red-950/40 dark:text-red-200 dark:border-red-900/60',
+  },
+  gray: {
+    header: 'bg-gray-200 text-gray-800 dark:bg-zinc-800 dark:text-zinc-100',
+    body: 'bg-gray-50/70 text-gray-700 border-gray-200 dark:bg-zinc-950 dark:text-zinc-300 dark:border-zinc-800',
   },
 }
 
 export const MessageComponent = ({
   header,
   children,
-  variant = 'default',
+  color = 'gray',
   onDelete,
   className,
   key,
   dataTest,
 }: MessageProps): React.ReactElement => {
-  const v = variantStyles[variant] || variantStyles.default
+  const v = colorStyles[color] || colorStyles.gray
   const hasHeaderOrDelete = Boolean(header || onDelete)
 
   return (

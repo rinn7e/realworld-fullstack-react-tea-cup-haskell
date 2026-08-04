@@ -4,15 +4,15 @@ import * as number from 'fp-ts/lib/number'
 import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
-export type ProgressVariant =
-  'primary' | 'link' | 'info' | 'success' | 'warning' | 'danger'
+export type ProgressColor =
+  'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red' | 'gray'
 
 export type ProgressSize = 'xsmall' | 'small' | 'normal' | 'medium' | 'large'
 
 export type ProgressProps = {
   value?: number
   max?: number
-  variant?: ProgressVariant
+  color?: ProgressColor
   size?: ProgressSize
   /**
    * NOTE: When `isIndeterminate` is set to true, this component functions as an
@@ -30,7 +30,7 @@ export const ProgressPropsEq: EqClass.Eq<ProgressProps> = EqClass.struct<
 >({
   value: number.Eq,
   max: number.Eq,
-  variant: string.Eq,
+  color: string.Eq,
   size: string.Eq,
   isIndeterminate: boolean.Eq,
   className: string.Eq,

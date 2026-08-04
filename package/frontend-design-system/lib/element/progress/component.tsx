@@ -2,15 +2,16 @@ import { memo } from 'react'
 import React from 'react'
 
 import { cn } from '../../theme'
-import { type ProgressProps, ProgressPropsEq } from './type'
+import { type ProgressColor, type ProgressProps, ProgressPropsEq } from './type'
 
-const variantStyles: Record<string, string> = {
-  primary: 'bg-emerald-500',
-  link: 'bg-emerald-600',
-  info: 'bg-sky-500',
-  success: 'bg-green-500',
-  warning: 'bg-amber-400',
-  danger: 'bg-rose-500',
+const colorStyles: Record<ProgressColor, string> = {
+  white: 'bg-white',
+  green: 'bg-green-600',
+  'dark-green': 'bg-green-700',
+  sky: 'bg-sky-500',
+  amber: 'bg-amber-500',
+  red: 'bg-red-600',
+  gray: 'bg-gray-400',
 }
 
 const sizeStyles: Record<string, string> = {
@@ -24,7 +25,7 @@ const sizeStyles: Record<string, string> = {
 export const ProgressComponent: React.FC<ProgressProps> = ({
   value = 0,
   max = 100,
-  variant = 'primary',
+  color = 'green',
   size = 'xsmall',
   isIndeterminate = false,
   className,
@@ -48,7 +49,7 @@ export const ProgressComponent: React.FC<ProgressProps> = ({
         <div
           className={cn(
             'animate-indeterminate absolute h-full w-full',
-            variantStyles[variant] || variantStyles.primary,
+            colorStyles[color] || colorStyles.green,
           )}
         />
       ) : (
@@ -56,7 +57,7 @@ export const ProgressComponent: React.FC<ProgressProps> = ({
           style={{ width: `${percentage}%` }}
           className={cn(
             'h-full rounded-full transition-all duration-300',
-            variantStyles[variant] || variantStyles.primary,
+            colorStyles[color] || colorStyles.green,
           )}
         />
       )}

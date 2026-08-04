@@ -1,6 +1,7 @@
 import * as RD from '@devexperts/remote-data-ts'
 import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
+import { ProgressMemo as DsProgressMemo } from '@rinn7e/realworld-design-system/element/progress/component'
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
@@ -13,7 +14,6 @@ import { API_BASE } from '@/common/env'
 import { type AppRoute } from '@/common/type/route'
 import { assetPath, memoStrategy } from '@/common/util'
 import { ErrorMessages } from '@/component/error-messages'
-import { IndeterminateProgressBar } from '@/component/indeterminate-progress-bar'
 import { Link } from '@/component/link'
 
 import { mkPaginationConfig } from './helper'
@@ -38,8 +38,20 @@ const ProfilePageComponent = ({
       {pipe(
         model.profile,
         RD.fold(
-          () => <IndeterminateProgressBar />,
-          () => <IndeterminateProgressBar />,
+          () => (
+            <DsProgressMemo
+              isIndeterminate={true}
+              size='xsmall'
+              color='green'
+            />
+          ),
+          () => (
+            <DsProgressMemo
+              isIndeterminate={true}
+              size='xsmall'
+              color='green'
+            />
+          ),
           () => profileErrorView(route),
 
           (data: ProfileResponse) => (

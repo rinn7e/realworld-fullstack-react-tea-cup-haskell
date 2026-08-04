@@ -22,7 +22,7 @@ export const HomePage: React.FC<Props> = () => {
     <div data-component='HomePage' className='w-full space-y-8 text-left'>
       {/* Hero Banner */}
       <DsHeroMemo
-        variant='primary'
+        color='green'
         size='medium'
         className='w-full rounded-xl bg-gradient-to-r from-green-600 to-emerald-700 px-8 py-12 text-white shadow-lg'
       >

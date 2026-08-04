@@ -29,7 +29,7 @@ export const TabsPage: React.FC<Props> = ({ model, dispatch }) => {
   return (
     <div data-component='TabsPage' className='w-full space-y-8 text-left'>
       <DsHeroMemo
-        variant='default'
+        color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >

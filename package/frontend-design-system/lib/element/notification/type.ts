@@ -2,12 +2,12 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as string from 'fp-ts/lib/string'
 import React from 'react'
 
-export type NotificationVariant =
-  'default' | 'primary' | 'link' | 'info' | 'success' | 'warning' | 'danger'
+export type NotificationColor =
+  'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red' | 'gray'
 
 export type NotificationProps = {
   children?: React.ReactNode
-  variant?: NotificationVariant
+  color?: NotificationColor
   onDelete?: () => void
   className?: string
   key?: React.Key
@@ -17,7 +17,7 @@ export type NotificationProps = {
 export const NotificationPropsEq: EqClass.Eq<NotificationProps> =
   EqClass.struct<Required<NotificationProps>>({
     children: EqClass.eqStrict,
-    variant: string.Eq,
+    color: string.Eq,
     onDelete: EqClass.eqStrict,
     className: string.Eq,
     key: EqClass.eqStrict,

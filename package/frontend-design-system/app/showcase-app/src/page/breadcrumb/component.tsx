@@ -25,7 +25,7 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
 
   return (
     <div data-component='BreadcrumbPage' className='w-full space-y-8'>
-      <DsHeroMemo variant='default' size='small'>
+      <DsHeroMemo color='gray' size='small'>
         <div className='flex items-center justify-between'>
           <div>
             <DsTitleMemo

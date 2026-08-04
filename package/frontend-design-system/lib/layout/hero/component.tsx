@@ -1,17 +1,17 @@
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import { type HeroProps, HeroPropsEq } from './type'
+import { type HeroColor, type HeroProps, HeroPropsEq } from './type'
 
-const variantStyles: Record<string, string> = {
-  default:
-    'bg-gray-100 text-gray-800 dark:bg-zinc-950 dark:text-zinc-100 dark:border dark:border-zinc-800',
-  primary: 'bg-green-600 text-white',
-  link: 'bg-sky-500 text-white',
-  info: 'bg-blue-500 text-white',
-  success: 'bg-emerald-500 text-white',
-  warning: 'bg-amber-500 text-white',
-  danger: 'bg-red-600 text-white',
+const colorStyles: Record<HeroColor, string> = {
+  white:
+    'bg-white text-gray-800 border border-gray-200 dark:bg-zinc-950 dark:text-zinc-100 dark:border-zinc-800',
+  green: 'bg-green-600 text-white',
+  'dark-green': 'bg-green-800 text-white',
+  sky: 'bg-sky-500 text-white',
+  amber: 'bg-amber-500 text-white',
+  red: 'bg-red-600 text-white',
+  gray: 'bg-gray-100 text-gray-800 dark:bg-zinc-900 dark:text-zinc-100',
 }
 
 const sizeStyles: Record<string, string> = {
@@ -22,7 +22,7 @@ const sizeStyles: Record<string, string> = {
 }
 
 export const HeroComponent: React.FC<HeroProps> = ({
-  variant = 'default',
+  color = 'gray',
   size = 'medium',
   title,
   subtitle,
@@ -40,7 +40,7 @@ export const HeroComponent: React.FC<HeroProps> = ({
       data-component='Hero'
       className={cn(
         'relative w-full text-center transition-colors',
-        variantStyles[variant],
+        colorStyles[color] || colorStyles.gray,
         sizeStyles[size],
         className,
       )}

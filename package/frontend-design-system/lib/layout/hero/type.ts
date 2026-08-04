@@ -3,13 +3,13 @@ import * as string from 'fp-ts/string'
 import type React from 'react'
 import type { ReactNode } from 'react'
 
-export type HeroVariant =
-  'default' | 'primary' | 'link' | 'info' | 'success' | 'warning' | 'danger'
+export type HeroColor =
+  'white' | 'green' | 'dark-green' | 'sky' | 'amber' | 'red' | 'gray'
 
 export type HeroSize = 'small' | 'medium' | 'large' | 'fullheight'
 
 export type HeroProps = {
-  variant?: HeroVariant
+  color?: HeroColor
   size?: HeroSize
   title?: ReactNode
   subtitle?: ReactNode
@@ -24,7 +24,7 @@ export type HeroProps = {
 export const HeroPropsEq: EqClass.Eq<HeroProps> = EqClass.struct<
   Required<HeroProps>
 >({
-  variant: EqClass.eqStrict,
+  color: EqClass.eqStrict,
   size: EqClass.eqStrict,
   title: EqClass.eqStrict,
   subtitle: EqClass.eqStrict,

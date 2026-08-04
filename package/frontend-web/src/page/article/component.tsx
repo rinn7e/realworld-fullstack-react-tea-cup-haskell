@@ -1,6 +1,7 @@
 import * as RD from '@devexperts/remote-data-ts'
 import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
+import { ProgressMemo as DsProgressMemo } from '@rinn7e/realworld-design-system/element/progress/component'
 import { TagMemo as DsTagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
@@ -13,7 +14,6 @@ import type { ApiError, ArticleResponse, HttpError } from '@/common/api'
 import { assetPath, memoStrategy } from '@/common/util'
 import { ErrorMessages } from '@/component/error-messages'
 import { favButtonView } from '@/component/fav-button'
-import { IndeterminateProgressBar } from '@/component/indeterminate-progress-bar'
 import { Link } from '@/component/link'
 
 import { CommentSectionMemo } from './sub-component/comment-section/component'
@@ -25,8 +25,20 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
       {pipe(
         model.article,
         RD.fold(
-          () => <IndeterminateProgressBar />,
-          () => <IndeterminateProgressBar />,
+          () => (
+            <DsProgressMemo
+              isIndeterminate={true}
+              size='xsmall'
+              color='green'
+            />
+          ),
+          () => (
+            <DsProgressMemo
+              isIndeterminate={true}
+              size='xsmall'
+              color='green'
+            />
+          ),
           (err: HttpError<ApiError>) => (
             <div className='mx-auto max-w-[1152px] px-[16px] py-[24px]'>
               <ErrorMessages error={err} />
