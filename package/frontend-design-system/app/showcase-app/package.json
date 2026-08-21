@@ -17,6 +17,8 @@
   "dependencies": {
     "@rinn7e/fp-ts-routing": "github:rinn7e/fp-ts-routing#0d9ec901639572171d6ada5b75aeee6ff945dc43",
     "@rinn7e/realworld-design-system": "workspace:*",
+    "@rinn7e/tea-cup-navigation": "file:../../../../../tea-cup-package/package/tea-cup-navigation",
+    "@rinn7e/tea-cup-prelude": "0.1.0-alpha.1",
     "clsx": "^2.1.1",
     "fp-ts": "^2.16.11",
     "io-ts": "^2.2.21",

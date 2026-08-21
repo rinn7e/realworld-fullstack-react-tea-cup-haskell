@@ -1,5 +1,6 @@
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import type * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
+import type * as Navigation from '@rinn7e/tea-cup-navigation'
 
 import type * as BlockPage from './page/block/type'
 import type * as BoxPage from './page/box/type'
@@ -115,9 +116,7 @@ export type PageModel =
   | { readonly _tag: 'NotFoundPageModel'; readonly model: NotFoundPage.Model }
 
 export type Model = {
-  readonly route: AppRoute
-  readonly isInternal: boolean
-  readonly pageModel: PageModel
+  readonly navigation: Navigation.Model<AppRoute, PageModel>
   readonly searchQuery: string
   readonly sidebarModel: DsSidebar.Model
   readonly rightSidebarModel: DsSidebar.Model
@@ -129,8 +128,10 @@ export type Model = {
 export type Msg =
   | { readonly _tag: 'NoOp' }
   | { readonly _tag: 'Init'; readonly location: Location }
-  | { readonly _tag: 'UrlChange'; readonly location: Location }
-  | { readonly _tag: 'ChangeRoute'; readonly route: AppRoute }
+  | {
+      readonly _tag: 'NavigationMsg'
+      readonly subMsg: Navigation.Msg<AppRoute>
+    }
   | { readonly _tag: 'UpdateSearch'; readonly query: string }
   | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
   | { readonly _tag: 'ToggleThemeMenu' }

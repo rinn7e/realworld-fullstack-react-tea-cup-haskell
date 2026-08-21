@@ -1,3 +1,4 @@
+import { devTools } from '@rinn7e/tea-cup-prelude'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { ProgramWithNav } from 'react-tea-cup'
@@ -14,11 +15,15 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <ProgramWithNav<Model, Msg>
-        onUrlChange={(location) => ({ _tag: 'UrlChange', location })}
+        onUrlChange={(location) => ({
+          _tag: 'NavigationMsg',
+          subMsg: { _tag: 'UrlChange', location },
+        })}
         init={init}
         update={update}
         view={view}
         subscriptions={() => Sub.none<Msg>()}
+        {...devTools<Model, Msg>().getProgramProps()}
       />
     </React.StrictMode>,
   )

@@ -1,7 +1,7 @@
 import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
-import { newUrl } from 'react-tea-cup'
-import { Cmd, Task } from 'tea-cup-fp'
+import * as Navigation from '@rinn7e/tea-cup-navigation'
+import { Cmd } from 'tea-cup-fp'
 
 import * as BlockPage from './page/block/update'
 import * as BoxPage from './page/box/update'
@@ -45,561 +45,373 @@ import * as TabsPage from './page/tabs/update'
 import * as TagPage from './page/tag/update'
 import * as TextareaPage from './page/textarea/update'
 import * as TitlePage from './page/title/update'
-import { parseAppRoute, toUrlString } from './route/parser'
-import { type AppRoute, AppRouteEq } from './route/type'
-import type { Model, Msg } from './type'
+import { mkNavigationConfig } from './route/navigation'
+import { type AppRoute } from './route/type'
+import type { Model, Msg, PageModel } from './type'
 import { loadColorScheme, setColorSchemeCmd } from './util/theme-util'
 
-export const initPageModel =
-  (newRoute: AppRoute) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    switch (newRoute.page._tag) {
-      case 'HomePage': {
-        const [homeModel, homeCmd] = HomePage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'HomePageModel', model: homeModel },
-          },
-          homeCmd.map((subMsg) => ({ _tag: 'HomePageMsg', subMsg })),
-        ]
-      }
+export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
+  switch (newRoute.page._tag) {
+    case 'HomePage': {
+      const [homeModel, homeCmd] = HomePage.init()
+      return [
+        { _tag: 'HomePageModel', model: homeModel },
+        homeCmd.map((subMsg) => ({ _tag: 'HomePageMsg', subMsg })),
+      ]
+    }
 
-      case 'BlockPage': {
-        const [subModel, subCmd] = BlockPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'BlockPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'BlockPageMsg', subMsg })),
-        ]
-      }
+    case 'BlockPage': {
+      const [subModel, subCmd] = BlockPage.init()
+      return [
+        { _tag: 'BlockPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'BlockPageMsg', subMsg })),
+      ]
+    }
 
-      case 'BoxPage': {
-        const [subModel, subCmd] = BoxPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'BoxPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'BoxPageMsg', subMsg })),
-        ]
-      }
+    case 'BoxPage': {
+      const [subModel, subCmd] = BoxPage.init()
+      return [
+        { _tag: 'BoxPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'BoxPageMsg', subMsg })),
+      ]
+    }
 
-      case 'ButtonPage': {
-        const [subModel, subCmd] = ButtonPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'ButtonPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'ButtonPageMsg', subMsg })),
-        ]
-      }
+    case 'ButtonPage': {
+      const [subModel, subCmd] = ButtonPage.init()
+      return [
+        { _tag: 'ButtonPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'ButtonPageMsg', subMsg })),
+      ]
+    }
 
-      case 'ContentPage': {
-        const [subModel, subCmd] = ContentPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'ContentPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'ContentPageMsg', subMsg })),
-        ]
-      }
+    case 'ContentPage': {
+      const [subModel, subCmd] = ContentPage.init()
+      return [
+        { _tag: 'ContentPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'ContentPageMsg', subMsg })),
+      ]
+    }
 
-      case 'DeletePage': {
-        const [subModel, subCmd] = DeletePage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'DeletePageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'DeletePageMsg', subMsg })),
-        ]
-      }
+    case 'DeletePage': {
+      const [subModel, subCmd] = DeletePage.init()
+      return [
+        { _tag: 'DeletePageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'DeletePageMsg', subMsg })),
+      ]
+    }
 
-      case 'IconPage': {
-        const [subModel, subCmd] = IconPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'IconPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'IconPageMsg', subMsg })),
-        ]
-      }
+    case 'IconPage': {
+      const [subModel, subCmd] = IconPage.init()
+      return [
+        { _tag: 'IconPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'IconPageMsg', subMsg })),
+      ]
+    }
 
-      case 'ImagePage': {
-        const [subModel, subCmd] = ImagePage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'ImagePageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'ImagePageMsg', subMsg })),
-        ]
-      }
+    case 'ImagePage': {
+      const [subModel, subCmd] = ImagePage.init()
+      return [
+        { _tag: 'ImagePageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'ImagePageMsg', subMsg })),
+      ]
+    }
 
-      case 'NotificationPage': {
-        const [subModel, subCmd] = NotificationPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'NotificationPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'NotificationPageMsg', subMsg })),
-        ]
-      }
+    case 'NotificationPage': {
+      const [subModel, subCmd] = NotificationPage.init()
+      return [
+        { _tag: 'NotificationPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'NotificationPageMsg', subMsg })),
+      ]
+    }
 
-      case 'ProgressPage': {
-        const [subModel, subCmd] = ProgressPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'ProgressPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'ProgressPageMsg', subMsg })),
-        ]
-      }
+    case 'ProgressPage': {
+      const [subModel, subCmd] = ProgressPage.init()
+      return [
+        { _tag: 'ProgressPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'ProgressPageMsg', subMsg })),
+      ]
+    }
 
-      case 'TablePage': {
-        const [subModel, subCmd] = TablePage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'TablePageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'TablePageMsg', subMsg })),
-        ]
-      }
+    case 'TablePage': {
+      const [subModel, subCmd] = TablePage.init()
+      return [
+        { _tag: 'TablePageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'TablePageMsg', subMsg })),
+      ]
+    }
 
-      case 'TagPage': {
-        const [subModel, subCmd] = TagPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'TagPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'TagPageMsg', subMsg })),
-        ]
-      }
+    case 'TagPage': {
+      const [subModel, subCmd] = TagPage.init()
+      return [
+        { _tag: 'TagPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'TagPageMsg', subMsg })),
+      ]
+    }
 
-      case 'TitlePage': {
-        const [subModel, subCmd] = TitlePage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'TitlePageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'TitlePageMsg', subMsg })),
-        ]
-      }
+    case 'TitlePage': {
+      const [subModel, subCmd] = TitlePage.init()
+      return [
+        { _tag: 'TitlePageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'TitlePageMsg', subMsg })),
+      ]
+    }
 
-      case 'BreadcrumbPage': {
-        const [subModel, subCmd] = BreadcrumbPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'BreadcrumbPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'BreadcrumbPageMsg', subMsg })),
-        ]
-      }
+    case 'BreadcrumbPage': {
+      const [subModel, subCmd] = BreadcrumbPage.init()
+      return [
+        { _tag: 'BreadcrumbPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'BreadcrumbPageMsg', subMsg })),
+      ]
+    }
 
-      case 'CardPage': {
-        const [subModel, subCmd] = CardPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'CardPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'CardPageMsg', subMsg })),
-        ]
-      }
+    case 'CardPage': {
+      const [subModel, subCmd] = CardPage.init()
+      return [
+        { _tag: 'CardPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'CardPageMsg', subMsg })),
+      ]
+    }
 
-      case 'DropdownPage': {
-        const [subModel, subCmd] = DropdownPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'DropdownPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'DropdownPageMsg', subMsg })),
-        ]
-      }
+    case 'DropdownPage': {
+      const [subModel, subCmd] = DropdownPage.init()
+      return [
+        { _tag: 'DropdownPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'DropdownPageMsg', subMsg })),
+      ]
+    }
 
-      case 'MenuPage': {
-        const [subModel, subCmd] = MenuPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'MenuPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'MenuPageMsg', subMsg })),
-        ]
-      }
+    case 'MenuPage': {
+      const [subModel, subCmd] = MenuPage.init()
+      return [
+        { _tag: 'MenuPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'MenuPageMsg', subMsg })),
+      ]
+    }
 
-      case 'MessagePage': {
-        const [subModel, subCmd] = MessagePage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'MessagePageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'MessagePageMsg', subMsg })),
-        ]
-      }
+    case 'MessagePage': {
+      const [subModel, subCmd] = MessagePage.init()
+      return [
+        { _tag: 'MessagePageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'MessagePageMsg', subMsg })),
+      ]
+    }
 
-      case 'ModalPage': {
-        const [subModel, subCmd] = ModalPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'ModalPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'ModalPageMsg', subMsg })),
-        ]
-      }
+    case 'ModalPage': {
+      const [subModel, subCmd] = ModalPage.init()
+      return [
+        { _tag: 'ModalPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'ModalPageMsg', subMsg })),
+      ]
+    }
 
-      case 'NavbarPage': {
-        const [subModel, subCmd] = NavbarPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'NavbarPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'NavbarPageMsg', subMsg })),
-        ]
-      }
+    case 'NavbarPage': {
+      const [subModel, subCmd] = NavbarPage.init()
+      return [
+        { _tag: 'NavbarPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'NavbarPageMsg', subMsg })),
+      ]
+    }
 
-      case 'FloatingSidebarPage': {
-        const [subModel, subCmd] = FloatingSidebarPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'FloatingSidebarPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'FloatingSidebarPageMsg', subMsg })),
-        ]
-      }
+    case 'FloatingSidebarPage': {
+      const [subModel, subCmd] = FloatingSidebarPage.init()
+      return [
+        { _tag: 'FloatingSidebarPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'FloatingSidebarPageMsg', subMsg })),
+      ]
+    }
 
-      case 'SidebarPage': {
-        const [subModel, subCmd] = SidebarPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'SidebarPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
-        ]
-      }
+    case 'SidebarPage': {
+      const [subModel, subCmd] = SidebarPage.init()
+      return [
+        { _tag: 'SidebarPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
+      ]
+    }
 
-      case 'PaginationPage': {
-        const [subModel, subCmd] = PaginationPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'PaginationPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'PaginationPageMsg', subMsg })),
-        ]
-      }
+    case 'PaginationPage': {
+      const [subModel, subCmd] = PaginationPage.init()
+      return [
+        { _tag: 'PaginationPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'PaginationPageMsg', subMsg })),
+      ]
+    }
 
-      case 'PanelPage': {
-        const [subModel, subCmd] = PanelPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'PanelPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'PanelPageMsg', subMsg })),
-        ]
-      }
+    case 'PanelPage': {
+      const [subModel, subCmd] = PanelPage.init()
+      return [
+        { _tag: 'PanelPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'PanelPageMsg', subMsg })),
+      ]
+    }
 
-      case 'PopoverPage': {
-        const [subModel, subCmd] = PopoverPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'PopoverPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'PopoverPageMsg', subMsg })),
-        ]
-      }
+    case 'PopoverPage': {
+      const [subModel, subCmd] = PopoverPage.init()
+      return [
+        { _tag: 'PopoverPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'PopoverPageMsg', subMsg })),
+      ]
+    }
 
-      case 'TabsPage': {
-        const [subModel, subCmd] = TabsPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'TabsPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'TabsPageMsg', subMsg })),
-        ]
-      }
+    case 'TabsPage': {
+      const [subModel, subCmd] = TabsPage.init()
+      return [
+        { _tag: 'TabsPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'TabsPageMsg', subMsg })),
+      ]
+    }
 
-      case 'FieldPage': {
-        const [subModel, subCmd] = FieldPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'FieldPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'FieldPageMsg', subMsg })),
-        ]
-      }
+    case 'FieldPage': {
+      const [subModel, subCmd] = FieldPage.init()
+      return [
+        { _tag: 'FieldPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'FieldPageMsg', subMsg })),
+      ]
+    }
 
-      case 'InputPage': {
-        const [subModel, subCmd] = InputPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'InputPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'InputPageMsg', subMsg })),
-        ]
-      }
+    case 'InputPage': {
+      const [subModel, subCmd] = InputPage.init()
+      return [
+        { _tag: 'InputPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'InputPageMsg', subMsg })),
+      ]
+    }
 
-      case 'TextareaPage': {
-        const [subModel, subCmd] = TextareaPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'TextareaPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'TextareaPageMsg', subMsg })),
-        ]
-      }
+    case 'TextareaPage': {
+      const [subModel, subCmd] = TextareaPage.init()
+      return [
+        { _tag: 'TextareaPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'TextareaPageMsg', subMsg })),
+      ]
+    }
 
-      case 'SelectPage': {
-        const [subModel, subCmd] = SelectPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'SelectPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'SelectPageMsg', subMsg })),
-        ]
-      }
+    case 'SelectPage': {
+      const [subModel, subCmd] = SelectPage.init()
+      return [
+        { _tag: 'SelectPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'SelectPageMsg', subMsg })),
+      ]
+    }
 
-      case 'CheckboxPage': {
-        const [subModel, subCmd] = CheckboxPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'CheckboxPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'CheckboxPageMsg', subMsg })),
-        ]
-      }
+    case 'CheckboxPage': {
+      const [subModel, subCmd] = CheckboxPage.init()
+      return [
+        { _tag: 'CheckboxPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'CheckboxPageMsg', subMsg })),
+      ]
+    }
 
-      case 'RadioPage': {
-        const [subModel, subCmd] = RadioPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'RadioPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'RadioPageMsg', subMsg })),
-        ]
-      }
+    case 'RadioPage': {
+      const [subModel, subCmd] = RadioPage.init()
+      return [
+        { _tag: 'RadioPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'RadioPageMsg', subMsg })),
+      ]
+    }
 
-      case 'FilePage': {
-        const [subModel, subCmd] = FilePage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'FilePageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'FilePageMsg', subMsg })),
-        ]
-      }
+    case 'FilePage': {
+      const [subModel, subCmd] = FilePage.init()
+      return [
+        { _tag: 'FilePageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'FilePageMsg', subMsg })),
+      ]
+    }
 
-      case 'ContainerPage': {
-        const [subModel, subCmd] = ContainerPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'ContainerPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'ContainerPageMsg', subMsg })),
-        ]
-      }
+    case 'ContainerPage': {
+      const [subModel, subCmd] = ContainerPage.init()
+      return [
+        { _tag: 'ContainerPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'ContainerPageMsg', subMsg })),
+      ]
+    }
 
-      case 'HeroPage': {
-        const [subModel, subCmd] = HeroPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'HeroPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'HeroPageMsg', subMsg })),
-        ]
-      }
+    case 'HeroPage': {
+      const [subModel, subCmd] = HeroPage.init()
+      return [
+        { _tag: 'HeroPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'HeroPageMsg', subMsg })),
+      ]
+    }
 
-      case 'SectionPage': {
-        const [subModel, subCmd] = SectionPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'SectionPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'SectionPageMsg', subMsg })),
-        ]
-      }
+    case 'SectionPage': {
+      const [subModel, subCmd] = SectionPage.init()
+      return [
+        { _tag: 'SectionPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'SectionPageMsg', subMsg })),
+      ]
+    }
 
-      case 'LevelPage': {
-        const [subModel, subCmd] = LevelPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'LevelPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'LevelPageMsg', subMsg })),
-        ]
-      }
+    case 'LevelPage': {
+      const [subModel, subCmd] = LevelPage.init()
+      return [
+        { _tag: 'LevelPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'LevelPageMsg', subMsg })),
+      ]
+    }
 
-      case 'MediaObjectPage': {
-        const [subModel, subCmd] = MediaObjectPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'MediaObjectPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'MediaObjectPageMsg', subMsg })),
-        ]
-      }
+    case 'MediaObjectPage': {
+      const [subModel, subCmd] = MediaObjectPage.init()
+      return [
+        { _tag: 'MediaObjectPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'MediaObjectPageMsg', subMsg })),
+      ]
+    }
 
-      case 'FooterPage': {
-        const [subModel, subCmd] = FooterPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'FooterPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'FooterPageMsg', subMsg })),
-        ]
-      }
+    case 'FooterPage': {
+      const [subModel, subCmd] = FooterPage.init()
+      return [
+        { _tag: 'FooterPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'FooterPageMsg', subMsg })),
+      ]
+    }
 
-      case 'ColumnsPage': {
-        const [subModel, subCmd] = ColumnsPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'ColumnsPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'ColumnsPageMsg', subMsg })),
-        ]
-      }
+    case 'ColumnsPage': {
+      const [subModel, subCmd] = ColumnsPage.init()
+      return [
+        { _tag: 'ColumnsPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'ColumnsPageMsg', subMsg })),
+      ]
+    }
 
-      case 'DotLoadingPage': {
-        const [subModel, subCmd] = DotLoadingPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'DotLoadingPageModel', model: subModel },
-          },
-          subCmd.map((subMsg) => ({ _tag: 'DotLoadingPageMsg', subMsg })),
-        ]
-      }
+    case 'DotLoadingPage': {
+      const [subModel, subCmd] = DotLoadingPage.init()
+      return [
+        { _tag: 'DotLoadingPageModel', model: subModel },
+        subCmd.map((subMsg) => ({ _tag: 'DotLoadingPageMsg', subMsg })),
+      ]
+    }
 
-      case 'NotFoundPage':
-      default: {
-        const [notFoundModel, notFoundCmd] = NotFoundPage.init()
-        return [
-          {
-            ...model,
-            route: newRoute,
-            pageModel: { _tag: 'NotFoundPageModel', model: notFoundModel },
-          },
-          notFoundCmd.map((subMsg) => ({ _tag: 'NotFoundPageMsg', subMsg })),
-        ]
-      }
+    case 'NotFoundPage':
+    default: {
+      const [notFoundModel, notFoundCmd] = NotFoundPage.init()
+      return [
+        { _tag: 'NotFoundPageModel', model: notFoundModel },
+        notFoundCmd.map((subMsg) => ({ _tag: 'NotFoundPageMsg', subMsg })),
+      ]
     }
   }
+}
 
-const navigate =
-  (newRoute: AppRoute, isInternal: boolean) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    const [updatedModel, updatedCmd] = initPageModel(newRoute)(model)
+export const navigationConfig = mkNavigationConfig<PageModel, Msg>(
+  initPageModel,
+)
 
-    const urlCmd = isInternal
-      ? Task.perform(newUrl(toUrlString(newRoute)), (): Msg => ({
-          _tag: 'NoOp',
-        }))
-      : Cmd.none<Msg>()
+export const navigationMsgHandler = (
+  subMsg: Extract<Msg, { _tag: 'NavigationMsg' }>['subMsg'],
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  const [navModel, navCmd] = Navigation.update(navigationConfig, undefined)(
+    subMsg,
+    model.navigation,
+  )
 
-    return [
-      {
-        ...updatedModel,
-        isInternal,
-      },
-      Cmd.batch([urlCmd, updatedCmd]),
-    ]
-  }
-
-const execChangeRoute =
-  (newRoute: AppRoute, isInternal: boolean) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    if (!AppRouteEq.equals(model.route, newRoute)) {
-      return navigate(newRoute, isInternal)(model)
-    } else {
-      if (isInternal) {
-        return navigate(newRoute, isInternal)(model)
-      } else {
-        return [model, Cmd.none()]
-      }
-    }
-  }
-
-const changeRouteHandler =
-  (newRoute: AppRoute, isInternal: boolean) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    return execChangeRoute(newRoute, isInternal)(model)
-  }
+  return [
+    {
+      ...model,
+      navigation: navModel,
+    },
+    navCmd,
+  ]
+}
 
 const sidebarMsgHandler =
   (msg: DsSidebar.Msg) =>
@@ -620,10 +432,10 @@ const sidebarMsgHandler =
       const nextRoute: AppRoute = {
         page: { _tag: pageTagName } as unknown as AppRoute['page'],
       }
-      const [navModel, navCmd] = changeRouteHandler(
-        nextRoute,
-        true,
-      )(updatedModel)
+      const [navModel, navCmd] = navigationMsgHandler(
+        { _tag: 'ChangeRoute', route: nextRoute },
+        updatedModel,
+      )
       return [navModel, Cmd.batch([subCmd, navCmd])]
     }
     return [updatedModel, subCmd]
@@ -650,10 +462,10 @@ const rightSidebarMsgHandler =
       const nextRoute: AppRoute = {
         page: { _tag: pageTagName } as unknown as AppRoute['page'],
       }
-      const [navModel, navCmd] = changeRouteHandler(
-        nextRoute,
-        true,
-      )(updatedModel)
+      const [navModel, navCmd] = navigationMsgHandler(
+        { _tag: 'ChangeRoute', route: nextRoute },
+        updatedModel,
+      )
       return [navModel, Cmd.batch([subCmd, navCmd])]
     }
     return [updatedModel, subCmd]
@@ -702,7 +514,10 @@ const topNavbarMsgHandler =
         ]
       }
       const targetPage = getTargetPage(msg.item.key)
-      return changeRouteHandler({ page: targetPage }, true)(updatedModel)
+      return navigationMsgHandler(
+        { _tag: 'ChangeRoute', route: { page: targetPage } },
+        updatedModel,
+      )
     }
     return [
       updatedModel,
@@ -711,16 +526,18 @@ const topNavbarMsgHandler =
   }
 
 export const init = (location: Location): [Model, Cmd<Msg>] => {
-  const route = parseAppRoute('', location.href)
+  const [navModel, navCmd] = Navigation.init(
+    navigationConfig,
+    location,
+    undefined,
+  )
   const [sidebarModel, sidebarCmd] = DsSidebar.init(false)
   const [rightSidebarModel, rightSidebarCmd] = DsSidebar.init(false)
   const [topNavbarModel, topNavbarCmd] = DsNavbar.init()
   const colorScheme = loadColorScheme()
 
-  const baseModel: Model = {
-    route,
-    isInternal: false,
-    pageModel: { _tag: 'NotFoundPageModel', model: {} },
+  const model: Model = {
+    navigation: navModel,
     searchQuery: '',
     sidebarModel,
     rightSidebarModel,
@@ -729,9 +546,8 @@ export const init = (location: Location): [Model, Cmd<Msg>] => {
     isThemeMenuOpen: false,
   }
 
-  const [navModel, navCmd] = navigate(route, true)(baseModel)
   return [
-    navModel,
+    model,
     Cmd.batch([
       sidebarCmd.map((subMsg) => ({ _tag: 'SidebarMsg' as const, subMsg })),
       rightSidebarCmd.map((subMsg) => ({
@@ -769,503 +585,689 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     case 'Init':
       return init(msg.location)
 
-    case 'UrlChange': {
-      if (model.isInternal) {
-        return [{ ...model, isInternal: false }, Cmd.none()]
-      } else {
-        const route = parseAppRoute('', msg.location.href)
-        return changeRouteHandler(route, false)(model)
-      }
-    }
-
-    case 'ChangeRoute': {
-      return changeRouteHandler(msg.route, true)(model)
-    }
+    case 'NavigationMsg':
+      return navigationMsgHandler(msg.subMsg, model)
 
     case 'UpdateSearch':
       return [{ ...model, searchQuery: msg.query }, Cmd.none()]
 
     case 'HomePageMsg': {
-      if (model.pageModel._tag !== 'HomePageModel') return [model, Cmd.none()]
-      const [homeModel, cmd] = HomePage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'HomePageModel') return [model, Cmd.none()]
+      const [homeModel, cmd] = HomePage.update(msg.subMsg, pageModel.model)
       return [
         {
           ...model,
-          pageModel: { _tag: 'HomePageModel', model: homeModel },
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'HomePageModel',
+            model: homeModel,
+          }),
         },
         cmd.map((subMsg) => ({ _tag: 'HomePageMsg', subMsg })),
       ]
     }
 
     case 'BlockPageMsg': {
-      if (model.pageModel._tag !== 'BlockPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = BlockPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'BlockPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = BlockPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'BlockPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'BlockPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'BlockPageMsg', subMsg })),
       ]
     }
+
     case 'BoxPageMsg': {
-      if (model.pageModel._tag !== 'BoxPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = BoxPage.update(msg.subMsg, model.pageModel.model)
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'BoxPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = BoxPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'BoxPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'BoxPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'BoxPageMsg', subMsg })),
       ]
     }
+
     case 'ButtonPageMsg': {
-      if (model.pageModel._tag !== 'ButtonPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = ButtonPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'ButtonPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = ButtonPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'ButtonPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'ButtonPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'ButtonPageMsg', subMsg })),
       ]
     }
+
     case 'ContentPageMsg': {
-      if (model.pageModel._tag !== 'ContentPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = ContentPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'ContentPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = ContentPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'ContentPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'ContentPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'ContentPageMsg', subMsg })),
       ]
     }
+
     case 'DeletePageMsg': {
-      if (model.pageModel._tag !== 'DeletePageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = DeletePage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'DeletePageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = DeletePage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'DeletePageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'DeletePageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'DeletePageMsg', subMsg })),
       ]
     }
+
     case 'IconPageMsg': {
-      if (model.pageModel._tag !== 'IconPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = IconPage.update(msg.subMsg, model.pageModel.model)
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'IconPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = IconPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'IconPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'IconPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'IconPageMsg', subMsg })),
       ]
     }
+
     case 'ImagePageMsg': {
-      if (model.pageModel._tag !== 'ImagePageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = ImagePage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'ImagePageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = ImagePage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'ImagePageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'ImagePageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'ImagePageMsg', subMsg })),
       ]
     }
+
     case 'NotificationPageMsg': {
-      if (model.pageModel._tag !== 'NotificationPageModel')
-        return [model, Cmd.none()]
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'NotificationPageModel') return [model, Cmd.none()]
       const [subModel, cmd] = NotificationPage.update(
         msg.subMsg,
-        model.pageModel.model,
+        pageModel.model,
       )
       return [
         {
           ...model,
-          pageModel: { _tag: 'NotificationPageModel', model: subModel },
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'NotificationPageModel',
+            model: subModel,
+          }),
         },
         cmd.map((subMsg) => ({ _tag: 'NotificationPageMsg', subMsg })),
       ]
     }
+
     case 'ProgressPageMsg': {
-      if (model.pageModel._tag !== 'ProgressPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = ProgressPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'ProgressPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'ProgressPageMsg', subMsg })),
-      ]
-    }
-    case 'TablePageMsg': {
-      if (model.pageModel._tag !== 'TablePageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = TablePage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'TablePageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'TablePageMsg', subMsg })),
-      ]
-    }
-    case 'TagPageMsg': {
-      if (model.pageModel._tag !== 'TagPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = TagPage.update(msg.subMsg, model.pageModel.model)
-      return [
-        { ...model, pageModel: { _tag: 'TagPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'TagPageMsg', subMsg })),
-      ]
-    }
-    case 'TitlePageMsg': {
-      if (model.pageModel._tag !== 'TitlePageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = TitlePage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'TitlePageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'TitlePageMsg', subMsg })),
-      ]
-    }
-    case 'BreadcrumbPageMsg': {
-      if (model.pageModel._tag !== 'BreadcrumbPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = BreadcrumbPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'ProgressPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = ProgressPage.update(msg.subMsg, pageModel.model)
       return [
         {
           ...model,
-          pageModel: { _tag: 'BreadcrumbPageModel', model: subModel },
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'ProgressPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'ProgressPageMsg', subMsg })),
+      ]
+    }
+
+    case 'TablePageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'TablePageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = TablePage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'TablePageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'TablePageMsg', subMsg })),
+      ]
+    }
+
+    case 'TagPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'TagPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = TagPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'TagPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'TagPageMsg', subMsg })),
+      ]
+    }
+
+    case 'TitlePageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'TitlePageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = TitlePage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'TitlePageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'TitlePageMsg', subMsg })),
+      ]
+    }
+
+    case 'BreadcrumbPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'BreadcrumbPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = BreadcrumbPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'BreadcrumbPageModel',
+            model: subModel,
+          }),
         },
         cmd.map((subMsg) => ({ _tag: 'BreadcrumbPageMsg', subMsg })),
       ]
     }
+
     case 'CardPageMsg': {
-      if (model.pageModel._tag !== 'CardPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = CardPage.update(msg.subMsg, model.pageModel.model)
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'CardPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = CardPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'CardPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'CardPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'CardPageMsg', subMsg })),
       ]
     }
+
     case 'DropdownPageMsg': {
-      if (model.pageModel._tag !== 'DropdownPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = DropdownPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'DropdownPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = DropdownPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'DropdownPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'DropdownPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'DropdownPageMsg', subMsg })),
       ]
     }
+
     case 'MenuPageMsg': {
-      if (model.pageModel._tag !== 'MenuPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = MenuPage.update(msg.subMsg, model.pageModel.model)
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'MenuPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = MenuPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'MenuPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'MenuPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'MenuPageMsg', subMsg })),
       ]
     }
+
     case 'MessagePageMsg': {
-      if (model.pageModel._tag !== 'MessagePageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = MessagePage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'MessagePageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = MessagePage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'MessagePageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'MessagePageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'MessagePageMsg', subMsg })),
       ]
     }
+
     case 'ModalPageMsg': {
-      if (model.pageModel._tag !== 'ModalPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = ModalPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'ModalPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = ModalPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'ModalPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'ModalPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'ModalPageMsg', subMsg })),
       ]
     }
+
     case 'NavbarPageMsg': {
-      if (model.pageModel._tag !== 'NavbarPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = NavbarPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'NavbarPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = NavbarPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'NavbarPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'NavbarPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'NavbarPageMsg', subMsg })),
       ]
     }
+
     case 'FloatingSidebarPageMsg': {
-      if (model.pageModel._tag !== 'FloatingSidebarPageModel')
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'FloatingSidebarPageModel')
         return [model, Cmd.none()]
       const [subModel, cmd] = FloatingSidebarPage.update(
         msg.subMsg,
-        model.pageModel.model,
+        pageModel.model,
       )
       return [
         {
           ...model,
-          pageModel: { _tag: 'FloatingSidebarPageModel', model: subModel },
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'FloatingSidebarPageModel',
+            model: subModel,
+          }),
         },
         cmd.map((subMsg) => ({ _tag: 'FloatingSidebarPageMsg', subMsg })),
       ]
     }
+
     case 'SidebarPageMsg': {
-      if (model.pageModel._tag !== 'SidebarPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = SidebarPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'SidebarPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
-      ]
-    }
-    case 'PaginationPageMsg': {
-      if (model.pageModel._tag !== 'PaginationPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = PaginationPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'SidebarPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = SidebarPage.update(msg.subMsg, pageModel.model)
       return [
         {
           ...model,
-          pageModel: { _tag: 'PaginationPageModel', model: subModel },
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'SidebarPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
+      ]
+    }
+
+    case 'PaginationPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'PaginationPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = PaginationPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'PaginationPageModel',
+            model: subModel,
+          }),
         },
         cmd.map((subMsg) => ({ _tag: 'PaginationPageMsg', subMsg })),
       ]
     }
+
     case 'PanelPageMsg': {
-      if (model.pageModel._tag !== 'PanelPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = PanelPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'PanelPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'PanelPageMsg', subMsg })),
-      ]
-    }
-    case 'PopoverPageMsg': {
-      if (model.pageModel._tag !== 'PopoverPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = PopoverPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'PopoverPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'PopoverPageMsg', subMsg })),
-      ]
-    }
-    case 'TabsPageMsg': {
-      if (model.pageModel._tag !== 'TabsPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = TabsPage.update(msg.subMsg, model.pageModel.model)
-      return [
-        { ...model, pageModel: { _tag: 'TabsPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'TabsPageMsg', subMsg })),
-      ]
-    }
-    case 'FieldPageMsg': {
-      if (model.pageModel._tag !== 'FieldPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = FieldPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'FieldPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'FieldPageMsg', subMsg })),
-      ]
-    }
-    case 'InputPageMsg': {
-      if (model.pageModel._tag !== 'InputPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = InputPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'InputPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'InputPageMsg', subMsg })),
-      ]
-    }
-    case 'TextareaPageMsg': {
-      if (model.pageModel._tag !== 'TextareaPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = TextareaPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'TextareaPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'TextareaPageMsg', subMsg })),
-      ]
-    }
-    case 'SelectPageMsg': {
-      if (model.pageModel._tag !== 'SelectPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = SelectPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'SelectPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'SelectPageMsg', subMsg })),
-      ]
-    }
-    case 'CheckboxPageMsg': {
-      if (model.pageModel._tag !== 'CheckboxPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = CheckboxPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'CheckboxPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'CheckboxPageMsg', subMsg })),
-      ]
-    }
-    case 'RadioPageMsg': {
-      if (model.pageModel._tag !== 'RadioPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = RadioPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'RadioPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'RadioPageMsg', subMsg })),
-      ]
-    }
-    case 'FilePageMsg': {
-      if (model.pageModel._tag !== 'FilePageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = FilePage.update(msg.subMsg, model.pageModel.model)
-      return [
-        { ...model, pageModel: { _tag: 'FilePageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'FilePageMsg', subMsg })),
-      ]
-    }
-    case 'ContainerPageMsg': {
-      if (model.pageModel._tag !== 'ContainerPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = ContainerPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'PanelPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = PanelPage.update(msg.subMsg, pageModel.model)
       return [
         {
           ...model,
-          pageModel: { _tag: 'ContainerPageModel', model: subModel },
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'PanelPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'PanelPageMsg', subMsg })),
+      ]
+    }
+
+    case 'PopoverPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'PopoverPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = PopoverPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'PopoverPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'PopoverPageMsg', subMsg })),
+      ]
+    }
+
+    case 'TabsPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'TabsPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = TabsPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'TabsPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'TabsPageMsg', subMsg })),
+      ]
+    }
+
+    case 'FieldPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'FieldPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = FieldPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'FieldPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'FieldPageMsg', subMsg })),
+      ]
+    }
+
+    case 'InputPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'InputPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = InputPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'InputPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'InputPageMsg', subMsg })),
+      ]
+    }
+
+    case 'TextareaPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'TextareaPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = TextareaPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'TextareaPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'TextareaPageMsg', subMsg })),
+      ]
+    }
+
+    case 'SelectPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'SelectPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = SelectPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'SelectPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'SelectPageMsg', subMsg })),
+      ]
+    }
+
+    case 'CheckboxPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'CheckboxPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = CheckboxPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'CheckboxPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'CheckboxPageMsg', subMsg })),
+      ]
+    }
+
+    case 'RadioPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'RadioPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = RadioPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'RadioPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'RadioPageMsg', subMsg })),
+      ]
+    }
+
+    case 'FilePageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'FilePageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = FilePage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'FilePageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'FilePageMsg', subMsg })),
+      ]
+    }
+
+    case 'ContainerPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'ContainerPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = ContainerPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'ContainerPageModel',
+            model: subModel,
+          }),
         },
         cmd.map((subMsg) => ({ _tag: 'ContainerPageMsg', subMsg })),
       ]
     }
+
     case 'HeroPageMsg': {
-      if (model.pageModel._tag !== 'HeroPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = HeroPage.update(msg.subMsg, model.pageModel.model)
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'HeroPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = HeroPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'HeroPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'HeroPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'HeroPageMsg', subMsg })),
       ]
     }
+
     case 'SectionPageMsg': {
-      if (model.pageModel._tag !== 'SectionPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = SectionPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'SectionPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = SectionPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'SectionPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'SectionPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'SectionPageMsg', subMsg })),
       ]
     }
+
     case 'LevelPageMsg': {
-      if (model.pageModel._tag !== 'LevelPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = LevelPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'LevelPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = LevelPage.update(msg.subMsg, pageModel.model)
       return [
-        { ...model, pageModel: { _tag: 'LevelPageModel', model: subModel } },
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'LevelPageModel',
+            model: subModel,
+          }),
+        },
         cmd.map((subMsg) => ({ _tag: 'LevelPageMsg', subMsg })),
       ]
     }
+
     case 'MediaObjectPageMsg': {
-      if (model.pageModel._tag !== 'MediaObjectPageModel')
-        return [model, Cmd.none()]
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'MediaObjectPageModel') return [model, Cmd.none()]
       const [subModel, cmd] = MediaObjectPage.update(
         msg.subMsg,
-        model.pageModel.model,
+        pageModel.model,
       )
       return [
         {
           ...model,
-          pageModel: { _tag: 'MediaObjectPageModel', model: subModel },
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'MediaObjectPageModel',
+            model: subModel,
+          }),
         },
         cmd.map((subMsg) => ({ _tag: 'MediaObjectPageMsg', subMsg })),
       ]
     }
+
     case 'FooterPageMsg': {
-      if (model.pageModel._tag !== 'FooterPageModel') return [model, Cmd.none()]
-      const [subModel, cmd] = FooterPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'FooterPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'FooterPageMsg', subMsg })),
-      ]
-    }
-    case 'ColumnsPageMsg': {
-      if (model.pageModel._tag !== 'ColumnsPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = ColumnsPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
-      return [
-        { ...model, pageModel: { _tag: 'ColumnsPageModel', model: subModel } },
-        cmd.map((subMsg) => ({ _tag: 'ColumnsPageMsg', subMsg })),
-      ]
-    }
-    case 'DotLoadingPageMsg': {
-      if (model.pageModel._tag !== 'DotLoadingPageModel')
-        return [model, Cmd.none()]
-      const [subModel, cmd] = DotLoadingPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'FooterPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = FooterPage.update(msg.subMsg, pageModel.model)
       return [
         {
           ...model,
-          pageModel: { _tag: 'DotLoadingPageModel', model: subModel },
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'FooterPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'FooterPageMsg', subMsg })),
+      ]
+    }
+
+    case 'ColumnsPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'ColumnsPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = ColumnsPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'ColumnsPageModel',
+            model: subModel,
+          }),
+        },
+        cmd.map((subMsg) => ({ _tag: 'ColumnsPageMsg', subMsg })),
+      ]
+    }
+
+    case 'DotLoadingPageMsg': {
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'DotLoadingPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = DotLoadingPage.update(msg.subMsg, pageModel.model)
+      return [
+        {
+          ...model,
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'DotLoadingPageModel',
+            model: subModel,
+          }),
         },
         cmd.map((subMsg) => ({ _tag: 'DotLoadingPageMsg', subMsg })),
       ]
     }
 
     case 'NotFoundPageMsg': {
-      if (model.pageModel._tag !== 'NotFoundPageModel')
-        return [model, Cmd.none()]
-      const [notFoundModel, cmd] = NotFoundPage.update(
-        msg.subMsg,
-        model.pageModel.model,
-      )
+      const pageModel = Navigation.getPageModel(model.navigation)
+      if (pageModel._tag !== 'NotFoundPageModel') return [model, Cmd.none()]
+      const [subModel, cmd] = NotFoundPage.update(msg.subMsg, pageModel.model)
       return [
         {
           ...model,
-          pageModel: { _tag: 'NotFoundPageModel', model: notFoundModel },
+          navigation: Navigation.setPageModel(model.navigation, {
+            _tag: 'NotFoundPageModel',
+            model: subModel,
+          }),
         },
         cmd.map((subMsg) => ({ _tag: 'NotFoundPageMsg', subMsg })),
       ]
@@ -1280,5 +1282,4 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     case 'TopNavbarMsg':
       return topNavbarMsgHandler(msg.subMsg)(model)
   }
-  return [model, Cmd.none()]
 }

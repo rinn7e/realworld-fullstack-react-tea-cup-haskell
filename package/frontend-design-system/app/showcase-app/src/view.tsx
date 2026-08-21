@@ -4,6 +4,7 @@ import { ColumnMemo as DsColumnMemo } from '@rinn7e/realworld-design-system/grid
 import { ColumnsMemo as DsColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
 import { ContainerMemo as DsContainerMemo } from '@rinn7e/realworld-design-system/layout/container/component'
 import { FooterMemo as DsFooterMemo } from '@rinn7e/realworld-design-system/layout/footer/component'
+import * as Navigation from '@rinn7e/tea-cup-navigation'
 import { Monitor, Moon, Sun } from 'lucide-react'
 import type React from 'react'
 
@@ -75,43 +76,49 @@ export const view = (
   dispatch: (msg: Msg) => void,
   model: Model,
 ): React.ReactElement => {
+  const currentRoute = Navigation.getRoute(model.navigation)
+  const pageModel = Navigation.getPageModel(model.navigation)
+
   const activeComponent =
-    model.route.page._tag === 'HomePage' ||
-    model.route.page._tag === 'NotFoundPage'
+    currentRoute.page._tag === 'HomePage' ||
+    currentRoute.page._tag === 'NotFoundPage'
       ? ''
-      : model.route.page._tag.replace(/Page$/, '').toLowerCase()
+      : currentRoute.page._tag.replace(/Page$/, '').toLowerCase()
 
   const navigateRoute = (route: AppRoute) => {
-    dispatch({ _tag: 'ChangeRoute', route })
+    dispatch({
+      _tag: 'NavigationMsg',
+      subMsg: { _tag: 'ChangeRoute', route },
+    })
   }
 
   const renderPage = () => {
-    switch (model.pageModel._tag) {
+    switch (pageModel._tag) {
       case 'HomePageModel':
         return (
           <HomePage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'HomePageMsg', subMsg })}
           />
         )
       case 'BlockPageModel':
         return (
           <BlockPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'BlockPageMsg', subMsg })}
           />
         )
       case 'BoxPageModel':
         return (
           <BoxPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'BoxPageMsg', subMsg })}
           />
         )
       case 'BreadcrumbPageModel':
         return (
           <BreadcrumbPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) =>
               dispatch({ _tag: 'BreadcrumbPageMsg', subMsg })
             }
@@ -120,35 +127,35 @@ export const view = (
       case 'ButtonPageModel':
         return (
           <ButtonPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'ButtonPageMsg', subMsg })}
           />
         )
       case 'CardPageModel':
         return (
           <CardPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'CardPageMsg', subMsg })}
           />
         )
       case 'CheckboxPageModel':
         return (
           <CheckboxPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'CheckboxPageMsg', subMsg })}
           />
         )
       case 'ColumnsPageModel':
         return (
           <ColumnsPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'ColumnsPageMsg', subMsg })}
           />
         )
       case 'ContainerPageModel':
         return (
           <ContainerPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) =>
               dispatch({ _tag: 'ContainerPageMsg', subMsg })
             }
@@ -157,14 +164,14 @@ export const view = (
       case 'ContentPageModel':
         return (
           <ContentPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'ContentPageMsg', subMsg })}
           />
         )
       case 'DotLoadingPageModel':
         return (
           <DotLoadingPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) =>
               dispatch({ _tag: 'DotLoadingPageMsg', subMsg })
             }
@@ -173,77 +180,77 @@ export const view = (
       case 'DeletePageModel':
         return (
           <DeletePage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'DeletePageMsg', subMsg })}
           />
         )
       case 'DropdownPageModel':
         return (
           <DropdownPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'DropdownPageMsg', subMsg })}
           />
         )
       case 'FieldPageModel':
         return (
           <FieldPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'FieldPageMsg', subMsg })}
           />
         )
       case 'FilePageModel':
         return (
           <FilePage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'FilePageMsg', subMsg })}
           />
         )
       case 'FooterPageModel':
         return (
           <FooterPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'FooterPageMsg', subMsg })}
           />
         )
       case 'HeroPageModel':
         return (
           <HeroPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'HeroPageMsg', subMsg })}
           />
         )
       case 'IconPageModel':
         return (
           <IconPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'IconPageMsg', subMsg })}
           />
         )
       case 'ImagePageModel':
         return (
           <ImagePage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'ImagePageMsg', subMsg })}
           />
         )
       case 'InputPageModel':
         return (
           <InputPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'InputPageMsg', subMsg })}
           />
         )
       case 'LevelPageModel':
         return (
           <LevelPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'LevelPageMsg', subMsg })}
           />
         )
       case 'MediaObjectPageModel':
         return (
           <MediaObjectPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) =>
               dispatch({ _tag: 'MediaObjectPageMsg', subMsg })
             }
@@ -252,35 +259,35 @@ export const view = (
       case 'MenuPageModel':
         return (
           <MenuPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'MenuPageMsg', subMsg })}
           />
         )
       case 'MessagePageModel':
         return (
           <MessagePage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'MessagePageMsg', subMsg })}
           />
         )
       case 'ModalPageModel':
         return (
           <ModalPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'ModalPageMsg', subMsg })}
           />
         )
       case 'NavbarPageModel':
         return (
           <NavbarPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'NavbarPageMsg', subMsg })}
           />
         )
       case 'FloatingSidebarPageModel':
         return (
           <FloatingSidebarPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) =>
               dispatch({ _tag: 'FloatingSidebarPageMsg', subMsg })
             }
@@ -289,14 +296,14 @@ export const view = (
       case 'SidebarPageModel':
         return (
           <SidebarPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'SidebarPageMsg', subMsg })}
           />
         )
       case 'NotificationPageModel':
         return (
           <NotificationPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) =>
               dispatch({ _tag: 'NotificationPageMsg', subMsg })
             }
@@ -305,7 +312,7 @@ export const view = (
       case 'PaginationPageModel':
         return (
           <PaginationPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) =>
               dispatch({ _tag: 'PaginationPageMsg', subMsg })
             }
@@ -314,77 +321,77 @@ export const view = (
       case 'PanelPageModel':
         return (
           <PanelPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'PanelPageMsg', subMsg })}
           />
         )
       case 'PopoverPageModel':
         return (
           <PopoverPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'PopoverPageMsg', subMsg })}
           />
         )
       case 'ProgressPageModel':
         return (
           <ProgressPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'ProgressPageMsg', subMsg })}
           />
         )
       case 'RadioPageModel':
         return (
           <RadioPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'RadioPageMsg', subMsg })}
           />
         )
       case 'SectionPageModel':
         return (
           <SectionPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'SectionPageMsg', subMsg })}
           />
         )
       case 'SelectPageModel':
         return (
           <SelectPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'SelectPageMsg', subMsg })}
           />
         )
       case 'TablePageModel':
         return (
           <TablePage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'TablePageMsg', subMsg })}
           />
         )
       case 'TabsPageModel':
         return (
           <TabsPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'TabsPageMsg', subMsg })}
           />
         )
       case 'TagPageModel':
         return (
           <TagPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'TagPageMsg', subMsg })}
           />
         )
       case 'TextareaPageModel':
         return (
           <TextareaPage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'TextareaPageMsg', subMsg })}
           />
         )
       case 'TitlePageModel':
         return (
           <TitlePage
-            model={model.pageModel.model}
+            model={pageModel.model}
             dispatch={(subMsg) => dispatch({ _tag: 'TitlePageMsg', subMsg })}
           />
         )
@@ -414,14 +421,14 @@ export const view = (
               key: 'home',
               label: 'Home',
               href: '#/',
-              isActive: model.route.page._tag === 'HomePage',
+              isActive: currentRoute.page._tag === 'HomePage',
             },
             {
               key: 'elements',
               label: 'Elements',
               href: '#/block',
               isActive:
-                model.route.page._tag !== 'HomePage' &&
+                currentRoute.page._tag !== 'HomePage' &&
                 SHOWCASE_CATEGORIES[0].items.some(
                   (i) => i.id === activeComponent,
                 ),
@@ -431,7 +438,7 @@ export const view = (
               label: 'Components',
               href: '#/breadcrumb',
               isActive:
-                model.route.page._tag !== 'HomePage' &&
+                currentRoute.page._tag !== 'HomePage' &&
                 SHOWCASE_CATEGORIES[1].items.some(
                   (i) => i.id === activeComponent,
                 ),
@@ -441,7 +448,7 @@ export const view = (
               label: 'Form',
               href: '#/field',
               isActive:
-                model.route.page._tag !== 'HomePage' &&
+                currentRoute.page._tag !== 'HomePage' &&
                 SHOWCASE_CATEGORIES[2].items.some(
                   (i) => i.id === activeComponent,
                 ),
