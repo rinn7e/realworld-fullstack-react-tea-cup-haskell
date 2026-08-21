@@ -1,6 +1,7 @@
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
 import type { NavItemData as DsNavItemData } from '@rinn7e/realworld-design-system/type/nav-item'
+import * as Navigation from '@rinn7e/tea-cup-navigation'
 import type { Option } from 'fp-ts/lib/Option'
 import { Menu, Monitor, Moon, Pencil, Settings, Sun } from 'lucide-react'
 import React from 'react'
@@ -85,7 +86,7 @@ export const toMobileNavItems = (_model: Model): NavItem[] => [
 
 export const toDesktopNavItems = (model: Model): NavItem[] => {
   const userOpt = model.shared.user
-  const pageTag = model.pageModel._tag
+  const pageTag = Navigation.getPageModel(model.navigation)._tag
   const navLinksData = userOpt._tag === 'Some' ? navLinkAuths : navLinkUnauths
 
   const items: NavItem[] = navLinksData.map((linkData) => {

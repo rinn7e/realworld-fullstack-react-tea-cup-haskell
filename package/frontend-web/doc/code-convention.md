@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Task Scope and Refactoring](#task-scope-and-refactoring)
+- [Preserving Comments and Documentation](#preserving-comments-and-documentation)
 - [Import Organization](#import-organization)
 - [Control Flow](#control-flow)
 - [Functional Programming (fp-ts)](#functional-programming-fp-ts)
@@ -27,6 +28,10 @@ Prefer to use `satisfies Type` instead of `as Type` for TypeSript code, unless t
 ## Task Scope and Refactoring
 
 Prefer not to update or refactor code outside of the specific task or feature that is assigned to you. Keep your changes focused on the current objective to prevent unintended side effects and scope creep.
+
+## Preserving Comments and Documentation
+
+Never strip, delete, or overwrite existing comments, documentation notes, or JSDoc comments during code modifications and refactoring. Existing comments often explain subtle business logic, edge cases (e.g. backend error status caveats), test expectations, or TODO items. Preserving comments maintains codebase history and documentation integrity.
 
 ---
 

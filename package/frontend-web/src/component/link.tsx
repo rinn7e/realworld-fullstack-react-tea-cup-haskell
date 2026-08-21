@@ -1,7 +1,9 @@
+import type * as Navigation from '@rinn7e/tea-cup-navigation'
+import { Link as NavLink } from '@rinn7e/tea-cup-navigation/component'
 import React, { useContext } from 'react'
 
 import { SetGlobalMsgContext } from '@/common/global-context'
-import { type AppRoute, toUrlString } from '@/common/type/route'
+import { type AppRoute, AppRouteEq, toUrlString } from '@/common/type/route'
 
 interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   route: AppRoute
@@ -15,20 +17,20 @@ export const Link: React.FC<Props> = ({
   children,
   ...rest
 }) => {
-  const setGlobalMsg = useContext(SetGlobalMsgContext)
-  const href = toUrlString(route)
+  const dispatch = useContext(SetGlobalMsgContext)
 
   return (
-    <a
+    <NavLink
       {...rest}
-      href={href}
+      route={route}
+      toUrl={toUrlString}
+      dispatch={(subMsg: Navigation.Msg<AppRoute>) =>
+        dispatch({ _tag: 'NavigationMsg', subMsg })
+      }
+      routeEq={AppRouteEq}
       className={className}
-      onClick={(e) => {
-        e.preventDefault()
-        setGlobalMsg({ _tag: 'ChangeRoute', route })
-      }}
     >
       {children}
-    </a>
+    </NavLink>
   )
 }

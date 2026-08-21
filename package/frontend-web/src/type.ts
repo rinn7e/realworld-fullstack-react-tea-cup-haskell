@@ -1,5 +1,6 @@
 import type * as DsFloatingSidebar from '@rinn7e/realworld-design-system/component/floating-sidebar'
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
+import type * as Navigation from '@rinn7e/tea-cup-navigation'
 import type { Option } from 'fp-ts/lib/Option'
 
 import type { User, UserWithToken } from '@/common/api/type'
@@ -27,11 +28,9 @@ export type PageModel =
   | { _tag: 'NotFoundPageModel' }
 
 export type Model = {
-  route: AppRoute
+  navigation: Navigation.Model<AppRoute, PageModel>
   unavailableMode: boolean
   shared: Shared
-  pageModel: PageModel
-  isInternal: boolean
   debugPanel: DebugPanel.Model
   sidebar: DsFloatingSidebar.Model
   navbar: DsNavbar.Model
@@ -48,8 +47,7 @@ export type Msg =
       isUnavailable: boolean
       token: Option<string>
     }
-  | { _tag: 'UrlChange'; location: Location }
-  | { _tag: 'ChangeRoute'; route: AppRoute }
+  | { _tag: 'NavigationMsg'; subMsg: Navigation.Msg<AppRoute> }
   | { _tag: 'SetUser'; user: Option<UserWithToken> }
   | { _tag: 'HomePageMsg'; subMsg: HomePage.Msg }
   | { _tag: 'ArticlePageMsg'; subMsg: ArticlePage.Msg }

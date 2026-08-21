@@ -1,5 +1,6 @@
 import { FloatingSidebarMemo as DsFloatingFloatingSidebarMemo } from '@rinn7e/realworld-design-system/component/floating-sidebar/component'
 import { NavbarMemo as DsNavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
+import * as Navigation from '@rinn7e/tea-cup-navigation'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
@@ -58,11 +59,14 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
 }
 
 const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
-  switch (model.pageModel._tag) {
+  const pageModel = Navigation.getPageModel(model.navigation)
+  const route = Navigation.getRoute(model.navigation)
+
+  switch (pageModel._tag) {
     case 'HomePageModel':
       return (
         <HomePageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           shared={model.shared}
           dispatch={(msg) => dispatch({ _tag: 'HomePageMsg', subMsg: msg })}
         />
@@ -70,7 +74,7 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
     case 'ArticlePageModel':
       return (
         <ArticlePageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           user={model.shared.user}
           dispatch={(msg) => dispatch({ _tag: 'ArticlePageMsg', subMsg: msg })}
         />
@@ -78,21 +82,21 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
     case 'LoginPageModel':
       return (
         <LoginPageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           dispatch={(msg) => dispatch({ _tag: 'LoginPageMsg', subMsg: msg })}
         />
       )
     case 'SignupPageModel':
       return (
         <SignupPageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           dispatch={(msg) => dispatch({ _tag: 'SignupPageMsg', subMsg: msg })}
         />
       )
     case 'SettingsPageModel':
       return (
         <SettingsPageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           dispatch={(msg) => dispatch({ _tag: 'SettingsPageMsg', subMsg: msg })}
         />
       )
@@ -100,17 +104,17 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
       const isCurrentUser =
         model.shared.user._tag === 'Some' &&
         model.shared.user.value.username ===
-          (model.pageModel.model.profile._tag === 'RemoteSuccess'
-            ? model.pageModel.model.profile.value.profile.username
+          (pageModel.model.profile._tag === 'RemoteSuccess'
+            ? pageModel.model.profile.value.profile.username
             : '')
 
       return (
         <ProfilePageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           shared={model.shared}
           dispatch={(msg) => dispatch({ _tag: 'ProfilePageMsg', subMsg: msg })}
           isCurrentUser={isCurrentUser}
-          route={model.route}
+          route={route}
         />
       )
     }
@@ -118,7 +122,7 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
     case 'EditorPageModel':
       return (
         <EditorPageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           dispatch={(msg) => dispatch({ _tag: 'EditorPageMsg', subMsg: msg })}
         />
       )

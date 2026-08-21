@@ -32,7 +32,10 @@ const preView = (dispatch: Dispatcher<Msg>, model: Model | null) => {
 export const AppProgram = () => {
   return (
     <ProgramWithNav<Model | null, Msg>
-      onUrlChange={(location) => ({ _tag: 'UrlChange', location })}
+      onUrlChange={(location) => ({
+        _tag: 'NavigationMsg',
+        subMsg: { _tag: 'UrlChange', location },
+      })}
       init={preInit}
       update={preUpdate}
       view={preView}
