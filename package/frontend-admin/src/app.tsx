@@ -1,3 +1,4 @@
+import * as Navigation from '@rinn7e/tea-cup-navigation'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
@@ -30,8 +31,10 @@ interface Props {
 
 // TODO: Implement mobile-first sidebar toggle for better responsiveness
 export const App: React.FC<Props> = ({ model, dispatch }) => {
+  const currentRoute = Navigation.getRoute(model.navigation)
+
   // If we are on the login page, show a different layout (no sidebar)
-  if (model.route.page._tag === 'LoginPage') {
+  if (currentRoute.page._tag === 'LoginPage') {
     return (
       <SetGlobalMsgContext value={dispatch}>
         <main className='h-dvh bg-gray-50 dark:bg-black'>
@@ -82,7 +85,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'HomePage'}
+              active={currentRoute.page._tag === 'HomePage'}
               route={{ page: homePage() }}
             />
             <SidebarLink
@@ -109,7 +112,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'ArticlePage'}
+              active={currentRoute.page._tag === 'ArticlePage'}
               route={{ page: articlesPage() }}
             />
             <SidebarLink
@@ -130,7 +133,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'UserPage'}
+              active={currentRoute.page._tag === 'UserPage'}
               route={{ page: usersPage() }}
             />
             <SidebarLink
@@ -151,7 +154,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'CommentPage'}
+              active={currentRoute.page._tag === 'CommentPage'}
               route={{ page: commentsPage() }}
             />
             <SidebarLink
@@ -172,7 +175,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'VisitorPage'}
+              active={currentRoute.page._tag === 'VisitorPage'}
               route={{ page: visitorsPage() }}
             />
             <SidebarLink
@@ -199,7 +202,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
                   />
                 </svg>
               }
-              active={model.route.page._tag === 'SettingPage'}
+              active={currentRoute.page._tag === 'SettingPage'}
               route={{ page: settingsPage() }}
             />
           </nav>
@@ -220,7 +223,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
           {renderPage(model, dispatch)}
 
           {/* Scroll to Top Button */}
-          {model.showScrollTop && model.route.page._tag !== 'HomePage' && (
+          {model.showScrollTop && currentRoute.page._tag !== 'HomePage' && (
             <button
               type='button'
               onClick={() => dispatch({ _tag: 'ScrollToTop' })}
@@ -276,11 +279,13 @@ const SidebarLink: React.FC<{
 )
 
 const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
-  switch (model.pageModel._tag) {
+  const pageModel = Navigation.getPageModel(model.navigation)
+
+  switch (pageModel._tag) {
     case 'HomePageModel':
       return (
         <HomePageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'HomePageMsg', subMsg })}
         />
@@ -288,7 +293,7 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
     case 'ArticlePageModel':
       return (
         <ArticlePageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'ArticlePageMsg', subMsg })}
         />
@@ -296,7 +301,7 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
     case 'UserPageModel':
       return (
         <UserPageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'UserPageMsg', subMsg })}
         />
@@ -304,7 +309,7 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
     case 'CommentPageModel':
       return (
         <CommentPageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'CommentPageMsg', subMsg })}
         />
@@ -312,7 +317,7 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
     case 'VisitorPageModel':
       return (
         <VisitorPageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'VisitorPageMsg', subMsg })}
         />
@@ -321,7 +326,7 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
     case 'LoginPageModel':
       return (
         <LoginPageMemo
-          model={model.pageModel.model}
+          model={pageModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'LoginPageMsg', subMsg })}
         />
       )

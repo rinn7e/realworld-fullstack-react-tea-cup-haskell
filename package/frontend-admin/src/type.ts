@@ -1,3 +1,4 @@
+import type * as Navigation from '@rinn7e/tea-cup-navigation'
 import { type Option } from 'fp-ts/lib/Option'
 
 import { type AuthUser } from '@/common/type/auth-user'
@@ -15,29 +16,29 @@ import { type Theme } from './theme/type'
 import { type ColorScheme } from './theme/util'
 
 export type Model = {
-  route: AppRoute
-  shared: Shared
-  pageModel: PageModel
-  persona: Persona.Model
-  showScrollTop: boolean
-  theme: Theme
-  colorScheme: ColorScheme
-  isInternal: boolean
+  readonly navigation: Navigation.Model<AppRoute, PageModel>
+  readonly shared: Shared
+  readonly persona: Persona.Model
+  readonly showScrollTop: boolean
+  readonly theme: Theme
+  readonly colorScheme: ColorScheme
 }
 
 export type PageModel =
-  | { _tag: 'HomePageModel'; model: Home.Model }
-  | { _tag: 'LoginPageModel'; model: Login.Model }
-  | { _tag: 'ArticlePageModel'; model: Articles.Model }
-  | { _tag: 'UserPageModel'; model: Users.Model }
-  | { _tag: 'CommentPageModel'; model: Comments.Model }
-  | { _tag: 'VisitorPageModel'; model: Visitors.Model }
-  | { _tag: 'SettingPageModel' }
-  | { _tag: 'NotFoundPageModel' }
+  | { readonly _tag: 'HomePageModel'; readonly model: Home.Model }
+  | { readonly _tag: 'LoginPageModel'; readonly model: Login.Model }
+  | { readonly _tag: 'ArticlePageModel'; readonly model: Articles.Model }
+  | { readonly _tag: 'UserPageModel'; readonly model: Users.Model }
+  | { readonly _tag: 'CommentPageModel'; readonly model: Comments.Model }
+  | { readonly _tag: 'VisitorPageModel'; readonly model: Visitors.Model }
+  | { readonly _tag: 'SettingPageModel' }
+  | { readonly _tag: 'NotFoundPageModel' }
 
 export type Msg =
-  | { _tag: 'UrlChange'; location: Location }
-  | { _tag: 'ChangeRoute'; route: AppRoute }
+  | {
+      readonly _tag: 'NavigationMsg'
+      readonly subMsg: Navigation.Msg<AppRoute>
+    }
   | {
       readonly _tag: 'Init'
       readonly location: Location
@@ -45,16 +46,16 @@ export type Msg =
       readonly isUnavailable: boolean
       readonly token: Option<string>
     }
-  | { _tag: 'Logout' }
-  | { _tag: 'HomePageMsg'; subMsg: Home.Msg }
-  | { _tag: 'LoginPageMsg'; subMsg: Login.Msg }
-  | { _tag: 'ArticlePageMsg'; subMsg: Articles.Msg }
-  | { _tag: 'UserPageMsg'; subMsg: Users.Msg }
-  | { _tag: 'CommentPageMsg'; subMsg: Comments.Msg }
-  | { _tag: 'VisitorPageMsg'; subMsg: Visitors.Msg }
-  | { _tag: 'PersonaMsg'; subMsg: Persona.Msg }
-  | { _tag: 'SetShowScrollTop'; value: boolean }
-  | { _tag: 'ScrollToTop' }
-  | { _tag: 'SwitchTheme'; theme: Theme }
-  | { _tag: 'SetColorScheme'; scheme: ColorScheme }
-  | { _tag: 'NoOp' }
+  | { readonly _tag: 'Logout' }
+  | { readonly _tag: 'HomePageMsg'; readonly subMsg: Home.Msg }
+  | { readonly _tag: 'LoginPageMsg'; readonly subMsg: Login.Msg }
+  | { readonly _tag: 'ArticlePageMsg'; readonly subMsg: Articles.Msg }
+  | { readonly _tag: 'UserPageMsg'; readonly subMsg: Users.Msg }
+  | { readonly _tag: 'CommentPageMsg'; readonly subMsg: Comments.Msg }
+  | { readonly _tag: 'VisitorPageMsg'; readonly subMsg: Visitors.Msg }
+  | { readonly _tag: 'PersonaMsg'; readonly subMsg: Persona.Msg }
+  | { readonly _tag: 'SetShowScrollTop'; readonly value: boolean }
+  | { readonly _tag: 'ScrollToTop' }
+  | { readonly _tag: 'SwitchTheme'; readonly theme: Theme }
+  | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
+  | { readonly _tag: 'NoOp' }

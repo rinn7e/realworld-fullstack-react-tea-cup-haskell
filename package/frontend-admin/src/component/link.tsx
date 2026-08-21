@@ -14,6 +14,7 @@ export const Link: React.FC<Props> = ({
   route,
   className,
   children,
+  onClick,
   ...rest
 }) => {
   const setGlobalMsg = useContext(SetGlobalMsgContext)
@@ -25,8 +26,20 @@ export const Link: React.FC<Props> = ({
       href={href}
       className={className}
       onClick={(e) => {
-        e.preventDefault()
-        setGlobalMsg({ _tag: 'ChangeRoute', route })
+        if (onClick) onClick(e)
+        if (
+          !e.defaultPrevented &&
+          e.button === 0 &&
+          !e.metaKey &&
+          !e.ctrlKey &&
+          !e.shiftKey
+        ) {
+          e.preventDefault()
+          setGlobalMsg({
+            _tag: 'NavigationMsg',
+            subMsg: { _tag: 'ChangeRoute', route },
+          })
+        }
       }}
     >
       {children}

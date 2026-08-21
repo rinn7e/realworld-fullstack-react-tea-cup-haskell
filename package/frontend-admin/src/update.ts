@@ -1,15 +1,14 @@
-import { taskFromTE, updateAndCmd } from '@rinn7e/tea-cup-prelude'
+import * as Navigation from '@rinn7e/tea-cup-navigation'
+import { taskFromTE } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
-import { pipe } from 'fp-ts/lib/function'
-import { newUrl } from 'react-tea-cup'
 import { Cmd, Task } from 'tea-cup-fp'
 
 import { getCurrentUser } from '@/common/api/handler/user'
 import { getToken, removeToken, saveToken } from '@/common/cache'
+import { mkNavigationConfig } from '@/common/navigation'
 import { type AuthUser } from '@/common/type/auth-user'
-import { type AppRoute, AppRouteEq } from '@/common/type/route'
+import { type AppRoute } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
-import { parseAppRoute, toUrlString } from '@/common/util/route'
 import type * as PersonaType from '@/component/persona-panel/type'
 import * as Persona from '@/component/persona-panel/update'
 import * as Articles from '@/page/article'
@@ -50,101 +49,6 @@ export const preUpdate = (
   }
 
   return update(msg, model)
-}
-
-// Init, Update
-// ---------------------------------------------
-
-export const init = (
-  location: Location,
-  user: O.Option<AuthUser>,
-  isUnavailable: boolean,
-  token: O.Option<string>,
-): [Model, Cmd<Msg>] => {
-  const route = parseAppRoute(window.location.origin, location.href)
-  if (!isUnavailable && token._tag === 'None') {
-    removeToken()
-  }
-
-  const [personaModel, personaCmd] = Persona.init()
-  const colorScheme = loadColorScheme()
-  const savedThemeId = loadThemeId()
-  const theme = (savedThemeId ? themes[savedThemeId] : null) ?? defaultTheme
-
-  const model: Model = {
-    route,
-    shared: {
-      user,
-      token,
-    },
-    pageModel: { _tag: 'NotFoundPageModel' },
-    persona: personaModel,
-    showScrollTop: false,
-    theme,
-    colorScheme,
-    isInternal: false,
-  }
-
-  const initCmd = Cmd.batch([
-    personaCmd.map((subMsg): Msg => ({ _tag: 'PersonaMsg', subMsg })),
-  ])
-
-  return pipe([model, initCmd], updateAndCmd(navigate(route, true)))
-}
-
-export const initializeCmd = (location: Location): Cmd<Msg> => {
-  const colorScheme = loadColorScheme()
-  const savedThemeId = loadThemeId()
-  const theme = (savedThemeId ? themes[savedThemeId] : null) ?? defaultTheme
-
-  // Inject theme right on initialization to avoid flash of unstyled content
-  injectTheme(theme, colorScheme)
-
-  const storedToken = getToken()
-  if (storedToken) {
-    return Task.attempt(taskFromTE(getCurrentUser(storedToken)), (res): Msg => {
-      const isUnavailable =
-        res.tag === 'Err' &&
-        (res.err.statusCode === 500 ||
-          res.err.statusCode === 0 ||
-          res.err.statusCode === 200)
-
-      const token =
-        res.tag === 'Ok'
-          ? O.some(res.value.user.token)
-          : isUnavailable
-            ? O.some(storedToken)
-            : O.none
-
-      if (token._tag === 'Some') saveToken(token.value)
-      else removeToken()
-
-      return {
-        _tag: 'Init',
-        location,
-        user:
-          res.tag === 'Ok'
-            ? O.some({
-                email: res.value.user.email,
-                token: res.value.user.token,
-                username: res.value.user.username,
-                bio: res.value.user.bio,
-                image: res.value.user.image,
-              })
-            : O.none,
-        isUnavailable,
-        token,
-      }
-    })
-  }
-
-  return Task.perform(Task.succeed(undefined), (): Msg => ({
-    _tag: 'Init',
-    location,
-    user: O.none,
-    isUnavailable: false,
-    token: O.none,
-  }))
 }
 
 export const initPageModel = (
@@ -202,98 +106,126 @@ export const initPageModel = (
   }
 }
 
-export const navigate =
-  (newRoute: AppRoute, isInternal: boolean) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    const urlCmd = isInternal
-      ? Task.perform(newUrl(toUrlString(newRoute)), (): Msg => ({
-          _tag: 'NoOp',
-        }))
-      : Cmd.none<Msg>()
+export const navigationConfig = mkNavigationConfig<PageModel, Msg>(
+  initPageModel,
+)
 
-    // Route Guard against unauth
-    const isLoggedIn = O.isSome(model.shared.user)
-    const isRouteRequiredAuth = newRoute.page._tag !== 'LoginPage'
-
-    if (isRouteRequiredAuth && !isLoggedIn && O.isNone(model.shared.token)) {
-      return navigate({ page: { _tag: 'LoginPage' } }, true)(model)
-    }
-
-    if (newRoute.page._tag === 'LoginPage' && isLoggedIn) {
-      return navigate({ page: { _tag: 'HomePage' } }, true)(model)
-    }
-
-    const [pageModel, pageCmd] = initPageModel(newRoute, model.shared)
-
-    const nextModel: Model = {
-      ...model,
-      isInternal,
-      route: newRoute,
-      pageModel,
-    }
-
-    return [nextModel, Cmd.batch([urlCmd, pageCmd])]
+export const init = (
+  location: Location,
+  user: O.Option<AuthUser>,
+  isUnavailable: boolean,
+  token: O.Option<string>,
+): [Model, Cmd<Msg>] => {
+  if (!isUnavailable && token._tag === 'None') {
+    removeToken()
   }
 
-const execChangeRoute =
-  (newRoute: AppRoute, isInternal: boolean) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    if (!AppRouteEq.equals(model.route, newRoute)) {
-      return navigate(newRoute, isInternal)(model)
-    } else {
-      if (isInternal) {
-        return navigate(newRoute, isInternal)(model)
-      } else {
-        return [model, Cmd.none()]
+  const shared: Shared = {
+    user,
+    token,
+  }
+
+  const [navModel, navCmd] = Navigation.init(navigationConfig, location, shared)
+
+  const [personaModel, personaCmd] = Persona.init()
+  const colorScheme = loadColorScheme()
+  const savedThemeId = loadThemeId()
+  const theme = (savedThemeId ? themes[savedThemeId] : null) ?? defaultTheme
+
+  const model: Model = {
+    navigation: navModel,
+    shared,
+    persona: personaModel,
+    showScrollTop: false,
+    theme,
+    colorScheme,
+  }
+
+  const initCmd = Cmd.batch([
+    navCmd,
+    personaCmd.map((subMsg): Msg => ({ _tag: 'PersonaMsg', subMsg })),
+  ])
+
+  return [model, initCmd]
+}
+
+export const initializeCmd = (location: Location): Cmd<Msg> => {
+  const colorScheme = loadColorScheme()
+  const savedThemeId = loadThemeId()
+  const theme = (savedThemeId ? themes[savedThemeId] : null) ?? defaultTheme
+
+  // Inject theme right on initialization to avoid flash of unstyled content
+  injectTheme(theme, colorScheme)
+
+  const storedToken = getToken()
+  if (storedToken) {
+    return Task.attempt(taskFromTE(getCurrentUser(storedToken)), (res): Msg => {
+      const isUnavailable =
+        res.tag === 'Err' &&
+        (res.err.statusCode === 500 ||
+          res.err.statusCode === 0 ||
+          res.err.statusCode === 200)
+
+      const token =
+        res.tag === 'Ok'
+          ? O.some(res.value.user.token)
+          : isUnavailable
+            ? O.some(storedToken)
+            : O.none
+
+      if (token._tag === 'Some') saveToken(token.value)
+      else removeToken()
+
+      return {
+        _tag: 'Init',
+        location,
+        user:
+          res.tag === 'Ok'
+            ? O.some({
+                email: res.value.user.email,
+                token: res.value.user.token,
+                username: res.value.user.username,
+                bio: res.value.user.bio,
+                image: res.value.user.image,
+              })
+            : O.none,
+        isUnavailable,
+        token,
       }
-    }
+    })
   }
 
-export const changeRouteHandler =
-  (newRoute: AppRoute, isInternal: boolean) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    return execChangeRoute(newRoute, isInternal)(model)
-  }
+  return Task.perform(Task.succeed(undefined), (): Msg => ({
+    _tag: 'Init',
+    location,
+    user: O.none,
+    isUnavailable: false,
+    token: O.none,
+  }))
+}
 
-// Modify the URL in the address bar without updating the route in the Model.
-// Sets `isInternal` to true to prevent re-navigation when the URL change is detected.
-// useful when we want to update the url to match app state
-export const changeRouteUrlNoReload =
-  (route: AppRoute) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    const url = toUrlString(route)
-    return [
-      {
-        ...model,
-        isInternal: true,
-      },
-      Task.perform(newUrl(url), (): Msg => ({ _tag: 'NoOp' })),
-    ]
-  }
+export const navigationMsgHandler = (
+  subMsg: Extract<Msg, { _tag: 'NavigationMsg' }>['subMsg'],
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  const [navModel, navCmd] = Navigation.update(navigationConfig, model.shared)(
+    subMsg,
+    model.navigation,
+  )
 
-// Modify the URL in the address bar and also update the route in the Model.
-// Sets `isInternal` to true to prevent re-navigation when the URL change is detected.
-// useful when we want to update the route,and url to match app state
-export const changeRouteNoReload =
-  (route: AppRoute) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    const url = toUrlString(route)
-    return [
-      {
-        ...model,
-        route,
-        isInternal: true,
-      },
-      Task.perform(newUrl(url), (): Msg => ({ _tag: 'NoOp' })),
-    ]
-  }
+  return [
+    {
+      ...model,
+      navigation: navModel,
+    },
+    navCmd,
+  ]
+}
 
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
-    case 'UrlChange':
-      return urlChangeHandler(msg.location, model)
-    case 'ChangeRoute':
-      return changeRouteHandler(msg.route, true)(model)
+    case 'NavigationMsg':
+      return navigationMsgHandler(msg.subMsg, model)
     case 'Init':
       // Handled by preUpdate
       return [model, Cmd.none()]
@@ -329,44 +261,36 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 // Handlers
 // ---------------------------------------------
 
-const urlChangeHandler = (
-  location: Location,
-  model: Model,
-): [Model, Cmd<Msg>] => {
-  if (model.isInternal) {
-    return [
-      {
-        ...model,
-        isInternal: false,
-      },
-      Cmd.none(),
-    ]
-  } else {
-    const route = parseAppRoute(window.location.origin, location.href)
-    return changeRouteHandler(route, false)(model)
-  }
-}
-
 const logoutHandler = (model: Model): [Model, Cmd<Msg>] => {
   removeToken()
-  const nextModel = {
+  const nextModel: Model = {
     ...model,
     shared: {
       user: O.none,
       token: O.none,
     },
   }
-  return changeRouteHandler({ page: { _tag: 'LoginPage' } }, true)(nextModel)
+  return navigationMsgHandler(
+    { _tag: 'ChangeRoute', route: { page: { _tag: 'LoginPage' } } },
+    nextModel,
+  )
 }
 
 const homePageMsgHandler = (
   subMsg: Home.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  if (model.pageModel._tag === 'HomePageModel') {
-    const [m, c] = Home.update(model.shared)(subMsg, model.pageModel.model)
+  const pageModel = Navigation.getPageModel(model.navigation)
+  if (pageModel._tag === 'HomePageModel') {
+    const [m, c] = Home.update(model.shared)(subMsg, pageModel.model)
     return [
-      { ...model, pageModel: { ...model.pageModel, model: m } },
+      {
+        ...model,
+        navigation: Navigation.setPageModel(model.navigation, {
+          _tag: 'HomePageModel',
+          model: m,
+        }),
+      },
       c.map((msg): Msg => ({ _tag: 'HomePageMsg', subMsg: msg })),
     ]
   }
@@ -377,15 +301,22 @@ const loginPageMsgHandler = (
   subMsg: Login.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  if (model.pageModel._tag === 'LoginPageModel') {
-    const [m, c] = Login.update(subMsg, model.pageModel.model)
-    const nextModel = { ...model, pageModel: { ...model.pageModel, model: m } }
+  const pageModel = Navigation.getPageModel(model.navigation)
+  if (pageModel._tag === 'LoginPageModel') {
+    const [m, c] = Login.update(subMsg, pageModel.model)
+    const nextModel: Model = {
+      ...model,
+      navigation: Navigation.setPageModel(model.navigation, {
+        _tag: 'LoginPageModel',
+        model: m,
+      }),
+    }
     const nextCmd = c.map((msg): Msg => ({ _tag: 'LoginPageMsg', subMsg: msg }))
 
     if (subMsg._tag === 'SubmitResult' && subMsg.result.tag === 'Ok') {
       const user = subMsg.result.value.user
       saveToken(user.token)
-      const updatedModel = {
+      const updatedModel: Model = {
         ...nextModel,
         shared: {
           ...nextModel.shared,
@@ -399,10 +330,10 @@ const loginPageMsgHandler = (
           token: O.some(user.token),
         },
       }
-      const [finalModel, navCmd] = changeRouteHandler(
-        { page: { _tag: 'HomePage' } },
-        true,
-      )(updatedModel)
+      const [finalModel, navCmd] = navigationMsgHandler(
+        { _tag: 'ChangeRoute', route: { page: { _tag: 'HomePage' } } },
+        updatedModel,
+      )
       return [finalModel, Cmd.batch([nextCmd, navCmd])]
     }
 
@@ -415,10 +346,17 @@ const articlesPageMsgHandler = (
   subMsg: Articles.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  if (model.pageModel._tag === 'ArticlePageModel') {
-    const [m, c] = Articles.update(model.shared)(subMsg, model.pageModel.model)
+  const pageModel = Navigation.getPageModel(model.navigation)
+  if (pageModel._tag === 'ArticlePageModel') {
+    const [m, c] = Articles.update(model.shared)(subMsg, pageModel.model)
     return [
-      { ...model, pageModel: { ...model.pageModel, model: m } },
+      {
+        ...model,
+        navigation: Navigation.setPageModel(model.navigation, {
+          _tag: 'ArticlePageModel',
+          model: m,
+        }),
+      },
       c.map((msg): Msg => ({ _tag: 'ArticlePageMsg', subMsg: msg })),
     ]
   }
@@ -429,10 +367,17 @@ const usersPageMsgHandler = (
   subMsg: Users.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  if (model.pageModel._tag === 'UserPageModel') {
-    const [m, c] = Users.update(model.shared)(subMsg, model.pageModel.model)
+  const pageModel = Navigation.getPageModel(model.navigation)
+  if (pageModel._tag === 'UserPageModel') {
+    const [m, c] = Users.update(model.shared)(subMsg, pageModel.model)
     return [
-      { ...model, pageModel: { ...model.pageModel, model: m } },
+      {
+        ...model,
+        navigation: Navigation.setPageModel(model.navigation, {
+          _tag: 'UserPageModel',
+          model: m,
+        }),
+      },
       c.map((msg): Msg => ({ _tag: 'UserPageMsg', subMsg: msg })),
     ]
   }
@@ -443,10 +388,17 @@ const commentsPageMsgHandler = (
   subMsg: Comments.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  if (model.pageModel._tag === 'CommentPageModel') {
-    const [m, c] = Comments.update(model.shared)(subMsg, model.pageModel.model)
+  const pageModel = Navigation.getPageModel(model.navigation)
+  if (pageModel._tag === 'CommentPageModel') {
+    const [m, c] = Comments.update(model.shared)(subMsg, pageModel.model)
     return [
-      { ...model, pageModel: { ...model.pageModel, model: m } },
+      {
+        ...model,
+        navigation: Navigation.setPageModel(model.navigation, {
+          _tag: 'CommentPageModel',
+          model: m,
+        }),
+      },
       c.map((msg): Msg => ({ _tag: 'CommentPageMsg', subMsg: msg })),
     ]
   }
@@ -457,10 +409,17 @@ const visitorsPageMsgHandler = (
   subMsg: Visitors.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  if (model.pageModel._tag === 'VisitorPageModel') {
-    const [m, c] = Visitors.update(model.shared)(subMsg, model.pageModel.model)
+  const pageModel = Navigation.getPageModel(model.navigation)
+  if (pageModel._tag === 'VisitorPageModel') {
+    const [m, c] = Visitors.update(model.shared)(subMsg, pageModel.model)
     return [
-      { ...model, pageModel: { ...model.pageModel, model: m } },
+      {
+        ...model,
+        navigation: Navigation.setPageModel(model.navigation, {
+          _tag: 'VisitorPageModel',
+          model: m,
+        }),
+      },
       c.map((msg): Msg => ({ _tag: 'VisitorPageMsg', subMsg: msg })),
     ]
   }
