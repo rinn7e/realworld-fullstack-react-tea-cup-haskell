@@ -1,10 +1,10 @@
-import type * as Navigation from '@rinn7e/tea-cup-navigation'
+import type * as TeaRouter from '@rinn7e/tea-cup-router'
 import { type Cmd } from 'tea-cup-fp'
 
 import { parseAppRoute, toUrlString } from './parser'
 import { type AppRoute, AppRouteEq } from './type'
 
-export const mkNavigationConfig = <PageModel, Msg>(
+export const mkRouterConfig = <PageModel, Msg>(
   initPageModel: (
     route: AppRoute,
     context: undefined,
@@ -13,11 +13,11 @@ export const mkNavigationConfig = <PageModel, Msg>(
       readonly pageModel: PageModel
     },
   ) => [PageModel, Cmd<Msg>],
-): Navigation.Config<AppRoute, PageModel, undefined, Msg> => ({
+): TeaRouter.Config<AppRoute, PageModel, undefined, Msg> => ({
   parseUrl: (location) => parseAppRoute('', location.href),
   toUrl: toUrlString,
   routeEq: AppRouteEq,
   guard: () => ({ _tag: 'Allow' }),
   initPageModel,
-  toMsg: (subMsg) => ({ _tag: 'NavigationMsg', subMsg }) as unknown as Msg,
+  toMsg: (subMsg) => ({ _tag: 'TeaRouterMsg', subMsg }) as unknown as Msg,
 })

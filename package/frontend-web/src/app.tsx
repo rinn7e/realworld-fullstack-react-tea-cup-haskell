@@ -1,7 +1,7 @@
 import { FloatingSidebarMemo as DsFloatingFloatingSidebarMemo } from '@rinn7e/realworld-design-system/component/floating-sidebar/component'
 import { NavbarMemo as DsNavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
-import * as Navigation from '@rinn7e/tea-cup-navigation'
 import { cn } from '@rinn7e/tea-cup-prelude'
+import * as TeaRouter from '@rinn7e/tea-cup-router'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
@@ -59,8 +59,8 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
 }
 
 const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
-  const pageModel = Navigation.getPageModel(model.navigation)
-  const route = Navigation.getRoute(model.navigation)
+  const pageModel = TeaRouter.getPageModel(model.router)
+  const route = TeaRouter.getRoute(model.router)
 
   switch (pageModel._tag) {
     case 'HomePageModel':

@@ -1,8 +1,10 @@
+import * as TeaRouter from '@rinn7e/tea-cup-router'
 import React, { useContext } from 'react'
 
 import { SetGlobalMsgContext } from '@/common/global-context'
 import { type AppRoute } from '@/common/type/route'
 import { toUrlString } from '@/common/util/route'
+import { TeaRouterMsg } from '@/type'
 
 interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   route: AppRoute
@@ -35,10 +37,7 @@ export const Link: React.FC<Props> = ({
           !e.shiftKey
         ) {
           e.preventDefault()
-          setGlobalMsg({
-            _tag: 'NavigationMsg',
-            subMsg: { _tag: 'ChangeRoute', route },
-          })
+          setGlobalMsg(TeaRouterMsg(TeaRouter.ChangeRouteMsg(route)))
         }
       }}
     >

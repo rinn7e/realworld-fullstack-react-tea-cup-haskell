@@ -1,6 +1,6 @@
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import type * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
-import type * as Navigation from '@rinn7e/tea-cup-navigation'
+import type * as TeaRouter from '@rinn7e/tea-cup-router'
 
 import type * as BlockPage from './page/block/type'
 import type * as BoxPage from './page/box/type'
@@ -116,7 +116,7 @@ export type PageModel =
   | { readonly _tag: 'NotFoundPageModel'; readonly model: NotFoundPage.Model }
 
 export type Model = {
-  readonly navigation: Navigation.Model<AppRoute, PageModel>
+  readonly router: TeaRouter.Model<AppRoute, PageModel>
   readonly searchQuery: string
   readonly sidebarModel: DsSidebar.Model
   readonly rightSidebarModel: DsSidebar.Model
@@ -129,8 +129,8 @@ export type Msg =
   | { readonly _tag: 'NoOp' }
   | { readonly _tag: 'Init'; readonly location: Location }
   | {
-      readonly _tag: 'NavigationMsg'
-      readonly subMsg: Navigation.Msg<AppRoute>
+      readonly _tag: 'TeaRouterMsg'
+      readonly subMsg: TeaRouter.Msg<AppRoute>
     }
   | { readonly _tag: 'UpdateSearch'; readonly query: string }
   | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
@@ -190,3 +190,8 @@ export type Msg =
   | { readonly _tag: 'TextareaPageMsg'; readonly subMsg: TextareaPage.Msg }
   | { readonly _tag: 'TitlePageMsg'; readonly subMsg: TitlePage.Msg }
   | { readonly _tag: 'NotFoundPageMsg'; readonly subMsg: NotFoundPage.Msg }
+
+export const TeaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
+  _tag: 'TeaRouterMsg',
+  subMsg,
+})

@@ -1,11 +1,12 @@
 import { devTools } from '@rinn7e/tea-cup-prelude'
+import * as TeaRouter from '@rinn7e/tea-cup-router'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { ProgramWithNav } from 'react-tea-cup'
 import { Sub } from 'tea-cup-fp'
 
 import './index.css'
-import type { Model, Msg } from './type'
+import { type Model, type Msg, TeaRouterMsg } from './type'
 import { init, update } from './update'
 import { view } from './view'
 
@@ -15,10 +16,9 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <ProgramWithNav<Model, Msg>
-        onUrlChange={(location) => ({
-          _tag: 'NavigationMsg',
-          subMsg: { _tag: 'UrlChange', location },
-        })}
+        onUrlChange={(location) =>
+          TeaRouterMsg(TeaRouter.UrlChangeMsg(location))
+        }
         init={init}
         update={update}
         view={view}

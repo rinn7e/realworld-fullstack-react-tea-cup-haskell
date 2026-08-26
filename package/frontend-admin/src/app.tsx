@@ -1,4 +1,4 @@
-import * as Navigation from '@rinn7e/tea-cup-navigation'
+import * as TeaRouter from '@rinn7e/tea-cup-router'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
@@ -31,7 +31,7 @@ interface Props {
 
 // TODO: Implement mobile-first sidebar toggle for better responsiveness
 export const App: React.FC<Props> = ({ model, dispatch }) => {
-  const currentRoute = Navigation.getRoute(model.navigation)
+  const currentRoute = TeaRouter.getRoute(model.router)
 
   // If we are on the login page, show a different layout (no sidebar)
   if (currentRoute.page._tag === 'LoginPage') {
@@ -279,7 +279,7 @@ const SidebarLink: React.FC<{
 )
 
 const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
-  const pageModel = Navigation.getPageModel(model.navigation)
+  const pageModel = TeaRouter.getPageModel(model.router)
 
   switch (pageModel._tag) {
     case 'HomePageModel':

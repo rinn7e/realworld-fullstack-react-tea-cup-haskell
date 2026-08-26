@@ -4,7 +4,7 @@ import { ColumnMemo as DsColumnMemo } from '@rinn7e/realworld-design-system/grid
 import { ColumnsMemo as DsColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
 import { ContainerMemo as DsContainerMemo } from '@rinn7e/realworld-design-system/layout/container/component'
 import { FooterMemo as DsFooterMemo } from '@rinn7e/realworld-design-system/layout/footer/component'
-import * as Navigation from '@rinn7e/tea-cup-navigation'
+import * as TeaRouter from '@rinn7e/tea-cup-router'
 import { Monitor, Moon, Sun } from 'lucide-react'
 import type React from 'react'
 
@@ -56,7 +56,7 @@ import { TagPage } from './page/tag/component'
 import { TextareaPage } from './page/textarea/component'
 import { TitlePage } from './page/title/component'
 import type { AppRoute } from './route/type'
-import type { Model, Msg } from './type'
+import { type Model, type Msg, TeaRouterMsg } from './type'
 import type { ColorScheme } from './util/theme-util'
 
 const colorSchemeIcon = (scheme: ColorScheme, size = 15) => {
@@ -76,8 +76,8 @@ export const view = (
   dispatch: (msg: Msg) => void,
   model: Model,
 ): React.ReactElement => {
-  const currentRoute = Navigation.getRoute(model.navigation)
-  const pageModel = Navigation.getPageModel(model.navigation)
+  const currentRoute = TeaRouter.getRoute(model.router)
+  const pageModel = TeaRouter.getPageModel(model.router)
 
   const activeComponent =
     currentRoute.page._tag === 'HomePage' ||
@@ -86,10 +86,7 @@ export const view = (
       : currentRoute.page._tag.replace(/Page$/, '').toLowerCase()
 
   const navigateRoute = (route: AppRoute) => {
-    dispatch({
-      _tag: 'NavigationMsg',
-      subMsg: { _tag: 'ChangeRoute', route },
-    })
+    dispatch(TeaRouterMsg(TeaRouter.ChangeRouteMsg(route)))
   }
 
   const renderPage = () => {

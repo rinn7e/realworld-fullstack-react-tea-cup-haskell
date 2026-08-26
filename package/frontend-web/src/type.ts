@@ -1,6 +1,6 @@
 import type * as DsFloatingSidebar from '@rinn7e/realworld-design-system/component/floating-sidebar'
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
-import type * as Navigation from '@rinn7e/tea-cup-navigation'
+import type * as TeaRouter from '@rinn7e/tea-cup-router'
 import type { Option } from 'fp-ts/lib/Option'
 
 import type { User, UserWithToken } from '@/common/api/type'
@@ -28,7 +28,7 @@ export type PageModel =
   | { _tag: 'NotFoundPageModel' }
 
 export type Model = {
-  navigation: Navigation.Model<AppRoute, PageModel>
+  router: TeaRouter.Model<AppRoute, PageModel>
   unavailableMode: boolean
   shared: Shared
   debugPanel: DebugPanel.Model
@@ -47,7 +47,7 @@ export type Msg =
       isUnavailable: boolean
       token: Option<string>
     }
-  | { _tag: 'NavigationMsg'; subMsg: Navigation.Msg<AppRoute> }
+  | { _tag: 'TeaRouterMsg'; subMsg: TeaRouter.Msg<AppRoute> }
   | { _tag: 'SetUser'; user: Option<UserWithToken> }
   | { _tag: 'HomePageMsg'; subMsg: HomePage.Msg }
   | { _tag: 'ArticlePageMsg'; subMsg: ArticlePage.Msg }
@@ -59,3 +59,8 @@ export type Msg =
   | { _tag: 'DebugPanelMsg'; subMsg: DebugPanel.Msg }
   | { _tag: 'SidebarMsg'; subMsg: DsFloatingSidebar.Msg }
   | { _tag: 'NavbarMsg'; subMsg: DsNavbar.Msg }
+
+export const TeaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
+  _tag: 'TeaRouterMsg',
+  subMsg,
+})

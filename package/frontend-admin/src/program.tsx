@@ -1,9 +1,10 @@
 import { devTools } from '@rinn7e/tea-cup-prelude'
+import * as TeaRouter from '@rinn7e/tea-cup-router'
 import { ProgramWithNav } from 'react-tea-cup'
 import { type Dispatcher, Sub } from 'tea-cup-fp'
 
 import { App } from './app'
-import { type Model, type Msg } from './type'
+import { type Model, type Msg, TeaRouterMsg } from './type'
 import { preInit, preUpdate } from './update'
 
 const preLoadingView = () => {
@@ -21,10 +22,7 @@ const preView = (dispatch: Dispatcher<Msg>, model: Model | null) => {
 export const AppProgram = () => {
   return (
     <ProgramWithNav<Model | null, Msg>
-      onUrlChange={(location) => ({
-        _tag: 'NavigationMsg',
-        subMsg: { _tag: 'UrlChange', location },
-      })}
+      onUrlChange={(location) => TeaRouterMsg(TeaRouter.UrlChangeMsg(location))}
       init={preInit}
       update={preUpdate}
       view={preView}

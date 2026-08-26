@@ -1,9 +1,10 @@
-import type * as Navigation from '@rinn7e/tea-cup-navigation'
-import { Link as NavLink } from '@rinn7e/tea-cup-navigation/component'
+import type * as TeaRouter from '@rinn7e/tea-cup-router'
+import { Link as NavLink } from '@rinn7e/tea-cup-router/link/component'
 import React, { useContext } from 'react'
 
 import { SetGlobalMsgContext } from '@/common/global-context'
 import { type AppRoute, AppRouteEq, toUrlString } from '@/common/type/route'
+import { TeaRouterMsg } from '@/type'
 
 interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   route: AppRoute
@@ -24,8 +25,8 @@ export const Link: React.FC<Props> = ({
       {...rest}
       route={route}
       toUrl={toUrlString}
-      dispatch={(subMsg: Navigation.Msg<AppRoute>) =>
-        dispatch({ _tag: 'NavigationMsg', subMsg })
+      dispatch={(subMsg: TeaRouter.Msg<AppRoute>) =>
+        dispatch(TeaRouterMsg(subMsg))
       }
       routeEq={AppRouteEq}
       className={className}

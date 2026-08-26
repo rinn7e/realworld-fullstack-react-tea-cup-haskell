@@ -1,4 +1,4 @@
-import type * as Navigation from '@rinn7e/tea-cup-navigation'
+import type * as TeaRouter from '@rinn7e/tea-cup-router'
 import { type Option } from 'fp-ts/lib/Option'
 
 import { type AuthUser } from '@/common/type/auth-user'
@@ -16,7 +16,7 @@ import { type Theme } from './theme/type'
 import { type ColorScheme } from './theme/util'
 
 export type Model = {
-  readonly navigation: Navigation.Model<AppRoute, PageModel>
+  readonly router: TeaRouter.Model<AppRoute, PageModel>
   readonly shared: Shared
   readonly persona: Persona.Model
   readonly showScrollTop: boolean
@@ -36,8 +36,8 @@ export type PageModel =
 
 export type Msg =
   | {
-      readonly _tag: 'NavigationMsg'
-      readonly subMsg: Navigation.Msg<AppRoute>
+      readonly _tag: 'TeaRouterMsg'
+      readonly subMsg: TeaRouter.Msg<AppRoute>
     }
   | {
       readonly _tag: 'Init'
@@ -59,3 +59,8 @@ export type Msg =
   | { readonly _tag: 'SwitchTheme'; readonly theme: Theme }
   | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
   | { readonly _tag: 'NoOp' }
+
+export const TeaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
+  _tag: 'TeaRouterMsg',
+  subMsg,
+})

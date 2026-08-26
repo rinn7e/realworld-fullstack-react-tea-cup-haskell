@@ -1,11 +1,11 @@
-import * as Navigation from '@rinn7e/tea-cup-navigation'
 import { taskFromTE } from '@rinn7e/tea-cup-prelude'
+import * as TeaRouter from '@rinn7e/tea-cup-router'
 import * as O from 'fp-ts/lib/Option'
 import { Cmd, Task } from 'tea-cup-fp'
 
 import { getCurrentUser } from '@/common/api/handler/user'
 import { getToken, removeToken, saveToken } from '@/common/cache'
-import { mkNavigationConfig } from '@/common/navigation'
+import { mkRouterConfig } from '@/common/router'
 import { type AuthUser } from '@/common/type/auth-user'
 import { type AppRoute } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
@@ -106,9 +106,7 @@ export const initPageModel = (
   }
 }
 
-export const navigationConfig = mkNavigationConfig<PageModel, Msg>(
-  initPageModel,
-)
+export const routerConfig = mkRouterConfig<PageModel, Msg>(initPageModel)
 
 export const init = (
   location: Location,
@@ -125,7 +123,11 @@ export const init = (
     token,
   }
 
-  const [navModel, navCmd] = Navigation.init(navigationConfig, location, shared)
+  const [routerModel, routerCmd] = TeaRouter.init(
+    routerConfig,
+    location,
+    shared,
+  )
 
   const [personaModel, personaCmd] = Persona.init()
   const colorScheme = loadColorScheme()
@@ -133,7 +135,7 @@ export const init = (
   const theme = (savedThemeId ? themes[savedThemeId] : null) ?? defaultTheme
 
   const model: Model = {
-    navigation: navModel,
+    router: routerModel,
     shared,
     persona: personaModel,
     showScrollTop: false,
@@ -142,7 +144,7 @@ export const init = (
   }
 
   const initCmd = Cmd.batch([
-    navCmd,
+    routerCmd,
     personaCmd.map((subMsg): Msg => ({ _tag: 'PersonaMsg', subMsg })),
   ])
 
@@ -204,28 +206,28 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
   }))
 }
 
-export const navigationMsgHandler = (
-  subMsg: Extract<Msg, { _tag: 'NavigationMsg' }>['subMsg'],
+export const routerMsgHandler = (
+  subMsg: Extract<Msg, { _tag: 'TeaRouterMsg' }>['subMsg'],
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const [navModel, navCmd] = Navigation.update(navigationConfig, model.shared)(
+  const [routerModel, routerCmd] = TeaRouter.update(routerConfig, model.shared)(
     subMsg,
-    model.navigation,
+    model.router,
   )
 
   return [
     {
       ...model,
-      navigation: navModel,
+      router: routerModel,
     },
-    navCmd,
+    routerCmd,
   ]
 }
 
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
-    case 'NavigationMsg':
-      return navigationMsgHandler(msg.subMsg, model)
+    case 'TeaRouterMsg':
+      return routerMsgHandler(msg.subMsg, model)
     case 'Init':
       // Handled by preUpdate
       return [model, Cmd.none()]
@@ -270,8 +272,8 @@ const logoutHandler = (model: Model): [Model, Cmd<Msg>] => {
       token: O.none,
     },
   }
-  return navigationMsgHandler(
-    { _tag: 'ChangeRoute', route: { page: { _tag: 'LoginPage' } } },
+  return routerMsgHandler(
+    TeaRouter.ChangeRouteMsg({ page: { _tag: 'LoginPage' } }),
     nextModel,
   )
 }
@@ -280,13 +282,13 @@ const homePageMsgHandler = (
   subMsg: Home.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = Navigation.getPageModel(model.navigation)
+  const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'HomePageModel') {
     const [m, c] = Home.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
-        navigation: Navigation.setPageModel(model.navigation, {
+        router: TeaRouter.setPageModel(model.router, {
           _tag: 'HomePageModel',
           model: m,
         }),
@@ -301,12 +303,12 @@ const loginPageMsgHandler = (
   subMsg: Login.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = Navigation.getPageModel(model.navigation)
+  const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'LoginPageModel') {
     const [m, c] = Login.update(subMsg, pageModel.model)
     const nextModel: Model = {
       ...model,
-      navigation: Navigation.setPageModel(model.navigation, {
+      router: TeaRouter.setPageModel(model.router, {
         _tag: 'LoginPageModel',
         model: m,
       }),
@@ -330,11 +332,11 @@ const loginPageMsgHandler = (
           token: O.some(user.token),
         },
       }
-      const [finalModel, navCmd] = navigationMsgHandler(
-        { _tag: 'ChangeRoute', route: { page: { _tag: 'HomePage' } } },
+      const [finalModel, routerCmd] = routerMsgHandler(
+        TeaRouter.ChangeRouteMsg({ page: { _tag: 'HomePage' } }),
         updatedModel,
       )
-      return [finalModel, Cmd.batch([nextCmd, navCmd])]
+      return [finalModel, Cmd.batch([nextCmd, routerCmd])]
     }
 
     return [nextModel, nextCmd]
@@ -346,13 +348,13 @@ const articlesPageMsgHandler = (
   subMsg: Articles.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = Navigation.getPageModel(model.navigation)
+  const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'ArticlePageModel') {
     const [m, c] = Articles.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
-        navigation: Navigation.setPageModel(model.navigation, {
+        router: TeaRouter.setPageModel(model.router, {
           _tag: 'ArticlePageModel',
           model: m,
         }),
@@ -367,13 +369,13 @@ const usersPageMsgHandler = (
   subMsg: Users.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = Navigation.getPageModel(model.navigation)
+  const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'UserPageModel') {
     const [m, c] = Users.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
-        navigation: Navigation.setPageModel(model.navigation, {
+        router: TeaRouter.setPageModel(model.router, {
           _tag: 'UserPageModel',
           model: m,
         }),
@@ -388,13 +390,13 @@ const commentsPageMsgHandler = (
   subMsg: Comments.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = Navigation.getPageModel(model.navigation)
+  const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'CommentPageModel') {
     const [m, c] = Comments.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
-        navigation: Navigation.setPageModel(model.navigation, {
+        router: TeaRouter.setPageModel(model.router, {
           _tag: 'CommentPageModel',
           model: m,
         }),
@@ -409,13 +411,13 @@ const visitorsPageMsgHandler = (
   subMsg: Visitors.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = Navigation.getPageModel(model.navigation)
+  const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'VisitorPageModel') {
     const [m, c] = Visitors.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
-        navigation: Navigation.setPageModel(model.navigation, {
+        router: TeaRouter.setPageModel(model.router, {
           _tag: 'VisitorPageModel',
           model: m,
         }),
