@@ -36,7 +36,7 @@ export const renderPagination = (
     <nav className='my-[24px]' data-test='pagination-nav'>
       <ul className='flex w-fit flex-wrap rounded-md border border-gray-200 dark:border-zinc-800'>
         {pages.map((p, index) => {
-          if (p === '...') {
+          if (typeof p !== 'number') {
             return (
               <li
                 key={`ellipsis-${index}`}
@@ -49,7 +49,7 @@ export const renderPagination = (
             )
           }
 
-          const pageNum = p as number
+          const pageNum = p
           return (
             <li
               key={pageNum}

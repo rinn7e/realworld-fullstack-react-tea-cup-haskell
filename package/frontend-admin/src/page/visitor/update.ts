@@ -120,7 +120,7 @@ const paginationMsgHandler = (
     [
       { ...model, pagination },
       paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
-    ] as [Model, Cmd<Msg>],
+    ] satisfies [Model, Cmd<Msg>],
     updateAndCmd((m) => {
       if (subMsg._tag === 'ItemMsg') {
         return paginationItemMsgHandler(subMsg.msg)(m)

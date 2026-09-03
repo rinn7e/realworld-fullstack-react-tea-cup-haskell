@@ -54,24 +54,23 @@ export const NotFoundPageEq: EqClass.Eq<NotFoundPage> = EqClass.struct({
 
 export const AppPageEq: EqClass.Eq<AppPage> = {
   equals: (a, b) => {
-    if (a._tag !== b._tag) return false
     switch (a._tag) {
       case 'HomePage':
-        return HomePageEq.equals(a, b as HomePage)
+        return b._tag === 'HomePage' && HomePageEq.equals(a, b)
       case 'LoginPage':
-        return LoginPageEq.equals(a, b as LoginPage)
+        return b._tag === 'LoginPage' && LoginPageEq.equals(a, b)
       case 'ArticlePage':
-        return ArticlePageEq.equals(a, b as ArticlePage)
+        return b._tag === 'ArticlePage' && ArticlePageEq.equals(a, b)
       case 'UserPage':
-        return UserPageEq.equals(a, b as UserPage)
+        return b._tag === 'UserPage' && UserPageEq.equals(a, b)
       case 'CommentPage':
-        return CommentPageEq.equals(a, b as CommentPage)
+        return b._tag === 'CommentPage' && CommentPageEq.equals(a, b)
       case 'VisitorPage':
-        return VisitorPageEq.equals(a, b as VisitorPage)
+        return b._tag === 'VisitorPage' && VisitorPageEq.equals(a, b)
       case 'SettingPage':
-        return SettingPageEq.equals(a, b as SettingPage)
+        return b._tag === 'SettingPage' && SettingPageEq.equals(a, b)
       case 'NotFoundPage':
-        return NotFoundPageEq.equals(a, b as NotFoundPage)
+        return b._tag === 'NotFoundPage' && NotFoundPageEq.equals(a, b)
     }
   },
 }

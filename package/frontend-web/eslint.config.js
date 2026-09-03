@@ -50,6 +50,12 @@ export default tseslint.config([
           fixStyle: 'inline-type-imports',
         },
       ],
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        {
+          assertionStyle: 'never',
+        },
+      ],
 
       '@typescript-eslint/await-thenable': 'error',
       '@typescript-eslint/no-explicit-any': 'off',

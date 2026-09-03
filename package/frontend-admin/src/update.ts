@@ -452,7 +452,7 @@ const scrollToTopHandler = (model: Model): [Model, Cmd<Msg>] => {
           ?.scrollTo({ top: 0, behavior: 'smooth' })
         return Task.succeed(undefined)
       }),
-      () => ({ _tag: 'NoOp' }) as Msg,
+      (): Msg => ({ _tag: 'NoOp' }),
     ),
   ]
 }
@@ -466,7 +466,7 @@ const switchThemeHandler = (theme: Theme, model: Model): [Model, Cmd<Msg>] => {
         injectTheme(theme, model.colorScheme)
         return Task.succeed(undefined)
       }),
-      () => ({ _tag: 'NoOp' }) as Msg,
+      (): Msg => ({ _tag: 'NoOp' }),
     ),
   ]
 }
@@ -483,7 +483,7 @@ const setColorSchemeHandler = (
         injectTheme(model.theme, scheme)
         return Task.succeed(undefined)
       }),
-      () => ({ _tag: 'NoOp' }) as Msg,
+      (): Msg => ({ _tag: 'NoOp' }),
     ),
   ]
 }

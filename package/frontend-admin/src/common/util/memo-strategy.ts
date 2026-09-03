@@ -12,4 +12,5 @@ export const memoStrategy = <T extends ComponentType<ComponentProps<T>>>(
     nextProps: Readonly<ComponentProps<T>>,
   ) => boolean,
 ): MemoExoticComponent<T> =>
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   memo(Component, equals) as unknown as MemoExoticComponent<T>

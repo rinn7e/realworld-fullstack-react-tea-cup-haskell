@@ -60,13 +60,13 @@ export const mkPaginationConfig = (
       shared.token,
       O.fold(
         () =>
-          TE.left({
-            _tag: 'HttpError',
-            error: {
-              _tag: 'ApiError',
+          TE.left<HttpError<ApiError>>({
+            statusCode: 401,
+            err: {
               errors: { body: ['Not authenticated'] },
             },
-          } as any),
+            actualErr: 'Not authenticated',
+          }),
         (token) =>
           pipe(
             getAdminComments(token, {

@@ -123,7 +123,7 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
       return {
         _tag: 'Init',
         location,
-        user: res.tag === 'Ok' ? O.some(res.value.user as User) : O.none,
+        user: res.tag === 'Ok' ? O.some<User>(res.value.user) : O.none,
         isUnavailable,
         token: token,
       }
@@ -138,94 +138,72 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
   })
 }
 
-// TODO this is used for both init and reInit
-// if we want to do some reInit action,
-// we can pass oldRoute as argument here
-export const initPageModel = (
-  newRoute: AppRoute,
+const initPageModel = (
+  route: AppRoute,
   shared: Shared,
-  _prev?: {
-    readonly route: AppRoute
-    readonly pageModel: PageModel
-  },
 ): [PageModel, Cmd<Msg>] => {
-  switch (newRoute.page._tag) {
+  switch (route.page._tag) {
     case 'HomePage': {
-      const [homeModel, homeCmd] = HomePage.init(
-        newRoute.page.tab,
-        newRoute.page.page,
+      const [model, cmd] = HomePage.init(
+        route.page.tab,
+        route.page.page,
         shared,
       )
       return [
-        { _tag: 'HomePageModel', model: homeModel },
-        homeCmd.map((msg) => ({ _tag: 'HomePageMsg', subMsg: msg })),
+        { _tag: 'HomePageModel', model },
+        cmd.map((m): Msg => ({ _tag: 'HomePageMsg', subMsg: m })),
       ]
     }
     case 'ArticlePage': {
-      const [articleModel, articleCmd] = ArticlePage.init(
-        newRoute.page.slug,
-        shared,
-      )
+      const [model, cmd] = ArticlePage.init(route.page.slug, shared)
       return [
-        { _tag: 'ArticlePageModel', model: articleModel },
-        articleCmd.map((msg) => ({
-          _tag: 'ArticlePageMsg',
-          subMsg: msg,
-        })),
+        { _tag: 'ArticlePageModel', model },
+        cmd.map((m): Msg => ({ _tag: 'ArticlePageMsg', subMsg: m })),
       ]
     }
     case 'LoginPage': {
-      const [loginModel, loginCmd] = LoginPage.init(shared)
+      const [model, cmd] = LoginPage.init(shared)
       return [
-        { _tag: 'LoginPageModel', model: loginModel },
-        loginCmd.map((msg) => ({ _tag: 'LoginPageMsg', subMsg: msg })),
+        { _tag: 'LoginPageModel', model },
+        cmd.map((m): Msg => ({ _tag: 'LoginPageMsg', subMsg: m })),
       ]
     }
     case 'SignupPage': {
-      const [signupModel, signupCmd] = SignupPage.init(shared)
+      const [model, cmd] = SignupPage.init(shared)
       return [
-        { _tag: 'SignupPageModel', model: signupModel },
-        signupCmd.map((msg) => ({ _tag: 'SignupPageMsg', subMsg: msg })),
+        { _tag: 'SignupPageModel', model },
+        cmd.map((m): Msg => ({ _tag: 'SignupPageMsg', subMsg: m })),
       ]
     }
     case 'SettingsPage': {
       if (shared.user._tag === 'None') {
         return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
       }
-      const [settingsModel, settingsCmd] = SettingsPage.init(shared.user.value)
+      const [model, cmd] = SettingsPage.init(shared.user.value)
       return [
-        { _tag: 'SettingsPageModel', model: settingsModel },
-        settingsCmd.map((msg) => ({
-          _tag: 'SettingsPageMsg',
-          subMsg: msg,
-        })),
+        { _tag: 'SettingsPageModel', model },
+        cmd.map((m): Msg => ({ _tag: 'SettingsPageMsg', subMsg: m })),
       ]
     }
     case 'ProfilePage': {
-      const [profileModel, profileCmd] = ProfilePage.init(
-        newRoute.page.username,
-        newRoute.page.favorites,
+      const [model, cmd] = ProfilePage.init(
+        route.page.username,
+        route.page.favorites,
         shared,
       )
       return [
-        { _tag: 'ProfilePageModel', model: profileModel },
-        profileCmd.map((msg) => ({
-          _tag: 'ProfilePageMsg',
-          subMsg: msg,
-        })),
+        { _tag: 'ProfilePageModel', model },
+        cmd.map((m): Msg => ({ _tag: 'ProfilePageMsg', subMsg: m })),
       ]
     }
     case 'EditorPage': {
       if (shared.user._tag === 'None') {
         return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
       }
-      const [editorModel, editorCmd] = EditorPage.init(
-        shared,
-        newRoute.page.slug,
-      )
+      const [model, cmd] = EditorPage.init(shared, route.page.slug)
       return [
-        { _tag: 'EditorPageModel', model: editorModel },
-        editorCmd.map((msg) => ({ _tag: 'EditorPageMsg', subMsg: msg })),
+        { _tag: 'EditorPageModel', model },
+        cmd.map((m): Msg => ({ _tag: 'EditorPageMsg', subMsg: m })),
       ]
     }
     default:
@@ -257,7 +235,14 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
       const user: O.Option<User> = msg.user
       return [
-        { ...model, shared: { ...model.shared, user, token } },
+        {
+          ...model,
+          shared: {
+            ...model.shared,
+            user,
+            token,
+          },
+        },
         Cmd.none(),
       ]
     }
@@ -281,7 +266,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
               _tag: 'HomePageMsg',
               subMsg,
             })),
-          ] as [Model, Cmd<Msg>],
+          ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'ChangeTab') {
               return interceptChangeTabFromHomePage(msg.subMsg.tab)(m)
@@ -316,9 +301,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                 model: articleModel,
               }),
             },
-            articleCmd.map(
-              (m) => ({ _tag: 'ArticlePageMsg' as const, subMsg: m }) as Msg,
-            ),
+            articleCmd.map((m): Msg => ({ _tag: 'ArticlePageMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (
@@ -353,9 +336,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                 model: loginModel,
               }),
             },
-            loginCmd.map(
-              (m) => ({ _tag: 'LoginPageMsg' as const, subMsg: m }) as Msg,
-            ),
+            loginCmd.map((m): Msg => ({ _tag: 'LoginPageMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (
@@ -403,9 +384,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                 model: signupModel,
               }),
             },
-            signupCmd.map(
-              (m) => ({ _tag: 'SignupPageMsg' as const, subMsg: m }) as Msg,
-            ),
+            signupCmd.map((m): Msg => ({ _tag: 'SignupPageMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (
@@ -456,9 +435,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                 model: settingsModel,
               }),
             },
-            settingsCmd.map(
-              (m) => ({ _tag: 'SettingsPageMsg' as const, subMsg: m }) as Msg,
-            ),
+            settingsCmd.map((m): Msg => ({
+              _tag: 'SettingsPageMsg',
+              subMsg: m,
+            })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'Logout') {
@@ -502,9 +482,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                 model: profileModel,
               }),
             },
-            profileCmd.map(
-              (m) => ({ _tag: 'ProfilePageMsg' as const, subMsg: m }) as Msg,
-            ),
+            profileCmd.map((m): Msg => ({ _tag: 'ProfilePageMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             // Intercept `ToggleFavorites` to update the url accordingly
@@ -545,9 +523,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                 model: editorModel,
               }),
             },
-            editorCmd.map(
-              (m) => ({ _tag: 'EditorPageMsg' as const, subMsg: m }) as Msg,
-            ),
+            editorCmd.map((m): Msg => ({ _tag: 'EditorPageMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (

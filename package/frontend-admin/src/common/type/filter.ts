@@ -9,10 +9,10 @@ export type Filter = {
   mode: FilterMode
 }
 
-export const FilterEq = EqClass.struct<Filter>({
+export const FilterEq: EqClass.Eq<Filter> = EqClass.struct<Filter>({
   attr: S.Eq,
   value: S.Eq,
-  mode: S.Eq as any,
+  mode: S.Eq,
 })
 
 export type Direction = 'asc' | 'desc'

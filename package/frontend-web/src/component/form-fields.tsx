@@ -215,10 +215,10 @@ export const textPillInputUi =
             className={cn('flex-1 bg-transparent outline-none', sizeClass)}
             placeholder={props.placeholder}
             value={props.currentValue}
-            onInput={(e) =>
+            onInput={(event) =>
               props.dispatch({
                 _tag: 'UpdateTextPill',
-                event: e as unknown as React.FormEvent<HTMLInputElement>,
+                event,
               })
             }
             onFocus={() =>

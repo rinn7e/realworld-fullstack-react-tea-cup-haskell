@@ -94,12 +94,13 @@ test.describe('Social Features', () => {
 
     await page.goto(`/profile/${targetUsername}`, { waitUntil: 'load' })
     await page
+      .getByTestId('user-info-section')
       .getByRole('heading', { level: 4 })
       .waitFor({ state: 'visible', timeout: 10000 })
 
-    await expect(page.getByRole('heading', { level: 4 })).toHaveText(
-      targetUsername,
-    )
+    await expect(
+      page.getByTestId('user-info-section').getByRole('heading', { level: 4 }),
+    ).toHaveText(targetUsername)
     await expect(page.getByTestId('follow-btn')).toBeVisible()
     await expect(page.getByTestId('edit-profile-settings')).not.toBeVisible()
     await expect(page.getByTestId('article-preview').first()).toBeVisible()

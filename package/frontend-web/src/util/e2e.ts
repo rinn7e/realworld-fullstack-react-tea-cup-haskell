@@ -14,10 +14,16 @@ export interface ConduitDebug {
   } | null
 }
 
+declare global {
+  interface Window {
+    __conduit_debug__?: ConduitDebug
+  }
+}
+
 // E2E test need this
 export const assignConduitDebug = (model: Model | null) => {
   if (typeof window !== 'undefined') {
-    ;(window as any).__conduit_debug__ = {
+    window.__conduit_debug__ = {
       getToken: () =>
         model?.shared.token._tag === 'Some'
           ? model.shared.token.value

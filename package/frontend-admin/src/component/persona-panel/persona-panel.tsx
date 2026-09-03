@@ -91,7 +91,7 @@ export const PersonaPanel: React.FC<Props> = ({
               portraitUrl={persona.portraitUrl}
               hoveredDialogue={
                 model.hoveredAction
-                  ? (persona.actions as any)[model.hoveredAction]
+                  ? persona.actions[model.hoveredAction]
                   : null
               }
             />

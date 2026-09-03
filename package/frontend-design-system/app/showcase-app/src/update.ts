@@ -45,6 +45,7 @@ import * as TabsPage from './page/tabs/update'
 import * as TagPage from './page/tag/update'
 import * as TextareaPage from './page/textarea/update'
 import * as TitlePage from './page/title/update'
+import { parseAppRoute } from './route/parser'
 import { mkRouterConfig } from './route/router'
 import { type AppRoute } from './route/type'
 import { type Model, type Msg, type PageModel, teaRouterMsg } from './type'
@@ -425,14 +426,7 @@ const sidebarMsgHandler =
     }))
     if (msg._tag === 'ClickItem') {
       const compId = msg.item.key
-      const pageTagName =
-        compId
-          .split('-')
-          .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
-          .join('') + 'Page'
-      const nextRoute: AppRoute = {
-        page: { _tag: pageTagName } as unknown as AppRoute['page'],
-      }
+      const nextRoute = parseAppRoute('', `/${compId}`)
       const [routerModel, routerCmd] = routerMsgHandler(
         { _tag: 'ChangeRoute', route: nextRoute },
         updatedModel,
@@ -455,14 +449,7 @@ const rightSidebarMsgHandler =
     }))
     if (msg._tag === 'ClickItem') {
       const compId = msg.item.key
-      const pageTagName =
-        compId
-          .split('-')
-          .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
-          .join('') + 'Page'
-      const nextRoute: AppRoute = {
-        page: { _tag: pageTagName } as unknown as AppRoute['page'],
-      }
+      const nextRoute = parseAppRoute('', `/${compId}`)
       const [routerModel, routerCmd] = routerMsgHandler(
         { _tag: 'ChangeRoute', route: nextRoute },
         updatedModel,
@@ -471,27 +458,6 @@ const rightSidebarMsgHandler =
     }
     return [updatedModel, subCmd]
   }
-
-const getTargetPage = (key: string): AppRoute['page'] => {
-  switch (key) {
-    case 'overview':
-      return { _tag: 'HomePage' }
-    case 'button':
-      return { _tag: 'ButtonPage' }
-    case 'card':
-      return { _tag: 'CardPage' }
-    case 'input':
-      return { _tag: 'InputPage' }
-    case 'modal':
-      return { _tag: 'ModalPage' }
-    case 'navbar':
-      return { _tag: 'NavbarPage' }
-    case 'sidebar':
-      return { _tag: 'SidebarPage' }
-    default:
-      return { _tag: 'HomePage' }
-  }
-}
 
 const topNavbarMsgHandler =
   (msg: DsNavbar.Msg) =>
@@ -519,9 +485,9 @@ const topNavbarMsgHandler =
           setColorSchemeCmd('auto'),
         ]
       }
-      const targetPage = getTargetPage(msg.item.key)
+      const nextRoute = parseAppRoute('', `/${msg.item.key}`)
       return routerMsgHandler(
-        { _tag: 'ChangeRoute', route: { page: targetPage } },
+        { _tag: 'ChangeRoute', route: nextRoute },
         updatedModel,
       )
     }

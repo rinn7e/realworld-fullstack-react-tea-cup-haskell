@@ -66,7 +66,7 @@ export const update =
               _tag: 'PaginationMsg',
               subMsg: m,
             })),
-          ] as [Model, Cmd<Msg>],
+          ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'ItemMsg')
               return paginationItemMsgHandler(

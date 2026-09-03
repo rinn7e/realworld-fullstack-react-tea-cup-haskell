@@ -43,13 +43,13 @@ export const mkPaginationConfig = (
           shared.token,
           O.fold(
             () =>
-              TE.left({
-                _tag: 'HttpError',
-                error: {
-                  _tag: 'ApiError',
+              TE.left<HttpError<ApiError>>({
+                statusCode: 401,
+                err: {
                   errors: { body: ['Not logged in'] },
                 },
-              } as any),
+                actualErr: 'Not logged in',
+              }),
             (token) =>
               pipe(
                 getArticlesFeed(token, { offset, limit }),

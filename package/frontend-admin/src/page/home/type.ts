@@ -24,7 +24,7 @@ import { type Shared, SharedEq } from '@/common/type/shared'
 
 export type TimeFilter = '24h' | 'week' | 'month' | 'year'
 
-export const TimeFilterEq: EqClass.Eq<TimeFilter> = S.Eq as any
+export const TimeFilterEq: EqClass.Eq<TimeFilter> = S.Eq
 
 export type Model = {
   readonly _tag: 'HomeModel'

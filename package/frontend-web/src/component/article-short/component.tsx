@@ -91,6 +91,7 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
             {model.title}
           </DsTitleMemo>
           <DsContentMemo
+            dataTest='article-description'
             size='normal'
             className='line-clamp-3 text-sm text-gray-500 dark:text-zinc-400'
           >

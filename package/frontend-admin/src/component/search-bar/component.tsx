@@ -84,12 +84,17 @@ const view = <sortType,>(props: Props<sortType>) => {
         </div>
         <select
           value={sortToString(sort)}
-          onChange={(e) =>
-            dispatch({
-              _tag: 'ChangeSort',
-              sort: e.target.value as unknown as sortType,
-            })
-          }
+          onChange={(e) => {
+            const selectedOpt = sortOptions.find(
+              (opt) => sortToString(opt.value) === e.target.value,
+            )
+            if (selectedOpt) {
+              dispatch({
+                _tag: 'ChangeSort',
+                sort: selectedOpt.value,
+              })
+            }
+          }}
           className='cursor-pointer rounded-[10px] border border-slate-100 bg-slate-50 px-[16px] py-[10px] text-[14px] font-bold text-slate-600 transition-colors outline-none hover:bg-slate-100 dark:border-white/20 dark:bg-black/20 dark:text-white dark:hover:bg-black/40'
         >
           {sortOptions.map((opt) => (
