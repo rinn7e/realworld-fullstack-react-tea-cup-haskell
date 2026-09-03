@@ -56,7 +56,7 @@ import { TagPage } from './page/tag/component'
 import { TextareaPage } from './page/textarea/component'
 import { TitlePage } from './page/title/component'
 import type { AppRoute } from './route/type'
-import { type Model, type Msg, TeaRouterMsg } from './type'
+import { type Model, type Msg, teaRouterMsg } from './type'
 import type { ColorScheme } from './util/theme-util'
 
 const colorSchemeIcon = (scheme: ColorScheme, size = 15) => {
@@ -86,7 +86,7 @@ export const view = (
       : currentRoute.page._tag.replace(/Page$/, '').toLowerCase()
 
   const navigateRoute = (route: AppRoute) => {
-    dispatch(TeaRouterMsg(TeaRouter.ChangeRouteMsg(route)))
+    dispatch(teaRouterMsg({ _tag: 'ChangeRoute', route }))
   }
 
   const renderPage = () => {

@@ -60,7 +60,7 @@ export type Msg =
   | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
   | { readonly _tag: 'NoOp' }
 
-export const TeaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
+export const teaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
   _tag: 'TeaRouterMsg',
   subMsg,
 })

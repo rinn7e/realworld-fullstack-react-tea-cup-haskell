@@ -60,7 +60,7 @@ export type Msg =
   | { _tag: 'SidebarMsg'; subMsg: DsFloatingSidebar.Msg }
   | { _tag: 'NavbarMsg'; subMsg: DsNavbar.Msg }
 
-export const TeaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
+export const teaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
   _tag: 'TeaRouterMsg',
   subMsg,
 })

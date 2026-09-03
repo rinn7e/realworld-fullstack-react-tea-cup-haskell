@@ -1,10 +1,10 @@
 import type * as TeaRouter from '@rinn7e/tea-cup-router'
-import { Link as NavLink } from '@rinn7e/tea-cup-router/link/component'
+import { Link as RouterLink } from '@rinn7e/tea-cup-router/link/component'
 import React, { useContext } from 'react'
 
 import { SetGlobalMsgContext } from '@/common/global-context'
 import { type AppRoute, AppRouteEq, toUrlString } from '@/common/type/route'
-import { TeaRouterMsg } from '@/type'
+import { teaRouterMsg } from '@/type'
 
 interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   route: AppRoute
@@ -21,17 +21,17 @@ export const Link: React.FC<Props> = ({
   const dispatch = useContext(SetGlobalMsgContext)
 
   return (
-    <NavLink
+    <RouterLink
       {...rest}
       route={route}
       toUrl={toUrlString}
       dispatch={(subMsg: TeaRouter.Msg<AppRoute>) =>
-        dispatch(TeaRouterMsg(subMsg))
+        dispatch(teaRouterMsg(subMsg))
       }
       routeEq={AppRouteEq}
       className={className}
     >
       {children}
-    </NavLink>
+    </RouterLink>
   )
 }

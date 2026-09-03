@@ -191,7 +191,7 @@ export type Msg =
   | { readonly _tag: 'TitlePageMsg'; readonly subMsg: TitlePage.Msg }
   | { readonly _tag: 'NotFoundPageMsg'; readonly subMsg: NotFoundPage.Msg }
 
-export const TeaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
+export const teaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
   _tag: 'TeaRouterMsg',
   subMsg,
 })

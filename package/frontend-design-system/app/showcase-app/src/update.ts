@@ -47,7 +47,7 @@ import * as TextareaPage from './page/textarea/update'
 import * as TitlePage from './page/title/update'
 import { mkRouterConfig } from './route/router'
 import { type AppRoute } from './route/type'
-import type { Model, Msg, PageModel } from './type'
+import { type Model, type Msg, type PageModel, teaRouterMsg } from './type'
 import { loadColorScheme, setColorSchemeCmd } from './util/theme-util'
 
 export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
@@ -391,7 +391,10 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
   }
 }
 
-export const routerConfig = mkRouterConfig<PageModel, Msg>(initPageModel)
+export const routerConfig = mkRouterConfig<PageModel, Msg>(
+  initPageModel,
+  teaRouterMsg,
+)
 
 export const routerMsgHandler = (
   subMsg: Extract<Msg, { _tag: 'TeaRouterMsg' }>['subMsg'],
@@ -431,7 +434,7 @@ const sidebarMsgHandler =
         page: { _tag: pageTagName } as unknown as AppRoute['page'],
       }
       const [routerModel, routerCmd] = routerMsgHandler(
-        TeaRouter.ChangeRouteMsg(nextRoute),
+        { _tag: 'ChangeRoute', route: nextRoute },
         updatedModel,
       )
       return [routerModel, Cmd.batch([subCmd, routerCmd])]
@@ -461,7 +464,7 @@ const rightSidebarMsgHandler =
         page: { _tag: pageTagName } as unknown as AppRoute['page'],
       }
       const [routerModel, routerCmd] = routerMsgHandler(
-        TeaRouter.ChangeRouteMsg(nextRoute),
+        { _tag: 'ChangeRoute', route: nextRoute },
         updatedModel,
       )
       return [routerModel, Cmd.batch([subCmd, routerCmd])]
@@ -518,7 +521,7 @@ const topNavbarMsgHandler =
       }
       const targetPage = getTargetPage(msg.item.key)
       return routerMsgHandler(
-        TeaRouter.ChangeRouteMsg({ page: targetPage }),
+        { _tag: 'ChangeRoute', route: { page: targetPage } },
         updatedModel,
       )
     }

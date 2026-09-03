@@ -28,7 +28,7 @@ import {
   saveColorScheme,
   saveTheme,
 } from './theme/util'
-import { type Model, type Msg, type PageModel } from './type'
+import { type Model, type Msg, type PageModel, teaRouterMsg } from './type'
 
 // Initialization
 // ---------------------------------------------
@@ -106,7 +106,10 @@ export const initPageModel = (
   }
 }
 
-export const routerConfig = mkRouterConfig<PageModel, Msg>(initPageModel)
+export const routerConfig = mkRouterConfig<PageModel, Msg>(
+  initPageModel,
+  teaRouterMsg,
+)
 
 export const init = (
   location: Location,
@@ -273,7 +276,7 @@ const logoutHandler = (model: Model): [Model, Cmd<Msg>] => {
     },
   }
   return routerMsgHandler(
-    TeaRouter.ChangeRouteMsg({ page: { _tag: 'LoginPage' } }),
+    { _tag: 'ChangeRoute', route: { page: { _tag: 'LoginPage' } } },
     nextModel,
   )
 }
@@ -333,7 +336,7 @@ const loginPageMsgHandler = (
         },
       }
       const [finalModel, routerCmd] = routerMsgHandler(
-        TeaRouter.ChangeRouteMsg({ page: { _tag: 'HomePage' } }),
+        { _tag: 'ChangeRoute', route: { page: { _tag: 'HomePage' } } },
         updatedModel,
       )
       return [finalModel, Cmd.batch([nextCmd, routerCmd])]

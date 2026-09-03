@@ -21,6 +21,7 @@ export const mkRouterConfig = <PageModel, Msg>(
       readonly pageModel: PageModel
     },
   ) => [PageModel, Cmd<Msg>],
+  toMsg: (subMsg: TeaRouter.Msg<AppRoute>) => Msg,
 ): TeaRouter.Config<AppRoute, PageModel, Shared, Msg> => ({
   parseUrl: (location) => parseAppRoute('', location.href),
   toUrl: toUrlString,
@@ -47,5 +48,5 @@ export const mkRouterConfig = <PageModel, Msg>(
     return { _tag: 'Allow' }
   },
   initPageModel,
-  toMsg: (subMsg) => ({ _tag: 'TeaRouterMsg', subMsg }) as unknown as Msg,
+  toMsg,
 })

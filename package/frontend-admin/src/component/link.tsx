@@ -5,7 +5,7 @@ import React, { useContext } from 'react'
 import { SetGlobalMsgContext } from '@/common/global-context'
 import { type AppRoute, AppRouteEq } from '@/common/type/route'
 import { toUrlString } from '@/common/util/route'
-import { TeaRouterMsg } from '@/type'
+import { teaRouterMsg } from '@/type'
 
 interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   route: AppRoute
@@ -27,7 +27,7 @@ export const Link: React.FC<Props> = ({
       route={route}
       toUrl={toUrlString}
       dispatch={(subMsg: TeaRouter.Msg<AppRoute>) =>
-        setGlobalMsg(TeaRouterMsg(subMsg))
+        setGlobalMsg(teaRouterMsg(subMsg))
       }
       routeEq={AppRouteEq}
       className={className}
