@@ -45,139 +45,229 @@ export const update =
   (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     switch (msg._tag) {
       case 'GetArticleResponse':
-        if (msg.result.tag === 'Ok') {
-          return [
-            { ...model, article: RD.success(msg.result.value) },
-            Cmd.none(),
-          ]
-        } else {
-          return [{ ...model, article: RD.failure(msg.result.err) }, Cmd.none()]
-        }
+        return getArticleResponseHandler(msg.result)(model)
       case 'FavoriteArticle':
-        if (
-          shared.token._tag === 'Some' &&
-          model.article._tag === 'RemoteSuccess'
-        ) {
-          return [
-            {
-              ...model,
-              article: RD.success({
-                article: favoriteArticleUtil(model.article.value.article),
-              }),
-            },
-            attemptTE(
-              favoriteArticle(shared.token.value, model.slug),
-              (result): Msg => ({ _tag: 'FavoriteArticleResponse', result }),
-            ),
-          ]
-        }
-        return [model, Cmd.none()]
+        return favoriteArticleHandler(shared.token)(model)
       case 'UnfavoriteArticle':
-        if (
-          shared.token._tag === 'Some' &&
-          model.article._tag === 'RemoteSuccess'
-        ) {
-          return [
-            {
-              ...model,
-              article: RD.success({
-                article: unfavoriteArticleUtil(model.article.value.article),
-              }),
-            },
-            attemptTE(
-              unfavoriteArticle(shared.token.value, model.slug),
-              (result): Msg => ({ _tag: 'UnfavoriteArticleResponse', result }),
-            ),
-          ]
-        }
-        return [model, Cmd.none()]
+        return unfavoriteArticleHandler(shared.token)(model)
       case 'FavoriteArticleResponse':
+        return favoriteArticleResponseHandler(msg.result)(model)
       case 'UnfavoriteArticleResponse':
-        if (msg.result.tag === 'Ok') {
-          return [
-            { ...model, article: RD.success(msg.result.value) },
-            Cmd.none(),
-          ]
-        } else {
-          if (model.article._tag === 'RemoteSuccess') {
-            const revertedArticle =
-              msg._tag === 'FavoriteArticleResponse'
-                ? unfavoriteArticleUtil(model.article.value.article)
-                : favoriteArticleUtil(model.article.value.article)
-            return [
-              {
-                ...model,
-                article: RD.success({ article: revertedArticle }),
-              },
-              Cmd.none(),
-            ]
-          }
-        }
-        return [model, Cmd.none()]
+        return unfavoriteArticleResponseHandler(msg.result)(model)
       case 'FollowAuthor':
-        if (shared.token._tag === 'Some') {
-          return [
-            model,
-            attemptTE(
-              followUser(shared.token.value, msg.username),
-              (result): Msg => ({ _tag: 'FollowAuthorResponse', result }),
-            ),
-          ]
-        }
-        return [model, Cmd.none()]
+        return followAuthorHandler(shared.token, msg.username)(model)
       case 'UnfollowAuthor':
-        if (shared.token._tag === 'Some') {
-          return [
-            model,
-            attemptTE(
-              unfollowUser(shared.token.value, msg.username),
-              (result): Msg => ({ _tag: 'UnfollowAuthorResponse', result }),
-            ),
-          ]
-        }
-        return [model, Cmd.none()]
+        return unfollowAuthorHandler(shared.token, msg.username)(model)
       case 'FollowAuthorResponse':
+        return followAuthorResponseHandler(msg.result)(model)
       case 'UnfollowAuthorResponse':
-        if (msg.result.tag === 'Ok' && model.article._tag === 'RemoteSuccess') {
-          return [
-            {
-              ...model,
-              article: RD.success({
-                article: {
-                  ...model.article.value.article,
-                  author: msg.result.value.profile,
-                },
-              }),
-            },
-            Cmd.none(),
-          ]
-        }
-        return [model, Cmd.none()]
+        return unfollowAuthorResponseHandler(msg.result)(model)
       case 'DeleteArticle':
-        if (shared.token._tag === 'Some') {
-          return [
-            model,
-            attemptTE(
-              deleteArticle(shared.token.value, model.slug),
-              (result): Msg => ({ _tag: 'DeleteArticleResponse', result }),
-            ),
-          ]
-        }
-        return [model, Cmd.none()]
+        return deleteArticleHandler(shared.token)(model)
       case 'DeleteArticleResponse':
-        return [model, Cmd.none()]
-      case 'CommentSectionMsg': {
-        const [commentSection, commentSectionCmd] = CommentSection.update(
-          model.slug,
-          shared,
-        )(msg.subMsg, model.commentSection)
+        return deleteArticleResponseHandler(model)
+      case 'CommentSectionMsg':
+        return commentSectionMsgHandler(shared)(msg.subMsg, model)
+    }
+  }
+
+const getArticleResponseHandler =
+  (result: Extract<Msg, { _tag: 'GetArticleResponse' }>['result']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (result.tag === 'Ok') {
+      return [{ ...model, article: RD.success(result.value) }, Cmd.none()]
+    } else {
+      return [{ ...model, article: RD.failure(result.err) }, Cmd.none()]
+    }
+  }
+
+const favoriteArticleHandler =
+  (token: Shared['token']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (token._tag === 'Some' && model.article._tag === 'RemoteSuccess') {
+      return [
+        {
+          ...model,
+          article: RD.success({
+            article: favoriteArticleUtil(model.article.value.article),
+          }),
+        },
+        attemptTE(favoriteArticle(token.value, model.slug), (result): Msg => ({
+          _tag: 'FavoriteArticleResponse',
+          result,
+        })),
+      ]
+    }
+    return [model, Cmd.none()]
+  }
+
+const unfavoriteArticleHandler =
+  (token: Shared['token']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (token._tag === 'Some' && model.article._tag === 'RemoteSuccess') {
+      return [
+        {
+          ...model,
+          article: RD.success({
+            article: unfavoriteArticleUtil(model.article.value.article),
+          }),
+        },
+        attemptTE(
+          unfavoriteArticle(token.value, model.slug),
+          (result): Msg => ({ _tag: 'UnfavoriteArticleResponse', result }),
+        ),
+      ]
+    }
+    return [model, Cmd.none()]
+  }
+
+const favoriteArticleResponseHandler =
+  (result: Extract<Msg, { _tag: 'FavoriteArticleResponse' }>['result']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (result.tag === 'Ok') {
+      return [{ ...model, article: RD.success(result.value) }, Cmd.none()]
+    } else {
+      if (model.article._tag === 'RemoteSuccess') {
+        const revertedArticle = unfavoriteArticleUtil(
+          model.article.value.article,
+        )
         return [
-          { ...model, commentSection },
-          commentSectionCmd.map((subMsg) => ({
-            _tag: 'CommentSectionMsg',
-            subMsg,
-          })),
+          {
+            ...model,
+            article: RD.success({ article: revertedArticle }),
+          },
+          Cmd.none(),
         ]
       }
+      return [model, Cmd.none()]
     }
+  }
+
+const unfavoriteArticleResponseHandler =
+  (result: Extract<Msg, { _tag: 'UnfavoriteArticleResponse' }>['result']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (result.tag === 'Ok') {
+      return [{ ...model, article: RD.success(result.value) }, Cmd.none()]
+    } else {
+      if (model.article._tag === 'RemoteSuccess') {
+        const revertedArticle = favoriteArticleUtil(model.article.value.article)
+        return [
+          {
+            ...model,
+            article: RD.success({ article: revertedArticle }),
+          },
+          Cmd.none(),
+        ]
+      }
+      return [model, Cmd.none()]
+    }
+  }
+
+const followAuthorHandler =
+  (token: Shared['token'], username: string) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (token._tag === 'Some') {
+      return [
+        model,
+        attemptTE(followUser(token.value, username), (result): Msg => ({
+          _tag: 'FollowAuthorResponse',
+          result,
+        })),
+      ]
+    }
+    return [model, Cmd.none()]
+  }
+
+const unfollowAuthorHandler =
+  (token: Shared['token'], username: string) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (token._tag === 'Some') {
+      return [
+        model,
+        attemptTE(unfollowUser(token.value, username), (result): Msg => ({
+          _tag: 'UnfollowAuthorResponse',
+          result,
+        })),
+      ]
+    }
+    return [model, Cmd.none()]
+  }
+
+const followAuthorResponseHandler =
+  (result: Extract<Msg, { _tag: 'FollowAuthorResponse' }>['result']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (result.tag === 'Ok' && model.article._tag === 'RemoteSuccess') {
+      return [
+        {
+          ...model,
+          article: RD.success({
+            article: {
+              ...model.article.value.article,
+              author: result.value.profile,
+            },
+          }),
+        },
+        Cmd.none(),
+      ]
+    }
+    return [model, Cmd.none()]
+  }
+
+const unfollowAuthorResponseHandler =
+  (result: Extract<Msg, { _tag: 'UnfollowAuthorResponse' }>['result']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (result.tag === 'Ok' && model.article._tag === 'RemoteSuccess') {
+      return [
+        {
+          ...model,
+          article: RD.success({
+            article: {
+              ...model.article.value.article,
+              author: result.value.profile,
+            },
+          }),
+        },
+        Cmd.none(),
+      ]
+    }
+    return [model, Cmd.none()]
+  }
+
+const deleteArticleHandler =
+  (token: Shared['token']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (token._tag === 'Some') {
+      return [
+        model,
+        attemptTE(deleteArticle(token.value, model.slug), (result): Msg => ({
+          _tag: 'DeleteArticleResponse',
+          result,
+        })),
+      ]
+    }
+    return [model, Cmd.none()]
+  }
+
+const deleteArticleResponseHandler = (model: Model): [Model, Cmd<Msg>] => [
+  model,
+  Cmd.none(),
+]
+
+const commentSectionMsgHandler =
+  (shared: Shared) =>
+  (
+    subMsg: Extract<Msg, { _tag: 'CommentSectionMsg' }>['subMsg'],
+    model: Model,
+  ): [Model, Cmd<Msg>] => {
+    const [commentSection, commentSectionCmd] = CommentSection.update(
+      model.slug,
+      shared,
+    )(subMsg, model.commentSection)
+    return [
+      { ...model, commentSection },
+      commentSectionCmd.map((subMsg) => ({
+        _tag: 'CommentSectionMsg',
+        subMsg,
+      })),
+    ]
   }

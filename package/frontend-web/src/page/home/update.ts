@@ -4,9 +4,14 @@ import { ArrayExtra, attemptTE, updateAndCmd } from '@rinn7e/tea-cup-prelude'
 import * as A from 'fp-ts/lib/Array'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
-import { Cmd } from 'tea-cup-fp'
+import { Cmd, type Result } from 'tea-cup-fp'
 
-import { getTags } from '@/common/api'
+import {
+  type ApiError,
+  type HttpError,
+  type TagsResponse,
+  getTags,
+} from '@/common/api'
 import type { Article } from '@/common/api/type/article'
 import { type HomeTab, HomeTabEq } from '@/common/type/route'
 import type { Shared } from '@/common/type/shared'
@@ -46,64 +51,82 @@ export const update =
   (shared: Shared) =>
   (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     switch (msg._tag) {
-      case 'GetTagsResponse':
-        if (msg.result.tag === 'Ok') {
-          return [{ ...model, tags: RD.success(msg.result.value) }, Cmd.none()]
-        } else {
-          return [{ ...model, tags: RD.failure(msg.result.err) }, Cmd.none()]
-        }
+      case 'GetTagsResponse': {
+        return getTagsResponseHandler(msg.result)(model)
+      }
       case 'PaginationMsg': {
-        const paginationConfig = mkPaginationConfig(shared, model.tab)
-        const [pagination, paginationCmd] = Pagination.update(paginationConfig)(
-          msg.subMsg,
-          model.pagination,
-        )
-
-        return pipe(
-          [
-            { ...model, pagination },
-            paginationCmd.map((m): Msg => ({
-              _tag: 'PaginationMsg',
-              subMsg: m,
-            })),
-          ] satisfies [Model, Cmd<Msg>],
-          updateAndCmd((m) => {
-            if (msg.subMsg._tag === 'ItemMsg')
-              return paginationItemMsgHandler(
-                shared,
-                msg.subMsg.item,
-                msg.subMsg.msg,
-              )(m)
-            else return [m, Cmd.none()]
-          }),
-        )
+        return paginationMsgHandler(shared)(msg.subMsg, model)
       }
       case 'ChangeTab': {
-        if (HomeTabEq.equals(msg.tab, model.tab)) {
-          return [model, Cmd.none()]
-        } else {
-          const paginationConfig = mkPaginationConfig(shared, msg.tab)
-          const [pagination, paginationCmd] = Pagination.init(
-            paginationConfig,
-            1,
-          )
-          const newModel: Model = {
-            ...model,
-            tab: msg.tab,
-            pagination,
-          }
-
-          return [
-            newModel,
-            paginationCmd.map((m): Msg => ({
-              _tag: 'PaginationMsg',
-              subMsg: m,
-            })),
-          ]
-        }
+        return changeTabHandler(shared)(msg.tab, model)
       }
-      case 'NoOp':
+      case 'NoOp': {
         return [model, Cmd.none()]
+      }
+    }
+  }
+
+const getTagsResponseHandler =
+  (result: Result<HttpError<ApiError>, TagsResponse>) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (result.tag === 'Ok') {
+      return [{ ...model, tags: RD.success(result.value) }, Cmd.none()]
+    } else {
+      return [{ ...model, tags: RD.failure(result.err) }, Cmd.none()]
+    }
+  }
+
+const paginationMsgHandler =
+  (shared: Shared) =>
+  (
+    subMsg: Extract<Msg, { _tag: 'PaginationMsg' }>['subMsg'],
+    model: Model,
+  ): [Model, Cmd<Msg>] => {
+    const paginationConfig = mkPaginationConfig(shared, model.tab)
+    const [pagination, paginationCmd] = Pagination.update(paginationConfig)(
+      subMsg,
+      model.pagination,
+    )
+
+    return pipe(
+      [
+        { ...model, pagination },
+        paginationCmd.map((m): Msg => ({
+          _tag: 'PaginationMsg',
+          subMsg: m,
+        })),
+      ] satisfies [Model, Cmd<Msg>],
+      updateAndCmd((m) => {
+        if (subMsg._tag === 'ItemMsg') {
+          return paginationItemMsgHandler(shared, subMsg.item, subMsg.msg)(m)
+        } else {
+          return [m, Cmd.none()]
+        }
+      }),
+    )
+  }
+
+const changeTabHandler =
+  (shared: Shared) =>
+  (tab: HomeTab, model: Model): [Model, Cmd<Msg>] => {
+    if (HomeTabEq.equals(tab, model.tab)) {
+      return [model, Cmd.none()]
+    } else {
+      const paginationConfig = mkPaginationConfig(shared, tab)
+      const [pagination, paginationCmd] = Pagination.init(paginationConfig, 1)
+      const newModel: Model = {
+        ...model,
+        tab,
+        pagination,
+      }
+
+      return [
+        newModel,
+        paginationCmd.map((m): Msg => ({
+          _tag: 'PaginationMsg',
+          subMsg: m,
+        })),
+      ]
     }
   }
 

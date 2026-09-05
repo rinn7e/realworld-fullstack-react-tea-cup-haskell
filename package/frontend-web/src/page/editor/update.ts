@@ -126,30 +126,6 @@ const editorFormConfig = (): Form.Forms =>
     editorTagInputFormItem([]),
   ])
 
-const preprocessFormMsgHandler =
-  (newForm: Form.Model) =>
-  (model: Model): Model => {
-    const isFormValid =
-      Form.runValidationForAll(newForm.forms, Form.noExtraValidation)._tag ===
-      'Right'
-    return {
-      ...model,
-      form: newForm,
-      isFormValid,
-      requestRd: RD.initial,
-    }
-  }
-
-export const formMsgHandler =
-  (subMsg: Form.Msg) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    const [newForm, formCmd] = Form.update(subMsg)(model.form)
-    return [
-      preprocessFormMsgHandler(newForm)(model),
-      formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
-    ]
-  }
-
 export const init = (
   shared: Shared,
   slug: O.Option<string>,
@@ -192,75 +168,115 @@ export const update =
         return formMsgHandler(msg.subMsg)(model)
       }
       case 'GetArticleResponse':
-        if (msg.result.tag === 'Ok') {
-          const a = msg.result.value.article
-          const [newForm, formCmd] = Form.init(
-            editorFormConfigForEdit({
-              title: a.title,
-              description: a.description,
-              body: a.body ?? '',
-              tagList: a.tagList,
-            }),
-          )
-          return [
-            preprocessFormMsgHandler(newForm)({
-              ...model,
-              requestRd: RD.success(null),
-            }),
-            formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
-          ]
-        }
-        return [{ ...model, requestRd: RD.failure(msg.result.err) }, Cmd.none()]
-
+        return getArticleResponseHandler(msg.result)(model)
       case 'Submit': {
-        const form = model.form
-        const title = valueTextType(lookupForm(editorTitleField, form.forms))
-        const description = valueTextType(
-          lookupForm(editorDescriptionField, form.forms),
-        )
-        const body = valueTextType(lookupForm(editorBodyField, form.forms))
-        const tagList = valuePillTextType(
-          lookupForm(editorTagInputField, form.forms),
-        )
-
-        const request = {
-          article: { title, description, body, tagList },
-        }
-        if (shared.token._tag === 'None') {
-          return [model, Cmd.none()]
-        }
-
-        const task = model.slug
-          ? updateArticle(shared.token.value, model.slug, request)
-          : createArticle(shared.token.value, request)
-
-        return [
-          { ...model, requestRd: RD.pending },
-          attemptTE(task, (result): Msg => ({
-            _tag: 'SubmitResponse',
-            result,
-          })),
-        ]
+        return submitHandler(shared)(model)
       }
       case 'SubmitResponse':
-        if (msg.result.tag === 'Ok') {
-          return [{ ...model, requestRd: RD.success(null) }, Cmd.none()]
-        } else {
-          return [
-            { ...model, requestRd: RD.failure(msg.result.err) },
-            Cmd.none(),
-          ]
-        }
+        return submitResponseHandler(msg.result)(model)
       case 'ShowAllValidation':
-        return [
-          {
-            ...model,
-            form: {
-              ...model.form,
-              forms: showAllValidation(model.form.forms),
-            },
-          },
-          Cmd.none(),
-        ]
+        return showAllValidationHandler(model)
     }
   }
+
+const preprocessFormMsgHandler =
+  (newForm: Form.Model) =>
+  (model: Model): Model => {
+    const isFormValid =
+      Form.runValidationForAll(newForm.forms, Form.noExtraValidation)._tag ===
+      'Right'
+    return {
+      ...model,
+      form: newForm,
+      isFormValid,
+      requestRd: RD.initial,
+    }
+  }
+
+const formMsgHandler =
+  (subMsg: Form.Msg) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const [newForm, formCmd] = Form.update(subMsg)(model.form)
+    return [
+      preprocessFormMsgHandler(newForm)(model),
+      formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
+    ]
+  }
+
+const getArticleResponseHandler =
+  (result: Extract<Msg, { _tag: 'GetArticleResponse' }>['result']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (result.tag === 'Ok') {
+      const a = result.value.article
+      const [newForm, formCmd] = Form.init(
+        editorFormConfigForEdit({
+          title: a.title,
+          description: a.description,
+          body: a.body ?? '',
+          tagList: a.tagList,
+        }),
+      )
+      return [
+        preprocessFormMsgHandler(newForm)({
+          ...model,
+          requestRd: RD.success(null),
+        }),
+        formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
+      ]
+    }
+    return [{ ...model, requestRd: RD.failure(result.err) }, Cmd.none()]
+  }
+
+const submitHandler =
+  (shared: Shared) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const form = model.form
+    const title = valueTextType(lookupForm(editorTitleField, form.forms))
+    const description = valueTextType(
+      lookupForm(editorDescriptionField, form.forms),
+    )
+    const body = valueTextType(lookupForm(editorBodyField, form.forms))
+    const tagList = valuePillTextType(
+      lookupForm(editorTagInputField, form.forms),
+    )
+
+    const request = {
+      article: { title, description, body, tagList },
+    }
+    if (shared.token._tag === 'None') {
+      return [model, Cmd.none()]
+    }
+
+    const task = model.slug
+      ? updateArticle(shared.token.value, model.slug, request)
+      : createArticle(shared.token.value, request)
+
+    return [
+      { ...model, requestRd: RD.pending },
+      attemptTE(task, (result): Msg => ({
+        _tag: 'SubmitResponse',
+        result,
+      })),
+    ]
+  }
+
+const submitResponseHandler =
+  (result: Extract<Msg, { _tag: 'SubmitResponse' }>['result']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (result.tag === 'Ok') {
+      return [{ ...model, requestRd: RD.success(null) }, Cmd.none()]
+    } else {
+      return [{ ...model, requestRd: RD.failure(result.err) }, Cmd.none()]
+    }
+  }
+
+const showAllValidationHandler = (model: Model): [Model, Cmd<Msg>] => [
+  {
+    ...model,
+    form: {
+      ...model.form,
+      forms: showAllValidation(model.form.forms),
+    },
+  },
+  Cmd.none(),
+]

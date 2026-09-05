@@ -1,9 +1,14 @@
 import * as RD from '@devexperts/remote-data-ts'
 import * as Form from '@rinn7e/tea-cup-form'
 import { attemptTE } from '@rinn7e/tea-cup-prelude'
-import { Cmd } from 'tea-cup-fp'
+import { Cmd, type Result } from 'tea-cup-fp'
 
-import { login } from '@/common/api'
+import {
+  type ApiError,
+  type HttpError,
+  type UserResponse,
+  login,
+} from '@/common/api'
 import type { Shared } from '@/common/type/shared'
 import { standardInputUi } from '@/component/form-fields'
 
@@ -71,16 +76,6 @@ const preprocessFormMsgHandler =
     }
   }
 
-export const formMsgHandler =
-  (subMsg: Form.Msg) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    const [newForm, formCmd] = Form.update(subMsg)(model.form)
-    return [
-      preprocessFormMsgHandler(newForm)(model),
-      formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
-    ]
-  }
-
 export const init = (_shared: Shared): [Model, Cmd<Msg>] => {
   const [initialForm, formCmd] = Form.init(loginFormConfig())
   const model: Model = {
@@ -102,40 +97,61 @@ export const update =
         return formMsgHandler(msg.subMsg)(model)
       }
       case 'Submit': {
-        const email = Form.valueTextType(
-          Form.lookupForm(loginEmailField, model.form.forms),
-        )
-        const password = Form.valueTextType(
-          Form.lookupForm(loginPasswordField, model.form.forms),
-        )
-
-        return [
-          { ...model, requestRd: RD.pending },
-          attemptTE(login({ user: { email, password } }), (result): Msg => ({
-            _tag: 'SubmitResponse',
-            result,
-          })),
-        ]
+        return submitHandler(model)
       }
-      case 'SubmitResponse':
-        if (msg.result.tag === 'Ok') {
-          return [{ ...model, requestRd: RD.success(null) }, Cmd.none()]
-        } else {
-          return [
-            { ...model, requestRd: RD.failure(msg.result.err) },
-            Cmd.none(),
-          ]
-        }
-      case 'ShowAllValidation':
-        return [
-          {
-            ...model,
-            form: {
-              ...model.form,
-              forms: Form.showAllValidation(model.form.forms),
-            },
-          },
-          Cmd.none(),
-        ]
+      case 'SubmitResponse': {
+        return submitResponseHandler(msg.result)(model)
+      }
+      case 'ShowAllValidation': {
+        return showAllValidationHandler(model)
+      }
     }
   }
+
+const formMsgHandler =
+  (subMsg: Form.Msg) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const [newForm, formCmd] = Form.update(subMsg)(model.form)
+    return [
+      preprocessFormMsgHandler(newForm)(model),
+      formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
+    ]
+  }
+
+const submitHandler = (model: Model): [Model, Cmd<Msg>] => {
+  const email = Form.valueTextType(
+    Form.lookupForm(loginEmailField, model.form.forms),
+  )
+  const password = Form.valueTextType(
+    Form.lookupForm(loginPasswordField, model.form.forms),
+  )
+
+  return [
+    { ...model, requestRd: RD.pending },
+    attemptTE(login({ user: { email, password } }), (result): Msg => ({
+      _tag: 'SubmitResponse',
+      result,
+    })),
+  ]
+}
+
+const submitResponseHandler =
+  (result: Result<HttpError<ApiError>, UserResponse>) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (result.tag === 'Ok') {
+      return [{ ...model, requestRd: RD.success(null) }, Cmd.none()]
+    } else {
+      return [{ ...model, requestRd: RD.failure(result.err) }, Cmd.none()]
+    }
+  }
+
+const showAllValidationHandler = (model: Model): [Model, Cmd<Msg>] => [
+  {
+    ...model,
+    form: {
+      ...model.form,
+      forms: Form.showAllValidation(model.form.forms),
+    },
+  },
+  Cmd.none(),
+]

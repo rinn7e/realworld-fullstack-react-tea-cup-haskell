@@ -168,30 +168,6 @@ const settingsFormConfig = (user: User): Form.Forms =>
     settingsPasswordConfirmationFormItem(),
   ])
 
-const preprocessFormMsgHandler =
-  (newForm: Form.Model) =>
-  (model: Model): Model => {
-    const isFormValid =
-      Form.runValidationForAll(newForm.forms, Form.noExtraValidation)._tag ===
-      'Right'
-    return {
-      ...model,
-      form: newForm,
-      isFormValid,
-      requestRd: RD.initial,
-    }
-  }
-
-export const formMsgHandler =
-  (subMsg: Form.Msg) =>
-  (model: Model): [Model, Cmd<Msg>] => {
-    const [newForm, formCmd] = Form.update(subMsg)(model.form)
-    return [
-      preprocessFormMsgHandler(newForm)(model),
-      formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
-    ]
-  }
-
 export const init = (user: User): [Model, Cmd<Msg>] => {
   const [initialForm, formCmd] = Form.init(settingsFormConfig(user))
   const baseModel: Model = {
@@ -213,61 +189,98 @@ export const update =
         return formMsgHandler(msg.subMsg)(model)
       }
       case 'Logout':
-        return [model, Cmd.none()]
+        return logoutHandler(model)
       case 'Submit': {
-        const form = model.form
-        const image = valueTextType(lookupForm(settingsImageField, form.forms))
-        const username = valueTextType(
-          lookupForm(settingsUsernameField, form.forms),
-        )
-        const bio = valueTextType(lookupForm(settingsBioField, form.forms))
-        const email = valueTextType(lookupForm(settingsEmailField, form.forms))
-        const password = valueTextType(
-          lookupForm(settingsPasswordField, form.forms),
-        )
-
-        const userUpdate: {
-          image?: string
-          username?: string
-          bio?: string
-          email?: string
-          password?: string
-        } = { image, username, bio, email }
-        if (password) {
-          userUpdate.password = password
-        }
-
-        if (shared.token._tag === 'None') {
-          return [model, Cmd.none()]
-        }
-
-        return [
-          { ...model, requestRd: RD.pending },
-          attemptTE(
-            updateUser(shared.token.value, { user: userUpdate }),
-            (result): Msg => ({ _tag: 'SubmitResponse', result }),
-          ),
-        ]
+        return submitHandler(shared)(model)
       }
       case 'SubmitResponse':
-        if (msg.result.tag === 'Ok') {
-          return [{ ...model, requestRd: RD.success(null) }, Cmd.none()]
-        } else {
-          return [
-            { ...model, requestRd: RD.failure(msg.result.err) },
-            Cmd.none(),
-          ]
-        }
+        return submitResponseHandler(msg.result)(model)
       case 'ShowAllValidation':
-        return [
-          {
-            ...model,
-            form: {
-              ...model.form,
-              forms: Form.showAllValidation(model.form.forms),
-            },
-          },
-          Cmd.none(),
-        ]
+        return showAllValidationHandler(model)
     }
   }
+
+const preprocessFormMsgHandler =
+  (newForm: Form.Model) =>
+  (model: Model): Model => {
+    const isFormValid =
+      Form.runValidationForAll(newForm.forms, Form.noExtraValidation)._tag ===
+      'Right'
+    return {
+      ...model,
+      form: newForm,
+      isFormValid,
+      requestRd: RD.initial,
+    }
+  }
+
+const formMsgHandler =
+  (subMsg: Form.Msg) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const [newForm, formCmd] = Form.update(subMsg)(model.form)
+    return [
+      preprocessFormMsgHandler(newForm)(model),
+      formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
+    ]
+  }
+
+const logoutHandler = (model: Model): [Model, Cmd<Msg>] => [model, Cmd.none()]
+
+const submitHandler =
+  (shared: Shared) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const form = model.form
+    const image = valueTextType(lookupForm(settingsImageField, form.forms))
+    const username = valueTextType(
+      lookupForm(settingsUsernameField, form.forms),
+    )
+    const bio = valueTextType(lookupForm(settingsBioField, form.forms))
+    const email = valueTextType(lookupForm(settingsEmailField, form.forms))
+    const password = valueTextType(
+      lookupForm(settingsPasswordField, form.forms),
+    )
+
+    const userUpdate: {
+      image?: string
+      username?: string
+      bio?: string
+      email?: string
+      password?: string
+    } = { image, username, bio, email }
+    if (password) {
+      userUpdate.password = password
+    }
+
+    if (shared.token._tag === 'None') {
+      return [model, Cmd.none()]
+    }
+
+    return [
+      { ...model, requestRd: RD.pending },
+      attemptTE(
+        updateUser(shared.token.value, { user: userUpdate }),
+        (result): Msg => ({ _tag: 'SubmitResponse', result }),
+      ),
+    ]
+  }
+
+const submitResponseHandler =
+  (result: Extract<Msg, { _tag: 'SubmitResponse' }>['result']) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    if (result.tag === 'Ok') {
+      return [{ ...model, requestRd: RD.success(null) }, Cmd.none()]
+    } else {
+      return [{ ...model, requestRd: RD.failure(result.err) }, Cmd.none()]
+    }
+  }
+
+const showAllValidationHandler = (model: Model): [Model, Cmd<Msg>] => [
+  {
+    ...model,
+    form: {
+      ...model.form,
+      forms: Form.showAllValidation(model.form.forms),
+    },
+  },
+  Cmd.none(),
+]
