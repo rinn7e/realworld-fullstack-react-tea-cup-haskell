@@ -44,6 +44,12 @@ For details on running individual packages independently:
 * [package/frontend-design-system/README.md](package/frontend-design-system/README.md)
 * [package/e2e/README.md](package/e2e/README.md)
 
+## Sponsors
+
+A heartfelt thank you to the sponsors supporting this project 😁:
+
+* [@0x000000000000000000001](https://github.com/0x000000000000000000001)
+
 ## License
 
 This project is licensed under the MIT License.
