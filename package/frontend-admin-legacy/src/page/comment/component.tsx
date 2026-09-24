@@ -1,4 +1,4 @@
-import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
+import { PaginationMemo } from '@rinn7e/tea-cup-pagination/component'
 import React from 'react'
 
 import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'

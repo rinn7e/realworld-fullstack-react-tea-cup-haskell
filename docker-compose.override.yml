@@ -1,0 +1,6 @@
+# Local only: `docker compose` loads this automatically next to docker-compose.yml.
+# The VPS sets COMPOSE_FILE=docker-compose.yml:docker-compose.vps.yml, so this file is never used there.
+services:
+  app:
+    ports:
+      - "3000:3000"

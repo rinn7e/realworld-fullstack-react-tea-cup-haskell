@@ -22,6 +22,7 @@ ehthumbs.db
 # Node / Frontend Dependencies & Builds
 node_modules/
 dist/
+.env
 .env.local
 .env.*.local
 .eslintcache
@@ -30,7 +31,5 @@ dist/
 playwright-report/
 test-results/
 
-# Haskell & Nix Build Artifacts
+# Haskell Build Artifacts
 .stack-work/
-result
-result-*

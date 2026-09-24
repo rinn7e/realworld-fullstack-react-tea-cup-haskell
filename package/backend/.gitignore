@@ -5,5 +5,3 @@
 dist-newstyle/
 .DS_Store
 *.log
-result
-result-*

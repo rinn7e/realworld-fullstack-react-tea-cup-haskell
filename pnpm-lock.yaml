@@ -69,17 +69,17 @@ importers:
         specifier: github:rinn7e/fp-ts-routing#0d9ec901639572171d6ada5b75aeee6ff945dc43
         version: fp-ts-routing@https://codeload.github.com/rinn7e/fp-ts-routing/tar.gz/0d9ec901639572171d6ada5b75aeee6ff945dc43(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))
       '@rinn7e/tea-cup-form':
-        specifier: 0.1.0-alpha.3
-        version: 0.1.0-alpha.3(6232d0fc0b4a1f536fa41e03c5f29610)
+        specifier: ^1.0.2
+        version: 1.0.2(310fa7e21e201b7c144de33e350d97cf)
       '@rinn7e/tea-cup-pagination':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
       '@rinn7e/tea-cup-prelude':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       '@rinn7e/tea-cup-router':
-        specifier: file:../../../tea-cup-package/package/tea-cup-router
-        version: file:../tea-cup-package/package/tea-cup-router(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -208,14 +208,14 @@ importers:
         specifier: github:rinn7e/fp-ts-routing#0d9ec901639572171d6ada5b75aeee6ff945dc43
         version: fp-ts-routing@https://codeload.github.com/rinn7e/fp-ts-routing/tar.gz/0d9ec901639572171d6ada5b75aeee6ff945dc43(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))
       '@rinn7e/tea-cup-form':
-        specifier: 0.1.0-alpha.3
-        version: 0.1.0-alpha.3(6232d0fc0b4a1f536fa41e03c5f29610)
+        specifier: ^1.0.2
+        version: 1.0.2(310fa7e21e201b7c144de33e350d97cf)
       '@rinn7e/tea-cup-pagination':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
       '@rinn7e/tea-cup-prelude':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -335,8 +335,8 @@ importers:
   package/frontend-design-system:
     dependencies:
       '@rinn7e/tea-cup-prelude':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -435,11 +435,11 @@ importers:
         specifier: workspace:*
         version: link:../..
       '@rinn7e/tea-cup-prelude':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       '@rinn7e/tea-cup-router':
-        specifier: file:../../../../../tea-cup-package/package/tea-cup-router
-        version: file:../tea-cup-package/package/tea-cup-router(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -538,17 +538,17 @@ importers:
         specifier: workspace:*
         version: link:../frontend-design-system
       '@rinn7e/tea-cup-form':
-        specifier: 0.1.0-alpha.3
-        version: 0.1.0-alpha.3(6232d0fc0b4a1f536fa41e03c5f29610)
+        specifier: ^1.0.2
+        version: 1.0.2(310fa7e21e201b7c144de33e350d97cf)
       '@rinn7e/tea-cup-pagination':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
       '@rinn7e/tea-cup-prelude':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       '@rinn7e/tea-cup-router':
-        specifier: file:../../../tea-cup-package/package/tea-cup-router
-        version: file:../tea-cup-package/package/tea-cup-router(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
+        specifier: ^1.0.2
+        version: 1.0.2(@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1214,11 +1214,11 @@ packages:
       react-redux:
         optional: true
 
-  '@rinn7e/tea-cup-form@0.1.0-alpha.3':
-    resolution: {integrity: sha512-TY317Vs/7GBFyYTVfK1t3vHXODbLVDm7vVAVRb7lLWiaiK632z4f92k57LpA8YBqZ0n5RwQ56kjMYG8InTvJwQ==, tarball: https://npm.pkg.github.com/download/@rinn7e/tea-cup-form/0.1.0-alpha.3/dc08571fe9ac78a8e9db16d6024109a4874ae223}
+  '@rinn7e/tea-cup-form@1.0.2':
+    resolution: {integrity: sha512-X4WyZrRotw+TovZbk5VLzj3z4rhoeJIXKzKarcAOrNf5urX7kXIkUY8+VszjIzffacJrEeyUi5+7fq0bjpzWSA==, tarball: https://npm.pkg.github.com/download/@rinn7e/tea-cup-form/1.0.2/af3c017eb9428c5407937c004b0dc661e4ad7db9}
     peerDependencies:
       '@devexperts/remote-data-ts': ^2.1.1
-      '@rinn7e/tea-cup-prelude': ^0.1.0-alpha.1
+      '@rinn7e/tea-cup-prelude': ^1.0.2
       fp-ts: ^2.16.11
       io-ts: ^2.2.22
       react: ^19.2.0
@@ -1227,19 +1227,19 @@ packages:
       react-tea-cup: ^5.1.1
       tea-cup-fp: ^1.1.1
 
-  '@rinn7e/tea-cup-pagination@0.1.0-alpha.1':
-    resolution: {integrity: sha512-O3Zn3xqc9Lxs31clrHHf/9pbeoy94Gxbd8snoGQ4/A/rD+MEx8EzYc35I5bu1Fv+lOeSEvSu5Tuki3K8HTnZww==, tarball: https://npm.pkg.github.com/download/@rinn7e/tea-cup-pagination/0.1.0-alpha.1/905a968062cdd4f56b5a37284c119812c0e59e42}
+  '@rinn7e/tea-cup-pagination@1.0.2':
+    resolution: {integrity: sha512-2FC/yA/tKDP6ufBhNpBRDbtLquQ9t9B/BX3PrAnGvzpS7dfS9+cMrJUWQIKwduqm/NspShJ+PeBw5LjVB2BcZw==, tarball: https://npm.pkg.github.com/download/@rinn7e/tea-cup-pagination/1.0.2/fbc197faee67ec4ccfbf0e759f20732dfab977de}
     peerDependencies:
       '@devexperts/remote-data-ts': ^2.1.1
-      '@rinn7e/tea-cup-prelude': ^0.1.0-alpha.1
+      '@rinn7e/tea-cup-prelude': ^1.0.2
       fp-ts: ^2.16.11
       react: ^19.2.0
       react-dom: ^19.2.0
       react-tea-cup: ^5.1.1
       tea-cup-fp: ^1.1.1
 
-  '@rinn7e/tea-cup-prelude@0.1.0-alpha.1':
-    resolution: {integrity: sha512-m5Qi241kXKhaBqxskYUfV8QsAeMqoT/rZWzynZllkTpJiSz+AHr8kYj2ai88sdxjvt0nD6+nxsE9qjNAERMyug==, tarball: https://npm.pkg.github.com/download/@rinn7e/tea-cup-prelude/0.1.0-alpha.1/0a7013e485de279b763ec63de3a42213ee564b53}
+  '@rinn7e/tea-cup-prelude@1.0.2':
+    resolution: {integrity: sha512-UEc77aZeRAo1xuTJ0Hxknrirc4FUsvx+18iMh7BRc6NqUxyAX4D7X5idajxsf+BfJQoAlVkKAOedx3dyw2M5Gw==, tarball: https://npm.pkg.github.com/download/@rinn7e/tea-cup-prelude/1.0.2/c00275a1c488a3ed7c4b02283db876c84b9694a6}
     peerDependencies:
       '@devexperts/remote-data-ts': ^2.1.1
       clsx: ^2.0.0
@@ -1251,10 +1251,10 @@ packages:
       tailwind-merge: ^3.3.1
       tea-cup-fp: ^1.1.1
 
-  '@rinn7e/tea-cup-router@file:../tea-cup-package/package/tea-cup-router':
-    resolution: {directory: ../tea-cup-package/package/tea-cup-router, type: directory}
+  '@rinn7e/tea-cup-router@1.0.2':
+    resolution: {integrity: sha512-AKhzao4/d9SQBcWYtor9WFCTaf+CKUpMWjm+v9O50XwzZiaweUYF7OVrNxcgr5OWLCv7a6pEV7WF/J8HwDkkwQ==, tarball: https://npm.pkg.github.com/download/@rinn7e/tea-cup-router/1.0.2/4db0e88b578ebb57e25230a710d1009df5c1a410}
     peerDependencies:
-      '@rinn7e/tea-cup-prelude': ^0.1.0-alpha.1
+      '@rinn7e/tea-cup-prelude': ^1.0.2
       fp-ts: ^2.16.11
       react: ^19.2.0
       react-dom: ^19.2.0
@@ -4366,10 +4366,10 @@ snapshots:
       react: 19.2.8
       react-redux: 9.3.0(@types/react@19.2.18)(react@19.2.8)(redux@5.0.1)
 
-  '@rinn7e/tea-cup-form@0.1.0-alpha.3(6232d0fc0b4a1f536fa41e03c5f29610)':
+  '@rinn7e/tea-cup-form@1.0.2(310fa7e21e201b7c144de33e350d97cf)':
     dependencies:
       '@devexperts/remote-data-ts': 2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))
-      '@rinn7e/tea-cup-prelude': 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+      '@rinn7e/tea-cup-prelude': 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       fp-ts: 2.16.11
       io-ts: 2.2.22(fp-ts@2.16.11)
       react: 19.2.8
@@ -4378,17 +4378,17 @@ snapshots:
       react-tea-cup: 5.1.1(react@19.2.8)(tea-cup-fp@1.1.1)
       tea-cup-fp: 1.1.1
 
-  ? '@rinn7e/tea-cup-pagination@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)'
-  : dependencies:
+  '@rinn7e/tea-cup-pagination@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)':
+    dependencies:
       '@devexperts/remote-data-ts': 2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))
-      '@rinn7e/tea-cup-prelude': 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+      '@rinn7e/tea-cup-prelude': 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       fp-ts: 2.16.11
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
       react-tea-cup: 5.1.1(react@19.2.8)(tea-cup-fp@1.1.1)
       tea-cup-fp: 1.1.1
 
-  '@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)':
+  '@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)':
     dependencies:
       '@devexperts/remote-data-ts': 2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))
       clsx: 2.1.1
@@ -4400,7 +4400,7 @@ snapshots:
       tailwind-merge: 3.6.0
       tea-cup-fp: 1.1.1
 
-  '@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)':
+  '@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)':
     dependencies:
       '@devexperts/remote-data-ts': 2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))
       clsx: 2.1.1
@@ -4412,18 +4412,18 @@ snapshots:
       tailwind-merge: 3.6.0
       tea-cup-fp: 1.1.1
 
-  '@rinn7e/tea-cup-router@file:../tea-cup-package/package/tea-cup-router(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)':
+  '@rinn7e/tea-cup-router@1.0.2(@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)':
     dependencies:
-      '@rinn7e/tea-cup-prelude': 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+      '@rinn7e/tea-cup-prelude': 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.1(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       fp-ts: 2.16.11
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
       react-tea-cup: 5.1.1(react@19.2.8)(tea-cup-fp@1.1.1)
       tea-cup-fp: 1.1.1
 
-  '@rinn7e/tea-cup-router@file:../tea-cup-package/package/tea-cup-router(@rinn7e/tea-cup-prelude@0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)':
+  '@rinn7e/tea-cup-router@1.0.2(@rinn7e/tea-cup-prelude@1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1))(fp-ts@2.16.11)(react-dom@19.2.8(react@19.2.8))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tea-cup-fp@1.1.1)':
     dependencies:
-      '@rinn7e/tea-cup-prelude': 0.1.0-alpha.1(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
+      '@rinn7e/tea-cup-prelude': 1.0.2(@devexperts/remote-data-ts@2.1.1(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11)))(clsx@2.1.1)(fp-ts@2.16.11)(io-ts-types@0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))))(io-ts@2.2.22(fp-ts@2.16.11))(react-tea-cup@5.1.3(react@19.2.8)(tea-cup-fp@1.1.1))(react@19.2.8)(tailwind-merge@3.6.0)(tea-cup-fp@1.1.1)
       fp-ts: 2.16.11
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)

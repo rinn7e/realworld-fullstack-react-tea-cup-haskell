@@ -1,32 +1,32 @@
 .DEFAULT_GOAL := build
 
-.PHONY: build watch api api-watch server resetdb seed migrate-generate migrate-up migrate-up-one migrate-down-one migrate-status lint format build-haddock build-hoogle hoogle test compile install exec run-installed swagger-web swagger-admin server-fresh server-prod docker deploy build-dry-run docker-dry-run
+.PHONY: build watch api api-watch server resetdb seed migrate-generate migrate-up migrate-up-one migrate-down-one migrate-status lint format build-haddock build-hoogle hoogle test compile install exec run-installed swagger-web swagger-admin server-fresh server-prod
 
 # Build with fast compilation
 build:
-	nix develop -c cabal build
+	stack build --fast
 
 # Generate Web OpenAPI 3.0 specification in YAML format
 swagger-web:
 	@chmod +x ./script/generate-swagger.sh
-	nix develop -c "./script/generate-swagger.sh web"
+	./script/generate-swagger.sh web
 
 # Generate Admin OpenAPI 3.0 specification in YAML format
 swagger-admin:
 	@chmod +x ./script/generate-swagger.sh
-	nix develop -c "./script/generate-swagger.sh admin"
+	./script/generate-swagger.sh admin
 
 # Build and watch for changes
 watch:
-	nix develop -c "cabal build --file-watch"
+	stack build --fast --file-watch
 
 # Build and run the API
 api:
-	nix develop -c cabal run haskell-servant-realworld-exe
+	stack build --fast && stack exec haskell-servant-realworld-exe
 
-# Build, watch, and auto-restart the API
+# Build, watch, and re-run the API after every successful build
 api-watch:
-	nix develop -c "cabal run haskell-servant-realworld-exe --file-watch"
+	stack build --fast --file-watch --exec haskell-servant-realworld-exe
 
 # Run API, Frontend Web, and Frontend Admin in tmux windows
 server:
@@ -35,7 +35,7 @@ server:
 
 # Reset database and start dev server
 server-fresh:
-	nix develop -c ./script/resetdb.sh
+	./script/resetdb.sh
 	$(MAKE) migrate-up
 	$(MAKE) seed
 	$(MAKE) server
@@ -43,108 +43,75 @@ server-fresh:
 # Compile frontends and run server in production mode
 server-prod:
 	@chmod +x ./script/server-prod.sh
-	nix develop -c ./script/server-prod.sh
+	./script/server-prod.sh
 
-# Build production docker image natively using Nix
-docker:
-	# Compile frontends on host using pnpm
-	cd ../frontend-web && VITE_BASE_URL=/ VITE_API_BASE=/api pnpm run build
-	cd ../frontend-admin && VITE_BASE_URL=/admin/ VITE_API_BASE=/api pnpm run build
-	# Copy compiled outputs into backend/dist/
-	rm -rf dist/web dist/admin
-	mkdir -p dist/web dist/admin
-	cp -R ../frontend-web/dist/* dist/web/
-	cp -R ../frontend-admin/dist/* dist/admin/
-	# Build the Docker image natively via Nix (using buildImage, no fakeroot needed!)
-	nix build .#dockerImage
-	# Load the Nix-built Docker image tarball into local Docker daemon and tag it
-	docker load -i result
-	docker tag realworld-api:latest rinn7e-haskell-realworld-api
-	# Clean up compiled folders from host backend/dist/ and result symlink
-	rm -rf dist/web dist/admin result
-
-# Deploy to Fly.io by pulling the compiled image from GHCR, tagging it, and deploying locally
-deploy:
-	docker pull ghcr.io/rinn7e/realworld-fullstack-react-tea-cup-haskell:latest
-	docker tag ghcr.io/rinn7e/realworld-fullstack-react-tea-cup-haskell:latest rinn7e-haskell-realworld-api
-	fly deploy --image rinn7e-haskell-realworld-api --local-only
-
-# Run a dry-run of the nix develop shell environment used by make build
-build-dry-run:
-	nix build .#devShells.$$(nix eval --raw --impure --expr 'builtins.currentSystem').default --dry-run
-
-# Run a dry-run of the Docker build to see what Nix will fetch vs build
-docker-dry-run:
-	nix build .#dockerImage --dry-run
-
-# Reset database and start dev server
+# Reset database
 resetdb:
-	nix develop -c ./script/resetdb.sh
+	@chmod +x ./script/resetdb.sh
+	./script/resetdb.sh
 
 # Populate database with seed data
 seed:
-	nix develop -c bash -c 'psql "$$DB_CONN" -f resource/seed.sql'
+	psql "$${DB_CONN:-host=localhost dbname=realworld user=postgres password=postgres port=5432}" -f resource/seed.sql
 
 # Generate a new migration (Usage: make migrate-generate NAME=add_users)
 migrate-generate:
 	@if [ -z "$(NAME)" ]; then echo "Error: NAME is required. Usage: make migrate-generate NAME=some_name"; exit 1; fi
-	nix develop -c cabal run migrate-exe -- generate $(NAME)
+	stack build --fast && stack exec migrate-exe -- generate $(NAME)
 
 # Run all pending up migrations
 migrate-up:
-	nix develop -c cabal run migrate-exe -- up
+	stack build --fast && stack exec migrate-exe -- up
 
 # Run a single pending up migration
 migrate-up-one:
-	nix develop -c cabal run migrate-exe -- up-one
+	stack build --fast && stack exec migrate-exe -- up-one
 
 # Run a single down migration
 migrate-down-one:
-	nix develop -c cabal run migrate-exe -- down-one
+	stack build --fast && stack exec migrate-exe -- down-one
 
 # Check migration status and schema mismatches
 migrate-status:
-	nix develop -c cabal run migrate-exe -- status
+	stack build --fast && stack exec migrate-exe -- status
 
 # Lint Haskell code
 lint:
-	nix develop -c "hlint src app"
+	hlint src app
 
 # Format Haskell code
 format:
-	nix develop -c "find src app test -name '*.hs' | xargs fourmolu --mode inplace"
+	find src app test -name '*.hs' | xargs fourmolu --mode inplace
 
 # Generate documentation
 build-haddock:
-	nix develop -c cabal haddock
+	stack haddock --fast
 
-# Start local Hoogle server
+# Generate and start local Hoogle server
 build-hoogle:
-	$(MAKE) build-haddock
-	nix develop -c "stack hoogle -- generate --local --database=.stack-work/hoogle"
-	nix develop -c "stack hoogle -- map --database=.stack-work/hoogle"
-	nix develop -c "stack hoogle -- server --local --database=.stack-work/hoogle"
+	stack hoogle -- generate --local
+	stack hoogle -- server --local
 
 # Start local Hoogle server
 hoogle:
-	nix develop -c "stack hoogle -- server --local --database=.stack-work/hoogle"
+	stack hoogle -- server --local
 
 # Run tests
 test:
-	nix develop -c cabal test
+	stack test --fast
 
 # Compile binary (production build)
 compile:
-	nix develop -c "cabal build --enable-optimization"
+	stack build
 
 # Install binary to ~/.local/bin
 install:
-	nix develop -c cabal install
+	stack install
 
 # Run the compiled binary via stack
 exec:
-	nix develop -c cabal run haskell-servant-realworld-exe
+	stack exec haskell-servant-realworld-exe
 
 # Run the installed binary (assumes ~/.local/bin is in PATH)
 run-installed:
-	nix develop -c haskell-servant-realworld-exe
+	haskell-servant-realworld-exe

@@ -1,0 +1,58 @@
+services:
+  db:
+    # Keep in sync with the local Postgres major version (pg_dump output is not backwards compatible)
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-realworld}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
+    volumes:
+      # User data (accounts, articles, comments, visitors): never deleted by deploys.
+      # Postgres 18+ images keep data in /var/lib/postgresql/<major>/docker
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-realworld}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    # IMAGE: your fork's image (CI publishes ghcr.io/<github-owner>/<repo-name>).
+    # IMAGE_TAG defaults to latest; set it to a commit SHA to pin or roll back
+    image: ${IMAGE:-ghcr.io/rinn7e/realworld-fullstack-react-tea-cup-haskell}:${IMAGE_TAG:-latest}
+    build:
+      context: .
+      dockerfile: docker/app.Dockerfile
+      secrets:
+        - gh_token
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Password is single-quoted for libpq, so it may contain spaces (but not ' or \)
+      DB_CONN: "host=db dbname=${POSTGRES_DB:-realworld} user=${POSTGRES_USER:-postgres} password='${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}' port=5432"
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set in .env}
+      # Migrations are run explicitly (CI deploy / `docker compose run --rm app /app/migrate-exe up`);
+      # the server still refuses to start if the schema is out of date
+      SHOULD_RUN_MIGRATION_AUTOMATICALLY: "false"
+      # Frontends are served from the same origin, so no CORS headers are needed
+      ALLOW_CORS: "false"
+      SHOW_SQL_LOG: "false"
+    healthcheck:
+      # Unauthenticated, returns the build's git commit
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/api/metadata"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+    # No published ports: docker-compose.override.yml publishes it locally,
+    # docker-compose.vps.yml puts it behind the droplet's shared HTTPS proxy
+
+secrets:
+  gh_token:
+    environment: INSTALL_GITHUB_PACKAGE_TOKEN
+
+volumes:
+  postgres_data:

@@ -20,22 +20,20 @@ This backend implements a **3-Layer Cake Clean Architecture** powered by the `ef
 
 ## Prerequisites
 
-- [Nix](https://nixos.org/download) (with Flakes enabled)
-- PostgreSQL database (running locally or via Supabase; the Nix dev shell automatically provides the postgres client libraries and headers)
+- [Stack](https://docs.haskellstack.org/) (installs GHC 9.8.4 from the `lts-23.28` resolver in `stack.yaml`)
+- PostgreSQL (server + client libraries, e.g. `brew install postgresql`), running locally
 
 ## Getting Started
 
 1.  **Clone the repository**.
 2.  **Navigate to the backend directory**:
     ```bash
-    cd backend
+    cd package/backend
     ```
-3.  **Enter the Nix development shell**:
-    To load the compiler (GHC 9.10), package manager (Cabal), language server (HLS), and all required system libraries (Postgres client headers, Zlib) pre-compiled from the Nix cache, run:
+3.  **Build** (the first build compiles all dependencies):
     ```bash
-    nix develop
+    make build
     ```
-    *(Alternatively, if you use `direnv` with `nix-direnv`, simply copy the sample `.envrc` and run `direnv allow`—it will automatically load the Nix development shell whenever you enter this directory!)*
 4.  **Set up the database**:
     Ensure you have a PostgreSQL database running. You can customize the connection string in your `.envrc`.
 5.  **Environment Variables**:
@@ -46,19 +44,19 @@ This backend implements a **3-Layer Cake Clean Architecture** powered by the `ef
     direnv allow
     ```
     Required variables:
-    - `DB_CONN`: Postgres connection string (e.g. targeting the Supabase pooler).
+    - `DB_CONN`: Postgres connection string (libpq keyword form, e.g. `host=localhost dbname=realworld user=postgres password=postgres port=5432`).
     - `JWT_SECRET`: Secret key for JWT signing.
     - `SHOULD_RUN_MIGRATION_AUTOMATICALLY`: Set to `true` to run migrations on startup (default `false`).
     - `GIT_COMMIT_HASH`: Current commit hash for metadata endpoint.
 
 ## Development Commands (Makefile)
 
-A `Makefile` is provided in the `backend` directory for common tasks. Make sure to run these commands inside the Nix development shell (after running `nix develop`) or prefix them with `nix develop --command`:
+A `Makefile` is provided in `package/backend` for common tasks (all use Stack):
 
-- `make build`: Build the project (`cabal build`).
-- `make watch`: Build and watch for changes (`cabal build --file-watch`).
-- `make api`: Build and run the API server (`cabal run haskell-servant-realworld-exe`).
-- `make api-watch`: Build, watch, and auto-restart the server.
+- `make build`: Build the project (`stack build --fast`).
+- `make watch`: Build and watch for changes (`stack build --fast --file-watch`).
+- `make api`: Build and run the API server (`stack exec haskell-servant-realworld-exe`).
+- `make api-watch`: Build, watch, and re-run the server after every successful build.
 - `make server-fresh`: Reset database, apply migrations, seed data, and start the server.
 - `make resetdb`: Reset the database schema.
 - `make seed`: Populate the database with seed data.
@@ -70,11 +68,11 @@ A `Makefile` is provided in the `backend` directory for common tasks. Make sure 
 - `make migrate-status`: Check migration status.
 - `make lint`: Lint the codebase with `hlint`.
 - `make format`: Format code with `fourmolu`.
-- `make haddock`: Generate Haddock documentation.
-- `make test`: Run tests (`cabal test`).
-- `make compile`: Production build with optimizations (`cabal build --enable-optimization`).
-- `make install`: Install binary to `~/.cabal/bin`.
-- `make exec`: Run the binary via `cabal run`.
+- `make build-haddock`: Generate Haddock documentation.
+- `make test`: Run tests (`stack test --fast`).
+- `make compile`: Production build with optimizations (`stack build`).
+- `make install`: Install binary to `~/.local/bin`.
+- `make exec`: Run the binary via `stack exec`.
 - `make run-installed`: Run the installed binary.
 
 ## Migration System
@@ -90,27 +88,27 @@ By default, automatic migration are **disabled** on server startup to encourage 
 ### How to Enable Automatic Migration
 If you want the server to run migration automatically on startup (e.g., in a CI environment), set the `SHOULD_RUN_MIGRATION_AUTOMATICALLY` environment variable to `true`:
 ```bash
-SHOULD_RUN_MIGRATION_AUTOMATICALLY=true cabal run haskell-servant-realworld-exe
+SHOULD_RUN_MIGRATION_AUTOMATICALLY=true make api
 ```
 
 ### How to Trigger Migrations Manually
-You can use the executable to run migration without starting the web server.
+The `migrate-exe` executable runs migrations without starting the web server.
 
 **To trigger all pending "Up" migration:**
 ```bash
-cabal run haskell-servant-realworld-exe -- migrate up
+make migrate-up
 ```
 
 **To trigger a single "Down" migration (roll back the last one):**
 ```bash
-cabal run haskell-servant-realworld-exe -- migrate down
+make migrate-down-one
 ```
 
 ### How to Autogenerate Migrations
 You don't have to write the SQL by hand! You can use the `migrate generate` command to automatically detect changes in your `DB.hs` entities and generate the necessary `.up.sql` code.
 
 ```bash
-cabal run haskell-servant-realworld-exe -- migrate generate <some_name>
+make migrate-generate NAME=<some_name>
 ```
 
 - This will create a new pair of files: `migration/NNN_<some_name>.up.sql` and `migration/NNN_<some_name>.down.sql`.

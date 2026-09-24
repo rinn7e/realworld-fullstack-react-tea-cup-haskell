@@ -1,6 +1,6 @@
 import * as RD from '@devexperts/remote-data-ts'
 import { TagMemo as DsTagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
-import { PaginationMemo } from '@rinn7e/tea-cup-pagination/lib/component'
+import { PaginationMemo } from '@rinn7e/tea-cup-pagination/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
 import React from 'react'

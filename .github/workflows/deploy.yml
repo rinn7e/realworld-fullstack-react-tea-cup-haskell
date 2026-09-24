@@ -1,68 +1,174 @@
-name: Deploy to GitHub Pages
+# ==============================================================================
+# GitHub Actions CI/CD: Automated Docker Image Build & Publish to GHCR + VPS deploy
+# ==============================================================================
+# This workflow compiles the Haskell server and both frontends (web + admin) inside
+# GitHub Actions runners into one production image, pushes it to the GitHub
+# Container Registry (ghcr.io), then deploys it to the VPS.
+#
+# Benefits for Master:
+# 1. Zero compilation load on your remote cloud VPS (no GHC/Stack OOM crashes).
+# 2. High-performance BuildKit caching (type=gha) speeds up repeated builds.
+# 3. The database holds user data: deploys only run migrations, never reset it.
+# ==============================================================================
 
+name: Build & Publish Docker Image
+
+# Triggers for this workflow:
 on:
+  # 1. Push to 'master': build + publish the image only (no deploy).
+  #    Only when the push touches something the deployed app is built from; docs, e2e,
+  #    admin-legacy, Makefile, ... changes don't rebuild. Add new app inputs here.
+  push:
+    branches: [ master ]
+    paths:
+      # Server, migrations
+      - 'package/backend/**'
+      # Frontends served by the server (and the design system they build against)
+      - 'package/frontend-web/**'
+      - 'package/frontend-admin/**'
+      - 'package/frontend-design-system/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.npmrc'
+      # Deployment setup
+      - 'docker/**'
+      - 'docker-compose.yml'
+      - 'docker-compose.vps.yml'
+      - '.dockerignore'
+      - '.github/workflows/deploy.yml'
+
+  # 2. Manual run from the GitHub UI Actions tab: build + deploy (the ONLY way to deploy).
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+  # 3. Weekly run keeps the Actions cache warm: GitHub evicts cache entries unused
+  #    for 7 days, which would force a full GHC + Haskell dependency rebuild.
+  #    Everything is a cache hit, so this only re-publishes the same image (no deploy).
+  schedule:
+    - cron: '0 3 * * 1'
 
+# Permissions required by the workflow runner:
+permissions:
+  contents: read   # Allows checking out the repository code.
+  packages: write  # Grants permission to push Docker images to GitHub Container Registry (ghcr.io).
+
+# Only the newest push publishes :latest; an older in-progress run is cancelled.
 concurrency:
-  group: 'pages'
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  # ============================================================================
+  # Job 1: Build & Publish the App Image (Haskell server + frontend-web + frontend-admin)
+  # ============================================================================
+  build:
+    name: Build & Push Image
+    # Run on GitHub-hosted Ubuntu runner with 4 vCPUs and plenty of RAM for GHC
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout main repo
-        uses: actions/checkout@v4
+      # Step 1: Check out the repository source code to the runner
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      # Step 2: Set up Docker Buildx (required for advanced BuildKit cache mounts)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      # Step 3: Authenticate with GitHub Container Registry (ghcr.io)
+      # Uses the runner's built-in GITHUB_TOKEN which has 'packages: write' permission
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4
         with:
-          path: realworld-fullstack-react-tea-cup-haskell
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Checkout tea-cup-package
-        uses: actions/checkout@v4
+      # Step 4: Image name = ghcr.io/<owner>/<repo>, strictly lowercase
+      # (Docker repository names must be lowercase), so forks publish to their own package
+      - name: Set image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
+      # Step 5: Build the app Docker image and push to ghcr.io
+      - name: Build and push App Image
+        uses: docker/build-push-action@v7
         with:
-          repository: rinn7e/tea-cup-package
-          ref: master
-          path: tea-cup-package
+          context: .
+          file: docker/app.Dockerfile
+          push: true
+          # Pass the token as a BuildKit secret (id=gh_token) so pnpm can authenticate with
+          # npm.pkg.github.com without the token leaking into image layers or build history.
+          # Falls back to secrets.GITHUB_TOKEN if repository secret is not explicitly set.
+          secrets: |
+            gh_token=${{ secrets.INSTALL_GITHUB_PACKAGE_TOKEN || secrets.GITHUB_TOKEN }}
+          # Shown by GET /api/metadata
+          build-args: |
+            GIT_COMMIT_HASH=${{ github.sha }}
+          # Tags:
+          #   1. :latest -> Default production tag pulled by docker-compose on VPS
+          #   2. :<sha>   -> Immutable commit-specific tag for rollback safety
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          # GitHub Actions cache backend. Caches BuildKit layers only, not RUN cache mounts:
+          # GHC + Stack dependencies and the pnpm install are regular layers in app.Dockerfile,
+          # reused until stack.yaml / package.yaml / the lockfile change.
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,scope=app,mode=max
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 11
+  # ============================================================================
+  # Job 2: Deploy the image to the VPS
+  # ============================================================================
+  # Manual runs only (Actions tab -> Run workflow). Pushes and the weekly schedule
+  # only build the image; to deploy automatically on push, change `if:` to
+  # `github.event_name != 'schedule'`.
+  #
+  # The database is never rebuilt: it holds user data (accounts, articles, comments,
+  # visitors). Deploys only run pending migrations:
+  #   pull this commit's image on the VPS -> migrate-exe up -> start/update the app
+  #
+  # One-time VPS setup required (see README "Deployment"):
+  #   - Docker installed, `docker login ghcr.io` with a read:packages PAT
+  #   - $VPS_DIR/.env with COMPOSE_FILE, DOMAIN, POSTGRES_PASSWORD, JWT_SECRET
+  #   - The shared HTTPS proxy running on the droplet (github.com/rinn7e/caddy-front)
+  #   - Repo secrets: VPS_HOST, VPS_USER, VPS_DIR, VPS_SSH_KEY, VPS_KNOWN_HOSTS
+  deploy:
+    name: Deploy to VPS
+    needs: [build]
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    # A hung step (e.g. a stalled image pull) fails the job instead of running for GitHub's 6h default
+    timeout-minutes: 30
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
 
-      - name: Build tea-cup-package
-        run: |
-          pnpm install
-          pnpm build
-        working-directory: tea-cup-package
-
-      - name: Install dependencies
-        run: pnpm install
-        working-directory: realworld-fullstack-react-tea-cup-haskell/frontend-web
-
-      - name: Build
-        run: pnpm build
-        working-directory: realworld-fullstack-react-tea-cup-haskell/frontend-web
+      - name: Configure SSH
         env:
-          VITE_API_BASE: https://api.realworld.show/api
-          VITE_BASE_URL: /realworld-fullstack-react-tea-cup-haskell/
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: realworld-fullstack-react-tea-cup-haskell/frontend-web/dist
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      # Ship the compose files so the VPS always runs this commit's service config
+      # (the VPS .env's COMPOSE_FILE combines them), then pull this commit's image
+      # (pinned by SHA), apply pending migrations and start it. Finally delete every image
+      # no container uses (older :<sha> deploys), so the VPS disk doesn't fill up.
+      # pull --quiet: without a TTY the progress bar prints one log line per redraw.
+      # Pulls from ghcr.io occasionally stall forever: 5 min limit per attempt, 3 attempts.
+      - name: Deploy image to VPS
+        env:
+          TARGET: ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}
+          VPS_DIR: ${{ secrets.VPS_DIR }}
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
+          scp docker-compose.yml docker-compose.vps.yml "$TARGET:$VPS_DIR/"
+          ssh "$TARGET" "cd \"$VPS_DIR\" && export IMAGE=$IMAGE IMAGE_TAG=${{ github.sha }} INSTALL_GITHUB_PACKAGE_TOKEN=unused \
+            && for i in 1 2 3; do timeout 300 docker compose pull --quiet && break; \
+                 [ \$i = 3 ] && exit 1; echo \"Image pull failed or stalled (attempt \$i/3), retrying...\"; done \
+            && docker compose up -d --wait db \
+            && docker compose run --rm --no-deps app /app/migrate-exe up \
+            && docker compose up -d --wait && docker image prune -af"

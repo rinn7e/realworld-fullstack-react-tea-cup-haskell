@@ -1,0 +1,40 @@
+# VCS & System
+.git
+.gitignore
+**/.DS_Store
+.idea
+.vscode
+
+# Haskell artifacts (Crucial: prevents copying host Mac .stack-work into Linux container)
+.stack-work/
+**/.stack-work/
+**/dist-newstyle/
+**/*.o
+**/*.hi
+
+# Node & Frontend artifacts
+node_modules/
+**/node_modules/
+**/dist/
+coverage/
+*.tsbuildinfo
+
+# Playwright artifacts
+**/test-results/
+**/playwright-report/
+
+# Environment & secrets
+.env
+**/.env.local
+**/.envrc
+**/.direnv
+
+# Not part of the app image
+doc/
+.agents/
+.gemini/
+package/e2e/
+package/frontend-admin-legacy/
+# Showcase app (not deployed). Excluded so the workspace inside the image is exactly the
+# installed projects; otherwise pnpm's pre-run deps check tries to install it.
+package/frontend-design-system/app/

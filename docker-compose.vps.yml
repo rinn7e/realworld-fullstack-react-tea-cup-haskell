@@ -1,0 +1,16 @@
+# VPS only (COMPOSE_FILE=docker-compose.yml:docker-compose.vps.yml in the VPS .env).
+# Puts `app` behind the droplet's shared HTTPS proxy (github.com/rinn7e/caddy-front): the proxy
+# reads these labels, gets the certificates and forwards to app:3000. No ports are published.
+services:
+  app:
+    networks:
+      - default
+      - proxy
+    labels:
+      # Site address(es), e.g. "realworld.example.com"
+      caddy: ${DOMAIN:?DOMAIN must be set in .env}
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+
+networks:
+  proxy:
+    external: true
