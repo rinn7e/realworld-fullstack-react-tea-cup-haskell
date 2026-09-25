@@ -10,6 +10,8 @@ services:
       # Site address(es), e.g. "realworld.example.com"
       caddy: ${DOMAIN:?DOMAIN must be set in .env}
       caddy.reverse_proxy: "{{upstreams 3000}}"
+      # The Haskell server sends uncompressed responses; compress them at the proxy
+      caddy.encode: zstd gzip
 
 networks:
   proxy:
