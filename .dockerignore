@@ -32,7 +32,6 @@ coverage/
 # Not part of the app image
 doc/
 .agents/
-.gemini/
 package/e2e/
 package/frontend-admin-legacy/
 # Showcase app (not deployed). Excluded so the workspace inside the image is exactly the
