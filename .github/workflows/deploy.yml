@@ -52,9 +52,10 @@ permissions:
   contents: read   # Allows checking out the repository code.
   packages: write  # Grants permission to push Docker images to GitHub Container Registry (ghcr.io).
 
-# Only the newest push publishes :latest; an older in-progress run is cancelled.
+# Only the newest run publishes :latest; an older in-progress run of the SAME trigger is
+# cancelled. Grouped by trigger so a push never cancels a manual (deploying) run.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:

@@ -2,6 +2,8 @@
 
 A production-grade, type-safe implementation of the RealWorld spec, featuring a Haskell Servant backend and React frontends built with The Elm Architecture (TEA) using `react-tea-cup` and Tailwind CSS v4.
 
+**Live demo:** [https://conduit.rinn7e.com/](https://conduit.rinn7e.com/). It also has an admin dashboard at [`/admin/`](https://conduit.rinn7e.com/admin/) and API docs at [`/swagger-ui`](https://conduit.rinn7e.com/swagger-ui/).
+
 ## Project Structure
 
 * [**package/backend/**](package/backend) — Haskell Servant Conduit API with PostgreSQL, Persistent, and Esqueleto.
@@ -35,7 +37,7 @@ cd package/backend && make server-fresh
 
 ## Deployment (Docker + GitHub Actions + VPS)
 
-Live demo: **https://realworld.rinn7e.com**. The site at `/` is the web app, `/admin/` is the admin dashboard, and `/swagger-ui` has the API docs.
+Live demo: [https://conduit.rinn7e.com/](https://conduit.rinn7e.com/). The site at `/` is the web app, `/admin/` is the admin dashboard, and `/swagger-ui` has the API docs.
 
 This section explains how to run the production image locally and how to deploy your own copy to a Linux server with automatic HTTPS and CI/CD.
 
