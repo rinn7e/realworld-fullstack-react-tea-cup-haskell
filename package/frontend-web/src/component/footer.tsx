@@ -51,7 +51,7 @@ export const Footer: React.FC = () => {
               rel='noopener noreferrer'
               className='underline hover:text-gray-600 dark:hover:text-zinc-300'
             >
-              rinn7e
+              rinn7e.
             </a>
           </span>
           <span className='text-xs text-gray-400 dark:text-zinc-500'>

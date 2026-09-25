@@ -15,9 +15,9 @@ name: Build & Publish Docker Image
 
 # Triggers for this workflow:
 on:
-  # 1. Push to 'master': build + publish the image only (no deploy).
+  # 1. Push to 'master': build the image, then deploy it to the VPS.
   #    Only when the push touches something the deployed app is built from; docs, e2e,
-  #    admin-legacy, Makefile, ... changes don't rebuild. Add new app inputs here.
+  #    admin-legacy, Makefile, ... changes don't redeploy. Add new app inputs here.
   push:
     branches: [ master ]
     paths:
@@ -38,7 +38,7 @@ on:
       - '.dockerignore'
       - '.github/workflows/deploy.yml'
 
-  # 2. Manual run from the GitHub UI Actions tab: build + deploy (the ONLY way to deploy).
+  # 2. Manual run from the GitHub UI Actions tab (same as a push: build + deploy, no path filter).
   workflow_dispatch:
 
   # 3. Weekly run keeps the Actions cache warm: GitHub evicts cache entries unused
@@ -119,9 +119,7 @@ jobs:
   # ============================================================================
   # Job 2: Deploy the image to the VPS
   # ============================================================================
-  # Manual runs only (Actions tab -> Run workflow). Pushes and the weekly schedule
-  # only build the image; to deploy automatically on push, change `if:` to
-  # `github.event_name != 'schedule'`.
+  # Runs on every push / manual run (not on the weekly cache-warming schedule).
   #
   # The database is never rebuilt: it holds user data (accounts, articles, comments,
   # visitors). Deploys only run pending migrations:
@@ -135,7 +133,7 @@ jobs:
   deploy:
     name: Deploy to VPS
     needs: [build]
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     # A hung step (e.g. a stalled image pull) fails the job instead of running for GitHub's 6h default
     timeout-minutes: 30
