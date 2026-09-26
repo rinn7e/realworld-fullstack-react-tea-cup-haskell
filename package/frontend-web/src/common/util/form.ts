@@ -6,8 +6,9 @@ export const minLengthIfExistValidator =
   (input: string): E.Either<string, string> => {
     if (input.length === 0) {
       return E.right(input)
+    } else {
+      return Form.minLengthValidator(label, minLength)(input)
     }
-    return Form.minLengthValidator(label, minLength)(input)
   }
 
 export const isEmailField = (str: string): boolean => {

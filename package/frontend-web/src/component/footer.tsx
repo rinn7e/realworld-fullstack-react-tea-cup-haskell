@@ -1,10 +1,10 @@
 import { cn } from '@rinn7e/tea-cup-prelude'
-import React from 'react'
+import { memo } from 'react'
 
 import { homePage } from '@/common/type/route'
 import { Link } from '@/component/link'
 
-export const Footer: React.FC = () => {
+const FooterComponent = () => {
   return (
     <footer className='border-t border-gray-100 bg-gray-50 py-[24px] dark:border-zinc-800 dark:bg-zinc-950'>
       <div
@@ -70,3 +70,5 @@ export const Footer: React.FC = () => {
     </footer>
   )
 }
+
+export const FooterMemo = memo(FooterComponent)

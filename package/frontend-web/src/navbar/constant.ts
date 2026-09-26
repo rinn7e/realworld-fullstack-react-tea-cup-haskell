@@ -1,21 +1,9 @@
 import * as O from 'fp-ts/lib/Option'
-import type { Option } from 'fp-ts/lib/Option'
 
-import type { User } from '@/common/api'
-import { type AppRoute, homePage } from '@/common/type/route'
+import { homePage } from '@/common/type/route'
 import { assetPath } from '@/common/util'
 
-export type NavLinkIcon =
-  | { _tag: 'Icon'; name: 'pencil' | 'settings' }
-  | { _tag: 'Avatar'; getImage: (user: Option<User>) => string | null }
-
-export type NavLinkData = {
-  key: string
-  label: (user: Option<User>) => string
-  route: (user: Option<User>) => AppRoute
-  pageTag: string
-  icon?: NavLinkIcon
-}
+import type { NavLinkData } from './type'
 
 export const navLinkUnauths: NavLinkData[] = [
   {

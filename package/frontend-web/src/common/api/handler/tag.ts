@@ -4,8 +4,12 @@ import { pipe } from 'fp-ts/lib/function'
 
 import { API_BASE } from '@/common/env'
 
-import { type ApiError, type HttpError } from '../type/common'
-import { type TagsResponse, TagsResponseJson } from '../type/tag'
+import {
+  type ApiError,
+  type HttpError,
+  type TagsResponse,
+  TagsResponseJson,
+} from '../type'
 import { decodeApiError, decodeSuccess, fetchToTaskEither } from './common'
 
 export const getTags = (

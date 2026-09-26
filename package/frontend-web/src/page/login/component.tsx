@@ -1,11 +1,10 @@
 import * as RD from '@devexperts/remote-data-ts'
 import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { FormItemMemo } from '@rinn7e/tea-cup-form/component'
-import React from 'react'
+import React, { memo } from 'react'
 
 import type { AppRoute } from '@/common/type/route'
-import { memoStrategy } from '@/common/util'
-import { ErrorMessages } from '@/component/error-messages'
+import { ErrorMessagesMemo } from '@/component/error-messages/component'
 import { Link } from '@/component/link'
 
 import {
@@ -45,12 +44,11 @@ const LoginPageComponent = ({ model, dispatch }: Props) => {
             e.preventDefault()
             if (RD.isPending(model.requestRd)) {
               return
-            }
-            if (!model.isFormValid) {
+            } else if (!model.isFormValid) {
               dispatch({ _tag: 'ShowAllValidation' })
-              return
+            } else {
+              dispatch({ _tag: 'Submit' })
             }
-            dispatch({ _tag: 'Submit' })
           }}
         >
           <fieldset
@@ -70,7 +68,7 @@ const LoginPageComponent = ({ model, dispatch }: Props) => {
           </fieldset>
 
           {RD.isFailure(model.requestRd) && (
-            <ErrorMessages error={model.requestRd.error} />
+            <ErrorMessagesMemo error={model.requestRd.error} />
           )}
 
           <div className='pt-[16px]'>
@@ -89,4 +87,4 @@ const LoginPageComponent = ({ model, dispatch }: Props) => {
   )
 }
 
-export const LoginPageMemo = memoStrategy(LoginPageComponent, PropsEq.equals)
+export const LoginPageMemo = memo(LoginPageComponent, PropsEq.equals)

@@ -97,8 +97,9 @@ const favoriteArticleHandler =
           result,
         })),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const unfavoriteArticleHandler =
@@ -117,8 +118,9 @@ const unfavoriteArticleHandler =
           (result): Msg => ({ _tag: 'UnfavoriteArticleResponse', result }),
         ),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const favoriteArticleResponseHandler =
@@ -126,19 +128,16 @@ const favoriteArticleResponseHandler =
   (model: Model): [Model, Cmd<Msg>] => {
     if (result.tag === 'Ok') {
       return [{ ...model, article: RD.success(result.value) }, Cmd.none()]
+    } else if (model.article._tag === 'RemoteSuccess') {
+      const revertedArticle = unfavoriteArticleUtil(model.article.value.article)
+      return [
+        {
+          ...model,
+          article: RD.success({ article: revertedArticle }),
+        },
+        Cmd.none(),
+      ]
     } else {
-      if (model.article._tag === 'RemoteSuccess') {
-        const revertedArticle = unfavoriteArticleUtil(
-          model.article.value.article,
-        )
-        return [
-          {
-            ...model,
-            article: RD.success({ article: revertedArticle }),
-          },
-          Cmd.none(),
-        ]
-      }
       return [model, Cmd.none()]
     }
   }
@@ -148,17 +147,16 @@ const unfavoriteArticleResponseHandler =
   (model: Model): [Model, Cmd<Msg>] => {
     if (result.tag === 'Ok') {
       return [{ ...model, article: RD.success(result.value) }, Cmd.none()]
+    } else if (model.article._tag === 'RemoteSuccess') {
+      const revertedArticle = favoriteArticleUtil(model.article.value.article)
+      return [
+        {
+          ...model,
+          article: RD.success({ article: revertedArticle }),
+        },
+        Cmd.none(),
+      ]
     } else {
-      if (model.article._tag === 'RemoteSuccess') {
-        const revertedArticle = favoriteArticleUtil(model.article.value.article)
-        return [
-          {
-            ...model,
-            article: RD.success({ article: revertedArticle }),
-          },
-          Cmd.none(),
-        ]
-      }
       return [model, Cmd.none()]
     }
   }
@@ -174,8 +172,9 @@ const followAuthorHandler =
           result,
         })),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const unfollowAuthorHandler =
@@ -189,8 +188,9 @@ const unfollowAuthorHandler =
           result,
         })),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const followAuthorResponseHandler =
@@ -209,8 +209,9 @@ const followAuthorResponseHandler =
         },
         Cmd.none(),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const unfollowAuthorResponseHandler =
@@ -229,8 +230,9 @@ const unfollowAuthorResponseHandler =
         },
         Cmd.none(),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const deleteArticleHandler =
@@ -244,8 +246,9 @@ const deleteArticleHandler =
           result,
         })),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const deleteArticleResponseHandler = (model: Model): [Model, Cmd<Msg>] => [

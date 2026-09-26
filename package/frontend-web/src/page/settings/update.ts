@@ -61,7 +61,7 @@ const settingsUsernameFormItem = (
       variant: { _tag: 'Text' },
       autocomplete: false,
       isFocus: false,
-      ui: standardInputUi(),
+      ui: standardInputUi({ isSmall: false, testId: 'username-input' }),
     },
   },
 ]
@@ -81,7 +81,7 @@ const settingsBioFormItem = (bio: string | null): [string, Form.FormType] => [
       variant: { _tag: 'Text' },
       autocomplete: false,
       isFocus: false,
-      ui: standardInputUi({ testId: 'user-bio-textarea' }),
+      ui: standardInputUi({ isSmall: false, testId: 'user-bio-textarea' }),
     },
   },
 ]
@@ -102,7 +102,7 @@ const settingsEmailFormItem = (email: string): [string, Form.FormType] => [
       variant: { _tag: 'Email' },
       autocomplete: false,
       isFocus: false,
-      ui: standardInputUi(),
+      ui: standardInputUi({ isSmall: false, testId: 'email-input' }),
     },
   },
 ]
@@ -122,7 +122,7 @@ const settingsPasswordFormItem = (): [string, Form.FormType] => [
       variant: { _tag: 'Password', reveal: false },
       autocomplete: false,
       isFocus: false,
-      ui: standardInputUi(),
+      ui: standardInputUi({ isSmall: false, testId: 'password-input' }),
     },
   },
 ]
@@ -143,8 +143,9 @@ const settingsPasswordConfirmationFormItem = (): [string, Form.FormType] => [
           validation: (currentInput: string, linkInput: string) => {
             if (currentInput !== linkInput) {
               return E.left('Password does not match')
+            } else {
+              return E.right(currentInput)
             }
-            return E.right(currentInput)
           },
         },
       ],
@@ -153,7 +154,10 @@ const settingsPasswordConfirmationFormItem = (): [string, Form.FormType] => [
       variant: { _tag: 'Password', reveal: false },
       autocomplete: false,
       isFocus: false,
-      ui: standardInputUi(),
+      ui: standardInputUi({
+        isSmall: false,
+        testId: 'passwordConfirmation-input',
+      }),
     },
   },
 ]
@@ -253,15 +257,15 @@ const submitHandler =
 
     if (shared.token._tag === 'None') {
       return [model, Cmd.none()]
+    } else {
+      return [
+        { ...model, requestRd: RD.pending },
+        attemptTE(
+          updateUser(shared.token.value, { user: userUpdate }),
+          (result): Msg => ({ _tag: 'SubmitResponse', result }),
+        ),
+      ]
     }
-
-    return [
-      { ...model, requestRd: RD.pending },
-      attemptTE(
-        updateUser(shared.token.value, { user: userUpdate }),
-        (result): Msg => ({ _tag: 'SubmitResponse', result }),
-      ),
-    ]
   }
 
 const submitResponseHandler =

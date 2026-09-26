@@ -1,11 +1,17 @@
 import { cn } from '@rinn7e/tea-cup-prelude'
-import React from 'react'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as S from 'fp-ts/lib/string'
+import { memo } from 'react'
 
-export interface Props {
-  className?: string
+export type DotLoadingProps = {
+  className: string
 }
 
-export const DotLoading: React.FC<Props> = ({ className }) => {
+const DotLoadingPropsEq: EqClass.Eq<DotLoadingProps> = EqClass.struct({
+  className: S.Eq,
+})
+
+const DotLoadingComponent = ({ className }: DotLoadingProps) => {
   return (
     <span className={cn('inline-flex gap-[2px]', className)}>
       <span className='animate-flicker'>.</span>
@@ -14,3 +20,8 @@ export const DotLoading: React.FC<Props> = ({ className }) => {
     </span>
   )
 }
+
+export const DotLoadingMemo = memo(
+  DotLoadingComponent,
+  DotLoadingPropsEq.equals,
+)

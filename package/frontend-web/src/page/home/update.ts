@@ -3,22 +3,75 @@ import * as Pagination from '@rinn7e/tea-cup-pagination'
 import { ArrayExtra, attemptTE, updateAndCmd } from '@rinn7e/tea-cup-prelude'
 import * as A from 'fp-ts/lib/Array'
 import * as O from 'fp-ts/lib/Option'
+import * as TE from 'fp-ts/lib/TaskEither'
 import { pipe } from 'fp-ts/lib/function'
 import { Cmd, type Result } from 'tea-cup-fp'
 
 import {
   type ApiError,
+  type Article,
   type HttpError,
   type TagsResponse,
+  getArticles,
+  getArticlesFeed,
   getTags,
 } from '@/common/api'
-import type { Article } from '@/common/api/type/article'
 import { type HomeTab, HomeTabEq } from '@/common/type/route'
 import type { Shared } from '@/common/type/shared'
+import {
+  type ArticlePaginationConfig,
+  mkArticlePaginationConfig,
+} from '@/component/article-list'
 import * as ArticleShort from '@/component/article-short'
 
-import { mkPaginationConfig } from './helper'
 import { type Model, type Msg } from './type'
+
+export const mkPaginationConfig = (
+  shared: Shared,
+  tab: HomeTab,
+): ArticlePaginationConfig =>
+  mkArticlePaginationConfig((offset, limit) => {
+    switch (tab._tag) {
+      case 'GlobalFeedTab':
+        return pipe(
+          getArticles(shared.token, { offset, limit }),
+          TE.map((res) => ({
+            items: res.articles,
+            totalCount: res.articlesCount,
+          })),
+        )
+      case 'UserFeedTab':
+        return pipe(
+          shared.token,
+          O.fold(
+            () =>
+              TE.left<HttpError<ApiError>>({
+                statusCode: 401,
+                err: {
+                  errors: { body: ['Not logged in'] },
+                },
+                actualErr: 'Not logged in',
+              }),
+            (token) =>
+              pipe(
+                getArticlesFeed(token, { offset, limit }),
+                TE.map((res) => ({
+                  items: res.articles,
+                  totalCount: res.articlesCount,
+                })),
+              ),
+          ),
+        )
+      case 'TagFeedTab':
+        return pipe(
+          getArticles(shared.token, { offset, limit, tag: tab.tag }),
+          TE.map((res) => ({
+            items: res.articles,
+            totalCount: res.articlesCount,
+          })),
+        )
+    }
+  }, 'EmptyFeed')
 
 export const init = (
   tab: HomeTab,

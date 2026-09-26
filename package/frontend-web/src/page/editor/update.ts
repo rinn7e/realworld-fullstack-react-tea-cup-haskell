@@ -39,7 +39,7 @@ const editorTitleFormItem = (title: string): [string, Form.FormType] => [
       variant: { _tag: 'Text' },
       autocomplete: false,
       isFocus: false,
-      ui: standardInputUi({ testId: 'article-title-input' }),
+      ui: standardInputUi({ isSmall: false, testId: 'article-title-input' }),
     },
   },
 ]
@@ -100,7 +100,7 @@ const editorTagInputFormItem = (tags: string[]): [string, Form.FormType] => [
       isTextarea: false,
       autocomplete: false,
       isFocus: false,
-      ui: textPillInputUi(),
+      ui: textPillInputUi({ isSmall: false, testId: 'tagInput-input' }),
     },
   },
 ]
@@ -152,12 +152,12 @@ export const init = (
         })),
       ]),
     ]
+  } else {
+    return [
+      model,
+      formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
+    ]
   }
-
-  return [
-    model,
-    formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
-  ]
 }
 
 export const update =
@@ -212,7 +212,7 @@ const getArticleResponseHandler =
         editorFormConfigForEdit({
           title: a.title,
           description: a.description,
-          body: a.body ?? '',
+          body: a.body,
           tagList: a.tagList,
         }),
       )
@@ -223,8 +223,9 @@ const getArticleResponseHandler =
         }),
         formCmd.map((subMsg) => ({ _tag: 'FormMsg' as const, subMsg })),
       ]
+    } else {
+      return [{ ...model, requestRd: RD.failure(result.err) }, Cmd.none()]
     }
-    return [{ ...model, requestRd: RD.failure(result.err) }, Cmd.none()]
   }
 
 const submitHandler =
@@ -245,19 +246,19 @@ const submitHandler =
     }
     if (shared.token._tag === 'None') {
       return [model, Cmd.none()]
+    } else {
+      const task = model.slug
+        ? updateArticle(shared.token.value, model.slug, request)
+        : createArticle(shared.token.value, request)
+
+      return [
+        { ...model, requestRd: RD.pending },
+        attemptTE(task, (result): Msg => ({
+          _tag: 'SubmitResponse',
+          result,
+        })),
+      ]
     }
-
-    const task = model.slug
-      ? updateArticle(shared.token.value, model.slug, request)
-      : createArticle(shared.token.value, request)
-
-    return [
-      { ...model, requestRd: RD.pending },
-      attemptTE(task, (result): Msg => ({
-        _tag: 'SubmitResponse',
-        result,
-      })),
-    ]
   }
 
 const submitResponseHandler =

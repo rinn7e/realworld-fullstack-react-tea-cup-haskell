@@ -1,21 +1,14 @@
 import * as RD from '@devexperts/remote-data-ts'
-import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
-import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
 import { ProgressMemo as DsProgressMemo } from '@rinn7e/realworld-design-system/element/progress/component'
 import { TagMemo as DsTagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
-import { cn } from '@rinn7e/tea-cup-prelude'
-import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
-import { Pencil, Trash2, UserMinus, UserPlus } from 'lucide-react'
-import React from 'react'
+import React, { memo } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 import type { ApiError, ArticleResponse, HttpError } from '@/common/api'
-import { assetPath, memoStrategy } from '@/common/util'
-import { ErrorMessages } from '@/component/error-messages'
-import { favButtonView } from '@/component/fav-button'
-import { Link } from '@/component/link'
+import { ErrorMessagesMemo } from '@/component/error-messages/component'
 
+import { ArticleMetaMemo } from './sub-component/article-meta'
 import { CommentSectionMemo } from './sub-component/comment-section/component'
 import { type Props, PropsEq } from './type'
 
@@ -41,152 +34,11 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
           ),
           (err: HttpError<ApiError>) => (
             <div className='mx-auto max-w-[1152px] px-[16px] py-[24px]'>
-              <ErrorMessages error={err} />
+              <ErrorMessagesMemo error={err} />
             </div>
           ),
 
           (data: ArticleResponse) => {
-            const isLoggedIn = O.isSome(user)
-            const isAuthor =
-              isLoggedIn && user.value.username === data.article.author.username
-            const author = data.article.author
-
-            const articleMeta = (isLight: boolean) => (
-              <div
-                className='flex flex-wrap items-center gap-[12px]'
-                data-test='article-metadata'
-              >
-                <Link
-                  route={{
-                    page: {
-                      _tag: 'ProfilePage',
-                      username: author.username,
-                      favorites: false,
-                    },
-                  }}
-                >
-                  <DsImageMemo
-                    src={author.image ? assetPath(author.image) : null}
-                    defaultSrc={assetPath('/default-avatar.svg')}
-                    className='h-[36px] w-[36px] rounded-full object-cover'
-                    alt=''
-                    dataTest='article-author-img'
-                  />
-                </Link>
-                <div className='flex flex-col'>
-                  <Link
-                    route={{
-                      page: {
-                        _tag: 'ProfilePage',
-                        username: author.username,
-                        favorites: false,
-                      },
-                    }}
-                    className={cn(
-                      'block text-sm font-medium hover:underline',
-                      isLight ? 'text-green-400' : 'text-green-600',
-                    )}
-                    data-test='article-author'
-                  >
-                    {author.username}
-                  </Link>
-                  <span className='date text-xs text-gray-400'>
-                    {new Date(data.article.createdAt).toDateString()}
-                  </span>
-                </div>
-                <div className='flex flex-wrap items-center gap-[8px]'>
-                  {isLoggedIn &&
-                    (author.following ? (
-                      <DsButtonMemo
-                        color='gray'
-                        variant='outline'
-                        size='xsmall'
-                        onClick={() =>
-                          dispatch({
-                            _tag: 'UnfollowAuthor',
-                            username: author.username,
-                          })
-                        }
-                        className={
-                          isLight
-                            ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
-                            : undefined
-                        }
-                      >
-                        <UserMinus size={13} className='mr-1' /> Unfollow{' '}
-                        {author.username}
-                      </DsButtonMemo>
-                    ) : (
-                      <DsButtonMemo
-                        color='gray'
-                        variant='outline'
-                        size='xsmall'
-                        onClick={() =>
-                          dispatch({
-                            _tag: 'FollowAuthor',
-                            username: author.username,
-                          })
-                        }
-                        className={
-                          isLight
-                            ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
-                            : undefined
-                        }
-                      >
-                        <UserPlus size={13} className='mr-1' /> Follow{' '}
-                        {author.username}
-                      </DsButtonMemo>
-                    ))}
-                  {favButtonView({
-                    variant: 'detail',
-                    isLight,
-                    favorited: data.article.favorited,
-                    favoritesCount: data.article.favoritesCount,
-                    onClick: () =>
-                      isLoggedIn &&
-                      dispatch({
-                        _tag: data.article.favorited
-                          ? 'UnfavoriteArticle'
-                          : 'FavoriteArticle',
-                      }),
-                  })}
-                  {isAuthor && (
-                    <>
-                      <Link
-                        route={{
-                          page: {
-                            _tag: 'EditorPage',
-                            slug: O.some(data.article.slug),
-                          },
-                        }}
-                        className={cn(
-                          'flex items-center gap-[4px] rounded border px-[12px] py-[4px] text-xs transition-colors',
-                          isLight
-                            ? 'border-gray-400 text-gray-300 hover:border-white hover:text-white'
-                            : 'border-gray-300 text-gray-600 hover:border-gray-500',
-                        )}
-                        data-test='article-edit-btn'
-                      >
-                        <Pencil size={13} /> Edit Article
-                      </Link>
-                      <DsButtonMemo
-                        color='red'
-                        variant='outline'
-                        size='xsmall'
-                        onClick={() => dispatch({ _tag: 'DeleteArticle' })}
-                        dataTest='article-delete-btn'
-                        className={
-                          isLight ? 'hover:bg-red-900' : 'hover:bg-red-50'
-                        }
-                      >
-                        <Trash2 size={13} className='mr-1' /> Delete Article
-                      </DsButtonMemo>
-                    </>
-                  )}
-                </div>
-              </div>
-            )
-
             return (
               <div className='flex min-h-full flex-col'>
                 {/* Article Header */}
@@ -195,7 +47,12 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                     <h1 className='text-3xl leading-tight font-bold lg:text-4xl'>
                       {data.article.title}
                     </h1>
-                    {articleMeta(true)}
+                    <ArticleMetaMemo
+                      article={data.article}
+                      isLight={true}
+                      user={user}
+                      dispatch={dispatch}
+                    />
                   </div>
                 </div>
 
@@ -206,7 +63,7 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                       className='prose prose-gray dark:prose-invert prose-img:rounded-lg max-w-none'
                       data-test='article-body'
                     >
-                      <ReactMarkdown>{data.article.body ?? ''}</ReactMarkdown>
+                      <ReactMarkdown>{data.article.body}</ReactMarkdown>
                     </div>
                     <div
                       className='flex flex-wrap gap-[4px]'
@@ -230,7 +87,12 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
                   <hr className='border-gray-200 dark:border-zinc-800' />
 
                   <div className='flex flex-col items-center gap-[32px]'>
-                    {articleMeta(false)}
+                    <ArticleMetaMemo
+                      article={data.article}
+                      isLight={false}
+                      user={user}
+                      dispatch={dispatch}
+                    />
 
                     <CommentSectionMemo
                       model={model.commentSection}
@@ -250,7 +112,4 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
   )
 }
 
-export const ArticlePageMemo = memoStrategy(
-  ArticlePageComponent,
-  PropsEq.equals,
-)
+export const ArticlePageMemo = memo(ArticlePageComponent, PropsEq.equals)

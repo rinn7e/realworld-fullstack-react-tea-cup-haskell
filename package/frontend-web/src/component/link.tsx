@@ -4,20 +4,15 @@ import React, { useContext } from 'react'
 
 import { SetGlobalMsgContext } from '@/common/global-context'
 import { type AppRoute, AppRouteEq, toUrlString } from '@/common/type/route'
-import { teaRouterMsg } from '@/type'
 
-interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+// Not memoized: `children` is arbitrary JSX, which has no meaningful Eq
+export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   route: AppRoute
   className?: string
   children: React.ReactNode
 }
 
-export const Link: React.FC<Props> = ({
-  route,
-  className,
-  children,
-  ...rest
-}) => {
+export const Link = ({ route, className, children, ...rest }: LinkProps) => {
   const dispatch = useContext(SetGlobalMsgContext)
 
   return (
@@ -26,7 +21,7 @@ export const Link: React.FC<Props> = ({
       route={route}
       toUrl={toUrlString}
       dispatch={(subMsg: TeaRouter.Msg<AppRoute>) =>
-        dispatch(teaRouterMsg(subMsg))
+        dispatch({ _tag: 'TeaRouterMsg', subMsg })
       }
       routeEq={AppRouteEq}
       className={className}

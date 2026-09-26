@@ -8,12 +8,13 @@ import type { Dispatcher, Result } from 'tea-cup-fp'
 import {
   type ApiError,
   ApiErrorEq,
+  type Article,
+  ArticleEq,
   type HttpError,
   type ProfileResponse,
   ProfileResponseEq,
   getHttpErrorEq,
 } from '@/common/api'
-import { type Article, ArticleEq } from '@/common/api/type/article'
 import { type AppRoute, AppRouteEq } from '@/common/type/route'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import type * as ArticleShort from '@/component/article-short'

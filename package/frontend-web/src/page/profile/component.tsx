@@ -5,19 +5,23 @@ import { ProgressMemo as DsProgressMemo } from '@rinn7e/realworld-design-system/
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
-import { RotateCw, Settings, UserPlus } from 'lucide-react'
-import React from 'react'
+import { Frown, RotateCw, Settings, UserPlus } from 'lucide-react'
+import React, { memo } from 'react'
 
-import { ApiErrorEq, type ProfileResponse, getHttpErrorEq } from '@/common/api'
-import { ArticleEq } from '@/common/api/type/article'
+import {
+  ApiErrorEq,
+  ArticleEq,
+  type ProfileResponse,
+  getHttpErrorEq,
+} from '@/common/api'
 import { API_BASE } from '@/common/env'
 import { type AppRoute } from '@/common/type/route'
-import { assetPath, memoStrategy } from '@/common/util'
-import { ErrorMessages } from '@/component/error-messages'
+import { assetPath } from '@/common/util'
+import { ErrorMessagesMemo } from '@/component/error-messages/component'
 import { Link } from '@/component/link'
 
-import { mkPaginationConfig } from './helper'
 import { type Props, PropsEq } from './type'
+import { mkPaginationConfig } from './update'
 
 const ProfilePageComponent = ({
   model,
@@ -52,7 +56,7 @@ const ProfilePageComponent = ({
               color='green'
             />
           ),
-          () => profileErrorView(route),
+          () => <ProfileNotFoundView route={route} />,
 
           (data: ProfileResponse) => (
             <>
@@ -80,7 +84,7 @@ const ProfilePageComponent = ({
                       className='max-w-[600px] text-sm text-gray-500 dark:text-zinc-400'
                       data-test='user-bio'
                     >
-                      {data.profile.bio || ''}
+                      {data.profile.bio}
                     </p>
                   </div>
 
@@ -90,8 +94,8 @@ const ProfilePageComponent = ({
                       () => null,
                       () => null,
                       (err) => (
-                        <div className='mb-[16px]'>
-                          <ErrorMessages error={err} />
+                        <div className='pb-[16px]'>
+                          <ErrorMessagesMemo error={err} />
                         </div>
                       ),
                       () => null,
@@ -104,8 +108,8 @@ const ProfilePageComponent = ({
                       () => null,
                       () => null,
                       (err) => (
-                        <div className='mb-[16px]'>
-                          <ErrorMessages error={err} />
+                        <div className='pb-[16px]'>
+                          <ErrorMessagesMemo error={err} />
                         </div>
                       ),
                       () => null,
@@ -134,10 +138,12 @@ const ProfilePageComponent = ({
                           })
                         }
                       >
-                        <UserPlus size={13} className='mr-1.5' />
-                        {data.profile.following
-                          ? `Unfollow ${data.profile.username}`
-                          : `Follow ${data.profile.username}`}
+                        <span className='flex items-center gap-[6px]'>
+                          <UserPlus size={13} />
+                          {data.profile.following
+                            ? `Unfollow ${data.profile.username}`
+                            : `Follow ${data.profile.username}`}
+                        </span>
                       </DsButtonMemo>
                     )}
                   </div>
@@ -201,46 +207,51 @@ const ProfilePageComponent = ({
   )
 }
 
-const profileErrorView = (route: AppRoute) => {
+type ProfileNotFoundProps = {
+  route: AppRoute
+}
+
+const ProfileNotFoundView = ({ route }: ProfileNotFoundProps) => {
   const username = route.page._tag === 'ProfilePage' ? route.page.username : ''
 
   return (
-    <div className='mx-auto my-[48px] flex max-w-[600px] flex-col items-center gap-[16px] rounded-lg bg-yellow-50 px-[24px] py-[48px] text-center'>
-      <span className='text-6xl' role='img' aria-label='sad face'>
-        😟
-      </span>
-      <div className='flex flex-col gap-[8px]'>
-        <h1 className='text-3xl font-bold text-gray-900'>Profile not found</h1>
-        <p className='text-gray-600'>
-          Either the profile url is incorrect or
-          <br />
-          Something is wrong with
-          <a
-            href={`${API_BASE}/profiles/${username}`}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='mx-[4px] text-green-600 underline hover:text-green-700'
-          >
-            our server
-          </a>
-          right now,
-          <br />
-          please try again later
-        </p>
-      </div>
+    <div className='py-[48px]'>
+      <div className='mx-auto flex max-w-[600px] flex-col items-center gap-[16px] rounded-lg bg-yellow-50 px-[24px] py-[48px] text-center'>
+        <Frown size={60} className='text-yellow-500' aria-label='sad face' />
+        <div className='flex flex-col gap-[8px]'>
+          <h1 className='text-3xl font-bold text-gray-900'>
+            Profile not found
+          </h1>
+          <p className='text-gray-600'>
+            Either the profile url is incorrect or
+            <br />
+            Something is wrong with{' '}
+            <a
+              href={`${API_BASE}/profiles/${username}`}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-green-600 underline hover:text-green-700'
+            >
+              our server
+            </a>{' '}
+            right now,
+            <br />
+            please try again later
+          </p>
+        </div>
 
-      <Link
-        route={route}
-        className='mt-[16px] inline-flex items-center gap-[8px] rounded bg-green-600 px-[24px] py-[10px] font-medium text-white transition-colors hover:bg-green-700'
-      >
-        <RotateCw size={18} />
-        Refresh
-      </Link>
+        <div className='pt-[16px]'>
+          <Link
+            route={route}
+            className='inline-flex items-center gap-[8px] rounded bg-green-600 px-[24px] py-[10px] font-medium text-white transition-colors hover:bg-green-700'
+          >
+            <RotateCw size={18} />
+            Refresh
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
 
-export const ProfilePageMemo = memoStrategy(
-  ProfilePageComponent,
-  PropsEq.equals,
-)
+export const ProfilePageMemo = memo(ProfilePageComponent, PropsEq.equals)

@@ -1,9 +1,9 @@
-import React from 'react'
+import { memo } from 'react'
 
 import { homePage } from '@/common/type/route'
 import { Link } from '@/component/link'
 
-export const NotFoundView: React.FC = () => {
+const NotFoundPageComponent = () => {
   return (
     <div className='flex min-h-[60vh] flex-col items-center justify-center px-[16px] text-center'>
       <div className='flex flex-col gap-[16px]'>
@@ -28,3 +28,5 @@ export const NotFoundView: React.FC = () => {
     </div>
   )
 }
+
+export const NotFoundPageMemo = memo(NotFoundPageComponent)

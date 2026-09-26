@@ -1,17 +1,20 @@
 import { cmdSucceed } from '@rinn7e/tea-cup-prelude'
+import * as A from 'fp-ts/lib/Array'
+import * as O from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/function'
 import type { Cmd } from 'tea-cup-fp'
 
-export type ColorScheme = 'light' | 'dark' | 'auto'
+import { ALL_COLOR_SCHEMES, type ColorScheme } from './type'
 
 const COLOR_SCHEME_KEY = 'realworld-color-scheme'
 
 export const loadColorScheme = (): ColorScheme => {
   const stored = localStorage.getItem(COLOR_SCHEME_KEY)
-  if (stored === 'light' || stored === 'dark' || stored === 'auto') {
-    return stored
-  } else {
-    return 'auto'
-  }
+  return pipe(
+    ALL_COLOR_SCHEMES,
+    A.findFirst((scheme) => scheme === stored),
+    O.getOrElse((): ColorScheme => 'auto'),
+  )
 }
 
 export const saveColorScheme = (scheme: ColorScheme): void => {

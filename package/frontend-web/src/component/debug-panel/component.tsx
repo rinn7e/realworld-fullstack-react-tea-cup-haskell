@@ -3,17 +3,12 @@ import {
   Cog6ToothIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid'
-import React from 'react'
+import { memo } from 'react'
 import { createPortal } from 'react-dom'
 
-import type { Model, Msg } from './type'
+import { type Props, PropsEq } from './type'
 
-interface Props {
-  model: Model
-  dispatch: (msg: Msg) => void
-}
-
-export const DebugPanelComponent: React.FC<Props> = ({ model, dispatch }) => {
+const DebugPanelComponent = ({ model, dispatch }: Props) => {
   const clearCacheAndReload = () => {
     localStorage.clear()
     window.location.reload()
@@ -47,8 +42,8 @@ export const DebugPanelComponent: React.FC<Props> = ({ model, dispatch }) => {
               <XMarkIcon className='h-5 w-5' />
             </button>
           </div>
-          <div className='space-y-4 p-4'>
-            <div className='space-y-2'>
+          <div className='flex flex-col gap-[16px] p-4'>
+            <div className='flex flex-col gap-[8px]'>
               <p className='text-xs font-bold tracking-wider text-gray-500 uppercase'>
                 Shortcuts
               </p>
@@ -80,3 +75,5 @@ export const DebugPanelComponent: React.FC<Props> = ({ model, dispatch }) => {
 
   return createPortal(panelContent, document.body)
 }
+
+export const DebugPanelMemo = memo(DebugPanelComponent, PropsEq.equals)

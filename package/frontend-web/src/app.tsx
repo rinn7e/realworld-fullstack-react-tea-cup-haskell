@@ -2,29 +2,28 @@ import { FloatingSidebarMemo as DsFloatingFloatingSidebarMemo } from '@rinn7e/re
 import { NavbarMemo as DsNavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import * as TeaRouter from '@rinn7e/tea-cup-router'
-import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { SetGlobalMsgContext } from './common/global-context'
-import { toDesktopNavItems, toNavbarConfig } from './common/nav-link-helper'
-import { DebugPanelComponent } from './component/debug-panel/component'
-import { Footer } from './component/footer'
+import { DebugPanelMemo } from './component/debug-panel/component'
+import { FooterMemo } from './component/footer'
+import { toDesktopNavItems, toNavbarConfig } from './navbar/util'
 import { ArticlePageMemo } from './page/article/component'
 import { EditorPageMemo } from './page/editor/component'
 import { HomePageMemo } from './page/home/component'
 import { LoginPageMemo } from './page/login/component'
-import { NotFoundView } from './page/not-found'
+import { NotFoundPageMemo } from './page/not-found/component'
 import { ProfilePageMemo } from './page/profile/component'
 import { SettingsPageMemo } from './page/settings/component'
 import { SignupPageMemo } from './page/signup/component'
 import type { Model, Msg } from './type'
 
-interface Props {
+export type AppProps = {
   model: Model
   dispatch: Dispatcher<Msg>
 }
 
-export const App: React.FC<Props> = ({ model, dispatch }) => {
+export const App = ({ model, dispatch }: AppProps) => {
   const isNavOpen = model.sidebar.status.state._tag !== 'Invisible'
   const desktopNavItems = toDesktopNavItems(model)
   const navbarConfig = toNavbarConfig(model)
@@ -33,7 +32,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
     <SetGlobalMsgContext value={dispatch}>
       <div
         className={cn(
-          'yo flex min-h-dvh flex-col bg-white text-gray-900 transition-colors dark:bg-zinc-950 dark:text-zinc-100',
+          'flex min-h-dvh flex-col bg-white text-gray-900 transition-colors dark:bg-zinc-950 dark:text-zinc-100',
           isNavOpen && 'h-dvh overflow-hidden',
         )}
       >
@@ -43,15 +42,17 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
           config={navbarConfig}
           dispatch={(subMsg) => dispatch({ _tag: 'NavbarMsg', subMsg })}
         />
-        <main className='flex-grow'>{renderPage(model, dispatch)}</main>
-        <Footer />
+        <main className='flex-grow'>
+          <PageView model={model} dispatch={dispatch} />
+        </main>
+        <FooterMemo />
       </div>
       <DsFloatingFloatingSidebarMemo
         model={model.sidebar}
         items={desktopNavItems.map((n) => n.data)}
         dispatch={(subMsg) => dispatch({ _tag: 'SidebarMsg', subMsg })}
       />
-      <DebugPanelComponent
+      <DebugPanelMemo
         model={model.debugPanel}
         dispatch={(msg) => dispatch({ _tag: 'DebugPanelMsg', subMsg: msg })}
       />
@@ -59,7 +60,7 @@ export const App: React.FC<Props> = ({ model, dispatch }) => {
   )
 }
 
-const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
+const PageView = ({ model, dispatch }: AppProps) => {
   const pageModel = TeaRouter.getPageModel(model.router)
   const route = TeaRouter.getRoute(model.router)
 
@@ -128,6 +129,6 @@ const renderPage = (model: Model, dispatch: Dispatcher<Msg>) => {
         />
       )
     case 'NotFoundPageModel':
-      return <NotFoundView />
+      return <NotFoundPageMemo />
   }
 }

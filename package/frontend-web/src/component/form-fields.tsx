@@ -7,39 +7,24 @@ import { Eye, EyeOff, X } from 'lucide-react'
 import React from 'react'
 
 export type ExtraTextInputProps = {
-  isSmall?: boolean
-  isTag?: boolean
-  testId?: string
+  isSmall: boolean
+  testId: string
 }
 
 export const standardInputUi =
-  (extra: ExtraTextInputProps = {}) =>
-  (props: Form.Text.UiArg) => {
-    const isSmall = extra.isSmall ?? false
+  (extra: ExtraTextInputProps) => (props: Form.Text.UiArg) => {
+    const isSmall = extra.isSmall
     const isError = E.isLeft(props.validationResult) && props.showValidation
     const sizeClass = isSmall ? 'py-[8px] text-sm' : 'py-[12px] text-base'
     const validationClass = isError
       ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
       : 'border-gray-300 focus:border-green-500 focus:ring-green-500'
-    const testId = extra.testId ?? props.key + '-input'
+    const testId = extra.testId
     const inputClass = cn(
       'w-full rounded border px-[12px] bg-white text-gray-900 outline-none focus:ring-1 transition-colors dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100',
       validationClass,
       sizeClass,
     )
-
-    const onKeyDown = (
-      e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
-      if (extra.isTag && e.key === 'Enter') {
-        e.preventDefault()
-        props.dispatch({
-          _tag: 'UpdateValue',
-          value: props.currentValue + ', ',
-        })
-      }
-      props.onKeyDown?.(e)
-    }
 
     const variant = props.variant
 
@@ -70,7 +55,7 @@ export const standardInputUi =
             isFocus: false,
           })
         }
-        onKeyDown={onKeyDown}
+        onKeyDown={props.onKeyDown}
       />
     ) : (
       <div className='relative flex items-center'>
@@ -100,7 +85,7 @@ export const standardInputUi =
               isFocus: false,
             })
           }
-          onKeyDown={onKeyDown}
+          onKeyDown={props.onKeyDown}
         />
         {variant._tag === 'Password' && (
           <DsButtonMemo
@@ -144,9 +129,8 @@ export const standardInputUi =
   }
 
 export const textPillInputUi =
-  (extra: ExtraTextInputProps = {}) =>
-  (props: Form.TextPill.UiArg) => {
-    const isSmall = extra.isSmall ?? false
+  (extra: ExtraTextInputProps) => (props: Form.TextPill.UiArg) => {
+    const isSmall = extra.isSmall
     const isError = E.isLeft(props.validationResult) && props.showValidation
     const sizeClass = isSmall ? 'py-[4px] text-sm' : 'py-[6px] text-base'
     const validationClass = isError
@@ -210,7 +194,7 @@ export const textPillInputUi =
           ))}
           <input
             name={props.key}
-            data-test={extra.testId ?? props.key + '-input'}
+            data-test={extra.testId}
             autoComplete={Form.Text.autocompleteToString(props.autocomplete)}
             className={cn('flex-1 bg-transparent outline-none', sizeClass)}
             placeholder={props.placeholder}

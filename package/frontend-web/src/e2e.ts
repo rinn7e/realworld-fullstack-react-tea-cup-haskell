@@ -29,11 +29,15 @@ export const assignConduitDebug = (model: Model | null) => {
           ? model.shared.token.value
           : getToken(),
       getAuthState: () => {
-        if (!model) return 'loading'
-        if (model.unavailableMode) return 'unavailable'
-        return model.shared.user._tag === 'Some'
-          ? 'authenticated'
-          : 'unauthenticated'
+        if (!model) {
+          return 'loading'
+        } else if (model.unavailableMode) {
+          return 'unavailable'
+        } else {
+          return model.shared.user._tag === 'Some'
+            ? 'authenticated'
+            : 'unauthenticated'
+        }
       },
       getCurrentUser: () => {
         if (
@@ -44,8 +48,9 @@ export const assignConduitDebug = (model: Model | null) => {
             ...model.shared.user.value,
             token: model.shared.token.value,
           }
+        } else {
+          return null
         }
-        return null
       },
     } satisfies ConduitDebug
   }

@@ -70,8 +70,9 @@ const submitCommentHandler =
           (result): Msg => ({ _tag: 'SubmitCommentResponse', result }),
         ),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const submitCommentResponseHandler =
@@ -111,8 +112,9 @@ const deleteCommentHandler =
           result,
         })),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const deleteCommentResponseHandler =
@@ -134,7 +136,7 @@ const deleteCommentResponseHandler =
       ]
     } else if (result.tag === 'Err') {
       return [{ ...model, newCommentError: result.err }, Cmd.none()]
+    } else {
+      return [model, Cmd.none()]
     }
-
-    return [model, Cmd.none()]
   }

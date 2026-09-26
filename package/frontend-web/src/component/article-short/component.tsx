@@ -2,22 +2,16 @@ import { ContentMemo as DsContentMemo } from '@rinn7e/realworld-design-system/el
 import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/element/image/component'
 import { TagMemo as DsTagMemo } from '@rinn7e/realworld-design-system/element/tag/component'
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
 import { assetPath } from '@/common/util'
-import { DotLoading } from '@/component/dot-loading'
-import { favButtonView } from '@/component/fav-button'
+import { DotLoadingMemo } from '@/component/dot-loading'
+import { FavButtonMemo } from '@/component/fav-button'
 import { Link } from '@/component/link'
 
-import type { Model, Msg } from './type'
+import { type Props, PropsEq } from './type'
 
-export interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
-
-export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
+const ArticleShortComponent = ({ model, dispatch }: Props) => {
   return (
     <div
       className='flex flex-col gap-[12px] border-b border-gray-200 py-[24px] dark:border-zinc-800'
@@ -63,18 +57,20 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
               className='date text-xs text-gray-400 dark:text-zinc-500'
               data-test='article-date'
             >
-              {new Date(model.createdAt).toDateString()}
+              {model.createdAt.toDateString()}
             </span>
           </div>
         </div>
-        {favButtonView({
-          favorited: model.favorited,
-          favoritesCount: model.favoritesCount,
-          onClick: () =>
+        <FavButtonMemo
+          variant='normal'
+          favorited={model.favorited}
+          favoritesCount={model.favoritesCount}
+          onClick={() =>
             dispatch({
               _tag: model.favorited ? 'Unfavorite' : 'Favorite',
-            }),
-        })}
+            })
+          }
+        />
       </div>
       <Link
         route={{
@@ -101,7 +97,7 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
         <div className='flex items-center justify-between'>
           <span className='text-xs text-gray-400 dark:text-zinc-500'>
             Read more
-            <DotLoading className='gap-[0px]' />
+            <DotLoadingMemo className='gap-[0px]' />
           </span>
           <div className='flex flex-wrap gap-[4px]' data-test='tag-list'>
             {model.tagList.map((tag) => (
@@ -122,3 +118,5 @@ export const ArticleShortComponent: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const ArticleShortMemo = memo(ArticleShortComponent, PropsEq.equals)

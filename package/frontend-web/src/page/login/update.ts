@@ -34,7 +34,7 @@ const loginEmailFormItem = (): [string, Form.FormType] => [
       variant: { _tag: 'Email' },
       autocomplete: true,
       isFocus: false,
-      ui: standardInputUi(),
+      ui: standardInputUi({ isSmall: false, testId: 'email-input' }),
     },
   },
 ]
@@ -54,7 +54,7 @@ const loginPasswordFormItem = (): [string, Form.FormType] => [
       variant: { _tag: 'Password', reveal: false },
       autocomplete: true,
       isFocus: false,
-      ui: standardInputUi(),
+      ui: standardInputUi({ isSmall: false, testId: 'password-input' }),
     },
   },
 ]

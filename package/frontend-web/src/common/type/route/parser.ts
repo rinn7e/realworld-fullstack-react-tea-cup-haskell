@@ -36,12 +36,13 @@ import {
 
 export const removeBaseUrl = (href: string): string => {
   const url = new URL(href)
-  let pathname = url.pathname
   const base = BASE_URL.replace(/\/$/, '')
-  if (base !== '' && pathname.startsWith(base)) {
-    pathname = pathname.slice(base.length)
-  }
-  return (pathname || '/') + url.search
+  const pathname =
+    base !== '' && url.pathname.startsWith(base)
+      ? url.pathname.slice(base.length)
+      : url.pathname
+  // A path equal to the base itself strips down to '', which is the root
+  return (pathname === '' ? '/' : pathname) + url.search
 }
 
 export const addBaseUrl = (path: string): string => {
@@ -122,9 +123,12 @@ const tabToParams = (tab: HomeTab): HomeParams => {
 }
 
 const pageFromParam = (p: string | undefined): number => {
-  if (p === undefined) return 1
-  const n = parseInt(p, 10)
-  return isNaN(n) ? 1 : n
+  if (p === undefined) {
+    return 1
+  } else {
+    const n = parseInt(p, 10)
+    return isNaN(n) ? 1 : n
+  }
 }
 
 const appRouter: Parser<AppPage> = zero<AppPage>()

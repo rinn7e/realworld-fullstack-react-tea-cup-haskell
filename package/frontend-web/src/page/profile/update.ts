@@ -3,16 +3,47 @@ import * as Pagination from '@rinn7e/tea-cup-pagination'
 import { ArrayExtra, attemptTE, updateAndCmd } from '@rinn7e/tea-cup-prelude'
 import * as A from 'fp-ts/lib/Array'
 import * as O from 'fp-ts/lib/Option'
+import * as TE from 'fp-ts/lib/TaskEither'
 import { pipe } from 'fp-ts/lib/function'
 import { Cmd } from 'tea-cup-fp'
 
-import { followUser, getProfile, unfollowUser } from '@/common/api'
-import type { Article } from '@/common/api/type/article'
+import {
+  type Article,
+  followUser,
+  getArticles,
+  getProfile,
+  unfollowUser,
+} from '@/common/api'
 import type { Shared } from '@/common/type/shared'
+import {
+  type ArticlePaginationConfig,
+  mkArticlePaginationConfig,
+} from '@/component/article-list'
 import * as ArticleShort from '@/component/article-short'
 
-import { mkPaginationConfig } from './helper'
 import type { Model, Msg } from './type'
+
+export const mkPaginationConfig = (
+  shared: Shared,
+  username: string,
+  favorites: boolean,
+): ArticlePaginationConfig =>
+  mkArticlePaginationConfig(
+    (offset, limit) =>
+      pipe(
+        getArticles(
+          shared.token,
+          favorites
+            ? { favorited: username, offset, limit }
+            : { author: username, offset, limit },
+        ),
+        TE.map((res) => ({
+          items: res.articles,
+          totalCount: res.articlesCount,
+        })),
+      ),
+    'EmptyArticles',
+  )
 
 export const init = (
   username: string,
@@ -111,20 +142,21 @@ const toggleFavoritesHandler =
   (model: Model): [Model, Cmd<Msg>] => {
     if (show === model.showFavorites) {
       return [model, Cmd.none()]
+    } else {
+      const [pagination, paginationCmd] = Pagination.init(
+        mkPaginationConfig(shared, username, show),
+        1,
+      )
+      const newModel = {
+        ...model,
+        showFavorites: show,
+        pagination,
+      }
+      return [
+        newModel,
+        paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
+      ]
     }
-    const [pagination, paginationCmd] = Pagination.init(
-      mkPaginationConfig(shared, username, show),
-      1,
-    )
-    const newModel = {
-      ...model,
-      showFavorites: show,
-      pagination,
-    }
-    return [
-      newModel,
-      paginationCmd.map((m): Msg => ({ _tag: 'PaginationMsg', subMsg: m })),
-    ]
   }
 
 const followHandler =
@@ -138,8 +170,9 @@ const followHandler =
           result,
         })),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const followResponseHandler =
@@ -170,8 +203,9 @@ const unfollowHandler =
           result,
         })),
       ]
+    } else {
+      return [model, Cmd.none()]
     }
-    return [model, Cmd.none()]
   }
 
 const unfollowResponseHandler =

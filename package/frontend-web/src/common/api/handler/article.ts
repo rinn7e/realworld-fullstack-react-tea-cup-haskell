@@ -5,14 +5,15 @@ import { pipe } from 'fp-ts/lib/function'
 import { API_BASE } from '@/common/env'
 
 import {
+  type ApiError,
   type ArticleResponse,
   ArticleResponseJson,
   type ArticlesResponse,
   ArticlesResponseJson,
+  type HttpError,
   type NewArticleRequest,
   type UpdateArticleRequest,
-} from '../type/article'
-import { type ApiError, type HttpError } from '../type/common'
+} from '../type'
 import {
   decodeApiError,
   decodeSuccess,

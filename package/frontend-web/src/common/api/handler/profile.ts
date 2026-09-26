@@ -4,8 +4,12 @@ import { pipe } from 'fp-ts/lib/function'
 
 import { API_BASE } from '@/common/env'
 
-import { type ApiError, type HttpError } from '../type/common'
-import { type ProfileResponse, ProfileResponseJson } from '../type/profile'
+import {
+  type ApiError,
+  type HttpError,
+  type ProfileResponse,
+  ProfileResponseJson,
+} from '../type'
 import { decodeApiError, decodeSuccess, fetchToTaskEither } from './common'
 
 export const getProfile = (

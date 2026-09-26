@@ -26,8 +26,9 @@ export const update =
               (result): Msg => ({ _tag: 'FavoriteResponse', result }),
             ),
           ]
+        } else {
+          return [model, Cmd.none()]
         }
-        return [model, Cmd.none()]
       case 'Unfavorite':
         if (shared.token._tag === 'Some') {
           return [
@@ -37,8 +38,9 @@ export const update =
               (result): Msg => ({ _tag: 'UnfavoriteResponse', result }),
             ),
           ]
+        } else {
+          return [model, Cmd.none()]
         }
-        return [model, Cmd.none()]
       case 'FavoriteResponse':
         if (msg.result.tag === 'Ok') {
           return [msg.result.value.article, Cmd.none()]

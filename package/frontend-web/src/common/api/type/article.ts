@@ -1,10 +1,12 @@
-import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as A from 'fp-ts/lib/Array'
+import * as D from 'fp-ts/lib/Date'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as B from 'fp-ts/lib/boolean'
 import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
 import * as t from 'io-ts'
+
+import { DateJson } from '@/common/type/date'
 
 import { type Profile, ProfileEq, ProfileJson } from './profile'
 
@@ -12,10 +14,10 @@ export type Article = {
   slug: string
   title: string
   description: string
-  body?: string
+  body: string
   tagList: string[]
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   favorited: boolean
   favoritesCount: number
   author: Profile
@@ -25,10 +27,10 @@ export const ArticleEq = EqClass.struct<Article>({
   slug: S.Eq,
   title: S.Eq,
   description: S.Eq,
-  body: UndefinableEq(S.Eq),
+  body: S.Eq,
   tagList: A.getEq(S.Eq),
-  createdAt: S.Eq,
-  updatedAt: S.Eq,
+  createdAt: D.Eq,
+  updatedAt: D.Eq,
   favorited: B.Eq,
   favoritesCount: N.Eq,
   author: ProfileEq,
@@ -43,40 +45,38 @@ export const ArticlesResponseEq = EqClass.struct<ArticlesResponse>({
   articlesCount: N.Eq,
 })
 
-export const ArticleJson: t.Type<Article> = t.intersection([
-  t.type({
-    slug: t.string,
-    title: t.string,
-    description: t.string,
-    tagList: t.array(t.string),
-    createdAt: t.string,
-    updatedAt: t.string,
-    favorited: t.boolean,
-    favoritesCount: t.number,
-    author: ProfileJson,
-  }),
-  t.partial({
-    body: t.string,
-  }),
-])
+export const ArticleJson: t.Type<Article, unknown, unknown> = t.type({
+  slug: t.string,
+  title: t.string,
+  description: t.string,
+  body: t.string,
+  tagList: t.array(t.string),
+  createdAt: DateJson,
+  updatedAt: DateJson,
+  favorited: t.boolean,
+  favoritesCount: t.number,
+  author: ProfileJson,
+})
 
 export type ArticleResponse = {
   article: Article
 }
 
-export const ArticleResponseJson: t.Type<ArticleResponse> = t.type({
-  article: ArticleJson,
-})
+export const ArticleResponseJson: t.Type<ArticleResponse, unknown, unknown> =
+  t.type({
+    article: ArticleJson,
+  })
 
 export type ArticlesResponse = {
   articles: Article[]
   articlesCount: number
 }
 
-export const ArticlesResponseJson: t.Type<ArticlesResponse> = t.type({
-  articles: t.array(ArticleJson),
-  articlesCount: t.number,
-})
+export const ArticlesResponseJson: t.Type<ArticlesResponse, unknown, unknown> =
+  t.type({
+    articles: t.array(ArticleJson),
+    articlesCount: t.number,
+  })
 
 export type NewArticleRequest = {
   article: {

@@ -13,8 +13,6 @@ import {
   trackVisitor,
 } from '@/common/api'
 import { getToken, removeToken, saveToken } from '@/common/cache'
-import { findNavItemRoute } from '@/common/nav-link-helper'
-import { mkRouterConfig } from '@/common/router'
 import {
   type AppRoute,
   AppRouteEq,
@@ -24,19 +22,19 @@ import {
 } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
 import * as DebugPanel from '@/component/debug-panel'
-import * as ArticlePage from '@/page/article/update'
-import * as EditorPage from '@/page/editor/update'
-import * as HomePage from '@/page/home/update'
-import * as LoginPage from '@/page/login/update'
-import * as ProfilePage from '@/page/profile/update'
-import * as SettingsPage from '@/page/settings/update'
-import * as SignupPage from '@/page/signup/update'
+import * as ArticlePage from '@/page/article'
+import * as EditorPage from '@/page/editor'
+import * as HomePage from '@/page/home'
+import * as LoginPage from '@/page/login'
+import * as ProfilePage from '@/page/profile'
+import * as SettingsPage from '@/page/settings'
+import * as SignupPage from '@/page/signup'
+import { mkRouterConfig } from '@/router-config'
+import type { ColorScheme } from '@/theme/type'
+import { loadColorScheme, setColorSchemeCmd } from '@/theme/util'
 import { type Model, type Msg, type PageModel, teaRouterMsg } from '@/type'
-import {
-  type ColorScheme,
-  loadColorScheme,
-  setColorSchemeCmd,
-} from '@/util/theme-util'
+
+import { findNavItemRoute } from './navbar/util'
 
 // Initialization
 // ---------------------------------------------
@@ -52,11 +50,12 @@ export const preUpdate = (
   if (model === null) {
     if (msg._tag === 'Init') {
       return init(msg.location, msg.user, msg.isUnavailable, msg.token)
+    } else {
+      return [null, Cmd.none()]
     }
-    return [null, Cmd.none()]
+  } else {
+    return update(msg, model)
   }
-
-  return update(msg, model)
 }
 
 // Init, Update
@@ -128,14 +127,15 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
         token: token,
       }
     })
+  } else {
+    return msgCmd({
+      _tag: 'Init',
+      location,
+      user: O.none,
+      isUnavailable: false,
+      token: O.none,
+    })
   }
-  return msgCmd({
-    _tag: 'Init',
-    location,
-    user: O.none,
-    isUnavailable: false,
-    token: O.none,
-  })
 }
 
 const initPageModel = (
@@ -178,12 +178,13 @@ const initPageModel = (
     case 'SettingsPage': {
       if (shared.user._tag === 'None') {
         return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
+      } else {
+        const [model, cmd] = SettingsPage.init(shared.user.value)
+        return [
+          { _tag: 'SettingsPageModel', model },
+          cmd.map((m): Msg => ({ _tag: 'SettingsPageMsg', subMsg: m })),
+        ]
       }
-      const [model, cmd] = SettingsPage.init(shared.user.value)
-      return [
-        { _tag: 'SettingsPageModel', model },
-        cmd.map((m): Msg => ({ _tag: 'SettingsPageMsg', subMsg: m })),
-      ]
     }
     case 'ProfilePage': {
       const [model, cmd] = ProfilePage.init(
@@ -199,12 +200,13 @@ const initPageModel = (
     case 'EditorPage': {
       if (shared.user._tag === 'None') {
         return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
+      } else {
+        const [model, cmd] = EditorPage.init(shared, route.page.slug)
+        return [
+          { _tag: 'EditorPageModel', model },
+          cmd.map((m): Msg => ({ _tag: 'EditorPageMsg', subMsg: m })),
+        ]
       }
-      const [model, cmd] = EditorPage.init(shared, route.page.slug)
-      return [
-        { _tag: 'EditorPageModel', model },
-        cmd.map((m): Msg => ({ _tag: 'EditorPageMsg', subMsg: m })),
-      ]
     }
     default:
       return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
@@ -270,20 +272,21 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'ChangeTab') {
               return interceptChangeTabFromHomePage(msg.subMsg.tab)(m)
-            }
-            if (
+            } else if (
               msg.subMsg._tag === 'PaginationMsg' &&
               msg.subMsg.subMsg._tag === 'ChangePage'
             ) {
               return interceptPaginationChangePageFromHomePage(
                 msg.subMsg.subMsg.page,
               )(m)
+            } else {
+              return [m, Cmd.none()]
             }
-            return [m, Cmd.none()]
           }),
         )
+      } else {
+        return [model, Cmd.none()]
       }
-      return [model, Cmd.none()]
     }
     case 'ArticlePageMsg': {
       const pageModel = TeaRouter.getPageModel(model.router)
@@ -312,12 +315,14 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                 { _tag: 'ChangeRoute', route: { page: homePage() } },
                 m,
               )
+            } else {
+              return [m, Cmd.none()]
             }
-            return [m, Cmd.none()]
           }),
         )
+      } else {
+        return [model, Cmd.none()]
       }
-      return [model, Cmd.none()]
     }
     case 'LoginPageMsg': {
       const pageModel = TeaRouter.getPageModel(model.router)
@@ -500,8 +505,9 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
             }
           }),
         )
+      } else {
+        return [model, Cmd.none()]
       }
-      return [model, Cmd.none()]
     }
     case 'EditorPageMsg': {
       const pageModel = TeaRouter.getPageModel(model.router)
@@ -746,12 +752,13 @@ const interceptChangeTabFromHomePage =
         { _tag: 'ChangeRoute', route: { page: { _tag: 'LoginPage' } } },
         m,
       )
+    } else {
+      // Change url according to the tab
+      return routerMsgHandler(
+        { _tag: 'ChangeRouteNoReload', route: { page: homePage(tab) } },
+        m,
+      )
     }
-    // Change url according to the tab
-    return routerMsgHandler(
-      { _tag: 'ChangeRouteNoReload', route: { page: homePage(tab) } },
-      m,
-    )
   }
 
 const interceptPaginationChangePageFromHomePage =
@@ -768,8 +775,9 @@ const interceptPaginationChangePageFromHomePage =
         },
         m,
       )
+    } else {
+      return [m, Cmd.none()]
     }
-    return [m, Cmd.none()]
   }
 
 const trackVisitorCmd = (

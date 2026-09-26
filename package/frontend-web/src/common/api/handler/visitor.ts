@@ -4,8 +4,11 @@ import { pipe } from 'fp-ts/lib/function'
 
 import { API_BASE } from '@/common/env'
 
-import { type ApiError, type HttpError } from '../type/common'
-import { type TrackVisitorRequest } from '../type/visitor'
+import {
+  type ApiError,
+  type HttpError,
+  type TrackVisitorRequest,
+} from '../type'
 import { decodeApiError, ensureIsOk, fetchToTaskEither } from './common'
 
 export const trackVisitor = (

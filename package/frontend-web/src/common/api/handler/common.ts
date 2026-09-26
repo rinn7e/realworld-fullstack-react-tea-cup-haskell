@@ -2,7 +2,7 @@ import * as E from 'fp-ts/lib/Either'
 import * as TE from 'fp-ts/lib/TaskEither'
 import type * as t from 'io-ts'
 
-import { type ApiError, ApiErrorJson, type HttpError } from '../type/common'
+import { type ApiError, ApiErrorJson, type HttpError } from '../type'
 
 export type FetchToTaskEitherError = { err: string; status?: number }
 export type FetchToTaskEitherSuccess = {
@@ -25,20 +25,28 @@ export const fetchToTaskEither = (
   )
 
 export const decodeSuccess =
-  <A>(decoder: t.Type<A>) =>
+  <A>(decoder: t.Decoder<unknown, A>) =>
   (s: FetchToTaskEitherSuccess): E.Either<FetchToTaskEitherError, A> => {
-    if (!s.ok) return E.left({ err: s.text, status: s.status })
-    try {
-      const json: unknown = JSON.parse(s.text)
-      const result = decoder.decode(json)
-      if (result._tag === 'Left')
+    if (!s.ok) {
+      return E.left({ err: s.text, status: s.status })
+    } else {
+      try {
+        const json: unknown = JSON.parse(s.text)
+        const result = decoder.decode(json)
+        if (result._tag === 'Left') {
+          return E.left({
+            err: `Decode error: ${JSON.stringify(result.left)}`,
+            status: s.status,
+          })
+        } else {
+          return E.right(result.right)
+        }
+      } catch (e) {
         return E.left({
-          err: `Decode error: ${JSON.stringify(result.left)}`,
+          err: `JSON parse error: ${String(e)}`,
           status: s.status,
         })
-      return E.right(result.right)
-    } catch (e) {
-      return E.left({ err: `JSON parse error: ${String(e)}`, status: s.status })
+      }
     }
   }
 

@@ -3,23 +3,25 @@ import { TagMemo as DsTagMemo } from '@rinn7e/realworld-design-system/element/ta
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { pipe } from 'fp-ts/lib/function'
-import React from 'react'
+import React, { memo } from 'react'
 
-import { ApiErrorEq, type TagsResponse, getHttpErrorEq } from '@/common/api'
-import { ArticleEq } from '@/common/api/type/article'
 import {
-  type AppRoute,
+  ApiErrorEq,
+  ArticleEq,
+  type TagsResponse,
+  getHttpErrorEq,
+} from '@/common/api'
+import {
   globalFeedTab,
   homePage,
   tagFeedTab,
   userFeedTab,
 } from '@/common/type/route'
-import { memoStrategy } from '@/common/util'
-import { DotLoading } from '@/component/dot-loading'
-import { Link } from '@/component/link'
+import { DotLoadingMemo } from '@/component/dot-loading'
 
-import { mkPaginationConfig } from './helper'
+import { HomeTabLinkMemo } from './sub-component/home-tab-link'
 import { type Props, PropsEq } from './type'
+import { mkPaginationConfig } from './update'
 
 const HomePageComponent = ({ model, shared, dispatch }: Props) => {
   const paginationConfig = mkPaginationConfig(shared, model.tab)
@@ -57,18 +59,23 @@ const HomePageComponent = ({ model, shared, dispatch }: Props) => {
               className='flex border-b border-gray-200 dark:border-zinc-800'
               data-test='feed-toggle'
             >
-              {renderTabView(model.tab._tag === 'UserFeedTab', 'Your Feed', {
-                page: homePage(userFeedTab()),
-              })}
-              {renderTabView(
-                model.tab._tag === 'GlobalFeedTab',
-                'Global Feed',
-                { page: homePage(globalFeedTab()) },
+              <HomeTabLinkMemo
+                isActive={model.tab._tag === 'UserFeedTab'}
+                label='Your Feed'
+                route={{ page: homePage(userFeedTab()) }}
+              />
+              <HomeTabLinkMemo
+                isActive={model.tab._tag === 'GlobalFeedTab'}
+                label='Global Feed'
+                route={{ page: homePage(globalFeedTab()) }}
+              />
+              {model.tab._tag === 'TagFeedTab' && (
+                <HomeTabLinkMemo
+                  isActive={true}
+                  label={`# ${model.tab.tag}`}
+                  route={{ page: homePage(tagFeedTab(model.tab.tag)) }}
+                />
               )}
-              {model.tab._tag === 'TagFeedTab' &&
-                renderTabView(true, `# ${model.tab.tag}`, {
-                  page: homePage(tagFeedTab(model.tab.tag)),
-                })}
             </div>
 
             <PaginationMemo
@@ -95,8 +102,8 @@ const HomePageComponent = ({ model, shared, dispatch }: Props) => {
               {pipe(
                 model.tags,
                 RD.fold(
-                  () => <DotLoading className='text-2xl text-gray-400' />,
-                  () => <DotLoading className='text-2xl text-gray-400' />,
+                  () => <DotLoadingMemo className='text-2xl text-gray-400' />,
+                  () => <DotLoadingMemo className='text-2xl text-gray-400' />,
                   () => (
                     <span className='text-xs text-red-400'>
                       Error loading tags
@@ -137,22 +144,4 @@ const HomePageComponent = ({ model, shared, dispatch }: Props) => {
   )
 }
 
-const renderTabView = (active: boolean, label: string, route: AppRoute) => {
-  return (
-    <Link
-      route={route}
-      className={cn(
-        'border-b-2 px-4 py-2 font-medium transition-colors',
-        active
-          ? 'border-green-500 text-green-500'
-          : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200',
-      )}
-      data-test='home-tab'
-      aria-current={active ? 'page' : undefined}
-    >
-      {label}
-    </Link>
-  )
-}
-
-export const HomePageMemo = memoStrategy(HomePageComponent, PropsEq.equals)
+export const HomePageMemo = memo(HomePageComponent, PropsEq.equals)

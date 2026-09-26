@@ -4,16 +4,16 @@ import { ImageMemo as DsImageMemo } from '@rinn7e/realworld-design-system/elemen
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Trash2 } from 'lucide-react'
-import React from 'react'
+import React, { memo } from 'react'
 
 import {
   type ApiError,
   type CommentsResponse,
   type HttpError,
 } from '@/common/api'
-import { assetPath, memoStrategy } from '@/common/util'
-import { DotLoading } from '@/component/dot-loading'
-import { ErrorMessages } from '@/component/error-messages'
+import { assetPath } from '@/common/util'
+import { DotLoadingMemo } from '@/component/dot-loading'
+import { ErrorMessagesMemo } from '@/component/error-messages/component'
 import { Link } from '@/component/link'
 
 import { type Props, PropsEq } from './type'
@@ -47,7 +47,7 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
           />
 
           {model.newCommentError && (
-            <ErrorMessages error={model.newCommentError} />
+            <ErrorMessagesMemo error={model.newCommentError} />
           )}
 
           <div className='flex items-center justify-between border-t border-gray-100 bg-gray-50 px-[12px] py-[8px] dark:border-zinc-800 dark:bg-zinc-900'>
@@ -78,17 +78,17 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
         RD.fold(
           () => (
             <div className='py-[12px]'>
-              <DotLoading className='text-2xl text-green-600' />
+              <DotLoadingMemo className='text-2xl text-green-600' />
             </div>
           ),
           () => (
             <div className='py-[12px]'>
-              <DotLoading className='text-2xl text-green-600' />
+              <DotLoadingMemo className='text-2xl text-green-600' />
             </div>
           ),
           (err: HttpError<ApiError>) => (
             <div className='py-[12px]'>
-              <ErrorMessages error={err} />
+              <ErrorMessagesMemo error={err} />
             </div>
           ),
           (commentsData: CommentsResponse) => (
@@ -139,11 +139,11 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                       {comment.author.username}
                     </Link>
                     <span className='text-gray-400 dark:text-zinc-500'>
-                      {new Date(comment.createdAt).toDateString()}
+                      {comment.createdAt.toDateString()}
                     </span>
                     {isLoggedIn &&
                       user.value.username === comment.author.username && (
-                        <span className='ml-auto'>
+                        <span className='flex flex-1 justify-end'>
                           <DsButtonMemo
                             color='gray'
                             variant='ghost'
@@ -171,7 +171,4 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
   )
 }
 
-export const CommentSectionMemo = memoStrategy(
-  CommentSectionComponent,
-  PropsEq.equals,
-)
+export const CommentSectionMemo = memo(CommentSectionComponent, PropsEq.equals)
