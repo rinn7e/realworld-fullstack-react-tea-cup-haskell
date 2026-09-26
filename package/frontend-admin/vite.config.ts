@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
@@ -11,6 +12,18 @@ export default defineConfig(({ mode }) => {
     base: env.VITE_BASE_URL ?? '/',
     server: {
       port: 5174,
+    },
+    test: {
+      server: {
+        deps: {
+          inline: [
+            '@rinn7e/tea-cup-prelude',
+            '@rinn7e/tea-cup-form',
+            '@rinn7e/tea-cup-pagination',
+            'fp-ts',
+          ],
+        },
+      },
     },
   }
 })

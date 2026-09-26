@@ -1,7 +1,7 @@
 import * as RD from '@devexperts/remote-data-ts'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
-import React from 'react'
+import React, { memo } from 'react'
 import {
   Area,
   AreaChart,
@@ -12,12 +12,10 @@ import {
   YAxis,
 } from 'recharts'
 
-import { memoStrategy } from '@/common/util'
-
-import { FilterButton } from './sub-component/filter-button'
-import { LevelBadge } from './sub-component/level-badge'
-import { LogDetailOverlay } from './sub-component/log-detail-overlay'
-import { StatCard } from './sub-component/stat-card'
+import { FilterButtonMemo } from './sub-component/filter-button'
+import { LevelBadgeMemo } from './sub-component/level-badge'
+import { LogDetailOverlayMemo } from './sub-component/log-detail-overlay'
+import { StatCardMemo } from './sub-component/stat-card'
 import { type Props, PropsEq } from './type'
 
 const LoadingSpinner = () => (
@@ -26,11 +24,11 @@ const LoadingSpinner = () => (
   </div>
 )
 
-export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
+const HomePageComponent = ({ model, dispatch }: Props) => {
   return (
     <div className='relative flex flex-col gap-[32px]'>
       <div>
-        <div className='mb-[24px] flex items-center justify-between'>
+        <div className='flex items-center justify-between pb-[24px]'>
           <h2 className='text-theme-secondary text-[28px] font-bold dark:text-white'>
             Overview
           </h2>
@@ -63,32 +61,32 @@ export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
             () => <LoadingSpinner />,
             (err) => (
               <div className='text-red-500'>
-                Error loading stats: {err.actualErr || 'Unknown error'}
+                Error loading stats: {err.actualErr}
               </div>
             ),
             (stats) => (
-              <div className='grid grid-cols-1 gap-[24px] sm:grid-cols-2 lg:grid-cols-5'>
-                <StatCard
+              <div className='grid grid-cols-1 gap-[24px] lg:grid-cols-2 lg:grid-cols-5'>
+                <StatCardMemo
                   label='Total Users'
                   value={stats.totalUsers.toString()}
                   color='bg-indigo-500'
                 />
-                <StatCard
+                <StatCardMemo
                   label='Total Articles'
                   value={stats.totalArticles.toString()}
                   color='bg-blue-500'
                 />
-                <StatCard
+                <StatCardMemo
                   label='Total Comments'
                   value={stats.totalComments.toString()}
                   color='bg-purple-500'
                 />
-                <StatCard
+                <StatCardMemo
                   label='Total Visitors'
                   value={stats.totalVisitors.toString()}
                   color='bg-orange-500'
                 />
-                <StatCard
+                <StatCardMemo
                   label='Active Users (24h)'
                   value={stats.activeUsers24h.toString()}
                   color='bg-green-500'
@@ -100,29 +98,29 @@ export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
       </div>
 
       <div className='dark:bg-surface-dark rounded-[16px] bg-white p-[24px] shadow-sm'>
-        <div className='mb-[24px] flex flex-col justify-between gap-[16px] sm:flex-row sm:items-center'>
+        <div className='flex flex-col justify-between gap-[16px] pb-[24px] lg:flex-row lg:items-center'>
           <h3 className='text-theme-secondary text-[18px] font-bold dark:text-white'>
             Visitor Activity
           </h3>
           <div className='flex flex-wrap gap-[8px] rounded-[8px] bg-slate-100 p-[4px] dark:bg-black/20'>
-            <FilterButton
+            <FilterButtonMemo
               label='24h'
               active={model.currentFilter === '24h'}
               onClick={() => dispatch({ _tag: 'ChangeFilter', filter: '24h' })}
             />
-            <FilterButton
+            <FilterButtonMemo
               label='Week'
               active={model.currentFilter === 'week'}
               onClick={() => dispatch({ _tag: 'ChangeFilter', filter: 'week' })}
             />
-            <FilterButton
+            <FilterButtonMemo
               label='Month'
               active={model.currentFilter === 'month'}
               onClick={() =>
                 dispatch({ _tag: 'ChangeFilter', filter: 'month' })
               }
             />
-            <FilterButton
+            <FilterButtonMemo
               label='Year'
               active={model.currentFilter === 'year'}
               onClick={() => dispatch({ _tag: 'ChangeFilter', filter: 'year' })}
@@ -138,8 +136,7 @@ export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
               () => <LoadingSpinner />,
               (err) => (
                 <div className='flex h-full items-center justify-center text-red-500'>
-                  Error loading visitor activity:{' '}
-                  {err.actualErr || 'Unknown error'}
+                  Error loading visitor activity: {err.actualErr}
                 </div>
               ),
               (stats) => (
@@ -206,7 +203,7 @@ export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
       </div>
 
       <div className='dark:bg-surface-dark rounded-[16px] bg-white p-[24px] shadow-sm'>
-        <h3 className='text-theme-secondary mb-[24px] text-[18px] font-bold dark:text-white'>
+        <h3 className='text-theme-secondary pb-[24px] text-[18px] font-bold dark:text-white'>
           System Logs
         </h3>
         {pipe(
@@ -216,7 +213,7 @@ export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
             () => <LoadingSpinner />,
             (err) => (
               <div className='text-red-500'>
-                Error loading logs: {err.actualErr || 'Unknown error'}
+                Error loading logs: {err.actualErr}
               </div>
             ),
             (logs) =>
@@ -245,7 +242,7 @@ export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
                           }
                         >
                           <td className='px-[16px] py-[12px]'>
-                            <LevelBadge level={log.level} />
+                            <LevelBadgeMemo level={log.level} />
                           </td>
                           <td className='px-[16px] py-[12px] font-medium text-slate-700 dark:text-slate-200'>
                             <div className='max-w-[500px] truncate font-mono text-[12px]'>
@@ -256,7 +253,7 @@ export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
                             {log.source}
                           </td>
                           <td className='px-[16px] py-[12px] text-slate-400 dark:text-slate-200'>
-                            {new Date(log.timestamp).toLocaleTimeString()}
+                            {log.timestamp.toLocaleTimeString()}
                           </td>
                         </tr>
                       ))}
@@ -268,9 +265,12 @@ export const HomePageComponent: React.FC<Props> = ({ model, dispatch }) => {
         )}
       </div>
 
-      <LogDetailOverlay selectedLog={model.selectedLog} dispatch={dispatch} />
+      <LogDetailOverlayMemo
+        selectedLog={model.selectedLog}
+        dispatch={dispatch}
+      />
     </div>
   )
 }
 
-export const HomePageMemo = memoStrategy(HomePageComponent, PropsEq.equals)
+export const HomePageMemo = memo(HomePageComponent, PropsEq.equals)

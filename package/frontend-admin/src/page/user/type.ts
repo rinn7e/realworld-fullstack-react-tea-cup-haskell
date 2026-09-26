@@ -6,16 +6,14 @@ import * as S from 'fp-ts/lib/string'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import {
+  type AdminUser,
+  AdminUserEq,
   type ApiError,
   ApiErrorEq,
   type HttpError,
-  getHttpErrorEq,
-} from '@/common/api/type'
-import {
-  type AdminUser,
-  AdminUserEq,
   type UserSortAttr,
-} from '@/common/api/type/user'
+  getHttpErrorEq,
+} from '@/common/api'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import * as SearchBar from '@/component/search-bar'
 

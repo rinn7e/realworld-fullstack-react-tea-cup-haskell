@@ -1,15 +1,28 @@
-import React from 'react'
+import { NullableEq } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as S from 'fp-ts/lib/string'
+import React, { memo } from 'react'
 
-import { Image } from '@/component/image'
+import { ImageMemo } from '@/component/image'
 
-export const HeroSection: React.FC<{
+export type HeroSectionProps = {
   portraitUrl: string
   hoveredDialogue: string | null
-}> = ({ portraitUrl, hoveredDialogue }) => {
+}
+
+const HeroSectionPropsEq: EqClass.Eq<HeroSectionProps> = EqClass.struct({
+  portraitUrl: S.Eq,
+  hoveredDialogue: NullableEq(S.Eq),
+})
+
+const HeroSectionComponent = ({
+  portraitUrl,
+  hoveredDialogue,
+}: HeroSectionProps) => {
   return (
     <div className='absolute inset-0 flex items-start justify-center overflow-hidden bg-black'>
       <div className='animate-persona flex h-full w-full items-start justify-center p-[40px]'>
-        <Image
+        <ImageMemo
           src={portraitUrl}
           defaultSrc='https://api.dicebear.com/7.x/shapes/svg?seed=placeholder'
           className='h-full w-full object-contain object-top'
@@ -33,3 +46,8 @@ export const HeroSection: React.FC<{
     </div>
   )
 }
+
+export const HeroSectionMemo = memo(
+  HeroSectionComponent,
+  HeroSectionPropsEq.equals,
+)

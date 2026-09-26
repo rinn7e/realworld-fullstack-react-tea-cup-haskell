@@ -3,6 +3,7 @@ import { type Persona } from '../../type'
 export const hinataAndroid: Persona = {
   id: 'hinata-android',
   name: 'Hinata-Model-B',
+  shortName: 'Model-B',
   bio: 'An advanced combat android of the Hyuga-Model series. Designed for high-performance administrative support and system security. Her Byakugan has been upgraded to a multi-spectral ocular HUD.',
   portraitUrl: '/asset/persona/hinata-android/portrait.png',
   dialogue:

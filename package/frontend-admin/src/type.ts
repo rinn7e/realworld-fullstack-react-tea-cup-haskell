@@ -4,7 +4,7 @@ import { type Option } from 'fp-ts/lib/Option'
 import { type AuthUser } from '@/common/type/auth-user'
 import { type AppRoute } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
-import type * as Persona from '@/component/persona-panel/type'
+import type * as Persona from '@/component/persona-panel'
 import type * as Articles from '@/page/article'
 import type * as Comments from '@/page/comment'
 import type * as Home from '@/page/home'
@@ -12,8 +12,7 @@ import type * as Login from '@/page/login'
 import type * as Users from '@/page/user'
 import type * as Visitors from '@/page/visitor'
 
-import { type Theme } from './theme/type'
-import { type ColorScheme } from './theme/util'
+import { type ColorScheme, type Theme } from './theme/type'
 
 export type Model = {
   readonly router: TeaRouter.Model<AppRoute, PageModel>

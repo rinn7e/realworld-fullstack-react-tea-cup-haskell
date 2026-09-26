@@ -10,13 +10,11 @@ import {
   type ApiError,
   ApiErrorEq,
   type HttpError,
-  getHttpErrorEq,
-} from '@/common/api/type'
-import {
   type Visitor,
   VisitorEq,
   type VisitorSortAttr,
-} from '@/common/api/type/visitor'
+  getHttpErrorEq,
+} from '@/common/api'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import * as SearchBar from '@/component/search-bar'
 

@@ -4,11 +4,7 @@ import * as O from 'fp-ts/lib/Option'
 import * as S from 'fp-ts/lib/string'
 import { type Dispatcher, type Result } from 'tea-cup-fp'
 
-import {
-  type ApiError,
-  type HttpError,
-  type UserResponse,
-} from '@/common/api/type'
+import { type ApiError, type HttpError, type UserResponse } from '@/common/api'
 
 export type Model = {
   readonly _tag: 'LoginModel'

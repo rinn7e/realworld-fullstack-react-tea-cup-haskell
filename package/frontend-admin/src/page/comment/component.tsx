@@ -1,15 +1,18 @@
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/component'
-import React from 'react'
+import React, { memo } from 'react'
 
-import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'
-import { CommentEq, type CommentSortAttr } from '@/common/api/type/comment'
-import { memoStrategy } from '@/common/util'
+import {
+  ApiErrorEq,
+  CommentEq,
+  type CommentSortAttr,
+  getHttpErrorEq,
+} from '@/common/api'
 import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
-import { mkPaginationConfig } from './helper'
-import { CommentDetailOverlay } from './sub-component/comment-detail-overlay'
+import { CommentDetailOverlayMemo } from './sub-component/comment-detail-overlay'
 import { type Props, PropsEq } from './type'
+import { mkPaginationConfig } from './util'
 
 const sortOptions: SearchBar.SearchOption<CommentSortAttr>[] = [
   { label: 'Creation Date', value: 'createdAt' },
@@ -17,11 +20,7 @@ const sortOptions: SearchBar.SearchOption<CommentSortAttr>[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const CommentPageComponent: React.FC<Props> = ({
-  model,
-  shared,
-  dispatch,
-}) => {
+const CommentPageComponent = ({ model, shared, dispatch }: Props) => {
   const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
@@ -49,7 +48,7 @@ export const CommentPageComponent: React.FC<Props> = ({
         errEq={getHttpErrorEq(ApiErrorEq)}
       />
 
-      <CommentDetailOverlay
+      <CommentDetailOverlayMemo
         selectedComment={model.selectedComment}
         dispatch={dispatch}
       />
@@ -57,7 +56,4 @@ export const CommentPageComponent: React.FC<Props> = ({
   )
 }
 
-export const CommentPageMemo = memoStrategy(
-  CommentPageComponent,
-  PropsEq.equals,
-)
+export const CommentPageMemo = memo(CommentPageComponent, PropsEq.equals)

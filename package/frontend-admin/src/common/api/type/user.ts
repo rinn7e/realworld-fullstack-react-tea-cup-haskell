@@ -57,7 +57,7 @@ export type AdminUserListResponse = {
   totalCount: number
 }
 
-export const AdminUserListResponseJson = t.type({
+export const AdminUserListResponseJson: t.Type<AdminUserListResponse> = t.type({
   users: t.array(AdminUserJson),
   totalCount: t.number,
 })
@@ -69,7 +69,7 @@ export type LoginRequest = {
   }
 }
 
-export const LoginRequestJson = t.type({
+export const LoginRequestJson: t.Type<LoginRequest> = t.type({
   user: t.type({
     email: t.string,
     password: t.string,
@@ -80,7 +80,7 @@ export type UpdateUserRoleRequest = {
   role: string
 }
 
-export const UpdateUserRoleRequestJson = t.type({
+export const UpdateUserRoleRequestJson: t.Type<UpdateUserRoleRequest> = t.type({
   role: t.string,
 })
 
@@ -94,7 +94,7 @@ export type UserResponse = {
   }
 }
 
-export const UserResponseJson = t.type({
+export const UserResponseJson: t.Type<UserResponse> = t.type({
   user: t.type({
     email: t.string,
     token: t.string,

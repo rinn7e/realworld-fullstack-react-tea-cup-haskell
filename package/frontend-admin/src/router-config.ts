@@ -2,9 +2,13 @@ import type * as TeaRouter from '@rinn7e/tea-cup-router'
 import * as O from 'fp-ts/lib/Option'
 import { type Cmd } from 'tea-cup-fp'
 
-import { type AppRoute, AppRouteEq } from '@/common/type/route'
+import {
+  type AppRoute,
+  AppRouteEq,
+  parseAppRoute,
+  toUrlString,
+} from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
-import { parseAppRoute, toUrlString } from '@/common/util/route'
 
 export const mkRouterConfig = <PageModel, Msg>(
   initPageModel: (
@@ -26,13 +30,11 @@ export const mkRouterConfig = <PageModel, Msg>(
 
     if (isRouteRequiredAuth && !isLoggedIn && O.isNone(shared.token)) {
       return { _tag: 'Redirect', to: { page: { _tag: 'LoginPage' } } }
-    }
-
-    if (toRoute.page._tag === 'LoginPage' && isLoggedIn) {
+    } else if (toRoute.page._tag === 'LoginPage' && isLoggedIn) {
       return { _tag: 'Redirect', to: { page: { _tag: 'HomePage' } } }
+    } else {
+      return { _tag: 'Allow' }
     }
-
-    return { _tag: 'Allow' }
   },
   initPageModel,
   toMsg,

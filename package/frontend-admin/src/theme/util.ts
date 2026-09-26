@@ -1,14 +1,18 @@
-import { type Theme } from './type'
+import * as A from 'fp-ts/lib/Array'
+import * as O from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/function'
 
-export type ColorScheme = 'light' | 'dark' | 'auto'
+import { ALL_COLOR_SCHEMES, type ColorScheme, type Theme } from './type'
 
 const COLOR_SCHEME_KEY = 'admin-color-scheme'
 
 export const loadColorScheme = (): ColorScheme => {
   const stored = localStorage.getItem(COLOR_SCHEME_KEY)
-  if (stored === 'light' || stored === 'dark' || stored === 'auto')
-    return stored
-  return 'auto'
+  return pipe(
+    ALL_COLOR_SCHEMES,
+    A.findFirst((scheme) => scheme === stored),
+    O.getOrElse((): ColorScheme => 'auto'),
+  )
 }
 
 export const saveColorScheme = (scheme: ColorScheme): void => {
@@ -26,9 +30,13 @@ export const saveTheme = (theme: Theme): void => {
 }
 
 export const resolveIsDark = (scheme: ColorScheme): boolean => {
-  if (scheme === 'dark') return true
-  if (scheme === 'light') return false
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
+  if (scheme === 'dark') {
+    return true
+  } else if (scheme === 'light') {
+    return false
+  } else {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
 }
 
 export const injectTheme = (theme: Theme, scheme: ColorScheme): void => {

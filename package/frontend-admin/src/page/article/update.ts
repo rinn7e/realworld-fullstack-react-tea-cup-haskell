@@ -5,12 +5,12 @@ import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Cmd } from 'tea-cup-fp'
 
-import { type ArticleSortAttr } from '@/common/api/type/article'
+import { type ArticleSortAttr } from '@/common/api'
 import type { Shared } from '@/common/type/shared'
 import * as SearchBar from '@/component/search-bar'
 
-import { mkPaginationConfig } from './helper'
-import { type Model, type Msg } from './type'
+import { type ArticleItemMsg, type Model, type Msg } from './type'
+import { mkPaginationConfig } from './util'
 
 export const init = (shared: Shared): [Model, Cmd<Msg>] => {
   const [searchBar, searchBarCmd] = SearchBar.init<ArticleSortAttr>(
@@ -92,8 +92,9 @@ const searchBarMsgHandler = (
             subMsg: pm,
           })),
         ]
+      } else {
+        return [m, Cmd.none()]
       }
-      return [m, Cmd.none()]
     }),
   )
 }
@@ -125,12 +126,10 @@ const paginationMsgHandler = (
 }
 
 const paginationItemMsgHandler =
-  (msg: any) =>
+  (msg: ArticleItemMsg) =>
   (m: Model): [Model, Cmd<Msg>] => {
     switch (msg._tag) {
       case 'SelectArticle':
         return [{ ...m, selectedArticle: msg.article }, Cmd.none()]
-      default:
-        return [m, Cmd.none()]
     }
   }

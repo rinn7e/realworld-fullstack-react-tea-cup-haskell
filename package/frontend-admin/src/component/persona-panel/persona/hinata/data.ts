@@ -3,6 +3,7 @@ import { type Persona } from '../../type'
 export const hinata: Persona = {
   id: 'hinata',
   name: 'Hinata Hyuga',
+  shortName: 'Hyuga',
   bio: 'A gentle and shy soul from the Hyuga clan, gifted with the Byakugan. She was somehow injected into this software to assist the Developer with unwavering devotion.',
   portraitUrl: '/asset/persona/hinata/portrait.png',
   dialogue:

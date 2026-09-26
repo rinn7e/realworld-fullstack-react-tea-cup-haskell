@@ -1,15 +1,18 @@
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/component'
-import React from 'react'
+import React, { memo } from 'react'
 
-import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'
-import { AdminUserEq, type UserSortAttr } from '@/common/api/type/user'
-import { memoStrategy } from '@/common/util'
+import {
+  AdminUserEq,
+  ApiErrorEq,
+  type UserSortAttr,
+  getHttpErrorEq,
+} from '@/common/api'
 import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
-import { mkPaginationConfig } from './helper'
-import { UserDetailOverlay } from './sub-component/user-detail-overlay'
+import { UserDetailOverlayMemo } from './sub-component/user-detail-overlay'
 import { type Props, PropsEq } from './type'
+import { mkPaginationConfig } from './util'
 
 const sortOptions: SearchBar.SearchOption<UserSortAttr>[] = [
   { label: 'Username', value: 'username' },
@@ -17,11 +20,7 @@ const sortOptions: SearchBar.SearchOption<UserSortAttr>[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const UserPageComponent: React.FC<Props> = ({
-  model,
-  shared,
-  dispatch,
-}) => {
+const UserPageComponent = ({ model, shared, dispatch }: Props) => {
   const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
@@ -51,7 +50,7 @@ export const UserPageComponent: React.FC<Props> = ({
         />
       </div>
 
-      <UserDetailOverlay
+      <UserDetailOverlayMemo
         selectedUser={model.selectedUser}
         dispatch={dispatch}
       />
@@ -59,4 +58,4 @@ export const UserPageComponent: React.FC<Props> = ({
   )
 }
 
-export const UserPageMemo = memoStrategy(UserPageComponent, PropsEq.equals)
+export const UserPageMemo = memo(UserPageComponent, PropsEq.equals)

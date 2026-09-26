@@ -1,15 +1,18 @@
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/component'
-import React from 'react'
+import React, { memo } from 'react'
 
-import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'
-import { ArticleEq, type ArticleSortAttr } from '@/common/api/type/article'
-import { memoStrategy } from '@/common/util'
+import {
+  ApiErrorEq,
+  ArticleEq,
+  type ArticleSortAttr,
+  getHttpErrorEq,
+} from '@/common/api'
 import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
-import { mkPaginationConfig } from './helper'
-import { ArticleDetailOverlay } from './sub-component/article-detail-overlay'
+import { ArticleDetailOverlayMemo } from './sub-component/article-detail-overlay'
 import { type Props, PropsEq } from './type'
+import { mkPaginationConfig } from './util'
 
 const sortOptions: SearchBar.SearchOption<ArticleSortAttr>[] = [
   { label: 'Creation Date', value: 'createdAt' },
@@ -18,11 +21,7 @@ const sortOptions: SearchBar.SearchOption<ArticleSortAttr>[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const ArticlePageComponent: React.FC<Props> = ({
-  model,
-  shared,
-  dispatch,
-}) => {
+const ArticlePageComponent = ({ model, shared, dispatch }: Props) => {
   const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
@@ -52,7 +51,7 @@ export const ArticlePageComponent: React.FC<Props> = ({
         />
       </div>
 
-      <ArticleDetailOverlay
+      <ArticleDetailOverlayMemo
         selectedArticle={model.selectedArticle}
         dispatch={dispatch}
       />
@@ -60,7 +59,4 @@ export const ArticlePageComponent: React.FC<Props> = ({
   )
 }
 
-export const ArticlePageMemo = memoStrategy(
-  ArticlePageComponent,
-  PropsEq.equals,
-)
+export const ArticlePageMemo = memo(ArticlePageComponent, PropsEq.equals)

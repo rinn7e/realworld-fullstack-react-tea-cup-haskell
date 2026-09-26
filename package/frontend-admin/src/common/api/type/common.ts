@@ -10,7 +10,7 @@ export type Errors = {
   errors: Record<string, string[]>
 }
 
-export const ErrorsJson = t.type({
+export const ErrorsJson: t.Type<Errors> = t.type({
   errors: t.record(t.string, t.array(t.string)),
 })
 
@@ -43,7 +43,7 @@ export const ApiErrorEq: EqClass.Eq<ApiError> = EqClass.struct({
   errors: R.getEq(A.getEq(S.Eq)),
 })
 
-export const ApiErrorJson = t.type({
+export const ApiErrorJson: t.Type<ApiError> = t.type({
   errors: t.record(t.string, t.array(t.string)),
 })
 

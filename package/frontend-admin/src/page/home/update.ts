@@ -4,11 +4,7 @@ import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Cmd } from 'tea-cup-fp'
 
-import {
-  getDashboardStats,
-  getLogs,
-  getVisitorStats,
-} from '@/common/api/handler/dashboard'
+import { getDashboardStats, getLogs, getVisitorStats } from '@/common/api'
 import { type Shared } from '@/common/type/shared'
 
 import { type Model, type Msg, type TimeFilter } from './type'

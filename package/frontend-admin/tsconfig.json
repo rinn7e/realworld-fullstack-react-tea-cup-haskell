@@ -28,6 +28,11 @@
       "@rinn7e/realworld-design-system/*": ["../frontend-design-system/lib/*"]
     }
   },
-  "include": ["node_modules/vite/client.d.ts", "src/**/*", "vite.config.ts"],
+  "include": [
+    "node_modules/vite/client.d.ts",
+    "src/**/*",
+    "tests/**/*",
+    "vite.config.ts"
+  ],
   "exclude": ["dist"]
 }

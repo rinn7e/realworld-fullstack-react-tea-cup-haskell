@@ -3,25 +3,23 @@ import * as TeaRouter from '@rinn7e/tea-cup-router'
 import * as O from 'fp-ts/lib/Option'
 import { Cmd, Task } from 'tea-cup-fp'
 
-import { getCurrentUser } from '@/common/api/handler/user'
+import { getCurrentUser } from '@/common/api'
 import { getToken, removeToken, saveToken } from '@/common/cache'
-import { mkRouterConfig } from '@/common/router'
 import { type AuthUser } from '@/common/type/auth-user'
 import { type AppRoute } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
-import type * as PersonaType from '@/component/persona-panel/type'
-import * as Persona from '@/component/persona-panel/update'
+import * as Persona from '@/component/persona-panel'
 import * as Articles from '@/page/article'
 import * as Comments from '@/page/comment'
 import * as Home from '@/page/home'
 import * as Login from '@/page/login'
 import * as Users from '@/page/user'
 import * as Visitors from '@/page/visitor'
+import { mkRouterConfig } from '@/router-config'
 
 import { defaultTheme, themes } from './theme/data'
-import { type Theme } from './theme/type'
+import { type ColorScheme, type Theme } from './theme/type'
 import {
-  type ColorScheme,
   injectTheme,
   loadColorScheme,
   loadThemeId,
@@ -44,11 +42,12 @@ export const preUpdate = (
   if (model === null) {
     if (msg._tag === 'Init') {
       return init(msg.location, msg.user, msg.isUnavailable, msg.token)
+    } else {
+      return [null, Cmd.none()]
     }
-    return [null, Cmd.none()]
+  } else {
+    return update(msg, model)
   }
-
-  return update(msg, model)
 }
 
 export const initPageModel = (
@@ -101,7 +100,6 @@ export const initPageModel = (
     case 'SettingPage':
       return [{ _tag: 'SettingPageModel' }, Cmd.none()]
     case 'NotFoundPage':
-    default:
       return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
   }
 }
@@ -198,15 +196,15 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
         token,
       }
     })
+  } else {
+    return Task.perform(Task.succeed(undefined), (): Msg => ({
+      _tag: 'Init',
+      location,
+      user: O.none,
+      isUnavailable: false,
+      token: O.none,
+    }))
   }
-
-  return Task.perform(Task.succeed(undefined), (): Msg => ({
-    _tag: 'Init',
-    location,
-    user: O.none,
-    isUnavailable: false,
-    token: O.none,
-  }))
 }
 
 export const routerMsgHandler = (
@@ -298,8 +296,9 @@ const homePageMsgHandler = (
       },
       c.map((msg): Msg => ({ _tag: 'HomePageMsg', subMsg: msg })),
     ]
+  } else {
+    return [model, Cmd.none()]
   }
-  return [model, Cmd.none()]
 }
 
 const loginPageMsgHandler = (
@@ -340,11 +339,12 @@ const loginPageMsgHandler = (
         updatedModel,
       )
       return [finalModel, Cmd.batch([nextCmd, routerCmd])]
+    } else {
+      return [nextModel, nextCmd]
     }
-
-    return [nextModel, nextCmd]
+  } else {
+    return [model, Cmd.none()]
   }
-  return [model, Cmd.none()]
 }
 
 const articlesPageMsgHandler = (
@@ -364,8 +364,9 @@ const articlesPageMsgHandler = (
       },
       c.map((msg): Msg => ({ _tag: 'ArticlePageMsg', subMsg: msg })),
     ]
+  } else {
+    return [model, Cmd.none()]
   }
-  return [model, Cmd.none()]
 }
 
 const usersPageMsgHandler = (
@@ -385,8 +386,9 @@ const usersPageMsgHandler = (
       },
       c.map((msg): Msg => ({ _tag: 'UserPageMsg', subMsg: msg })),
     ]
+  } else {
+    return [model, Cmd.none()]
   }
-  return [model, Cmd.none()]
 }
 
 const commentsPageMsgHandler = (
@@ -406,8 +408,9 @@ const commentsPageMsgHandler = (
       },
       c.map((msg): Msg => ({ _tag: 'CommentPageMsg', subMsg: msg })),
     ]
+  } else {
+    return [model, Cmd.none()]
   }
-  return [model, Cmd.none()]
 }
 
 const visitorsPageMsgHandler = (
@@ -427,12 +430,13 @@ const visitorsPageMsgHandler = (
       },
       c.map((msg): Msg => ({ _tag: 'VisitorPageMsg', subMsg: msg })),
     ]
+  } else {
+    return [model, Cmd.none()]
   }
-  return [model, Cmd.none()]
 }
 
 const personaMsgHandler = (
-  subMsg: PersonaType.Msg,
+  subMsg: Persona.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
   const [m, c] = Persona.update(subMsg, model.persona)

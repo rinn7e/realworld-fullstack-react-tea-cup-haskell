@@ -1,16 +1,19 @@
 import { PaginationMemo } from '@rinn7e/tea-cup-pagination/component'
 import { ChevronDown, ChevronRight } from 'lucide-react'
-import React from 'react'
+import React, { memo } from 'react'
 
-import { ApiErrorEq, getHttpErrorEq } from '@/common/api/type'
-import { VisitorEq, type VisitorSortAttr } from '@/common/api/type/visitor'
-import { memoStrategy } from '@/common/util'
+import {
+  ApiErrorEq,
+  VisitorEq,
+  type VisitorSortAttr,
+  getHttpErrorEq,
+} from '@/common/api'
 import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
-import { mkPaginationConfig } from './helper'
-import { VisitorDetailOverlay } from './sub-component/visitor-detail-overlay'
+import { VisitorDetailOverlayMemo } from './sub-component/visitor-detail-overlay'
 import { type Props, PropsEq } from './type'
+import { mkPaginationConfig } from './util'
 
 const sortOptions: SearchBar.SearchOption<VisitorSortAttr>[] = [
   { label: 'Timestamp', value: 'timestamp' },
@@ -19,11 +22,7 @@ const sortOptions: SearchBar.SearchOption<VisitorSortAttr>[] = [
   { label: 'ID', value: 'id' },
 ]
 
-export const VisitorPageComponent: React.FC<Props> = ({
-  model,
-  shared,
-  dispatch,
-}) => {
+const VisitorPageComponent = ({ model, shared, dispatch }: Props) => {
   const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
@@ -82,7 +81,7 @@ export const VisitorPageComponent: React.FC<Props> = ({
         />
       </div>
 
-      <VisitorDetailOverlay
+      <VisitorDetailOverlayMemo
         selectedVisitor={model.selectedVisitor}
         dispatch={dispatch}
       />
@@ -90,7 +89,4 @@ export const VisitorPageComponent: React.FC<Props> = ({
   )
 }
 
-export const VisitorPageMemo = memoStrategy(
-  VisitorPageComponent,
-  PropsEq.equals,
-)
+export const VisitorPageMemo = memo(VisitorPageComponent, PropsEq.equals)

@@ -16,14 +16,6 @@ import {
   fetchToTaskEither,
 } from './common'
 
-const hashSlugToId = (slug: string): number => {
-  let hash = 0
-  for (let i = 0; i < slug.length; i++) {
-    hash = slug.charCodeAt(i) + ((hash << 5) - hash)
-  }
-  return Math.abs(hash)
-}
-
 export const getAdminArticles = (
   token: string,
   params: {
@@ -52,13 +44,6 @@ export const getAdminArticles = (
     }),
     fetchToTaskEither,
     TE.chainEitherK(decodeSuccess(ArticleListResponseJson)),
-    TE.map((res) => ({
-      articlesCount: res.articlesCount,
-      articles: res.articles.map((a) => ({
-        ...a,
-        id: a.id !== undefined ? a.id : hashSlugToId(a.slug),
-      })),
-    })),
     TE.mapLeft(decodeApiError),
   )
 }

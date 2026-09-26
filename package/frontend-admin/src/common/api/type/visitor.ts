@@ -1,8 +1,11 @@
 import { NullableEq } from '@rinn7e/tea-cup-prelude'
+import * as D from 'fp-ts/lib/Date'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
 import * as t from 'io-ts'
+
+import { DateJson } from '@/common/type/date'
 
 import { type AdminUser, AdminUserEq, AdminUserJson } from './user'
 
@@ -14,7 +17,7 @@ export type Visitor = {
   userAgent: string
   path: string
   fingerprint: string
-  timestamp: string
+  timestamp: Date
   user: AdminUser | null
 }
 
@@ -24,17 +27,17 @@ export const VisitorEq: EqClass.Eq<Visitor> = EqClass.struct({
   userAgent: S.Eq,
   path: S.Eq,
   fingerprint: S.Eq,
-  timestamp: S.Eq,
+  timestamp: D.Eq,
   user: NullableEq(AdminUserEq),
 })
 
-export const VisitorJson: t.Type<Visitor> = t.type({
+export const VisitorJson: t.Type<Visitor, unknown, unknown> = t.type({
   id: t.number,
   ip: t.string,
   userAgent: t.string,
   path: t.string,
   fingerprint: t.string,
-  timestamp: t.string,
+  timestamp: DateJson,
   user: t.union([AdminUserJson, t.null]),
 })
 
@@ -43,7 +46,11 @@ export type VisitorListResponse = {
   totalCount: number
 }
 
-export const VisitorListResponseJson = t.type({
+export const VisitorListResponseJson: t.Type<
+  VisitorListResponse,
+  unknown,
+  unknown
+> = t.type({
   visitors: t.array(VisitorJson),
   totalCount: t.number,
 })

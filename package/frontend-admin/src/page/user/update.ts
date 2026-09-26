@@ -5,12 +5,12 @@ import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Cmd } from 'tea-cup-fp'
 
-import { type UserSortAttr } from '@/common/api/type/user'
+import { type UserSortAttr } from '@/common/api'
 import { type Shared } from '@/common/type/shared'
 import * as SearchBar from '@/component/search-bar'
 
-import { mkPaginationConfig } from './helper'
-import { type Model, type Msg } from './type'
+import { type Model, type Msg, type UserItemMsg } from './type'
+import { mkPaginationConfig } from './util'
 
 export const init = (shared: Shared): [Model, Cmd<Msg>] => {
   const [searchBar, searchBarCmd] = SearchBar.init<UserSortAttr>(
@@ -126,12 +126,10 @@ const paginationMsgHandler = (
 }
 
 const paginationItemMsgHandler =
-  (msg: any) =>
+  (msg: UserItemMsg) =>
   (m: Model): [Model, Cmd<Msg>] => {
     switch (msg._tag) {
       case 'SelectUser':
         return [{ ...m, selectedUser: msg.user }, Cmd.none()]
-      default:
-        return [m, Cmd.none()]
     }
   }

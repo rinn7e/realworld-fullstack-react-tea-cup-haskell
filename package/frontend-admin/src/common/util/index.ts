@@ -1,8 +1,6 @@
 import { cmdSucceed } from '@rinn7e/tea-cup-prelude'
 import { type Cmd } from 'tea-cup-fp'
 
-export * from './memo-strategy'
-
 export const scrollToTopCmd = (): Cmd<{ _tag: 'NoOp' }> =>
   cmdSucceed(() => {
     const element = document.getElementById('main-content')

@@ -1,22 +1,35 @@
+import { EqAlways } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as S from 'fp-ts/lib/string'
 import { domToPng } from 'modern-screenshot'
-import React from 'react'
+import React, { memo } from 'react'
 
 import { personas } from '../persona'
 import { type Persona } from '../type'
 
-export const ActionSection: React.FC<{
+export type ActionSectionProps = {
   currentPersonaId: string
   onClearCache: () => void
   onToggleCollapse: () => void
   onSwitchPersona: (persona: Persona) => void
   onHoverAction: (action: keyof Persona['actions'] | null) => void
-}> = ({
+}
+
+const ActionSectionPropsEq: EqClass.Eq<ActionSectionProps> = EqClass.struct({
+  currentPersonaId: S.Eq,
+  onClearCache: EqAlways,
+  onToggleCollapse: EqAlways,
+  onSwitchPersona: EqAlways,
+  onHoverAction: EqAlways,
+})
+
+const ActionSectionComponent = ({
   currentPersonaId,
   onClearCache,
   onToggleCollapse,
   onSwitchPersona,
   onHoverAction,
-}) => {
+}: ActionSectionProps) => {
   const personaList = [
     personas.flashAg,
     personas.hinata,
@@ -36,8 +49,9 @@ export const ActionSection: React.FC<{
             node.hasAttribute('data-html2canvas-ignore')
           ) {
             return false
+          } else {
+            return true
           }
-          return true
         },
       })
 
@@ -51,8 +65,8 @@ export const ActionSection: React.FC<{
   }
 
   return (
-    <div className='space-y-[12px]'>
-      <div className='space-y-[8px]'>
+    <div className='flex flex-col gap-[12px]'>
+      <div className='flex flex-col gap-[8px]'>
         <button
           type='button'
           onClick={onClearCache}
@@ -165,9 +179,11 @@ export const ActionSection: React.FC<{
         </button>
       </div>
 
-      <div className='bg-theme-primary/10 my-[8px] h-[1px] w-full' />
+      <div className='py-[8px]'>
+        <div className='bg-theme-primary/10 h-[1px] w-full' />
+      </div>
 
-      <div className='space-y-[8px]'>
+      <div className='flex flex-col gap-[8px]'>
         <span className='text-theme-primary pl-[4px] text-[10px] font-bold tracking-widest uppercase'>
           Persona Selection
         </span>
@@ -186,11 +202,7 @@ export const ActionSection: React.FC<{
               <span
                 className={`text-[10px] font-black tracking-tight uppercase ${currentPersonaId === p.id ? 'text-white' : 'text-white/40'}`}
               >
-                {p.id === 'hinata'
-                  ? 'Hyuga'
-                  : p.id === 'hinata-android'
-                    ? 'Model-B'
-                    : 'Flash AG'}
+                {p.shortName}
               </span>
             </button>
           ))}
@@ -199,3 +211,8 @@ export const ActionSection: React.FC<{
     </div>
   )
 }
+
+export const ActionSectionMemo = memo(
+  ActionSectionComponent,
+  ActionSectionPropsEq.equals,
+)

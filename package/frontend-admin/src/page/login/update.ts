@@ -2,7 +2,7 @@ import { attemptTE } from '@rinn7e/tea-cup-prelude'
 import * as O from 'fp-ts/lib/Option'
 import { Cmd } from 'tea-cup-fp'
 
-import { login } from '@/common/api/handler/user'
+import { login } from '@/common/api'
 
 import { type Model, type Msg } from './type'
 
@@ -38,17 +38,21 @@ const submitHandler = (model: Model): [Model, Cmd<Msg>] => {
       { ...model, error: O.some('Please fill in all fields.') },
       Cmd.none(),
     ]
+  } else {
+    return [
+      { ...model, isSubmitting: true, error: O.none },
+      attemptTE(
+        login({ user: { email: model.email, password: model.password } }),
+        (result): Msg => ({ _tag: 'SubmitResult', result }),
+      ),
+    ]
   }
-  return [
-    { ...model, isSubmitting: true, error: O.none },
-    attemptTE(
-      login({ user: { email: model.email, password: model.password } }),
-      (result): Msg => ({ _tag: 'SubmitResult', result }),
-    ),
-  ]
 }
 
-const submitResultHandler = (result: any, model: Model): [Model, Cmd<Msg>] => {
+const submitResultHandler = (
+  result: Extract<Msg, { _tag: 'SubmitResult' }>['result'],
+  model: Model,
+): [Model, Cmd<Msg>] => {
   if (result.tag === 'Ok') {
     return [{ ...model, isSubmitting: false, error: O.none }, Cmd.none()]
   } else {

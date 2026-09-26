@@ -1,11 +1,9 @@
 import * as O from 'fp-ts/lib/Option'
-import React from 'react'
-
-import { memoStrategy } from '@/common/util'
+import React, { memo } from 'react'
 
 import { type Props, PropsEq } from './type'
 
-export const LoginPageComponent: React.FC<Props> = ({ model, dispatch }) => {
+const LoginPageComponent = ({ model, dispatch }: Props) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!model.isSubmitting) {
@@ -26,8 +24,8 @@ export const LoginPageComponent: React.FC<Props> = ({ model, dispatch }) => {
             className='dark:bg-surface-dark relative z-10 overflow-hidden rounded-[24px] border border-slate-100 bg-white p-[40px] shadow-xl dark:border-white/5 dark:bg-slate-900'
           >
             {/* Title / Brand */}
-            <div className='mb-[36px] text-center'>
-              <h2 className='text-theme-secondary mb-[8px] text-[28px] font-black tracking-tight dark:text-white'>
+            <div className='pb-[36px] text-center'>
+              <h2 className='text-theme-secondary pb-[8px] text-[28px] font-black tracking-tight dark:text-white'>
                 Sentinel Admin
               </h2>
               <p className='text-[14px] text-slate-400 dark:text-slate-500'>
@@ -37,29 +35,33 @@ export const LoginPageComponent: React.FC<Props> = ({ model, dispatch }) => {
 
             {/* Error Alert Banner */}
             {O.isSome(model.error) && (
-              <div className='animate-in fade-in slide-in-from-top-2 mb-[24px] flex items-start gap-[12px] rounded-[12px] border border-red-100 bg-red-50/50 p-[16px] text-[14px] text-red-600 dark:border-red-950/30 dark:bg-red-950/10 dark:text-red-400'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='mt-[2px] h-[16px] w-[16px] shrink-0'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
-                  />
-                </svg>
-                <div className='font-medium'>{model.error.value}</div>
+              <div className='pb-[24px]'>
+                <div className='animate-in fade-in slide-in-from-top-2 flex items-start gap-[12px] rounded-[12px] border border-red-100 bg-red-50/50 p-[16px] text-[14px] text-red-600 dark:border-red-950/30 dark:bg-red-950/10 dark:text-red-400'>
+                  <span className='shrink-0 pt-[2px]'>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      className='h-[16px] w-[16px]'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
+                      />
+                    </svg>
+                  </span>
+                  <div className='font-medium'>{model.error.value}</div>
+                </div>
               </div>
             )}
 
             {/* Form Inputs */}
             <div className='flex flex-col gap-[20px]'>
               <div>
-                <label className='mb-[8px] block text-[12px] font-bold tracking-wider text-slate-400 uppercase dark:text-slate-500'>
+                <label className='block pb-[8px] text-[12px] font-bold tracking-wider text-slate-400 uppercase dark:text-slate-500'>
                   Email Address
                 </label>
                 <input
@@ -76,7 +78,7 @@ export const LoginPageComponent: React.FC<Props> = ({ model, dispatch }) => {
               </div>
 
               <div>
-                <label className='mb-[8px] block text-[12px] font-bold tracking-wider text-slate-400 uppercase dark:text-slate-500'>
+                <label className='block pb-[8px] text-[12px] font-bold tracking-wider text-slate-400 uppercase dark:text-slate-500'>
                   Password
                 </label>
                 <input
@@ -95,39 +97,41 @@ export const LoginPageComponent: React.FC<Props> = ({ model, dispatch }) => {
                 />
               </div>
 
-              <button
-                type='submit'
-                disabled={model.isSubmitting}
-                className='bg-theme-primary hover:bg-theme-primary/95 focus:ring-theme-primary/20 shadow-theme-primary/10 hover:shadow-theme-primary/20 mt-[8px] flex w-full items-center justify-center gap-[10px] rounded-[12px] py-[14px] text-[15px] font-bold text-white shadow-lg transition-all focus:ring-4 disabled:opacity-50'
-              >
-                {model.isSubmitting ? (
-                  <>
-                    <svg
-                      className='h-[18px] w-[18px] animate-spin text-white'
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                    >
-                      <circle
-                        className='opacity-25'
-                        cx='12'
-                        cy='12'
-                        r='10'
-                        stroke='currentColor'
-                        strokeWidth='4'
-                      />
-                      <path
-                        className='opacity-75'
-                        fill='currentColor'
-                        d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-                      />
-                    </svg>
-                    Signing In...
-                  </>
-                ) : (
-                  'Sign In to Dashboard'
-                )}
-              </button>
+              <div className='pt-[8px]'>
+                <button
+                  type='submit'
+                  disabled={model.isSubmitting}
+                  className='bg-theme-primary hover:bg-theme-primary/95 focus:ring-theme-primary/20 shadow-theme-primary/10 hover:shadow-theme-primary/20 flex w-full items-center justify-center gap-[10px] rounded-[12px] py-[14px] text-[15px] font-bold text-white shadow-lg transition-all focus:ring-4 disabled:opacity-50'
+                >
+                  {model.isSubmitting ? (
+                    <>
+                      <svg
+                        className='h-[18px] w-[18px] animate-spin text-white'
+                        xmlns='http://www.w3.org/2000/svg'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                      >
+                        <circle
+                          className='opacity-25'
+                          cx='12'
+                          cy='12'
+                          r='10'
+                          stroke='currentColor'
+                          strokeWidth='4'
+                        />
+                        <path
+                          className='opacity-75'
+                          fill='currentColor'
+                          d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                        />
+                      </svg>
+                      Signing In...
+                    </>
+                  ) : (
+                    'Sign In to Dashboard'
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -136,4 +140,4 @@ export const LoginPageComponent: React.FC<Props> = ({ model, dispatch }) => {
   )
 }
 
-export const LoginPageMemo = memoStrategy(LoginPageComponent, PropsEq.equals)
+export const LoginPageMemo = memo(LoginPageComponent, PropsEq.equals)

@@ -1,9 +1,12 @@
 import * as A from 'fp-ts/lib/Array'
+import * as D from 'fp-ts/lib/Date'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as B from 'fp-ts/lib/boolean'
 import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
 import * as t from 'io-ts'
+
+import { DateJson } from '@/common/type/date'
 
 import { type AdminUser, AdminUserEq, AdminUserJson } from './user'
 
@@ -16,8 +19,8 @@ export type Article = {
   description: string
   body: string
   tagList: string[]
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   favorited: boolean
   favoritesCount: number
   author: AdminUser
@@ -30,22 +33,22 @@ export const ArticleEq = EqClass.struct<Article>({
   description: S.Eq,
   body: S.Eq,
   tagList: A.getEq(S.Eq),
-  createdAt: S.Eq,
-  updatedAt: S.Eq,
+  createdAt: D.Eq,
+  updatedAt: D.Eq,
   favorited: B.Eq,
   favoritesCount: N.Eq,
   author: AdminUserEq,
 })
 
-export const ArticleJson: t.Type<Article> = t.type({
+export const ArticleJson: t.Type<Article, unknown, unknown> = t.type({
   id: t.number,
   slug: t.string,
   title: t.string,
   description: t.string,
   body: t.string,
   tagList: t.array(t.string),
-  createdAt: t.string,
-  updatedAt: t.string,
+  createdAt: DateJson,
+  updatedAt: DateJson,
   favorited: t.boolean,
   favoritesCount: t.number,
   author: AdminUserJson,
@@ -56,7 +59,11 @@ export type ArticleListResponse = {
   articlesCount: number
 }
 
-export const ArticleListResponseJson = t.type({
+export const ArticleListResponseJson: t.Type<
+  ArticleListResponse,
+  unknown,
+  unknown
+> = t.type({
   articles: t.array(ArticleJson),
   articlesCount: t.number,
 })

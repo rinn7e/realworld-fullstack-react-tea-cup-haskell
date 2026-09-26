@@ -1,13 +1,15 @@
+import { EqAlways } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
 import * as O from 'fp-ts/lib/Option'
-import React from 'react'
+import * as S from 'fp-ts/lib/string'
+import React, { memo } from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type AuthUser } from '@/common/type/auth-user'
-import { Image } from '@/component/image'
+import { type AuthUser, AuthUserEq } from '@/common/type/auth-user'
+import { ImageMemo } from '@/component/image'
 import { DEFAULT_AVATAR_URL } from '@/component/profile-thumbnail'
 import { themes } from '@/theme/data'
-import { type Theme } from '@/theme/type'
-import { type ColorScheme } from '@/theme/util'
+import { type ColorScheme, type Theme, ThemeEq } from '@/theme/type'
 import { type Msg } from '@/type'
 
 const SunIcon = () => (
@@ -107,12 +109,26 @@ const schemeOptions: SchemeOption[] = [
   },
 ]
 
-export const SettingPageComponent: React.FC<{
+export type SettingPageProps = {
   user: O.Option<AuthUser>
   colorScheme: ColorScheme
   theme: Theme
   dispatch: Dispatcher<Msg>
-}> = ({ user, colorScheme, theme, dispatch }) => {
+}
+
+const SettingPagePropsEq: EqClass.Eq<SettingPageProps> = EqClass.struct({
+  user: O.getEq(AuthUserEq),
+  colorScheme: S.Eq,
+  theme: ThemeEq,
+  dispatch: EqAlways,
+})
+
+const SettingPageComponent = ({
+  user,
+  colorScheme,
+  theme,
+  dispatch,
+}: SettingPageProps) => {
   const themesList = Object.values(themes)
 
   return (
@@ -121,7 +137,7 @@ export const SettingPageComponent: React.FC<{
         <h2 className='text-theme-secondary text-[28px] font-bold dark:text-white'>
           Settings
         </h2>
-        <p className='mt-[4px] text-slate-500 dark:text-slate-200'>
+        <p className='pt-[4px] text-slate-500 dark:text-slate-200'>
           Manage your account preferences and appearance.
         </p>
       </div>
@@ -129,11 +145,11 @@ export const SettingPageComponent: React.FC<{
       {/* Account Profile Section */}
       {O.isSome(user) && (
         <section className='overflow-hidden rounded-[24px] border border-slate-100 bg-white p-[32px] shadow-lg dark:border-white/5 dark:bg-slate-900'>
-          <div className='flex flex-col gap-[24px] sm:flex-row sm:items-center'>
+          <div className='flex flex-col gap-[24px] lg:flex-row lg:items-center'>
             {/* Avatar */}
             <div className='bg-theme-primary/10 text-theme-primary ring-theme-primary/10 dark:bg-theme-primary/20 relative flex h-[80px] w-[80px] shrink-0 items-center justify-center overflow-hidden rounded-full text-[28px] font-black ring-4'>
               {user.value.image ? (
-                <Image
+                <ImageMemo
                   src={user.value.image}
                   defaultSrc={DEFAULT_AVATAR_URL}
                   alt={user.value.username}
@@ -154,11 +170,11 @@ export const SettingPageComponent: React.FC<{
                   Administrator
                 </span>
               </div>
-              <p className='mt-[2px] text-[14px] text-slate-500 dark:text-slate-400'>
+              <p className='pt-[2px] text-[14px] text-slate-500 dark:text-slate-400'>
                 {user.value.email}
               </p>
               {user.value.bio && (
-                <p className='mt-[8px] max-w-[500px] text-[14px] text-slate-600 italic dark:text-slate-300'>
+                <p className='max-w-[500px] pt-[8px] text-[14px] text-slate-600 italic dark:text-slate-300'>
                   "{user.value.bio}"
                 </p>
               )}
@@ -168,7 +184,7 @@ export const SettingPageComponent: React.FC<{
             <button
               type='button'
               onClick={() => dispatch({ _tag: 'Logout' })}
-              className='flex cursor-pointer items-center justify-center gap-[8px] self-start rounded-[12px] border border-slate-200 bg-transparent px-[20px] py-[10px] text-[14px] font-bold text-slate-600 transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-700 sm:self-center dark:border-white/10 dark:text-slate-300 dark:hover:border-red-900/30 dark:hover:bg-red-950/20'
+              className='flex cursor-pointer items-center justify-center gap-[8px] self-start rounded-[12px] border border-slate-200 bg-transparent px-[20px] py-[10px] text-[14px] font-bold text-slate-600 transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-700 lg:self-center dark:border-white/10 dark:text-slate-300 dark:hover:border-red-900/30 dark:hover:bg-red-950/20'
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -192,16 +208,16 @@ export const SettingPageComponent: React.FC<{
 
       {/* Appearance Section */}
       <section>
-        <div className='mb-[20px]'>
+        <div className='pb-[20px]'>
           <h3 className='text-theme-secondary text-[18px] font-bold dark:text-white'>
             Appearance
           </h3>
-          <p className='mt-[4px] text-[14px] text-slate-500 dark:text-slate-200'>
+          <p className='pt-[4px] text-[14px] text-slate-500 dark:text-slate-200'>
             Choose how the admin panel looks. Your preference is saved locally.
           </p>
         </div>
 
-        <div className='grid grid-cols-1 gap-[16px] sm:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-[16px] lg:grid-cols-3'>
           {schemeOptions.map((opt) => {
             const isActive = colorScheme === opt.value
             return (
@@ -237,7 +253,7 @@ export const SettingPageComponent: React.FC<{
                   >
                     {opt.label}
                   </div>
-                  <div className='mt-[2px] text-[13px] text-slate-500 dark:text-slate-200'>
+                  <div className='pt-[2px] text-[13px] text-slate-500 dark:text-slate-200'>
                     {opt.description}
                   </div>
                 </div>
@@ -265,17 +281,17 @@ export const SettingPageComponent: React.FC<{
 
       {/* Theme Section */}
       <section>
-        <div className='mb-[20px]'>
+        <div className='pb-[20px]'>
           <h3 className='text-theme-secondary text-[18px] font-bold dark:text-white'>
             Color Theme
           </h3>
-          <p className='mt-[4px] text-[14px] text-slate-500 dark:text-slate-200'>
+          <p className='pt-[4px] text-[14px] text-slate-500 dark:text-slate-200'>
             Pick an accent color for the interface. Affects primary and
             secondary colors.
           </p>
         </div>
 
-        <div className='grid grid-cols-1 gap-[16px] sm:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-[16px] lg:grid-cols-3'>
           {themesList.map((t) => {
             const isActive = theme.id === t.id
             return (
@@ -333,7 +349,7 @@ export const SettingPageComponent: React.FC<{
                     >
                       {t.name}
                     </div>
-                    <div className='mt-[2px] font-mono text-[11px] text-slate-400 dark:text-slate-200'>
+                    <div className='pt-[2px] font-mono text-[11px] text-slate-400 dark:text-slate-200'>
                       {t.primaryColor} · {t.primaryColorDarkMode}
                     </div>
                   </div>
@@ -360,3 +376,8 @@ export const SettingPageComponent: React.FC<{
     </div>
   )
 }
+
+export const SettingPageMemo = memo(
+  SettingPageComponent,
+  SettingPagePropsEq.equals,
+)

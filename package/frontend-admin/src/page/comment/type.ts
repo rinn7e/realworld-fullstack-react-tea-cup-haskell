@@ -8,14 +8,12 @@ import { type Dispatcher } from 'tea-cup-fp'
 import {
   type ApiError,
   ApiErrorEq,
-  type HttpError,
-  getHttpErrorEq,
-} from '@/common/api/type'
-import {
   type Comment,
   CommentEq,
   type CommentSortAttr,
-} from '@/common/api/type/comment'
+  type HttpError,
+  getHttpErrorEq,
+} from '@/common/api'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import * as SearchBar from '@/component/search-bar'
 

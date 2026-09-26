@@ -6,16 +6,14 @@ import { App } from './app'
 import { type Model, type Msg, teaRouterMsg } from './type'
 import { preInit, preUpdate } from './update'
 
-const preLoadingView = () => {
-  return (
-    <div className='initial-loader-wrap'>
-      <div className='initial-loader'></div>
-    </div>
-  )
-}
+const PreLoadingView = () => (
+  <div className='initial-loader-wrap'>
+    <div className='initial-loader'></div>
+  </div>
+)
 
 const preView = (dispatch: Dispatcher<Msg>, model: Model | null) => {
-  return model ? <App model={model} dispatch={dispatch} /> : preLoadingView()
+  return model ? <App model={model} dispatch={dispatch} /> : <PreLoadingView />
 }
 
 export const AppProgram = () => {

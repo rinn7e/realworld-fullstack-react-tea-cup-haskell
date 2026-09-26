@@ -1,10 +1,25 @@
-import React from 'react'
+import { EqAlways } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as S from 'fp-ts/lib/string'
+import React, { memo } from 'react'
 
-export const PanelHeader: React.FC<{
+export type PanelHeaderProps = {
   name: string
   onToggleDetails: () => void
   onToggleCollapse: () => void
-}> = ({ name, onToggleDetails, onToggleCollapse }) => (
+}
+
+const PanelHeaderPropsEq: EqClass.Eq<PanelHeaderProps> = EqClass.struct({
+  name: S.Eq,
+  onToggleDetails: EqAlways,
+  onToggleCollapse: EqAlways,
+})
+
+const PanelHeaderComponent = ({
+  name,
+  onToggleDetails,
+  onToggleCollapse,
+}: PanelHeaderProps) => (
   <div className='border-theme-primary/20 flex items-center justify-between border-b p-[24px]'>
     <button
       type='button'
@@ -34,4 +49,9 @@ export const PanelHeader: React.FC<{
       </svg>
     </button>
   </div>
+)
+
+export const PanelHeaderMemo = memo(
+  PanelHeaderComponent,
+  PanelHeaderPropsEq.equals,
 )

@@ -9,17 +9,15 @@ import { type Dispatcher, type Result } from 'tea-cup-fp'
 import {
   type ApiError,
   ApiErrorEq,
-  type HttpError,
-  getHttpErrorEq,
-} from '@/common/api/type'
-import {
   type DashboardStats,
   DashboardStatsEq,
+  type HttpError,
   type Log,
   LogEq,
   type VisitorStat,
   VisitorStatEq,
-} from '@/common/api/type/dashboard'
+  getHttpErrorEq,
+} from '@/common/api'
 import { type Shared, SharedEq } from '@/common/type/shared'
 
 export type TimeFilter = '24h' | 'week' | 'month' | 'year'

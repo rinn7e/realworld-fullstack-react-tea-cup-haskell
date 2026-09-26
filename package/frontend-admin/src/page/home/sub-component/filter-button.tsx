@@ -1,10 +1,26 @@
-import React from 'react'
+import { EqAlways } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as B from 'fp-ts/lib/boolean'
+import * as S from 'fp-ts/lib/string'
+import React, { memo } from 'react'
 
-export const FilterButton: React.FC<{
+export type FilterButtonProps = {
   label: string
   active: boolean
   onClick: () => void
-}> = ({ label, active, onClick }) => (
+}
+
+const FilterButtonPropsEq: EqClass.Eq<FilterButtonProps> = EqClass.struct({
+  label: S.Eq,
+  active: B.Eq,
+  onClick: EqAlways,
+})
+
+const FilterButtonComponent = ({
+  label,
+  active,
+  onClick,
+}: FilterButtonProps) => (
   <button
     type='button'
     onClick={onClick}
@@ -16,4 +32,9 @@ export const FilterButton: React.FC<{
   >
     {label}
   </button>
+)
+
+export const FilterButtonMemo = memo(
+  FilterButtonComponent,
+  FilterButtonPropsEq.equals,
 )

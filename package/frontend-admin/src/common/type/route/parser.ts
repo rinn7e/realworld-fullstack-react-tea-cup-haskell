@@ -1,6 +1,7 @@
 import { Route, end, format, lit, parse, zero } from '@rinn7e/fp-ts-routing'
 
-import { BASE_URL } from '../env'
+import { BASE_URL } from '@/common/env'
+
 import {
   type AppPage,
   type AppRoute,
@@ -12,7 +13,7 @@ import {
   settingsPage,
   usersPage,
   visitorsPage,
-} from '../type/route'
+} from './type'
 
 const homeMatch = end
 const loginMatch = lit('login').and(end)
@@ -33,12 +34,13 @@ const appRouter = zero<AppPage>()
 
 export const removeBaseUrl = (href: string): string => {
   const url = new URL(href)
-  let pathname = url.pathname
   const base = BASE_URL.replace(/\/$/, '')
-  if (base !== '' && pathname.startsWith(base)) {
-    pathname = pathname.slice(base.length)
-  }
-  return (pathname || '/') + url.search
+  const pathname =
+    base !== '' && url.pathname.startsWith(base)
+      ? url.pathname.slice(base.length)
+      : url.pathname
+  // A path equal to the base itself strips down to '', which is the root
+  return (pathname === '' ? '/' : pathname) + url.search
 }
 
 export const addBaseUrl = (path: string): string => {
@@ -72,8 +74,6 @@ export const toUrlString = (appRoute: AppRoute): string => {
       case 'SettingPage':
         return format(settingsMatch.formatter, {})
       case 'NotFoundPage':
-        return '/404'
-      default:
         return '/404'
     }
   }
