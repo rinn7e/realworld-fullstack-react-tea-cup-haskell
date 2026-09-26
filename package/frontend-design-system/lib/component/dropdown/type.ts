@@ -7,13 +7,12 @@ export type DropdownItem = {
   isDivider?: boolean
 }
 
-export const DropdownItemEq: EqClass.Eq<DropdownItem> = EqClass.struct<
-  Required<DropdownItem>
->({
-  id: EqClass.eqString,
-  label: EqClass.eqString,
-  isDivider: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<DropdownItem>
+export const DropdownItemEq: EqClass.Eq<DropdownItem> =
+  EqClass.struct<DropdownItem>({
+    id: EqClass.eqString,
+    label: EqClass.eqString,
+    isDivider: EqClass.eqStrict,
+  })
 
 export type Model = {
   isOpen: boolean
@@ -37,13 +36,12 @@ export type DropdownProps = {
   dataTest?: string
 }
 
-export const DropdownPropsEq: EqClass.Eq<DropdownProps> = EqClass.struct<
-  Required<DropdownProps>
->({
-  triggerLabel: EqClass.eqString,
-  items: A.getEq(DropdownItemEq),
-  model: ModelEq,
-  dispatch: EqClass.eqStrict,
-  className: EqClass.eqStrict,
-  dataTest: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<DropdownProps>
+export const DropdownPropsEq: EqClass.Eq<DropdownProps> =
+  EqClass.struct<DropdownProps>({
+    triggerLabel: EqClass.eqString,
+    items: A.getEq(DropdownItemEq),
+    model: ModelEq,
+    dispatch: EqClass.eqStrict,
+    className: EqClass.eqStrict,
+    dataTest: EqClass.eqStrict,
+  })

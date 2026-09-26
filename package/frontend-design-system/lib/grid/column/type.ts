@@ -1,5 +1,6 @@
-import * as EqClass from 'fp-ts/Eq'
-import * as string from 'fp-ts/string'
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as string from 'fp-ts/lib/string'
 import type { ReactNode } from 'react'
 
 export type ColumnSize =
@@ -17,11 +18,10 @@ export type ColumnProps = {
   dataTest?: string
 }
 
-export const ColumnPropsEq: EqClass.Eq<ColumnProps> = EqClass.struct<
-  Required<ColumnProps>
->({
-  size: EqClass.eqStrict,
-  children: EqClass.eqStrict,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<ColumnProps>
+export const ColumnPropsEq: EqClass.Eq<ColumnProps> =
+  EqClass.struct<ColumnProps>({
+    size: EqClass.eqStrict,
+    children: EqClass.eqStrict,
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })

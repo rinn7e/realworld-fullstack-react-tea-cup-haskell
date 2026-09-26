@@ -1,10 +1,10 @@
 import { Upload } from 'lucide-react'
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
 import { type FileProps, FilePropsEq } from './type'
 
-export const FileComponent: React.FC<FileProps> = ({
+const FileComponent = ({
   filename,
   ctaText = 'Choose a file…',
   accept,
@@ -14,7 +14,7 @@ export const FileComponent: React.FC<FileProps> = ({
   id,
   className,
   dataTest,
-}) => {
+}: FileProps) => {
   return (
     <div
       data-test={dataTest}

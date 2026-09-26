@@ -4,7 +4,7 @@ import { cn } from '../../theme'
 import type { TabsProps } from './type'
 import { TabsPropsEq } from './type'
 
-export const TabsComponent = ({
+const TabsComponent = ({
   items,
   isBoxed = false,
   isToggle = false,
@@ -43,9 +43,7 @@ export const TabsComponent = ({
                 </button>
               </li>
             )
-          }
-
-          if (isToggle) {
+          } else if (isToggle) {
             return (
               <li key={item.id}>
                 <button
@@ -63,25 +61,25 @@ export const TabsComponent = ({
                 </button>
               </li>
             )
+          } else {
+            return (
+              <li key={item.id}>
+                <button
+                  type='button'
+                  onClick={() => dispatch({ _tag: 'Select', id: item.id })}
+                  className={cn(
+                    'inline-flex cursor-pointer items-center gap-2 border-b-2 px-4 py-2.5 transition-colors',
+                    isActive
+                      ? 'border-emerald-600 font-bold text-emerald-600'
+                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                  )}
+                >
+                  {item.icon}
+                  <span>{item.label}</span>
+                </button>
+              </li>
+            )
           }
-
-          return (
-            <li key={item.id}>
-              <button
-                type='button'
-                onClick={() => dispatch({ _tag: 'Select', id: item.id })}
-                className={cn(
-                  'inline-flex cursor-pointer items-center gap-2 border-b-2 px-4 py-2.5 transition-colors',
-                  isActive
-                    ? 'border-emerald-600 font-bold text-emerald-600'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                )}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </button>
-            </li>
-          )
         })}
       </ul>
     </div>

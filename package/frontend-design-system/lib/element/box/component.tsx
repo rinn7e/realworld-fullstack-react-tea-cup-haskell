@@ -1,14 +1,9 @@
 import { memo } from 'react'
-import React from 'react'
 
 import { cn } from '../../theme'
 import { type BoxProps, BoxPropsEq } from './type'
 
-export const BoxComponent: React.FC<BoxProps> = ({
-  children,
-  className,
-  dataTest,
-}) => {
+const BoxComponent = ({ children, className, dataTest }: BoxProps) => {
   return (
     <div
       data-test={dataTest}

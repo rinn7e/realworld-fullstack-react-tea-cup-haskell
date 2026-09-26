@@ -3,18 +3,16 @@ import { DeleteMemo as DsDeleteMemo } from '@rinn7e/realworld-design-system/elem
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2, Sparkles } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import {
+  DEFAULT_SECTION_BOX_CLASS,
+  SectionViewMemo,
+} from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
+const DeletePageComponent = ({ model, dispatch }: Props) => {
   const code = `// Delete Button Sizes
 <DsDeleteMemo size='small' onClick={() => alert('Deleted!')} />
 <DsDeleteMemo size='normal' onClick={() => alert('Deleted!')} />
@@ -22,19 +20,22 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
 <DsDeleteMemo size='large' onClick={() => alert('Deleted!')} />`
 
   return (
-    <div data-component='DeletePage' className='w-full space-y-8 text-left'>
+    <div
+      data-component='DeletePage'
+      className='flex w-full flex-col gap-8 text-left'
+    >
       <DsHeroMemo
         color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
         <>
-          <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+          <div className='pb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
             ELEMENTS / DELETE
           </div>
           <DsTitleMemo
             size={2}
-            className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+            className='pb-2 font-extrabold text-gray-900 dark:text-zinc-100'
           >
             Delete
           </DsTitleMemo>
@@ -68,21 +69,21 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
           </DsButtonMemo>
         </div>
 
-        {sectionView({
-          title: 'Delete Icon Button Sizes',
-          children: () => (
-            <div className='flex items-center gap-6'>
-              <DsDeleteMemo size='small' onClick={() => alert('Deleted!')} />
-              <DsDeleteMemo size='normal' onClick={() => alert('Deleted!')} />
-              <DsDeleteMemo size='medium' onClick={() => alert('Deleted!')} />
-              <DsDeleteMemo size='large' onClick={() => alert('Deleted!')} />
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Delete Icon Button Sizes'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex items-center gap-6'>
+            <DsDeleteMemo size='small' onClick={() => alert('Deleted!')} />
+            <DsDeleteMemo size='normal' onClick={() => alert('Deleted!')} />
+            <DsDeleteMemo size='medium' onClick={() => alert('Deleted!')} />
+            <DsDeleteMemo size='large' onClick={() => alert('Deleted!')} />
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Delete Component Code
@@ -97,3 +98,5 @@ export const DeletePage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const DeletePageMemo = memo(DeletePageComponent, PropsEq.equals)

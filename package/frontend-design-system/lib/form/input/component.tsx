@@ -1,16 +1,16 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
-import { type InputProps, InputPropsEq } from './type'
+import { type InputProps, InputPropsEq, type InputSize } from './type'
 
-const sizeStyles: Record<string, string> = {
+const sizeStyles: Record<InputSize, string> = {
   small: 'px-2.5 py-1 text-xs',
   normal: 'px-3 py-1.5 text-sm',
   medium: 'px-4 py-2 text-base',
   large: 'px-5 py-3 text-lg',
 }
 
-export const InputComponent: React.FC<InputProps> = ({
+const InputComponent = ({
   type = 'text',
   value,
   placeholder,
@@ -26,7 +26,7 @@ export const InputComponent: React.FC<InputProps> = ({
   id,
   className,
   dataTest,
-}) => {
+}: InputProps) => {
   return (
     <input
       data-test={dataTest}

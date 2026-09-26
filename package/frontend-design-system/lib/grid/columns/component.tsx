@@ -1,20 +1,20 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
 import { type ColumnsProps, ColumnsPropsEq } from './type'
 
-export const ColumnsComponent: React.FC<ColumnsProps> = ({
+const ColumnsComponent = ({
   isMultiline,
   children,
   className,
   dataTest,
-}) => {
+}: ColumnsProps) => {
   return (
     <div
       data-test={dataTest}
       data-component='Columns'
       className={cn(
-        'flex flex-col gap-4 md:flex-row',
+        'flex flex-col gap-4 lg:flex-row',
         isMultiline && 'flex-wrap',
         className,
       )}

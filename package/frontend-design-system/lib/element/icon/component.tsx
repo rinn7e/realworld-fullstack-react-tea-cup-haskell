@@ -1,22 +1,21 @@
 import { memo } from 'react'
-import React from 'react'
 
 import { cn } from '../../theme'
-import { type IconProps, IconPropsEq } from './type'
+import { type IconProps, IconPropsEq, type IconSize } from './type'
 
-const sizeStyles: Record<string, string> = {
+const sizeStyles: Record<IconSize, string> = {
   small: 'h-4 w-4 text-xs',
   normal: 'h-5 w-5 text-sm',
   medium: 'h-6 w-6 text-base',
   large: 'h-8 w-8 text-lg',
 }
 
-export const IconComponent: React.FC<IconProps> = ({
+const IconComponent = ({
   size = 'normal',
   children,
   className,
   dataTest,
-}) => {
+}: IconProps) => {
   return (
     <span
       data-test={dataTest}

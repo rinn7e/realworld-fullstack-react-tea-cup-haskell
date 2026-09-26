@@ -1,4 +1,7 @@
+import { NullableEq, UndefinableEq } from '@rinn7e/tea-cup-prelude'
+import * as A from 'fp-ts/lib/Array'
 import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
 
 import { type NavItemData, NavItemDataEq } from '../../type/nav-item'
@@ -10,30 +13,20 @@ export type Config = {
   unavailableMode?: boolean
 }
 
-export const ConfigEq: EqClass.Eq<Config> = {
-  equals: (x, y) =>
-    x.unavailableMode === y.unavailableMode &&
-    ((!x.brandNavItem && !y.brandNavItem) ||
-      (Boolean(x.brandNavItem) &&
-        Boolean(y.brandNavItem) &&
-        NavItemDataEq.equals(x.brandNavItem!, y.brandNavItem!))) &&
-    x.desktopNavItems.length === y.desktopNavItems.length &&
-    x.desktopNavItems.every((item, i) =>
-      NavItemDataEq.equals(item, y.desktopNavItems[i]),
-    ) &&
-    x.mobileNavItems.length === y.mobileNavItems.length &&
-    x.mobileNavItems.every((item, i) =>
-      NavItemDataEq.equals(item, y.mobileNavItems[i]),
-    ),
-}
+export const ConfigEq: EqClass.Eq<Config> = EqClass.struct<Config>({
+  brandNavItem: UndefinableEq(NavItemDataEq),
+  desktopNavItems: A.getEq(NavItemDataEq),
+  mobileNavItems: A.getEq(NavItemDataEq),
+  unavailableMode: UndefinableEq(boolean.Eq),
+})
 
 export type Model = {
   readonly openDropdownKey: string | null
 }
 
-export const ModelEq: EqClass.Eq<Model> = {
-  equals: (x, y) => x.openDropdownKey === y.openDropdownKey,
-}
+export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
+  openDropdownKey: NullableEq(string.Eq),
+})
 
 export type Msg =
   | { readonly _tag: 'NoOp' }
@@ -50,13 +43,24 @@ export type NavbarProps = {
   dataTest?: string
 }
 
-export const NavbarPropsEq: EqClass.Eq<NavbarProps> = EqClass.struct<
-  Required<NavbarProps>
->({
-  config: ConfigEq,
+export const NavbarPropsEq: EqClass.Eq<NavbarProps> =
+  EqClass.struct<NavbarProps>({
+    config: ConfigEq,
+    model: ModelEq,
+    dispatch: EqClass.eqStrict,
+    className: UndefinableEq(string.Eq),
+    containerClassName: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })
+
+export type NavItemProps = {
+  item: NavItemData
+  model: Model
+  dispatch: (msg: Msg) => void
+}
+
+export const NavItemPropsEq: EqClass.Eq<NavItemProps> = EqClass.struct({
+  item: NavItemDataEq,
   model: ModelEq,
   dispatch: EqClass.eqStrict,
-  className: string.Eq,
-  containerClassName: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<NavbarProps>
+})

@@ -65,7 +65,7 @@ export const removeBaseUrl = (href: string): string => {
     rawPathname !== '/' && rawPathname.endsWith('/')
       ? rawPathname.slice(0, -1)
       : rawPathname
-  return (pathname || '/') + url.search
+  return pathname + url.search
 }
 
 export const addBaseUrl = (path: string): string => {
@@ -164,11 +164,12 @@ const appRouter: Parser<AppPage> = zero<AppPage>()
   .alt(dotloadingMatch.parser.map(() => dotLoadingPage()))
   .alt(anyStrings.parser.map(() => notFoundPage()))
 
-export const parseAppRoute = (_mainUrl: string, href: string): AppRoute => {
-  const pathname = removeBaseUrl(href)
-  const page = parse(appRouter, Route.parse(pathname), homePage())
-  return { page }
-}
+export const parsePath = (path: string): AppRoute => ({
+  page: parse(appRouter, Route.parse(path), homePage()),
+})
+
+export const parseAppRoute = (_mainUrl: string, href: string): AppRoute =>
+  parsePath(removeBaseUrl(href))
 
 export const toUrlString = (r: AppRoute): string => {
   const page = r.page

@@ -26,6 +26,12 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       'unused-imports/no-unused-imports': 'error',
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        {
+          assertionStyle: 'never',
+        },
+      ],
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {

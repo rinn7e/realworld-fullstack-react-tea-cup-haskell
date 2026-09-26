@@ -1,3 +1,4 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as number from 'fp-ts/lib/number'
@@ -14,12 +15,10 @@ export type TitleProps = {
   dataTest?: string
 }
 
-export const TitlePropsEq: EqClass.Eq<TitleProps> = EqClass.struct<
-  Required<TitleProps>
->({
+export const TitlePropsEq: EqClass.Eq<TitleProps> = EqClass.struct<TitleProps>({
   children: EqClass.eqStrict,
-  size: number.Eq,
-  isSubtitle: boolean.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<TitleProps>
+  size: UndefinableEq(number.Eq),
+  isSubtitle: UndefinableEq(boolean.Eq),
+  className: UndefinableEq(string.Eq),
+  dataTest: UndefinableEq(string.Eq),
+})

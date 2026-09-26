@@ -1,6 +1,7 @@
-import * as EqClass from 'fp-ts/Eq'
-import * as boolean from 'fp-ts/boolean'
-import * as string from 'fp-ts/string'
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
+import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
 export type CheckboxProps = {
@@ -14,15 +15,14 @@ export type CheckboxProps = {
   dataTest?: string
 }
 
-export const CheckboxPropsEq: EqClass.Eq<CheckboxProps> = EqClass.struct<
-  Required<CheckboxProps>
->({
-  label: EqClass.eqStrict,
-  checked: boolean.Eq,
-  isDisabled: boolean.Eq,
-  onChange: EqClass.eqStrict,
-  name: string.Eq,
-  id: string.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<CheckboxProps>
+export const CheckboxPropsEq: EqClass.Eq<CheckboxProps> =
+  EqClass.struct<CheckboxProps>({
+    label: EqClass.eqStrict,
+    checked: UndefinableEq(boolean.Eq),
+    isDisabled: UndefinableEq(boolean.Eq),
+    onChange: EqClass.eqStrict,
+    name: UndefinableEq(string.Eq),
+    id: UndefinableEq(string.Eq),
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })

@@ -3,23 +3,21 @@ import { ContentMemo as DsContentMemo } from '@rinn7e/realworld-design-system/el
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2, Sparkles } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import {
+  DEFAULT_SECTION_BOX_CLASS,
+  SectionViewMemo,
+} from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
+const ContentPageComponent = ({ model, dispatch }: Props) => {
   const code = `<DsContentMemo size='normal'>
   
     <div>
-      <h3 className='text-lg font-bold text-gray-900 dark:text-zinc-100 mb-2'>Rich Article Content</h3>
-      <p className='text-gray-600 dark:text-zinc-400 mb-3'>
+      <h3 className='text-lg font-bold text-gray-900 dark:text-zinc-100 pb-2'>Rich Article Content</h3>
+      <p className='text-gray-600 dark:text-zinc-400 pb-3'>
         Clean line-height typography wrapper designed for body copy, markdown articles, and documentation text.
       </p>
     </div>
@@ -27,19 +25,22 @@ export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
 </DsContentMemo>`
 
   return (
-    <div data-component='ContentPage' className='w-full space-y-8 text-left'>
+    <div
+      data-component='ContentPage'
+      className='flex w-full flex-col gap-8 text-left'
+    >
       <DsHeroMemo
         color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
         <>
-          <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+          <div className='pb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
             ELEMENTS / CONTENT
           </div>
           <DsTitleMemo
             size={2}
-            className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+            className='pb-2 font-extrabold text-gray-900 dark:text-zinc-100'
           >
             Content
           </DsTitleMemo>
@@ -73,28 +74,28 @@ export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
           </DsButtonMemo>
         </div>
 
-        {sectionView({
-          title: 'Typography Body Copy',
-          children: () => (
-            <div className='w-full'>
-              <DsContentMemo size='normal'>
-                <div>
-                  <h3 className='mb-2 text-lg font-bold text-gray-900 dark:text-zinc-100'>
-                    Rich Article Content
-                  </h3>
-                  <p className='mb-3 leading-relaxed text-gray-600 dark:text-zinc-300'>
-                    Clean line-height typography wrapper designed for body copy,
-                    markdown articles, and documentation text.
-                  </p>
-                </div>
-              </DsContentMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Typography Body Copy'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='w-full'>
+            <DsContentMemo size='normal'>
+              <div>
+                <h3 className='pb-2 text-lg font-bold text-gray-900 dark:text-zinc-100'>
+                  Rich Article Content
+                </h3>
+                <p className='pb-3 leading-relaxed text-gray-600 dark:text-zinc-300'>
+                  Clean line-height typography wrapper designed for body copy,
+                  markdown articles, and documentation text.
+                </p>
+              </div>
+            </DsContentMemo>
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Content Component Code
@@ -109,3 +110,5 @@ export const ContentPage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const ContentPageMemo = memo(ContentPageComponent, PropsEq.equals)

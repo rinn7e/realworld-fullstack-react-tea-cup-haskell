@@ -1,5 +1,8 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as A from 'fp-ts/lib/Array'
 import * as EqClass from 'fp-ts/lib/Eq'
+import * as RA from 'fp-ts/lib/ReadonlyArray'
+import * as number from 'fp-ts/lib/number'
 import * as string from 'fp-ts/lib/string'
 
 import * as Animate from '../../type/animate'
@@ -7,13 +10,13 @@ import { type NavItemData, NavItemDataEq } from '../../type/nav-item'
 
 export type Model = {
   status: Animate.Animate<null>
-  expandedKeys?: ReadonlyArray<string>
+  expandedKeys: ReadonlyArray<string>
 }
 
-export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
+export const ModelEq: EqClass.Eq<Model> = EqClass.struct<Model>({
   status: Animate.getEq(EqClass.eqStrict),
-  expandedKeys: A.getEq(string.Eq),
-}) as unknown as EqClass.Eq<Model>
+  expandedKeys: RA.getEq(string.Eq),
+})
 
 export type Msg =
   | { _tag: 'Toggle'; open: boolean }
@@ -31,11 +34,26 @@ export type FloatingSidebarProps = {
 }
 
 export const FloatingSidebarPropsEq: EqClass.Eq<FloatingSidebarProps> =
-  EqClass.struct<Required<FloatingSidebarProps>>({
+  EqClass.struct<FloatingSidebarProps>({
     model: ModelEq,
     items: A.getEq(NavItemDataEq),
     dispatch: EqClass.eqStrict,
-    placement: string.Eq,
-    className: string.Eq,
-    dataTest: string.Eq,
-  }) as unknown as EqClass.Eq<FloatingSidebarProps>
+    placement: UndefinableEq(string.Eq),
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })
+
+export type FloatingSidebarItemProps = {
+  item: NavItemData
+  depth: number
+  expandedKeys: ReadonlyArray<string>
+  dispatch: (msg: Msg) => void
+}
+
+export const FloatingSidebarItemPropsEq: EqClass.Eq<FloatingSidebarItemProps> =
+  EqClass.struct({
+    item: NavItemDataEq,
+    depth: number.Eq,
+    expandedKeys: RA.getEq(string.Eq),
+    dispatch: EqClass.eqStrict,
+  })

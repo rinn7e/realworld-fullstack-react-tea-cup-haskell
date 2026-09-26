@@ -1,3 +1,4 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
@@ -9,9 +10,9 @@ export type Model = {
   readonly isOpen: boolean
 }
 
-export const ModelEq: EqClass.Eq<Model> = {
-  equals: (x, y) => boolean.Eq.equals(x.isOpen, y.isOpen),
-}
+export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
+  isOpen: boolean.Eq,
+})
 
 export type Msg =
   | { readonly _tag: 'NoOp' }
@@ -30,15 +31,14 @@ export type PopoverProps = {
   dataTest?: string
 }
 
-export const PopoverPropsEq: EqClass.Eq<PopoverProps> = EqClass.struct<
-  Required<PopoverProps>
->({
-  model: ModelEq,
-  dispatch: EqClass.eqStrict,
-  trigger: EqClass.eqStrict,
-  children: EqClass.eqStrict,
-  align: string.Eq as unknown as EqClass.Eq<Alignment>,
-  className: string.Eq,
-  cardClassName: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<PopoverProps>
+export const PopoverPropsEq: EqClass.Eq<PopoverProps> =
+  EqClass.struct<PopoverProps>({
+    model: ModelEq,
+    dispatch: EqClass.eqStrict,
+    trigger: EqClass.eqStrict,
+    children: EqClass.eqStrict,
+    align: UndefinableEq(string.Eq),
+    className: UndefinableEq(string.Eq),
+    cardClassName: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })

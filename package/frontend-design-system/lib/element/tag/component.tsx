@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import React from 'react'
 
 import { cn } from '../../theme'
 import { DeleteMemo } from '../delete/component'
@@ -7,6 +6,7 @@ import {
   type TagColor,
   type TagProps,
   TagPropsEq,
+  type TagSize,
   type TagVariant,
 } from './type'
 
@@ -81,7 +81,7 @@ const colorStyles: Record<TagColor, TagColorStyle> = {
   },
 }
 
-const sizeStyles: Record<string, string> = {
+const sizeStyles: Record<TagSize, string> = {
   small: 'px-2 py-0.5 text-[11px] leading-none',
   normal: 'px-2.5 py-0.5 text-xs',
   medium: 'px-3 py-1 text-sm',
@@ -89,16 +89,22 @@ const sizeStyles: Record<string, string> = {
 }
 
 const getStyleClass = (c: TagColorStyle, variant: TagVariant): string => {
-  if (variant === 'outline') return c.outline
-  return c.solid
+  if (variant === 'outline') {
+    return c.outline
+  } else {
+    return c.solid
+  }
 }
 
 const getHoverClass = (c: TagColorStyle, variant: TagVariant): string => {
-  if (variant === 'outline') return c.outlineHover
-  return c.solidHover
+  if (variant === 'outline') {
+    return c.outlineHover
+  } else {
+    return c.solidHover
+  }
 }
 
-export const TagComponent: React.FC<TagProps> = ({
+const TagComponent = ({
   color = 'gray',
   variant = 'solid',
   size = 'normal',
@@ -108,8 +114,8 @@ export const TagComponent: React.FC<TagProps> = ({
   onClick,
   dataTest,
   className,
-}) => {
-  const c = colorStyles[color] ?? colorStyles.gray
+}: TagProps) => {
+  const c = colorStyles[color]
   const styleClass = getStyleClass(c, variant)
   const hoverClass = onClick ? getHoverClass(c, variant) : ''
 

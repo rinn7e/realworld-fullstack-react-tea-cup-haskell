@@ -1,9 +1,9 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
 import { type RadioProps, RadioPropsEq } from './type'
 
-export const RadioComponent: React.FC<RadioProps> = ({
+const RadioComponent = ({
   name,
   options,
   selectedValue,
@@ -11,7 +11,7 @@ export const RadioComponent: React.FC<RadioProps> = ({
   onChange,
   className,
   dataTest,
-}) => {
+}: RadioProps) => {
   return (
     <div
       data-test={dataTest}

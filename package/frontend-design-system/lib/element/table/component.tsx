@@ -1,10 +1,9 @@
 import { memo } from 'react'
-import React from 'react'
 
 import { cn } from '../../theme'
 import { type TableProps, TablePropsEq } from './type'
 
-export const TableComponent: React.FC<TableProps> = ({
+const TableComponent = ({
   isBordered = false,
   isStriped = false,
   isHoverable = false,
@@ -12,7 +11,7 @@ export const TableComponent: React.FC<TableProps> = ({
   children,
   className,
   dataTest,
-}) => {
+}: TableProps) => {
   return (
     <div
       data-test={dataTest}

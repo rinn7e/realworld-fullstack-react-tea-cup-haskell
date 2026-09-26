@@ -3,18 +3,16 @@ import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/elem
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2 } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import {
+  DEFAULT_SECTION_BOX_CLASS,
+  SectionViewMemo,
+} from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
+const BreadcrumbPageComponent = ({ model, dispatch }: Props) => {
   const code = `<DsBreadcrumbMemo
   items={[
     { label: 'Home', href: '#' },
@@ -24,7 +22,7 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
 />`
 
   return (
-    <div data-component='BreadcrumbPage' className='w-full space-y-8'>
+    <div data-component='BreadcrumbPage' className='flex w-full flex-col gap-8'>
       <DsHeroMemo color='gray' size='small'>
         <div className='flex items-center justify-between'>
           <div>
@@ -34,7 +32,7 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
             >
               Breadcrumb Component
             </DsTitleMemo>
-            <p className='mt-1 text-sm text-gray-500 dark:text-zinc-400'>
+            <p className='pt-1 text-sm text-gray-500 dark:text-zinc-400'>
               Breadcrumb navigation bar component.
             </p>
           </div>
@@ -50,25 +48,25 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
         </div>
       </DsHeroMemo>
 
-      <div className='space-y-6'>
-        {sectionView({
-          title: 'Standard Breadcrumb Navigation',
-          children: () => (
-            <div className='w-full'>
-              <DsBreadcrumbMemo
-                items={[
-                  { label: 'Home', href: '#' },
-                  { label: 'Components', href: '#' },
-                  { label: 'Breadcrumb', isActive: true },
-                ]}
-              />
-            </div>
-          ),
-        })}
+      <div className='flex flex-col gap-6'>
+        <SectionViewMemo
+          title='Standard Breadcrumb Navigation'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='w-full'>
+            <DsBreadcrumbMemo
+              items={[
+                { label: 'Home', href: '#' },
+                { label: 'Components', href: '#' },
+                { label: 'Breadcrumb', isActive: true },
+              ]}
+            />
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Breadcrumb Component Code
@@ -83,3 +81,5 @@ export const BreadcrumbPage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const BreadcrumbPageMemo = memo(BreadcrumbPageComponent, PropsEq.equals)

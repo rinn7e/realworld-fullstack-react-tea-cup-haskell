@@ -1,20 +1,19 @@
 import { memo } from 'react'
-import React from 'react'
 
 import { cn } from '../../theme'
-import { type TitleProps, TitlePropsEq } from './type'
+import { type TitleProps, TitlePropsEq, type TitleSize } from './type'
 
-const sizeStyles: Record<number, { title: string; subtitle: string }> = {
+const sizeStyles: Record<TitleSize, { title: string; subtitle: string }> = {
   1: {
-    title: 'text-4xl font-extrabold sm:text-5xl',
+    title: 'text-4xl font-extrabold lg:text-5xl',
     subtitle: 'text-2xl text-gray-500 font-normal',
   },
   2: {
-    title: 'text-3xl font-extrabold sm:text-4xl',
+    title: 'text-3xl font-extrabold lg:text-4xl',
     subtitle: 'text-xl text-gray-500 font-normal',
   },
   3: {
-    title: 'text-2xl font-bold sm:text-3xl',
+    title: 'text-2xl font-bold lg:text-3xl',
     subtitle: 'text-lg text-gray-500 font-normal',
   },
   4: {
@@ -31,14 +30,14 @@ const sizeStyles: Record<number, { title: string; subtitle: string }> = {
   },
 }
 
-export const TitleComponent: React.FC<TitleProps> = ({
+const TitleComponent = ({
   children,
   size = 3,
   isSubtitle = false,
   className,
   dataTest,
-}) => {
-  const styles = sizeStyles[size] || sizeStyles[3]
+}: TitleProps) => {
+  const styles = sizeStyles[size]
   const fullClass = cn(
     isSubtitle
       ? 'text-gray-500 dark:text-slate-400'

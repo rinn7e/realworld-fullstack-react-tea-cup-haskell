@@ -7,13 +7,11 @@ export type MenuItem = {
   isActive?: boolean
 }
 
-export const MenuItemEq: EqClass.Eq<MenuItem> = EqClass.struct<
-  Required<MenuItem>
->({
+export const MenuItemEq: EqClass.Eq<MenuItem> = EqClass.struct<MenuItem>({
   id: EqClass.eqString,
   label: EqClass.eqString,
   isActive: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<MenuItem>
+})
 
 export type MenuCategory = {
   title: string
@@ -43,12 +41,10 @@ export type MenuProps = {
   dataTest?: string
 }
 
-export const MenuPropsEq: EqClass.Eq<MenuProps> = EqClass.struct<
-  Required<MenuProps>
->({
+export const MenuPropsEq: EqClass.Eq<MenuProps> = EqClass.struct<MenuProps>({
   categories: A.getEq(MenuCategoryEq),
   model: ModelEq,
   dispatch: EqClass.eqStrict,
   className: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<MenuProps>
+})

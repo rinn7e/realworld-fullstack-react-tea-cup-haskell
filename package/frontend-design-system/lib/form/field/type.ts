@@ -1,6 +1,7 @@
-import * as EqClass from 'fp-ts/Eq'
-import * as boolean from 'fp-ts/boolean'
-import * as string from 'fp-ts/string'
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
+import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
 export type FieldProps = {
@@ -13,14 +14,12 @@ export type FieldProps = {
   dataTest?: string
 }
 
-export const FieldPropsEq: EqClass.Eq<FieldProps> = EqClass.struct<
-  Required<FieldProps>
->({
-  label: string.Eq,
-  helpText: string.Eq,
-  errorText: string.Eq,
-  isExpanded: boolean.Eq,
+export const FieldPropsEq: EqClass.Eq<FieldProps> = EqClass.struct<FieldProps>({
+  label: UndefinableEq(string.Eq),
+  helpText: UndefinableEq(string.Eq),
+  errorText: UndefinableEq(string.Eq),
+  isExpanded: UndefinableEq(boolean.Eq),
   children: EqClass.eqStrict,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<FieldProps>
+  className: UndefinableEq(string.Eq),
+  dataTest: UndefinableEq(string.Eq),
+})

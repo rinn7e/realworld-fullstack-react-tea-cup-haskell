@@ -16,7 +16,7 @@ export const update =
       case 'SetCollapsed':
         return [{ ...model, collapsed: msg.collapsed }, Cmd.none()]
       case 'ToggleExpand': {
-        const expandedKeys = model.expandedKeys || []
+        const expandedKeys = model.expandedKeys
         const isExpanded = expandedKeys.includes(msg.key)
         const nextKeys = isExpanded
           ? expandedKeys.filter((k) => k !== msg.key)
@@ -25,14 +25,15 @@ export const update =
       }
       case 'ClickItem': {
         if (msg.item.children && msg.item.children.length > 0) {
-          const expandedKeys = model.expandedKeys || []
+          const expandedKeys = model.expandedKeys
           const isExpanded = expandedKeys.includes(msg.item.key)
           const nextKeys = isExpanded
             ? expandedKeys.filter((k) => k !== msg.item.key)
             : [...expandedKeys, msg.item.key]
           return [{ ...model, expandedKeys: nextKeys }, Cmd.none()]
+        } else {
+          return [model, Cmd.none()]
         }
-        return [model, Cmd.none()]
       }
     }
   }

@@ -2,18 +2,16 @@ import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/elem
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2, Sparkles } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import {
+  DEFAULT_SECTION_BOX_CLASS,
+  SectionViewMemo,
+} from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const HeroPage: React.FC<Props> = ({ model, dispatch }) => {
+const HeroPageComponent = ({ model, dispatch }: Props) => {
   const code = `// Hero Color Variants (white, green, dark-green, sky, amber, red, gray)
 <DsHeroMemo color='white' size='small'>White Hero Banner</DsHeroMemo>
 <DsHeroMemo color='green' size='small'>Green Hero Banner</DsHeroMemo>
@@ -24,19 +22,22 @@ export const HeroPage: React.FC<Props> = ({ model, dispatch }) => {
 <DsHeroMemo color='gray' size='small'>Gray Hero Banner</DsHeroMemo>`
 
   return (
-    <div data-component='HeroPage' className='w-full space-y-8 text-left'>
+    <div
+      data-component='HeroPage'
+      className='flex w-full flex-col gap-8 text-left'
+    >
       <DsHeroMemo
         color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
         <>
-          <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+          <div className='pb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
             LAYOUT / HERO
           </div>
           <DsTitleMemo
             size={2}
-            className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+            className='pb-2 font-extrabold text-gray-900 dark:text-zinc-100'
           >
             Hero
           </DsTitleMemo>
@@ -70,70 +71,62 @@ export const HeroPage: React.FC<Props> = ({ model, dispatch }) => {
         </div>
 
         {/* Section 1: Color Variants */}
-        {sectionView({
-          title: 'Color Variants',
-          children: () => (
-            <div className='w-full space-y-4'>
-              <DsHeroMemo
-                color='white'
-                size='small'
-                className='rounded-lg border'
+        <SectionViewMemo
+          title='Color Variants'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex w-full flex-col gap-4'>
+            <DsHeroMemo
+              color='white'
+              size='small'
+              className='rounded-lg border'
+            >
+              <DsTitleMemo
+                size={3}
+                className='text-gray-900 dark:text-zinc-100'
               >
-                <DsTitleMemo
-                  size={3}
-                  className='text-gray-900 dark:text-zinc-100'
-                >
-                  White Hero Banner
-                </DsTitleMemo>
-              </DsHeroMemo>
-              <DsHeroMemo color='green' size='small' className='rounded-lg'>
-                <DsTitleMemo size={3} className='text-white'>
-                  Green Hero Banner
-                </DsTitleMemo>
-              </DsHeroMemo>
-              <DsHeroMemo
-                color='dark-green'
-                size='small'
-                className='rounded-lg'
+                White Hero Banner
+              </DsTitleMemo>
+            </DsHeroMemo>
+            <DsHeroMemo color='green' size='small' className='rounded-lg'>
+              <DsTitleMemo size={3} className='text-white'>
+                Green Hero Banner
+              </DsTitleMemo>
+            </DsHeroMemo>
+            <DsHeroMemo color='dark-green' size='small' className='rounded-lg'>
+              <DsTitleMemo size={3} className='text-white'>
+                Dark Green Hero Banner
+              </DsTitleMemo>
+            </DsHeroMemo>
+            <DsHeroMemo color='sky' size='small' className='rounded-lg'>
+              <DsTitleMemo size={3} className='text-white'>
+                Sky Hero Banner
+              </DsTitleMemo>
+            </DsHeroMemo>
+            <DsHeroMemo color='amber' size='small' className='rounded-lg'>
+              <DsTitleMemo size={3} className='text-white'>
+                Amber Hero Banner
+              </DsTitleMemo>
+            </DsHeroMemo>
+            <DsHeroMemo color='red' size='small' className='rounded-lg'>
+              <DsTitleMemo size={3} className='text-white'>
+                Red Hero Banner
+              </DsTitleMemo>
+            </DsHeroMemo>
+            <DsHeroMemo color='gray' size='small' className='rounded-lg border'>
+              <DsTitleMemo
+                size={3}
+                className='text-gray-900 dark:text-zinc-100'
               >
-                <DsTitleMemo size={3} className='text-white'>
-                  Dark Green Hero Banner
-                </DsTitleMemo>
-              </DsHeroMemo>
-              <DsHeroMemo color='sky' size='small' className='rounded-lg'>
-                <DsTitleMemo size={3} className='text-white'>
-                  Sky Hero Banner
-                </DsTitleMemo>
-              </DsHeroMemo>
-              <DsHeroMemo color='amber' size='small' className='rounded-lg'>
-                <DsTitleMemo size={3} className='text-white'>
-                  Amber Hero Banner
-                </DsTitleMemo>
-              </DsHeroMemo>
-              <DsHeroMemo color='red' size='small' className='rounded-lg'>
-                <DsTitleMemo size={3} className='text-white'>
-                  Red Hero Banner
-                </DsTitleMemo>
-              </DsHeroMemo>
-              <DsHeroMemo
-                color='gray'
-                size='small'
-                className='rounded-lg border'
-              >
-                <DsTitleMemo
-                  size={3}
-                  className='text-gray-900 dark:text-zinc-100'
-                >
-                  Gray Hero Banner
-                </DsTitleMemo>
-              </DsHeroMemo>
-            </div>
-          ),
-        })}
+                Gray Hero Banner
+              </DsTitleMemo>
+            </DsHeroMemo>
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Hero Component Code
@@ -148,3 +141,5 @@ export const HeroPage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const HeroPageMemo = memo(HeroPageComponent, PropsEq.equals)

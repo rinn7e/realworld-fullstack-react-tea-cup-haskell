@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig } from 'vite'
@@ -19,9 +20,6 @@ export default defineConfig({
       entry: {
         index: path.resolve(__dirname, 'lib/index.ts'),
         plugin: path.resolve(__dirname, 'lib/plugin.ts'),
-
-        // Type
-        'type/nav-item': path.resolve(__dirname, 'lib/type/nav-item.ts'),
 
         // Element components
         'element/block/component': path.resolve(
@@ -112,7 +110,11 @@ export default defineConfig({
         // Component entries
         'component/generic-link': path.resolve(
           __dirname,
-          'lib/component/generic-link/index.tsx',
+          'lib/component/generic-link/index.ts',
+        ),
+        'component/generic-link/component': path.resolve(
+          __dirname,
+          'lib/component/generic-link/component.tsx',
         ),
         'component/navbar': path.resolve(
           __dirname,
@@ -247,6 +249,14 @@ export default defineConfig({
           'tea-cup-fp': 'TeaCupFp',
           'fp-ts': 'FpTs',
         },
+      },
+    },
+  },
+  test: {
+    include: ['tests/**/*.test.ts'],
+    server: {
+      deps: {
+        inline: ['@rinn7e/tea-cup-prelude', 'fp-ts'],
       },
     },
   },

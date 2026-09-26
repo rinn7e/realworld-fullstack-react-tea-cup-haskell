@@ -1,6 +1,7 @@
-import * as EqClass from 'fp-ts/Eq'
-import * as boolean from 'fp-ts/boolean'
-import * as string from 'fp-ts/string'
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
+import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
 export type InputSize = 'small' | 'normal' | 'medium' | 'large'
@@ -23,22 +24,20 @@ export type InputProps = {
   dataTest?: string
 }
 
-export const InputPropsEq: EqClass.Eq<InputProps> = EqClass.struct<
-  Required<InputProps>
->({
+export const InputPropsEq: EqClass.Eq<InputProps> = EqClass.struct<InputProps>({
   type: EqClass.eqStrict,
-  value: string.Eq,
-  placeholder: string.Eq,
+  value: UndefinableEq(string.Eq),
+  placeholder: UndefinableEq(string.Eq),
   size: EqClass.eqStrict,
-  isRounded: boolean.Eq,
-  isFullWidth: boolean.Eq,
-  isError: boolean.Eq,
-  isDisabled: boolean.Eq,
+  isRounded: UndefinableEq(boolean.Eq),
+  isFullWidth: UndefinableEq(boolean.Eq),
+  isError: UndefinableEq(boolean.Eq),
+  isDisabled: UndefinableEq(boolean.Eq),
   onChange: EqClass.eqStrict,
   onFocus: EqClass.eqStrict,
   onBlur: EqClass.eqStrict,
-  name: string.Eq,
-  id: string.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<InputProps>
+  name: UndefinableEq(string.Eq),
+  id: UndefinableEq(string.Eq),
+  className: UndefinableEq(string.Eq),
+  dataTest: UndefinableEq(string.Eq),
+})

@@ -1,3 +1,4 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as number from 'fp-ts/lib/number'
@@ -23,14 +24,13 @@ export type ProgressProps = {
   dataTest?: string
 }
 
-export const ProgressPropsEq: EqClass.Eq<ProgressProps> = EqClass.struct<
-  Required<ProgressProps>
->({
-  value: number.Eq,
-  max: number.Eq,
-  color: string.Eq,
-  size: string.Eq,
-  isIndeterminate: boolean.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<ProgressProps>
+export const ProgressPropsEq: EqClass.Eq<ProgressProps> =
+  EqClass.struct<ProgressProps>({
+    value: UndefinableEq(number.Eq),
+    max: UndefinableEq(number.Eq),
+    color: UndefinableEq(string.Eq),
+    size: UndefinableEq(string.Eq),
+    isIndeterminate: UndefinableEq(boolean.Eq),
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })

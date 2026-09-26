@@ -1,14 +1,14 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
 import { type ContainerProps, ContainerPropsEq } from './type'
 
-export const ContainerComponent: React.FC<ContainerProps> = ({
+const ContainerComponent = ({
   children,
   isFluid,
   className,
   dataTest,
-}) => {
+}: ContainerProps) => {
   return (
     <div
       data-test={dataTest}

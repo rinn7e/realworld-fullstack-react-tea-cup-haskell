@@ -8,13 +8,11 @@ export type TabItem = {
   icon?: React.ReactNode
 }
 
-export const TabItemEq: EqClass.Eq<TabItem> = EqClass.struct<Required<TabItem>>(
-  {
-    id: EqClass.eqString,
-    label: EqClass.eqStrict,
-    icon: EqClass.eqStrict,
-  },
-) as unknown as EqClass.Eq<TabItem>
+export const TabItemEq: EqClass.Eq<TabItem> = EqClass.struct<TabItem>({
+  id: EqClass.eqString,
+  label: EqClass.eqStrict,
+  icon: EqClass.eqStrict,
+})
 
 export type Model = {
   activeId: string
@@ -37,9 +35,7 @@ export type TabsProps = {
   dataTest?: string
 }
 
-export const TabsPropsEq: EqClass.Eq<TabsProps> = EqClass.struct<
-  Required<TabsProps>
->({
+export const TabsPropsEq: EqClass.Eq<TabsProps> = EqClass.struct<TabsProps>({
   items: A.getEq(TabItemEq),
   model: ModelEq,
   dispatch: EqClass.eqStrict,
@@ -48,4 +44,4 @@ export const TabsPropsEq: EqClass.Eq<TabsProps> = EqClass.struct<
   isFullWidth: EqClass.eqStrict,
   className: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<TabsProps>
+})

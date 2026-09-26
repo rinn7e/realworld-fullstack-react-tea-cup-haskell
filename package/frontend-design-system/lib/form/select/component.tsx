@@ -1,9 +1,9 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
 import { type SelectProps, SelectPropsEq } from './type'
 
-export const SelectComponent: React.FC<SelectProps> = ({
+const SelectComponent = ({
   options,
   value,
   isDisabled,
@@ -12,7 +12,7 @@ export const SelectComponent: React.FC<SelectProps> = ({
   name,
   className,
   dataTest,
-}) => {
+}: SelectProps) => {
   return (
     <select
       data-test={dataTest}

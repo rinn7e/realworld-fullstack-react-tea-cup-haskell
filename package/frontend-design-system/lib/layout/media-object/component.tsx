@@ -1,15 +1,15 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
 import { type MediaObjectProps, MediaObjectPropsEq } from './type'
 
-export const MediaObjectComponent: React.FC<MediaObjectProps> = ({
+const MediaObjectComponent = ({
   left,
   children,
   right,
   className,
   dataTest,
-}) => {
+}: MediaObjectProps) => {
   return (
     <article
       data-test={dataTest}

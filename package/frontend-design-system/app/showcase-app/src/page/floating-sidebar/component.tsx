@@ -4,18 +4,13 @@ import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/elemen
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import type { NavItemData as DsNavItemData } from '@rinn7e/realworld-design-system/type/nav-item'
 import { Code2, Home, Pencil, Settings, Sparkles } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import { SectionViewMemo } from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const FloatingSidebarPage: React.FC<Props> = ({ model, dispatch }) => {
+const FloatingSidebarPageComponent = ({ model, dispatch }: Props) => {
   const items: DsNavItemData[] = [
     {
       key: 'home',
@@ -56,7 +51,7 @@ export const FloatingSidebarPage: React.FC<Props> = ({ model, dispatch }) => {
   return (
     <div
       data-component='FloatingSidebarPage'
-      className='w-full space-y-8 text-left'
+      className='flex w-full flex-col gap-8 text-left'
     >
       <DsHeroMemo
         color='gray'
@@ -64,12 +59,12 @@ export const FloatingSidebarPage: React.FC<Props> = ({ model, dispatch }) => {
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
         <>
-          <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+          <div className='pb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
             COMPONENTS / FLOATING SIDEBAR
           </div>
           <DsTitleMemo
             size={2}
-            className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+            className='pb-2 font-extrabold text-gray-900 dark:text-zinc-100'
           >
             Floating Sidebar
           </DsTitleMemo>
@@ -103,66 +98,64 @@ export const FloatingSidebarPage: React.FC<Props> = ({ model, dispatch }) => {
           </DsButtonMemo>
         </div>
 
-        {sectionView({
-          title: 'Slide-Over Navigation Drawer',
-          boxClassName:
-            'p-6 w-full bg-white border-2 border-dotted border-gray-300 dark:bg-zinc-950 dark:border-zinc-800 dark:bg-zinc-950 dark:border-zinc-800 rounded-lg flex flex-col items-start gap-4',
-          children: () => (
-            <div className='flex flex-col gap-4'>
-              <div className='flex items-center gap-3'>
-                <span className='text-sm font-medium text-gray-700 dark:text-zinc-300'>
-                  Placement:
-                </span>
-                <button
-                  type='button'
-                  onClick={() =>
-                    dispatch({ _tag: 'SetPlacement', placement: 'left' })
-                  }
-                  className={`rounded border px-3 py-1 text-xs transition-colors ${
-                    model.placement === 'left'
-                      ? 'border-green-600 bg-green-50 font-bold text-green-700'
-                      : 'border-gray-300 text-gray-600 hover:bg-gray-100 dark:text-zinc-400'
-                  }`}
-                >
-                  Left
-                </button>
-                <button
-                  type='button'
-                  onClick={() =>
-                    dispatch({ _tag: 'SetPlacement', placement: 'right' })
-                  }
-                  className={`rounded border px-3 py-1 text-xs transition-colors ${
-                    model.placement === 'right'
-                      ? 'border-green-600 bg-green-50 font-bold text-green-700'
-                      : 'border-gray-300 text-gray-600 hover:bg-gray-100 dark:text-zinc-400'
-                  }`}
-                >
-                  Right
-                </button>
-              </div>
-
-              <DsButtonMemo
-                color='green'
-                variant='solid'
-                onClick={() => dispatch({ _tag: 'OpenSidebar' })}
+        <SectionViewMemo
+          title='Slide-Over Navigation Drawer'
+          boxClassName='p-6 w-full bg-white border-2 border-dotted border-gray-300 dark:bg-zinc-950 dark:border-zinc-800 dark:bg-zinc-950 dark:border-zinc-800 rounded-lg flex flex-col items-start gap-4'
+        >
+          <div className='flex flex-col gap-4'>
+            <div className='flex items-center gap-3'>
+              <span className='text-sm font-medium text-gray-700 dark:text-zinc-300'>
+                Placement:
+              </span>
+              <button
+                type='button'
+                onClick={() =>
+                  dispatch({ _tag: 'SetPlacement', placement: 'left' })
+                }
+                className={`rounded border px-3 py-1 text-xs transition-colors ${
+                  model.placement === 'left'
+                    ? 'border-green-600 bg-green-50 font-bold text-green-700'
+                    : 'border-gray-300 text-gray-600 hover:bg-gray-100 dark:text-zinc-400'
+                }`}
               >
-                Open {model.placement === 'left' ? 'Left' : 'Right'} Floating
-                Sidebar
-              </DsButtonMemo>
-
-              <DsFloatingSidebarMemo
-                model={model.sidebar}
-                items={items}
-                placement={model.placement}
-                dispatch={(subMsg) => dispatch({ _tag: 'SidebarMsg', subMsg })}
-              />
+                Left
+              </button>
+              <button
+                type='button'
+                onClick={() =>
+                  dispatch({ _tag: 'SetPlacement', placement: 'right' })
+                }
+                className={`rounded border px-3 py-1 text-xs transition-colors ${
+                  model.placement === 'right'
+                    ? 'border-green-600 bg-green-50 font-bold text-green-700'
+                    : 'border-gray-300 text-gray-600 hover:bg-gray-100 dark:text-zinc-400'
+                }`}
+              >
+                Right
+              </button>
             </div>
-          ),
-        })}
+
+            <DsButtonMemo
+              color='green'
+              variant='solid'
+              onClick={() => dispatch({ _tag: 'OpenSidebar' })}
+            >
+              Open {model.placement === 'left' ? 'Left' : 'Right'} Floating
+              Sidebar
+            </DsButtonMemo>
+
+            <DsFloatingSidebarMemo
+              model={model.sidebar}
+              items={items}
+              placement={model.placement}
+              dispatch={(subMsg) => dispatch({ _tag: 'SidebarMsg', subMsg })}
+            />
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Floating Sidebar Component Code
@@ -177,3 +170,8 @@ export const FloatingSidebarPage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const FloatingSidebarPageMemo = memo(
+  FloatingSidebarPageComponent,
+  PropsEq.equals,
+)

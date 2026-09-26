@@ -10,18 +10,16 @@ import {
   Sparkles,
   Trash2,
 } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import {
+  DEFAULT_SECTION_BOX_CLASS,
+  SectionViewMemo,
+} from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
+const ButtonPageComponent = ({ model, dispatch }: Props) => {
   const code = `// Solid Style (variant = 'solid')
 <DsButtonMemo color='white' variant='solid'>White</DsButtonMemo>
 <DsButtonMemo color='green' variant='solid'>Green</DsButtonMemo>
@@ -45,18 +43,21 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
 <DsButtonMemo isFullWidth={true}>Full Width Button</DsButtonMemo>`
 
   return (
-    <div data-component='ButtonPage' className='w-full space-y-8 text-left'>
+    <div
+      data-component='ButtonPage'
+      className='flex w-full flex-col gap-8 text-left'
+    >
       <DsHeroMemo
         color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
-        <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+        <div className='pb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
           ELEMENTS / BUTTON
         </div>
         <DsTitleMemo
           size={2}
-          className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+          className='pb-2 font-extrabold text-gray-900 dark:text-zinc-100'
         >
           Button
         </DsTitleMemo>
@@ -89,234 +90,234 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
         </div>
 
         {/* Section 1: Solid Variant */}
-        {sectionView({
-          title: 'Solid Variant (variant = "solid")',
-          children: () => (
-            <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='white' variant='solid'>
-                White
-              </DsButtonMemo>
-              <DsButtonMemo color='green' variant='solid'>
-                Green
-              </DsButtonMemo>
-              <DsButtonMemo color='dark-green' variant='solid'>
-                Dark Green
-              </DsButtonMemo>
-              <DsButtonMemo color='sky' variant='solid'>
-                Sky
-              </DsButtonMemo>
-              <DsButtonMemo color='amber' variant='solid'>
-                Amber
-              </DsButtonMemo>
-              <DsButtonMemo color='red' variant='solid'>
-                Red
-              </DsButtonMemo>
-              <DsButtonMemo color='gray' variant='solid'>
-                Gray
-              </DsButtonMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Solid Variant (variant = "solid")'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex flex-wrap items-center gap-3'>
+            <DsButtonMemo color='white' variant='solid'>
+              White
+            </DsButtonMemo>
+            <DsButtonMemo color='green' variant='solid'>
+              Green
+            </DsButtonMemo>
+            <DsButtonMemo color='dark-green' variant='solid'>
+              Dark Green
+            </DsButtonMemo>
+            <DsButtonMemo color='sky' variant='solid'>
+              Sky
+            </DsButtonMemo>
+            <DsButtonMemo color='amber' variant='solid'>
+              Amber
+            </DsButtonMemo>
+            <DsButtonMemo color='red' variant='solid'>
+              Red
+            </DsButtonMemo>
+            <DsButtonMemo color='gray' variant='solid'>
+              Gray
+            </DsButtonMemo>
+          </div>
+        </SectionViewMemo>
 
         {/* Section 2: Outline Variant */}
-        {sectionView({
-          title: 'Outline Variant (variant = "outline")',
-          children: () => (
-            <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='white' variant='outline'>
-                White
-              </DsButtonMemo>
-              <DsButtonMemo color='green' variant='outline'>
-                Green
-              </DsButtonMemo>
-              <DsButtonMemo color='dark-green' variant='outline'>
-                Dark Green
-              </DsButtonMemo>
-              <DsButtonMemo color='sky' variant='outline'>
-                Sky
-              </DsButtonMemo>
-              <DsButtonMemo color='amber' variant='outline'>
-                Amber
-              </DsButtonMemo>
-              <DsButtonMemo color='red' variant='outline'>
-                Red
-              </DsButtonMemo>
-              <DsButtonMemo color='gray' variant='outline'>
-                Gray
-              </DsButtonMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Outline Variant (variant = "outline")'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex flex-wrap items-center gap-3'>
+            <DsButtonMemo color='white' variant='outline'>
+              White
+            </DsButtonMemo>
+            <DsButtonMemo color='green' variant='outline'>
+              Green
+            </DsButtonMemo>
+            <DsButtonMemo color='dark-green' variant='outline'>
+              Dark Green
+            </DsButtonMemo>
+            <DsButtonMemo color='sky' variant='outline'>
+              Sky
+            </DsButtonMemo>
+            <DsButtonMemo color='amber' variant='outline'>
+              Amber
+            </DsButtonMemo>
+            <DsButtonMemo color='red' variant='outline'>
+              Red
+            </DsButtonMemo>
+            <DsButtonMemo color='gray' variant='outline'>
+              Gray
+            </DsButtonMemo>
+          </div>
+        </SectionViewMemo>
 
         {/* Section 3: Link Variant */}
-        {sectionView({
-          title: 'Link Variant (variant = "link")',
-          children: () => (
-            <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='white' variant='link'>
-                White
-              </DsButtonMemo>
-              <DsButtonMemo color='green' variant='link'>
-                Green
-              </DsButtonMemo>
-              <DsButtonMemo color='dark-green' variant='link'>
-                Dark Green
-              </DsButtonMemo>
-              <DsButtonMemo color='sky' variant='link'>
-                Sky
-              </DsButtonMemo>
-              <DsButtonMemo color='amber' variant='link'>
-                Amber
-              </DsButtonMemo>
-              <DsButtonMemo color='red' variant='link'>
-                Red
-              </DsButtonMemo>
-              <DsButtonMemo color='gray' variant='link'>
-                Gray
-              </DsButtonMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Link Variant (variant = "link")'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex flex-wrap items-center gap-3'>
+            <DsButtonMemo color='white' variant='link'>
+              White
+            </DsButtonMemo>
+            <DsButtonMemo color='green' variant='link'>
+              Green
+            </DsButtonMemo>
+            <DsButtonMemo color='dark-green' variant='link'>
+              Dark Green
+            </DsButtonMemo>
+            <DsButtonMemo color='sky' variant='link'>
+              Sky
+            </DsButtonMemo>
+            <DsButtonMemo color='amber' variant='link'>
+              Amber
+            </DsButtonMemo>
+            <DsButtonMemo color='red' variant='link'>
+              Red
+            </DsButtonMemo>
+            <DsButtonMemo color='gray' variant='link'>
+              Gray
+            </DsButtonMemo>
+          </div>
+        </SectionViewMemo>
 
         {/* Section 4: Ghost Variant */}
-        {sectionView({
-          title: 'Ghost Variant (variant = "ghost")',
-          children: () => (
-            <div className='flex flex-wrap items-center gap-3 rounded bg-gray-800 p-4'>
-              <DsButtonMemo color='white' variant='ghost'>
-                White
-              </DsButtonMemo>
-              <DsButtonMemo color='green' variant='ghost'>
-                Green
-              </DsButtonMemo>
-              <DsButtonMemo color='dark-green' variant='ghost'>
-                Dark Green
-              </DsButtonMemo>
-              <DsButtonMemo color='sky' variant='ghost'>
-                Sky
-              </DsButtonMemo>
-              <DsButtonMemo color='amber' variant='ghost'>
-                Amber
-              </DsButtonMemo>
-              <DsButtonMemo color='red' variant='ghost'>
-                Red
-              </DsButtonMemo>
-              <DsButtonMemo color='gray' variant='ghost'>
-                Gray
-              </DsButtonMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Ghost Variant (variant = "ghost")'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex flex-wrap items-center gap-3 rounded bg-gray-800 p-4'>
+            <DsButtonMemo color='white' variant='ghost'>
+              White
+            </DsButtonMemo>
+            <DsButtonMemo color='green' variant='ghost'>
+              Green
+            </DsButtonMemo>
+            <DsButtonMemo color='dark-green' variant='ghost'>
+              Dark Green
+            </DsButtonMemo>
+            <DsButtonMemo color='sky' variant='ghost'>
+              Sky
+            </DsButtonMemo>
+            <DsButtonMemo color='amber' variant='ghost'>
+              Amber
+            </DsButtonMemo>
+            <DsButtonMemo color='red' variant='ghost'>
+              Red
+            </DsButtonMemo>
+            <DsButtonMemo color='gray' variant='ghost'>
+              Gray
+            </DsButtonMemo>
+          </div>
+        </SectionViewMemo>
 
         {/* Section 5: Sizes */}
-        {sectionView({
-          title: 'Button Sizes',
-          children: () => (
-            <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='green' size='xsmall'>
-                XSmall (xs)
-              </DsButtonMemo>
-              <DsButtonMemo color='green' size='small'>
-                Small (sm)
-              </DsButtonMemo>
-              <DsButtonMemo color='green' size='normal'>
-                Normal (base)
-              </DsButtonMemo>
-              <DsButtonMemo color='green' size='medium'>
-                Medium (md)
-              </DsButtonMemo>
-              <DsButtonMemo color='green' size='large'>
-                Large (lg)
-              </DsButtonMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Button Sizes'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex flex-wrap items-center gap-3'>
+            <DsButtonMemo color='green' size='xsmall'>
+              XSmall (xs)
+            </DsButtonMemo>
+            <DsButtonMemo color='green' size='small'>
+              Small (sm)
+            </DsButtonMemo>
+            <DsButtonMemo color='green' size='normal'>
+              Normal (base)
+            </DsButtonMemo>
+            <DsButtonMemo color='green' size='medium'>
+              Medium (md)
+            </DsButtonMemo>
+            <DsButtonMemo color='green' size='large'>
+              Large (lg)
+            </DsButtonMemo>
+          </div>
+        </SectionViewMemo>
 
         {/* Section 6: Shapes */}
-        {sectionView({
-          title: 'Shapes & Rounded Pill',
-          children: () => (
-            <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='green' isRounded={false}>
-                Standard Square
-              </DsButtonMemo>
-              <DsButtonMemo color='green' isRounded={true}>
-                Rounded Pill
-              </DsButtonMemo>
-              <DsButtonMemo color='sky' variant='outline' isRounded={true}>
-                Outline Rounded
-              </DsButtonMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Shapes & Rounded Pill'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex flex-wrap items-center gap-3'>
+            <DsButtonMemo color='green' isRounded={false}>
+              Standard Square
+            </DsButtonMemo>
+            <DsButtonMemo color='green' isRounded={true}>
+              Rounded Pill
+            </DsButtonMemo>
+            <DsButtonMemo color='sky' variant='outline' isRounded={true}>
+              Outline Rounded
+            </DsButtonMemo>
+          </div>
+        </SectionViewMemo>
 
         {/* Section 7: Icons inside Buttons */}
-        {sectionView({
-          title: 'Icons inside Buttons',
-          children: () => (
-            <div className='flex flex-wrap items-center gap-3'>
-              <DsButtonMemo color='green'>
-                <span className='flex items-center gap-1.5'>
-                  <Plus className='h-4 w-4' />
-                  <span>New Post</span>
-                </span>
-              </DsButtonMemo>
-              <DsButtonMemo color='sky' variant='outline'>
-                <span className='flex items-center gap-1.5'>
-                  <Download className='h-4 w-4' />
-                  <span>Download PDF</span>
-                </span>
-              </DsButtonMemo>
-              <DsButtonMemo color='red' variant='solid'>
-                <span className='flex items-center gap-1.5'>
-                  <Trash2 className='h-4 w-4' />
-                  <span>Delete Account</span>
-                </span>
-              </DsButtonMemo>
-              <DsButtonMemo color='amber'>
-                <span className='flex items-center gap-1.5'>
-                  <Heart className='h-4 w-4 fill-current' />
-                  <span>Favorite (42)</span>
-                </span>
-              </DsButtonMemo>
-              <DsButtonMemo color='dark-green' isRounded={true}>
-                <span className='flex items-center gap-1.5'>
-                  <Send className='h-4 w-4' />
-                  <span>Send Message</span>
-                </span>
-              </DsButtonMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Icons inside Buttons'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex flex-wrap items-center gap-3'>
+            <DsButtonMemo color='green'>
+              <span className='flex items-center gap-1.5'>
+                <Plus className='h-4 w-4' />
+                <span>New Post</span>
+              </span>
+            </DsButtonMemo>
+            <DsButtonMemo color='sky' variant='outline'>
+              <span className='flex items-center gap-1.5'>
+                <Download className='h-4 w-4' />
+                <span>Download PDF</span>
+              </span>
+            </DsButtonMemo>
+            <DsButtonMemo color='red' variant='solid'>
+              <span className='flex items-center gap-1.5'>
+                <Trash2 className='h-4 w-4' />
+                <span>Delete Account</span>
+              </span>
+            </DsButtonMemo>
+            <DsButtonMemo color='amber'>
+              <span className='flex items-center gap-1.5'>
+                <Heart className='h-4 w-4 fill-current' />
+                <span>Favorite (42)</span>
+              </span>
+            </DsButtonMemo>
+            <DsButtonMemo color='dark-green' isRounded={true}>
+              <span className='flex items-center gap-1.5'>
+                <Send className='h-4 w-4' />
+                <span>Send Message</span>
+              </span>
+            </DsButtonMemo>
+          </div>
+        </SectionViewMemo>
 
         {/* Section 8: Interactive States */}
-        {sectionView({
-          title: 'Interactive States (Loading, Disabled, Full Width)',
-          children: () => (
-            <div className='space-y-4'>
-              <div className='flex flex-wrap items-center gap-3'>
-                <DsButtonMemo color='green' isLoading={true}>
-                  Loading State
-                </DsButtonMemo>
-                <DsButtonMemo color='green' isDisabled={true}>
-                  Disabled State
-                </DsButtonMemo>
-                <DsButtonMemo color='red' variant='outline' isDisabled={true}>
-                  Disabled Outline
-                </DsButtonMemo>
-              </div>
-              <div>
-                <DsButtonMemo color='green' isFullWidth={true}>
-                  Full Width Button Block
-                </DsButtonMemo>
-              </div>
+        <SectionViewMemo
+          title='Interactive States (Loading, Disabled, Full Width)'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex flex-col gap-4'>
+            <div className='flex flex-wrap items-center gap-3'>
+              <DsButtonMemo color='green' isLoading={true}>
+                Loading State
+              </DsButtonMemo>
+              <DsButtonMemo color='green' isDisabled={true}>
+                Disabled State
+              </DsButtonMemo>
+              <DsButtonMemo color='red' variant='outline' isDisabled={true}>
+                Disabled Outline
+              </DsButtonMemo>
             </div>
-          ),
-        })}
+            <div>
+              <DsButtonMemo color='green' isFullWidth={true}>
+                Full Width Button Block
+              </DsButtonMemo>
+            </div>
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Button Component Code
@@ -331,3 +332,5 @@ export const ButtonPage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const ButtonPageMemo = memo(ButtonPageComponent, PropsEq.equals)

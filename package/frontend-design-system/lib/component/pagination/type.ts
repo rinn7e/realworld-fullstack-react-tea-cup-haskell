@@ -20,12 +20,11 @@ export type PaginationProps = {
   dataTest?: string
 }
 
-export const PaginationPropsEq: EqClass.Eq<PaginationProps> = EqClass.struct<
-  Required<PaginationProps>
->({
-  model: ModelEq,
-  dispatch: EqClass.eqStrict,
-  onPageChange: EqClass.eqStrict,
-  className: EqClass.eqStrict,
-  dataTest: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<PaginationProps>
+export const PaginationPropsEq: EqClass.Eq<PaginationProps> =
+  EqClass.struct<PaginationProps>({
+    model: ModelEq,
+    dispatch: EqClass.eqStrict,
+    onPageChange: EqClass.eqStrict,
+    className: EqClass.eqStrict,
+    dataTest: EqClass.eqStrict,
+  })

@@ -1,4 +1,3 @@
-import { cn } from '@rinn7e/tea-cup-prelude'
 import {
   ChevronDown,
   ChevronRight,
@@ -8,15 +7,106 @@ import {
   PanelRightOpen,
   User as UserIcon,
 } from 'lucide-react'
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { ButtonMemo as DsButtonMemo } from '../../element/button/component'
-import type { NavItemData } from '../../type/nav-item'
-import { GenericLink } from '../generic-link'
-import type { SidebarCategory, SidebarProps } from './type'
-import { SidebarPropsEq } from './type'
+import { cn } from '../../theme'
+import { GenericLink } from '../generic-link/component'
+import {
+  type SidebarCategory,
+  type SidebarItemProps,
+  SidebarItemPropsEq,
+  type SidebarProps,
+  SidebarPropsEq,
+} from './type'
 
-export const SidebarComponent: React.FC<SidebarProps> = ({
+const activeCls =
+  'bg-green-50 text-green-600 font-semibold dark:bg-green-950/40 dark:text-green-400'
+const inactiveCls =
+  'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100'
+
+const SidebarItemComponent = ({
+  item,
+  depth,
+  isCollapsed,
+  expandedKeys,
+  dispatch,
+}: SidebarItemProps) => {
+  const children = item.children ?? []
+  const hasChildren = children.length > 0
+  const isExpanded = expandedKeys.includes(item.key)
+
+  const itemCls = cn(
+    'flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors cursor-pointer select-none text-left',
+    item.isActive ? activeCls : inactiveCls,
+    isCollapsed && 'justify-center px-0',
+    depth > 0 && !isCollapsed && 'pl-7 text-xs',
+  )
+
+  const navContent = (
+    <>
+      <div className='flex items-center gap-3 truncate'>
+        <span className='shrink-0'>{item.icon}</span>
+        {!isCollapsed && <span className='truncate'>{item.label}</span>}
+      </div>
+
+      {hasChildren && !isCollapsed && (
+        <span className='shrink-0 text-gray-400 dark:text-slate-500'>
+          {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+        </span>
+      )}
+    </>
+  )
+
+  return (
+    <li className='flex flex-col gap-1'>
+      {hasChildren ? (
+        <button
+          type='button'
+          className={itemCls}
+          onClick={() => dispatch({ _tag: 'ClickItem', item })}
+          data-test='nav-link'
+          aria-current={item.isActive ? 'page' : undefined}
+        >
+          {navContent}
+        </button>
+      ) : (
+        <GenericLink
+          className={itemCls}
+          href={item.href ?? '#'}
+          dispatch={dispatch}
+          msg={item.isNewTab ? undefined : { _tag: 'ClickItem', item }}
+          isNewTab={item.isNewTab}
+          data-test='nav-link'
+          aria-current={item.isActive ? 'page' : undefined}
+        >
+          {navContent}
+        </GenericLink>
+      )}
+
+      {hasChildren && isExpanded && !isCollapsed && (
+        <div className='pl-3'>
+          <ul className='flex flex-col gap-1 border-l border-gray-100 pl-2 dark:border-slate-800'>
+            {children.map((child) => (
+              <SidebarItemMemo
+                key={child.key}
+                item={child}
+                depth={depth + 1}
+                isCollapsed={isCollapsed}
+                expandedKeys={expandedKeys}
+                dispatch={dispatch}
+              />
+            ))}
+          </ul>
+        </div>
+      )}
+    </li>
+  )
+}
+
+const SidebarItemMemo = memo(SidebarItemComponent, SidebarItemPropsEq.equals)
+
+const SidebarComponent = ({
   model,
   items,
   categories,
@@ -26,14 +116,9 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
   userProfile,
   align = 'left',
   className,
-  dataTest,
-}) => {
+  dataTest = 'sidebar',
+}: SidebarProps) => {
   const isCollapsed = model.collapsed
-
-  const activeCls =
-    'bg-green-50 text-green-600 font-semibold dark:bg-green-950/40 dark:text-green-400'
-  const inactiveCls =
-    'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100'
 
   const normalizedCategories: SidebarCategory[] = categories
     ? categories
@@ -41,76 +126,9 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
       ? [{ title: '', items }]
       : []
 
-  const renderItem = (item: NavItemData, depth = 0) => {
-    const hasChildren = Boolean(item.children && item.children.length > 0)
-    const isExpanded = model.expandedKeys
-      ? model.expandedKeys.includes(item.key)
-      : false
-
-    const itemCls = cn(
-      'flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors cursor-pointer select-none text-left',
-      item.isActive ? activeCls : inactiveCls,
-      isCollapsed && 'justify-center px-0',
-      depth > 0 && !isCollapsed && 'pl-7 text-xs',
-    )
-
-    const navContent = (
-      <>
-        <div className='flex items-center gap-3 truncate'>
-          <span className='shrink-0'>{item.icon}</span>
-          {!isCollapsed && <span className='truncate'>{item.label}</span>}
-        </div>
-
-        {hasChildren && !isCollapsed && (
-          <span className='shrink-0 text-gray-400 dark:text-slate-500'>
-            {isExpanded ? (
-              <ChevronDown size={14} />
-            ) : (
-              <ChevronRight size={14} />
-            )}
-          </span>
-        )}
-      </>
-    )
-
-    return (
-      <li key={item.key} className='space-y-1'>
-        {hasChildren ? (
-          <button
-            type='button'
-            className={itemCls}
-            onClick={() => dispatch({ _tag: 'ClickItem', item })}
-            data-test='nav-link'
-            aria-current={item.isActive ? 'page' : undefined}
-          >
-            {navContent}
-          </button>
-        ) : (
-          <GenericLink
-            className={itemCls}
-            href={item.href ?? '#'}
-            dispatch={dispatch}
-            msg={item.isNewTab ? undefined : { _tag: 'ClickItem', item }}
-            isNewTab={item.isNewTab}
-            data-test='nav-link'
-            aria-current={item.isActive ? 'page' : undefined}
-          >
-            {navContent}
-          </GenericLink>
-        )}
-
-        {hasChildren && isExpanded && !isCollapsed && (
-          <ul className='ml-3 space-y-1 border-l border-gray-100 pl-2 dark:border-slate-800'>
-            {item.children!.map((child) => renderItem(child, depth + 1))}
-          </ul>
-        )}
-      </li>
-    )
-  }
-
   return (
     <aside
-      data-test={dataTest || 'sidebar'}
+      data-test={dataTest}
       data-component='Sidebar'
       className={cn(
         'flex h-full shrink-0 flex-col overflow-hidden bg-white transition-all duration-300 ease-in-out select-none dark:bg-slate-900',
@@ -163,9 +181,9 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
       </div>
 
       {/* Nav List */}
-      <div className='flex-1 space-y-3 overflow-y-auto p-2'>
+      <div className='flex flex-1 flex-col gap-3 overflow-y-auto p-2'>
         {normalizedCategories.map((cat, idx) => (
-          <div key={cat.title || idx} className='space-y-1'>
+          <div key={cat.title || idx} className='flex flex-col gap-1'>
             {cat.title && (
               <>
                 {!isCollapsed ? (
@@ -174,13 +192,24 @@ export const SidebarComponent: React.FC<SidebarProps> = ({
                   </div>
                 ) : (
                   idx > 0 && (
-                    <div className='my-1 border-t border-gray-100 dark:border-slate-800' />
+                    <div className='py-1'>
+                      <div className='border-t border-gray-100 dark:border-slate-800' />
+                    </div>
                   )
                 )}
               </>
             )}
-            <ul className='space-y-1'>
-              {cat.items.map((item) => renderItem(item))}
+            <ul className='flex flex-col gap-1'>
+              {cat.items.map((item) => (
+                <SidebarItemMemo
+                  key={item.key}
+                  item={item}
+                  depth={0}
+                  isCollapsed={isCollapsed}
+                  expandedKeys={model.expandedKeys}
+                  dispatch={dispatch}
+                />
+              ))}
             </ul>
           </div>
         ))}

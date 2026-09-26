@@ -18,10 +18,11 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
+      "@/*": ["src/*"],
       "../../lib": ["../../lib/index.ts"],
       "@rinn7e/realworld-design-system": ["../../lib/index.ts"],
       "@rinn7e/realworld-design-system/*": ["../../lib/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "tests"]
 }

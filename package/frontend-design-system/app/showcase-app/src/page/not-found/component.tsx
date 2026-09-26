@@ -1,18 +1,14 @@
 import { BoxMemo as DsBoxMemo } from '@rinn7e/realworld-design-system/element/box/component'
 import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/element/button/component'
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
-import React from 'react'
+import { memo } from 'react'
 
-import type { AppRoute } from '../../route/type'
+import { type Props, PropsEq } from './type'
 
-interface Props {
-  navigateRoute: (route: AppRoute) => void
-}
-
-export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
+const NotFoundPageComponent = ({ navigateRoute }: Props) => {
   return (
     <div className='flex flex-col items-center justify-center py-16 text-center'>
-      <DsBoxMemo className='max-w-md space-y-4 p-10'>
+      <DsBoxMemo className='flex max-w-md flex-col gap-4 p-10'>
         <>
           <DsTitleMemo size={1} className='font-extrabold text-green-600'>
             404
@@ -41,3 +37,5 @@ export const NotFoundPage: React.FC<Props> = ({ navigateRoute }) => {
     </div>
   )
 }
+
+export const NotFoundPageMemo = memo(NotFoundPageComponent, PropsEq.equals)

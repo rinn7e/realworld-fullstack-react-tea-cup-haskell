@@ -4,20 +4,18 @@ import { ContentMemo as DsContentMemo } from '@rinn7e/realworld-design-system/el
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2, Sparkles } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import {
+  DEFAULT_SECTION_BOX_CLASS,
+  SectionViewMemo,
+} from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const BoxPage: React.FC<Props> = ({ model, dispatch }) => {
+const BoxPageComponent = ({ model, dispatch }: Props) => {
   const code = `<DsBoxMemo className='w-full p-6'>
-  <DsTitleMemo size={4} className='mb-1 font-bold text-gray-900 dark:text-zinc-100'>
+  <DsTitleMemo size={4} className='pb-1 font-bold text-gray-900 dark:text-zinc-100'>
     Interactive Box Container
   </DsTitleMemo>
   <DsContentMemo size='normal' className='text-gray-600 dark:text-zinc-400'>
@@ -26,18 +24,21 @@ export const BoxPage: React.FC<Props> = ({ model, dispatch }) => {
 </DsBoxMemo>`
 
   return (
-    <div data-component='BoxPage' className='w-full space-y-8 text-left'>
+    <div
+      data-component='BoxPage'
+      className='flex w-full flex-col gap-8 text-left'
+    >
       <DsHeroMemo
         color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
-        <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+        <div className='pb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
           ELEMENTS / BOX
         </div>
         <DsTitleMemo
           size={2}
-          className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+          className='pb-2 font-extrabold text-gray-900 dark:text-zinc-100'
         >
           Box
         </DsTitleMemo>
@@ -67,31 +68,31 @@ export const BoxPage: React.FC<Props> = ({ model, dispatch }) => {
           </DsButtonMemo>
         </div>
 
-        {sectionView({
-          title: 'Standard Box Container',
-          children: () => (
-            <div className='w-full'>
-              <DsBoxMemo className='w-full p-6'>
-                <DsTitleMemo
-                  size={4}
-                  className='mb-1 font-bold text-gray-900 dark:text-zinc-100'
-                >
-                  Interactive Box Container
-                </DsTitleMemo>
-                <DsContentMemo
-                  size='normal'
-                  className='text-gray-600 dark:text-zinc-400'
-                >
-                  This is a classic box container.
-                </DsContentMemo>
-              </DsBoxMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Standard Box Container'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='w-full'>
+            <DsBoxMemo className='w-full p-6'>
+              <DsTitleMemo
+                size={4}
+                className='pb-1 font-bold text-gray-900 dark:text-zinc-100'
+              >
+                Interactive Box Container
+              </DsTitleMemo>
+              <DsContentMemo
+                size='normal'
+                className='text-gray-600 dark:text-zinc-400'
+              >
+                This is a classic box container.
+              </DsContentMemo>
+            </DsBoxMemo>
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Box Component Code
@@ -106,3 +107,5 @@ export const BoxPage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const BoxPageMemo = memo(BoxPageComponent, PropsEq.equals)

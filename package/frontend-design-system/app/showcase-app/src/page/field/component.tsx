@@ -4,18 +4,16 @@ import { FieldMemo as DsFieldMemo } from '@rinn7e/realworld-design-system/form/f
 import { InputMemo as DsInputMemo } from '@rinn7e/realworld-design-system/form/input/component'
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2, Sparkles } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import React, { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import {
+  DEFAULT_SECTION_BOX_CLASS,
+  SectionViewMemo,
+} from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const FieldPage: React.FC<Props> = ({ model, dispatch }) => {
+const FieldPageComponent = ({ model, dispatch }: Props) => {
   const code = `<DsFieldMemo
   label='Username'
   helpText='Choose a unique handle for your Conduit profile.'
@@ -28,18 +26,21 @@ export const FieldPage: React.FC<Props> = ({ model, dispatch }) => {
 </DsFieldMemo>`
 
   return (
-    <div data-component='FieldPage' className='w-full space-y-8 text-left'>
+    <div
+      data-component='FieldPage'
+      className='flex w-full flex-col gap-8 text-left'
+    >
       <DsHeroMemo
         color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
-        <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+        <div className='pb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
           FORM / FIELD
         </div>
         <DsTitleMemo
           size={2}
-          className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+          className='pb-2 font-extrabold text-gray-900 dark:text-zinc-100'
         >
           Field
         </DsTitleMemo>
@@ -70,29 +71,29 @@ export const FieldPage: React.FC<Props> = ({ model, dispatch }) => {
           </DsButtonMemo>
         </div>
 
-        {sectionView({
-          title: 'Form Field Container',
-          children: () => (
-            <div className='w-full max-w-md'>
-              <DsFieldMemo
-                label='Username'
-                helpText='Choose a unique handle for your Conduit profile.'
-              >
-                <DsInputMemo
-                  value={model.value}
-                  placeholder='e.g. gerard_quan'
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    dispatch({ _tag: 'UpdateValue', value: e.target.value })
-                  }
-                />
-              </DsFieldMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Form Field Container'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='w-full max-w-md'>
+            <DsFieldMemo
+              label='Username'
+              helpText='Choose a unique handle for your Conduit profile.'
+            >
+              <DsInputMemo
+                value={model.value}
+                placeholder='e.g. gerard_quan'
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  dispatch({ _tag: 'UpdateValue', value: e.target.value })
+                }
+              />
+            </DsFieldMemo>
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Field Component Code
@@ -107,3 +108,5 @@ export const FieldPage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const FieldPageMemo = memo(FieldPageComponent, PropsEq.equals)

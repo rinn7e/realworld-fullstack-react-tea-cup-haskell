@@ -1,8 +1,12 @@
 import type * as TeaRouter from '@rinn7e/tea-cup-router'
 import { type Cmd } from 'tea-cup-fp'
 
-import { parseAppRoute, toUrlString } from './parser'
-import { type AppRoute, AppRouteEq } from './type'
+import {
+  type AppRoute,
+  AppRouteEq,
+  parseAppRoute,
+  toUrlString,
+} from '@/common/type/route'
 
 export const mkRouterConfig = <PageModel, Msg>(
   initPageModel: (

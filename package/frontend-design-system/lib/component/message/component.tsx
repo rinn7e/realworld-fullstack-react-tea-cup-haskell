@@ -38,7 +38,7 @@ const colorStyles: Record<MessageColor, { header: string; body: string }> = {
   },
 }
 
-export const MessageComponent = ({
+const MessageComponent = ({
   header,
   children,
   color = 'gray',
@@ -46,7 +46,7 @@ export const MessageComponent = ({
   className,
   dataTest,
 }: MessageProps): React.ReactElement => {
-  const v = colorStyles[color] || colorStyles.gray
+  const v = colorStyles[color]
   const hasHeaderOrDelete = Boolean(header || onDelete)
 
   return (
@@ -67,9 +67,7 @@ export const MessageComponent = ({
           )}
         >
           <div>{header}</div>
-          {onDelete && (
-            <DeleteMemo size='small' onClick={onDelete} className='ml-auto' />
-          )}
+          {onDelete && <DeleteMemo size='small' onClick={onDelete} />}
         </div>
       )}
       <div className='p-4'>{children}</div>

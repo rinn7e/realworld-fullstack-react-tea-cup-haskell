@@ -1,10 +1,10 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
 import type { PopoverProps } from './type'
 import { PopoverPropsEq } from './type'
 
-export const PopoverComponent: React.FC<PopoverProps> = ({
+const PopoverComponent = ({
   model,
   dispatch,
   trigger,
@@ -13,7 +13,7 @@ export const PopoverComponent: React.FC<PopoverProps> = ({
   className,
   cardClassName,
   dataTest,
-}) => {
+}: PopoverProps) => {
   return (
     <div
       data-test={dataTest}
@@ -35,7 +35,7 @@ export const PopoverComponent: React.FC<PopoverProps> = ({
           />
           <div
             className={cn(
-              'absolute top-full z-50 mt-2 w-44 rounded-lg border border-gray-100 bg-white p-1.5 shadow-xl ring-1 ring-black/5 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-2xl',
+              'absolute top-[calc(100%+8px)] z-50 w-44 rounded-lg border border-gray-100 bg-white p-1.5 shadow-xl ring-1 ring-black/5 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-2xl',
               align === 'right' ? 'right-0' : 'left-0',
               cardClassName,
             )}

@@ -4,18 +4,16 @@ import { ColumnMemo as DsColumnMemo } from '@rinn7e/realworld-design-system/grid
 import { ColumnsMemo as DsColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2, Sparkles } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import {
+  DEFAULT_SECTION_BOX_CLASS,
+  SectionViewMemo,
+} from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const ColumnsPage: React.FC<Props> = ({ model, dispatch }) => {
+const ColumnsPageComponent = ({ model, dispatch }: Props) => {
   const code = `<DsColumnsMemo>
   <DsColumnMemo size='half'>
     <div className='p-4 bg-green-50 text-green-800 text-center font-semibold rounded border border-green-200'>
@@ -30,18 +28,21 @@ export const ColumnsPage: React.FC<Props> = ({ model, dispatch }) => {
 </DsColumnsMemo>`
 
   return (
-    <div data-component='ColumnsPage' className='w-full space-y-8 text-left'>
+    <div
+      data-component='ColumnsPage'
+      className='flex w-full flex-col gap-8 text-left'
+    >
       <DsHeroMemo
         color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
-        <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+        <div className='pb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
           GRID / COLUMNS
         </div>
         <DsTitleMemo
           size={2}
-          className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+          className='pb-2 font-extrabold text-gray-900 dark:text-zinc-100'
         >
           Columns
         </DsTitleMemo>
@@ -71,29 +72,29 @@ export const ColumnsPage: React.FC<Props> = ({ model, dispatch }) => {
           </DsButtonMemo>
         </div>
 
-        {sectionView({
-          title: '2-Column Grid Layout',
-          children: () => (
-            <div className='w-full'>
-              <DsColumnsMemo>
-                <DsColumnMemo size='half'>
-                  <div className='rounded border border-green-200 bg-green-50 p-4 text-center font-semibold text-green-800'>
-                    Column 1 (Half)
-                  </div>
-                </DsColumnMemo>
-                <DsColumnMemo size='half'>
-                  <div className='rounded border border-blue-200 bg-blue-50 p-4 text-center font-semibold text-blue-800'>
-                    Column 2 (Half)
-                  </div>
-                </DsColumnMemo>
-              </DsColumnsMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='2-Column Grid Layout'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='w-full'>
+            <DsColumnsMemo>
+              <DsColumnMemo size='half'>
+                <div className='rounded border border-green-200 bg-green-50 p-4 text-center font-semibold text-green-800'>
+                  Column 1 (Half)
+                </div>
+              </DsColumnMemo>
+              <DsColumnMemo size='half'>
+                <div className='rounded border border-blue-200 bg-blue-50 p-4 text-center font-semibold text-blue-800'>
+                  Column 2 (Half)
+                </div>
+              </DsColumnMemo>
+            </DsColumnsMemo>
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Columns Component Code
@@ -108,3 +109,5 @@ export const ColumnsPage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const ColumnsPageMemo = memo(ColumnsPageComponent, PropsEq.equals)

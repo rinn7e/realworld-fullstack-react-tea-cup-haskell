@@ -58,7 +58,7 @@ export const update =
           Cmd.none(),
         ]
       case 'ToggleExpand': {
-        const expandedKeys = model.expandedKeys || []
+        const expandedKeys = model.expandedKeys
         const isExpanded = expandedKeys.includes(msg.key)
         const nextKeys = isExpanded
           ? expandedKeys.filter((k) => k !== msg.key)
@@ -71,7 +71,7 @@ export const update =
         )
         const shouldCloseOnSelect = msg.item.shouldCloseOnSelect ?? true
 
-        const expandedKeys = model.expandedKeys || []
+        const expandedKeys = model.expandedKeys
         const isExpanded = expandedKeys.includes(msg.item.key)
         const nextKeys = hasChildren
           ? isExpanded

@@ -21,9 +21,7 @@ export type ModalProps = {
   dataTest?: string
 }
 
-export const ModalPropsEq: EqClass.Eq<ModalProps> = EqClass.struct<
-  Required<ModalProps>
->({
+export const ModalPropsEq: EqClass.Eq<ModalProps> = EqClass.struct<ModalProps>({
   title: EqClass.eqStrict,
   children: EqClass.eqStrict,
   footer: EqClass.eqStrict,
@@ -31,4 +29,4 @@ export const ModalPropsEq: EqClass.Eq<ModalProps> = EqClass.struct<
   dispatch: EqClass.eqStrict,
   className: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<ModalProps>
+})

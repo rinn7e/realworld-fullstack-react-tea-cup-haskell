@@ -1,3 +1,4 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
@@ -26,19 +27,18 @@ export type ButtonProps = {
   dataTest?: string
 }
 
-export const ButtonPropsEq: EqClass.Eq<ButtonProps> = EqClass.struct<
-  Required<ButtonProps>
->({
-  color: string.Eq,
-  variant: string.Eq,
-  size: string.Eq,
-  isRounded: boolean.Eq,
-  isFullWidth: boolean.Eq,
-  isLoading: boolean.Eq,
-  isDisabled: boolean.Eq,
-  children: EqClass.eqStrict,
-  onClick: EqClass.eqStrict,
-  type: string.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<ButtonProps>
+export const ButtonPropsEq: EqClass.Eq<ButtonProps> =
+  EqClass.struct<ButtonProps>({
+    color: UndefinableEq(string.Eq),
+    variant: UndefinableEq(string.Eq),
+    size: UndefinableEq(string.Eq),
+    isRounded: UndefinableEq(boolean.Eq),
+    isFullWidth: UndefinableEq(boolean.Eq),
+    isLoading: UndefinableEq(boolean.Eq),
+    isDisabled: UndefinableEq(boolean.Eq),
+    children: EqClass.eqStrict,
+    onClick: EqClass.eqStrict,
+    type: UndefinableEq(string.Eq),
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })

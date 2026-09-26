@@ -22,17 +22,16 @@ export type NavItemData = {
   shouldCloseOnSelect?: boolean
 }
 
-export const NavItemDataEq: EqClass.Eq<NavItemData> = EqClass.struct<
-  Required<NavItemData>
->({
-  key: S.Eq,
-  label: S.Eq,
-  href: UndefinableEq(S.Eq),
-  isActive: B.Eq,
-  icon: UndefinableEq(EqClass.eqStrict),
-  isNewTab: UndefinableEq(B.Eq),
-  shouldCloseOnSelect: UndefinableEq(B.Eq),
-  children: UndefinableEq(
-    A.getEq(EqClass.fromEquals((x, y) => NavItemDataEq.equals(x, y))),
-  ),
-}) as unknown as EqClass.Eq<NavItemData>
+export const NavItemDataEq: EqClass.Eq<NavItemData> =
+  EqClass.struct<NavItemData>({
+    key: S.Eq,
+    label: S.Eq,
+    href: UndefinableEq(S.Eq),
+    isActive: B.Eq,
+    icon: UndefinableEq(EqClass.eqStrict),
+    isNewTab: UndefinableEq(B.Eq),
+    shouldCloseOnSelect: UndefinableEq(B.Eq),
+    children: UndefinableEq(
+      A.getEq(EqClass.fromEquals((x, y) => NavItemDataEq.equals(x, y))),
+    ),
+  })

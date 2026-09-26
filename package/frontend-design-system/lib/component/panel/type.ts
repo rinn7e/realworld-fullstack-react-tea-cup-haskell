@@ -18,13 +18,12 @@ export type PanelBlockItem = {
   icon?: React.ReactNode
 }
 
-export const PanelBlockItemEq: EqClass.Eq<PanelBlockItem> = EqClass.struct<
-  Required<PanelBlockItem>
->({
-  id: EqClass.eqString,
-  label: EqClass.eqStrict,
-  icon: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<PanelBlockItem>
+export const PanelBlockItemEq: EqClass.Eq<PanelBlockItem> =
+  EqClass.struct<PanelBlockItem>({
+    id: EqClass.eqString,
+    label: EqClass.eqStrict,
+    icon: EqClass.eqStrict,
+  })
 
 export type Model = {
   activeTabId: string
@@ -49,9 +48,7 @@ export type PanelProps = {
   dataTest?: string
 }
 
-export const PanelPropsEq: EqClass.Eq<PanelProps> = EqClass.struct<
-  Required<PanelProps>
->({
+export const PanelPropsEq: EqClass.Eq<PanelProps> = EqClass.struct<PanelProps>({
   heading: EqClass.eqStrict,
   tabs: EqClass.eqStrict,
   blocks: A.getEq(PanelBlockItemEq),
@@ -59,4 +56,4 @@ export const PanelPropsEq: EqClass.Eq<PanelProps> = EqClass.struct<
   dispatch: EqClass.eqStrict,
   className: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<PanelProps>
+})

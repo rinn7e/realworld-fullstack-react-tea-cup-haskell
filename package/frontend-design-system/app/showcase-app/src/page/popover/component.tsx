@@ -4,18 +4,16 @@ import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/elem
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { ChevronDown, Code2, Sliders, Sparkles, User } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import {
+  DEFAULT_SECTION_BOX_CLASS,
+  SectionViewMemo,
+} from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const PopoverPage: React.FC<Props> = ({ model, dispatch }) => {
+const PopoverPageComponent = ({ model, dispatch }: Props) => {
   const code = `<DsPopoverMemo
   model={model.popoverLeftModel}
   dispatch={(subMsg) => dispatch({ _tag: 'PopoverLeftMsg', subMsg })}
@@ -37,19 +35,22 @@ export const PopoverPage: React.FC<Props> = ({ model, dispatch }) => {
 </DsPopoverMemo>`
 
   return (
-    <div data-component='PopoverPage' className='w-full space-y-8 text-left'>
+    <div
+      data-component='PopoverPage'
+      className='flex w-full flex-col gap-8 text-left'
+    >
       <DsHeroMemo
         color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
         <>
-          <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+          <div className='pb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
             COMPONENTS / POPOVER
           </div>
           <DsTitleMemo
             size={2}
-            className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+            className='pb-2 font-extrabold text-gray-900 dark:text-zinc-100'
           >
             Popover
           </DsTitleMemo>
@@ -83,130 +84,132 @@ export const PopoverPage: React.FC<Props> = ({ model, dispatch }) => {
           </DsButtonMemo>
         </div>
 
-        {sectionView({
-          title: 'Left Aligned Popover (align="left")',
-          children: () => (
-            <div className='flex min-h-[140px] w-full items-start justify-center p-4'>
-              <DsPopoverMemo
-                model={model.popoverLeftModel}
-                dispatch={(subMsg: DsPopover.Msg) =>
-                  dispatch({ _tag: 'PopoverLeftMsg', subMsg })
-                }
-                trigger={
-                  <DsButtonMemo
-                    color='green'
-                    size='small'
-                    className='flex items-center gap-1.5'
-                  >
-                    <User size={16} />
-                    <span>User</span>
-                    <ChevronDown size={14} />
-                  </DsButtonMemo>
-                }
-                align='left'
-                cardClassName='w-64'
-              >
-                <div className='flex flex-col gap-1 text-sm'>
-                  <button
-                    type='button'
-                    onClick={() =>
-                      dispatch({
-                        _tag: 'PopoverLeftMsg',
-                        subMsg: { _tag: 'Close' },
-                      })
-                    }
-                    className='flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-gray-700 hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-zinc-900'
-                  >
-                    View Account Details
-                  </button>
-                  <button
-                    type='button'
-                    onClick={() =>
-                      dispatch({
-                        _tag: 'PopoverLeftMsg',
-                        subMsg: { _tag: 'Close' },
-                      })
-                    }
-                    className='flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-gray-700 hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-zinc-900'
-                  >
-                    Settings & Preferences
-                  </button>
-                  <div className='my-1 border-t border-gray-100 dark:border-zinc-800' />
-                  <button
-                    type='button'
-                    onClick={() =>
-                      dispatch({
-                        _tag: 'PopoverLeftMsg',
-                        subMsg: { _tag: 'Close' },
-                      })
-                    }
-                    className='flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40'
-                  >
-                    Log Out
-                  </button>
+        <SectionViewMemo
+          title='Left Aligned Popover (align="left")'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex min-h-[140px] w-full items-start justify-center p-4'>
+            <DsPopoverMemo
+              model={model.popoverLeftModel}
+              dispatch={(subMsg: DsPopover.Msg) =>
+                dispatch({ _tag: 'PopoverLeftMsg', subMsg })
+              }
+              trigger={
+                <DsButtonMemo
+                  color='green'
+                  size='small'
+                  className='flex items-center gap-1.5'
+                >
+                  <User size={16} />
+                  <span>User</span>
+                  <ChevronDown size={14} />
+                </DsButtonMemo>
+              }
+              align='left'
+              cardClassName='w-64'
+            >
+              <div className='flex flex-col gap-1 text-sm'>
+                <button
+                  type='button'
+                  onClick={() =>
+                    dispatch({
+                      _tag: 'PopoverLeftMsg',
+                      subMsg: { _tag: 'Close' },
+                    })
+                  }
+                  className='flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-gray-700 hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-zinc-900'
+                >
+                  View Account Details
+                </button>
+                <button
+                  type='button'
+                  onClick={() =>
+                    dispatch({
+                      _tag: 'PopoverLeftMsg',
+                      subMsg: { _tag: 'Close' },
+                    })
+                  }
+                  className='flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-gray-700 hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-zinc-900'
+                >
+                  Settings & Preferences
+                </button>
+                <div className='py-1'>
+                  <div className='border-t border-gray-100 dark:border-zinc-800' />
                 </div>
-              </DsPopoverMemo>
-            </div>
-          ),
-        })}
+                <button
+                  type='button'
+                  onClick={() =>
+                    dispatch({
+                      _tag: 'PopoverLeftMsg',
+                      subMsg: { _tag: 'Close' },
+                    })
+                  }
+                  className='flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40'
+                >
+                  Log Out
+                </button>
+              </div>
+            </DsPopoverMemo>
+          </div>
+        </SectionViewMemo>
 
-        {sectionView({
-          title: 'Right Aligned Popover (align="right")',
-          children: () => (
-            <div className='flex min-h-[140px] w-full items-start justify-center p-4'>
-              <DsPopoverMemo
-                model={model.popoverRightModel}
-                dispatch={(subMsg: DsPopover.Msg) =>
-                  dispatch({ _tag: 'PopoverRightMsg', subMsg })
-                }
-                trigger={
-                  <DsButtonMemo
-                    color='gray'
-                    size='small'
-                    className='flex items-center gap-1.5'
-                  >
-                    <Sliders size={16} />
-                    <span>Filter</span>
-                    <ChevronDown size={14} />
-                  </DsButtonMemo>
-                }
-                align='right'
-                cardClassName='w-64'
-              >
-                <div className='flex flex-col gap-1 text-sm'>
-                  <button
-                    type='button'
-                    onClick={() =>
-                      dispatch({
-                        _tag: 'PopoverRightMsg',
-                        subMsg: { _tag: 'Close' },
-                      })
-                    }
-                    className='flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-gray-700 hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-zinc-900'
-                  >
-                    Sort by Date Added
-                  </button>
-                  <button
-                    type='button'
-                    onClick={() =>
-                      dispatch({
-                        _tag: 'PopoverRightMsg',
-                        subMsg: { _tag: 'Close' },
-                      })
-                    }
-                    className='flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-gray-700 hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-zinc-900'
-                  >
-                    Sort by Popularity
-                  </button>
-                </div>
-              </DsPopoverMemo>
-            </div>
-          ),
-        })}
+        <SectionViewMemo
+          title='Right Aligned Popover (align="right")'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex min-h-[140px] w-full items-start justify-center p-4'>
+            <DsPopoverMemo
+              model={model.popoverRightModel}
+              dispatch={(subMsg: DsPopover.Msg) =>
+                dispatch({ _tag: 'PopoverRightMsg', subMsg })
+              }
+              trigger={
+                <DsButtonMemo
+                  color='gray'
+                  size='small'
+                  className='flex items-center gap-1.5'
+                >
+                  <Sliders size={16} />
+                  <span>Filter</span>
+                  <ChevronDown size={14} />
+                </DsButtonMemo>
+              }
+              align='right'
+              cardClassName='w-64'
+            >
+              <div className='flex flex-col gap-1 text-sm'>
+                <button
+                  type='button'
+                  onClick={() =>
+                    dispatch({
+                      _tag: 'PopoverRightMsg',
+                      subMsg: { _tag: 'Close' },
+                    })
+                  }
+                  className='flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-gray-700 hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-zinc-900'
+                >
+                  Sort by Date Added
+                </button>
+                <button
+                  type='button'
+                  onClick={() =>
+                    dispatch({
+                      _tag: 'PopoverRightMsg',
+                      subMsg: { _tag: 'Close' },
+                    })
+                  }
+                  className='flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-gray-700 hover:bg-gray-100 dark:text-zinc-200 dark:hover:bg-zinc-900'
+                >
+                  Sort by Popularity
+                </button>
+              </div>
+            </DsPopoverMemo>
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Popover Component Code
@@ -221,3 +224,5 @@ export const PopoverPage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const PopoverPageMemo = memo(PopoverPageComponent, PropsEq.equals)

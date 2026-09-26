@@ -1,13 +1,9 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
 import { type FooterProps, FooterPropsEq } from './type'
 
-export const FooterComponent: React.FC<FooterProps> = ({
-  children,
-  className,
-  dataTest,
-}) => {
+const FooterComponent = ({ children, className, dataTest }: FooterProps) => {
   return (
     <footer
       data-test={dataTest}

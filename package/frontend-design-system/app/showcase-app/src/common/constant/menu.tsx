@@ -48,8 +48,10 @@ import {
 } from 'lucide-react'
 import React from 'react'
 
-import type { ComponentItem } from '../route/type'
-import type { SectionCategory } from '../type'
+import type { ComponentItem } from '@/common/type/route'
+
+export type SectionCategory =
+  'elements' | 'components' | 'form' | 'layout' | 'grid' | 'misc'
 
 export type ShowcaseCategory = {
   id: SectionCategory
@@ -201,9 +203,9 @@ export const getSidebarCategories = (
     items: cat.items.map((item) => ({
       key: item.id,
       label: item.name,
-      href: `#/${item.id}`,
+      href: `/${item.id}`,
       isActive: activeComponent === item.id,
-      icon: ITEM_ICONS[item.id] || cat.icon,
+      icon: ITEM_ICONS[item.id],
     })),
   }))
 

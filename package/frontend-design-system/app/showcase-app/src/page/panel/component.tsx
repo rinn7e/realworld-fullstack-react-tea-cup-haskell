@@ -4,18 +4,16 @@ import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/elem
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { HeroMemo as DsHeroMemo } from '@rinn7e/realworld-design-system/layout/hero/component'
 import { Code2, Sparkles } from 'lucide-react'
-import React from 'react'
-import type { Dispatcher } from 'tea-cup-fp'
+import { memo } from 'react'
 
-import { sectionView } from '../../component/section-view'
-import type { Model, Msg } from './type'
+import {
+  DEFAULT_SECTION_BOX_CLASS,
+  SectionViewMemo,
+} from '@/component/section-view'
 
-interface Props {
-  model: Model
-  dispatch: Dispatcher<Msg>
-}
+import { type Props, PropsEq } from './type'
 
-export const PanelPage: React.FC<Props> = ({ model, dispatch }) => {
+const PanelPageComponent = ({ model, dispatch }: Props) => {
   const code = `<DsPanelMemo
   heading='Repositories'
   tabs={[{ id: 'all', label: 'All' }, { id: 'public', label: 'Public' }, { id: 'private', label: 'Private' }]}
@@ -29,19 +27,22 @@ export const PanelPage: React.FC<Props> = ({ model, dispatch }) => {
 />`
 
   return (
-    <div data-component='PanelPage' className='w-full space-y-8 text-left'>
+    <div
+      data-component='PanelPage'
+      className='flex w-full flex-col gap-8 text-left'
+    >
       <DsHeroMemo
         color='gray'
         size='small'
         className='w-full rounded-lg border border-gray-200 bg-gray-50 px-6 py-6 dark:border-zinc-800 dark:bg-zinc-950'
       >
         <>
-          <div className='mb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
+          <div className='pb-1 text-xs font-bold tracking-wider text-green-600 uppercase'>
             COMPONENTS / PANEL
           </div>
           <DsTitleMemo
             size={2}
-            className='mb-2 font-extrabold text-gray-900 dark:text-zinc-100'
+            className='pb-2 font-extrabold text-gray-900 dark:text-zinc-100'
           >
             Panel
           </DsTitleMemo>
@@ -75,36 +76,36 @@ export const PanelPage: React.FC<Props> = ({ model, dispatch }) => {
           </DsButtonMemo>
         </div>
 
-        {sectionView({
-          title: 'Repository List Panel',
-          children: () => (
-            <div className='flex w-full justify-center'>
-              <div className='w-full max-w-md'>
-                <DsPanelMemo
-                  heading='Repositories'
-                  tabs={[
-                    { id: 'all', label: 'All' },
-                    { id: 'public', label: 'Public' },
-                    { id: 'private', label: 'Private' },
-                  ]}
-                  blocks={[
-                    { id: 'p1', label: 'realworld-design-system' },
-                    { id: 'p2', label: 'frontend-web' },
-                    { id: 'p3', label: 'backend-servant' },
-                  ]}
-                  model={model.panelModel}
-                  dispatch={(subMsg: DsPanel.Msg) =>
-                    dispatch({ _tag: 'PanelMsg', subMsg })
-                  }
-                />
-              </div>
+        <SectionViewMemo
+          title='Repository List Panel'
+          boxClassName={DEFAULT_SECTION_BOX_CLASS}
+        >
+          <div className='flex w-full justify-center'>
+            <div className='w-full max-w-md'>
+              <DsPanelMemo
+                heading='Repositories'
+                tabs={[
+                  { id: 'all', label: 'All' },
+                  { id: 'public', label: 'Public' },
+                  { id: 'private', label: 'Private' },
+                ]}
+                blocks={[
+                  { id: 'p1', label: 'realworld-design-system' },
+                  { id: 'p2', label: 'frontend-web' },
+                  { id: 'p3', label: 'backend-servant' },
+                ]}
+                model={model.panelModel}
+                dispatch={(subMsg: DsPanel.Msg) =>
+                  dispatch({ _tag: 'PanelMsg', subMsg })
+                }
+              />
             </div>
-          ),
-        })}
+          </div>
+        </SectionViewMemo>
 
         {model.showCode && (
-          <div className='relative w-full overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
-            <div className='mb-3 flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
+          <div className='relative flex w-full flex-col gap-3 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900 p-5 font-mono text-xs text-gray-100 shadow-lg'>
+            <div className='flex items-center justify-between border-b border-gray-800 pb-3 font-sans text-xs text-gray-400'>
               <span className='font-semibold text-green-400'>JSX / HTML</span>
               <span className='text-gray-500 dark:text-zinc-400'>
                 Panel Component Code
@@ -119,3 +120,5 @@ export const PanelPage: React.FC<Props> = ({ model, dispatch }) => {
     </div>
   )
 }
+
+export const PanelPageMemo = memo(PanelPageComponent, PropsEq.equals)

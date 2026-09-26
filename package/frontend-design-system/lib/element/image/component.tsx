@@ -1,10 +1,9 @@
 import { memo } from 'react'
-import React, { useEffect, useState } from 'react'
 
 import { cn } from '../../theme'
-import { type ImageProps, ImagePropsEq } from './type'
+import { type ImageProps, ImagePropsEq, type ImageRatio } from './type'
 
-const ratioStyles: Record<string, string> = {
+const ratioStyles: Record<ImageRatio, string> = {
   square: 'aspect-square object-cover',
   '1by1': 'aspect-square object-cover',
   '4by3': 'aspect-4/3 object-cover',
@@ -12,7 +11,7 @@ const ratioStyles: Record<string, string> = {
   rounded: 'rounded-full aspect-square object-cover',
 }
 
-export const ImageComponent: React.FC<ImageProps> = ({
+const ImageComponent = ({
   src,
   defaultSrc,
   fallbackSrc,
@@ -22,23 +21,18 @@ export const ImageComponent: React.FC<ImageProps> = ({
   className,
   dataTest,
   onError,
-}) => {
+}: ImageProps) => {
   const fallback = defaultSrc || fallbackSrc
-  const [currentSrc, setCurrentSrc] = useState<string | undefined>(
-    src || fallback,
-  )
+  // The API sends `null` or `''` for a missing image
+  const resolvedSrc = src || fallback
 
-  useEffect(() => {
-    setCurrentSrc(src || fallback)
-  }, [src, fallback])
-
-  const ratioClass = ratioStyles[ratio] || ''
+  const ratioClass = ratioStyles[ratio]
 
   return (
     <img
       data-component='Image'
       data-test={dataTest}
-      src={currentSrc}
+      src={resolvedSrc}
       alt={alt}
       className={cn(
         'align-middle',
@@ -47,8 +41,9 @@ export const ImageComponent: React.FC<ImageProps> = ({
         className,
       )}
       onError={(e) => {
-        if (fallback && currentSrc !== fallback) {
-          setCurrentSrc(fallback)
+        // Swap to the fallback on the DOM node itself, so no React state is needed
+        if (fallback && e.currentTarget.getAttribute('src') !== fallback) {
+          e.currentTarget.src = fallback
         }
         onError?.(e)
       }}

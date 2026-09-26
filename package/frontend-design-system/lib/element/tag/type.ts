@@ -1,3 +1,4 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
@@ -22,16 +23,14 @@ export type TagProps = {
   className?: string
 }
 
-export const TagPropsEq: EqClass.Eq<TagProps> = EqClass.struct<
-  Required<TagProps>
->({
+export const TagPropsEq: EqClass.Eq<TagProps> = EqClass.struct<TagProps>({
   children: EqClass.eqStrict,
-  color: string.Eq,
-  variant: string.Eq,
-  size: string.Eq,
-  isRounded: boolean.Eq,
+  color: UndefinableEq(string.Eq),
+  variant: UndefinableEq(string.Eq),
+  size: UndefinableEq(string.Eq),
+  isRounded: UndefinableEq(boolean.Eq),
   onDelete: EqClass.eqStrict,
   onClick: EqClass.eqStrict,
-  dataTest: string.Eq,
-  className: string.Eq,
-}) as unknown as EqClass.Eq<TagProps>
+  dataTest: UndefinableEq(string.Eq),
+  className: UndefinableEq(string.Eq),
+})

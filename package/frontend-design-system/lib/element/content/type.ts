@@ -1,3 +1,4 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as string from 'fp-ts/lib/string'
 import type { ReactNode } from 'react'
@@ -11,11 +12,10 @@ export type ContentProps = {
   dataTest?: string
 }
 
-export const ContentPropsEq: EqClass.Eq<ContentProps> = EqClass.struct<
-  Required<ContentProps>
->({
-  size: string.Eq,
-  children: EqClass.eqStrict,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<ContentProps>
+export const ContentPropsEq: EqClass.Eq<ContentProps> =
+  EqClass.struct<ContentProps>({
+    size: UndefinableEq(string.Eq),
+    children: EqClass.eqStrict,
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })

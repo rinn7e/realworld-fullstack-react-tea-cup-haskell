@@ -1,23 +1,22 @@
 import { X } from 'lucide-react'
 import { memo } from 'react'
-import React from 'react'
 
 import { cn } from '../../theme'
-import { type DeleteProps, DeletePropsEq } from './type'
+import { type DeleteProps, DeletePropsEq, type DeleteSize } from './type'
 
-const sizeStyles: Record<string, string> = {
+const sizeStyles: Record<DeleteSize, string> = {
   small: 'h-4 w-4 p-0.5',
   normal: 'h-5 w-5 p-1',
   medium: 'h-6 w-6 p-1',
   large: 'h-8 w-8 p-1.5',
 }
 
-export const DeleteComponent: React.FC<DeleteProps> = ({
+const DeleteComponent = ({
   size = 'normal',
   onClick,
   className,
   dataTest,
-}) => {
+}: DeleteProps) => {
   return (
     <button
       data-test={dataTest}

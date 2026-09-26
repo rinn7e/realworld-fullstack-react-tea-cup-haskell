@@ -1,6 +1,7 @@
-import * as EqClass from 'fp-ts/Eq'
-import * as boolean from 'fp-ts/boolean'
-import * as string from 'fp-ts/string'
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
+import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
 export type FileProps = {
@@ -15,16 +16,14 @@ export type FileProps = {
   dataTest?: string
 }
 
-export const FilePropsEq: EqClass.Eq<FileProps> = EqClass.struct<
-  Required<FileProps>
->({
-  filename: string.Eq,
-  ctaText: string.Eq,
-  accept: string.Eq,
-  isDisabled: boolean.Eq,
+export const FilePropsEq: EqClass.Eq<FileProps> = EqClass.struct<FileProps>({
+  filename: UndefinableEq(string.Eq),
+  ctaText: UndefinableEq(string.Eq),
+  accept: UndefinableEq(string.Eq),
+  isDisabled: UndefinableEq(boolean.Eq),
   onChange: EqClass.eqStrict,
-  name: string.Eq,
-  id: string.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<FileProps>
+  name: UndefinableEq(string.Eq),
+  id: UndefinableEq(string.Eq),
+  className: UndefinableEq(string.Eq),
+  dataTest: UndefinableEq(string.Eq),
+})

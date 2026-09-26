@@ -1,7 +1,12 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
-import { type HeroColor, type HeroProps, HeroPropsEq } from './type'
+import {
+  type HeroColor,
+  type HeroProps,
+  HeroPropsEq,
+  type HeroSize,
+} from './type'
 
 const colorStyles: Record<HeroColor, string> = {
   white:
@@ -14,14 +19,14 @@ const colorStyles: Record<HeroColor, string> = {
   gray: 'bg-gray-100 text-gray-800 dark:bg-zinc-900 dark:text-zinc-100',
 }
 
-const sizeStyles: Record<string, string> = {
+const sizeStyles: Record<HeroSize, string> = {
   small: 'py-6 px-4',
   medium: 'py-12 px-6',
   large: 'py-24 px-8',
   fullheight: 'min-h-screen py-12 px-6 flex flex-col justify-between',
 }
 
-export const HeroComponent: React.FC<HeroProps> = ({
+const HeroComponent = ({
   color = 'gray',
   size = 'medium',
   title,
@@ -31,29 +36,29 @@ export const HeroComponent: React.FC<HeroProps> = ({
   children,
   className,
   dataTest,
-}) => {
+}: HeroProps) => {
   return (
     <section
       data-test={dataTest}
       data-component='Hero'
       className={cn(
         'relative w-full text-center transition-colors',
-        colorStyles[color] || colorStyles.gray,
+        colorStyles[color],
         sizeStyles[size],
         className,
       )}
     >
-      {header && <div className='mb-4'>{header}</div>}
+      {header && <div className='pb-4'>{header}</div>}
 
       <div className='mx-auto max-w-4xl'>
         {title && (
-          <h1 className='mb-2 text-4xl font-bold tracking-tight'>{title}</h1>
+          <h1 className='pb-2 text-4xl font-bold tracking-tight'>{title}</h1>
         )}
         {subtitle && <p className='text-lg opacity-90'>{subtitle}</p>}
         {children}
       </div>
 
-      {footer && <div className='mt-4'>{footer}</div>}
+      {footer && <div className='pt-4'>{footer}</div>}
     </section>
   )
 }

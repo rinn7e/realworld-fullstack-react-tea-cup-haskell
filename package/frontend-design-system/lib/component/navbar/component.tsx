@@ -1,23 +1,22 @@
-import { cn } from '@rinn7e/tea-cup-prelude'
 import { ChevronDown } from 'lucide-react'
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { ButtonMemo as DsButtonMemo } from '../../element/button/component'
-import type { NavItemData } from '../../type/nav-item'
-import { GenericLink } from '../generic-link'
+import { cn } from '../../theme'
+import { GenericLink } from '../generic-link/component'
 import { PopoverMemo as DsPopoverMemo } from '../popover/component'
-import type { Msg, NavbarProps } from './type'
-import { NavbarPropsEq } from './type'
+import {
+  type NavItemProps,
+  NavItemPropsEq,
+  type NavbarProps,
+  NavbarPropsEq,
+} from './type'
 
-export const NavItemView: React.FC<{
-  item: NavItemData
-  model: NavbarProps['model']
-  dispatch: (msg: Msg) => void
-}> = ({ item, model, dispatch }) => {
-  const activeCls = 'text-green-600 font-semibold'
-  const inactiveCls =
-    'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100'
+const activeCls = 'text-green-600 font-semibold'
+const inactiveCls =
+  'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100'
 
+const NavItemComponent = ({ item, model, dispatch }: NavItemProps) => {
   if (item.children && item.children.length > 0) {
     const isOpen = model.openDropdownKey === item.key
 
@@ -77,56 +76,39 @@ export const NavItemView: React.FC<{
         </DsPopoverMemo>
       </li>
     )
-  }
+  } else {
+    const baseCls = item.icon
+      ? 'flex items-center gap-[4px] rounded px-[12px] py-[6px] text-sm'
+      : 'block rounded px-[12px] py-[6px] text-sm'
 
-  const baseCls = item.icon
-    ? 'flex items-center gap-[4px] rounded px-[12px] py-[6px] text-sm'
-    : 'block rounded px-[12px] py-[6px] text-sm'
-
-  return (
-    <li>
-      <GenericLink
-        className={cn(baseCls, item.isActive ? activeCls : inactiveCls)}
-        href={item.href || '#'}
-        dispatch={dispatch}
-        msg={{ _tag: 'ClickNavItem', item }}
-        data-test='nav-link'
-        aria-current={item.isActive ? 'page' : undefined}
-      >
-        {item.icon}
-        {item.label}
-      </GenericLink>
-    </li>
-  )
-}
-
-export const NavLinks: React.FC<{
-  items: NavItemData[]
-  model: NavbarProps['model']
-  dispatch: (msg: Msg) => void
-}> = ({ items, model, dispatch }) => {
-  return (
-    <>
-      {items.map((item) => (
-        <NavItemView
-          key={item.key}
-          item={item}
-          model={model}
+    return (
+      <li>
+        <GenericLink
+          className={cn(baseCls, item.isActive ? activeCls : inactiveCls)}
+          href={item.href || '#'}
           dispatch={dispatch}
-        />
-      ))}
-    </>
-  )
+          msg={{ _tag: 'ClickNavItem', item }}
+          data-test='nav-link'
+          aria-current={item.isActive ? 'page' : undefined}
+        >
+          {item.icon}
+          {item.label}
+        </GenericLink>
+      </li>
+    )
+  }
 }
 
-export const NavbarComponent: React.FC<NavbarProps> = ({
+const NavItemMemo = memo(NavItemComponent, NavItemPropsEq.equals)
+
+const NavbarComponent = ({
   config,
   model,
   dispatch,
   className,
   containerClassName,
   dataTest,
-}) => {
+}: NavbarProps) => {
   const { brandNavItem, desktopNavItems, mobileNavItems, unavailableMode } =
     config
 
@@ -155,7 +137,7 @@ export const NavbarComponent: React.FC<NavbarProps> = ({
 
           {unavailableMode && (
             <span
-              className='ml-[16px] flex items-center gap-[6px] text-sm text-gray-400 dark:text-slate-500'
+              className='flex items-center gap-[6px] pl-[16px] text-sm text-gray-400 dark:text-slate-500'
               data-test='app-connecting-state'
             >
               <div className='h-[8px] w-[8px] animate-pulse rounded-full bg-amber-400' />
@@ -182,11 +164,14 @@ export const NavbarComponent: React.FC<NavbarProps> = ({
 
             {/* desktop nav links */}
             <ul className='hidden lg:flex lg:items-center lg:gap-[4px]'>
-              <NavLinks
-                items={desktopNavItems}
-                model={model}
-                dispatch={dispatch}
-              />
+              {desktopNavItems.map((item) => (
+                <NavItemMemo
+                  key={item.key}
+                  item={item}
+                  model={model}
+                  dispatch={dispatch}
+                />
+              ))}
             </ul>
           </div>
         </div>

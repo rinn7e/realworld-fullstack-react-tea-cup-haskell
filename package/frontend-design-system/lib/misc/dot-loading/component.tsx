@@ -1,11 +1,8 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { type DotLoadingProps, DotLoadingPropsEq } from './type'
 
-export const DotLoadingComponent: React.FC<DotLoadingProps> = ({
-  className = '',
-  dataTest,
-}) => {
+const DotLoadingComponent = ({ className = '', dataTest }: DotLoadingProps) => {
   return (
     <span
       data-test={dataTest}

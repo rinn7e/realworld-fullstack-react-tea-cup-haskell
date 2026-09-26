@@ -4,7 +4,7 @@ import { cn } from '../../theme'
 import type { CardProps } from './type'
 import { CardPropsEq } from './type'
 
-export const CardComponent = ({
+const CardComponent = ({
   header,
   image,
   children,

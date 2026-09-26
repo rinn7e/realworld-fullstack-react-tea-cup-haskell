@@ -2,16 +2,16 @@ import { ChevronRight } from 'lucide-react'
 import React, { memo } from 'react'
 
 import { cn } from '../../theme'
-import type { BreadcrumbProps } from './type'
+import type { BreadcrumbAlign, BreadcrumbProps } from './type'
 import { BreadcrumbPropsEq } from './type'
 
-const alignStyles: Record<string, string> = {
+const alignStyles: Record<BreadcrumbAlign, string> = {
   left: 'justify-start',
   center: 'justify-center',
   right: 'justify-end',
 }
 
-export const BreadcrumbComponent = ({
+const BreadcrumbComponent = ({
   items,
   align = 'left',
   onSelect,

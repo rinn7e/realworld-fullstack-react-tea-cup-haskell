@@ -1,3 +1,4 @@
+import * as A from 'fp-ts/lib/Array'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import React, { memo } from 'react'
 
@@ -5,16 +6,13 @@ import { cn } from '../../theme'
 import type { PaginationProps } from './type'
 import { PaginationPropsEq } from './type'
 
-export const PaginationComponent = ({
+const PaginationComponent = ({
   model,
   dispatch,
   className,
   dataTest,
 }: PaginationProps): React.ReactElement => {
-  const pages: number[] = []
-  for (let i = 1; i <= model.totalPages; i++) {
-    pages.push(i)
-  }
+  const pages = A.makeBy(model.totalPages, (i) => i + 1)
 
   return (
     <nav

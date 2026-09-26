@@ -10,13 +10,11 @@ export type CardProps = {
   dataTest?: string
 }
 
-export const CardPropsEq: EqClass.Eq<CardProps> = EqClass.struct<
-  Required<CardProps>
->({
+export const CardPropsEq: EqClass.Eq<CardProps> = EqClass.struct<CardProps>({
   header: EqClass.eqStrict,
   image: EqClass.eqStrict,
   children: EqClass.eqStrict,
   footer: EqClass.eqStrict,
   className: EqClass.eqStrict,
   dataTest: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<CardProps>
+})

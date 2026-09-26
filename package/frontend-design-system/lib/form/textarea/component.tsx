@@ -1,9 +1,9 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
 import { type TextareaProps, TextareaPropsEq } from './type'
 
-export const TextareaComponent: React.FC<TextareaProps> = ({
+const TextareaComponent = ({
   value,
   placeholder,
   rows = 4,
@@ -16,7 +16,7 @@ export const TextareaComponent: React.FC<TextareaProps> = ({
   id,
   className,
   dataTest,
-}) => {
+}: TextareaProps) => {
   return (
     <textarea
       data-test={dataTest}

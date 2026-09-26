@@ -4,7 +4,7 @@ import { cn } from '../../theme'
 import type { MenuProps } from './type'
 import { MenuPropsEq } from './type'
 
-export const MenuComponent = ({
+const MenuComponent = ({
   categories,
   model,
   dispatch,
@@ -15,14 +15,14 @@ export const MenuComponent = ({
     <aside
       data-test={dataTest}
       data-component='Menu'
-      className={cn('w-full text-sm', className)}
+      className={cn('flex w-full flex-col gap-4 text-sm', className)}
     >
       {categories.map((cat, idx) => (
-        <div key={idx} className='mb-4 last:mb-0'>
-          <p className='mb-2 px-3 text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-zinc-400'>
+        <div key={idx} className='flex flex-col gap-2'>
+          <p className='px-3 text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-zinc-400'>
             {cat.title}
           </p>
-          <ul className='space-y-1'>
+          <ul className='flex flex-col gap-1'>
             {cat.items.map((item) => {
               const isActive = model.activeId === item.id || item.isActive
               return (

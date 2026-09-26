@@ -1,5 +1,6 @@
-import * as EqClass from 'fp-ts/Eq'
-import * as string from 'fp-ts/string'
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as string from 'fp-ts/lib/string'
 import type { ReactNode } from 'react'
 
 export type HeroColor =
@@ -19,9 +20,7 @@ export type HeroProps = {
   dataTest?: string
 }
 
-export const HeroPropsEq: EqClass.Eq<HeroProps> = EqClass.struct<
-  Required<HeroProps>
->({
+export const HeroPropsEq: EqClass.Eq<HeroProps> = EqClass.struct<HeroProps>({
   color: EqClass.eqStrict,
   size: EqClass.eqStrict,
   title: EqClass.eqStrict,
@@ -29,6 +28,6 @@ export const HeroPropsEq: EqClass.Eq<HeroProps> = EqClass.struct<
   header: EqClass.eqStrict,
   footer: EqClass.eqStrict,
   children: EqClass.eqStrict,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<HeroProps>
+  className: UndefinableEq(string.Eq),
+  dataTest: UndefinableEq(string.Eq),
+})

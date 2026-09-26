@@ -1,3 +1,4 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as string from 'fp-ts/lib/string'
 import React from 'react'
@@ -14,10 +15,10 @@ export type NotificationProps = {
 }
 
 export const NotificationPropsEq: EqClass.Eq<NotificationProps> =
-  EqClass.struct<Required<NotificationProps>>({
+  EqClass.struct<NotificationProps>({
     children: EqClass.eqStrict,
-    color: string.Eq,
+    color: UndefinableEq(string.Eq),
     onDelete: EqClass.eqStrict,
-    className: string.Eq,
-    dataTest: string.Eq,
-  }) as unknown as EqClass.Eq<NotificationProps>
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })

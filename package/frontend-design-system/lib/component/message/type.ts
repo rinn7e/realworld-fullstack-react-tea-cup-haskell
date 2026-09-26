@@ -13,13 +13,12 @@ export type MessageProps = {
   dataTest?: string
 }
 
-export const MessagePropsEq: EqClass.Eq<MessageProps> = EqClass.struct<
-  Required<MessageProps>
->({
-  header: EqClass.eqStrict,
-  children: EqClass.eqStrict,
-  color: EqClass.eqStrict,
-  onDelete: EqClass.eqStrict,
-  className: EqClass.eqStrict,
-  dataTest: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<MessageProps>
+export const MessagePropsEq: EqClass.Eq<MessageProps> =
+  EqClass.struct<MessageProps>({
+    header: EqClass.eqStrict,
+    children: EqClass.eqStrict,
+    color: EqClass.eqStrict,
+    onDelete: EqClass.eqStrict,
+    className: EqClass.eqStrict,
+    dataTest: EqClass.eqStrict,
+  })

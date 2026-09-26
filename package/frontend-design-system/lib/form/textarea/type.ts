@@ -1,7 +1,8 @@
-import * as EqClass from 'fp-ts/Eq'
-import * as boolean from 'fp-ts/boolean'
-import * as number from 'fp-ts/number'
-import * as string from 'fp-ts/string'
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
+import * as number from 'fp-ts/lib/number'
+import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
 export type TextareaProps = {
@@ -19,19 +20,18 @@ export type TextareaProps = {
   dataTest?: string
 }
 
-export const TextareaPropsEq: EqClass.Eq<TextareaProps> = EqClass.struct<
-  Required<TextareaProps>
->({
-  value: string.Eq,
-  placeholder: string.Eq,
-  rows: number.Eq,
-  isError: boolean.Eq,
-  isDisabled: boolean.Eq,
-  onChange: EqClass.eqStrict,
-  onFocus: EqClass.eqStrict,
-  onBlur: EqClass.eqStrict,
-  name: string.Eq,
-  id: string.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<TextareaProps>
+export const TextareaPropsEq: EqClass.Eq<TextareaProps> =
+  EqClass.struct<TextareaProps>({
+    value: UndefinableEq(string.Eq),
+    placeholder: UndefinableEq(string.Eq),
+    rows: UndefinableEq(number.Eq),
+    isError: UndefinableEq(boolean.Eq),
+    isDisabled: UndefinableEq(boolean.Eq),
+    onChange: EqClass.eqStrict,
+    onFocus: EqClass.eqStrict,
+    onBlur: EqClass.eqStrict,
+    name: UndefinableEq(string.Eq),
+    id: UndefinableEq(string.Eq),
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })

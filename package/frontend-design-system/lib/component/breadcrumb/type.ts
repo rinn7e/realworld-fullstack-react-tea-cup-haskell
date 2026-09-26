@@ -7,30 +7,30 @@ export type BreadcrumbItem = {
   isActive?: boolean
 }
 
-export const BreadcrumbItemEq: EqClass.Eq<BreadcrumbItem> = EqClass.struct<
-  Required<BreadcrumbItem>
->({
-  label: EqClass.eqString,
-  href: EqClass.eqStrict,
-  isActive: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<BreadcrumbItem>
+export const BreadcrumbItemEq: EqClass.Eq<BreadcrumbItem> =
+  EqClass.struct<BreadcrumbItem>({
+    label: EqClass.eqString,
+    href: EqClass.eqStrict,
+    isActive: EqClass.eqStrict,
+  })
+
+export type BreadcrumbAlign = 'left' | 'center' | 'right'
 
 export type BreadcrumbProps = {
   items: BreadcrumbItem[]
   separator?: 'bullet' | 'dot' | 'succeeds' | 'arrow'
-  align?: 'left' | 'center' | 'right'
+  align?: BreadcrumbAlign
   onSelect?: (item: BreadcrumbItem) => void
   className?: string
   dataTest?: string
 }
 
-export const BreadcrumbPropsEq: EqClass.Eq<BreadcrumbProps> = EqClass.struct<
-  Required<BreadcrumbProps>
->({
-  items: A.getEq(BreadcrumbItemEq),
-  separator: EqClass.eqStrict,
-  align: EqClass.eqStrict,
-  onSelect: EqClass.eqStrict,
-  className: EqClass.eqStrict,
-  dataTest: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<BreadcrumbProps>
+export const BreadcrumbPropsEq: EqClass.Eq<BreadcrumbProps> =
+  EqClass.struct<BreadcrumbProps>({
+    items: A.getEq(BreadcrumbItemEq),
+    separator: EqClass.eqStrict,
+    align: EqClass.eqStrict,
+    onSelect: EqClass.eqStrict,
+    className: EqClass.eqStrict,
+    dataTest: EqClass.eqStrict,
+  })

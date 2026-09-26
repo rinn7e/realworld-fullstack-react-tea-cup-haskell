@@ -1,6 +1,7 @@
-import * as EqClass from 'fp-ts/Eq'
-import * as boolean from 'fp-ts/boolean'
-import * as string from 'fp-ts/string'
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
+import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
 export type ContainerProps = {
@@ -10,11 +11,10 @@ export type ContainerProps = {
   dataTest?: string
 }
 
-export const ContainerPropsEq: EqClass.Eq<ContainerProps> = EqClass.struct<
-  Required<ContainerProps>
->({
-  children: EqClass.eqStrict,
-  isFluid: boolean.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<ContainerProps>
+export const ContainerPropsEq: EqClass.Eq<ContainerProps> =
+  EqClass.struct<ContainerProps>({
+    children: EqClass.eqStrict,
+    isFluid: UndefinableEq(boolean.Eq),
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })

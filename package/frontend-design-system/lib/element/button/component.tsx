@@ -1,12 +1,12 @@
 import { Loader2 } from 'lucide-react'
 import { memo } from 'react'
-import React from 'react'
 
 import { cn } from '../../theme'
 import {
   type ButtonColor,
   type ButtonProps,
   ButtonPropsEq,
+  type ButtonSize,
   type ButtonVariant,
 } from './type'
 
@@ -76,7 +76,7 @@ const colorStyles: Record<ButtonColor, Record<ButtonVariant, string>> = {
   },
 }
 
-const sizeStyles: Record<string, string> = {
+const sizeStyles: Record<ButtonSize, string> = {
   xsmall: 'px-2 py-1 text-xs font-medium',
   small: 'px-3 py-1.5 text-xs font-medium',
   normal: 'px-4 py-2 text-sm font-medium',
@@ -84,7 +84,7 @@ const sizeStyles: Record<string, string> = {
   large: 'px-6 py-3 text-lg font-semibold',
 }
 
-export const ButtonComponent: React.FC<ButtonProps> = ({
+const ButtonComponent = ({
   color = 'green',
   variant = 'solid',
   size = 'normal',
@@ -97,9 +97,9 @@ export const ButtonComponent: React.FC<ButtonProps> = ({
   type = 'button',
   className,
   dataTest,
-}) => {
-  const styles = colorStyles[color] || colorStyles.green
-  const colorClass = styles[variant] || styles.solid
+}: ButtonProps) => {
+  const styles = colorStyles[color]
+  const colorClass = styles[variant]
   return (
     <button
       data-test={dataTest}

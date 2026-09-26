@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import React from 'react'
 
 import { cn } from '../../theme'
 import { DeleteMemo } from '../delete/component'
@@ -23,20 +22,20 @@ const colorStyles: Record<NotificationColor, string> = {
   gray: 'bg-gray-200 text-gray-800 border-gray-300 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-800',
 }
 
-export const NotificationComponent: React.FC<NotificationProps> = ({
+const NotificationComponent = ({
   color = 'gray',
   children,
   onDelete,
   className,
   dataTest,
-}) => {
+}: NotificationProps) => {
   return (
     <div
       data-test={dataTest}
       data-component='Notification'
       className={cn(
         'relative flex items-center justify-between rounded-xl border p-4 text-sm shadow-xs transition-all',
-        colorStyles[color] || colorStyles.gray,
+        colorStyles[color],
         className,
       )}
     >

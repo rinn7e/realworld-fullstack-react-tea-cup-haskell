@@ -17,5 +17,5 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["lib"]
+  "include": ["lib", "tests"]
 }

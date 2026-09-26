@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
 import {
@@ -8,17 +8,13 @@ import {
   LevelPropsEq,
 } from './type'
 
-export const LevelComponent: React.FC<LevelProps> = ({
-  children,
-  className,
-  dataTest,
-}) => {
+const LevelComponent = ({ children, className, dataTest }: LevelProps) => {
   return (
     <div
       data-test={dataTest}
       data-component='Level'
       className={cn(
-        'flex flex-col items-center justify-between gap-4 md:flex-row',
+        'flex flex-col items-center justify-between gap-4 lg:flex-row',
         className,
       )}
     >
@@ -27,12 +23,12 @@ export const LevelComponent: React.FC<LevelProps> = ({
   )
 }
 
-export const LevelItemComponent: React.FC<LevelItemProps> = ({
+const LevelItemComponent = ({
   hasTextCentered,
   children,
   className,
   dataTest,
-}) => {
+}: LevelItemProps) => {
   return (
     <div
       data-test={dataTest}

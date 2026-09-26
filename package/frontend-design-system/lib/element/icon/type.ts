@@ -1,3 +1,4 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as string from 'fp-ts/lib/string'
 import React from 'react'
@@ -11,11 +12,9 @@ export type IconProps = {
   dataTest?: string
 }
 
-export const IconPropsEq: EqClass.Eq<IconProps> = EqClass.struct<
-  Required<IconProps>
->({
+export const IconPropsEq: EqClass.Eq<IconProps> = EqClass.struct<IconProps>({
   children: EqClass.eqStrict,
-  size: string.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<IconProps>
+  size: UndefinableEq(string.Eq),
+  className: UndefinableEq(string.Eq),
+  dataTest: UndefinableEq(string.Eq),
+})

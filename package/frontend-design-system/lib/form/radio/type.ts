@@ -1,6 +1,7 @@
-import * as EqClass from 'fp-ts/Eq'
-import * as boolean from 'fp-ts/boolean'
-import * as string from 'fp-ts/string'
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
+import * as EqClass from 'fp-ts/lib/Eq'
+import * as boolean from 'fp-ts/lib/boolean'
+import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
 export type RadioOption = {
@@ -18,14 +19,12 @@ export type RadioProps = {
   dataTest?: string
 }
 
-export const RadioPropsEq: EqClass.Eq<RadioProps> = EqClass.struct<
-  Required<RadioProps>
->({
+export const RadioPropsEq: EqClass.Eq<RadioProps> = EqClass.struct<RadioProps>({
   name: string.Eq,
   options: EqClass.eqStrict,
-  selectedValue: string.Eq,
-  isDisabled: boolean.Eq,
+  selectedValue: UndefinableEq(string.Eq),
+  isDisabled: UndefinableEq(boolean.Eq),
   onChange: EqClass.eqStrict,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<RadioProps>
+  className: UndefinableEq(string.Eq),
+  dataTest: UndefinableEq(string.Eq),
+})

@@ -1,6 +1,9 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as A from 'fp-ts/lib/Array'
 import * as EqClass from 'fp-ts/lib/Eq'
+import * as RA from 'fp-ts/lib/ReadonlyArray'
 import * as boolean from 'fp-ts/lib/boolean'
+import * as number from 'fp-ts/lib/number'
 import * as string from 'fp-ts/lib/string'
 import type React from 'react'
 
@@ -18,13 +21,13 @@ export const SidebarCategoryEq: EqClass.Eq<SidebarCategory> = EqClass.struct({
 
 export type Model = {
   collapsed: boolean
-  expandedKeys?: ReadonlyArray<string>
+  expandedKeys: ReadonlyArray<string>
 }
 
-export const ModelEq: EqClass.Eq<Model> = EqClass.struct({
+export const ModelEq: EqClass.Eq<Model> = EqClass.struct<Model>({
   collapsed: boolean.Eq,
-  expandedKeys: A.getEq(string.Eq),
-}) as unknown as EqClass.Eq<Model>
+  expandedKeys: RA.getEq(string.Eq),
+})
 
 export type Msg =
   | { _tag: 'ToggleCollapsed' }
@@ -49,17 +52,32 @@ export type SidebarProps = {
   dataTest?: string
 }
 
-export const SidebarPropsEq: EqClass.Eq<SidebarProps> = EqClass.struct<
-  Required<SidebarProps>
->({
-  model: ModelEq,
-  items: A.getEq(NavItemDataEq),
-  categories: A.getEq(SidebarCategoryEq),
+export const SidebarPropsEq: EqClass.Eq<SidebarProps> =
+  EqClass.struct<SidebarProps>({
+    model: ModelEq,
+    items: UndefinableEq(A.getEq(NavItemDataEq)),
+    categories: UndefinableEq(A.getEq(SidebarCategoryEq)),
+    dispatch: EqClass.eqStrict,
+    brandTitle: UndefinableEq(string.Eq),
+    brandLogo: EqClass.eqStrict,
+    userProfile: EqClass.eqStrict,
+    align: UndefinableEq(string.Eq),
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })
+
+export type SidebarItemProps = {
+  item: NavItemData
+  depth: number
+  isCollapsed: boolean
+  expandedKeys: ReadonlyArray<string>
+  dispatch: (msg: Msg) => void
+}
+
+export const SidebarItemPropsEq: EqClass.Eq<SidebarItemProps> = EqClass.struct({
+  item: NavItemDataEq,
+  depth: number.Eq,
+  isCollapsed: boolean.Eq,
+  expandedKeys: RA.getEq(string.Eq),
   dispatch: EqClass.eqStrict,
-  brandTitle: string.Eq,
-  brandLogo: EqClass.eqStrict,
-  userProfile: EqClass.eqStrict,
-  align: string.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<SidebarProps>
+})

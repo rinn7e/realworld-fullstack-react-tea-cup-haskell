@@ -5,7 +5,7 @@ import { cn } from '../../theme'
 import type { DropdownProps } from './type'
 import { DropdownPropsEq } from './type'
 
-export const DropdownComponent = ({
+const DropdownComponent = ({
   triggerLabel,
   items,
   model,
@@ -36,13 +36,12 @@ export const DropdownComponent = ({
       </button>
 
       {model.isOpen && (
-        <div className='absolute left-0 z-50 mt-1.5 w-48 rounded-md border border-gray-200 bg-white py-1 shadow-lg ring-1 ring-black/5 dark:border-zinc-800 dark:bg-zinc-950'>
+        <div className='absolute top-[calc(100%+6px)] left-0 z-50 w-48 rounded-md border border-gray-200 bg-white py-1 shadow-lg ring-1 ring-black/5 dark:border-zinc-800 dark:bg-zinc-950'>
           {items.map((item, idx) =>
             item.isDivider ? (
-              <div
-                key={idx}
-                className='my-1 border-t border-gray-100 dark:border-zinc-800'
-              />
+              <div key={idx} className='py-1'>
+                <div className='border-t border-gray-100 dark:border-zinc-800' />
+              </div>
             ) : (
               <button
                 key={item.id}

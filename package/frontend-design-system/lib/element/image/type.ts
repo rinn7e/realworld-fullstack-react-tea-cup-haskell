@@ -1,3 +1,4 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as boolean from 'fp-ts/lib/boolean'
 import * as string from 'fp-ts/lib/string'
@@ -18,17 +19,15 @@ export type ImageProps = {
   onError?: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void
 }
 
-export const ImagePropsEq: EqClass.Eq<ImageProps> = EqClass.struct<
-  Required<ImageProps>
->({
+export const ImagePropsEq: EqClass.Eq<ImageProps> = EqClass.struct<ImageProps>({
   src: EqClass.eqStrict,
-  defaultSrc: string.Eq,
-  fallbackSrc: string.Eq,
-  alt: string.Eq,
-  ratio: string.Eq,
+  defaultSrc: UndefinableEq(string.Eq),
+  fallbackSrc: UndefinableEq(string.Eq),
+  alt: UndefinableEq(string.Eq),
+  ratio: UndefinableEq(string.Eq),
   size: EqClass.eqStrict,
-  isRounded: boolean.Eq,
-  className: string.Eq,
-  dataTest: string.Eq,
+  isRounded: UndefinableEq(boolean.Eq),
+  className: UndefinableEq(string.Eq),
+  dataTest: UndefinableEq(string.Eq),
   onError: EqClass.eqStrict,
-}) as unknown as EqClass.Eq<ImageProps>
+})

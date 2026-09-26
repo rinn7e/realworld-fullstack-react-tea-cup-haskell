@@ -1,3 +1,4 @@
+import { UndefinableEq } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as string from 'fp-ts/lib/string'
 import React from 'react'
@@ -11,11 +12,10 @@ export type DeleteProps = {
   dataTest?: string
 }
 
-export const DeletePropsEq: EqClass.Eq<DeleteProps> = EqClass.struct<
-  Required<DeleteProps>
->({
-  size: string.Eq,
-  onClick: EqClass.eqStrict,
-  className: string.Eq,
-  dataTest: string.Eq,
-}) as unknown as EqClass.Eq<DeleteProps>
+export const DeletePropsEq: EqClass.Eq<DeleteProps> =
+  EqClass.struct<DeleteProps>({
+    size: UndefinableEq(string.Eq),
+    onClick: EqClass.eqStrict,
+    className: UndefinableEq(string.Eq),
+    dataTest: UndefinableEq(string.Eq),
+  })

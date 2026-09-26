@@ -4,7 +4,7 @@ import { cn } from '../../theme'
 import type { PanelProps } from './type'
 import { PanelPropsEq } from './type'
 
-export const PanelComponent = ({
+const PanelComponent = ({
   heading = 'Repositories',
   tabs = [],
   blocks = [],

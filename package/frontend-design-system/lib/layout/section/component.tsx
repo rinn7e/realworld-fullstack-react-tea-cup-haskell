@@ -1,19 +1,19 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { cn } from '../../theme'
-import { type SectionProps, SectionPropsEq } from './type'
+import { type SectionProps, SectionPropsEq, type SectionSize } from './type'
 
-const sizeStyles: Record<string, string> = {
+const sizeStyles: Record<SectionSize, string> = {
   medium: 'py-9 px-6',
   large: 'py-18 px-6',
 }
 
-export const SectionComponent: React.FC<SectionProps> = ({
+const SectionComponent = ({
   children,
   size = 'medium',
   className,
   dataTest,
-}) => {
+}: SectionProps) => {
   return (
     <section
       data-test={dataTest}
