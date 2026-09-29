@@ -25,7 +25,7 @@ const ArticleShortComponent = ({ model, dispatch }: Props) => {
           <Link
             route={{
               page: {
-                _tag: 'ProfilePage',
+                _tag: 'PageProfile',
                 username: model.author.username,
                 favorites: false,
               },
@@ -43,7 +43,7 @@ const ArticleShortComponent = ({ model, dispatch }: Props) => {
             <Link
               route={{
                 page: {
-                  _tag: 'ProfilePage',
+                  _tag: 'PageProfile',
                   username: model.author.username,
                   favorites: false,
                 },
@@ -75,7 +75,7 @@ const ArticleShortComponent = ({ model, dispatch }: Props) => {
       <Link
         route={{
           page: {
-            _tag: 'ArticlePage',
+            _tag: 'PageArticle',
             slug: model.slug,
           },
         }}

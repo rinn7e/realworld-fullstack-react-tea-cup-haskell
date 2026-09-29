@@ -2,7 +2,7 @@ import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar
 import * as TeaRouter from '@rinn7e/tea-cup-router'
 import { Menu } from 'lucide-react'
 
-import { type AppRoute, homePage, toUrlString } from '@/common/type/route'
+import { type AppRoute, pageHome, toUrlString } from '@/common/type/route'
 import { ALL_COLOR_SCHEMES, formatColorSchemeLabel } from '@/theme/type'
 import type { Model } from '@/type'
 
@@ -11,7 +11,7 @@ import { navLinkAuths, navLinkUnauths } from './constant'
 import type { NavItem } from './type'
 
 export const toBrandNavItem = (_model: Model): NavItem => {
-  const route: AppRoute = { page: homePage() }
+  const route: AppRoute = { page: pageHome() }
   return {
     data: {
       key: 'site-logo',

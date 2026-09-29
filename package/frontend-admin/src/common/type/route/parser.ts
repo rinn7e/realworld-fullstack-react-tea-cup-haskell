@@ -5,14 +5,14 @@ import { BASE_URL } from '@/common/env'
 import {
   type AppPage,
   type AppRoute,
-  articlesPage,
-  commentsPage,
-  homePage,
-  loginPage,
-  notFoundPage,
-  settingsPage,
-  usersPage,
-  visitorsPage,
+  pageArticles,
+  pageComments,
+  pageHome,
+  pageLogin,
+  pageNotFound,
+  pageSettings,
+  pageUsers,
+  pageVisitors,
 } from './type'
 
 const homeMatch = end
@@ -24,13 +24,13 @@ const settingsMatch = lit('settings').and(end)
 const visitorsMatch = lit('visitors').and(end)
 
 const appRouter = zero<AppPage>()
-  .alt(homeMatch.parser.map(homePage))
-  .alt(loginMatch.parser.map(loginPage))
-  .alt(articlesMatch.parser.map(articlesPage))
-  .alt(usersMatch.parser.map(usersPage))
-  .alt(commentsMatch.parser.map(commentsPage))
-  .alt(visitorsMatch.parser.map(visitorsPage))
-  .alt(settingsMatch.parser.map(settingsPage))
+  .alt(homeMatch.parser.map(pageHome))
+  .alt(loginMatch.parser.map(pageLogin))
+  .alt(articlesMatch.parser.map(pageArticles))
+  .alt(usersMatch.parser.map(pageUsers))
+  .alt(commentsMatch.parser.map(pageComments))
+  .alt(visitorsMatch.parser.map(pageVisitors))
+  .alt(settingsMatch.parser.map(pageSettings))
 
 export const removeBaseUrl = (href: string): string => {
   const url = new URL(href)
@@ -51,7 +51,7 @@ export const addBaseUrl = (path: string): string => {
 
 export const parseAppRoute = (_origin: string, url: string): AppRoute => {
   const pathname = removeBaseUrl(url)
-  const page = parse(appRouter, Route.parse(pathname), notFoundPage())
+  const page = parse(appRouter, Route.parse(pathname), pageNotFound())
   return { page }
 }
 
@@ -59,21 +59,21 @@ export const toUrlString = (appRoute: AppRoute): string => {
   const { page } = appRoute
   const getPath = () => {
     switch (page._tag) {
-      case 'HomePage':
+      case 'PageHome':
         return format(homeMatch.formatter, {})
-      case 'LoginPage':
+      case 'PageLogin':
         return format(loginMatch.formatter, {})
-      case 'ArticlePage':
+      case 'PageArticle':
         return format(articlesMatch.formatter, {})
-      case 'UserPage':
+      case 'PageUser':
         return format(usersMatch.formatter, {})
-      case 'CommentPage':
+      case 'PageComment':
         return format(commentsMatch.formatter, {})
-      case 'VisitorPage':
+      case 'PageVisitor':
         return format(visitorsMatch.formatter, {})
-      case 'SettingPage':
+      case 'PageSetting':
         return format(settingsMatch.formatter, {})
-      case 'NotFoundPage':
+      case 'PageNotFound':
         return '/404'
     }
   }

@@ -5,22 +5,22 @@ import { type Dispatcher } from 'tea-cup-fp'
 import { SetGlobalMsgContext } from '@/common/global-context'
 import {
   type AppRoute,
-  articlesPage,
-  commentsPage,
-  homePage,
-  settingsPage,
-  usersPage,
-  visitorsPage,
+  pageArticles,
+  pageComments,
+  pageHome,
+  pageSettings,
+  pageUsers,
+  pageVisitors,
 } from '@/common/type/route'
 import { Link } from '@/component/link'
 import { PersonaPanelMemo } from '@/component/persona-panel/component'
-import { ArticlePageMemo } from '@/page/article/component'
-import { CommentPageMemo } from '@/page/comment/component'
-import { HomePageMemo } from '@/page/home/component'
-import { LoginPageMemo } from '@/page/login/component'
-import { SettingPageMemo } from '@/page/setting/component'
-import { UserPageMemo } from '@/page/user/component'
-import { VisitorPageMemo } from '@/page/visitor/component'
+import { ArticlePageMemo } from '@/page/article-page/component'
+import { CommentPageMemo } from '@/page/comment-page/component'
+import { HomePageMemo } from '@/page/home-page/component'
+import { LoginPageMemo } from '@/page/login-page/component'
+import { SettingPageMemo } from '@/page/setting-page/component'
+import { UserPageMemo } from '@/page/user-page/component'
+import { VisitorPageMemo } from '@/page/visitor-page/component'
 
 import { type Model, type Msg } from './type'
 
@@ -34,7 +34,7 @@ export const App = ({ model, dispatch }: AppProps) => {
   const currentRoute = TeaRouter.getRoute(model.router)
 
   // If we are on the login page, show a different layout (no sidebar)
-  if (currentRoute.page._tag === 'LoginPage') {
+  if (currentRoute.page._tag === 'PageLogin') {
     return (
       <SetGlobalMsgContext value={dispatch}>
         <main className='h-dvh bg-gray-50 dark:bg-black'>
@@ -57,7 +57,7 @@ export const App = ({ model, dispatch }: AppProps) => {
           <aside className='bg-theme-secondary flex w-full flex-col text-white lg:w-[260px] lg:shrink-0'>
             <div className='p-[24px]'>
               <Link
-                route={{ page: homePage() }}
+                route={{ page: pageHome() }}
                 className='block text-left transition-opacity hover:opacity-85'
               >
                 <h1 className='text-[22px] font-bold tracking-tight text-white hover:underline'>
@@ -84,8 +84,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'HomePage'}
-                route={{ page: homePage() }}
+                active={currentRoute.page._tag === 'PageHome'}
+                route={{ page: pageHome() }}
               />
               <SidebarLink
                 label='Articles'
@@ -111,8 +111,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'ArticlePage'}
-                route={{ page: articlesPage() }}
+                active={currentRoute.page._tag === 'PageArticle'}
+                route={{ page: pageArticles() }}
               />
               <SidebarLink
                 label='Users'
@@ -132,8 +132,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'UserPage'}
-                route={{ page: usersPage() }}
+                active={currentRoute.page._tag === 'PageUser'}
+                route={{ page: pageUsers() }}
               />
               <SidebarLink
                 label='Comments'
@@ -153,8 +153,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'CommentPage'}
-                route={{ page: commentsPage() }}
+                active={currentRoute.page._tag === 'PageComment'}
+                route={{ page: pageComments() }}
               />
               <SidebarLink
                 label='Visitors'
@@ -174,8 +174,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'VisitorPage'}
-                route={{ page: visitorsPage() }}
+                active={currentRoute.page._tag === 'PageVisitor'}
+                route={{ page: pageVisitors() }}
               />
               <SidebarLink
                 label='Settings'
@@ -201,8 +201,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'SettingPage'}
-                route={{ page: settingsPage() }}
+                active={currentRoute.page._tag === 'PageSetting'}
+                route={{ page: pageSettings() }}
               />
             </nav>
           </aside>
@@ -222,7 +222,7 @@ export const App = ({ model, dispatch }: AppProps) => {
             <PageView model={model} dispatch={dispatch} />
 
             {/* Scroll to Top Button */}
-            {model.showScrollTop && currentRoute.page._tag !== 'HomePage' && (
+            {model.showScrollTop && currentRoute.page._tag !== 'PageHome' && (
               <button
                 type='button'
                 onClick={() => dispatch({ _tag: 'ScrollToTop' })}

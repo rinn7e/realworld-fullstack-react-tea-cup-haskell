@@ -18,48 +18,48 @@ import {
   getSidebarCategories,
 } from '@/common/constant/menu'
 import type { AppRoute } from '@/common/type/route'
-import { BlockPageMemo } from '@/page/block/component'
-import { BoxPageMemo } from '@/page/box/component'
-import { BreadcrumbPageMemo } from '@/page/breadcrumb/component'
-import { ButtonPageMemo } from '@/page/button/component'
-import { CardPageMemo } from '@/page/card/component'
-import { CheckboxPageMemo } from '@/page/checkbox/component'
-import { ColumnsPageMemo } from '@/page/columns/component'
-import { ContainerPageMemo } from '@/page/container/component'
-import { ContentPageMemo } from '@/page/content/component'
-import { DeletePageMemo } from '@/page/delete/component'
-import { DotLoadingPageMemo } from '@/page/dot-loading/component'
-import { DropdownPageMemo } from '@/page/dropdown/component'
-import { FieldPageMemo } from '@/page/field/component'
-import { FilePageMemo } from '@/page/file/component'
-import { FloatingSidebarPageMemo } from '@/page/floating-sidebar/component'
-import { FooterPageMemo } from '@/page/footer/component'
-import { HeroPageMemo } from '@/page/hero/component'
-import { HomePageMemo } from '@/page/home/component'
-import { IconPageMemo } from '@/page/icon/component'
-import { ImagePageMemo } from '@/page/image/component'
-import { InputPageMemo } from '@/page/input/component'
-import { LevelPageMemo } from '@/page/level/component'
-import { MediaObjectPageMemo } from '@/page/media-object/component'
-import { MenuPageMemo } from '@/page/menu/component'
-import { MessagePageMemo } from '@/page/message/component'
-import { ModalPageMemo } from '@/page/modal/component'
-import { NavbarPageMemo } from '@/page/navbar/component'
-import { NotFoundPageMemo } from '@/page/not-found/component'
-import { NotificationPageMemo } from '@/page/notification/component'
-import { PaginationPageMemo } from '@/page/pagination/component'
-import { PanelPageMemo } from '@/page/panel/component'
-import { PopoverPageMemo } from '@/page/popover/component'
-import { ProgressPageMemo } from '@/page/progress/component'
-import { RadioPageMemo } from '@/page/radio/component'
-import { SectionPageMemo } from '@/page/section/component'
-import { SelectPageMemo } from '@/page/select/component'
-import { SidebarPageMemo } from '@/page/sidebar/component'
-import { TablePageMemo } from '@/page/table/component'
-import { TabsPageMemo } from '@/page/tabs/component'
-import { TagPageMemo } from '@/page/tag/component'
-import { TextareaPageMemo } from '@/page/textarea/component'
-import { TitlePageMemo } from '@/page/title/component'
+import { BlockPageMemo } from '@/page/block-page/component'
+import { BoxPageMemo } from '@/page/box-page/component'
+import { BreadcrumbPageMemo } from '@/page/breadcrumb-page/component'
+import { ButtonPageMemo } from '@/page/button-page/component'
+import { CardPageMemo } from '@/page/card-page/component'
+import { CheckboxPageMemo } from '@/page/checkbox-page/component'
+import { ColumnsPageMemo } from '@/page/columns-page/component'
+import { ContainerPageMemo } from '@/page/container-page/component'
+import { ContentPageMemo } from '@/page/content-page/component'
+import { DeletePageMemo } from '@/page/delete-page/component'
+import { DotLoadingPageMemo } from '@/page/dot-loading-page/component'
+import { DropdownPageMemo } from '@/page/dropdown-page/component'
+import { FieldPageMemo } from '@/page/field-page/component'
+import { FilePageMemo } from '@/page/file-page/component'
+import { FloatingSidebarPageMemo } from '@/page/floating-sidebar-page/component'
+import { FooterPageMemo } from '@/page/footer-page/component'
+import { HeroPageMemo } from '@/page/hero-page/component'
+import { HomePageMemo } from '@/page/home-page/component'
+import { IconPageMemo } from '@/page/icon-page/component'
+import { ImagePageMemo } from '@/page/image-page/component'
+import { InputPageMemo } from '@/page/input-page/component'
+import { LevelPageMemo } from '@/page/level-page/component'
+import { MediaObjectPageMemo } from '@/page/media-object-page/component'
+import { MenuPageMemo } from '@/page/menu-page/component'
+import { MessagePageMemo } from '@/page/message-page/component'
+import { ModalPageMemo } from '@/page/modal-page/component'
+import { NavbarPageMemo } from '@/page/navbar-page/component'
+import { NotFoundPageMemo } from '@/page/not-found-page/component'
+import { NotificationPageMemo } from '@/page/notification-page/component'
+import { PaginationPageMemo } from '@/page/pagination-page/component'
+import { PanelPageMemo } from '@/page/panel-page/component'
+import { PopoverPageMemo } from '@/page/popover-page/component'
+import { ProgressPageMemo } from '@/page/progress-page/component'
+import { RadioPageMemo } from '@/page/radio-page/component'
+import { SectionPageMemo } from '@/page/section-page/component'
+import { SelectPageMemo } from '@/page/select-page/component'
+import { SidebarPageMemo } from '@/page/sidebar-page/component'
+import { TablePageMemo } from '@/page/table-page/component'
+import { TabsPageMemo } from '@/page/tabs-page/component'
+import { TagPageMemo } from '@/page/tag-page/component'
+import { TextareaPageMemo } from '@/page/textarea-page/component'
+import { TitlePageMemo } from '@/page/title-page/component'
 import type { ColorScheme } from '@/theme/type'
 
 import { type Model, type Msg, type PageModel, teaRouterMsg } from './type'
@@ -420,8 +420,8 @@ export const App = ({ model, dispatch }: AppProps) => {
   const pageModel = TeaRouter.getPageModel(model.router)
 
   const activeComponent =
-    currentRoute.page._tag === 'HomePage' ||
-    currentRoute.page._tag === 'NotFoundPage'
+    currentRoute.page._tag === 'PageHome' ||
+    currentRoute.page._tag === 'PageNotFound'
       ? ''
       : currentRoute.page._tag.replace(/Page$/, '').toLowerCase()
 
@@ -445,14 +445,14 @@ export const App = ({ model, dispatch }: AppProps) => {
               key: 'home',
               label: 'Home',
               href: '/',
-              isActive: currentRoute.page._tag === 'HomePage',
+              isActive: currentRoute.page._tag === 'PageHome',
             },
             {
               key: 'elements',
               label: 'Elements',
               href: '/block',
               isActive:
-                currentRoute.page._tag !== 'HomePage' &&
+                currentRoute.page._tag !== 'PageHome' &&
                 SHOWCASE_CATEGORIES[0].items.some(
                   (i) => i.id === activeComponent,
                 ),
@@ -462,7 +462,7 @@ export const App = ({ model, dispatch }: AppProps) => {
               label: 'Components',
               href: '/breadcrumb',
               isActive:
-                currentRoute.page._tag !== 'HomePage' &&
+                currentRoute.page._tag !== 'PageHome' &&
                 SHOWCASE_CATEGORIES[1].items.some(
                   (i) => i.id === activeComponent,
                 ),
@@ -472,7 +472,7 @@ export const App = ({ model, dispatch }: AppProps) => {
               label: 'Form',
               href: '/field',
               isActive:
-                currentRoute.page._tag !== 'HomePage' &&
+                currentRoute.page._tag !== 'PageHome' &&
                 SHOWCASE_CATEGORIES[2].items.some(
                   (i) => i.id === activeComponent,
                 ),

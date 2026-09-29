@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := build
 
-.PHONY: build watch api api-watch server resetdb seed migrate-generate migrate-up migrate-up-one migrate-down-one migrate-status lint format build-haddock build-hoogle hoogle test compile install exec run-installed swagger-web swagger-admin server-fresh server-prod
+.PHONY: build watch api api-watch server server-ai server-stop-ai resetdb seed migrate-generate migrate-up migrate-up-one migrate-down-one migrate-status lint format build-haddock build-hoogle hoogle test compile install exec run-installed swagger-web swagger-admin server-fresh server-prod
 
 # Build with fast compilation
 build:
@@ -32,6 +32,16 @@ api-watch:
 server:
 	@chmod +x ./script/server.sh
 	./script/server.sh
+
+# Start all services in the background without tmux (for AI agents / non-interactive shells)
+server-ai:
+	@chmod +x ./script/server-ai.sh ./script/stop-server-ai.sh
+	./script/server-ai.sh
+
+# Stop all background services started by server-ai
+server-stop-ai:
+	@chmod +x ./script/stop-server-ai.sh
+	./script/stop-server-ai.sh
 
 # Reset database and start dev server
 server-fresh:

@@ -10,53 +10,53 @@ export type HomeTab =
   | { _tag: 'UserFeedTab' }
   | { _tag: 'TagFeedTab'; tag: string }
 
-export type HomePage = {
-  readonly _tag: 'HomePage'
+export type PageHome = {
+  readonly _tag: 'PageHome'
   tab: HomeTab
   page: number
 }
 
-export type LoginPage = {
-  readonly _tag: 'LoginPage'
+export type PageLogin = {
+  readonly _tag: 'PageLogin'
 }
 
-export type SignupPage = {
-  readonly _tag: 'SignupPage'
+export type PageSignup = {
+  readonly _tag: 'PageSignup'
 }
 
-export type SettingsPage = {
-  readonly _tag: 'SettingsPage'
+export type PageSettings = {
+  readonly _tag: 'PageSettings'
 }
 
-export type EditorPage = {
-  readonly _tag: 'EditorPage'
+export type PageEditor = {
+  readonly _tag: 'PageEditor'
   slug: Option<string>
 }
 
-export type ArticlePage = {
-  readonly _tag: 'ArticlePage'
+export type PageArticle = {
+  readonly _tag: 'PageArticle'
   slug: string
 }
 
-export type ProfilePage = {
-  readonly _tag: 'ProfilePage'
+export type PageProfile = {
+  readonly _tag: 'PageProfile'
   username: string
   favorites: boolean
 }
 
-export type NotFoundPage = {
-  readonly _tag: 'NotFoundPage'
+export type PageNotFound = {
+  readonly _tag: 'PageNotFound'
 }
 
 export type AppPage =
-  | HomePage
-  | LoginPage
-  | SignupPage
-  | SettingsPage
-  | EditorPage
-  | ArticlePage
-  | ProfilePage
-  | NotFoundPage
+  | PageHome
+  | PageLogin
+  | PageSignup
+  | PageSettings
+  | PageEditor
+  | PageArticle
+  | PageProfile
+  | PageNotFound
 
 export const HomeTabEq: EqClass.Eq<HomeTab> = {
   equals: (x, y) => {
@@ -79,62 +79,62 @@ export const HomeTabEq: EqClass.Eq<HomeTab> = {
   },
 }
 
-export const HomePageEq: EqClass.Eq<HomePage> = EqClass.struct({
+export const PageHomeEq: EqClass.Eq<PageHome> = EqClass.struct({
   _tag: S.Eq,
   tab: HomeTabEq,
   page: N.Eq,
 })
 
-export const LoginPageEq: EqClass.Eq<LoginPage> = EqClass.struct({
+export const PageLoginEq: EqClass.Eq<PageLogin> = EqClass.struct({
   _tag: S.Eq,
 })
 
-export const SignupPageEq: EqClass.Eq<SignupPage> = EqClass.struct({
+export const PageSignupEq: EqClass.Eq<PageSignup> = EqClass.struct({
   _tag: S.Eq,
 })
 
-export const SettingsPageEq: EqClass.Eq<SettingsPage> = EqClass.struct({
+export const PageSettingsEq: EqClass.Eq<PageSettings> = EqClass.struct({
   _tag: S.Eq,
 })
 
-export const EditorPageEq: EqClass.Eq<EditorPage> = EqClass.struct({
+export const PageEditorEq: EqClass.Eq<PageEditor> = EqClass.struct({
   _tag: S.Eq,
   slug: O.getEq(S.Eq),
 })
 
-export const ArticlePageEq: EqClass.Eq<ArticlePage> = EqClass.struct({
+export const PageArticleEq: EqClass.Eq<PageArticle> = EqClass.struct({
   _tag: S.Eq,
   slug: S.Eq,
 })
 
-export const ProfilePageEq: EqClass.Eq<ProfilePage> = EqClass.struct({
+export const PageProfileEq: EqClass.Eq<PageProfile> = EqClass.struct({
   _tag: S.Eq,
   username: S.Eq,
   favorites: B.Eq,
 })
 
-export const NotFoundPageEq: EqClass.Eq<NotFoundPage> = EqClass.struct({
+export const PageNotFoundEq: EqClass.Eq<PageNotFound> = EqClass.struct({
   _tag: S.Eq,
 })
 
 export const AppPageEq: EqClass.Eq<AppPage> = {
   equals: (x, y) => {
-    if (x._tag === 'HomePage' && y._tag === 'HomePage') {
-      return HomePageEq.equals(x, y)
-    } else if (x._tag === 'LoginPage' && y._tag === 'LoginPage') {
-      return LoginPageEq.equals(x, y)
-    } else if (x._tag === 'SignupPage' && y._tag === 'SignupPage') {
-      return SignupPageEq.equals(x, y)
-    } else if (x._tag === 'SettingsPage' && y._tag === 'SettingsPage') {
-      return SettingsPageEq.equals(x, y)
-    } else if (x._tag === 'EditorPage' && y._tag === 'EditorPage') {
-      return EditorPageEq.equals(x, y)
-    } else if (x._tag === 'ArticlePage' && y._tag === 'ArticlePage') {
-      return ArticlePageEq.equals(x, y)
-    } else if (x._tag === 'ProfilePage' && y._tag === 'ProfilePage') {
-      return ProfilePageEq.equals(x, y)
-    } else if (x._tag === 'NotFoundPage' && y._tag === 'NotFoundPage') {
-      return NotFoundPageEq.equals(x, y)
+    if (x._tag === 'PageHome' && y._tag === 'PageHome') {
+      return PageHomeEq.equals(x, y)
+    } else if (x._tag === 'PageLogin' && y._tag === 'PageLogin') {
+      return PageLoginEq.equals(x, y)
+    } else if (x._tag === 'PageSignup' && y._tag === 'PageSignup') {
+      return PageSignupEq.equals(x, y)
+    } else if (x._tag === 'PageSettings' && y._tag === 'PageSettings') {
+      return PageSettingsEq.equals(x, y)
+    } else if (x._tag === 'PageEditor' && y._tag === 'PageEditor') {
+      return PageEditorEq.equals(x, y)
+    } else if (x._tag === 'PageArticle' && y._tag === 'PageArticle') {
+      return PageArticleEq.equals(x, y)
+    } else if (x._tag === 'PageProfile' && y._tag === 'PageProfile') {
+      return PageProfileEq.equals(x, y)
+    } else if (x._tag === 'PageNotFound' && y._tag === 'PageNotFound') {
+      return PageNotFoundEq.equals(x, y)
     } else {
       return false
     }
@@ -150,7 +150,7 @@ export type AppRoute = {
 }
 
 export const defaultAppRoute = (): AppRoute => ({
-  page: homePage(),
+  page: pageHome(),
 })
 
 export const globalFeedTab = (): HomeTab => ({ _tag: 'GlobalFeedTab' })
@@ -160,28 +160,28 @@ export const tagFeedTab = (tag: string): HomeTab => ({
   tag,
 })
 
-export const homePage = (
+export const pageHome = (
   tab: HomeTab = globalFeedTab(),
   page: number = 1,
 ): AppPage => ({
-  _tag: 'HomePage',
+  _tag: 'PageHome',
   tab,
   page,
 })
-export const loginPage = (): AppPage => ({ _tag: 'LoginPage' })
-export const signupPage = (): AppPage => ({ _tag: 'SignupPage' })
-export const settingsPage = (): AppPage => ({ _tag: 'SettingsPage' })
-export const editorPage = (slug: Option<string>): AppPage => ({
-  _tag: 'EditorPage',
+export const pageLogin = (): AppPage => ({ _tag: 'PageLogin' })
+export const pageSignup = (): AppPage => ({ _tag: 'PageSignup' })
+export const pageSettings = (): AppPage => ({ _tag: 'PageSettings' })
+export const pageEditor = (slug: Option<string>): AppPage => ({
+  _tag: 'PageEditor',
   slug,
 })
-export const articlePage = (slug: string): AppPage => ({
-  _tag: 'ArticlePage',
+export const pageArticle = (slug: string): AppPage => ({
+  _tag: 'PageArticle',
   slug,
 })
-export const profilePage = (username: string, favorites: boolean): AppPage => ({
-  _tag: 'ProfilePage',
+export const pageProfile = (username: string, favorites: boolean): AppPage => ({
+  _tag: 'PageProfile',
   username,
   favorites,
 })
-export const notFoundPage = (): AppPage => ({ _tag: 'NotFoundPage' })
+export const pageNotFound = (): AppPage => ({ _tag: 'PageNotFound' })

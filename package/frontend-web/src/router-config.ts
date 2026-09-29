@@ -5,7 +5,7 @@ import { type Cmd } from 'tea-cup-fp'
 import {
   type AppRoute,
   AppRouteEq,
-  homePage,
+  pageHome,
   parseAppRoute,
   toUrlString,
 } from '@/common/type/route'
@@ -28,19 +28,19 @@ export const mkRouterConfig = <PageModel, Msg>(
   guard: (toRoute, shared) => {
     const isLoggedIn = O.isSome(shared.user)
     const requiresAuth =
-      toRoute.page._tag === 'SettingsPage' ||
-      toRoute.page._tag === 'EditorPage' ||
-      (toRoute.page._tag === 'HomePage' &&
+      toRoute.page._tag === 'PageSettings' ||
+      toRoute.page._tag === 'PageEditor' ||
+      (toRoute.page._tag === 'PageHome' &&
         toRoute.page.tab._tag === 'UserFeedTab')
 
     if (requiresAuth && !isLoggedIn) {
-      return { _tag: 'Redirect', to: { page: { _tag: 'LoginPage' } } }
+      return { _tag: 'Redirect', to: { page: { _tag: 'PageLogin' } } }
     } else {
       const requiresGuest =
-        toRoute.page._tag === 'LoginPage' || toRoute.page._tag === 'SignupPage'
+        toRoute.page._tag === 'PageLogin' || toRoute.page._tag === 'PageSignup'
 
       if (requiresGuest && isLoggedIn) {
-        return { _tag: 'Redirect', to: { page: homePage() } }
+        return { _tag: 'Redirect', to: { page: pageHome() } }
       } else {
         return { _tag: 'Allow' }
       }

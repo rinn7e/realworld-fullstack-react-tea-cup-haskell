@@ -2,16 +2,16 @@ import { describe, expect, it } from 'vitest'
 
 import {
   type AppRoute,
-  articlesPage,
-  commentsPage,
-  homePage,
-  loginPage,
-  notFoundPage,
+  pageArticles,
+  pageComments,
+  pageHome,
+  pageLogin,
+  pageNotFound,
+  pageSettings,
+  pageUsers,
+  pageVisitors,
   parseAppRoute,
-  settingsPage,
   toUrlString,
-  usersPage,
-  visitorsPage,
 } from '@/common/type/route'
 
 const parse = (path: string) =>
@@ -19,23 +19,23 @@ const parse = (path: string) =>
 
 describe('parseAppRoute', () => {
   it('parses every page and falls back to not found', () => {
-    expect(parse('/')).toEqual(homePage())
-    expect(parse('/login')).toEqual(loginPage())
-    expect(parse('/articles')).toEqual(articlesPage())
-    expect(parse('/users')).toEqual(usersPage())
-    expect(parse('/comments')).toEqual(commentsPage())
-    expect(parse('/visitors')).toEqual(visitorsPage())
-    expect(parse('/settings')).toEqual(settingsPage())
-    expect(parse('/no/such/page')).toEqual(notFoundPage())
+    expect(parse('/')).toEqual(pageHome())
+    expect(parse('/login')).toEqual(pageLogin())
+    expect(parse('/articles')).toEqual(pageArticles())
+    expect(parse('/users')).toEqual(pageUsers())
+    expect(parse('/comments')).toEqual(pageComments())
+    expect(parse('/visitors')).toEqual(pageVisitors())
+    expect(parse('/settings')).toEqual(pageSettings())
+    expect(parse('/no/such/page')).toEqual(pageNotFound())
   })
 })
 
 describe('toUrlString', () => {
   it('round-trips through parseAppRoute', () => {
     const routes: AppRoute[] = [
-      { page: homePage() },
-      { page: usersPage() },
-      { page: settingsPage() },
+      { page: pageHome() },
+      { page: pageUsers() },
+      { page: pageSettings() },
     ]
     routes.forEach((route) => {
       expect(

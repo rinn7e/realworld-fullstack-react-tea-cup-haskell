@@ -1,76 +1,76 @@
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as S from 'fp-ts/lib/string'
 
-export type HomePage = { _tag: 'HomePage' }
-export type LoginPage = { _tag: 'LoginPage' }
-export type ArticlePage = { _tag: 'ArticlePage' }
-export type UserPage = { _tag: 'UserPage' }
-export type CommentPage = { _tag: 'CommentPage' }
-export type VisitorPage = { _tag: 'VisitorPage' }
-export type SettingPage = { _tag: 'SettingPage' }
-export type NotFoundPage = { _tag: 'NotFoundPage' }
+export type PageHome = { _tag: 'PageHome' }
+export type PageLogin = { _tag: 'PageLogin' }
+export type PageArticle = { _tag: 'PageArticle' }
+export type PageUser = { _tag: 'PageUser' }
+export type PageComment = { _tag: 'PageComment' }
+export type PageVisitor = { _tag: 'PageVisitor' }
+export type PageSetting = { _tag: 'PageSetting' }
+export type PageNotFound = { _tag: 'PageNotFound' }
 
 export type AppPage =
-  | HomePage
-  | LoginPage
-  | ArticlePage
-  | UserPage
-  | CommentPage
-  | VisitorPage
-  | SettingPage
-  | NotFoundPage
+  | PageHome
+  | PageLogin
+  | PageArticle
+  | PageUser
+  | PageComment
+  | PageVisitor
+  | PageSetting
+  | PageNotFound
 
-export const HomePageEq: EqClass.Eq<HomePage> = EqClass.struct({
+export const PageHomeEq: EqClass.Eq<PageHome> = EqClass.struct({
   _tag: S.Eq,
 })
 
-export const LoginPageEq: EqClass.Eq<LoginPage> = EqClass.struct({
+export const PageLoginEq: EqClass.Eq<PageLogin> = EqClass.struct({
   _tag: S.Eq,
 })
 
-export const ArticlePageEq: EqClass.Eq<ArticlePage> = EqClass.struct({
+export const PageArticleEq: EqClass.Eq<PageArticle> = EqClass.struct({
   _tag: S.Eq,
 })
 
-export const UserPageEq: EqClass.Eq<UserPage> = EqClass.struct({
+export const PageUserEq: EqClass.Eq<PageUser> = EqClass.struct({
   _tag: S.Eq,
 })
 
-export const CommentPageEq: EqClass.Eq<CommentPage> = EqClass.struct({
+export const PageCommentEq: EqClass.Eq<PageComment> = EqClass.struct({
   _tag: S.Eq,
 })
 
-export const VisitorPageEq: EqClass.Eq<VisitorPage> = EqClass.struct({
+export const PageVisitorEq: EqClass.Eq<PageVisitor> = EqClass.struct({
   _tag: S.Eq,
 })
 
-export const SettingPageEq: EqClass.Eq<SettingPage> = EqClass.struct({
+export const PageSettingEq: EqClass.Eq<PageSetting> = EqClass.struct({
   _tag: S.Eq,
 })
 
-export const NotFoundPageEq: EqClass.Eq<NotFoundPage> = EqClass.struct({
+export const PageNotFoundEq: EqClass.Eq<PageNotFound> = EqClass.struct({
   _tag: S.Eq,
 })
 
 export const AppPageEq: EqClass.Eq<AppPage> = {
   equals: (a, b) => {
     switch (a._tag) {
-      case 'HomePage':
-        return b._tag === 'HomePage' && HomePageEq.equals(a, b)
-      case 'LoginPage':
-        return b._tag === 'LoginPage' && LoginPageEq.equals(a, b)
-      case 'ArticlePage':
-        return b._tag === 'ArticlePage' && ArticlePageEq.equals(a, b)
-      case 'UserPage':
-        return b._tag === 'UserPage' && UserPageEq.equals(a, b)
-      case 'CommentPage':
-        return b._tag === 'CommentPage' && CommentPageEq.equals(a, b)
-      case 'VisitorPage':
-        return b._tag === 'VisitorPage' && VisitorPageEq.equals(a, b)
-      case 'SettingPage':
-        return b._tag === 'SettingPage' && SettingPageEq.equals(a, b)
-      case 'NotFoundPage':
-        return b._tag === 'NotFoundPage' && NotFoundPageEq.equals(a, b)
+      case 'PageHome':
+        return b._tag === 'PageHome' && PageHomeEq.equals(a, b)
+      case 'PageLogin':
+        return b._tag === 'PageLogin' && PageLoginEq.equals(a, b)
+      case 'PageArticle':
+        return b._tag === 'PageArticle' && PageArticleEq.equals(a, b)
+      case 'PageUser':
+        return b._tag === 'PageUser' && PageUserEq.equals(a, b)
+      case 'PageComment':
+        return b._tag === 'PageComment' && PageCommentEq.equals(a, b)
+      case 'PageVisitor':
+        return b._tag === 'PageVisitor' && PageVisitorEq.equals(a, b)
+      case 'PageSetting':
+        return b._tag === 'PageSetting' && PageSettingEq.equals(a, b)
+      case 'PageNotFound':
+        return b._tag === 'PageNotFound' && PageNotFoundEq.equals(a, b)
     }
   },
 }
@@ -83,11 +83,11 @@ export const AppRouteEq: EqClass.Eq<AppRoute> = EqClass.struct({
   page: AppPageEq,
 })
 
-export const homePage = (): AppPage => ({ _tag: 'HomePage' })
-export const loginPage = (): AppPage => ({ _tag: 'LoginPage' })
-export const articlesPage = (): AppPage => ({ _tag: 'ArticlePage' })
-export const usersPage = (): AppPage => ({ _tag: 'UserPage' })
-export const commentsPage = (): AppPage => ({ _tag: 'CommentPage' })
-export const visitorsPage = (): AppPage => ({ _tag: 'VisitorPage' })
-export const settingsPage = (): AppPage => ({ _tag: 'SettingPage' })
-export const notFoundPage = (): AppPage => ({ _tag: 'NotFoundPage' })
+export const pageHome = (): AppPage => ({ _tag: 'PageHome' })
+export const pageLogin = (): AppPage => ({ _tag: 'PageLogin' })
+export const pageArticles = (): AppPage => ({ _tag: 'PageArticle' })
+export const pageUsers = (): AppPage => ({ _tag: 'PageUser' })
+export const pageComments = (): AppPage => ({ _tag: 'PageComment' })
+export const pageVisitors = (): AppPage => ({ _tag: 'PageVisitor' })
+export const pageSettings = (): AppPage => ({ _tag: 'PageSetting' })
+export const pageNotFound = (): AppPage => ({ _tag: 'PageNotFound' })

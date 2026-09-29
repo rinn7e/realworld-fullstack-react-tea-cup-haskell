@@ -21,15 +21,15 @@ import {
   type AppPage,
   type AppRoute,
   type HomeTab,
-  articlePage,
-  editorPage,
   globalFeedTab,
-  homePage,
-  loginPage,
-  notFoundPage,
-  profilePage,
-  settingsPage,
-  signupPage,
+  pageArticle,
+  pageEditor,
+  pageHome,
+  pageLogin,
+  pageNotFound,
+  pageProfile,
+  pageSettings,
+  pageSignup,
   tagFeedTab,
   userFeedTab,
 } from './type'
@@ -134,25 +134,25 @@ const pageFromParam = (p: string | undefined): number => {
 const appRouter: Parser<AppPage> = zero<AppPage>()
   .alt(
     homeMatch.parser.map(({ tab, tag, page }) =>
-      homePage(tabFromParam(tab, tag), pageFromParam(page)),
+      pageHome(tabFromParam(tab, tag), pageFromParam(page)),
     ),
   )
-  .alt(loginMatch.parser.map(() => loginPage()))
-  .alt(signupMatch.parser.map(() => signupPage()))
-  .alt(settingsMatch.parser.map(() => settingsPage()))
-  .alt(editorMatch.parser.map(() => editorPage(O.none)))
-  .alt(editorSlugMatch.parser.map(({ slug }) => editorPage(O.some(slug))))
-  .alt(articleMatch.parser.map(({ slug }) => articlePage(slug)))
+  .alt(loginMatch.parser.map(() => pageLogin()))
+  .alt(signupMatch.parser.map(() => pageSignup()))
+  .alt(settingsMatch.parser.map(() => pageSettings()))
+  .alt(editorMatch.parser.map(() => pageEditor(O.none)))
+  .alt(editorSlugMatch.parser.map(({ slug }) => pageEditor(O.some(slug))))
+  .alt(articleMatch.parser.map(({ slug }) => pageArticle(slug)))
   .alt(
     profileMatch.parser.map(({ username, favorites }) =>
-      profilePage(username, booleanFromUndefinedWithDefault(favorites, false)),
+      pageProfile(username, booleanFromUndefinedWithDefault(favorites, false)),
     ),
   )
-  .alt(anyStrings.parser.map(() => notFoundPage()))
+  .alt(anyStrings.parser.map(() => pageNotFound()))
 
 export const parseAppRoute = (_mainUrl: string, href: string): AppRoute => {
   const pathname = removeBaseUrl(href)
-  const page = parse(appRouter, Route.parse(pathname), homePage())
+  const page = parse(appRouter, Route.parse(pathname), pageHome())
   return { page }
 }
 
@@ -163,29 +163,29 @@ export const toUrlString = (r: AppRoute): string => {
   const page = r.page
   const getPath = () => {
     switch (page._tag) {
-      case 'HomePage':
+      case 'PageHome':
         return format(homeMatch.formatter, {
           ...tabToParams(page.tab),
           page: page.page > 1 ? String(page.page) : undefined,
         })
-      case 'LoginPage':
+      case 'PageLogin':
         return format(loginMatch.formatter, {})
-      case 'SignupPage':
+      case 'PageSignup':
         return format(signupMatch.formatter, {})
-      case 'SettingsPage':
+      case 'PageSettings':
         return format(settingsMatch.formatter, {})
-      case 'EditorPage':
+      case 'PageEditor':
         return O.isSome(page.slug)
           ? format(editorSlugMatch.formatter, { slug: page.slug.value })
           : format(editorMatch.formatter, {})
-      case 'ArticlePage':
+      case 'PageArticle':
         return format(articleMatch.formatter, { slug: page.slug })
-      case 'ProfilePage':
+      case 'PageProfile':
         return format(profileMatch.formatter, {
           username: page.username,
           favorites: page.favorites ? 'true' : undefined,
         })
-      case 'NotFoundPage':
+      case 'PageNotFound':
         return '404'
     }
   }

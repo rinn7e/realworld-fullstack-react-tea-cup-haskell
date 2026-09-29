@@ -26,12 +26,12 @@ export const mkRouterConfig = <PageModel, Msg>(
   routeEq: AppRouteEq,
   guard: (toRoute, shared) => {
     const isLoggedIn = O.isSome(shared.user)
-    const isRouteRequiredAuth = toRoute.page._tag !== 'LoginPage'
+    const isRouteRequiredAuth = toRoute.page._tag !== 'PageLogin'
 
     if (isRouteRequiredAuth && !isLoggedIn && O.isNone(shared.token)) {
-      return { _tag: 'Redirect', to: { page: { _tag: 'LoginPage' } } }
-    } else if (toRoute.page._tag === 'LoginPage' && isLoggedIn) {
-      return { _tag: 'Redirect', to: { page: { _tag: 'HomePage' } } }
+      return { _tag: 'Redirect', to: { page: { _tag: 'PageLogin' } } }
+    } else if (toRoute.page._tag === 'PageLogin' && isLoggedIn) {
+      return { _tag: 'Redirect', to: { page: { _tag: 'PageHome' } } }
     } else {
       return { _tag: 'Allow' }
     }

@@ -9,12 +9,12 @@ import { type AuthUser } from '@/common/type/auth-user'
 import { type AppRoute } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
 import * as Persona from '@/component/persona-panel'
-import * as Articles from '@/page/article'
-import * as Comments from '@/page/comment'
-import * as Home from '@/page/home'
-import * as Login from '@/page/login'
-import * as Users from '@/page/user'
-import * as Visitors from '@/page/visitor'
+import * as ArticlePage from '@/page/article-page'
+import * as CommentPage from '@/page/comment-page'
+import * as HomePage from '@/page/home-page'
+import * as LoginPage from '@/page/login-page'
+import * as UserPage from '@/page/user-page'
+import * as VisitorPage from '@/page/visitor-page'
 import { mkRouterConfig } from '@/router-config'
 
 import { defaultTheme, themes } from './theme/data'
@@ -55,51 +55,51 @@ export const initPageModel = (
   shared: Shared,
 ): [PageModel, Cmd<Msg>] => {
   switch (route.page._tag) {
-    case 'HomePage': {
-      const [m, c] = Home.init(shared)
+    case 'PageHome': {
+      const [m, c] = HomePage.init(shared)
       return [
         { _tag: 'HomePageModel', model: m },
         c.map((subMsg): Msg => ({ _tag: 'HomePageMsg', subMsg })),
       ]
     }
-    case 'LoginPage': {
-      const [m, c] = Login.init()
+    case 'PageLogin': {
+      const [m, c] = LoginPage.init()
       return [
         { _tag: 'LoginPageModel', model: m },
         c.map((subMsg): Msg => ({ _tag: 'LoginPageMsg', subMsg })),
       ]
     }
-    case 'ArticlePage': {
-      const [m, c] = Articles.init(shared)
+    case 'PageArticle': {
+      const [m, c] = ArticlePage.init(shared)
       return [
         { _tag: 'ArticlePageModel', model: m },
         c.map((subMsg): Msg => ({ _tag: 'ArticlePageMsg', subMsg })),
       ]
     }
-    case 'UserPage': {
-      const [m, c] = Users.init(shared)
+    case 'PageUser': {
+      const [m, c] = UserPage.init(shared)
       return [
         { _tag: 'UserPageModel', model: m },
         c.map((subMsg): Msg => ({ _tag: 'UserPageMsg', subMsg })),
       ]
     }
-    case 'CommentPage': {
-      const [m, c] = Comments.init(shared)
+    case 'PageComment': {
+      const [m, c] = CommentPage.init(shared)
       return [
         { _tag: 'CommentPageModel', model: m },
         c.map((subMsg): Msg => ({ _tag: 'CommentPageMsg', subMsg })),
       ]
     }
-    case 'VisitorPage': {
-      const [m, c] = Visitors.init(shared)
+    case 'PageVisitor': {
+      const [m, c] = VisitorPage.init(shared)
       return [
         { _tag: 'VisitorPageModel', model: m },
         c.map((subMsg): Msg => ({ _tag: 'VisitorPageMsg', subMsg })),
       ]
     }
-    case 'SettingPage':
+    case 'PageSetting':
       return [{ _tag: 'SettingPageModel' }, Cmd.none()]
-    case 'NotFoundPage':
+    case 'PageNotFound':
       return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
   }
 }
@@ -274,18 +274,18 @@ const logoutHandler = (model: Model): [Model, Cmd<Msg>] => {
     },
   }
   return routerMsgHandler(
-    { _tag: 'ChangeRoute', route: { page: { _tag: 'LoginPage' } } },
+    { _tag: 'ChangeRoute', route: { page: { _tag: 'PageLogin' } } },
     nextModel,
   )
 }
 
 const homePageMsgHandler = (
-  subMsg: Home.Msg,
+  subMsg: HomePage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
   const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'HomePageModel') {
-    const [m, c] = Home.update(model.shared)(subMsg, pageModel.model)
+    const [m, c] = HomePage.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
@@ -302,12 +302,12 @@ const homePageMsgHandler = (
 }
 
 const loginPageMsgHandler = (
-  subMsg: Login.Msg,
+  subMsg: LoginPage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
   const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'LoginPageModel') {
-    const [m, c] = Login.update(subMsg, pageModel.model)
+    const [m, c] = LoginPage.update(subMsg, pageModel.model)
     const nextModel: Model = {
       ...model,
       router: TeaRouter.setPageModel(model.router, {
@@ -335,7 +335,7 @@ const loginPageMsgHandler = (
         },
       }
       const [finalModel, routerCmd] = routerMsgHandler(
-        { _tag: 'ChangeRoute', route: { page: { _tag: 'HomePage' } } },
+        { _tag: 'ChangeRoute', route: { page: { _tag: 'PageHome' } } },
         updatedModel,
       )
       return [finalModel, Cmd.batch([nextCmd, routerCmd])]
@@ -348,12 +348,12 @@ const loginPageMsgHandler = (
 }
 
 const articlesPageMsgHandler = (
-  subMsg: Articles.Msg,
+  subMsg: ArticlePage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
   const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'ArticlePageModel') {
-    const [m, c] = Articles.update(model.shared)(subMsg, pageModel.model)
+    const [m, c] = ArticlePage.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
@@ -370,12 +370,12 @@ const articlesPageMsgHandler = (
 }
 
 const usersPageMsgHandler = (
-  subMsg: Users.Msg,
+  subMsg: UserPage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
   const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'UserPageModel') {
-    const [m, c] = Users.update(model.shared)(subMsg, pageModel.model)
+    const [m, c] = UserPage.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
@@ -392,12 +392,12 @@ const usersPageMsgHandler = (
 }
 
 const commentsPageMsgHandler = (
-  subMsg: Comments.Msg,
+  subMsg: CommentPage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
   const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'CommentPageModel') {
-    const [m, c] = Comments.update(model.shared)(subMsg, pageModel.model)
+    const [m, c] = CommentPage.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
@@ -414,12 +414,12 @@ const commentsPageMsgHandler = (
 }
 
 const visitorsPageMsgHandler = (
-  subMsg: Visitors.Msg,
+  subMsg: VisitorPage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
   const pageModel = TeaRouter.getPageModel(model.router)
   if (pageModel._tag === 'VisitorPageModel') {
-    const [m, c] = Visitors.update(model.shared)(subMsg, pageModel.model)
+    const [m, c] = VisitorPage.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,

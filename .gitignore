@@ -33,3 +33,7 @@ test-results/
 
 # Haskell Build Artifacts
 .stack-work/
+
+# make server-ai (package/backend)
+.pids/
+logs/

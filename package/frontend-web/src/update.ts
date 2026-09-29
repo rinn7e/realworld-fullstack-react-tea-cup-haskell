@@ -17,18 +17,18 @@ import {
   type AppRoute,
   AppRouteEq,
   type HomeTab,
-  homePage,
+  pageHome,
   toUrlString,
 } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
 import * as DebugPanel from '@/component/debug-panel'
-import * as ArticlePage from '@/page/article'
-import * as EditorPage from '@/page/editor'
-import * as HomePage from '@/page/home'
-import * as LoginPage from '@/page/login'
-import * as ProfilePage from '@/page/profile'
-import * as SettingsPage from '@/page/settings'
-import * as SignupPage from '@/page/signup'
+import * as ArticlePage from '@/page/article-page'
+import * as EditorPage from '@/page/editor-page'
+import * as HomePage from '@/page/home-page'
+import * as LoginPage from '@/page/login-page'
+import * as ProfilePage from '@/page/profile-page'
+import * as SettingsPage from '@/page/settings-page'
+import * as SignupPage from '@/page/signup-page'
 import { mkRouterConfig } from '@/router-config'
 import type { ColorScheme } from '@/theme/type'
 import { loadColorScheme, setColorSchemeCmd } from '@/theme/util'
@@ -143,7 +143,7 @@ const initPageModel = (
   shared: Shared,
 ): [PageModel, Cmd<Msg>] => {
   switch (route.page._tag) {
-    case 'HomePage': {
+    case 'PageHome': {
       const [model, cmd] = HomePage.init(
         route.page.tab,
         route.page.page,
@@ -154,28 +154,28 @@ const initPageModel = (
         cmd.map((m): Msg => ({ _tag: 'HomePageMsg', subMsg: m })),
       ]
     }
-    case 'ArticlePage': {
+    case 'PageArticle': {
       const [model, cmd] = ArticlePage.init(route.page.slug, shared)
       return [
         { _tag: 'ArticlePageModel', model },
         cmd.map((m): Msg => ({ _tag: 'ArticlePageMsg', subMsg: m })),
       ]
     }
-    case 'LoginPage': {
+    case 'PageLogin': {
       const [model, cmd] = LoginPage.init(shared)
       return [
         { _tag: 'LoginPageModel', model },
         cmd.map((m): Msg => ({ _tag: 'LoginPageMsg', subMsg: m })),
       ]
     }
-    case 'SignupPage': {
+    case 'PageSignup': {
       const [model, cmd] = SignupPage.init(shared)
       return [
         { _tag: 'SignupPageModel', model },
         cmd.map((m): Msg => ({ _tag: 'SignupPageMsg', subMsg: m })),
       ]
     }
-    case 'SettingsPage': {
+    case 'PageSettings': {
       if (shared.user._tag === 'None') {
         return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
       } else {
@@ -186,7 +186,7 @@ const initPageModel = (
         ]
       }
     }
-    case 'ProfilePage': {
+    case 'PageProfile': {
       const [model, cmd] = ProfilePage.init(
         route.page.username,
         route.page.favorites,
@@ -197,7 +197,7 @@ const initPageModel = (
         cmd.map((m): Msg => ({ _tag: 'ProfilePageMsg', subMsg: m })),
       ]
     }
-    case 'EditorPage': {
+    case 'PageEditor': {
       if (shared.user._tag === 'None') {
         return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
       } else {
@@ -312,7 +312,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
               msg.subMsg.result.tag === 'Ok'
             ) {
               return routerMsgHandler(
-                { _tag: 'ChangeRoute', route: { page: homePage() } },
+                { _tag: 'ChangeRoute', route: { page: pageHome() } },
                 m,
               )
             } else {
@@ -360,7 +360,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                 },
               }
               return routerMsgHandler(
-                { _tag: 'ChangeRoute', route: { page: homePage() } },
+                { _tag: 'ChangeRoute', route: { page: pageHome() } },
                 nextModel,
               )
             } else {
@@ -408,7 +408,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                 },
               }
               return routerMsgHandler(
-                { _tag: 'ChangeRoute', route: { page: homePage() } },
+                { _tag: 'ChangeRoute', route: { page: pageHome() } },
                 nextModel,
               )
             } else {
@@ -469,7 +469,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       const currentRoute = TeaRouter.getRoute(model.router)
       if (
         pageModel._tag === 'ProfilePageModel' &&
-        currentRoute.page._tag === 'ProfilePage'
+        currentRoute.page._tag === 'PageProfile'
       ) {
         const username = currentRoute.page.username
 
@@ -494,7 +494,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
             if (msg.subMsg._tag === 'ToggleFavorites') {
               const route: AppRoute = {
                 page: {
-                  _tag: 'ProfilePage',
+                  _tag: 'PageProfile',
                   username,
                   favorites: msg.subMsg.show,
                 },
@@ -541,7 +541,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                 {
                   _tag: 'ChangeRoute',
                   route: {
-                    page: { _tag: 'ArticlePage', slug },
+                    page: { _tag: 'PageArticle', slug },
                   },
                 },
                 m,
@@ -709,7 +709,7 @@ const interceptLogoutFromSettingPage = (m: Model): [Model, Cmd<Msg>] => {
     shared: { ...m.shared, user: O.none, token: O.none },
   }
   return routerMsgHandler(
-    { _tag: 'ChangeRoute', route: { page: homePage() } },
+    { _tag: 'ChangeRoute', route: { page: pageHome() } },
     nextModel,
   )
 }
@@ -734,7 +734,7 @@ const interceptSubmitResponseOkFromSettingPage =
         _tag: 'ChangeRoute',
         route: {
           page: {
-            _tag: 'ProfilePage',
+            _tag: 'PageProfile',
             username: user.username,
             favorites: false,
           },
@@ -749,13 +749,13 @@ const interceptChangeTabFromHomePage =
   (m: Model): [Model, Cmd<Msg>] => {
     if (tab._tag === 'UserFeedTab' && m.shared.user._tag === 'None') {
       return routerMsgHandler(
-        { _tag: 'ChangeRoute', route: { page: { _tag: 'LoginPage' } } },
+        { _tag: 'ChangeRoute', route: { page: { _tag: 'PageLogin' } } },
         m,
       )
     } else {
       // Change url according to the tab
       return routerMsgHandler(
-        { _tag: 'ChangeRouteNoReload', route: { page: homePage(tab) } },
+        { _tag: 'ChangeRouteNoReload', route: { page: pageHome(tab) } },
         m,
       )
     }
@@ -765,12 +765,12 @@ const interceptPaginationChangePageFromHomePage =
   (page: number) =>
   (m: Model): [Model, Cmd<Msg>] => {
     const currentRoute = TeaRouter.getRoute(m.router)
-    if (currentRoute.page._tag === 'HomePage') {
+    if (currentRoute.page._tag === 'PageHome') {
       return routerMsgHandler(
         {
           _tag: 'ChangeRouteNoReload',
           route: {
-            page: homePage(currentRoute.page.tab, page),
+            page: pageHome(currentRoute.page.tab, page),
           },
         },
         m,

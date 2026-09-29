@@ -7,48 +7,48 @@ import { pipe } from 'fp-ts/lib/function'
 import { Cmd } from 'tea-cup-fp'
 
 import { type AppRoute, parsePath } from '@/common/type/route'
-import * as BlockPage from '@/page/block'
-import * as BoxPage from '@/page/box'
-import * as BreadcrumbPage from '@/page/breadcrumb'
-import * as ButtonPage from '@/page/button'
-import * as CardPage from '@/page/card'
-import * as CheckboxPage from '@/page/checkbox'
-import * as ColumnsPage from '@/page/columns'
-import * as ContainerPage from '@/page/container'
-import * as ContentPage from '@/page/content'
-import * as DeletePage from '@/page/delete'
-import * as DotLoadingPage from '@/page/dot-loading'
-import * as DropdownPage from '@/page/dropdown'
-import * as FieldPage from '@/page/field'
-import * as FilePage from '@/page/file'
-import * as FloatingSidebarPage from '@/page/floating-sidebar'
-import * as FooterPage from '@/page/footer'
-import * as HeroPage from '@/page/hero'
-import * as HomePage from '@/page/home'
-import * as IconPage from '@/page/icon'
-import * as ImagePage from '@/page/image'
-import * as InputPage from '@/page/input'
-import * as LevelPage from '@/page/level'
-import * as MediaObjectPage from '@/page/media-object'
-import * as MenuPage from '@/page/menu'
-import * as MessagePage from '@/page/message'
-import * as ModalPage from '@/page/modal'
-import * as NavbarPage from '@/page/navbar'
-import * as NotFoundPage from '@/page/not-found'
-import * as NotificationPage from '@/page/notification'
-import * as PaginationPage from '@/page/pagination'
-import * as PanelPage from '@/page/panel'
-import * as PopoverPage from '@/page/popover'
-import * as ProgressPage from '@/page/progress'
-import * as RadioPage from '@/page/radio'
-import * as SectionPage from '@/page/section'
-import * as SelectPage from '@/page/select'
-import * as SidebarPage from '@/page/sidebar'
-import * as TablePage from '@/page/table'
-import * as TabsPage from '@/page/tabs'
-import * as TagPage from '@/page/tag'
-import * as TextareaPage from '@/page/textarea'
-import * as TitlePage from '@/page/title'
+import * as BlockPage from '@/page/block-page'
+import * as BoxPage from '@/page/box-page'
+import * as BreadcrumbPage from '@/page/breadcrumb-page'
+import * as ButtonPage from '@/page/button-page'
+import * as CardPage from '@/page/card-page'
+import * as CheckboxPage from '@/page/checkbox-page'
+import * as ColumnsPage from '@/page/columns-page'
+import * as ContainerPage from '@/page/container-page'
+import * as ContentPage from '@/page/content-page'
+import * as DeletePage from '@/page/delete-page'
+import * as DotLoadingPage from '@/page/dot-loading-page'
+import * as DropdownPage from '@/page/dropdown-page'
+import * as FieldPage from '@/page/field-page'
+import * as FilePage from '@/page/file-page'
+import * as FloatingSidebarPage from '@/page/floating-sidebar-page'
+import * as FooterPage from '@/page/footer-page'
+import * as HeroPage from '@/page/hero-page'
+import * as HomePage from '@/page/home-page'
+import * as IconPage from '@/page/icon-page'
+import * as ImagePage from '@/page/image-page'
+import * as InputPage from '@/page/input-page'
+import * as LevelPage from '@/page/level-page'
+import * as MediaObjectPage from '@/page/media-object-page'
+import * as MenuPage from '@/page/menu-page'
+import * as MessagePage from '@/page/message-page'
+import * as ModalPage from '@/page/modal-page'
+import * as NavbarPage from '@/page/navbar-page'
+import * as NotFoundPage from '@/page/not-found-page'
+import * as NotificationPage from '@/page/notification-page'
+import * as PaginationPage from '@/page/pagination-page'
+import * as PanelPage from '@/page/panel-page'
+import * as PopoverPage from '@/page/popover-page'
+import * as ProgressPage from '@/page/progress-page'
+import * as RadioPage from '@/page/radio-page'
+import * as SectionPage from '@/page/section-page'
+import * as SelectPage from '@/page/select-page'
+import * as SidebarPage from '@/page/sidebar-page'
+import * as TablePage from '@/page/table-page'
+import * as TabsPage from '@/page/tabs-page'
+import * as TagPage from '@/page/tag-page'
+import * as TextareaPage from '@/page/textarea-page'
+import * as TitlePage from '@/page/title-page'
 import { loadColorScheme, setColorSchemeCmd } from '@/theme/util'
 
 import { mkRouterConfig } from './router-config'
@@ -56,7 +56,7 @@ import { type Model, type Msg, type PageModel, teaRouterMsg } from './type'
 
 export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
   switch (newRoute.page._tag) {
-    case 'HomePage': {
+    case 'PageHome': {
       const [homeModel, homeCmd] = HomePage.init()
       return [
         { _tag: 'HomePageModel', model: homeModel },
@@ -64,7 +64,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'BlockPage': {
+    case 'PageBlock': {
       const [subModel, subCmd] = BlockPage.init()
       return [
         { _tag: 'BlockPageModel', model: subModel },
@@ -72,7 +72,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'BoxPage': {
+    case 'PageBox': {
       const [subModel, subCmd] = BoxPage.init()
       return [
         { _tag: 'BoxPageModel', model: subModel },
@@ -80,7 +80,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'ButtonPage': {
+    case 'PageButton': {
       const [subModel, subCmd] = ButtonPage.init()
       return [
         { _tag: 'ButtonPageModel', model: subModel },
@@ -88,7 +88,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'ContentPage': {
+    case 'PageContent': {
       const [subModel, subCmd] = ContentPage.init()
       return [
         { _tag: 'ContentPageModel', model: subModel },
@@ -96,7 +96,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'DeletePage': {
+    case 'PageDelete': {
       const [subModel, subCmd] = DeletePage.init()
       return [
         { _tag: 'DeletePageModel', model: subModel },
@@ -104,7 +104,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'IconPage': {
+    case 'PageIcon': {
       const [subModel, subCmd] = IconPage.init()
       return [
         { _tag: 'IconPageModel', model: subModel },
@@ -112,7 +112,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'ImagePage': {
+    case 'PageImage': {
       const [subModel, subCmd] = ImagePage.init()
       return [
         { _tag: 'ImagePageModel', model: subModel },
@@ -120,7 +120,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'NotificationPage': {
+    case 'PageNotification': {
       const [subModel, subCmd] = NotificationPage.init()
       return [
         { _tag: 'NotificationPageModel', model: subModel },
@@ -128,7 +128,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'ProgressPage': {
+    case 'PageProgress': {
       const [subModel, subCmd] = ProgressPage.init()
       return [
         { _tag: 'ProgressPageModel', model: subModel },
@@ -136,7 +136,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'TablePage': {
+    case 'PageTable': {
       const [subModel, subCmd] = TablePage.init()
       return [
         { _tag: 'TablePageModel', model: subModel },
@@ -144,7 +144,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'TagPage': {
+    case 'PageTag': {
       const [subModel, subCmd] = TagPage.init()
       return [
         { _tag: 'TagPageModel', model: subModel },
@@ -152,7 +152,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'TitlePage': {
+    case 'PageTitle': {
       const [subModel, subCmd] = TitlePage.init()
       return [
         { _tag: 'TitlePageModel', model: subModel },
@@ -160,7 +160,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'BreadcrumbPage': {
+    case 'PageBreadcrumb': {
       const [subModel, subCmd] = BreadcrumbPage.init()
       return [
         { _tag: 'BreadcrumbPageModel', model: subModel },
@@ -168,7 +168,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'CardPage': {
+    case 'PageCard': {
       const [subModel, subCmd] = CardPage.init()
       return [
         { _tag: 'CardPageModel', model: subModel },
@@ -176,7 +176,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'DropdownPage': {
+    case 'PageDropdown': {
       const [subModel, subCmd] = DropdownPage.init()
       return [
         { _tag: 'DropdownPageModel', model: subModel },
@@ -184,7 +184,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'MenuPage': {
+    case 'PageMenu': {
       const [subModel, subCmd] = MenuPage.init()
       return [
         { _tag: 'MenuPageModel', model: subModel },
@@ -192,7 +192,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'MessagePage': {
+    case 'PageMessage': {
       const [subModel, subCmd] = MessagePage.init()
       return [
         { _tag: 'MessagePageModel', model: subModel },
@@ -200,7 +200,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'ModalPage': {
+    case 'PageModal': {
       const [subModel, subCmd] = ModalPage.init()
       return [
         { _tag: 'ModalPageModel', model: subModel },
@@ -208,7 +208,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'NavbarPage': {
+    case 'PageNavbar': {
       const [subModel, subCmd] = NavbarPage.init()
       return [
         { _tag: 'NavbarPageModel', model: subModel },
@@ -216,7 +216,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'FloatingSidebarPage': {
+    case 'PageFloatingSidebar': {
       const [subModel, subCmd] = FloatingSidebarPage.init()
       return [
         { _tag: 'FloatingSidebarPageModel', model: subModel },
@@ -224,7 +224,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'SidebarPage': {
+    case 'PageSidebar': {
       const [subModel, subCmd] = SidebarPage.init()
       return [
         { _tag: 'SidebarPageModel', model: subModel },
@@ -232,7 +232,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'PaginationPage': {
+    case 'PagePagination': {
       const [subModel, subCmd] = PaginationPage.init()
       return [
         { _tag: 'PaginationPageModel', model: subModel },
@@ -240,7 +240,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'PanelPage': {
+    case 'PagePanel': {
       const [subModel, subCmd] = PanelPage.init()
       return [
         { _tag: 'PanelPageModel', model: subModel },
@@ -248,7 +248,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'PopoverPage': {
+    case 'PagePopover': {
       const [subModel, subCmd] = PopoverPage.init()
       return [
         { _tag: 'PopoverPageModel', model: subModel },
@@ -256,7 +256,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'TabsPage': {
+    case 'PageTabs': {
       const [subModel, subCmd] = TabsPage.init()
       return [
         { _tag: 'TabsPageModel', model: subModel },
@@ -264,7 +264,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'FieldPage': {
+    case 'PageField': {
       const [subModel, subCmd] = FieldPage.init()
       return [
         { _tag: 'FieldPageModel', model: subModel },
@@ -272,7 +272,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'InputPage': {
+    case 'PageInput': {
       const [subModel, subCmd] = InputPage.init()
       return [
         { _tag: 'InputPageModel', model: subModel },
@@ -280,7 +280,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'TextareaPage': {
+    case 'PageTextarea': {
       const [subModel, subCmd] = TextareaPage.init()
       return [
         { _tag: 'TextareaPageModel', model: subModel },
@@ -288,7 +288,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'SelectPage': {
+    case 'PageSelect': {
       const [subModel, subCmd] = SelectPage.init()
       return [
         { _tag: 'SelectPageModel', model: subModel },
@@ -296,7 +296,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'CheckboxPage': {
+    case 'PageCheckbox': {
       const [subModel, subCmd] = CheckboxPage.init()
       return [
         { _tag: 'CheckboxPageModel', model: subModel },
@@ -304,7 +304,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'RadioPage': {
+    case 'PageRadio': {
       const [subModel, subCmd] = RadioPage.init()
       return [
         { _tag: 'RadioPageModel', model: subModel },
@@ -312,7 +312,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'FilePage': {
+    case 'PageFile': {
       const [subModel, subCmd] = FilePage.init()
       return [
         { _tag: 'FilePageModel', model: subModel },
@@ -320,7 +320,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'ContainerPage': {
+    case 'PageContainer': {
       const [subModel, subCmd] = ContainerPage.init()
       return [
         { _tag: 'ContainerPageModel', model: subModel },
@@ -328,7 +328,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'HeroPage': {
+    case 'PageHero': {
       const [subModel, subCmd] = HeroPage.init()
       return [
         { _tag: 'HeroPageModel', model: subModel },
@@ -336,7 +336,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'SectionPage': {
+    case 'PageSection': {
       const [subModel, subCmd] = SectionPage.init()
       return [
         { _tag: 'SectionPageModel', model: subModel },
@@ -344,7 +344,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'LevelPage': {
+    case 'PageLevel': {
       const [subModel, subCmd] = LevelPage.init()
       return [
         { _tag: 'LevelPageModel', model: subModel },
@@ -352,7 +352,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'MediaObjectPage': {
+    case 'PageMediaObject': {
       const [subModel, subCmd] = MediaObjectPage.init()
       return [
         { _tag: 'MediaObjectPageModel', model: subModel },
@@ -360,7 +360,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'FooterPage': {
+    case 'PageFooter': {
       const [subModel, subCmd] = FooterPage.init()
       return [
         { _tag: 'FooterPageModel', model: subModel },
@@ -368,7 +368,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'ColumnsPage': {
+    case 'PageColumns': {
       const [subModel, subCmd] = ColumnsPage.init()
       return [
         { _tag: 'ColumnsPageModel', model: subModel },
@@ -376,7 +376,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'DotLoadingPage': {
+    case 'PageDotLoading': {
       const [subModel, subCmd] = DotLoadingPage.init()
       return [
         { _tag: 'DotLoadingPageModel', model: subModel },
@@ -384,7 +384,7 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
       ]
     }
 
-    case 'NotFoundPage': {
+    case 'PageNotFound': {
       const [notFoundModel, notFoundCmd] = NotFoundPage.init()
       return [
         { _tag: 'NotFoundPageModel', model: notFoundModel },
