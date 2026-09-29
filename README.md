@@ -1,5 +1,7 @@
 # RealWorld FullStack Monorepo
 
+[![AI-DECLARATION: assist](https://img.shields.io/badge/䷼%20AI--DECLARATION-assist-fef9c3?labelColor=fef9c3)](AI-DECLARATION.md)
+
 A production-grade, type-safe implementation of the RealWorld spec, featuring a Haskell Servant backend and React frontends built with The Elm Architecture (TEA) using `react-tea-cup` and Tailwind CSS v4.
 
 **Live demo:** [https://conduit.rinn7e.com/](https://conduit.rinn7e.com/). It also has an admin dashboard at [`/admin/`](https://conduit.rinn7e.com/admin/) and API docs at [`/swagger-ui`](https://conduit.rinn7e.com/swagger-ui/).
@@ -153,6 +155,11 @@ For details on running individual packages independently:
 A heartfelt thank you to the sponsors supporting this project 😁:
 
 * [@0x000000000000000000001](https://github.com/0x000000000000000000001)
+
+## AI declaration
+
+This project declares its AI usage in [AI-DECLARATION.md](AI-DECLARATION.md), following the
+[AI-DECLARATION.md](https://ai-declaration.md) standard (level: `assist`).
 
 ## License
 
