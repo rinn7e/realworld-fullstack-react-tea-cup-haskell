@@ -1,8 +1,17 @@
-import type * as TeaRouter from '@rinn7e/tea-cup-router'
 import { type Option } from 'fp-ts/lib/Option'
 
 import { type AuthUser } from '@/common/type/auth-user'
-import { type AppRoute } from '@/common/type/route'
+import {
+  type AppRoute,
+  pageArticles,
+  pageComments,
+  pageHome,
+  pageLogin,
+  pageNotFound,
+  pageSettings,
+  pageUsers,
+  pageVisitors,
+} from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
 import type * as Persona from '@/component/persona-panel'
 import type * as ArticlePage from '@/page/article-page'
@@ -14,8 +23,11 @@ import type * as VisitorPage from '@/page/visitor-page'
 
 import { type ColorScheme, type Theme } from './theme/type'
 
+// `pageModel` is the single source of truth for navigation: the route is
+// derived from it (`pageModelToRoute`) and the URL from the route
+// (`url-port.ts`), never the other way round
 export type Model = {
-  readonly router: TeaRouter.Model<AppRoute, PageModel>
+  readonly pageModel: PageModel
   readonly shared: Shared
   readonly persona: Persona.Model
   readonly showScrollTop: boolean
@@ -33,11 +45,33 @@ export type PageModel =
   | { readonly _tag: 'SettingPageModel' }
   | { readonly _tag: 'NotFoundPageModel' }
 
+// Every route is a page without params, so the open page alone gives the route
+export const pageModelToRoute = (pageModel: PageModel): AppRoute => {
+  switch (pageModel._tag) {
+    case 'HomePageModel':
+      return { page: pageHome() }
+    case 'LoginPageModel':
+      return { page: pageLogin() }
+    case 'ArticlePageModel':
+      return { page: pageArticles() }
+    case 'UserPageModel':
+      return { page: pageUsers() }
+    case 'CommentPageModel':
+      return { page: pageComments() }
+    case 'VisitorPageModel':
+      return { page: pageVisitors() }
+    case 'SettingPageModel':
+      return { page: pageSettings() }
+    case 'NotFoundPageModel':
+      return { page: pageNotFound() }
+  }
+}
+
 export type Msg =
-  | {
-      readonly _tag: 'TeaRouterMsg'
-      readonly subMsg: TeaRouter.Msg<AppRoute>
-    }
+  | { readonly _tag: 'Navigate'; readonly route: AppRoute }
+  // Browser back / forward: the only URL change that comes from outside
+  // after boot
+  | { readonly _tag: 'UrlChange'; readonly location: Location }
   | {
       readonly _tag: 'Init'
       readonly location: Location
@@ -58,8 +92,3 @@ export type Msg =
   | { readonly _tag: 'SwitchTheme'; readonly theme: Theme }
   | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
   | { readonly _tag: 'NoOp' }
-
-export const teaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
-  _tag: 'TeaRouterMsg',
-  subMsg,
-})

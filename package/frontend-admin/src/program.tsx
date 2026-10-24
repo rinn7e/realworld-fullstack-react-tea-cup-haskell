@@ -3,8 +3,9 @@ import { ProgramWithNav } from 'react-tea-cup'
 import { type Dispatcher, Sub } from 'tea-cup-fp'
 
 import { App } from './app'
-import { type Model, type Msg, teaRouterMsg } from './type'
+import { type Model, type Msg } from './type'
 import { preInit, preUpdate } from './update'
+import { withUrlSync } from './url-port'
 
 const PreLoadingView = () => (
   <div className='initial-loader-wrap'>
@@ -19,9 +20,9 @@ const preView = (dispatch: Dispatcher<Msg>, model: Model | null) => {
 export const AppProgram = () => {
   return (
     <ProgramWithNav<Model | null, Msg>
-      onUrlChange={(location) => teaRouterMsg({ _tag: 'UrlChange', location })}
+      onUrlChange={(location): Msg => ({ _tag: 'UrlChange', location })}
       init={preInit}
-      update={preUpdate}
+      update={withUrlSync(preUpdate)}
       view={preView}
       subscriptions={() => Sub.none()}
       {...devTools<Model | null, Msg>().getProgramProps()}

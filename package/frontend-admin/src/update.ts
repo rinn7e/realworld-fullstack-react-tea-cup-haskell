@@ -1,12 +1,17 @@
 import { taskFromTE } from '@rinn7e/tea-cup-prelude'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import * as O from 'fp-ts/lib/Option'
 import { Cmd, Task } from 'tea-cup-fp'
 
 import { getCurrentUser } from '@/common/api'
 import { getToken, removeToken, saveToken } from '@/common/cache'
 import { type AuthUser } from '@/common/type/auth-user'
-import { type AppRoute } from '@/common/type/route'
+import {
+  type AppRoute,
+  AppRouteEq,
+  pageHome,
+  pageLogin,
+  parseAppRoute,
+} from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
 import * as Persona from '@/component/persona-panel'
 import * as ArticlePage from '@/page/article-page'
@@ -15,7 +20,6 @@ import * as HomePage from '@/page/home-page'
 import * as LoginPage from '@/page/login-page'
 import * as UserPage from '@/page/user-page'
 import * as VisitorPage from '@/page/visitor-page'
-import { mkRouterConfig } from '@/router-config'
 
 import { defaultTheme, themes } from './theme/data'
 import { type ColorScheme, type Theme } from './theme/type'
@@ -26,7 +30,7 @@ import {
   saveColorScheme,
   saveTheme,
 } from './theme/util'
-import { type Model, type Msg, type PageModel, teaRouterMsg } from './type'
+import { type Model, type Msg, type PageModel, pageModelToRoute } from './type'
 
 // Initialization
 // ---------------------------------------------
@@ -104,10 +108,19 @@ export const initPageModel = (
   }
 }
 
-export const routerConfig = mkRouterConfig<PageModel, Msg>(
-  initPageModel,
-  teaRouterMsg,
-)
+// Redirects a route the current session may not open: logged out -> login,
+// logged in -> away from login
+export const guardRoute = (route: AppRoute, shared: Shared): AppRoute => {
+  const isLoggedIn = O.isSome(shared.user)
+  const isRouteRequiredAuth = route.page._tag !== 'PageLogin'
+  if (isRouteRequiredAuth && !isLoggedIn && O.isNone(shared.token)) {
+    return { page: pageLogin() }
+  } else if (route.page._tag === 'PageLogin' && isLoggedIn) {
+    return { page: pageHome() }
+  } else {
+    return route
+  }
+}
 
 export const init = (
   location: Location,
@@ -124,11 +137,12 @@ export const init = (
     token,
   }
 
-  const [routerModel, routerCmd] = TeaRouter.init(
-    routerConfig,
-    location,
+  // Boot: the one place the URL is read (besides browser back / forward)
+  const route = guardRoute(
+    parseAppRoute(window.location.origin, location.href),
     shared,
   )
+  const [pageModel, pageCmd] = initPageModel(route, shared)
 
   const [personaModel, personaCmd] = Persona.init()
   const colorScheme = loadColorScheme()
@@ -136,7 +150,7 @@ export const init = (
   const theme = (savedThemeId ? themes[savedThemeId] : null) ?? defaultTheme
 
   const model: Model = {
-    router: routerModel,
+    pageModel,
     shared,
     persona: personaModel,
     showScrollTop: false,
@@ -145,7 +159,7 @@ export const init = (
   }
 
   const initCmd = Cmd.batch([
-    routerCmd,
+    pageCmd,
     personaCmd.map((subMsg): Msg => ({ _tag: 'PersonaMsg', subMsg })),
   ])
 
@@ -207,28 +221,39 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
   }
 }
 
-export const routerMsgHandler = (
-  subMsg: Extract<Msg, { _tag: 'TeaRouterMsg' }>['subMsg'],
+// Opening a route always (re)initializes its page, also when it is the current
+// one, so clicking the active sidebar link refreshes the page
+export const navigateHandler = (
+  route: AppRoute,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const [routerModel, routerCmd] = TeaRouter.update(routerConfig, model.shared)(
-    subMsg,
-    model.router,
-  )
+  const guarded = guardRoute(route, model.shared)
+  const [pageModel, pageCmd] = initPageModel(guarded, model.shared)
+  return [{ ...model, pageModel }, pageCmd]
+}
 
-  return [
-    {
-      ...model,
-      router: routerModel,
-    },
-    routerCmd,
-  ]
+// Back / forward to the route already shown keeps the page as it is
+const urlChangeHandler = (
+  location: Location,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  const route = guardRoute(
+    parseAppRoute(window.location.origin, location.href),
+    model.shared,
+  )
+  if (AppRouteEq.equals(route, pageModelToRoute(model.pageModel))) {
+    return [model, Cmd.none()]
+  } else {
+    return navigateHandler(route, model)
+  }
 }
 
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
-    case 'TeaRouterMsg':
-      return routerMsgHandler(msg.subMsg, model)
+    case 'Navigate':
+      return navigateHandler(msg.route, model)
+    case 'UrlChange':
+      return urlChangeHandler(msg.location, model)
     case 'Init':
       // Handled by preUpdate
       return [model, Cmd.none()]
@@ -273,26 +298,23 @@ const logoutHandler = (model: Model): [Model, Cmd<Msg>] => {
       token: O.none,
     },
   }
-  return routerMsgHandler(
-    { _tag: 'ChangeRoute', route: { page: { _tag: 'PageLogin' } } },
-    nextModel,
-  )
+  return navigateHandler({ page: pageLogin() }, nextModel)
 }
 
 const homePageMsgHandler = (
   subMsg: HomePage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
+  const pageModel = model.pageModel
   if (pageModel._tag === 'HomePageModel') {
     const [m, c] = HomePage.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
-        router: TeaRouter.setPageModel(model.router, {
+        pageModel: {
           _tag: 'HomePageModel',
           model: m,
-        }),
+        },
       },
       c.map((msg): Msg => ({ _tag: 'HomePageMsg', subMsg: msg })),
     ]
@@ -305,15 +327,15 @@ const loginPageMsgHandler = (
   subMsg: LoginPage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
+  const pageModel = model.pageModel
   if (pageModel._tag === 'LoginPageModel') {
     const [m, c] = LoginPage.update(subMsg, pageModel.model)
     const nextModel: Model = {
       ...model,
-      router: TeaRouter.setPageModel(model.router, {
+      pageModel: {
         _tag: 'LoginPageModel',
         model: m,
-      }),
+      },
     }
     const nextCmd = c.map((msg): Msg => ({ _tag: 'LoginPageMsg', subMsg: msg }))
 
@@ -334,11 +356,11 @@ const loginPageMsgHandler = (
           token: O.some(user.token),
         },
       }
-      const [finalModel, routerCmd] = routerMsgHandler(
-        { _tag: 'ChangeRoute', route: { page: { _tag: 'PageHome' } } },
+      const [finalModel, navigateCmd] = navigateHandler(
+        { page: pageHome() },
         updatedModel,
       )
-      return [finalModel, Cmd.batch([nextCmd, routerCmd])]
+      return [finalModel, Cmd.batch([nextCmd, navigateCmd])]
     } else {
       return [nextModel, nextCmd]
     }
@@ -351,16 +373,16 @@ const articlesPageMsgHandler = (
   subMsg: ArticlePage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
+  const pageModel = model.pageModel
   if (pageModel._tag === 'ArticlePageModel') {
     const [m, c] = ArticlePage.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
-        router: TeaRouter.setPageModel(model.router, {
+        pageModel: {
           _tag: 'ArticlePageModel',
           model: m,
-        }),
+        },
       },
       c.map((msg): Msg => ({ _tag: 'ArticlePageMsg', subMsg: msg })),
     ]
@@ -373,16 +395,16 @@ const usersPageMsgHandler = (
   subMsg: UserPage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
+  const pageModel = model.pageModel
   if (pageModel._tag === 'UserPageModel') {
     const [m, c] = UserPage.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
-        router: TeaRouter.setPageModel(model.router, {
+        pageModel: {
           _tag: 'UserPageModel',
           model: m,
-        }),
+        },
       },
       c.map((msg): Msg => ({ _tag: 'UserPageMsg', subMsg: msg })),
     ]
@@ -395,16 +417,16 @@ const commentsPageMsgHandler = (
   subMsg: CommentPage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
+  const pageModel = model.pageModel
   if (pageModel._tag === 'CommentPageModel') {
     const [m, c] = CommentPage.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
-        router: TeaRouter.setPageModel(model.router, {
+        pageModel: {
           _tag: 'CommentPageModel',
           model: m,
-        }),
+        },
       },
       c.map((msg): Msg => ({ _tag: 'CommentPageMsg', subMsg: msg })),
     ]
@@ -417,16 +439,16 @@ const visitorsPageMsgHandler = (
   subMsg: VisitorPage.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
+  const pageModel = model.pageModel
   if (pageModel._tag === 'VisitorPageModel') {
     const [m, c] = VisitorPage.update(model.shared)(subMsg, pageModel.model)
     return [
       {
         ...model,
-        router: TeaRouter.setPageModel(model.router, {
+        pageModel: {
           _tag: 'VisitorPageModel',
           model: m,
-        }),
+        },
       },
       c.map((msg): Msg => ({ _tag: 'VisitorPageMsg', subMsg: msg })),
     ]

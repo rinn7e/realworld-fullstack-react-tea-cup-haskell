@@ -1,4 +1,3 @@
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
@@ -22,7 +21,7 @@ import { SettingPageMemo } from '@/page/setting-page/component'
 import { UserPageMemo } from '@/page/user-page/component'
 import { VisitorPageMemo } from '@/page/visitor-page/component'
 
-import { type Model, type Msg } from './type'
+import { type Model, type Msg, pageModelToRoute } from './type'
 
 export type AppProps = {
   model: Model
@@ -31,7 +30,7 @@ export type AppProps = {
 
 // TODO: Implement mobile-first sidebar toggle for better responsiveness
 export const App = ({ model, dispatch }: AppProps) => {
-  const currentRoute = TeaRouter.getRoute(model.router)
+  const currentRoute = pageModelToRoute(model.pageModel)
 
   // If we are on the login page, show a different layout (no sidebar)
   if (currentRoute.page._tag === 'PageLogin') {
@@ -282,7 +281,7 @@ const SidebarLink = ({ label, icon, active, route }: SidebarLinkProps) => (
 )
 
 const PageView = ({ model, dispatch }: AppProps) => {
-  const pageModel = TeaRouter.getPageModel(model.router)
+  const pageModel = model.pageModel
 
   switch (pageModel._tag) {
     case 'HomePageModel':

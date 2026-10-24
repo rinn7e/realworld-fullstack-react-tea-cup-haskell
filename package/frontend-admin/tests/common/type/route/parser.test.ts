@@ -31,11 +31,18 @@ describe('parseAppRoute', () => {
 })
 
 describe('toUrlString', () => {
+  // The URL is derived from the model and parsed back on boot and on
+  // back / forward, so every page must survive the round trip
   it('round-trips through parseAppRoute', () => {
     const routes: AppRoute[] = [
       { page: pageHome() },
+      { page: pageLogin() },
+      { page: pageArticles() },
       { page: pageUsers() },
+      { page: pageComments() },
+      { page: pageVisitors() },
       { page: pageSettings() },
+      { page: pageNotFound() },
     ]
     routes.forEach((route) => {
       expect(
