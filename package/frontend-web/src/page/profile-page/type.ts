@@ -3,6 +3,7 @@ import * as Pagination from '@rinn7e/tea-cup-pagination'
 import { EqAlways } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as B from 'fp-ts/lib/boolean'
+import * as S from 'fp-ts/lib/string'
 import type { Dispatcher, Result } from 'tea-cup-fp'
 
 import {
@@ -19,7 +20,10 @@ import { type AppRoute, AppRouteEq } from '@/common/type/route'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import type * as ArticleShort from '@/component/article-short'
 
+// `username` and `showFavorites` are the page's route params: the root derives
+// the route (and so the URL) from them
 export type Model = {
+  username: string
   profile: RD.RemoteData<HttpError<ApiError>, ProfileResponse>
   pagination: Pagination.Model<Article, HttpError<ApiError>>
   showFavorites: boolean
@@ -28,6 +32,7 @@ export type Model = {
 }
 
 export const ModelEq = EqClass.struct<Model>({
+  username: S.Eq,
   profile: RD.getEq(getHttpErrorEq(ApiErrorEq), ProfileResponseEq),
   pagination: Pagination.mkModelEq(ArticleEq, getHttpErrorEq(ApiErrorEq)),
   showFavorites: B.Eq,

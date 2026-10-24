@@ -1,7 +1,6 @@
 import { FloatingSidebarMemo as DsFloatingFloatingSidebarMemo } from '@rinn7e/realworld-design-system/component/floating-sidebar/component'
 import { NavbarMemo as DsNavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { SetGlobalMsgContext } from './common/global-context'
@@ -16,7 +15,7 @@ import { NotFoundPageMemo } from './page/not-found-page/component'
 import { ProfilePageMemo } from './page/profile-page/component'
 import { SettingsPageMemo } from './page/settings-page/component'
 import { SignupPageMemo } from './page/signup-page/component'
-import type { Model, Msg } from './type'
+import { type Model, type Msg, pageModelToRoute } from './type'
 
 export type AppProps = {
   model: Model
@@ -61,8 +60,8 @@ export const App = ({ model, dispatch }: AppProps) => {
 }
 
 const PageView = ({ model, dispatch }: AppProps) => {
-  const pageModel = TeaRouter.getPageModel(model.router)
-  const route = TeaRouter.getRoute(model.router)
+  const pageModel = model.pageModel
+  const route = pageModelToRoute(pageModel)
 
   switch (pageModel._tag) {
     case 'HomePageModel':

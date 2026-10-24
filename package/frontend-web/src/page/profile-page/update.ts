@@ -55,6 +55,7 @@ export const init = (
   )
 
   const model: Model = {
+    username,
     profile: RD.pending,
     pagination,
     showFavorites: favorites,
@@ -77,21 +78,21 @@ export const init = (
 }
 
 export const update =
-  (username: string, shared: Shared) =>
+  (shared: Shared) =>
   (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     switch (msg._tag) {
       case 'GetProfileResponse':
         return getProfileResponseHandler(msg.result)(model)
       case 'PaginationMsg':
-        return paginationMsgHandler(username, shared)(msg.subMsg, model)
+        return paginationMsgHandler(model.username, shared)(msg.subMsg, model)
       case 'ToggleFavorites':
-        return toggleFavoritesHandler(username, shared)(msg.show)(model)
+        return toggleFavoritesHandler(model.username, shared)(msg.show)(model)
       case 'Follow':
-        return followHandler(username, shared.token)(model)
+        return followHandler(model.username, shared.token)(model)
       case 'FollowResponse':
         return followResponseHandler(msg.result)(model)
       case 'Unfollow':
-        return unfollowHandler(username, shared.token)(model)
+        return unfollowHandler(model.username, shared.token)(model)
       case 'UnfollowResponse':
         return unfollowResponseHandler(msg.result)(model)
     }

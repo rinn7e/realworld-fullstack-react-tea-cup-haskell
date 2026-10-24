@@ -122,12 +122,14 @@ const tabToParams = (tab: HomeTab): HomeParams => {
   }
 }
 
+// Pages start at 1. A lower number would open a page whose URL (written back
+// at boot) omits the default page and so reads as page 1.
 const pageFromParam = (p: string | undefined): number => {
   if (p === undefined) {
     return 1
   } else {
     const n = parseInt(p, 10)
-    return isNaN(n) ? 1 : n
+    return isNaN(n) || n < 1 ? 1 : n
   }
 }
 

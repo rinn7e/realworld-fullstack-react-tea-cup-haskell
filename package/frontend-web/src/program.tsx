@@ -5,7 +5,7 @@ import { type Dispatcher, Sub } from 'tea-cup-fp'
 import { App } from './app'
 import { IS_RUNNING_E2E } from './common/env'
 import { assignConduitDebug } from './e2e'
-import { type Model, type Msg, teaRouterMsg } from './type'
+import { type Model, type Msg } from './type'
 import { preInit, preUpdate } from './update'
 
 // Pre-views
@@ -30,7 +30,10 @@ const preView = (dispatch: Dispatcher<Msg>, model: Model | null) => {
 export const AppProgram = () => {
   return (
     <ProgramWithNav<Model | null, Msg>
-      onUrlChange={(location) => teaRouterMsg({ _tag: 'UrlChange', location })}
+      onUrlChange={(location): Msg => ({
+        _tag: 'UrlChanged',
+        url: new URL(location.href),
+      })}
       init={preInit}
       update={preUpdate}
       view={preView}

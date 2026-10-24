@@ -2,7 +2,6 @@ import * as O from 'fp-ts/lib/Option'
 import { describe, expect, it } from 'vitest'
 
 import {
-  type AppRoute,
   globalFeedTab,
   pageArticle,
   pageEditor,
@@ -16,6 +15,8 @@ import {
   toUrlString,
   userFeedTab,
 } from '@/common/type/route'
+
+import { allRoutes } from '../../../helper/route'
 
 const parse = (path: string) =>
   parseAppRoute('', `http://localhost${path}`).page
@@ -32,6 +33,8 @@ describe('parseAppRoute', () => {
   it('falls back to the global feed and page 1 on unusable params', () => {
     expect(parse('/?tab=tag-feed')).toEqual(pageHome(globalFeedTab(), 1))
     expect(parse('/?page=abc')).toEqual(pageHome(globalFeedTab(), 1))
+    expect(parse('/?page=0')).toEqual(pageHome(globalFeedTab(), 1))
+    expect(parse('/?page=-2')).toEqual(pageHome(globalFeedTab(), 1))
   })
 
   it('parses the other pages', () => {
@@ -49,14 +52,11 @@ describe('parseAppRoute', () => {
 })
 
 describe('toUrlString', () => {
+  // The URL is derived from the model and parsed back on boot and on
+  // back / forward, so every page `pushUrl` / `replaceUrl` write must
+  // survive the round trip (not-found is never written; it passes trivially)
   it('round-trips through parseAppRoute', () => {
-    const routes: AppRoute[] = [
-      { page: pageHome(globalFeedTab(), 1) },
-      { page: pageHome(tagFeedTab('react'), 2) },
-      { page: pageEditor(O.some('my-post')) },
-      { page: pageProfile('jake', true) },
-    ]
-    routes.forEach((route) => {
+    allRoutes.forEach((route) => {
       expect(
         parseAppRoute('', `http://localhost${toUrlString(route)}`),
       ).toEqual(route)

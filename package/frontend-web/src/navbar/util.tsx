@@ -1,5 +1,4 @@
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import { Menu } from 'lucide-react'
 
 import { type AppRoute, pageHome, toUrlString } from '@/common/type/route'
@@ -37,7 +36,7 @@ export const toMobileNavItems = (_model: Model): NavItem[] => [
 
 export const toDesktopNavItems = (model: Model): NavItem[] => {
   const userOpt = model.shared.user
-  const pageTag = TeaRouter.getPageModel(model.router)._tag
+  const pageTag = model.pageModel._tag
   const navLinksData = userOpt._tag === 'Some' ? navLinkAuths : navLinkUnauths
 
   const items: NavItem[] = navLinksData.map((linkData) => {

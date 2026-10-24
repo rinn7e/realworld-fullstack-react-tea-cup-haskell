@@ -1,7 +1,6 @@
 import * as DsFloatingSidebar from '@rinn7e/realworld-design-system/component/floating-sidebar'
 import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import { msgCmd, taskFromTE, updateAndCmd } from '@rinn7e/tea-cup-prelude'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Cmd, Task } from 'tea-cup-fp'
@@ -18,9 +17,12 @@ import {
   AppRouteEq,
   type HomeTab,
   pageHome,
+  pageLogin,
+  parseAppRoute,
   toUrlString,
 } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
+import { pushUrl, replaceUrl } from '@/common/util/url'
 import * as DebugPanel from '@/component/debug-panel'
 import * as ArticlePage from '@/page/article-page'
 import * as EditorPage from '@/page/editor-page'
@@ -29,10 +31,9 @@ import * as LoginPage from '@/page/login-page'
 import * as ProfilePage from '@/page/profile-page'
 import * as SettingsPage from '@/page/settings-page'
 import * as SignupPage from '@/page/signup-page'
-import { mkRouterConfig } from '@/router-config'
 import type { ColorScheme } from '@/theme/type'
 import { loadColorScheme, setColorSchemeCmd } from '@/theme/util'
-import { type Model, type Msg, type PageModel, teaRouterMsg } from '@/type'
+import { type Model, type Msg, type PageModel, pageModelToRoute } from '@/type'
 
 import { findNavItemRoute } from './navbar/util'
 
@@ -67,19 +68,18 @@ export const init = (
   isUnavailable: boolean,
   token: O.Option<string>,
 ): [Model, Cmd<Msg>] => {
-  if (!isUnavailable && token._tag === 'None') {
-    removeToken()
-  }
+  // The stored token is not touched here: `initializeCmd` already saved or
+  // removed it from the server's answer, and with no stored token there is
+  // nothing to remove. Removing it here raced with a token saved between
+  // page load and this delayed `Init` (e.g. by a test), and wiped it.
   const initialColorScheme = loadColorScheme()
   const shared = { user, token }
-  const [routerModel, routerCmd] = TeaRouter.init(
-    routerConfig,
-    location,
-    shared,
-  )
+  // Boot: the one place the URL is read (besides browser back / forward)
+  const route = guardRoute(parseAppRoute('', location.href), shared)
+  const [pageModel, pageCmd] = initPageModel(route, shared)
 
   const model: Model = {
-    router: routerModel,
+    pageModel,
     unavailableMode: isUnavailable,
     shared,
     debugPanel: DebugPanel.init(),
@@ -88,9 +88,11 @@ export const init = (
     colorScheme: initialColorScheme,
   }
   const initCmd = Cmd.batch([
-    routerCmd,
-    trackVisitorCmd(token, TeaRouter.getRoute(routerModel)),
+    pageCmd,
+    trackVisitorCmd(token, route),
     setColorSchemeCmd(initialColorScheme).map((): Msg => ({ _tag: 'NoOp' })),
+    // Replace, so a guard redirect leaves no history entry to bounce off
+    replaceUrl(route).map(noOpToMsg),
   ])
 
   return [model, initCmd]
@@ -138,7 +140,7 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
   }
 }
 
-const initPageModel = (
+export const initPageModel = (
   route: AppRoute,
   shared: Shared,
 ): [PageModel, Cmd<Msg>] => {
@@ -213,10 +215,28 @@ const initPageModel = (
   }
 }
 
-export const routerConfig = mkRouterConfig<PageModel, Msg>(
-  initPageModel,
-  teaRouterMsg,
-)
+// Redirects a route the current session may not open: pages that need a user
+// -> login, login and signup when logged in -> home
+export const guardRoute = (route: AppRoute, shared: Shared): AppRoute => {
+  const isLoggedIn = O.isSome(shared.user)
+  const requiresAuth =
+    route.page._tag === 'PageSettings' ||
+    route.page._tag === 'PageEditor' ||
+    (route.page._tag === 'PageHome' && route.page.tab._tag === 'UserFeedTab')
+
+  if (requiresAuth && !isLoggedIn) {
+    return { page: pageLogin() }
+  } else {
+    const requiresGuest =
+      route.page._tag === 'PageLogin' || route.page._tag === 'PageSignup'
+
+    if (requiresGuest && isLoggedIn) {
+      return { page: pageHome() }
+    } else {
+      return route
+    }
+  }
+}
 
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
@@ -224,8 +244,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       return [model, Cmd.none()]
     case 'Init':
       return [model, Cmd.none()]
-    case 'TeaRouterMsg':
-      return routerMsgHandler(msg.subMsg, model)
+    case 'Navigate':
+      return navigateHandler(msg.route, model)
+    case 'UrlChanged':
+      return urlChangedHandler(msg.url, model)
 
     case 'SetUser': {
       const token =
@@ -249,21 +271,16 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       ]
     }
     case 'HomePageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag === 'HomePageModel') {
+        const prevRoute = pageModelToRoute(pageModel)
         const [homeModel, homeCmd] = HomePage.update(model.shared)(
           msg.subMsg,
           pageModel.model,
         )
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'HomePageModel',
-                model: homeModel,
-              }),
-            },
+            withPageModel(model, { _tag: 'HomePageModel', model: homeModel }),
             homeCmd.map((subMsg): Msg => ({
               _tag: 'HomePageMsg',
               subMsg,
@@ -271,14 +288,15 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'ChangeTab') {
-              return interceptChangeTabFromHomePage(msg.subMsg.tab)(m)
+              return interceptChangeTabFromHomePage(
+                prevRoute,
+                msg.subMsg.tab,
+              )(m)
             } else if (
               msg.subMsg._tag === 'PaginationMsg' &&
               msg.subMsg.subMsg._tag === 'ChangePage'
             ) {
-              return interceptPaginationChangePageFromHomePage(
-                msg.subMsg.subMsg.page,
-              )(m)
+              return pageRouteChangedHandler(prevRoute)(m)
             } else {
               return [m, Cmd.none()]
             }
@@ -289,7 +307,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'ArticlePageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag === 'ArticlePageModel') {
         const [articleModel, articleCmd] = ArticlePage.update(model.shared)(
           msg.subMsg,
@@ -297,13 +315,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         )
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'ArticlePageModel',
-                model: articleModel,
-              }),
-            },
+            withPageModel(model, {
+              _tag: 'ArticlePageModel',
+              model: articleModel,
+            }),
             articleCmd.map((m): Msg => ({ _tag: 'ArticlePageMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
@@ -311,10 +326,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
               msg.subMsg._tag === 'DeleteArticleResponse' &&
               msg.subMsg.result.tag === 'Ok'
             ) {
-              return routerMsgHandler(
-                { _tag: 'ChangeRoute', route: { page: pageHome() } },
-                m,
-              )
+              return navigateHandler({ page: pageHome() }, m)
             } else {
               return [m, Cmd.none()]
             }
@@ -325,7 +337,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'LoginPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag === 'LoginPageModel') {
         const [loginModel, loginCmd] = LoginPage.update(model.shared)(
           msg.subMsg,
@@ -334,13 +346,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'LoginPageModel',
-                model: loginModel,
-              }),
-            },
+            withPageModel(model, { _tag: 'LoginPageModel', model: loginModel }),
             loginCmd.map((m): Msg => ({ _tag: 'LoginPageMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
@@ -359,10 +365,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                   token: O.some(userWithToken.token),
                 },
               }
-              return routerMsgHandler(
-                { _tag: 'ChangeRoute', route: { page: pageHome() } },
-                nextModel,
-              )
+              return navigateHandler({ page: pageHome() }, nextModel)
             } else {
               return [m, Cmd.none()]
             }
@@ -373,7 +376,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'SignupPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag === 'SignupPageModel') {
         const [signupModel, signupCmd] = SignupPage.update(model.shared)(
           msg.subMsg,
@@ -382,13 +385,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'SignupPageModel',
-                model: signupModel,
-              }),
-            },
+            withPageModel(model, {
+              _tag: 'SignupPageModel',
+              model: signupModel,
+            }),
             signupCmd.map((m): Msg => ({ _tag: 'SignupPageMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
@@ -407,10 +407,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                   token: O.some(userWithToken.token),
                 },
               }
-              return routerMsgHandler(
-                { _tag: 'ChangeRoute', route: { page: pageHome() } },
-                nextModel,
-              )
+              return navigateHandler({ page: pageHome() }, nextModel)
             } else {
               return [m, Cmd.none()]
             }
@@ -421,7 +418,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'SettingsPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (
         pageModel._tag === 'SettingsPageModel' &&
         model.shared.user._tag === 'Some'
@@ -433,13 +430,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'SettingsPageModel',
-                model: settingsModel,
-              }),
-            },
+            withPageModel(model, {
+              _tag: 'SettingsPageModel',
+              model: settingsModel,
+            }),
             settingsCmd.map((m): Msg => ({
               _tag: 'SettingsPageMsg',
               subMsg: m,
@@ -465,41 +459,26 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'ProfilePageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
-      const currentRoute = TeaRouter.getRoute(model.router)
-      if (
-        pageModel._tag === 'ProfilePageModel' &&
-        currentRoute.page._tag === 'PageProfile'
-      ) {
-        const username = currentRoute.page.username
-
-        const [profileModel, profileCmd] = ProfilePage.update(
-          username,
-          model.shared,
-        )(msg.subMsg, pageModel.model)
+      const pageModel = model.pageModel
+      if (pageModel._tag === 'ProfilePageModel') {
+        const prevRoute = pageModelToRoute(pageModel)
+        const [profileModel, profileCmd] = ProfilePage.update(model.shared)(
+          msg.subMsg,
+          pageModel.model,
+        )
 
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'ProfilePageModel',
-                model: profileModel,
-              }),
-            },
+            withPageModel(model, {
+              _tag: 'ProfilePageModel',
+              model: profileModel,
+            }),
             profileCmd.map((m): Msg => ({ _tag: 'ProfilePageMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             // Intercept `ToggleFavorites` to update the url accordingly
             if (msg.subMsg._tag === 'ToggleFavorites') {
-              const route: AppRoute = {
-                page: {
-                  _tag: 'PageProfile',
-                  username,
-                  favorites: msg.subMsg.show,
-                },
-              }
-              return routerMsgHandler({ _tag: 'ChangeRouteNoReload', route }, m)
+              return pageRouteChangedHandler(prevRoute)(m)
             } else {
               return [m, Cmd.none()]
             }
@@ -510,7 +489,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'EditorPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (
         pageModel._tag === 'EditorPageModel' &&
         model.shared.user._tag === 'Some'
@@ -522,13 +501,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'EditorPageModel',
-                model: editorModel,
-              }),
-            },
+            withPageModel(model, {
+              _tag: 'EditorPageModel',
+              model: editorModel,
+            }),
             editorCmd.map((m): Msg => ({ _tag: 'EditorPageMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
@@ -537,15 +513,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
               msg.subMsg.result.tag === 'Ok'
             ) {
               const slug = msg.subMsg.result.value.article.slug
-              return routerMsgHandler(
-                {
-                  _tag: 'ChangeRoute',
-                  route: {
-                    page: { _tag: 'PageArticle', slug },
-                  },
-                },
-                m,
-              )
+              return navigateHandler({ page: { _tag: 'PageArticle', slug } }, m)
             } else {
               return [m, Cmd.none()]
             }
@@ -572,36 +540,95 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   }
 }
 
-// Child Msg interception handler
+// Navigation handlers
 
-const routerMsgHandler = (
-  subMsg: Extract<Msg, { _tag: 'TeaRouterMsg' }>['subMsg'],
+// Sets the open page; typed as `Model` so a page handler's result is not
+// narrowed to one page
+const withPageModel = (model: Model, pageModel: PageModel): Model => ({
+  ...model,
+  pageModel,
+})
+
+const noOpToMsg = (noOp: { _tag: 'NoOp' }): Msg => noOp
+
+// (Re)initializes the page of an already guarded route; the caller adds the URL
+// write
+const openPage = (route: AppRoute, model: Model): [Model, Cmd<Msg>] => {
+  const [pageModel, pageCmd] = initPageModel(route, model.shared)
+  return [{ ...model, pageModel }, pageCmd]
+}
+
+// What every move to another route does besides the page itself: close the
+// sidebar and record the visit
+const routeChangedHandler =
+  (route: AppRoute) =>
+  (model: Model): [Model, Cmd<Msg>] => [
+    { ...model, sidebar: DsFloatingSidebar.init()[0] },
+    trackVisitorCmd(model.shared.token, route),
+  ]
+
+// Opening a route always (re)initializes its page, also when it is the current
+// one, so clicking the active link refreshes the page. `pushUrl` skips the
+// write when the URL is already shown, so that adds no history entry. The
+// sidebar closes on every navigation, as it did with the old router (whose
+// `popstate` echo reset it); only a real route change records a visit.
+export const navigateHandler = (
+  route: AppRoute,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const prevRoute = TeaRouter.getRoute(model.router)
-  const [routerModel, routerCmd] = TeaRouter.update(routerConfig, model.shared)(
-    subMsg,
-    model.router,
+  const guarded = guardRoute(route, model.shared)
+  const isRouteChanged = !AppRouteEq.equals(
+    pageModelToRoute(model.pageModel),
+    guarded,
   )
-
   return pipe(
-    [{ ...model, router: routerModel }, routerCmd] satisfies [Model, Cmd<Msg>],
-    updateAndCmd((m) => {
-      const currentRoute = TeaRouter.getRoute(m.router)
-      const isRouteChanged = !AppRouteEq.equals(prevRoute, currentRoute)
-      if (isRouteChanged) {
-        return [
-          { ...m, sidebar: DsFloatingSidebar.init()[0] },
-          trackVisitorCmd(m.shared.token, currentRoute),
-        ]
-      } else if (subMsg._tag === 'UrlChange') {
-        return [{ ...m, sidebar: DsFloatingSidebar.init()[0] }, Cmd.none()]
-      } else {
-        return [m, Cmd.none()]
-      }
-    }),
+    openPage(guarded, model),
+    updateAndCmd((m) =>
+      isRouteChanged
+        ? routeChangedHandler(guarded)(m)
+        : [{ ...m, sidebar: DsFloatingSidebar.init()[0] }, Cmd.none()],
+    ),
+    updateAndCmd((m) => [m, pushUrl(guarded).map(noOpToMsg)]),
   )
 }
+
+// Back / forward to the route already shown keeps the page as it is (but still
+// closes the sidebar). The URL is replaced, never pushed, also when the guard
+// redirected it: the URL must show the page, and a push would cut off the
+// forward history.
+export const urlChangedHandler = (
+  url: URL,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  const route = guardRoute(parseAppRoute('', url.href), model.shared)
+  const opened: [Model, Cmd<Msg>] = AppRouteEq.equals(
+    route,
+    pageModelToRoute(model.pageModel),
+  )
+    ? [{ ...model, sidebar: DsFloatingSidebar.init()[0] }, Cmd.none()]
+    : pipe(openPage(route, model), updateAndCmd(routeChangedHandler(route)))
+  return pipe(
+    opened,
+    updateAndCmd((m) => [m, replaceUrl(route).map(noOpToMsg)]),
+  )
+}
+
+// A page changed its own route params without reloading (home tab or page,
+// profile favorites): its model already shows the new route, so only the URL
+// and the route-change effects follow
+const pageRouteChangedHandler =
+  (prevRoute: AppRoute) =>
+  (model: Model): [Model, Cmd<Msg>] => {
+    const route = pageModelToRoute(model.pageModel)
+    if (AppRouteEq.equals(prevRoute, route)) {
+      return [model, Cmd.none()]
+    } else {
+      return pipe(
+        routeChangedHandler(route)(model),
+        updateAndCmd((m) => [m, pushUrl(route).map(noOpToMsg)]),
+      )
+    }
+  }
 
 // Child Msg interception handler
 
@@ -630,10 +657,7 @@ const sidebarMsgHandler = (
         } else {
           const targetRoute = findNavItemRoute(m, item.key)
           if (targetRoute) {
-            return routerMsgHandler(
-              { _tag: 'ChangeRoute', route: targetRoute },
-              m,
-            )
+            return navigateHandler(targetRoute, m)
           }
         }
       }
@@ -679,10 +703,7 @@ const navbarMsgHandler = (
         } else {
           const targetRoute = findNavItemRoute(m, item.key)
           if (targetRoute) {
-            return routerMsgHandler(
-              { _tag: 'ChangeRoute', route: targetRoute },
-              m,
-            )
+            return navigateHandler(targetRoute, m)
           }
         }
       }
@@ -708,10 +729,7 @@ const interceptLogoutFromSettingPage = (m: Model): [Model, Cmd<Msg>] => {
     ...m,
     shared: { ...m.shared, user: O.none, token: O.none },
   }
-  return routerMsgHandler(
-    { _tag: 'ChangeRoute', route: { page: pageHome() } },
-    nextModel,
-  )
+  return navigateHandler({ page: pageHome() }, nextModel)
 }
 
 const interceptSubmitResponseOkFromSettingPage =
@@ -729,15 +747,12 @@ const interceptSubmitResponseOkFromSettingPage =
         token: O.some(userWithToken.token),
       },
     }
-    return routerMsgHandler(
+    return navigateHandler(
       {
-        _tag: 'ChangeRoute',
-        route: {
-          page: {
-            _tag: 'PageProfile',
-            username: user.username,
-            favorites: false,
-          },
+        page: {
+          _tag: 'PageProfile',
+          username: user.username,
+          favorites: false,
         },
       },
       nextModel,
@@ -745,38 +760,13 @@ const interceptSubmitResponseOkFromSettingPage =
   }
 
 const interceptChangeTabFromHomePage =
-  (tab: HomeTab) =>
+  (prevRoute: AppRoute, tab: HomeTab) =>
   (m: Model): [Model, Cmd<Msg>] => {
     if (tab._tag === 'UserFeedTab' && m.shared.user._tag === 'None') {
-      return routerMsgHandler(
-        { _tag: 'ChangeRoute', route: { page: { _tag: 'PageLogin' } } },
-        m,
-      )
+      return navigateHandler({ page: pageLogin() }, m)
     } else {
       // Change url according to the tab
-      return routerMsgHandler(
-        { _tag: 'ChangeRouteNoReload', route: { page: pageHome(tab) } },
-        m,
-      )
-    }
-  }
-
-const interceptPaginationChangePageFromHomePage =
-  (page: number) =>
-  (m: Model): [Model, Cmd<Msg>] => {
-    const currentRoute = TeaRouter.getRoute(m.router)
-    if (currentRoute.page._tag === 'PageHome') {
-      return routerMsgHandler(
-        {
-          _tag: 'ChangeRouteNoReload',
-          route: {
-            page: pageHome(currentRoute.page.tab, page),
-          },
-        },
-        m,
-      )
-    } else {
-      return [m, Cmd.none()]
+      return pageRouteChangedHandler(prevRoute)(m)
     }
   }
 
