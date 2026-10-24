@@ -13,6 +13,7 @@ import type { Dispatcher } from 'tea-cup-fp'
 
 import {
   SHOWCASE_CATEGORIES,
+  activeComponentOf,
   getRightSidebarCategories,
   getSidebarCategories,
 } from '@/common/constant/menu'
@@ -418,11 +419,7 @@ export const App = ({ model, dispatch }: AppProps) => {
   const currentRoute = pageModelToRoute(model.pageModel)
   const pageModel = model.pageModel
 
-  const activeComponent =
-    currentRoute.page._tag === 'PageHome' ||
-    currentRoute.page._tag === 'PageNotFound'
-      ? ''
-      : currentRoute.page._tag.replace(/Page$/, '').toLowerCase()
+  const activeComponent = activeComponentOf(currentRoute)
 
   return (
     <div

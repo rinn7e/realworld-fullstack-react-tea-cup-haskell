@@ -48,7 +48,11 @@ import {
 } from 'lucide-react'
 import React from 'react'
 
-import type { ComponentItem } from '@/common/type/route'
+import {
+  type AppRoute,
+  type ComponentItem,
+  toUrlString,
+} from '@/common/type/route'
 
 export type SectionCategory =
   'elements' | 'components' | 'form' | 'layout' | 'grid' | 'misc'
@@ -194,6 +198,18 @@ export const SHOWCASE_CATEGORIES: ShowcaseCategory[] = [
     items: [{ id: 'dot-loading', name: 'Dot Loading' }],
   },
 ]
+
+// A menu item's id is its URL path (`href: /${id}`), so the open page's item
+// is read off the route's URL. Home and the not-found page have no item.
+export const activeComponentOf = (route: AppRoute): string => {
+  switch (route.page._tag) {
+    case 'PageHome':
+    case 'PageNotFound':
+      return ''
+    default:
+      return toUrlString(route).replace(/^\//, '')
+  }
+}
 
 export const getSidebarCategories = (
   activeComponent: string,
