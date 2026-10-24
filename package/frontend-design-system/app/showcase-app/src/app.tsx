@@ -4,7 +4,6 @@ import { ColumnMemo as DsColumnMemo } from '@rinn7e/realworld-design-system/grid
 import { ColumnsMemo as DsColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
 import { ContainerMemo as DsContainerMemo } from '@rinn7e/realworld-design-system/layout/container/component'
 import { FooterMemo as DsFooterMemo } from '@rinn7e/realworld-design-system/layout/footer/component'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
@@ -62,7 +61,7 @@ import { TextareaPageMemo } from '@/page/textarea-page/component'
 import { TitlePageMemo } from '@/page/title-page/component'
 import type { ColorScheme } from '@/theme/type'
 
-import { type Model, type Msg, type PageModel, teaRouterMsg } from './type'
+import { type Model, type Msg, type PageModel, pageModelToRoute } from './type'
 
 type ColorSchemeIconProps = {
   scheme: ColorScheme
@@ -106,7 +105,7 @@ const PageViewPropsEq: EqClass.Eq<PageViewProps> = EqClass.struct({
 
 const PageViewComponent = ({ pageModel, dispatch }: PageViewProps) => {
   const navigateRoute = (route: AppRoute) => {
-    dispatch(teaRouterMsg({ _tag: 'ChangeRoute', route }))
+    dispatch({ _tag: 'Navigate', route })
   }
 
   switch (pageModel._tag) {
@@ -416,8 +415,8 @@ export type AppProps = {
 }
 
 export const App = ({ model, dispatch }: AppProps) => {
-  const currentRoute = TeaRouter.getRoute(model.router)
-  const pageModel = TeaRouter.getPageModel(model.router)
+  const currentRoute = pageModelToRoute(model.pageModel)
+  const pageModel = model.pageModel
 
   const activeComponent =
     currentRoute.page._tag === 'PageHome' ||

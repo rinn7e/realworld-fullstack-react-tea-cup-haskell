@@ -1,12 +1,17 @@
 import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
 import type { NavItemData } from '@rinn7e/realworld-design-system/type/nav-item'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Cmd } from 'tea-cup-fp'
 
-import { type AppRoute, parsePath } from '@/common/type/route'
+import {
+  type AppRoute,
+  AppRouteEq,
+  parseAppRoute,
+  parsePath,
+} from '@/common/type/route'
+import { pushUrl, replaceUrl } from '@/common/util/url'
 import * as BlockPage from '@/page/block-page'
 import * as BoxPage from '@/page/box-page'
 import * as BreadcrumbPage from '@/page/breadcrumb-page'
@@ -51,8 +56,7 @@ import * as TextareaPage from '@/page/textarea-page'
 import * as TitlePage from '@/page/title-page'
 import { loadColorScheme, setColorSchemeCmd } from '@/theme/util'
 
-import { mkRouterConfig } from './router-config'
-import { type Model, type Msg, type PageModel, teaRouterMsg } from './type'
+import { type Model, type Msg, type PageModel, pageModelToRoute } from './type'
 
 export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
   switch (newRoute.page._tag) {
@@ -394,28 +398,40 @@ export const initPageModel = (newRoute: AppRoute): [PageModel, Cmd<Msg>] => {
   }
 }
 
-export const routerConfig = mkRouterConfig<PageModel, Msg>(
-  initPageModel,
-  teaRouterMsg,
-)
+const openPage = (route: AppRoute, model: Model): [Model, Cmd<Msg>] => {
+  const [pageModel, pageCmd] = initPageModel(route)
+  return [{ ...model, pageModel }, pageCmd]
+}
 
-export const routerMsgHandler = (
-  subMsg: Extract<Msg, { _tag: 'TeaRouterMsg' }>['subMsg'],
+// Opening the route that is already open starts the page afresh, like a link to
+// the current page. `pushUrl` skips the write when the URL is already shown, so
+// that adds no history entry.
+export const navigateHandler = (
+  route: AppRoute,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const [routerModel, routerCmd] = TeaRouter.update(routerConfig, undefined)(
-    subMsg,
-    model.router,
-  )
-
-  return [
-    {
-      ...model,
-      router: routerModel,
-    },
-    routerCmd,
-  ]
+  const [nextModel, pageCmd] = openPage(route, model)
+  return [nextModel, Cmd.batch([pageCmd, pushUrl(route).map(noOpToMsg)])]
 }
+
+// Back / forward to the route already shown keeps the page as it is. The URL is
+// written back even then, so a URL that parses to the shown route but is
+// spelled differently (a trailing slash) is tidied.
+export const urlChangedHandler = (
+  url: URL,
+  model: Model,
+): [Model, Cmd<Msg>] => {
+  const route = parseAppRoute(url.origin, url.href)
+  const [nextModel, pageCmd] = AppRouteEq.equals(
+    route,
+    pageModelToRoute(model.pageModel),
+  )
+    ? [model, Cmd.none<Msg>()]
+    : openPage(route, model)
+  return [nextModel, Cmd.batch([pageCmd, replaceUrl(route).map(noOpToMsg)])]
+}
+
+const noOpToMsg = (noOp: { _tag: 'NoOp' }): Msg => noOp
 
 // Nav items route to their own href, the same URL a plain link click would open
 const navItemRouteHandler =
@@ -425,11 +441,7 @@ const navItemRouteHandler =
       O.fromNullable(item.href),
       O.fold(
         (): [Model, Cmd<Msg>] => [model, Cmd.none()],
-        (href) =>
-          routerMsgHandler(
-            { _tag: 'ChangeRoute', route: parsePath(href) },
-            model,
-          ),
+        (href) => navigateHandler(parsePath(href), model),
       ),
     )
 
@@ -443,10 +455,8 @@ const sidebarMsgHandler =
       subMsg,
     }))
     if (msg._tag === 'ClickItem') {
-      const [routerModel, routerCmd] = navItemRouteHandler(msg.item)(
-        updatedModel,
-      )
-      return [routerModel, Cmd.batch([subCmd, routerCmd])]
+      const [navModel, navCmd] = navItemRouteHandler(msg.item)(updatedModel)
+      return [navModel, Cmd.batch([subCmd, navCmd])]
     } else {
       return [updatedModel, subCmd]
     }
@@ -464,10 +474,8 @@ const rightSidebarMsgHandler =
       subMsg,
     }))
     if (msg._tag === 'ClickItem') {
-      const [routerModel, routerCmd] = navItemRouteHandler(msg.item)(
-        updatedModel,
-      )
-      return [routerModel, Cmd.batch([subCmd, routerCmd])]
+      const [navModel, navCmd] = navItemRouteHandler(msg.item)(updatedModel)
+      return [navModel, Cmd.batch([subCmd, navCmd])]
     } else {
       return [updatedModel, subCmd]
     }
@@ -508,18 +516,15 @@ const topNavbarMsgHandler =
   }
 
 export const init = (location: Location): [Model, Cmd<Msg>] => {
-  const [routerModel, routerCmd] = TeaRouter.init(
-    routerConfig,
-    location,
-    undefined,
-  )
+  const route = parseAppRoute(location.origin, location.href)
+  const [pageModel, pageCmd] = initPageModel(route)
   const [sidebarModel, sidebarCmd] = DsSidebar.init(false)
   const [rightSidebarModel, rightSidebarCmd] = DsSidebar.init(false)
   const [topNavbarModel, topNavbarCmd] = DsNavbar.init()
   const colorScheme = loadColorScheme()
 
   const model: Model = {
-    router: routerModel,
+    pageModel,
     searchQuery: '',
     sidebarModel,
     rightSidebarModel,
@@ -540,7 +545,8 @@ export const init = (location: Location): [Model, Cmd<Msg>] => {
         _tag: 'TopNavbarMsg' as const,
         subMsg,
       })),
-      routerCmd,
+      pageCmd,
+      replaceUrl(route).map(noOpToMsg),
       setColorSchemeCmd(colorScheme),
     ]),
   ]
@@ -567,14 +573,17 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     case 'Init':
       return init(msg.location)
 
-    case 'TeaRouterMsg':
-      return routerMsgHandler(msg.subMsg, model)
+    case 'Navigate':
+      return navigateHandler(msg.route, model)
+
+    case 'UrlChanged':
+      return urlChangedHandler(msg.url, model)
 
     case 'UpdateSearch':
       return [{ ...model, searchQuery: msg.query }, Cmd.none()]
 
     case 'HomePageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'HomePageModel') {
         return [model, Cmd.none()]
       } else {
@@ -582,10 +591,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'HomePageModel',
               model: homeModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'HomePageMsg', subMsg })),
         ]
@@ -593,7 +602,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'BlockPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'BlockPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -601,10 +610,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'BlockPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'BlockPageMsg', subMsg })),
         ]
@@ -612,7 +621,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'BoxPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'BoxPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -620,10 +629,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'BoxPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'BoxPageMsg', subMsg })),
         ]
@@ -631,7 +640,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'ButtonPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'ButtonPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -639,10 +648,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'ButtonPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'ButtonPageMsg', subMsg })),
         ]
@@ -650,7 +659,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'ContentPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'ContentPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -658,10 +667,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'ContentPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'ContentPageMsg', subMsg })),
         ]
@@ -669,7 +678,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'DeletePageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'DeletePageModel') {
         return [model, Cmd.none()]
       } else {
@@ -677,10 +686,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'DeletePageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'DeletePageMsg', subMsg })),
         ]
@@ -688,7 +697,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'IconPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'IconPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -696,10 +705,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'IconPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'IconPageMsg', subMsg })),
         ]
@@ -707,7 +716,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'ImagePageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'ImagePageModel') {
         return [model, Cmd.none()]
       } else {
@@ -715,10 +724,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'ImagePageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'ImagePageMsg', subMsg })),
         ]
@@ -726,7 +735,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'NotificationPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'NotificationPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -737,10 +746,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'NotificationPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'NotificationPageMsg', subMsg })),
         ]
@@ -748,7 +757,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'ProgressPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'ProgressPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -756,10 +765,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'ProgressPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'ProgressPageMsg', subMsg })),
         ]
@@ -767,7 +776,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'TablePageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'TablePageModel') {
         return [model, Cmd.none()]
       } else {
@@ -775,10 +784,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'TablePageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'TablePageMsg', subMsg })),
         ]
@@ -786,7 +795,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'TagPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'TagPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -794,10 +803,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'TagPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'TagPageMsg', subMsg })),
         ]
@@ -805,7 +814,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'TitlePageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'TitlePageModel') {
         return [model, Cmd.none()]
       } else {
@@ -813,10 +822,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'TitlePageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'TitlePageMsg', subMsg })),
         ]
@@ -824,7 +833,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'BreadcrumbPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'BreadcrumbPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -835,10 +844,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'BreadcrumbPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'BreadcrumbPageMsg', subMsg })),
         ]
@@ -846,7 +855,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'CardPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'CardPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -854,10 +863,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'CardPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'CardPageMsg', subMsg })),
         ]
@@ -865,7 +874,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'DropdownPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'DropdownPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -873,10 +882,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'DropdownPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'DropdownPageMsg', subMsg })),
         ]
@@ -884,7 +893,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'MenuPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'MenuPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -892,10 +901,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'MenuPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'MenuPageMsg', subMsg })),
         ]
@@ -903,7 +912,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'MessagePageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'MessagePageModel') {
         return [model, Cmd.none()]
       } else {
@@ -911,10 +920,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'MessagePageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'MessagePageMsg', subMsg })),
         ]
@@ -922,7 +931,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'ModalPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'ModalPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -930,10 +939,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'ModalPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'ModalPageMsg', subMsg })),
         ]
@@ -941,7 +950,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'NavbarPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'NavbarPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -949,10 +958,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'NavbarPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'NavbarPageMsg', subMsg })),
         ]
@@ -960,7 +969,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'FloatingSidebarPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'FloatingSidebarPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -971,10 +980,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'FloatingSidebarPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'FloatingSidebarPageMsg', subMsg })),
         ]
@@ -982,7 +991,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'SidebarPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'SidebarPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -990,10 +999,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'SidebarPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'SidebarPageMsg', subMsg })),
         ]
@@ -1001,7 +1010,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'PaginationPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'PaginationPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1012,10 +1021,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'PaginationPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'PaginationPageMsg', subMsg })),
         ]
@@ -1023,7 +1032,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'PanelPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'PanelPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1031,10 +1040,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'PanelPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'PanelPageMsg', subMsg })),
         ]
@@ -1042,7 +1051,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'PopoverPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'PopoverPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1050,10 +1059,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'PopoverPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'PopoverPageMsg', subMsg })),
         ]
@@ -1061,7 +1070,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'TabsPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'TabsPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1069,10 +1078,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'TabsPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'TabsPageMsg', subMsg })),
         ]
@@ -1080,7 +1089,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'FieldPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'FieldPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1088,10 +1097,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'FieldPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'FieldPageMsg', subMsg })),
         ]
@@ -1099,7 +1108,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'InputPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'InputPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1107,10 +1116,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'InputPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'InputPageMsg', subMsg })),
         ]
@@ -1118,7 +1127,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'TextareaPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'TextareaPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1126,10 +1135,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'TextareaPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'TextareaPageMsg', subMsg })),
         ]
@@ -1137,7 +1146,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'SelectPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'SelectPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1145,10 +1154,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'SelectPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'SelectPageMsg', subMsg })),
         ]
@@ -1156,7 +1165,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'CheckboxPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'CheckboxPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1164,10 +1173,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'CheckboxPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'CheckboxPageMsg', subMsg })),
         ]
@@ -1175,7 +1184,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'RadioPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'RadioPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1183,10 +1192,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'RadioPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'RadioPageMsg', subMsg })),
         ]
@@ -1194,7 +1203,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'FilePageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'FilePageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1202,10 +1211,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'FilePageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'FilePageMsg', subMsg })),
         ]
@@ -1213,7 +1222,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'ContainerPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'ContainerPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1224,10 +1233,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'ContainerPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'ContainerPageMsg', subMsg })),
         ]
@@ -1235,7 +1244,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'HeroPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'HeroPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1243,10 +1252,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'HeroPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'HeroPageMsg', subMsg })),
         ]
@@ -1254,7 +1263,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'SectionPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'SectionPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1262,10 +1271,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'SectionPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'SectionPageMsg', subMsg })),
         ]
@@ -1273,7 +1282,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'LevelPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'LevelPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1281,10 +1290,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'LevelPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'LevelPageMsg', subMsg })),
         ]
@@ -1292,7 +1301,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'MediaObjectPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'MediaObjectPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1303,10 +1312,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'MediaObjectPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'MediaObjectPageMsg', subMsg })),
         ]
@@ -1314,7 +1323,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'FooterPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'FooterPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1322,10 +1331,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'FooterPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'FooterPageMsg', subMsg })),
         ]
@@ -1333,7 +1342,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'ColumnsPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'ColumnsPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1341,10 +1350,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'ColumnsPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'ColumnsPageMsg', subMsg })),
         ]
@@ -1352,7 +1361,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'DotLoadingPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'DotLoadingPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1363,10 +1372,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'DotLoadingPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'DotLoadingPageMsg', subMsg })),
         ]
@@ -1374,7 +1383,7 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
     }
 
     case 'NotFoundPageMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const pageModel = model.pageModel
       if (pageModel._tag !== 'NotFoundPageModel') {
         return [model, Cmd.none()]
       } else {
@@ -1382,10 +1391,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            router: TeaRouter.setPageModel(model.router, {
+            pageModel: {
               _tag: 'NotFoundPageModel',
               model: subModel,
-            }),
+            },
           },
           cmd.map((subMsg) => ({ _tag: 'NotFoundPageMsg', subMsg })),
         ]

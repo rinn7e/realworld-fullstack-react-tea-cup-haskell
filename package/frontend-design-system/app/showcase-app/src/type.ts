@@ -1,6 +1,5 @@
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import type * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
-import type * as TeaRouter from '@rinn7e/tea-cup-router'
 
 import type { AppRoute } from '@/common/type/route'
 import type * as BlockPage from '@/page/block-page'
@@ -112,8 +111,101 @@ export type PageModel =
   | { readonly _tag: 'TitlePageModel'; readonly model: TitlePage.Model }
   | { readonly _tag: 'NotFoundPageModel'; readonly model: NotFoundPage.Model }
 
+// Every route is a page without params, so the open page alone gives the route
+export const pageModelToRoute = (pageModel: PageModel): AppRoute => {
+  switch (pageModel._tag) {
+    case 'HomePageModel':
+      return { page: { _tag: 'PageHome' } }
+    case 'BlockPageModel':
+      return { page: { _tag: 'PageBlock' } }
+    case 'BoxPageModel':
+      return { page: { _tag: 'PageBox' } }
+    case 'BreadcrumbPageModel':
+      return { page: { _tag: 'PageBreadcrumb' } }
+    case 'ButtonPageModel':
+      return { page: { _tag: 'PageButton' } }
+    case 'CardPageModel':
+      return { page: { _tag: 'PageCard' } }
+    case 'CheckboxPageModel':
+      return { page: { _tag: 'PageCheckbox' } }
+    case 'ColumnsPageModel':
+      return { page: { _tag: 'PageColumns' } }
+    case 'ContainerPageModel':
+      return { page: { _tag: 'PageContainer' } }
+    case 'ContentPageModel':
+      return { page: { _tag: 'PageContent' } }
+    case 'DeletePageModel':
+      return { page: { _tag: 'PageDelete' } }
+    case 'DotLoadingPageModel':
+      return { page: { _tag: 'PageDotLoading' } }
+    case 'DropdownPageModel':
+      return { page: { _tag: 'PageDropdown' } }
+    case 'FieldPageModel':
+      return { page: { _tag: 'PageField' } }
+    case 'FilePageModel':
+      return { page: { _tag: 'PageFile' } }
+    case 'FooterPageModel':
+      return { page: { _tag: 'PageFooter' } }
+    case 'HeroPageModel':
+      return { page: { _tag: 'PageHero' } }
+    case 'IconPageModel':
+      return { page: { _tag: 'PageIcon' } }
+    case 'ImagePageModel':
+      return { page: { _tag: 'PageImage' } }
+    case 'InputPageModel':
+      return { page: { _tag: 'PageInput' } }
+    case 'LevelPageModel':
+      return { page: { _tag: 'PageLevel' } }
+    case 'MediaObjectPageModel':
+      return { page: { _tag: 'PageMediaObject' } }
+    case 'MenuPageModel':
+      return { page: { _tag: 'PageMenu' } }
+    case 'MessagePageModel':
+      return { page: { _tag: 'PageMessage' } }
+    case 'ModalPageModel':
+      return { page: { _tag: 'PageModal' } }
+    case 'NavbarPageModel':
+      return { page: { _tag: 'PageNavbar' } }
+    case 'FloatingSidebarPageModel':
+      return { page: { _tag: 'PageFloatingSidebar' } }
+    case 'SidebarPageModel':
+      return { page: { _tag: 'PageSidebar' } }
+    case 'NotificationPageModel':
+      return { page: { _tag: 'PageNotification' } }
+    case 'PaginationPageModel':
+      return { page: { _tag: 'PagePagination' } }
+    case 'PanelPageModel':
+      return { page: { _tag: 'PagePanel' } }
+    case 'PopoverPageModel':
+      return { page: { _tag: 'PagePopover' } }
+    case 'ProgressPageModel':
+      return { page: { _tag: 'PageProgress' } }
+    case 'RadioPageModel':
+      return { page: { _tag: 'PageRadio' } }
+    case 'SectionPageModel':
+      return { page: { _tag: 'PageSection' } }
+    case 'SelectPageModel':
+      return { page: { _tag: 'PageSelect' } }
+    case 'TablePageModel':
+      return { page: { _tag: 'PageTable' } }
+    case 'TabsPageModel':
+      return { page: { _tag: 'PageTabs' } }
+    case 'TagPageModel':
+      return { page: { _tag: 'PageTag' } }
+    case 'TextareaPageModel':
+      return { page: { _tag: 'PageTextarea' } }
+    case 'TitlePageModel':
+      return { page: { _tag: 'PageTitle' } }
+    case 'NotFoundPageModel':
+      return { page: { _tag: 'PageNotFound' } }
+  }
+}
+
+// The open page is the single source of truth for where the app is: the route
+// is derived from it (`pageModelToRoute`) and the URL from the route
+// (`pushUrl` / `replaceUrl` in `common/util/url.ts`), never the other way round
 export type Model = {
-  readonly router: TeaRouter.Model<AppRoute, PageModel>
+  readonly pageModel: PageModel
   readonly searchQuery: string
   readonly sidebarModel: DsSidebar.Model
   readonly rightSidebarModel: DsSidebar.Model
@@ -125,10 +217,10 @@ export type Model = {
 export type Msg =
   | { readonly _tag: 'NoOp' }
   | { readonly _tag: 'Init'; readonly location: Location }
-  | {
-      readonly _tag: 'TeaRouterMsg'
-      readonly subMsg: TeaRouter.Msg<AppRoute>
-    }
+  | { readonly _tag: 'Navigate'; readonly route: AppRoute }
+  // Browser back / forward: the only URL change that comes from outside
+  // after boot
+  | { readonly _tag: 'UrlChanged'; readonly url: URL }
   | { readonly _tag: 'UpdateSearch'; readonly query: string }
   | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
   | { readonly _tag: 'ToggleThemeMenu' }
@@ -187,8 +279,3 @@ export type Msg =
   | { readonly _tag: 'TextareaPageMsg'; readonly subMsg: TextareaPage.Msg }
   | { readonly _tag: 'TitlePageMsg'; readonly subMsg: TitlePage.Msg }
   | { readonly _tag: 'NotFoundPageMsg'; readonly subMsg: NotFoundPage.Msg }
-
-export const teaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
-  _tag: 'TeaRouterMsg',
-  subMsg,
-})
