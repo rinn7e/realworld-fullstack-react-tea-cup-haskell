@@ -25,7 +25,7 @@ import { type ColorScheme, type Theme } from './theme/type'
 
 // `pageModel` is the single source of truth for navigation: the route is
 // derived from it (`pageModelToRoute`) and the URL from the route
-// (`url-port.ts`), never the other way round
+// (`pushUrl` / `replaceUrl` in `common/util/url.ts`), never the other way round
 export type Model = {
   readonly pageModel: PageModel
   readonly shared: Shared
@@ -71,7 +71,7 @@ export type Msg =
   | { readonly _tag: 'Navigate'; readonly route: AppRoute }
   // Browser back / forward: the only URL change that comes from outside
   // after boot
-  | { readonly _tag: 'UrlChange'; readonly location: Location }
+  | { readonly _tag: 'UrlChanged'; readonly url: URL }
   | {
       readonly _tag: 'Init'
       readonly location: Location

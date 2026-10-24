@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  type AppRoute,
   pageArticles,
   pageComments,
   pageHome,
@@ -13,6 +12,8 @@ import {
   parseAppRoute,
   toUrlString,
 } from '@/common/type/route'
+
+import { allRoutes } from '../../../helper/fixture'
 
 const parse = (path: string) =>
   parseAppRoute('', `http://localhost${path}`).page
@@ -32,19 +33,10 @@ describe('parseAppRoute', () => {
 
 describe('toUrlString', () => {
   // The URL is derived from the model and parsed back on boot and on
-  // back / forward, so every page must survive the round trip
+  // back / forward, so every page `pushUrl` / `replaceUrl` write must
+  // survive the round trip (not-found is never written; it passes trivially)
   it('round-trips through parseAppRoute', () => {
-    const routes: AppRoute[] = [
-      { page: pageHome() },
-      { page: pageLogin() },
-      { page: pageArticles() },
-      { page: pageUsers() },
-      { page: pageComments() },
-      { page: pageVisitors() },
-      { page: pageSettings() },
-      { page: pageNotFound() },
-    ]
-    routes.forEach((route) => {
+    allRoutes.forEach((route) => {
       expect(
         parseAppRoute('', `http://localhost${toUrlString(route)}`),
       ).toEqual(route)

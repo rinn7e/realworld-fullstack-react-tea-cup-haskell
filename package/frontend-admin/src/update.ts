@@ -13,6 +13,7 @@ import {
   parseAppRoute,
 } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
+import { pushUrl, replaceUrl } from '@/common/util/url'
 import * as Persona from '@/component/persona-panel'
 import * as ArticlePage from '@/page/article-page'
 import * as CommentPage from '@/page/comment-page'
@@ -139,7 +140,7 @@ export const init = (
 
   // Boot: the one place the URL is read (besides browser back / forward)
   const route = guardRoute(
-    parseAppRoute(window.location.origin, location.href),
+    parseAppRoute(location.origin, location.href),
     shared,
   )
   const [pageModel, pageCmd] = initPageModel(route, shared)
@@ -161,6 +162,8 @@ export const init = (
   const initCmd = Cmd.batch([
     pageCmd,
     personaCmd.map((subMsg): Msg => ({ _tag: 'PersonaMsg', subMsg })),
+    // Replace, so a guard redirect leaves no history entry to bounce off
+    replaceUrl(route).map(noOpToMsg),
   ])
 
   return [model, initCmd]
@@ -221,39 +224,51 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
   }
 }
 
+// (Re)initializes the page of an already guarded route; the caller adds the URL
+// write
+const openPage = (route: AppRoute, model: Model): [Model, Cmd<Msg>] => {
+  const [pageModel, pageCmd] = initPageModel(route, model.shared)
+  return [{ ...model, pageModel }, pageCmd]
+}
+
 // Opening a route always (re)initializes its page, also when it is the current
-// one, so clicking the active sidebar link refreshes the page
+// one, so clicking the active sidebar link refreshes the page. `pushUrl` skips
+// the write when the URL is already shown, so that adds no history entry.
 export const navigateHandler = (
   route: AppRoute,
   model: Model,
 ): [Model, Cmd<Msg>] => {
   const guarded = guardRoute(route, model.shared)
-  const [pageModel, pageCmd] = initPageModel(guarded, model.shared)
-  return [{ ...model, pageModel }, pageCmd]
+  const [nextModel, pageCmd] = openPage(guarded, model)
+  return [nextModel, Cmd.batch([pageCmd, pushUrl(guarded).map(noOpToMsg)])]
 }
 
-// Back / forward to the route already shown keeps the page as it is
-const urlChangeHandler = (
-  location: Location,
+// Back / forward to the route already shown keeps the page as it is. The URL is
+// replaced, never pushed, also when the guard redirected it: back to
+// `/settings` after logout keeps the login page and the URL must say so, and a
+// push would cut off the forward history.
+export const urlChangedHandler = (
+  url: URL,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const route = guardRoute(
-    parseAppRoute(window.location.origin, location.href),
-    model.shared,
+  const route = guardRoute(parseAppRoute(url.origin, url.href), model.shared)
+  const [nextModel, pageCmd] = AppRouteEq.equals(
+    route,
+    pageModelToRoute(model.pageModel),
   )
-  if (AppRouteEq.equals(route, pageModelToRoute(model.pageModel))) {
-    return [model, Cmd.none()]
-  } else {
-    return navigateHandler(route, model)
-  }
+    ? [model, Cmd.none<Msg>()]
+    : openPage(route, model)
+  return [nextModel, Cmd.batch([pageCmd, replaceUrl(route).map(noOpToMsg)])]
 }
+
+const noOpToMsg = (noOp: { _tag: 'NoOp' }): Msg => noOp
 
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
     case 'Navigate':
       return navigateHandler(msg.route, model)
-    case 'UrlChange':
-      return urlChangeHandler(msg.location, model)
+    case 'UrlChanged':
+      return urlChangedHandler(msg.url, model)
     case 'Init':
       // Handled by preUpdate
       return [model, Cmd.none()]
