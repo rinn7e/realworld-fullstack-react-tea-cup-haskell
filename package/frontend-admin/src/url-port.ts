@@ -26,9 +26,11 @@ const writeUrlCmd = (url: string, mode: 'push' | 'replace'): Cmd<Msg> =>
     (): Msg => ({ _tag: 'NoOp' }),
   )
 
-// Wraps the program's `update`. The first model (boot, where the guard may
-// have redirected) replaces the URL so back doesn't return to the redirect;
-// later route changes push a history entry.
+// Wraps the program's `update`. A route change pushes a history entry. Anything
+// else replaces, so the URL still follows the model without adding entries: at
+// boot (where the guard may have redirected), and when back / forward lands on
+// a URL the guard redirects to the page already shown (e.g. back to
+// `/settings` after logout keeps the login page, and the URL must say so).
 export const withUrlSync =
   <M extends Model | null>(update: (msg: Msg, model: M) => [M, Cmd<Msg>]) =>
   (msg: Msg, prev: M): [M, Cmd<Msg>] => {
@@ -37,15 +39,14 @@ export const withUrlSync =
       return [next, cmd]
     } else {
       const nextRoute = pageModelToRoute(next.pageModel)
-      if (
-        // Keep what the user typed instead of rewriting it to `/404`
-        nextRoute.page._tag === 'PageNotFound' ||
-        (prev !== null &&
-          AppRouteEq.equals(pageModelToRoute(prev.pageModel), nextRoute))
-      ) {
+      // Keep what the user typed instead of rewriting it to `/404`
+      if (nextRoute.page._tag === 'PageNotFound') {
         return [next, cmd]
       } else {
-        const mode = prev === null ? 'replace' : 'push'
+        const isRouteChange =
+          prev !== null &&
+          !AppRouteEq.equals(pageModelToRoute(prev.pageModel), nextRoute)
+        const mode = isRouteChange ? 'push' : 'replace'
         return [
           next,
           Cmd.batch([cmd, writeUrlCmd(toUrlString(nextRoute), mode)]),
