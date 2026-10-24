@@ -68,6 +68,20 @@ describe('guardRoute', () => {
 })
 
 describe('init', () => {
+  // `Init` arrives on a timer after the page load event; a token saved in
+  // between (e.g. by a test, before a reload) must survive the boot
+  it('leaves a stored token alone when booting without one', () => {
+    stubBrowser('/')
+    const removeItem = vi.fn()
+    vi.stubGlobal('localStorage', {
+      getItem: () => 'token-saved-after-load',
+      setItem: () => undefined,
+      removeItem,
+    })
+    init(window.location, loggedOut.user, false, loggedOut.token)
+    expect(removeItem).not.toHaveBeenCalled()
+  })
+
   // A guard redirect at boot must leave no history entry to bounce off
   it('replaces the URL when the guard redirects', async () => {
     const writes = stubBrowser('/articles')
