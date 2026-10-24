@@ -15,7 +15,7 @@ import {
   getHttpErrorEq,
 } from '@/common/api'
 import { API_BASE } from '@/common/env'
-import { type AppRoute } from '@/common/type/route'
+import { pageProfile } from '@/common/type/route'
 import { assetPath } from '@/common/util'
 import { ErrorMessagesMemo } from '@/component/error-messages/component'
 import { Link } from '@/component/link'
@@ -28,12 +28,10 @@ const ProfilePageComponent = ({
   shared,
   dispatch,
   isCurrentUser,
-  route,
 }: Props) => {
-  const username = route.page._tag === 'PageProfile' ? route.page.username : ''
   const paginationConfig = mkPaginationConfig(
     shared,
-    username,
+    model.username,
     model.showFavorites,
   )
 
@@ -56,7 +54,12 @@ const ProfilePageComponent = ({
               color='green'
             />
           ),
-          () => <ProfileNotFoundView route={route} />,
+          () => (
+            <ProfileNotFoundView
+              username={model.username}
+              showFavorites={model.showFavorites}
+            />
+          ),
 
           (data: ProfileResponse) => (
             <>
@@ -208,12 +211,14 @@ const ProfilePageComponent = ({
 }
 
 type ProfileNotFoundProps = {
-  route: AppRoute
+  username: string
+  showFavorites: boolean
 }
 
-const ProfileNotFoundView = ({ route }: ProfileNotFoundProps) => {
-  const username = route.page._tag === 'PageProfile' ? route.page.username : ''
-
+const ProfileNotFoundView = ({
+  username,
+  showFavorites,
+}: ProfileNotFoundProps) => {
   return (
     <div className='py-[48px]'>
       <div className='mx-auto flex max-w-[600px] flex-col items-center gap-[16px] rounded-lg bg-yellow-50 px-[24px] py-[48px] text-center'>
@@ -242,7 +247,7 @@ const ProfileNotFoundView = ({ route }: ProfileNotFoundProps) => {
 
         <div className='pt-[16px]'>
           <Link
-            route={route}
+            route={{ page: pageProfile(username, showFavorites) }}
             className='inline-flex items-center gap-[8px] rounded bg-green-600 px-[24px] py-[10px] font-medium text-white transition-colors hover:bg-green-700'
           >
             <RotateCw size={18} />

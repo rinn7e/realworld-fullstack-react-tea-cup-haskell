@@ -15,7 +15,7 @@ import { NotFoundPageMemo } from './page/not-found-page/component'
 import { ProfilePageMemo } from './page/profile-page/component'
 import { SettingsPageMemo } from './page/settings-page/component'
 import { SignupPageMemo } from './page/signup-page/component'
-import { type Model, type Msg, pageModelToRoute } from './type'
+import type { Model, Msg } from './type'
 
 export type AppProps = {
   model: Model
@@ -61,7 +61,6 @@ export const App = ({ model, dispatch }: AppProps) => {
 
 const PageView = ({ model, dispatch }: AppProps) => {
   const pageModel = model.pageModel
-  const route = pageModelToRoute(pageModel)
 
   switch (pageModel._tag) {
     case 'HomePageModel':
@@ -115,7 +114,6 @@ const PageView = ({ model, dispatch }: AppProps) => {
           shared={model.shared}
           dispatch={(msg) => dispatch({ _tag: 'ProfilePageMsg', subMsg: msg })}
           isCurrentUser={isCurrentUser}
-          route={route}
         />
       )
     }

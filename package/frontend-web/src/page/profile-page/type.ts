@@ -16,7 +16,6 @@ import {
   ProfileResponseEq,
   getHttpErrorEq,
 } from '@/common/api'
-import { type AppRoute, AppRouteEq } from '@/common/type/route'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import type * as ArticleShort from '@/component/article-short'
 
@@ -66,7 +65,6 @@ export type Props = {
   shared: Shared
   dispatch: Dispatcher<Msg>
   isCurrentUser: boolean
-  route: AppRoute
 }
 
 export const PropsEq: EqClass.Eq<Props> = EqClass.struct({
@@ -74,5 +72,4 @@ export const PropsEq: EqClass.Eq<Props> = EqClass.struct({
   shared: SharedEq,
   dispatch: EqAlways,
   isCurrentUser: B.Eq,
-  route: AppRouteEq,
 })
