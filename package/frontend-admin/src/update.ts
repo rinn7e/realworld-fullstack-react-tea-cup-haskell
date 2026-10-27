@@ -46,10 +46,10 @@ export const init = (
   isUnavailable: boolean,
   token: O.Option<string>,
 ): [Model, Cmd<Msg>] => {
-  if (!isUnavailable && token._tag === 'None') {
-    removeToken()
-  }
-
+  // The stored token is not touched here: `initializeCmd` already saved or
+  // removed it from the server's answer, and with no stored token there is
+  // nothing to remove. Removing it here raced with a token saved between
+  // page load and this delayed `Init` (e.g. by a test), and wiped it.
   const shared: Shared = {
     user,
     token,
