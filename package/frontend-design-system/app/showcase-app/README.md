@@ -18,6 +18,10 @@ Run the development server on port `5175`:
 pnpm run dev
 ```
 
+### Debugging Without the URL
+
+`VITE_DISABLE_URL=true pnpm run dev` runs the app on in-app navigation alone: it boots on the home screen, ignores the browser back and forward, and never writes the URL (see "Navigation and the URL" in [the code convention](../../doc/code-convention.md)).
+
 ### Build
 
 Compile for production:
