@@ -33,7 +33,7 @@ frontend-admin/
 │   │   │   └── local-storage/
 │   │   ├── global-context/ # React Contexts for global state
 │   │   │   ├── db-context.ts
-│   │   │   ├── route-context.ts
+│   │   │   ├── destination-context.ts
 │   │   │   ├── network-status-context.ts
 │   │   │   └── [feature]-context.ts
 │   │   ├── hook/        # Shared React hooks
@@ -44,7 +44,7 @@ frontend-admin/
 │   │   ├── provider/    # Context providers (e.g., fetcher-status)
 │   │   ├── util/        # Shared utility functions
 │   │   │   ├── date.ts
-│   │   │   ├── route.ts
+│   │   │   ├── url.ts
 │   │   │   ├── string.ts
 │   │   │   └── [category].ts
 │   │   └── type/        # Common type definitions
@@ -77,7 +77,7 @@ frontend-admin/
 │   ├── generated/       # Generated code (e.g., from backend types)
 │   ├── handler/         # Event handlers and side-effect logic
 │   │   ├── global-event-handler.ts
-│   │   ├── route-handler.ts
+│   │   ├── navigation-handler.ts
 │   │   └── sse-handler.ts
 │   ├── package/         # Internal library-like modules
 │   │   ├── tea-cup-prelude/

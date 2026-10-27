@@ -1,8 +1,7 @@
-import type * as TeaRouter from '@rinn7e/tea-cup-router'
 import { type Option } from 'fp-ts/lib/Option'
 
 import { type AuthUser } from '@/common/type/auth-user'
-import { type AppRoute } from '@/common/type/route'
+import { type NavigationMsg, type Screen } from '@/common/type/destination'
 import { type Shared } from '@/common/type/shared'
 import type * as Persona from '@/component/persona-panel'
 import type * as ArticleScreen from '@/screen/article-screen'
@@ -15,7 +14,7 @@ import type * as VisitorScreen from '@/screen/visitor-screen'
 import { type ColorScheme, type Theme } from './theme/type'
 
 export type Model = {
-  readonly router: TeaRouter.Model<AppRoute, ScreenModel>
+  readonly screenModel: ScreenModel
   readonly shared: Shared
   readonly persona: Persona.Model
   readonly showScrollTop: boolean
@@ -23,6 +22,9 @@ export type Model = {
   readonly colorScheme: ColorScheme
 }
 
+// The screen shown, as its model. Its tag is the destination's screen
+// (`currentScreenOf`): a `currentScreen` field next to it would say the
+// same thing twice.
 export type ScreenModel =
   | { readonly _tag: 'HomeScreenModel'; readonly model: HomeScreen.Model }
   | { readonly _tag: 'LoginScreenModel'; readonly model: LoginScreen.Model }
@@ -34,10 +36,7 @@ export type ScreenModel =
   | { readonly _tag: 'NotFoundScreenModel' }
 
 export type Msg =
-  | {
-      readonly _tag: 'TeaRouterMsg'
-      readonly subMsg: TeaRouter.Msg<AppRoute>
-    }
+  | { readonly _tag: 'NavigationMsg'; readonly subMsg: NavigationMsg }
   | {
       readonly _tag: 'Init'
       readonly location: Location
@@ -59,7 +58,31 @@ export type Msg =
   | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
   | { readonly _tag: 'NoOp' }
 
-export const teaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
-  _tag: 'TeaRouterMsg',
-  subMsg,
-})
+// The screen shown (the destination's `screen`, `destinationOf`)
+export const currentScreenOf = (screenModel: ScreenModel): Screen => {
+  switch (screenModel._tag) {
+    case 'HomeScreenModel':
+      return { _tag: 'HomeScreen' }
+    case 'LoginScreenModel':
+      return { _tag: 'LoginScreen' }
+    case 'ArticleScreenModel':
+      return { _tag: 'ArticleScreen' }
+    case 'UserScreenModel':
+      return { _tag: 'UserScreen' }
+    case 'CommentScreenModel':
+      return { _tag: 'CommentScreen' }
+    case 'VisitorScreenModel':
+      return { _tag: 'VisitorScreen' }
+    case 'SettingScreenModel':
+      return { _tag: 'SettingScreen' }
+    case 'NotFoundScreenModel':
+      return { _tag: 'NotFoundScreen' }
+  }
+}
+
+// Widens a screen's model to `ScreenModel` (an object literal keeps its own
+// tag, which narrows the `Model` built from it)
+export const withScreenModel = (
+  model: Model,
+  screenModel: ScreenModel,
+): Model => ({ ...model, screenModel })

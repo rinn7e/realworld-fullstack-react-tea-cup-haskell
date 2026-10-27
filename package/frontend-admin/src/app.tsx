@@ -1,17 +1,17 @@
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { SetGlobalMsgContext } from '@/common/global-context'
 import {
-  type AppRoute,
-  pageArticles,
-  pageComments,
-  pageHome,
-  pageSettings,
-  pageUsers,
-  pageVisitors,
-} from '@/common/type/route'
+  type Destination,
+  articleScreen,
+  commentScreen,
+  destinationOfScreen,
+  homeScreen,
+  settingScreen,
+  userScreen,
+  visitorScreen,
+} from '@/common/type/destination'
 import { Link } from '@/component/link'
 import { PersonaPanelMemo } from '@/component/persona-panel/component'
 import { ArticleScreenMemo } from '@/screen/article-screen/component'
@@ -22,7 +22,7 @@ import { SettingScreenMemo } from '@/screen/setting-screen/component'
 import { UserScreenMemo } from '@/screen/user-screen/component'
 import { VisitorScreenMemo } from '@/screen/visitor-screen/component'
 
-import { type Model, type Msg } from './type'
+import { type Model, type Msg, currentScreenOf } from './type'
 
 export type AppProps = {
   model: Model
@@ -31,10 +31,10 @@ export type AppProps = {
 
 // TODO: Implement mobile-first sidebar toggle for better responsiveness
 export const App = ({ model, dispatch }: AppProps) => {
-  const currentRoute = TeaRouter.getRoute(model.router)
+  const currentScreen = currentScreenOf(model.screenModel)
 
   // If we are on the login screen, show a different layout (no sidebar)
-  if (currentRoute.page._tag === 'PageLogin') {
+  if (currentScreen._tag === 'LoginScreen') {
     return (
       <SetGlobalMsgContext value={dispatch}>
         <main className='h-dvh bg-gray-50 dark:bg-black'>
@@ -57,7 +57,7 @@ export const App = ({ model, dispatch }: AppProps) => {
           <aside className='bg-theme-secondary flex w-full flex-col text-white lg:w-[260px] lg:shrink-0'>
             <div className='p-[24px]'>
               <Link
-                route={{ page: pageHome() }}
+                destination={destinationOfScreen(homeScreen())}
                 className='block text-left transition-opacity hover:opacity-85'
               >
                 <h1 className='text-[22px] font-bold tracking-tight text-white hover:underline'>
@@ -84,8 +84,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'PageHome'}
-                route={{ page: pageHome() }}
+                active={currentScreen._tag === 'HomeScreen'}
+                destination={destinationOfScreen(homeScreen())}
               />
               <SidebarLink
                 label='Articles'
@@ -111,8 +111,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'PageArticle'}
-                route={{ page: pageArticles() }}
+                active={currentScreen._tag === 'ArticleScreen'}
+                destination={destinationOfScreen(articleScreen())}
               />
               <SidebarLink
                 label='Users'
@@ -132,8 +132,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'PageUser'}
-                route={{ page: pageUsers() }}
+                active={currentScreen._tag === 'UserScreen'}
+                destination={destinationOfScreen(userScreen())}
               />
               <SidebarLink
                 label='Comments'
@@ -153,8 +153,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'PageComment'}
-                route={{ page: pageComments() }}
+                active={currentScreen._tag === 'CommentScreen'}
+                destination={destinationOfScreen(commentScreen())}
               />
               <SidebarLink
                 label='Visitors'
@@ -174,8 +174,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'PageVisitor'}
-                route={{ page: pageVisitors() }}
+                active={currentScreen._tag === 'VisitorScreen'}
+                destination={destinationOfScreen(visitorScreen())}
               />
               <SidebarLink
                 label='Settings'
@@ -201,8 +201,8 @@ export const App = ({ model, dispatch }: AppProps) => {
                     />
                   </svg>
                 }
-                active={currentRoute.page._tag === 'PageSetting'}
-                route={{ page: pageSettings() }}
+                active={currentScreen._tag === 'SettingScreen'}
+                destination={destinationOfScreen(settingScreen())}
               />
             </nav>
           </aside>
@@ -222,7 +222,7 @@ export const App = ({ model, dispatch }: AppProps) => {
             <ScreenView model={model} dispatch={dispatch} />
 
             {/* Scroll to Top Button */}
-            {model.showScrollTop && currentRoute.page._tag !== 'PageHome' && (
+            {model.showScrollTop && currentScreen._tag !== 'HomeScreen' && (
               <button
                 type='button'
                 onClick={() => dispatch({ _tag: 'ScrollToTop' })}
@@ -264,12 +264,17 @@ type SidebarLinkProps = {
   label: string
   icon: React.ReactNode
   active: boolean
-  route: AppRoute
+  destination: Destination
 }
 
-const SidebarLink = ({ label, icon, active, route }: SidebarLinkProps) => (
+const SidebarLink = ({
+  label,
+  icon,
+  active,
+  destination,
+}: SidebarLinkProps) => (
   <Link
-    route={route}
+    destination={destination}
     className={`flex w-full items-center gap-[12px] rounded-[8px] px-[16px] py-[12px] text-left transition-all duration-200 ${
       active
         ? 'bg-theme-primary shadow-theme-primary/20 text-white shadow-lg'
@@ -282,13 +287,13 @@ const SidebarLink = ({ label, icon, active, route }: SidebarLinkProps) => (
 )
 
 const ScreenView = ({ model, dispatch }: AppProps) => {
-  const pageModel = TeaRouter.getPageModel(model.router)
+  const { screenModel } = model
 
-  switch (pageModel._tag) {
+  switch (screenModel._tag) {
     case 'HomeScreenModel':
       return (
         <HomeScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'HomeScreenMsg', subMsg })}
         />
@@ -296,7 +301,7 @@ const ScreenView = ({ model, dispatch }: AppProps) => {
     case 'ArticleScreenModel':
       return (
         <ArticleScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'ArticleScreenMsg', subMsg })}
         />
@@ -304,7 +309,7 @@ const ScreenView = ({ model, dispatch }: AppProps) => {
     case 'UserScreenModel':
       return (
         <UserScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'UserScreenMsg', subMsg })}
         />
@@ -312,7 +317,7 @@ const ScreenView = ({ model, dispatch }: AppProps) => {
     case 'CommentScreenModel':
       return (
         <CommentScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'CommentScreenMsg', subMsg })}
         />
@@ -320,7 +325,7 @@ const ScreenView = ({ model, dispatch }: AppProps) => {
     case 'VisitorScreenModel':
       return (
         <VisitorScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           shared={model.shared}
           dispatch={(subMsg) => dispatch({ _tag: 'VisitorScreenMsg', subMsg })}
         />
@@ -329,7 +334,7 @@ const ScreenView = ({ model, dispatch }: AppProps) => {
     case 'LoginScreenModel':
       return (
         <LoginScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'LoginScreenMsg', subMsg })}
         />
       )

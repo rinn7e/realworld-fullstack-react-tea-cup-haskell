@@ -1,21 +1,26 @@
 import { taskFromTE } from '@rinn7e/tea-cup-prelude'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import * as O from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/function'
 import { Cmd, Task } from 'tea-cup-fp'
 
 import { getCurrentUser } from '@/common/api'
 import { getToken, removeToken, saveToken } from '@/common/cache'
 import { type AuthUser } from '@/common/type/auth-user'
-import { type AppRoute } from '@/common/type/route'
+import { defaultDestination, loginDestination } from '@/common/type/destination'
 import { type Shared } from '@/common/type/shared'
+import { replaceUrlCmd } from '@/common/util'
 import * as Persona from '@/component/persona-panel'
-import { mkRouterConfig } from '@/router-config'
+import {
+  initScreenModel,
+  navigationMsgHandler,
+} from '@/handler/navigation-handler'
 import * as ArticleScreen from '@/screen/article-screen'
 import * as CommentScreen from '@/screen/comment-screen'
 import * as HomeScreen from '@/screen/home-screen'
 import * as LoginScreen from '@/screen/login-screen'
 import * as UserScreen from '@/screen/user-screen'
 import * as VisitorScreen from '@/screen/visitor-screen'
+import { bootDestinationOf, bootUrlOf, guardDestination } from '@/util'
 
 import { defaultTheme, themes } from './theme/data'
 import { type ColorScheme, type Theme } from './theme/type'
@@ -26,7 +31,7 @@ import {
   saveColorScheme,
   saveTheme,
 } from './theme/util'
-import { type Model, type Msg, type ScreenModel, teaRouterMsg } from './type'
+import { type Model, type Msg } from './type'
 
 // Initialization
 // ---------------------------------------------
@@ -34,80 +39,6 @@ import { type Model, type Msg, type ScreenModel, teaRouterMsg } from './type'
 export const preInit = (location: Location): [Model | null, Cmd<Msg>] => {
   return [null, initializeCmd(location)]
 }
-
-export const preUpdate = (
-  msg: Msg,
-  model: Model | null,
-): [Model | null, Cmd<Msg>] => {
-  if (model === null) {
-    if (msg._tag === 'Init') {
-      return init(msg.location, msg.user, msg.isUnavailable, msg.token)
-    } else {
-      return [null, Cmd.none()]
-    }
-  } else {
-    return update(msg, model)
-  }
-}
-
-export const initScreenModel = (
-  route: AppRoute,
-  shared: Shared,
-): [ScreenModel, Cmd<Msg>] => {
-  switch (route.page._tag) {
-    case 'PageHome': {
-      const [m, c] = HomeScreen.init(shared)
-      return [
-        { _tag: 'HomeScreenModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'HomeScreenMsg', subMsg })),
-      ]
-    }
-    case 'PageLogin': {
-      const [m, c] = LoginScreen.init()
-      return [
-        { _tag: 'LoginScreenModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'LoginScreenMsg', subMsg })),
-      ]
-    }
-    case 'PageArticle': {
-      const [m, c] = ArticleScreen.init(shared)
-      return [
-        { _tag: 'ArticleScreenModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'ArticleScreenMsg', subMsg })),
-      ]
-    }
-    case 'PageUser': {
-      const [m, c] = UserScreen.init(shared)
-      return [
-        { _tag: 'UserScreenModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'UserScreenMsg', subMsg })),
-      ]
-    }
-    case 'PageComment': {
-      const [m, c] = CommentScreen.init(shared)
-      return [
-        { _tag: 'CommentScreenModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'CommentScreenMsg', subMsg })),
-      ]
-    }
-    case 'PageVisitor': {
-      const [m, c] = VisitorScreen.init(shared)
-      return [
-        { _tag: 'VisitorScreenModel', model: m },
-        c.map((subMsg): Msg => ({ _tag: 'VisitorScreenMsg', subMsg })),
-      ]
-    }
-    case 'PageSetting':
-      return [{ _tag: 'SettingScreenModel' }, Cmd.none()]
-    case 'PageNotFound':
-      return [{ _tag: 'NotFoundScreenModel' }, Cmd.none()]
-  }
-}
-
-export const routerConfig = mkRouterConfig<ScreenModel, Msg>(
-  initScreenModel,
-  teaRouterMsg,
-)
 
 export const init = (
   location: Location,
@@ -124,11 +55,9 @@ export const init = (
     token,
   }
 
-  const [routerModel, routerCmd] = TeaRouter.init(
-    routerConfig,
-    location,
-    shared,
-  )
+  const urlDestination = bootDestinationOf(location)
+  const destination = guardDestination(shared, urlDestination)
+  const [screenModel, screenCmd] = initScreenModel(destination, shared)
 
   const [personaModel, personaCmd] = Persona.init()
   const colorScheme = loadColorScheme()
@@ -136,7 +65,7 @@ export const init = (
   const theme = (savedThemeId ? themes[savedThemeId] : null) ?? defaultTheme
 
   const model: Model = {
-    router: routerModel,
+    screenModel,
     shared,
     persona: personaModel,
     showScrollTop: false,
@@ -145,7 +74,14 @@ export const init = (
   }
 
   const initCmd = Cmd.batch([
-    routerCmd,
+    pipe(
+      bootUrlOf(urlDestination, destination),
+      O.fold(
+        () => Cmd.none<Msg>(),
+        (url) => replaceUrlCmd(url).map((noOp): Msg => noOp),
+      ),
+    ),
+    screenCmd,
     personaCmd.map((subMsg): Msg => ({ _tag: 'PersonaMsg', subMsg })),
   ])
 
@@ -207,30 +143,12 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
   }
 }
 
-export const routerMsgHandler = (
-  subMsg: Extract<Msg, { _tag: 'TeaRouterMsg' }>['subMsg'],
-  model: Model,
-): [Model, Cmd<Msg>] => {
-  const [routerModel, routerCmd] = TeaRouter.update(routerConfig, model.shared)(
-    subMsg,
-    model.router,
-  )
-
-  return [
-    {
-      ...model,
-      router: routerModel,
-    },
-    routerCmd,
-  ]
-}
-
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
-    case 'TeaRouterMsg':
-      return routerMsgHandler(msg.subMsg, model)
+    case 'NavigationMsg':
+      return navigationMsgHandler(msg.subMsg, model)
     case 'Init':
-      // Handled by preUpdate
+      // Handled before the model exists (`program.tsx`)
       return [model, Cmd.none()]
     case 'Logout':
       return logoutHandler(model)
@@ -266,16 +184,16 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
 const logoutHandler = (model: Model): [Model, Cmd<Msg>] => {
   removeToken()
-  const nextModel: Model = {
+  const updatedModel: Model = {
     ...model,
     shared: {
       user: O.none,
       token: O.none,
     },
   }
-  return routerMsgHandler(
-    { _tag: 'ChangeRoute', route: { page: { _tag: 'PageLogin' } } },
-    nextModel,
+  return navigationMsgHandler(
+    { _tag: 'Navigate', destination: loginDestination() },
+    updatedModel,
   )
 }
 
@@ -283,16 +201,13 @@ const homeScreenMsgHandler = (
   subMsg: HomeScreen.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
-  if (pageModel._tag === 'HomeScreenModel') {
-    const [m, c] = HomeScreen.update(model.shared)(subMsg, pageModel.model)
+  const screenModel = model.screenModel
+  if (screenModel._tag === 'HomeScreenModel') {
+    const [m, c] = HomeScreen.update(model.shared)(subMsg, screenModel.model)
     return [
       {
         ...model,
-        router: TeaRouter.setPageModel(model.router, {
-          _tag: 'HomeScreenModel',
-          model: m,
-        }),
+        screenModel: { _tag: 'HomeScreenModel', model: m },
       },
       c.map((msg): Msg => ({ _tag: 'HomeScreenMsg', subMsg: msg })),
     ]
@@ -305,15 +220,12 @@ const loginScreenMsgHandler = (
   subMsg: LoginScreen.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
-  if (pageModel._tag === 'LoginScreenModel') {
-    const [m, c] = LoginScreen.update(subMsg, pageModel.model)
+  const screenModel = model.screenModel
+  if (screenModel._tag === 'LoginScreenModel') {
+    const [m, c] = LoginScreen.update(subMsg, screenModel.model)
     const nextModel: Model = {
       ...model,
-      router: TeaRouter.setPageModel(model.router, {
-        _tag: 'LoginScreenModel',
-        model: m,
-      }),
+      screenModel: { _tag: 'LoginScreenModel', model: m },
     }
     const nextCmd = c.map((msg): Msg => ({
       _tag: 'LoginScreenMsg',
@@ -337,11 +249,11 @@ const loginScreenMsgHandler = (
           token: O.some(user.token),
         },
       }
-      const [finalModel, routerCmd] = routerMsgHandler(
-        { _tag: 'ChangeRoute', route: { page: { _tag: 'PageHome' } } },
+      const [navigatedModel, navigationCmd] = navigationMsgHandler(
+        { _tag: 'Navigate', destination: defaultDestination() },
         updatedModel,
       )
-      return [finalModel, Cmd.batch([nextCmd, routerCmd])]
+      return [navigatedModel, Cmd.batch([nextCmd, navigationCmd])]
     } else {
       return [nextModel, nextCmd]
     }
@@ -354,16 +266,13 @@ const articlesScreenMsgHandler = (
   subMsg: ArticleScreen.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
-  if (pageModel._tag === 'ArticleScreenModel') {
-    const [m, c] = ArticleScreen.update(model.shared)(subMsg, pageModel.model)
+  const screenModel = model.screenModel
+  if (screenModel._tag === 'ArticleScreenModel') {
+    const [m, c] = ArticleScreen.update(model.shared)(subMsg, screenModel.model)
     return [
       {
         ...model,
-        router: TeaRouter.setPageModel(model.router, {
-          _tag: 'ArticleScreenModel',
-          model: m,
-        }),
+        screenModel: { _tag: 'ArticleScreenModel', model: m },
       },
       c.map((msg): Msg => ({ _tag: 'ArticleScreenMsg', subMsg: msg })),
     ]
@@ -376,16 +285,13 @@ const usersScreenMsgHandler = (
   subMsg: UserScreen.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
-  if (pageModel._tag === 'UserScreenModel') {
-    const [m, c] = UserScreen.update(model.shared)(subMsg, pageModel.model)
+  const screenModel = model.screenModel
+  if (screenModel._tag === 'UserScreenModel') {
+    const [m, c] = UserScreen.update(model.shared)(subMsg, screenModel.model)
     return [
       {
         ...model,
-        router: TeaRouter.setPageModel(model.router, {
-          _tag: 'UserScreenModel',
-          model: m,
-        }),
+        screenModel: { _tag: 'UserScreenModel', model: m },
       },
       c.map((msg): Msg => ({ _tag: 'UserScreenMsg', subMsg: msg })),
     ]
@@ -398,16 +304,13 @@ const commentsScreenMsgHandler = (
   subMsg: CommentScreen.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
-  if (pageModel._tag === 'CommentScreenModel') {
-    const [m, c] = CommentScreen.update(model.shared)(subMsg, pageModel.model)
+  const screenModel = model.screenModel
+  if (screenModel._tag === 'CommentScreenModel') {
+    const [m, c] = CommentScreen.update(model.shared)(subMsg, screenModel.model)
     return [
       {
         ...model,
-        router: TeaRouter.setPageModel(model.router, {
-          _tag: 'CommentScreenModel',
-          model: m,
-        }),
+        screenModel: { _tag: 'CommentScreenModel', model: m },
       },
       c.map((msg): Msg => ({ _tag: 'CommentScreenMsg', subMsg: msg })),
     ]
@@ -420,16 +323,13 @@ const visitorsScreenMsgHandler = (
   subMsg: VisitorScreen.Msg,
   model: Model,
 ): [Model, Cmd<Msg>] => {
-  const pageModel = TeaRouter.getPageModel(model.router)
-  if (pageModel._tag === 'VisitorScreenModel') {
-    const [m, c] = VisitorScreen.update(model.shared)(subMsg, pageModel.model)
+  const screenModel = model.screenModel
+  if (screenModel._tag === 'VisitorScreenModel') {
+    const [m, c] = VisitorScreen.update(model.shared)(subMsg, screenModel.model)
     return [
       {
         ...model,
-        router: TeaRouter.setPageModel(model.router, {
-          _tag: 'VisitorScreenModel',
-          model: m,
-        }),
+        screenModel: { _tag: 'VisitorScreenModel', model: m },
       },
       c.map((msg): Msg => ({ _tag: 'VisitorScreenMsg', subMsg: msg })),
     ]

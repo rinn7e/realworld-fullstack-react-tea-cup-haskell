@@ -1,32 +1,53 @@
-import type * as TeaRouter from '@rinn7e/tea-cup-router'
-import { Link as RouterLink } from '@rinn7e/tea-cup-router/link/component'
 import React, { useContext } from 'react'
 
 import { SetGlobalMsgContext } from '@/common/global-context'
-import { type AppRoute, AppRouteEq, toUrlString } from '@/common/type/route'
+import { type Destination, toUrlString } from '@/common/type/destination'
 
 // Not memoized: `children` is arbitrary JSX, which has no meaningful Eq
 export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-  route: AppRoute
+  destination: Destination
   className?: string
   children: React.ReactNode
 }
 
-export const Link = ({ route, className, children, ...rest }: LinkProps) => {
+// A real anchor: a plain left click navigates in the app, a click with a
+// modifier key or another button keeps the browser's behaviour (a new tab,
+// copying the link)
+export const Link = ({
+  destination,
+  className,
+  children,
+  onClick,
+  ...rest
+}: LinkProps) => {
   const setGlobalMsg = useContext(SetGlobalMsgContext)
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    onClick?.(e)
+    if (
+      !e.defaultPrevented &&
+      e.button === 0 &&
+      !e.metaKey &&
+      !e.ctrlKey &&
+      !e.shiftKey &&
+      !e.altKey
+    ) {
+      e.preventDefault()
+      setGlobalMsg({
+        _tag: 'NavigationMsg',
+        subMsg: { _tag: 'Navigate', destination },
+      })
+    }
+  }
+
   return (
-    <RouterLink
+    <a
       {...rest}
-      route={route}
-      toUrl={toUrlString}
-      dispatch={(subMsg: TeaRouter.Msg<AppRoute>) =>
-        setGlobalMsg({ _tag: 'TeaRouterMsg', subMsg })
-      }
-      routeEq={AppRouteEq}
+      href={toUrlString(destination)}
       className={className}
+      onClick={handleClick}
     >
       {children}
-    </RouterLink>
+    </a>
   )
 }

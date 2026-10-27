@@ -3,17 +3,20 @@ import { Route, end, format, lit, parse, zero } from '@rinn7e/fp-ts-routing'
 import { BASE_URL } from '@/common/env'
 
 import {
-  type AppPage,
-  type AppRoute,
-  pageArticles,
-  pageComments,
-  pageHome,
-  pageLogin,
-  pageNotFound,
-  pageSettings,
-  pageUsers,
-  pageVisitors,
+  type Destination,
+  type Screen,
+  articleScreen,
+  commentScreen,
+  destinationOfScreen,
+  homeScreen,
+  loginScreen,
+  notFoundScreen,
+  settingScreen,
+  userScreen,
+  visitorScreen,
 } from './type'
+
+// The only code that knows how a destination is spelled in the URL
 
 const homeMatch = end
 const loginMatch = lit('login').and(end)
@@ -23,14 +26,14 @@ const commentsMatch = lit('comments').and(end)
 const settingsMatch = lit('settings').and(end)
 const visitorsMatch = lit('visitors').and(end)
 
-const appRouter = zero<AppPage>()
-  .alt(homeMatch.parser.map(pageHome))
-  .alt(loginMatch.parser.map(pageLogin))
-  .alt(articlesMatch.parser.map(pageArticles))
-  .alt(usersMatch.parser.map(pageUsers))
-  .alt(commentsMatch.parser.map(pageComments))
-  .alt(visitorsMatch.parser.map(pageVisitors))
-  .alt(settingsMatch.parser.map(pageSettings))
+const screenParser = zero<Screen>()
+  .alt(homeMatch.parser.map(homeScreen))
+  .alt(loginMatch.parser.map(loginScreen))
+  .alt(articlesMatch.parser.map(articleScreen))
+  .alt(usersMatch.parser.map(userScreen))
+  .alt(commentsMatch.parser.map(commentScreen))
+  .alt(visitorsMatch.parser.map(visitorScreen))
+  .alt(settingsMatch.parser.map(settingScreen))
 
 export const removeBaseUrl = (href: string): string => {
   const url = new URL(href)
@@ -49,31 +52,31 @@ export const addBaseUrl = (path: string): string => {
   return base + '/' + cleanPath
 }
 
-export const parseAppRoute = (_origin: string, url: string): AppRoute => {
-  const pathname = removeBaseUrl(url)
-  const page = parse(appRouter, Route.parse(pathname), pageNotFound())
-  return { page }
-}
+// `href`: a full URL (the page's `location.href`)
+export const parseDestination = (href: string): Destination =>
+  destinationOfScreen(
+    parse(screenParser, Route.parse(removeBaseUrl(href)), notFoundScreen()),
+  )
 
-export const toUrlString = (appRoute: AppRoute): string => {
-  const { page } = appRoute
+export const toUrlString = (destination: Destination): string => {
+  const { screen } = destination
   const getPath = () => {
-    switch (page._tag) {
-      case 'PageHome':
+    switch (screen._tag) {
+      case 'HomeScreen':
         return format(homeMatch.formatter, {})
-      case 'PageLogin':
+      case 'LoginScreen':
         return format(loginMatch.formatter, {})
-      case 'PageArticle':
+      case 'ArticleScreen':
         return format(articlesMatch.formatter, {})
-      case 'PageUser':
+      case 'UserScreen':
         return format(usersMatch.formatter, {})
-      case 'PageComment':
+      case 'CommentScreen':
         return format(commentsMatch.formatter, {})
-      case 'PageVisitor':
+      case 'VisitorScreen':
         return format(visitorsMatch.formatter, {})
-      case 'PageSetting':
+      case 'SettingScreen':
         return format(settingsMatch.formatter, {})
-      case 'PageNotFound':
+      case 'NotFoundScreen':
         return '/404'
     }
   }

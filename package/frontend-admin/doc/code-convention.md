@@ -724,6 +724,6 @@ className={cn(
 
 ## Tests
 
-- Tests live in `tests/` (never inside `src/`), and the file tree **mirrors exactly** the `src/` path of the function under test (e.g. `src/common/type/route/parser.ts` → `tests/common/type/route/parser.test.ts`).
+- Tests live in `tests/` (never inside `src/`), and the file tree **mirrors exactly** the `src/` path of the function under test (e.g. `src/common/type/destination/parser.ts` → `tests/common/type/destination/parser.test.ts`).
 - Tests import through the `@/` alias.
 - End-to-end tests live in the separate `package/e2e` package.
