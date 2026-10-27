@@ -4,24 +4,28 @@ import * as B from 'fp-ts/lib/boolean'
 import * as S from 'fp-ts/lib/string'
 import { memo } from 'react'
 
-import { type AppRoute, AppRouteEq } from '@/common/type/route'
+import { type Destination, DestinationEq } from '@/common/type/destination'
 import { Link } from '@/component/link'
 
 export type HomeTabLinkProps = {
   isActive: boolean
   label: string
-  route: AppRoute
+  destination: Destination
 }
 
 const HomeTabLinkPropsEq: EqClass.Eq<HomeTabLinkProps> = EqClass.struct({
   isActive: B.Eq,
   label: S.Eq,
-  route: AppRouteEq,
+  destination: DestinationEq,
 })
 
-const HomeTabLinkComponent = ({ isActive, label, route }: HomeTabLinkProps) => (
+const HomeTabLinkComponent = ({
+  isActive,
+  label,
+  destination,
+}: HomeTabLinkProps) => (
   <Link
-    route={route}
+    destination={destination}
     className={cn(
       'border-b-2 px-[16px] py-[8px] font-medium transition-colors',
       isActive

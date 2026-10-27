@@ -18,18 +18,18 @@ import * as t from 'io-ts'
 import { BASE_URL } from '@/common/env'
 
 import {
-  type AppPage,
-  type AppRoute,
+  type Destination,
   type HomeTab,
+  type Screen,
+  articleScreen,
+  editorScreen,
   globalFeedTab,
-  pageArticle,
-  pageEditor,
-  pageHome,
-  pageLogin,
-  pageNotFound,
-  pageProfile,
-  pageSettings,
-  pageSignup,
+  homeScreen,
+  loginScreen,
+  notFoundScreen,
+  profileScreen,
+  settingsScreen,
+  signupScreen,
   tagFeedTab,
   userFeedTab,
 } from './type'
@@ -50,6 +50,8 @@ export const addBaseUrl = (path: string): string => {
   const cleanPath = path.replace(/^\//, '')
   return base + '/' + cleanPath
 }
+
+// The only code that knows how a destination is spelled in the URL
 
 // Parser
 // ------------------------------------------------------------------
@@ -127,65 +129,68 @@ const pageFromParam = (p: string | undefined): number => {
     return 1
   } else {
     const n = parseInt(p, 10)
-    return isNaN(n) ? 1 : n
+    // Below 1 reads as the first page, which the URL spells without `page`
+    return isNaN(n) || n < 1 ? 1 : n
   }
 }
 
-const appRouter: Parser<AppPage> = zero<AppPage>()
+const screenParser: Parser<Screen> = zero<Screen>()
   .alt(
     homeMatch.parser.map(({ tab, tag, page }) =>
-      pageHome(tabFromParam(tab, tag), pageFromParam(page)),
+      homeScreen(tabFromParam(tab, tag), pageFromParam(page)),
     ),
   )
-  .alt(loginMatch.parser.map(() => pageLogin()))
-  .alt(signupMatch.parser.map(() => pageSignup()))
-  .alt(settingsMatch.parser.map(() => pageSettings()))
-  .alt(editorMatch.parser.map(() => pageEditor(O.none)))
-  .alt(editorSlugMatch.parser.map(({ slug }) => pageEditor(O.some(slug))))
-  .alt(articleMatch.parser.map(({ slug }) => pageArticle(slug)))
+  .alt(loginMatch.parser.map(() => loginScreen()))
+  .alt(signupMatch.parser.map(() => signupScreen()))
+  .alt(settingsMatch.parser.map(() => settingsScreen()))
+  .alt(editorMatch.parser.map(() => editorScreen(O.none)))
+  .alt(editorSlugMatch.parser.map(({ slug }) => editorScreen(O.some(slug))))
+  .alt(articleMatch.parser.map(({ slug }) => articleScreen(slug)))
   .alt(
     profileMatch.parser.map(({ username, favorites }) =>
-      pageProfile(username, booleanFromUndefinedWithDefault(favorites, false)),
+      profileScreen(
+        username,
+        booleanFromUndefinedWithDefault(favorites, false),
+      ),
     ),
   )
-  .alt(anyStrings.parser.map(() => pageNotFound()))
+  .alt(anyStrings.parser.map(() => notFoundScreen()))
 
-export const parseAppRoute = (_mainUrl: string, href: string): AppRoute => {
-  const pathname = removeBaseUrl(href)
-  const page = parse(appRouter, Route.parse(pathname), pageHome())
-  return { page }
-}
+// `href`: a full URL (the page's `location.href`)
+export const parseDestination = (href: string): Destination => ({
+  screen: parse(screenParser, Route.parse(removeBaseUrl(href)), homeScreen()),
+})
 
 // Formatter
 // ------------------------------------------------------------------
 
-export const toUrlString = (r: AppRoute): string => {
-  const page = r.page
+export const toUrlString = (destination: Destination): string => {
+  const { screen } = destination
   const getPath = () => {
-    switch (page._tag) {
-      case 'PageHome':
+    switch (screen._tag) {
+      case 'HomeScreen':
         return format(homeMatch.formatter, {
-          ...tabToParams(page.tab),
-          page: page.page > 1 ? String(page.page) : undefined,
+          ...tabToParams(screen.tab),
+          page: screen.page > 1 ? String(screen.page) : undefined,
         })
-      case 'PageLogin':
+      case 'LoginScreen':
         return format(loginMatch.formatter, {})
-      case 'PageSignup':
+      case 'SignupScreen':
         return format(signupMatch.formatter, {})
-      case 'PageSettings':
+      case 'SettingsScreen':
         return format(settingsMatch.formatter, {})
-      case 'PageEditor':
-        return O.isSome(page.slug)
-          ? format(editorSlugMatch.formatter, { slug: page.slug.value })
+      case 'EditorScreen':
+        return O.isSome(screen.slug)
+          ? format(editorSlugMatch.formatter, { slug: screen.slug.value })
           : format(editorMatch.formatter, {})
-      case 'PageArticle':
-        return format(articleMatch.formatter, { slug: page.slug })
-      case 'PageProfile':
+      case 'ArticleScreen':
+        return format(articleMatch.formatter, { slug: screen.slug })
+      case 'ProfileScreen':
         return format(profileMatch.formatter, {
-          username: page.username,
-          favorites: page.favorites ? 'true' : undefined,
+          username: screen.username,
+          favorites: screen.favorites ? 'true' : undefined,
         })
-      case 'PageNotFound':
+      case 'NotFoundScreen':
         return '404'
     }
   }

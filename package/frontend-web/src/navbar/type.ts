@@ -2,7 +2,7 @@ import type { NavItemData as DsNavItemData } from '@rinn7e/realworld-design-syst
 import type { Option } from 'fp-ts/lib/Option'
 
 import type { User } from '@/common/api'
-import type { AppRoute } from '@/common/type/route'
+import type { Destination } from '@/common/type/destination'
 
 export type NavLinkIcon =
   | { _tag: 'Icon'; name: 'pencil' | 'settings' }
@@ -11,12 +11,12 @@ export type NavLinkIcon =
 export type NavLinkData = {
   key: string
   label: (user: Option<User>) => string
-  route: (user: Option<User>) => AppRoute
-  pageTag: string
+  destination: (user: Option<User>) => Destination
+  screenTag: string
   icon?: NavLinkIcon
 }
 
 export type NavItem = {
   data: DsNavItemData
-  route?: AppRoute
+  destination?: Destination
 }

@@ -1,8 +1,11 @@
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import { Menu } from 'lucide-react'
 
-import { type AppRoute, pageHome, toUrlString } from '@/common/type/route'
+import {
+  type Destination,
+  homeScreen,
+  toUrlString,
+} from '@/common/type/destination'
 import { ALL_COLOR_SCHEMES, formatColorSchemeLabel } from '@/theme/type'
 import type { Model } from '@/type'
 
@@ -11,15 +14,15 @@ import { navLinkAuths, navLinkUnauths } from './constant'
 import type { NavItem } from './type'
 
 export const toBrandNavItem = (_model: Model): NavItem => {
-  const route: AppRoute = { page: pageHome() }
+  const destination: Destination = { screen: homeScreen() }
   return {
     data: {
       key: 'site-logo',
       label: 'conduit',
-      href: toUrlString(route),
+      href: toUrlString(destination),
       isActive: false,
     },
-    route,
+    destination,
   }
 }
 
@@ -37,22 +40,22 @@ export const toMobileNavItems = (_model: Model): NavItem[] => [
 
 export const toDesktopNavItems = (model: Model): NavItem[] => {
   const userOpt = model.shared.user
-  const pageTag = TeaRouter.getPageModel(model.router)._tag
+  const screenTag = model.screenModel._tag
   const navLinksData = userOpt._tag === 'Some' ? navLinkAuths : navLinkUnauths
 
   const items: NavItem[] = navLinksData.map((linkData) => {
-    const route = linkData.route(userOpt)
+    const destination = linkData.destination(userOpt)
     return {
       data: {
         key: linkData.key,
         label: linkData.label(userOpt),
-        href: toUrlString(route),
-        isActive: pageTag === linkData.pageTag,
+        href: toUrlString(destination),
+        isActive: screenTag === linkData.screenTag,
         icon: linkData.icon && (
           <NavLinkIconMemo icon={linkData.icon} user={userOpt} />
         ),
       },
-      route,
+      destination,
     }
   })
 
@@ -88,16 +91,16 @@ export const toNavbarConfig = (model: Model): DsNavbar.Config => {
   }
 }
 
-export const findNavItemRoute = (
+export const findNavItemDestination = (
   model: Model,
   itemKey: string,
-): AppRoute | null => {
+): Destination | null => {
   const brand = toBrandNavItem(model)
   const found = toDesktopNavItems(model).find((n) => n.data.key === itemKey)
-  if (brand.data.key === itemKey && brand.route) {
-    return brand.route
-  } else if (found && found.route) {
-    return found.route
+  if (brand.data.key === itemKey && brand.destination) {
+    return brand.destination
+  } else if (found && found.destination) {
+    return found.destination
   } else {
     return null
   }

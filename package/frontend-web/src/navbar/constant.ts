@@ -1,6 +1,6 @@
 import * as O from 'fp-ts/lib/Option'
 
-import { pageHome } from '@/common/type/route'
+import { homeScreen } from '@/common/type/destination'
 import { assetPath } from '@/common/util'
 
 import type { NavLinkData } from './type'
@@ -9,20 +9,20 @@ export const navLinkUnauths: NavLinkData[] = [
   {
     key: 'home',
     label: () => 'Home',
-    route: () => ({ page: pageHome() }),
-    pageTag: 'HomeScreenModel',
+    destination: () => ({ screen: homeScreen() }),
+    screenTag: 'HomeScreenModel',
   },
   {
     key: 'login',
     label: () => 'Sign in',
-    route: () => ({ page: { _tag: 'PageLogin' } }),
-    pageTag: 'LoginScreenModel',
+    destination: () => ({ screen: { _tag: 'LoginScreen' } }),
+    screenTag: 'LoginScreenModel',
   },
   {
     key: 'signup',
     label: () => 'Sign up',
-    route: () => ({ page: { _tag: 'PageSignup' } }),
-    pageTag: 'SignupScreenModel',
+    destination: () => ({ screen: { _tag: 'SignupScreen' } }),
+    screenTag: 'SignupScreenModel',
   },
 ]
 
@@ -30,37 +30,37 @@ export const navLinkAuths: NavLinkData[] = [
   {
     key: 'home',
     label: () => 'Home',
-    route: () => ({ page: pageHome() }),
-    pageTag: 'HomeScreenModel',
+    destination: () => ({ screen: homeScreen() }),
+    screenTag: 'HomeScreenModel',
   },
   {
     key: 'editor',
     label: () => 'New Article',
-    route: () => ({ page: { _tag: 'PageEditor', slug: O.none } }),
-    pageTag: 'EditorScreenModel',
+    destination: () => ({ screen: { _tag: 'EditorScreen', slug: O.none } }),
+    screenTag: 'EditorScreenModel',
     icon: { _tag: 'Icon', name: 'pencil' },
   },
   {
     key: 'settings',
     label: () => 'Settings',
-    route: () => ({ page: { _tag: 'PageSettings' } }),
-    pageTag: 'SettingsScreenModel',
+    destination: () => ({ screen: { _tag: 'SettingsScreen' } }),
+    screenTag: 'SettingsScreenModel',
     icon: { _tag: 'Icon', name: 'settings' },
   },
   {
     key: 'profile',
     label: (userOpt) => (userOpt._tag === 'Some' ? userOpt.value.username : ''),
-    route: (userOpt) =>
+    destination: (userOpt) =>
       userOpt._tag === 'Some'
         ? {
-            page: {
-              _tag: 'PageProfile',
+            screen: {
+              _tag: 'ProfileScreen',
               username: userOpt.value.username,
               favorites: false,
             },
           }
-        : { page: pageHome() },
-    pageTag: 'ProfileScreenModel',
+        : { screen: homeScreen() },
+    screenTag: 'ProfileScreenModel',
     icon: {
       _tag: 'Avatar',
       getImage: (userOpt) =>

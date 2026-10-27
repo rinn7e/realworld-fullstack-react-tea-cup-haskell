@@ -3,7 +3,7 @@ import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/elem
 import { FormItemMemo } from '@rinn7e/tea-cup-form/component'
 import React, { memo } from 'react'
 
-import type { AppRoute } from '@/common/type/route'
+import { destinationOfScreen, signupScreen } from '@/common/type/destination'
 import { ErrorMessagesMemo } from '@/component/error-messages/component'
 import { Link } from '@/component/link'
 
@@ -15,7 +15,7 @@ import {
 } from './type'
 
 const LoginScreenComponent = ({ model, dispatch }: Props) => {
-  const signupRoute: AppRoute = { page: { _tag: 'PageSignup' } }
+  const signupDestination = destinationOfScreen(signupScreen())
 
   return (
     <div
@@ -29,7 +29,7 @@ const LoginScreenComponent = ({ model, dispatch }: Props) => {
           </h1>
           <p className='text-center text-sm'>
             <Link
-              route={signupRoute}
+              destination={signupDestination}
               className='text-green-600 hover:underline'
             >
               Need an account?

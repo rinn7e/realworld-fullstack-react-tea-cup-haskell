@@ -15,7 +15,7 @@ import {
   getArticlesFeed,
   getTags,
 } from '@/common/api'
-import { type HomeTab, HomeTabEq } from '@/common/type/route'
+import { type HomeTab, HomeTabEq } from '@/common/type/destination'
 import type { Shared } from '@/common/type/shared'
 import { updatePaginationItem } from '@/common/util'
 import {

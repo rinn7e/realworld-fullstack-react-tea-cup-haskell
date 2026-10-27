@@ -5,3 +5,8 @@ export const API_BASE: string =
 
 export const IS_RUNNING_E2E: boolean =
   import.meta.env.VITE_IS_RUNNING_E2E !== 'false'
+
+// Debugging only: the app ignores the URL (in-app navigation alone), see
+// `withUrl`
+export const IS_DISABLE_URL: boolean =
+  import.meta.env.VITE_DISABLE_URL === 'true'

@@ -13,10 +13,10 @@ import {
 } from '@/common/api'
 import {
   globalFeedTab,
-  pageHome,
+  homeScreen,
   tagFeedTab,
   userFeedTab,
-} from '@/common/type/route'
+} from '@/common/type/destination'
 import { DotLoadingMemo } from '@/component/dot-loading'
 
 import { HomeTabLinkMemo } from './sub-component/home-tab-link'
@@ -62,18 +62,20 @@ const HomeScreenComponent = ({ model, shared, dispatch }: Props) => {
               <HomeTabLinkMemo
                 isActive={model.tab._tag === 'UserFeedTab'}
                 label='Your Feed'
-                route={{ page: pageHome(userFeedTab()) }}
+                destination={{ screen: homeScreen(userFeedTab()) }}
               />
               <HomeTabLinkMemo
                 isActive={model.tab._tag === 'GlobalFeedTab'}
                 label='Global Feed'
-                route={{ page: pageHome(globalFeedTab()) }}
+                destination={{ screen: homeScreen(globalFeedTab()) }}
               />
               {model.tab._tag === 'TagFeedTab' && (
                 <HomeTabLinkMemo
                   isActive={true}
                   label={`# ${model.tab.tag}`}
-                  route={{ page: pageHome(tagFeedTab(model.tab.tag)) }}
+                  destination={{
+                    screen: homeScreen(tagFeedTab(model.tab.tag)),
+                  }}
                 />
               )}
             </div>

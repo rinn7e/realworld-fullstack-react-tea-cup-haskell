@@ -1,28 +1,29 @@
 import * as DsFloatingSidebar from '@rinn7e/realworld-design-system/component/floating-sidebar'
 import * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import { msgCmd, taskFromTE, updateAndCmd } from '@rinn7e/tea-cup-prelude'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Cmd, Task } from 'tea-cup-fp'
 
-import {
-  type User,
-  type UserWithToken,
-  getCurrentUser,
-  trackVisitor,
-} from '@/common/api'
+import { type User, type UserWithToken, getCurrentUser } from '@/common/api'
 import { getToken, removeToken, saveToken } from '@/common/cache'
 import {
-  type AppRoute,
-  AppRouteEq,
+  type Destination,
   type HomeTab,
-  pageHome,
-  toUrlString,
-} from '@/common/type/route'
-import { type Shared } from '@/common/type/shared'
+  articleScreen,
+  defaultDestination,
+  destinationOfScreen,
+  loginDestination,
+  profileScreen,
+} from '@/common/type/destination'
+import { replaceUrlCmd } from '@/common/util'
 import * as DebugPanel from '@/component/debug-panel'
-import { mkRouterConfig } from '@/router-config'
+import {
+  initScreenModel,
+  navigationMsgHandler,
+  trackDestinationChangeHandler,
+  trackVisitorCmd,
+} from '@/handler/navigation-handler'
 import * as ArticleScreen from '@/screen/article-screen'
 import * as EditorScreen from '@/screen/editor-screen'
 import * as HomeScreen from '@/screen/home-screen'
@@ -32,30 +33,21 @@ import * as SettingsScreen from '@/screen/settings-screen'
 import * as SignupScreen from '@/screen/signup-screen'
 import type { ColorScheme } from '@/theme/type'
 import { loadColorScheme, setColorSchemeCmd } from '@/theme/util'
-import { type Model, type Msg, type ScreenModel, teaRouterMsg } from '@/type'
+import { type Model, type Msg, withScreenModel } from '@/type'
+import {
+  bootDestinationOf,
+  bootUrlOf,
+  destinationOf,
+  guardDestination,
+} from '@/util'
 
-import { findNavItemRoute } from './navbar/util'
+import { findNavItemDestination } from './navbar/util'
 
 // Initialization
 // ---------------------------------------------
 
 export const preInit = (location: Location): [Model | null, Cmd<Msg>] => {
   return [null, initializeCmd(location)]
-}
-
-export const preUpdate = (
-  msg: Msg,
-  model: Model | null,
-): [Model | null, Cmd<Msg>] => {
-  if (model === null) {
-    if (msg._tag === 'Init') {
-      return init(msg.location, msg.user, msg.isUnavailable, msg.token)
-    } else {
-      return [null, Cmd.none()]
-    }
-  } else {
-    return update(msg, model)
-  }
 }
 
 // Init, Update
@@ -72,14 +64,12 @@ export const init = (
   }
   const initialColorScheme = loadColorScheme()
   const shared = { user, token }
-  const [routerModel, routerCmd] = TeaRouter.init(
-    routerConfig,
-    location,
-    shared,
-  )
+  const urlDestination = bootDestinationOf(location)
+  const destination = guardDestination(shared, urlDestination)
+  const [screenModel, screenCmd] = initScreenModel(destination, shared)
 
   const model: Model = {
-    router: routerModel,
+    screenModel,
     unavailableMode: isUnavailable,
     shared,
     debugPanel: DebugPanel.init(),
@@ -88,8 +78,15 @@ export const init = (
     colorScheme: initialColorScheme,
   }
   const initCmd = Cmd.batch([
-    routerCmd,
-    trackVisitorCmd(token, TeaRouter.getRoute(routerModel)),
+    pipe(
+      bootUrlOf(urlDestination, destination),
+      O.fold(
+        () => Cmd.none<Msg>(),
+        (url) => replaceUrlCmd(url).map((noOp): Msg => noOp),
+      ),
+    ),
+    screenCmd,
+    trackVisitorCmd(token, destination),
     setColorSchemeCmd(initialColorScheme).map((): Msg => ({ _tag: 'NoOp' })),
   ])
 
@@ -138,94 +135,14 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
   }
 }
 
-const initScreenModel = (
-  route: AppRoute,
-  shared: Shared,
-): [ScreenModel, Cmd<Msg>] => {
-  switch (route.page._tag) {
-    case 'PageHome': {
-      const [model, cmd] = HomeScreen.init(
-        route.page.tab,
-        route.page.page,
-        shared,
-      )
-      return [
-        { _tag: 'HomeScreenModel', model },
-        cmd.map((m): Msg => ({ _tag: 'HomeScreenMsg', subMsg: m })),
-      ]
-    }
-    case 'PageArticle': {
-      const [model, cmd] = ArticleScreen.init(route.page.slug, shared)
-      return [
-        { _tag: 'ArticleScreenModel', model },
-        cmd.map((m): Msg => ({ _tag: 'ArticleScreenMsg', subMsg: m })),
-      ]
-    }
-    case 'PageLogin': {
-      const [model, cmd] = LoginScreen.init(shared)
-      return [
-        { _tag: 'LoginScreenModel', model },
-        cmd.map((m): Msg => ({ _tag: 'LoginScreenMsg', subMsg: m })),
-      ]
-    }
-    case 'PageSignup': {
-      const [model, cmd] = SignupScreen.init(shared)
-      return [
-        { _tag: 'SignupScreenModel', model },
-        cmd.map((m): Msg => ({ _tag: 'SignupScreenMsg', subMsg: m })),
-      ]
-    }
-    case 'PageSettings': {
-      if (shared.user._tag === 'None') {
-        return [{ _tag: 'NotFoundScreenModel' }, Cmd.none()]
-      } else {
-        const [model, cmd] = SettingsScreen.init(shared.user.value)
-        return [
-          { _tag: 'SettingsScreenModel', model },
-          cmd.map((m): Msg => ({ _tag: 'SettingsScreenMsg', subMsg: m })),
-        ]
-      }
-    }
-    case 'PageProfile': {
-      const [model, cmd] = ProfileScreen.init(
-        route.page.username,
-        route.page.favorites,
-        shared,
-      )
-      return [
-        { _tag: 'ProfileScreenModel', model },
-        cmd.map((m): Msg => ({ _tag: 'ProfileScreenMsg', subMsg: m })),
-      ]
-    }
-    case 'PageEditor': {
-      if (shared.user._tag === 'None') {
-        return [{ _tag: 'NotFoundScreenModel' }, Cmd.none()]
-      } else {
-        const [model, cmd] = EditorScreen.init(shared, route.page.slug)
-        return [
-          { _tag: 'EditorScreenModel', model },
-          cmd.map((m): Msg => ({ _tag: 'EditorScreenMsg', subMsg: m })),
-        ]
-      }
-    }
-    default:
-      return [{ _tag: 'NotFoundScreenModel' }, Cmd.none()]
-  }
-}
-
-export const routerConfig = mkRouterConfig<ScreenModel, Msg>(
-  initScreenModel,
-  teaRouterMsg,
-)
-
 export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
   switch (msg._tag) {
     case 'NoOp':
       return [model, Cmd.none()]
     case 'Init':
       return [model, Cmd.none()]
-    case 'TeaRouterMsg':
-      return routerMsgHandler(msg.subMsg, model)
+    case 'NavigationMsg':
+      return navigationMsgHandler(msg.subMsg, model)
 
     case 'SetUser': {
       const token =
@@ -249,21 +166,19 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       ]
     }
     case 'HomeScreenMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
-      if (pageModel._tag === 'HomeScreenModel') {
+      const { screenModel } = model
+      if (screenModel._tag === 'HomeScreenModel') {
+        const prevDestination = destinationOf(model)
         const [homeModel, homeCmd] = HomeScreen.update(model.shared)(
           msg.subMsg,
-          pageModel.model,
+          screenModel.model,
         )
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'HomeScreenModel',
-                model: homeModel,
-              }),
-            },
+            withScreenModel(model, {
+              _tag: 'HomeScreenModel',
+              model: homeModel,
+            }),
             homeCmd.map((subMsg): Msg => ({
               _tag: 'HomeScreenMsg',
               subMsg,
@@ -271,14 +186,17 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'ChangeTab') {
-              return interceptChangeTabFromHomeScreen(msg.subMsg.tab)(m)
+              return interceptChangeTabFromHomeScreen(
+                msg.subMsg.tab,
+                prevDestination,
+              )(m)
             } else if (
               msg.subMsg._tag === 'PaginationMsg' &&
               msg.subMsg.subMsg._tag === 'ChangePage'
             ) {
-              return interceptPaginationChangePageFromHomeScreen(
-                msg.subMsg.subMsg.page,
-              )(m)
+              // The page is part of the destination: the URL follows it
+              // after the step, and its change records a visit
+              return trackDestinationChangeHandler(prevDestination)(m)
             } else {
               return [m, Cmd.none()]
             }
@@ -289,21 +207,18 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'ArticleScreenMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
-      if (pageModel._tag === 'ArticleScreenModel') {
+      const { screenModel } = model
+      if (screenModel._tag === 'ArticleScreenModel') {
         const [articleModel, articleCmd] = ArticleScreen.update(model.shared)(
           msg.subMsg,
-          pageModel.model,
+          screenModel.model,
         )
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'ArticleScreenModel',
-                model: articleModel,
-              }),
-            },
+            withScreenModel(model, {
+              _tag: 'ArticleScreenModel',
+              model: articleModel,
+            }),
             articleCmd.map((m): Msg => ({
               _tag: 'ArticleScreenMsg',
               subMsg: m,
@@ -314,8 +229,8 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
               msg.subMsg._tag === 'DeleteArticleResponse' &&
               msg.subMsg.result.tag === 'Ok'
             ) {
-              return routerMsgHandler(
-                { _tag: 'ChangeRoute', route: { page: pageHome() } },
+              return navigationMsgHandler(
+                { _tag: 'Navigate', destination: defaultDestination() },
                 m,
               )
             } else {
@@ -328,22 +243,19 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'LoginScreenMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
-      if (pageModel._tag === 'LoginScreenModel') {
+      const { screenModel } = model
+      if (screenModel._tag === 'LoginScreenModel') {
         const [loginModel, loginCmd] = LoginScreen.update(model.shared)(
           msg.subMsg,
-          pageModel.model,
+          screenModel.model,
         )
 
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'LoginScreenModel',
-                model: loginModel,
-              }),
-            },
+            withScreenModel(model, {
+              _tag: 'LoginScreenModel',
+              model: loginModel,
+            }),
             loginCmd.map((m): Msg => ({ _tag: 'LoginScreenMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
@@ -362,8 +274,8 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                   token: O.some(userWithToken.token),
                 },
               }
-              return routerMsgHandler(
-                { _tag: 'ChangeRoute', route: { page: pageHome() } },
+              return navigationMsgHandler(
+                { _tag: 'Navigate', destination: defaultDestination() },
                 nextModel,
               )
             } else {
@@ -376,22 +288,19 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'SignupScreenMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
-      if (pageModel._tag === 'SignupScreenModel') {
+      const { screenModel } = model
+      if (screenModel._tag === 'SignupScreenModel') {
         const [signupModel, signupCmd] = SignupScreen.update(model.shared)(
           msg.subMsg,
-          pageModel.model,
+          screenModel.model,
         )
 
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'SignupScreenModel',
-                model: signupModel,
-              }),
-            },
+            withScreenModel(model, {
+              _tag: 'SignupScreenModel',
+              model: signupModel,
+            }),
             signupCmd.map((m): Msg => ({ _tag: 'SignupScreenMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
@@ -410,8 +319,8 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
                   token: O.some(userWithToken.token),
                 },
               }
-              return routerMsgHandler(
-                { _tag: 'ChangeRoute', route: { page: pageHome() } },
+              return navigationMsgHandler(
+                { _tag: 'Navigate', destination: defaultDestination() },
                 nextModel,
               )
             } else {
@@ -424,24 +333,21 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'SettingsScreenMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const { screenModel } = model
       if (
-        pageModel._tag === 'SettingsScreenModel' &&
+        screenModel._tag === 'SettingsScreenModel' &&
         model.shared.user._tag === 'Some'
       ) {
         const [settingsModel, settingsCmd] = SettingsScreen.update(
           model.shared,
-        )(msg.subMsg, pageModel.model)
+        )(msg.subMsg, screenModel.model)
 
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'SettingsScreenModel',
-                model: settingsModel,
-              }),
-            },
+            withScreenModel(model, {
+              _tag: 'SettingsScreenModel',
+              model: settingsModel,
+            }),
             settingsCmd.map((m): Msg => ({
               _tag: 'SettingsScreenMsg',
               subMsg: m,
@@ -467,73 +373,50 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
       }
     }
     case 'ProfileScreenMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
-      const currentRoute = TeaRouter.getRoute(model.router)
-      if (
-        pageModel._tag === 'ProfileScreenModel' &&
-        currentRoute.page._tag === 'PageProfile'
-      ) {
-        const username = currentRoute.page.username
-
-        const [profileModel, profileCmd] = ProfileScreen.update(
-          username,
-          model.shared,
-        )(msg.subMsg, pageModel.model)
+      const { screenModel } = model
+      if (screenModel._tag === 'ProfileScreenModel') {
+        const prevDestination = destinationOf(model)
+        const [profileModel, profileCmd] = ProfileScreen.update(model.shared)(
+          msg.subMsg,
+          screenModel.model,
+        )
 
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'ProfileScreenModel',
-                model: profileModel,
-              }),
-            },
+            withScreenModel(model, {
+              _tag: 'ProfileScreenModel',
+              model: profileModel,
+            }),
             profileCmd.map((m): Msg => ({
               _tag: 'ProfileScreenMsg',
               subMsg: m,
             })),
           ] satisfies [Model, Cmd<Msg>],
-          updateAndCmd((m) => {
-            // Intercept `ToggleFavorites` to update the url accordingly
-            if (msg.subMsg._tag === 'ToggleFavorites') {
-              const route: AppRoute = {
-                page: {
-                  _tag: 'PageProfile',
-                  username,
-                  favorites: msg.subMsg.show,
-                },
-              }
-              return routerMsgHandler({ _tag: 'ChangeRouteNoReload', route }, m)
-            } else {
-              return [m, Cmd.none()]
-            }
-          }),
+          // The favorites tab is part of the destination: the URL follows
+          // it after the step, and its change records a visit
+          updateAndCmd(trackDestinationChangeHandler(prevDestination)),
         )
       } else {
         return [model, Cmd.none()]
       }
     }
     case 'EditorScreenMsg': {
-      const pageModel = TeaRouter.getPageModel(model.router)
+      const { screenModel } = model
       if (
-        pageModel._tag === 'EditorScreenModel' &&
+        screenModel._tag === 'EditorScreenModel' &&
         model.shared.user._tag === 'Some'
       ) {
         const [editorModel, editorCmd] = EditorScreen.update(model.shared)(
           msg.subMsg,
-          pageModel.model,
+          screenModel.model,
         )
 
         return pipe(
           [
-            {
-              ...model,
-              router: TeaRouter.setPageModel(model.router, {
-                _tag: 'EditorScreenModel',
-                model: editorModel,
-              }),
-            },
+            withScreenModel(model, {
+              _tag: 'EditorScreenModel',
+              model: editorModel,
+            }),
             editorCmd.map((m): Msg => ({ _tag: 'EditorScreenMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
@@ -542,12 +425,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
               msg.subMsg.result.tag === 'Ok'
             ) {
               const slug = msg.subMsg.result.value.article.slug
-              return routerMsgHandler(
+              return navigationMsgHandler(
                 {
-                  _tag: 'ChangeRoute',
-                  route: {
-                    page: { _tag: 'PageArticle', slug },
-                  },
+                  _tag: 'Navigate',
+                  destination: destinationOfScreen(articleScreen(slug)),
                 },
                 m,
               )
@@ -579,37 +460,6 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
 // Child Msg interception handler
 
-const routerMsgHandler = (
-  subMsg: Extract<Msg, { _tag: 'TeaRouterMsg' }>['subMsg'],
-  model: Model,
-): [Model, Cmd<Msg>] => {
-  const prevRoute = TeaRouter.getRoute(model.router)
-  const [routerModel, routerCmd] = TeaRouter.update(routerConfig, model.shared)(
-    subMsg,
-    model.router,
-  )
-
-  return pipe(
-    [{ ...model, router: routerModel }, routerCmd] satisfies [Model, Cmd<Msg>],
-    updateAndCmd((m) => {
-      const currentRoute = TeaRouter.getRoute(m.router)
-      const isRouteChanged = !AppRouteEq.equals(prevRoute, currentRoute)
-      if (isRouteChanged) {
-        return [
-          { ...m, sidebar: DsFloatingSidebar.init()[0] },
-          trackVisitorCmd(m.shared.token, currentRoute),
-        ]
-      } else if (subMsg._tag === 'UrlChange') {
-        return [{ ...m, sidebar: DsFloatingSidebar.init()[0] }, Cmd.none()]
-      } else {
-        return [m, Cmd.none()]
-      }
-    }),
-  )
-}
-
-// Child Msg interception handler
-
 const sidebarMsgHandler = (
   subMsg: Extract<Msg, { _tag: 'SidebarMsg' }>['subMsg'],
   model: Model,
@@ -633,10 +483,10 @@ const sidebarMsgHandler = (
         } else if (item.key === 'theme-auto') {
           return changeColorSchemeHandler('auto')(m)
         } else {
-          const targetRoute = findNavItemRoute(m, item.key)
-          if (targetRoute) {
-            return routerMsgHandler(
-              { _tag: 'ChangeRoute', route: targetRoute },
+          const targetDestination = findNavItemDestination(m, item.key)
+          if (targetDestination) {
+            return navigationMsgHandler(
+              { _tag: 'Navigate', destination: targetDestination },
               m,
             )
           }
@@ -682,10 +532,10 @@ const navbarMsgHandler = (
         } else if (item.key === 'theme-auto') {
           return changeColorSchemeHandler('auto')(m)
         } else {
-          const targetRoute = findNavItemRoute(m, item.key)
-          if (targetRoute) {
-            return routerMsgHandler(
-              { _tag: 'ChangeRoute', route: targetRoute },
+          const targetDestination = findNavItemDestination(m, item.key)
+          if (targetDestination) {
+            return navigationMsgHandler(
+              { _tag: 'Navigate', destination: targetDestination },
               m,
             )
           }
@@ -713,8 +563,8 @@ const interceptLogoutFromSettingsScreen = (m: Model): [Model, Cmd<Msg>] => {
     ...m,
     shared: { ...m.shared, user: O.none, token: O.none },
   }
-  return routerMsgHandler(
-    { _tag: 'ChangeRoute', route: { page: pageHome() } },
+  return navigationMsgHandler(
+    { _tag: 'Navigate', destination: defaultDestination() },
     nextModel,
   )
 }
@@ -734,63 +584,27 @@ const interceptSubmitResponseOkFromSettingsScreen =
         token: O.some(userWithToken.token),
       },
     }
-    return routerMsgHandler(
+    return navigationMsgHandler(
       {
-        _tag: 'ChangeRoute',
-        route: {
-          page: {
-            _tag: 'PageProfile',
-            username: user.username,
-            favorites: false,
-          },
-        },
+        _tag: 'Navigate',
+        destination: destinationOfScreen(profileScreen(user.username, false)),
       },
       nextModel,
     )
   }
 
+// The tab is part of the destination: the URL follows it after the step,
+// and its change records a visit. The user feed of a signed-out visitor
+// sends to login instead.
 const interceptChangeTabFromHomeScreen =
-  (tab: HomeTab) =>
+  (tab: HomeTab, prevDestination: Destination) =>
   (m: Model): [Model, Cmd<Msg>] => {
     if (tab._tag === 'UserFeedTab' && m.shared.user._tag === 'None') {
-      return routerMsgHandler(
-        { _tag: 'ChangeRoute', route: { page: { _tag: 'PageLogin' } } },
+      return navigationMsgHandler(
+        { _tag: 'Navigate', destination: loginDestination() },
         m,
       )
     } else {
-      // Change url according to the tab
-      return routerMsgHandler(
-        { _tag: 'ChangeRouteNoReload', route: { page: pageHome(tab) } },
-        m,
-      )
+      return trackDestinationChangeHandler(prevDestination)(m)
     }
   }
-
-const interceptPaginationChangePageFromHomeScreen =
-  (page: number) =>
-  (m: Model): [Model, Cmd<Msg>] => {
-    const currentRoute = TeaRouter.getRoute(m.router)
-    if (currentRoute.page._tag === 'PageHome') {
-      return routerMsgHandler(
-        {
-          _tag: 'ChangeRouteNoReload',
-          route: {
-            page: pageHome(currentRoute.page.tab, page),
-          },
-        },
-        m,
-      )
-    } else {
-      return [m, Cmd.none()]
-    }
-  }
-
-const trackVisitorCmd = (
-  token: O.Option<string>,
-  route: AppRoute,
-): Cmd<Msg> => {
-  const path = toUrlString(route)
-  return Task.attempt(taskFromTE(trackVisitor(token, { path })), (): Msg => ({
-    _tag: 'NoOp',
-  }))
-}

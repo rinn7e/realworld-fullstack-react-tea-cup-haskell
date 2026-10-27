@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { pageHome } from '@/common/type/route'
+import { homeScreen } from '@/common/type/destination'
 import { Link } from '@/component/link'
 
 const NotFoundScreenComponent = () => {
@@ -18,7 +18,7 @@ const NotFoundScreenComponent = () => {
         </div>
         <div className='pt-[16px]'>
           <Link
-            route={{ page: pageHome() }}
+            destination={{ screen: homeScreen() }}
             className='inline-flex items-center justify-center rounded-md bg-green-600 px-[24px] py-[12px] text-sm font-medium text-white shadow transition-colors hover:bg-green-700 focus-visible:ring-1 focus-visible:ring-green-500 focus-visible:outline-none'
           >
             Back to Home

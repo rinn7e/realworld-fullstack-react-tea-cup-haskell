@@ -3,6 +3,7 @@ import * as Pagination from '@rinn7e/tea-cup-pagination'
 import { EqAlways } from '@rinn7e/tea-cup-prelude'
 import * as EqClass from 'fp-ts/lib/Eq'
 import * as B from 'fp-ts/lib/boolean'
+import * as S from 'fp-ts/lib/string'
 import type { Dispatcher, Result } from 'tea-cup-fp'
 
 import {
@@ -15,11 +16,12 @@ import {
   ProfileResponseEq,
   getHttpErrorEq,
 } from '@/common/api'
-import { type AppRoute, AppRouteEq } from '@/common/type/route'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import type * as ArticleShort from '@/component/article-short'
 
 export type Model = {
+  // The profile shown (the destination's `username`)
+  username: string
   profile: RD.RemoteData<HttpError<ApiError>, ProfileResponse>
   pagination: Pagination.Model<Article, HttpError<ApiError>>
   showFavorites: boolean
@@ -28,6 +30,7 @@ export type Model = {
 }
 
 export const ModelEq = EqClass.struct<Model>({
+  username: S.Eq,
   profile: RD.getEq(getHttpErrorEq(ApiErrorEq), ProfileResponseEq),
   pagination: Pagination.mkModelEq(ArticleEq, getHttpErrorEq(ApiErrorEq)),
   showFavorites: B.Eq,
@@ -61,7 +64,6 @@ export type Props = {
   shared: Shared
   dispatch: Dispatcher<Msg>
   isCurrentUser: boolean
-  route: AppRoute
 }
 
 export const PropsEq: EqClass.Eq<Props> = EqClass.struct({
@@ -69,5 +71,4 @@ export const PropsEq: EqClass.Eq<Props> = EqClass.struct({
   shared: SharedEq,
   dispatch: EqAlways,
   isCurrentUser: B.Eq,
-  route: AppRouteEq,
 })

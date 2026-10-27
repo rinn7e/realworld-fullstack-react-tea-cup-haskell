@@ -1,7 +1,6 @@
 import { FloatingSidebarMemo as DsFloatingFloatingSidebarMemo } from '@rinn7e/realworld-design-system/component/floating-sidebar/component'
 import { NavbarMemo as DsNavbarMemo } from '@rinn7e/realworld-design-system/component/navbar/component'
 import { cn } from '@rinn7e/tea-cup-prelude'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import { type Dispatcher } from 'tea-cup-fp'
 
 import { SetGlobalMsgContext } from './common/global-context'
@@ -61,14 +60,13 @@ export const App = ({ model, dispatch }: AppProps) => {
 }
 
 const ScreenView = ({ model, dispatch }: AppProps) => {
-  const pageModel = TeaRouter.getPageModel(model.router)
-  const route = TeaRouter.getRoute(model.router)
+  const { screenModel } = model
 
-  switch (pageModel._tag) {
+  switch (screenModel._tag) {
     case 'HomeScreenModel':
       return (
         <HomeScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           shared={model.shared}
           dispatch={(msg) => dispatch({ _tag: 'HomeScreenMsg', subMsg: msg })}
         />
@@ -76,7 +74,7 @@ const ScreenView = ({ model, dispatch }: AppProps) => {
     case 'ArticleScreenModel':
       return (
         <ArticleScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           user={model.shared.user}
           dispatch={(msg) =>
             dispatch({ _tag: 'ArticleScreenMsg', subMsg: msg })
@@ -86,21 +84,21 @@ const ScreenView = ({ model, dispatch }: AppProps) => {
     case 'LoginScreenModel':
       return (
         <LoginScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(msg) => dispatch({ _tag: 'LoginScreenMsg', subMsg: msg })}
         />
       )
     case 'SignupScreenModel':
       return (
         <SignupScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(msg) => dispatch({ _tag: 'SignupScreenMsg', subMsg: msg })}
         />
       )
     case 'SettingsScreenModel':
       return (
         <SettingsScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(msg) =>
             dispatch({ _tag: 'SettingsScreenMsg', subMsg: msg })
           }
@@ -110,19 +108,18 @@ const ScreenView = ({ model, dispatch }: AppProps) => {
       const isCurrentUser =
         model.shared.user._tag === 'Some' &&
         model.shared.user.value.username ===
-          (pageModel.model.profile._tag === 'RemoteSuccess'
-            ? pageModel.model.profile.value.profile.username
+          (screenModel.model.profile._tag === 'RemoteSuccess'
+            ? screenModel.model.profile.value.profile.username
             : '')
 
       return (
         <ProfileScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           shared={model.shared}
           dispatch={(msg) =>
             dispatch({ _tag: 'ProfileScreenMsg', subMsg: msg })
           }
           isCurrentUser={isCurrentUser}
-          route={route}
         />
       )
     }
@@ -130,7 +127,7 @@ const ScreenView = ({ model, dispatch }: AppProps) => {
     case 'EditorScreenModel':
       return (
         <EditorScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(msg) => dispatch({ _tag: 'EditorScreenMsg', subMsg: msg })}
         />
       )

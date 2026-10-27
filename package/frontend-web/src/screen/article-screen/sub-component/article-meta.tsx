@@ -46,9 +46,9 @@ const ArticleMetaComponent = ({
       data-test='article-metadata'
     >
       <Link
-        route={{
-          page: {
-            _tag: 'PageProfile',
+        destination={{
+          screen: {
+            _tag: 'ProfileScreen',
             username: author.username,
             favorites: false,
           },
@@ -64,9 +64,9 @@ const ArticleMetaComponent = ({
       </Link>
       <div className='flex flex-col'>
         <Link
-          route={{
-            page: {
-              _tag: 'PageProfile',
+          destination={{
+            screen: {
+              _tag: 'ProfileScreen',
               username: author.username,
               favorites: false,
             },
@@ -147,9 +147,9 @@ const ArticleMetaComponent = ({
         {isAuthor && (
           <>
             <Link
-              route={{
-                page: {
-                  _tag: 'PageEditor',
+              destination={{
+                screen: {
+                  _tag: 'EditorScreen',
                   slug: O.some(article.slug),
                 },
               }}

@@ -55,6 +55,7 @@ export const init = (
   )
 
   const model: Model = {
+    username,
     profile: RD.pending,
     pagination,
     showFavorites: favorites,
@@ -77,8 +78,9 @@ export const init = (
 }
 
 export const update =
-  (username: string, shared: Shared) =>
+  (shared: Shared) =>
   (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
+    const { username } = model
     switch (msg._tag) {
       case 'GetProfileResponse':
         return getProfileResponseHandler(msg.result)(model)

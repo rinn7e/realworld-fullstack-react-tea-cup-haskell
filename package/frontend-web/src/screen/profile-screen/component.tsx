@@ -15,7 +15,7 @@ import {
   getHttpErrorEq,
 } from '@/common/api'
 import { API_BASE } from '@/common/env'
-import { type AppRoute } from '@/common/type/route'
+import { destinationOfScreen, profileScreen } from '@/common/type/destination'
 import { assetPath } from '@/common/util'
 import { ErrorMessagesMemo } from '@/component/error-messages/component'
 import { Link } from '@/component/link'
@@ -28,9 +28,8 @@ const ProfileScreenComponent = ({
   shared,
   dispatch,
   isCurrentUser,
-  route,
 }: Props) => {
-  const username = route.page._tag === 'PageProfile' ? route.page.username : ''
+  const { username } = model
   const paginationConfig = mkPaginationConfig(
     shared,
     username,
@@ -56,7 +55,12 @@ const ProfileScreenComponent = ({
               color='green'
             />
           ),
-          () => <ProfileNotFoundView route={route} />,
+          () => (
+            <ProfileNotFoundView
+              username={username}
+              favorites={model.showFavorites}
+            />
+          ),
 
           (data: ProfileResponse) => (
             <>
@@ -119,7 +123,7 @@ const ProfileScreenComponent = ({
                   <div className='pt-[4px]'>
                     {isCurrentUser ? (
                       <Link
-                        route={{ page: { _tag: 'PageSettings' } }}
+                        destination={{ screen: { _tag: 'SettingsScreen' } }}
                         className='inline-flex items-center gap-[6px] rounded border border-gray-400 px-[12px] py-[6px] text-sm text-gray-600 transition-colors hover:border-gray-600 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500'
                         data-test='edit-profile-settings'
                       >
@@ -208,12 +212,11 @@ const ProfileScreenComponent = ({
 }
 
 type ProfileNotFoundProps = {
-  route: AppRoute
+  username: string
+  favorites: boolean
 }
 
-const ProfileNotFoundView = ({ route }: ProfileNotFoundProps) => {
-  const username = route.page._tag === 'PageProfile' ? route.page.username : ''
-
+const ProfileNotFoundView = ({ username, favorites }: ProfileNotFoundProps) => {
   return (
     <div className='py-[48px]'>
       <div className='mx-auto flex max-w-[600px] flex-col items-center gap-[16px] rounded-lg bg-yellow-50 px-[24px] py-[48px] text-center'>
@@ -242,7 +245,9 @@ const ProfileNotFoundView = ({ route }: ProfileNotFoundProps) => {
 
         <div className='pt-[16px]'>
           <Link
-            route={route}
+            destination={destinationOfScreen(
+              profileScreen(username, favorites),
+            )}
             className='inline-flex items-center gap-[8px] rounded bg-green-600 px-[24px] py-[10px] font-medium text-white transition-colors hover:bg-green-700'
           >
             <RotateCw size={18} />

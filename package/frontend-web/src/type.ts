@@ -1,6 +1,6 @@
 import type * as DsFloatingSidebar from '@rinn7e/realworld-design-system/component/floating-sidebar'
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
-import type * as TeaRouter from '@rinn7e/tea-cup-router'
+import * as O from 'fp-ts/lib/Option'
 import type { Option } from 'fp-ts/lib/Option'
 
 import type { User, UserWithToken } from '@/common/api'
@@ -14,9 +14,13 @@ import type * as SettingsScreen from '@/screen/settings-screen'
 import type * as SignupScreen from '@/screen/signup-screen'
 import type { ColorScheme } from '@/theme/type'
 
-import { type AppRoute } from './common/type/route'
+import { type NavigationMsg, type Screen } from './common/type/destination'
 import { type Shared } from './common/type/shared'
 
+// The screen shown, as its model. Its tag and its own fields (a slug, the
+// home tab and page, the profile username) are the destination's screen
+// (`currentScreenOf`): a `currentScreen` field next to it would say the
+// same thing twice.
 export type ScreenModel =
   | { _tag: 'HomeScreenModel'; model: HomeScreen.Model }
   | { _tag: 'ArticleScreenModel'; model: ArticleScreen.Model }
@@ -28,7 +32,7 @@ export type ScreenModel =
   | { _tag: 'NotFoundScreenModel' }
 
 export type Model = {
-  router: TeaRouter.Model<AppRoute, ScreenModel>
+  screenModel: ScreenModel
   unavailableMode: boolean
   shared: Shared
   debugPanel: DebugPanel.Model
@@ -47,7 +51,7 @@ export type Msg =
       isUnavailable: boolean
       token: Option<string>
     }
-  | { _tag: 'TeaRouterMsg'; subMsg: TeaRouter.Msg<AppRoute> }
+  | { _tag: 'NavigationMsg'; subMsg: NavigationMsg }
   | { _tag: 'SetUser'; user: Option<UserWithToken> }
   | { _tag: 'HomeScreenMsg'; subMsg: HomeScreen.Msg }
   | { _tag: 'ArticleScreenMsg'; subMsg: ArticleScreen.Msg }
@@ -60,7 +64,43 @@ export type Msg =
   | { _tag: 'SidebarMsg'; subMsg: DsFloatingSidebar.Msg }
   | { _tag: 'NavbarMsg'; subMsg: DsNavbar.Msg }
 
-export const teaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
-  _tag: 'TeaRouterMsg',
-  subMsg,
-})
+// The screen shown (the destination's `screen`, `destinationOf`), read
+// from the fields of its model that hold the screen's params
+export const currentScreenOf = (screenModel: ScreenModel): Screen => {
+  switch (screenModel._tag) {
+    case 'HomeScreenModel':
+      return {
+        _tag: 'HomeScreen',
+        tab: screenModel.model.tab,
+        page: screenModel.model.pagination.page,
+      }
+    case 'ArticleScreenModel':
+      return { _tag: 'ArticleScreen', slug: screenModel.model.slug }
+    case 'LoginScreenModel':
+      return { _tag: 'LoginScreen' }
+    case 'SignupScreenModel':
+      return { _tag: 'SignupScreen' }
+    case 'SettingsScreenModel':
+      return { _tag: 'SettingsScreen' }
+    case 'ProfileScreenModel':
+      return {
+        _tag: 'ProfileScreen',
+        username: screenModel.model.username,
+        favorites: screenModel.model.showFavorites,
+      }
+    case 'EditorScreenModel':
+      return {
+        _tag: 'EditorScreen',
+        slug: O.fromNullable(screenModel.model.slug),
+      }
+    case 'NotFoundScreenModel':
+      return { _tag: 'NotFoundScreen' }
+  }
+}
+
+// Widens a screen's model to `ScreenModel` (an object literal keeps its own
+// tag, which narrows the `Model` built from it)
+export const withScreenModel = (
+  model: Model,
+  screenModel: ScreenModel,
+): Model => ({ ...model, screenModel })

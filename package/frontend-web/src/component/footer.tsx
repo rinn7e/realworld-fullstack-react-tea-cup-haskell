@@ -1,7 +1,7 @@
 import { cn } from '@rinn7e/tea-cup-prelude'
 import { memo } from 'react'
 
-import { pageHome } from '@/common/type/route'
+import { homeScreen } from '@/common/type/destination'
 import { Link } from '@/component/link'
 
 const FooterComponent = () => {
@@ -16,7 +16,7 @@ const FooterComponent = () => {
         )}
       >
         <Link
-          route={{ page: pageHome() }}
+          destination={{ screen: homeScreen() }}
           className='text-sm font-bold text-green-600'
         >
           conduit

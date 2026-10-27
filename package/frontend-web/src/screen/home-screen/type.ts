@@ -14,7 +14,7 @@ import {
   TagsResponseEq,
   getHttpErrorEq,
 } from '@/common/api'
-import { type HomeTab, HomeTabEq } from '@/common/type/route'
+import { type HomeTab, HomeTabEq } from '@/common/type/destination'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import type * as ArticleShort from '@/component/article-short'
 

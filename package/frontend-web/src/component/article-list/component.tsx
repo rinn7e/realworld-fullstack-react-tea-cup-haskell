@@ -14,7 +14,7 @@ import {
   type HttpError,
   getHttpErrorEq,
 } from '@/common/api'
-import { pageHome } from '@/common/type/route'
+import { homeScreen } from '@/common/type/destination'
 import type * as ArticleShort from '@/component/article-short'
 import { ArticleShortMemo } from '@/component/article-short/component'
 import { DotLoadingMemo } from '@/component/dot-loading'
@@ -68,7 +68,7 @@ const ArticleListComponent = ({
               <>
                 Your feed is empty... yet. Why not check out the{' '}
                 <Link
-                  route={{ page: pageHome() }}
+                  destination={{ screen: homeScreen() }}
                   className='text-green-600 hover:underline'
                 >
                   Global Feed

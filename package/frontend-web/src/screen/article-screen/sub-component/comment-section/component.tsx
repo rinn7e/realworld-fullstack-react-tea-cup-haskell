@@ -106,9 +106,9 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                   </div>
                   <div className='card-footer flex items-center gap-[8px] border-t border-gray-100 bg-gray-50 px-[16px] py-[8px] text-xs dark:border-zinc-800 dark:bg-zinc-900'>
                     <Link
-                      route={{
-                        page: {
-                          _tag: 'PageProfile',
+                      destination={{
+                        screen: {
+                          _tag: 'ProfileScreen',
                           username: comment.author.username,
                           favorites: false,
                         },
@@ -127,9 +127,9 @@ const CommentSectionComponent = ({ model, user, dispatch }: Props) => {
                       />
                     </Link>
                     <Link
-                      route={{
-                        page: {
-                          _tag: 'PageProfile',
+                      destination={{
+                        screen: {
+                          _tag: 'ProfileScreen',
                           username: comment.author.username,
                           favorites: false,
                         },

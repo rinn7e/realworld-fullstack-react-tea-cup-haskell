@@ -23,9 +23,9 @@ const ArticleShortComponent = ({ model, dispatch }: Props) => {
           data-test='article-metadata'
         >
           <Link
-            route={{
-              page: {
-                _tag: 'PageProfile',
+            destination={{
+              screen: {
+                _tag: 'ProfileScreen',
                 username: model.author.username,
                 favorites: false,
               },
@@ -41,9 +41,9 @@ const ArticleShortComponent = ({ model, dispatch }: Props) => {
           </Link>
           <div className='info flex flex-col'>
             <Link
-              route={{
-                page: {
-                  _tag: 'PageProfile',
+              destination={{
+                screen: {
+                  _tag: 'ProfileScreen',
                   username: model.author.username,
                   favorites: false,
                 },
@@ -73,9 +73,9 @@ const ArticleShortComponent = ({ model, dispatch }: Props) => {
         />
       </div>
       <Link
-        route={{
-          page: {
-            _tag: 'PageArticle',
+        destination={{
+          screen: {
+            _tag: 'ArticleScreen',
             slug: model.slug,
           },
         }}
