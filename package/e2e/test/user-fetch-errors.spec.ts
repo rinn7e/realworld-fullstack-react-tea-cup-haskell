@@ -193,11 +193,13 @@ test.describe('User Fetch Errors on App Initialization - 5XX (should enter unava
     await expect(page.getByText('Global Feed')).toBeVisible()
     // Manually reload the page (simulating user pressing F5)
     await page.reload()
+    // Should still be in unavailable mode (server still returning 500). Wait
+    // for it before reading the token: until the app has booted,
+    // `window.__conduit_debug__` does not exist and `getToken` reads null.
+    await expect(page.getByText('Connecting')).toBeVisible()
     // Token should STILL be there after manual reload
     const tokenAfterReload = await getToken(page)
     expect(tokenAfterReload).toBe('my-precious-token')
-    // Should still be in unavailable mode (server still returning 500)
-    await expect(page.getByText('Connecting')).toBeVisible()
     // App should still be functional
     await expect(page.getByText('Global Feed')).toBeVisible()
   })
