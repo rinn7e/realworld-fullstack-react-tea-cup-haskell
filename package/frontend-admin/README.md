@@ -35,6 +35,10 @@ To build the application for production deployment (e.g. to GitHub Pages):
 VITE_BASE_URL=/sentinel-dashboard/ pnpm build
 ```
 
+### Debugging Without the URL
+
+`VITE_DISABLE_URL=true pnpm dev` runs the app on in-app navigation alone: it boots on the home screen, ignores the browser back and forward, and never writes the URL (see "Navigation and the URL" in [the code convention](doc/code-convention.md)).
+
 ### Quality Assurance & Validation
 
 | Command               | Description                                          |

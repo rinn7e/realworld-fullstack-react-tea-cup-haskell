@@ -13,6 +13,10 @@
 - [Sum-Type Eq Instances](#sum-type-eq-instances)
 - [Side-Effects and IO in TEA Architecture](#side-effects-and-io-in-tea-architecture)
 - [TEA Child Msg Interception](#tea-child-msg-interception)
+- [Navigation and the URL](#navigation-and-the-url)
+- [No `update` Wrapper (and the URL Exception)](#no-update-wrapper-and-the-url-exception)
+- [Follow the Component Tree](#follow-the-component-tree)
+- [One Source of Truth: Make Impossible States Impossible](#one-source-of-truth-make-impossible-states-impossible)
 - [File Structure and Splitting](#file-structure-and-splitting)
   - [Tea Cup Components](#tea-cup-components)
   - [Dependency Order and Hierarchy](#dependency-order-and-hierarchy)
@@ -537,6 +541,110 @@ case 'ChildMsg': {
 
 ---
 
+## Navigation and the URL
+
+The app owns where it is; the URL only follows. The words:
+
+- **Destination** (`src/common/type/destination/`): where the app is, a `screen` plus, when an app has them, flat params (`currentX` style fields of their owners, one boolean per dialog that has its own URL). It is **never stored**: `destinationOf(model)` (`src/util/destination.ts`) reads it from the models that show it.
+- **Screen**: what the destination shows (`HomeScreen`, `UserScreen`, ...). The screen components live in `src/screen/`. There are no pages.
+- **`NavigationMsg`**: every move of the app (`Navigate`, `ModifyDestination`, `Refresh`, and `UrlChanged` for the browser back and forward), handled by `navigationMsgHandler` (`src/handler/navigation-handler.ts`), which runs the destination through `guardDestination` (`src/util/guard.ts`) and opens its screen.
+- **The URL** is an adapter at the edges (`src/util/url.ts`). It is written from the destination after every step (`withUrl`, see the next section) and read only at boot (`bootDestinationOf`) and on back or forward (`urlChangedMsg`). `parseDestination` and `toUrlString` are the only code that knows its spelling. Nothing the app writes comes back as an event: the URL commands call `window.history` directly, which fires no `popstate`.
+
+How the history follows a step (`urlWriteOf`):
+
+1. A change of destination pushes an entry.
+2. The same destination writes nothing (a click on the screen shown refreshes it, with no new entry).
+3. A back or forward (`UrlChanged`) already has its entry: it writes nothing, unless the app shows another destination than the one its URL opens (the guard redirected it, or a navigation block kept the destination shown); then it replaces.
+4. The boot replaces the URL when the guard redirected it (`bootUrlOf`), so a back to it does not only redirect again.
+
+`VITE_DISABLE_URL=true` turns the adapter off, for debugging only: the app boots on the default destination, ignores back and forward, and writes no URL.
+
+---
+
+## No `update` Wrapper (and the URL Exception)
+
+Do not add a step by wrapping the whole `update` of a component to run after every message, for example renaming `update` to `screenUpdate` and adding an outer `update` around it. Put the step in the `case` of the messages that change that state, with `updateAndCmd` in its `pipe` (see [TEA Child Msg Interception](#tea-child-msg-interception)). A wrapper hides the step from whoever reads the `case`, and it breaks the rule that dispatching `XMsg` and calling `xMsgHandler` are the same thing: a handler called from the step of another message goes through the wrapper of that step, not of its own message.
+
+```ts
+// Bad: a pass after every message of the screen
+export const update = (msg: Msg, model: Model) =>
+  pipe(screenUpdate(msg, model), updateAndCmd(closeHiddenRows))
+
+// Good: in the case that changes the list
+case 'PaginationMsg':
+  return pipe(
+    paginationMsgHandler(msg.subMsg)(model),
+    updateAndCmd(closeHiddenRows),
+  )
+```
+
+**The one exception: the URL** (`withUrl` in `src/util/url.ts`, around the root `update` in `src/program.tsx`). The URL is not state: it is written from the destination, which is read from the models (`destinationOf`), the same way the view is rendered from them. After each step `withUrl` compares the destination before and after (`urlWriteOf`) and pushes or replaces the URL. This is fine, and not the wrapper above, because:
+
+1. It wraps only the outermost `update`, the one the program runs for every message. Every handler runs inside one of its steps, so none can escape it: dispatching `XMsg` and calling `xMsgHandler` give the same URL (calling the handler inside another step folds its change into the single entry of that step).
+2. It decides from the state, not from the message: the destination before and after the step, whichever handlers changed it. The only use of the message is that a back or forward of the browser itself (`UrlChanged`) is corrected with a replace instead of pushed, which describes what the browser did.
+3. Its command answers only with `NoOp`, which changes no destination, so it never writes again: no loop of steps.
+4. The alternative is worse: every place that changes the destination (a navigation, a login, a logout, a screen param changed in place) would have to return its own URL write, and one that forgets leaves the URL showing something else than the screen.
+
+Nothing else may wrap `update`. A new step that must run after every message is a sign that its state is stored twice: make it read from the models instead, as the destination is.
+
+---
+
+## Follow the Component Tree
+
+Components nest as a tree (the app, a screen, its sub-components), and their `init`, `reInit` and handlers nest the same way: each one sets up or updates its own model and calls those of its direct children, nothing more. When a child has to react to something new (a destination param, a login), add that step to the function that already passes this kind of change down to it, in the component that owns the child. Do not add a second pass from higher up.
+
+Before writing a new function for the state of a child, find the chain that already reaches the child for this kind of change: for a destination change, that is the `reInit` of the parent (and its `init` for the first destination of the app), which already receive the destination. Add the step for the child there. A separate step bolted on in a grandparent splits the reaction of one component over two levels, makes the grandparent know its grandchild, and has to rebuild what the parent already receives.
+
+When the parent skips its work for an unchanged input (an early return), the step for the child must still run when its own input changed: check the new input in that branch too.
+
+Signs of the mistake: a grandparent pipes the result of the parent through a handler of the grandchild; a new handler whose only caller is a grandparent; arguments the grandparent derives from data the parent already gets.
+
+```ts
+// Bad: the app reaches into a dialog of the screen after the screen init
+const [screenModel, screenCmd] = pipe(
+  UserScreen.init(shared),
+  updateAndCmd(UserScreen.openRoleDialogHandler(destination.roleDialog)),
+)
+
+// Good (an illustration, the admin has no such dialog): the dialog is a
+// child of the screen, so the screen `reInit` (which
+// already gets both destinations) opens or closes it; the app only calls
+// `UserScreen.reInit`
+export const reInit = (oldDestination, newDestination, oldModel) => {
+  const [roleDialog, roleDialogCmd] = RoleDialog.reInit({
+    oldModel: oldModel.roleDialog,
+    oldShown: oldDestination.roleDialog,
+    newShown: newDestination.roleDialog,
+  })
+  // ...
+}
+```
+
+---
+
+## One Source of Truth: Make Impossible States Impossible
+
+Every fact lives in **one** place in the model, and the types allow only the states that can really happen. Do not keep a second copy of something the model already holds, and do not add a field whose value can be worked out from another one.
+
+**When a component gains a capability, refactor its model.** Reshape the existing state so the new capability fits it, even when that touches every caller. Do not bolt on a field that mirrors the old one and then sync the two: every later change has to remember both copies, and the types no longer stop them from disagreeing.
+
+Signs that a model holds the same state twice:
+
+- A `sync*` function that copies one field into another after updates, or a comment saying a field "follows" another.
+- A back-sync, such as an "is closed by the user" check that copies a close back into another field so a sync would not reopen it.
+- A `useEffect` that dispatches only to bring the model in line with itself.
+- A boolean or `Option` that only says whether something else is open, shown or set (`open: boolean` next to a dialog model).
+- Types that allow combinations that cannot happen.
+
+The destination follows the same rule:
+
+- **Never store the destination.** Each owner keeps a flat field for its part, set by its `init` or `reInit`: the screen model says which screen is shown (here its tag, read with `currentScreenOf`: a `currentScreen` field next to it would say the same thing twice), and a screen or pane with a param keeps it as a flat `currentX` field (`currentFilter`, `currentTab`). `destinationOf(model)` reads the destination from the owners.
+- **Read dialog and overlay flags from the dialog** (its `isOpen`; a dialog closing counts as closed), never store them a second time.
+- **A user close only updates its owner, and the URL follows.** No "closed by the user, so navigate" sync back. The one exception is a screen whose leaving must go through a navigation block or an auto-save: its close navigates instead of only closing, and that is documented on its model.
+- **A dialog that should survive a refresh and close on back** gets one flat boolean in the destination (`x_setting=true` style in the URL), opened and closed by its owner `reInit`, and dropped by the guard where it cannot open. One boolean per dialog: no `Option` of a dialog union, no grouping type. The admin has no such dialog today: its detail overlays hold the selected row (data, not a flag) and stay out of the URL.
+
+---
+
 ## File Structure and Splitting
 
 ### Tea Cup Components
@@ -563,6 +671,7 @@ export const AccountSettingMemo = memo(AccountSettingComponent, PropsEq.equals)
 
 - Props types are named after the component (e.g. `LinkProps`, `FooterProps`), except the TEA module's own `Props` in `type.ts`.
 - Views are always React components (`<TabItemMemo />`), never `renderXxx(...)` functions returning JSX.
+- **Naming the model a step returns**: the `Model` that a handler or step gives back is `updatedModel`, or `newModel` in an `init` or `reInit` (beside its `oldModel`). Do not name it after what the step did (not `withDialog`, `closed` or `opened`): the name says it is the model, the step says what changed. Its `Cmd` is named after the step (`navigationCmd`).
 
 #### Recommended File Breakdown
 
