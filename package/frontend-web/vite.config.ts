@@ -16,7 +16,13 @@ export default defineConfig(({ mode }) => {
     test: {
       server: {
         deps: {
-          inline: ['@rinn7e/tea-cup-prelude', '@rinn7e/tea-cup-form', 'fp-ts'],
+          inline: [
+            '@rinn7e/tea-cup-prelude',
+            '@rinn7e/tea-cup-form',
+            '@rinn7e/tea-cup-pagination',
+            '@rinn7e/realworld-design-system',
+            'fp-ts',
+          ],
         },
       },
     },
