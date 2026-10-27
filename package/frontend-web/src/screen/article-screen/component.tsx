@@ -12,7 +12,7 @@ import { ArticleMetaMemo } from './sub-component/article-meta'
 import { CommentSectionMemo } from './sub-component/comment-section/component'
 import { type Props, PropsEq } from './type'
 
-const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
+const ArticleScreenComponent = ({ model, user, dispatch }: Props) => {
   return (
     <div className='flex min-h-full flex-col' data-test='article-page'>
       {pipe(
@@ -112,4 +112,4 @@ const ArticlePageComponent = ({ model, user, dispatch }: Props) => {
   )
 }
 
-export const ArticlePageMemo = memo(ArticlePageComponent, PropsEq.equals)
+export const ArticleScreenMemo = memo(ArticleScreenComponent, PropsEq.equals)

@@ -8,14 +8,14 @@ import { SetGlobalMsgContext } from './common/global-context'
 import { DebugPanelMemo } from './component/debug-panel/component'
 import { FooterMemo } from './component/footer'
 import { toDesktopNavItems, toNavbarConfig } from './navbar/util'
-import { ArticlePageMemo } from './page/article-page/component'
-import { EditorPageMemo } from './page/editor-page/component'
-import { HomePageMemo } from './page/home-page/component'
-import { LoginPageMemo } from './page/login-page/component'
-import { NotFoundPageMemo } from './page/not-found-page/component'
-import { ProfilePageMemo } from './page/profile-page/component'
-import { SettingsPageMemo } from './page/settings-page/component'
-import { SignupPageMemo } from './page/signup-page/component'
+import { ArticleScreenMemo } from './screen/article-screen/component'
+import { EditorScreenMemo } from './screen/editor-screen/component'
+import { HomeScreenMemo } from './screen/home-screen/component'
+import { LoginScreenMemo } from './screen/login-screen/component'
+import { NotFoundScreenMemo } from './screen/not-found-screen/component'
+import { ProfileScreenMemo } from './screen/profile-screen/component'
+import { SettingsScreenMemo } from './screen/settings-screen/component'
+import { SignupScreenMemo } from './screen/signup-screen/component'
 import type { Model, Msg } from './type'
 
 export type AppProps = {
@@ -43,7 +43,7 @@ export const App = ({ model, dispatch }: AppProps) => {
           dispatch={(subMsg) => dispatch({ _tag: 'NavbarMsg', subMsg })}
         />
         <main className='flex-grow'>
-          <PageView model={model} dispatch={dispatch} />
+          <ScreenView model={model} dispatch={dispatch} />
         </main>
         <FooterMemo />
       </div>
@@ -60,49 +60,53 @@ export const App = ({ model, dispatch }: AppProps) => {
   )
 }
 
-const PageView = ({ model, dispatch }: AppProps) => {
+const ScreenView = ({ model, dispatch }: AppProps) => {
   const pageModel = TeaRouter.getPageModel(model.router)
   const route = TeaRouter.getRoute(model.router)
 
   switch (pageModel._tag) {
-    case 'HomePageModel':
+    case 'HomeScreenModel':
       return (
-        <HomePageMemo
+        <HomeScreenMemo
           model={pageModel.model}
           shared={model.shared}
-          dispatch={(msg) => dispatch({ _tag: 'HomePageMsg', subMsg: msg })}
+          dispatch={(msg) => dispatch({ _tag: 'HomeScreenMsg', subMsg: msg })}
         />
       )
-    case 'ArticlePageModel':
+    case 'ArticleScreenModel':
       return (
-        <ArticlePageMemo
+        <ArticleScreenMemo
           model={pageModel.model}
           user={model.shared.user}
-          dispatch={(msg) => dispatch({ _tag: 'ArticlePageMsg', subMsg: msg })}
+          dispatch={(msg) =>
+            dispatch({ _tag: 'ArticleScreenMsg', subMsg: msg })
+          }
         />
       )
-    case 'LoginPageModel':
+    case 'LoginScreenModel':
       return (
-        <LoginPageMemo
+        <LoginScreenMemo
           model={pageModel.model}
-          dispatch={(msg) => dispatch({ _tag: 'LoginPageMsg', subMsg: msg })}
+          dispatch={(msg) => dispatch({ _tag: 'LoginScreenMsg', subMsg: msg })}
         />
       )
-    case 'SignupPageModel':
+    case 'SignupScreenModel':
       return (
-        <SignupPageMemo
+        <SignupScreenMemo
           model={pageModel.model}
-          dispatch={(msg) => dispatch({ _tag: 'SignupPageMsg', subMsg: msg })}
+          dispatch={(msg) => dispatch({ _tag: 'SignupScreenMsg', subMsg: msg })}
         />
       )
-    case 'SettingsPageModel':
+    case 'SettingsScreenModel':
       return (
-        <SettingsPageMemo
+        <SettingsScreenMemo
           model={pageModel.model}
-          dispatch={(msg) => dispatch({ _tag: 'SettingsPageMsg', subMsg: msg })}
+          dispatch={(msg) =>
+            dispatch({ _tag: 'SettingsScreenMsg', subMsg: msg })
+          }
         />
       )
-    case 'ProfilePageModel': {
+    case 'ProfileScreenModel': {
       const isCurrentUser =
         model.shared.user._tag === 'Some' &&
         model.shared.user.value.username ===
@@ -111,24 +115,26 @@ const PageView = ({ model, dispatch }: AppProps) => {
             : '')
 
       return (
-        <ProfilePageMemo
+        <ProfileScreenMemo
           model={pageModel.model}
           shared={model.shared}
-          dispatch={(msg) => dispatch({ _tag: 'ProfilePageMsg', subMsg: msg })}
+          dispatch={(msg) =>
+            dispatch({ _tag: 'ProfileScreenMsg', subMsg: msg })
+          }
           isCurrentUser={isCurrentUser}
           route={route}
         />
       )
     }
 
-    case 'EditorPageModel':
+    case 'EditorScreenModel':
       return (
-        <EditorPageMemo
+        <EditorScreenMemo
           model={pageModel.model}
-          dispatch={(msg) => dispatch({ _tag: 'EditorPageMsg', subMsg: msg })}
+          dispatch={(msg) => dispatch({ _tag: 'EditorScreenMsg', subMsg: msg })}
         />
       )
-    case 'NotFoundPageModel':
-      return <NotFoundPageMemo />
+    case 'NotFoundScreenModel':
+      return <NotFoundScreenMemo />
   }
 }

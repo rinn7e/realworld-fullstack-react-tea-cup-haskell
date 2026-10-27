@@ -10,19 +10,19 @@ export const navLinkUnauths: NavLinkData[] = [
     key: 'home',
     label: () => 'Home',
     route: () => ({ page: pageHome() }),
-    pageTag: 'HomePageModel',
+    pageTag: 'HomeScreenModel',
   },
   {
     key: 'login',
     label: () => 'Sign in',
     route: () => ({ page: { _tag: 'PageLogin' } }),
-    pageTag: 'LoginPageModel',
+    pageTag: 'LoginScreenModel',
   },
   {
     key: 'signup',
     label: () => 'Sign up',
     route: () => ({ page: { _tag: 'PageSignup' } }),
-    pageTag: 'SignupPageModel',
+    pageTag: 'SignupScreenModel',
   },
 ]
 
@@ -31,20 +31,20 @@ export const navLinkAuths: NavLinkData[] = [
     key: 'home',
     label: () => 'Home',
     route: () => ({ page: pageHome() }),
-    pageTag: 'HomePageModel',
+    pageTag: 'HomeScreenModel',
   },
   {
     key: 'editor',
     label: () => 'New Article',
     route: () => ({ page: { _tag: 'PageEditor', slug: O.none } }),
-    pageTag: 'EditorPageModel',
+    pageTag: 'EditorScreenModel',
     icon: { _tag: 'Icon', name: 'pencil' },
   },
   {
     key: 'settings',
     label: () => 'Settings',
     route: () => ({ page: { _tag: 'PageSettings' } }),
-    pageTag: 'SettingsPageModel',
+    pageTag: 'SettingsScreenModel',
     icon: { _tag: 'Icon', name: 'settings' },
   },
   {
@@ -60,7 +60,7 @@ export const navLinkAuths: NavLinkData[] = [
             },
           }
         : { page: pageHome() },
-    pageTag: 'ProfilePageModel',
+    pageTag: 'ProfileScreenModel',
     icon: {
       _tag: 'Avatar',
       getImage: (userOpt) =>

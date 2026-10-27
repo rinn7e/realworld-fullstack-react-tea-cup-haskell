@@ -3,34 +3,41 @@ import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/elem
 import { FormItemMemo } from '@rinn7e/tea-cup-form/component'
 import React, { memo } from 'react'
 
+import type { AppRoute } from '@/common/type/route'
 import { ErrorMessagesMemo } from '@/component/error-messages/component'
+import { Link } from '@/component/link'
 
 import {
   type Props,
   PropsEq,
-  settingsBioField,
-  settingsEmailField,
-  settingsImageField,
-  settingsPasswordConfirmationField,
-  settingsPasswordField,
-  settingsUsernameField,
+  signupEmailField,
+  signupPasswordField,
+  signupUsernameField,
 } from './type'
 
-const SettingsPageComponent = ({ model, dispatch }: Props) => {
-  const form = model.form
+const SignupScreenComponent = ({ model, dispatch }: Props) => {
+  const loginRoute: AppRoute = { page: { _tag: 'PageLogin' } }
 
   return (
     <div
       className='flex min-h-full items-start justify-center px-[16px] pt-[64px] pb-[32px]'
-      data-test='settings-page'
+      data-test='signup-page'
     >
       <div className='flex w-full max-w-[448px] flex-col gap-[24px]'>
-        <h1 className='text-center text-3xl font-bold text-gray-900 dark:text-zinc-100'>
-          Your Settings
-        </h1>
+        <div className='flex flex-col gap-[8px]'>
+          <h1 className='text-center text-3xl font-bold text-gray-900 dark:text-zinc-100'>
+            Sign up
+          </h1>
+          <p className='text-center text-sm'>
+            <Link route={loginRoute} className='text-green-600 hover:underline'>
+              Have an account?
+            </Link>
+          </p>
+        </div>
 
         <form
           className='flex flex-col gap-[24px]'
+          autoComplete='off'
           onSubmit={(e) => {
             e.preventDefault()
             if (RD.isPending(model.requestRd)) {
@@ -47,33 +54,18 @@ const SettingsPageComponent = ({ model, dispatch }: Props) => {
             disabled={RD.isPending(model.requestRd)}
           >
             <FormItemMemo
-              field={settingsImageField}
-              model={form}
+              field={signupUsernameField}
+              model={model.form}
               dispatch={(msg) => dispatch({ _tag: 'FormMsg', subMsg: msg })}
             />
             <FormItemMemo
-              field={settingsUsernameField}
-              model={form}
+              field={signupEmailField}
+              model={model.form}
               dispatch={(msg) => dispatch({ _tag: 'FormMsg', subMsg: msg })}
             />
             <FormItemMemo
-              field={settingsBioField}
-              model={form}
-              dispatch={(msg) => dispatch({ _tag: 'FormMsg', subMsg: msg })}
-            />
-            <FormItemMemo
-              field={settingsEmailField}
-              model={form}
-              dispatch={(msg) => dispatch({ _tag: 'FormMsg', subMsg: msg })}
-            />
-            <FormItemMemo
-              field={settingsPasswordField}
-              model={form}
-              dispatch={(msg) => dispatch({ _tag: 'FormMsg', subMsg: msg })}
-            />
-            <FormItemMemo
-              field={settingsPasswordConfirmationField}
-              model={form}
+              field={signupPasswordField}
+              model={model.form}
               dispatch={(msg) => dispatch({ _tag: 'FormMsg', subMsg: msg })}
             />
           </fieldset>
@@ -82,32 +74,19 @@ const SettingsPageComponent = ({ model, dispatch }: Props) => {
             <ErrorMessagesMemo error={model.requestRd.error} />
           )}
 
-          <div className='flex justify-end pt-[16px]'>
+          <div className='pt-[16px]'>
             <DsButtonMemo
               type='submit'
+              isFullWidth={true}
               isLoading={RD.isPending(model.requestRd)}
             >
-              Update Settings
+              Sign up
             </DsButtonMemo>
           </div>
         </form>
-
-        <hr className='border-gray-200 dark:border-zinc-800' />
-
-        <div className='flex flex-col items-start'>
-          <DsButtonMemo
-            color='red'
-            variant='outline'
-            dataTest='logout-btn'
-            onClick={() => dispatch({ _tag: 'Logout' })}
-            className='self-start'
-          >
-            Or click here to logout.
-          </DsButtonMemo>
-        </div>
       </div>
     </div>
   )
 }
 
-export const SettingsPageMemo = memo(SettingsPageComponent, PropsEq.equals)
+export const SignupScreenMemo = memo(SignupScreenComponent, PropsEq.equals)

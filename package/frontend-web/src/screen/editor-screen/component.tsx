@@ -14,7 +14,7 @@ import {
   editorTitleField,
 } from './type'
 
-const EditorPageComponent = ({ model, dispatch }: Props) => {
+const EditorScreenComponent = ({ model, dispatch }: Props) => {
   const form = model.form
 
   return (
@@ -75,4 +75,4 @@ const EditorPageComponent = ({ model, dispatch }: Props) => {
   )
 }
 
-export const EditorPageMemo = memo(EditorPageComponent, PropsEq.equals)
+export const EditorScreenMemo = memo(EditorScreenComponent, PropsEq.equals)

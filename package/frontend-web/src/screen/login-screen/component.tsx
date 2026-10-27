@@ -10,27 +10,29 @@ import { Link } from '@/component/link'
 import {
   type Props,
   PropsEq,
-  signupEmailField,
-  signupPasswordField,
-  signupUsernameField,
+  loginEmailField,
+  loginPasswordField,
 } from './type'
 
-const SignupPageComponent = ({ model, dispatch }: Props) => {
-  const loginRoute: AppRoute = { page: { _tag: 'PageLogin' } }
+const LoginScreenComponent = ({ model, dispatch }: Props) => {
+  const signupRoute: AppRoute = { page: { _tag: 'PageSignup' } }
 
   return (
     <div
       className='flex min-h-full items-start justify-center px-[16px] pt-[64px] pb-[32px]'
-      data-test='signup-page'
+      data-test='login-page'
     >
       <div className='flex w-full max-w-[448px] flex-col gap-[24px]'>
         <div className='flex flex-col gap-[8px]'>
           <h1 className='text-center text-3xl font-bold text-gray-900 dark:text-zinc-100'>
-            Sign up
+            Sign in
           </h1>
           <p className='text-center text-sm'>
-            <Link route={loginRoute} className='text-green-600 hover:underline'>
-              Have an account?
+            <Link
+              route={signupRoute}
+              className='text-green-600 hover:underline'
+            >
+              Need an account?
             </Link>
           </p>
         </div>
@@ -54,17 +56,12 @@ const SignupPageComponent = ({ model, dispatch }: Props) => {
             disabled={RD.isPending(model.requestRd)}
           >
             <FormItemMemo
-              field={signupUsernameField}
+              field={loginEmailField}
               model={model.form}
               dispatch={(msg) => dispatch({ _tag: 'FormMsg', subMsg: msg })}
             />
             <FormItemMemo
-              field={signupEmailField}
-              model={model.form}
-              dispatch={(msg) => dispatch({ _tag: 'FormMsg', subMsg: msg })}
-            />
-            <FormItemMemo
-              field={signupPasswordField}
+              field={loginPasswordField}
               model={model.form}
               dispatch={(msg) => dispatch({ _tag: 'FormMsg', subMsg: msg })}
             />
@@ -79,8 +76,9 @@ const SignupPageComponent = ({ model, dispatch }: Props) => {
               type='submit'
               isFullWidth={true}
               isLoading={RD.isPending(model.requestRd)}
+              dataTest='login-btn'
             >
-              Sign up
+              Sign in
             </DsButtonMemo>
           </div>
         </form>
@@ -89,4 +87,4 @@ const SignupPageComponent = ({ model, dispatch }: Props) => {
   )
 }
 
-export const SignupPageMemo = memo(SignupPageComponent, PropsEq.equals)
+export const LoginScreenMemo = memo(LoginScreenComponent, PropsEq.equals)

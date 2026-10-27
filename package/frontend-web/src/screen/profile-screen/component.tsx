@@ -23,7 +23,7 @@ import { Link } from '@/component/link'
 import { type Props, PropsEq } from './type'
 import { mkPaginationConfig } from './update'
 
-const ProfilePageComponent = ({
+const ProfileScreenComponent = ({
   model,
   shared,
   dispatch,
@@ -254,4 +254,4 @@ const ProfileNotFoundView = ({ route }: ProfileNotFoundProps) => {
   )
 }
 
-export const ProfilePageMemo = memo(ProfilePageComponent, PropsEq.equals)
+export const ProfileScreenMemo = memo(ProfileScreenComponent, PropsEq.equals)

@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { pageHome } from '@/common/type/route'
 import { Link } from '@/component/link'
 
-const NotFoundPageComponent = () => {
+const NotFoundScreenComponent = () => {
   return (
     <div className='flex min-h-[60vh] flex-col items-center justify-center px-[16px] text-center'>
       <div className='flex flex-col gap-[16px]'>
@@ -29,4 +29,4 @@ const NotFoundPageComponent = () => {
   )
 }
 
-export const NotFoundPageMemo = memo(NotFoundPageComponent)
+export const NotFoundScreenMemo = memo(NotFoundScreenComponent)

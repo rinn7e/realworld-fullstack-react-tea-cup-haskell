@@ -5,30 +5,30 @@ import type { Option } from 'fp-ts/lib/Option'
 
 import type { User, UserWithToken } from '@/common/api'
 import type * as DebugPanel from '@/component/debug-panel'
-import type * as ArticlePage from '@/page/article-page'
-import type * as EditorPage from '@/page/editor-page'
-import type * as HomePage from '@/page/home-page'
-import type * as LoginPage from '@/page/login-page'
-import type * as ProfilePage from '@/page/profile-page'
-import type * as SettingsPage from '@/page/settings-page'
-import type * as SignupPage from '@/page/signup-page'
+import type * as ArticleScreen from '@/screen/article-screen'
+import type * as EditorScreen from '@/screen/editor-screen'
+import type * as HomeScreen from '@/screen/home-screen'
+import type * as LoginScreen from '@/screen/login-screen'
+import type * as ProfileScreen from '@/screen/profile-screen'
+import type * as SettingsScreen from '@/screen/settings-screen'
+import type * as SignupScreen from '@/screen/signup-screen'
 import type { ColorScheme } from '@/theme/type'
 
 import { type AppRoute } from './common/type/route'
 import { type Shared } from './common/type/shared'
 
-export type PageModel =
-  | { _tag: 'HomePageModel'; model: HomePage.Model }
-  | { _tag: 'ArticlePageModel'; model: ArticlePage.Model }
-  | { _tag: 'LoginPageModel'; model: LoginPage.Model }
-  | { _tag: 'SignupPageModel'; model: SignupPage.Model }
-  | { _tag: 'SettingsPageModel'; model: SettingsPage.Model }
-  | { _tag: 'ProfilePageModel'; model: ProfilePage.Model }
-  | { _tag: 'EditorPageModel'; model: EditorPage.Model }
-  | { _tag: 'NotFoundPageModel' }
+export type ScreenModel =
+  | { _tag: 'HomeScreenModel'; model: HomeScreen.Model }
+  | { _tag: 'ArticleScreenModel'; model: ArticleScreen.Model }
+  | { _tag: 'LoginScreenModel'; model: LoginScreen.Model }
+  | { _tag: 'SignupScreenModel'; model: SignupScreen.Model }
+  | { _tag: 'SettingsScreenModel'; model: SettingsScreen.Model }
+  | { _tag: 'ProfileScreenModel'; model: ProfileScreen.Model }
+  | { _tag: 'EditorScreenModel'; model: EditorScreen.Model }
+  | { _tag: 'NotFoundScreenModel' }
 
 export type Model = {
-  router: TeaRouter.Model<AppRoute, PageModel>
+  router: TeaRouter.Model<AppRoute, ScreenModel>
   unavailableMode: boolean
   shared: Shared
   debugPanel: DebugPanel.Model
@@ -49,13 +49,13 @@ export type Msg =
     }
   | { _tag: 'TeaRouterMsg'; subMsg: TeaRouter.Msg<AppRoute> }
   | { _tag: 'SetUser'; user: Option<UserWithToken> }
-  | { _tag: 'HomePageMsg'; subMsg: HomePage.Msg }
-  | { _tag: 'ArticlePageMsg'; subMsg: ArticlePage.Msg }
-  | { _tag: 'LoginPageMsg'; subMsg: LoginPage.Msg }
-  | { _tag: 'SignupPageMsg'; subMsg: SignupPage.Msg }
-  | { _tag: 'SettingsPageMsg'; subMsg: SettingsPage.Msg }
-  | { _tag: 'ProfilePageMsg'; subMsg: ProfilePage.Msg }
-  | { _tag: 'EditorPageMsg'; subMsg: EditorPage.Msg }
+  | { _tag: 'HomeScreenMsg'; subMsg: HomeScreen.Msg }
+  | { _tag: 'ArticleScreenMsg'; subMsg: ArticleScreen.Msg }
+  | { _tag: 'LoginScreenMsg'; subMsg: LoginScreen.Msg }
+  | { _tag: 'SignupScreenMsg'; subMsg: SignupScreen.Msg }
+  | { _tag: 'SettingsScreenMsg'; subMsg: SettingsScreen.Msg }
+  | { _tag: 'ProfileScreenMsg'; subMsg: ProfileScreen.Msg }
+  | { _tag: 'EditorScreenMsg'; subMsg: EditorScreen.Msg }
   | { _tag: 'DebugPanelMsg'; subMsg: DebugPanel.Msg }
   | { _tag: 'SidebarMsg'; subMsg: DsFloatingSidebar.Msg }
   | { _tag: 'NavbarMsg'; subMsg: DsNavbar.Msg }

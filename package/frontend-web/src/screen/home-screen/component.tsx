@@ -23,7 +23,7 @@ import { HomeTabLinkMemo } from './sub-component/home-tab-link'
 import { type Props, PropsEq } from './type'
 import { mkPaginationConfig } from './update'
 
-const HomePageComponent = ({ model, shared, dispatch }: Props) => {
+const HomeScreenComponent = ({ model, shared, dispatch }: Props) => {
   const paginationConfig = mkPaginationConfig(shared, model.tab)
 
   return (
@@ -144,4 +144,4 @@ const HomePageComponent = ({ model, shared, dispatch }: Props) => {
   )
 }
 
-export const HomePageMemo = memo(HomePageComponent, PropsEq.equals)
+export const HomeScreenMemo = memo(HomeScreenComponent, PropsEq.equals)

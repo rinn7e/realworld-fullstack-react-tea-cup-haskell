@@ -22,17 +22,17 @@ import {
 } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
 import * as DebugPanel from '@/component/debug-panel'
-import * as ArticlePage from '@/page/article-page'
-import * as EditorPage from '@/page/editor-page'
-import * as HomePage from '@/page/home-page'
-import * as LoginPage from '@/page/login-page'
-import * as ProfilePage from '@/page/profile-page'
-import * as SettingsPage from '@/page/settings-page'
-import * as SignupPage from '@/page/signup-page'
 import { mkRouterConfig } from '@/router-config'
+import * as ArticleScreen from '@/screen/article-screen'
+import * as EditorScreen from '@/screen/editor-screen'
+import * as HomeScreen from '@/screen/home-screen'
+import * as LoginScreen from '@/screen/login-screen'
+import * as ProfileScreen from '@/screen/profile-screen'
+import * as SettingsScreen from '@/screen/settings-screen'
+import * as SignupScreen from '@/screen/signup-screen'
 import type { ColorScheme } from '@/theme/type'
 import { loadColorScheme, setColorSchemeCmd } from '@/theme/util'
-import { type Model, type Msg, type PageModel, teaRouterMsg } from '@/type'
+import { type Model, type Msg, type ScreenModel, teaRouterMsg } from '@/type'
 
 import { findNavItemRoute } from './navbar/util'
 
@@ -138,83 +138,83 @@ export const initializeCmd = (location: Location): Cmd<Msg> => {
   }
 }
 
-const initPageModel = (
+const initScreenModel = (
   route: AppRoute,
   shared: Shared,
-): [PageModel, Cmd<Msg>] => {
+): [ScreenModel, Cmd<Msg>] => {
   switch (route.page._tag) {
     case 'PageHome': {
-      const [model, cmd] = HomePage.init(
+      const [model, cmd] = HomeScreen.init(
         route.page.tab,
         route.page.page,
         shared,
       )
       return [
-        { _tag: 'HomePageModel', model },
-        cmd.map((m): Msg => ({ _tag: 'HomePageMsg', subMsg: m })),
+        { _tag: 'HomeScreenModel', model },
+        cmd.map((m): Msg => ({ _tag: 'HomeScreenMsg', subMsg: m })),
       ]
     }
     case 'PageArticle': {
-      const [model, cmd] = ArticlePage.init(route.page.slug, shared)
+      const [model, cmd] = ArticleScreen.init(route.page.slug, shared)
       return [
-        { _tag: 'ArticlePageModel', model },
-        cmd.map((m): Msg => ({ _tag: 'ArticlePageMsg', subMsg: m })),
+        { _tag: 'ArticleScreenModel', model },
+        cmd.map((m): Msg => ({ _tag: 'ArticleScreenMsg', subMsg: m })),
       ]
     }
     case 'PageLogin': {
-      const [model, cmd] = LoginPage.init(shared)
+      const [model, cmd] = LoginScreen.init(shared)
       return [
-        { _tag: 'LoginPageModel', model },
-        cmd.map((m): Msg => ({ _tag: 'LoginPageMsg', subMsg: m })),
+        { _tag: 'LoginScreenModel', model },
+        cmd.map((m): Msg => ({ _tag: 'LoginScreenMsg', subMsg: m })),
       ]
     }
     case 'PageSignup': {
-      const [model, cmd] = SignupPage.init(shared)
+      const [model, cmd] = SignupScreen.init(shared)
       return [
-        { _tag: 'SignupPageModel', model },
-        cmd.map((m): Msg => ({ _tag: 'SignupPageMsg', subMsg: m })),
+        { _tag: 'SignupScreenModel', model },
+        cmd.map((m): Msg => ({ _tag: 'SignupScreenMsg', subMsg: m })),
       ]
     }
     case 'PageSettings': {
       if (shared.user._tag === 'None') {
-        return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
+        return [{ _tag: 'NotFoundScreenModel' }, Cmd.none()]
       } else {
-        const [model, cmd] = SettingsPage.init(shared.user.value)
+        const [model, cmd] = SettingsScreen.init(shared.user.value)
         return [
-          { _tag: 'SettingsPageModel', model },
-          cmd.map((m): Msg => ({ _tag: 'SettingsPageMsg', subMsg: m })),
+          { _tag: 'SettingsScreenModel', model },
+          cmd.map((m): Msg => ({ _tag: 'SettingsScreenMsg', subMsg: m })),
         ]
       }
     }
     case 'PageProfile': {
-      const [model, cmd] = ProfilePage.init(
+      const [model, cmd] = ProfileScreen.init(
         route.page.username,
         route.page.favorites,
         shared,
       )
       return [
-        { _tag: 'ProfilePageModel', model },
-        cmd.map((m): Msg => ({ _tag: 'ProfilePageMsg', subMsg: m })),
+        { _tag: 'ProfileScreenModel', model },
+        cmd.map((m): Msg => ({ _tag: 'ProfileScreenMsg', subMsg: m })),
       ]
     }
     case 'PageEditor': {
       if (shared.user._tag === 'None') {
-        return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
+        return [{ _tag: 'NotFoundScreenModel' }, Cmd.none()]
       } else {
-        const [model, cmd] = EditorPage.init(shared, route.page.slug)
+        const [model, cmd] = EditorScreen.init(shared, route.page.slug)
         return [
-          { _tag: 'EditorPageModel', model },
-          cmd.map((m): Msg => ({ _tag: 'EditorPageMsg', subMsg: m })),
+          { _tag: 'EditorScreenModel', model },
+          cmd.map((m): Msg => ({ _tag: 'EditorScreenMsg', subMsg: m })),
         ]
       }
     }
     default:
-      return [{ _tag: 'NotFoundPageModel' }, Cmd.none()]
+      return [{ _tag: 'NotFoundScreenModel' }, Cmd.none()]
   }
 }
 
-export const routerConfig = mkRouterConfig<PageModel, Msg>(
-  initPageModel,
+export const routerConfig = mkRouterConfig<ScreenModel, Msg>(
+  initScreenModel,
   teaRouterMsg,
 )
 
@@ -248,10 +248,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         Cmd.none(),
       ]
     }
-    case 'HomePageMsg': {
+    case 'HomeScreenMsg': {
       const pageModel = TeaRouter.getPageModel(model.router)
-      if (pageModel._tag === 'HomePageModel') {
-        const [homeModel, homeCmd] = HomePage.update(model.shared)(
+      if (pageModel._tag === 'HomeScreenModel') {
+        const [homeModel, homeCmd] = HomeScreen.update(model.shared)(
           msg.subMsg,
           pageModel.model,
         )
@@ -260,23 +260,23 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
             {
               ...model,
               router: TeaRouter.setPageModel(model.router, {
-                _tag: 'HomePageModel',
+                _tag: 'HomeScreenModel',
                 model: homeModel,
               }),
             },
             homeCmd.map((subMsg): Msg => ({
-              _tag: 'HomePageMsg',
+              _tag: 'HomeScreenMsg',
               subMsg,
             })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'ChangeTab') {
-              return interceptChangeTabFromHomePage(msg.subMsg.tab)(m)
+              return interceptChangeTabFromHomeScreen(msg.subMsg.tab)(m)
             } else if (
               msg.subMsg._tag === 'PaginationMsg' &&
               msg.subMsg.subMsg._tag === 'ChangePage'
             ) {
-              return interceptPaginationChangePageFromHomePage(
+              return interceptPaginationChangePageFromHomeScreen(
                 msg.subMsg.subMsg.page,
               )(m)
             } else {
@@ -288,10 +288,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [model, Cmd.none()]
       }
     }
-    case 'ArticlePageMsg': {
+    case 'ArticleScreenMsg': {
       const pageModel = TeaRouter.getPageModel(model.router)
-      if (pageModel._tag === 'ArticlePageModel') {
-        const [articleModel, articleCmd] = ArticlePage.update(model.shared)(
+      if (pageModel._tag === 'ArticleScreenModel') {
+        const [articleModel, articleCmd] = ArticleScreen.update(model.shared)(
           msg.subMsg,
           pageModel.model,
         )
@@ -300,11 +300,14 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
             {
               ...model,
               router: TeaRouter.setPageModel(model.router, {
-                _tag: 'ArticlePageModel',
+                _tag: 'ArticleScreenModel',
                 model: articleModel,
               }),
             },
-            articleCmd.map((m): Msg => ({ _tag: 'ArticlePageMsg', subMsg: m })),
+            articleCmd.map((m): Msg => ({
+              _tag: 'ArticleScreenMsg',
+              subMsg: m,
+            })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (
@@ -324,10 +327,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [model, Cmd.none()]
       }
     }
-    case 'LoginPageMsg': {
+    case 'LoginScreenMsg': {
       const pageModel = TeaRouter.getPageModel(model.router)
-      if (pageModel._tag === 'LoginPageModel') {
-        const [loginModel, loginCmd] = LoginPage.update(model.shared)(
+      if (pageModel._tag === 'LoginScreenModel') {
+        const [loginModel, loginCmd] = LoginScreen.update(model.shared)(
           msg.subMsg,
           pageModel.model,
         )
@@ -337,11 +340,11 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
             {
               ...model,
               router: TeaRouter.setPageModel(model.router, {
-                _tag: 'LoginPageModel',
+                _tag: 'LoginScreenModel',
                 model: loginModel,
               }),
             },
-            loginCmd.map((m): Msg => ({ _tag: 'LoginPageMsg', subMsg: m })),
+            loginCmd.map((m): Msg => ({ _tag: 'LoginScreenMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (
@@ -372,10 +375,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [model, Cmd.none()]
       }
     }
-    case 'SignupPageMsg': {
+    case 'SignupScreenMsg': {
       const pageModel = TeaRouter.getPageModel(model.router)
-      if (pageModel._tag === 'SignupPageModel') {
-        const [signupModel, signupCmd] = SignupPage.update(model.shared)(
+      if (pageModel._tag === 'SignupScreenModel') {
+        const [signupModel, signupCmd] = SignupScreen.update(model.shared)(
           msg.subMsg,
           pageModel.model,
         )
@@ -385,11 +388,11 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
             {
               ...model,
               router: TeaRouter.setPageModel(model.router, {
-                _tag: 'SignupPageModel',
+                _tag: 'SignupScreenModel',
                 model: signupModel,
               }),
             },
-            signupCmd.map((m): Msg => ({ _tag: 'SignupPageMsg', subMsg: m })),
+            signupCmd.map((m): Msg => ({ _tag: 'SignupScreenMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (
@@ -420,39 +423,38 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [model, Cmd.none()]
       }
     }
-    case 'SettingsPageMsg': {
+    case 'SettingsScreenMsg': {
       const pageModel = TeaRouter.getPageModel(model.router)
       if (
-        pageModel._tag === 'SettingsPageModel' &&
+        pageModel._tag === 'SettingsScreenModel' &&
         model.shared.user._tag === 'Some'
       ) {
-        const [settingsModel, settingsCmd] = SettingsPage.update(model.shared)(
-          msg.subMsg,
-          pageModel.model,
-        )
+        const [settingsModel, settingsCmd] = SettingsScreen.update(
+          model.shared,
+        )(msg.subMsg, pageModel.model)
 
         return pipe(
           [
             {
               ...model,
               router: TeaRouter.setPageModel(model.router, {
-                _tag: 'SettingsPageModel',
+                _tag: 'SettingsScreenModel',
                 model: settingsModel,
               }),
             },
             settingsCmd.map((m): Msg => ({
-              _tag: 'SettingsPageMsg',
+              _tag: 'SettingsScreenMsg',
               subMsg: m,
             })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (msg.subMsg._tag === 'Logout') {
-              return interceptLogoutFromSettingPage(m)
+              return interceptLogoutFromSettingsScreen(m)
             } else if (
               msg.subMsg._tag === 'SubmitResponse' &&
               msg.subMsg.result.tag === 'Ok'
             ) {
-              return interceptSubmitResponseOkFromSettingPage(
+              return interceptSubmitResponseOkFromSettingsScreen(
                 msg.subMsg.result.value.user,
               )(m)
             } else {
@@ -464,16 +466,16 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [model, Cmd.none()]
       }
     }
-    case 'ProfilePageMsg': {
+    case 'ProfileScreenMsg': {
       const pageModel = TeaRouter.getPageModel(model.router)
       const currentRoute = TeaRouter.getRoute(model.router)
       if (
-        pageModel._tag === 'ProfilePageModel' &&
+        pageModel._tag === 'ProfileScreenModel' &&
         currentRoute.page._tag === 'PageProfile'
       ) {
         const username = currentRoute.page.username
 
-        const [profileModel, profileCmd] = ProfilePage.update(
+        const [profileModel, profileCmd] = ProfileScreen.update(
           username,
           model.shared,
         )(msg.subMsg, pageModel.model)
@@ -483,11 +485,14 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
             {
               ...model,
               router: TeaRouter.setPageModel(model.router, {
-                _tag: 'ProfilePageModel',
+                _tag: 'ProfileScreenModel',
                 model: profileModel,
               }),
             },
-            profileCmd.map((m): Msg => ({ _tag: 'ProfilePageMsg', subMsg: m })),
+            profileCmd.map((m): Msg => ({
+              _tag: 'ProfileScreenMsg',
+              subMsg: m,
+            })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             // Intercept `ToggleFavorites` to update the url accordingly
@@ -509,13 +514,13 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [model, Cmd.none()]
       }
     }
-    case 'EditorPageMsg': {
+    case 'EditorScreenMsg': {
       const pageModel = TeaRouter.getPageModel(model.router)
       if (
-        pageModel._tag === 'EditorPageModel' &&
+        pageModel._tag === 'EditorScreenModel' &&
         model.shared.user._tag === 'Some'
       ) {
-        const [editorModel, editorCmd] = EditorPage.update(model.shared)(
+        const [editorModel, editorCmd] = EditorScreen.update(model.shared)(
           msg.subMsg,
           pageModel.model,
         )
@@ -525,11 +530,11 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
             {
               ...model,
               router: TeaRouter.setPageModel(model.router, {
-                _tag: 'EditorPageModel',
+                _tag: 'EditorScreenModel',
                 model: editorModel,
               }),
             },
-            editorCmd.map((m): Msg => ({ _tag: 'EditorPageMsg', subMsg: m })),
+            editorCmd.map((m): Msg => ({ _tag: 'EditorScreenMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
             if (
@@ -702,7 +707,7 @@ const changeColorSchemeHandler =
 
 // Child Msg interception handler
 
-const interceptLogoutFromSettingPage = (m: Model): [Model, Cmd<Msg>] => {
+const interceptLogoutFromSettingsScreen = (m: Model): [Model, Cmd<Msg>] => {
   removeToken()
   const nextModel: Model = {
     ...m,
@@ -714,7 +719,7 @@ const interceptLogoutFromSettingPage = (m: Model): [Model, Cmd<Msg>] => {
   )
 }
 
-const interceptSubmitResponseOkFromSettingPage =
+const interceptSubmitResponseOkFromSettingsScreen =
   (userWithToken: UserWithToken) =>
   (m: Model): [Model, Cmd<Msg>] => {
     saveToken(userWithToken.token)
@@ -744,7 +749,7 @@ const interceptSubmitResponseOkFromSettingPage =
     )
   }
 
-const interceptChangeTabFromHomePage =
+const interceptChangeTabFromHomeScreen =
   (tab: HomeTab) =>
   (m: Model): [Model, Cmd<Msg>] => {
     if (tab._tag === 'UserFeedTab' && m.shared.user._tag === 'None') {
@@ -761,7 +766,7 @@ const interceptChangeTabFromHomePage =
     }
   }
 
-const interceptPaginationChangePageFromHomePage =
+const interceptPaginationChangePageFromHomeScreen =
   (page: number) =>
   (m: Model): [Model, Cmd<Msg>] => {
     const currentRoute = TeaRouter.getRoute(m.router)
