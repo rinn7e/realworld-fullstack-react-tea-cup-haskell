@@ -1,8 +1,7 @@
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import type * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
-import type * as TeaRouter from '@rinn7e/tea-cup-router'
 
-import type { AppRoute } from '@/common/type/route'
+import type { NavigationMsg, Screen } from '@/common/type/destination'
 import type * as BlockScreen from '@/screen/block-screen'
 import type * as BoxScreen from '@/screen/box-screen'
 import type * as BreadcrumbScreen from '@/screen/breadcrumb-screen'
@@ -47,6 +46,9 @@ import type * as TextareaScreen from '@/screen/textarea-screen'
 import type * as TitleScreen from '@/screen/title-screen'
 import type { ColorScheme } from '@/theme/type'
 
+// The screen shown, as its model. Its tag is the destination's screen
+// (`currentScreenOf`): a `currentScreen` field next to it would say the
+// same thing twice.
 export type ScreenModel =
   | { readonly _tag: 'HomeScreenModel'; readonly model: HomeScreen.Model }
   | { readonly _tag: 'BlockScreenModel'; readonly model: BlockScreen.Model }
@@ -128,7 +130,7 @@ export type ScreenModel =
     }
 
 export type Model = {
-  readonly router: TeaRouter.Model<AppRoute, ScreenModel>
+  readonly screenModel: ScreenModel
   readonly searchQuery: string
   readonly sidebarModel: DsSidebar.Model
   readonly rightSidebarModel: DsSidebar.Model
@@ -140,10 +142,7 @@ export type Model = {
 export type Msg =
   | { readonly _tag: 'NoOp' }
   | { readonly _tag: 'Init'; readonly location: Location }
-  | {
-      readonly _tag: 'TeaRouterMsg'
-      readonly subMsg: TeaRouter.Msg<AppRoute>
-    }
+  | { readonly _tag: 'NavigationMsg'; readonly subMsg: NavigationMsg }
   | { readonly _tag: 'UpdateSearch'; readonly query: string }
   | { readonly _tag: 'SetColorScheme'; readonly scheme: ColorScheme }
   | { readonly _tag: 'ToggleThemeMenu' }
@@ -215,7 +214,92 @@ export type Msg =
   | { readonly _tag: 'TitleScreenMsg'; readonly subMsg: TitleScreen.Msg }
   | { readonly _tag: 'NotFoundScreenMsg'; readonly subMsg: NotFoundScreen.Msg }
 
-export const teaRouterMsg = (subMsg: TeaRouter.Msg<AppRoute>): Msg => ({
-  _tag: 'TeaRouterMsg',
-  subMsg,
-})
+// The screen shown (the destination's `screen`, `destinationOf`)
+export const currentScreenOf = (screenModel: ScreenModel): Screen => {
+  switch (screenModel._tag) {
+    case 'HomeScreenModel':
+      return { _tag: 'HomeScreen' }
+    case 'BlockScreenModel':
+      return { _tag: 'BlockScreen' }
+    case 'BoxScreenModel':
+      return { _tag: 'BoxScreen' }
+    case 'BreadcrumbScreenModel':
+      return { _tag: 'BreadcrumbScreen' }
+    case 'ButtonScreenModel':
+      return { _tag: 'ButtonScreen' }
+    case 'CardScreenModel':
+      return { _tag: 'CardScreen' }
+    case 'CheckboxScreenModel':
+      return { _tag: 'CheckboxScreen' }
+    case 'ColumnsScreenModel':
+      return { _tag: 'ColumnsScreen' }
+    case 'ContainerScreenModel':
+      return { _tag: 'ContainerScreen' }
+    case 'ContentScreenModel':
+      return { _tag: 'ContentScreen' }
+    case 'DeleteScreenModel':
+      return { _tag: 'DeleteScreen' }
+    case 'DotLoadingScreenModel':
+      return { _tag: 'DotLoadingScreen' }
+    case 'DropdownScreenModel':
+      return { _tag: 'DropdownScreen' }
+    case 'FieldScreenModel':
+      return { _tag: 'FieldScreen' }
+    case 'FileScreenModel':
+      return { _tag: 'FileScreen' }
+    case 'FooterScreenModel':
+      return { _tag: 'FooterScreen' }
+    case 'HeroScreenModel':
+      return { _tag: 'HeroScreen' }
+    case 'IconScreenModel':
+      return { _tag: 'IconScreen' }
+    case 'ImageScreenModel':
+      return { _tag: 'ImageScreen' }
+    case 'InputScreenModel':
+      return { _tag: 'InputScreen' }
+    case 'LevelScreenModel':
+      return { _tag: 'LevelScreen' }
+    case 'MediaObjectScreenModel':
+      return { _tag: 'MediaObjectScreen' }
+    case 'MenuScreenModel':
+      return { _tag: 'MenuScreen' }
+    case 'MessageScreenModel':
+      return { _tag: 'MessageScreen' }
+    case 'ModalScreenModel':
+      return { _tag: 'ModalScreen' }
+    case 'NavbarScreenModel':
+      return { _tag: 'NavbarScreen' }
+    case 'FloatingSidebarScreenModel':
+      return { _tag: 'FloatingSidebarScreen' }
+    case 'SidebarScreenModel':
+      return { _tag: 'SidebarScreen' }
+    case 'NotificationScreenModel':
+      return { _tag: 'NotificationScreen' }
+    case 'PaginationScreenModel':
+      return { _tag: 'PaginationScreen' }
+    case 'PanelScreenModel':
+      return { _tag: 'PanelScreen' }
+    case 'PopoverScreenModel':
+      return { _tag: 'PopoverScreen' }
+    case 'ProgressScreenModel':
+      return { _tag: 'ProgressScreen' }
+    case 'RadioScreenModel':
+      return { _tag: 'RadioScreen' }
+    case 'SectionScreenModel':
+      return { _tag: 'SectionScreen' }
+    case 'SelectScreenModel':
+      return { _tag: 'SelectScreen' }
+    case 'TableScreenModel':
+      return { _tag: 'TableScreen' }
+    case 'TabsScreenModel':
+      return { _tag: 'TabsScreen' }
+    case 'TagScreenModel':
+      return { _tag: 'TagScreen' }
+    case 'TextareaScreenModel':
+      return { _tag: 'TextareaScreen' }
+    case 'TitleScreenModel':
+      return { _tag: 'TitleScreen' }
+    case 'NotFoundScreenModel':
+      return { _tag: 'NotFoundScreen' }
+  }
+}

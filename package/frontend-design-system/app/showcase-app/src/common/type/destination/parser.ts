@@ -12,50 +12,50 @@ import {
 import * as O from 'fp-ts/lib/Option'
 
 import {
-  type AppPage,
-  type AppRoute,
-  pageBlock,
-  pageBox,
-  pageBreadcrumb,
-  pageButton,
-  pageCard,
-  pageCheckbox,
-  pageColumns,
-  pageContainer,
-  pageContent,
-  pageDelete,
-  pageDotLoading,
-  pageDropdown,
-  pageField,
-  pageFile,
-  pageFloatingSidebar,
-  pageFooter,
-  pageHero,
-  pageHome,
-  pageIcon,
-  pageImage,
-  pageInput,
-  pageLevel,
-  pageMediaObject,
-  pageMenu,
-  pageMessage,
-  pageModal,
-  pageNavbar,
-  pageNotFound,
-  pageNotification,
-  pagePagination,
-  pagePanel,
-  pagePopover,
-  pageProgress,
-  pageRadio,
-  pageSection,
-  pageSelect,
-  pageSidebar,
-  pageTable,
-  pageTabs,
-  pageTag,
-  pageTextarea,
-  pageTitle,
+  type Destination,
+  type Screen,
+  blockScreen,
+  boxScreen,
+  breadcrumbScreen,
+  buttonScreen,
+  cardScreen,
+  checkboxScreen,
+  columnsScreen,
+  containerScreen,
+  contentScreen,
+  deleteScreen,
+  dotLoadingScreen,
+  dropdownScreen,
+  fieldScreen,
+  fileScreen,
+  floatingSidebarScreen,
+  footerScreen,
+  heroScreen,
+  homeScreen,
+  iconScreen,
+  imageScreen,
+  inputScreen,
+  levelScreen,
+  mediaObjectScreen,
+  menuScreen,
+  messageScreen,
+  modalScreen,
+  navbarScreen,
+  notFoundScreen,
+  notificationScreen,
+  paginationScreen,
+  panelScreen,
+  popoverScreen,
+  progressScreen,
+  radioScreen,
+  sectionScreen,
+  selectScreen,
+  sidebarScreen,
+  tableScreen,
+  tabsScreen,
+  tagScreen,
+  textareaScreen,
+  titleScreen,
 } from './type'
 
 export const removeBaseUrl = (href: string): string => {
@@ -72,6 +72,8 @@ export const addBaseUrl = (path: string): string => {
   const cleanPath = path.replace(/^\//, '')
   return '/' + cleanPath
 }
+
+// The only code that knows how a destination is spelled in the URL
 
 const homeMatch = end
 const blockMatch = lit('block').and(end)
@@ -120,144 +122,142 @@ const anyStrings = new Match<object>(
   new Formatter((r) => r),
 )
 
-const appRouter: Parser<AppPage> = zero<AppPage>()
-  .alt(homeMatch.parser.map(() => pageHome()))
-  .alt(blockMatch.parser.map(() => pageBlock()))
-  .alt(boxMatch.parser.map(() => pageBox()))
-  .alt(buttonMatch.parser.map(() => pageButton()))
-  .alt(contentMatch.parser.map(() => pageContent()))
-  .alt(deleteMatch.parser.map(() => pageDelete()))
-  .alt(iconMatch.parser.map(() => pageIcon()))
-  .alt(imageMatch.parser.map(() => pageImage()))
-  .alt(notificationMatch.parser.map(() => pageNotification()))
-  .alt(progressMatch.parser.map(() => pageProgress()))
-  .alt(tableMatch.parser.map(() => pageTable()))
-  .alt(tagMatch.parser.map(() => pageTag()))
-  .alt(titleMatch.parser.map(() => pageTitle()))
-  .alt(breadcrumbMatch.parser.map(() => pageBreadcrumb()))
-  .alt(cardMatch.parser.map(() => pageCard()))
-  .alt(dropdownMatch.parser.map(() => pageDropdown()))
-  .alt(menuMatch.parser.map(() => pageMenu()))
-  .alt(messageMatch.parser.map(() => pageMessage()))
-  .alt(modalMatch.parser.map(() => pageModal()))
-  .alt(navbarMatch.parser.map(() => pageNavbar()))
-  .alt(floatingSidebarMatch.parser.map(() => pageFloatingSidebar()))
-  .alt(sidebarMatch.parser.map(() => pageSidebar()))
-  .alt(paginationMatch.parser.map(() => pagePagination()))
-  .alt(panelMatch.parser.map(() => pagePanel()))
-  .alt(popoverMatch.parser.map(() => pagePopover()))
-  .alt(tabsMatch.parser.map(() => pageTabs()))
-  .alt(fieldMatch.parser.map(() => pageField()))
-  .alt(inputMatch.parser.map(() => pageInput()))
-  .alt(textareaMatch.parser.map(() => pageTextarea()))
-  .alt(selectMatch.parser.map(() => pageSelect()))
-  .alt(checkboxMatch.parser.map(() => pageCheckbox()))
-  .alt(radioMatch.parser.map(() => pageRadio()))
-  .alt(fileMatch.parser.map(() => pageFile()))
-  .alt(containerMatch.parser.map(() => pageContainer()))
-  .alt(heroMatch.parser.map(() => pageHero()))
-  .alt(sectionMatch.parser.map(() => pageSection()))
-  .alt(levelMatch.parser.map(() => pageLevel()))
-  .alt(mediaobjectMatch.parser.map(() => pageMediaObject()))
-  .alt(footerMatch.parser.map(() => pageFooter()))
-  .alt(columnsMatch.parser.map(() => pageColumns()))
-  .alt(dotloadingMatch.parser.map(() => pageDotLoading()))
-  .alt(anyStrings.parser.map(() => pageNotFound()))
+const screenParser: Parser<Screen> = zero<Screen>()
+  .alt(homeMatch.parser.map(() => homeScreen()))
+  .alt(blockMatch.parser.map(() => blockScreen()))
+  .alt(boxMatch.parser.map(() => boxScreen()))
+  .alt(buttonMatch.parser.map(() => buttonScreen()))
+  .alt(contentMatch.parser.map(() => contentScreen()))
+  .alt(deleteMatch.parser.map(() => deleteScreen()))
+  .alt(iconMatch.parser.map(() => iconScreen()))
+  .alt(imageMatch.parser.map(() => imageScreen()))
+  .alt(notificationMatch.parser.map(() => notificationScreen()))
+  .alt(progressMatch.parser.map(() => progressScreen()))
+  .alt(tableMatch.parser.map(() => tableScreen()))
+  .alt(tagMatch.parser.map(() => tagScreen()))
+  .alt(titleMatch.parser.map(() => titleScreen()))
+  .alt(breadcrumbMatch.parser.map(() => breadcrumbScreen()))
+  .alt(cardMatch.parser.map(() => cardScreen()))
+  .alt(dropdownMatch.parser.map(() => dropdownScreen()))
+  .alt(menuMatch.parser.map(() => menuScreen()))
+  .alt(messageMatch.parser.map(() => messageScreen()))
+  .alt(modalMatch.parser.map(() => modalScreen()))
+  .alt(navbarMatch.parser.map(() => navbarScreen()))
+  .alt(floatingSidebarMatch.parser.map(() => floatingSidebarScreen()))
+  .alt(sidebarMatch.parser.map(() => sidebarScreen()))
+  .alt(paginationMatch.parser.map(() => paginationScreen()))
+  .alt(panelMatch.parser.map(() => panelScreen()))
+  .alt(popoverMatch.parser.map(() => popoverScreen()))
+  .alt(tabsMatch.parser.map(() => tabsScreen()))
+  .alt(fieldMatch.parser.map(() => fieldScreen()))
+  .alt(inputMatch.parser.map(() => inputScreen()))
+  .alt(textareaMatch.parser.map(() => textareaScreen()))
+  .alt(selectMatch.parser.map(() => selectScreen()))
+  .alt(checkboxMatch.parser.map(() => checkboxScreen()))
+  .alt(radioMatch.parser.map(() => radioScreen()))
+  .alt(fileMatch.parser.map(() => fileScreen()))
+  .alt(containerMatch.parser.map(() => containerScreen()))
+  .alt(heroMatch.parser.map(() => heroScreen()))
+  .alt(sectionMatch.parser.map(() => sectionScreen()))
+  .alt(levelMatch.parser.map(() => levelScreen()))
+  .alt(mediaobjectMatch.parser.map(() => mediaObjectScreen()))
+  .alt(footerMatch.parser.map(() => footerScreen()))
+  .alt(columnsMatch.parser.map(() => columnsScreen()))
+  .alt(dotloadingMatch.parser.map(() => dotLoadingScreen()))
+  .alt(anyStrings.parser.map(() => notFoundScreen()))
 
-export const parsePath = (path: string): AppRoute => ({
-  page: parse(appRouter, Route.parse(path), pageHome()),
+// `href`: a full URL (the page's `location.href`)
+export const parseDestination = (href: string): Destination => ({
+  screen: parse(screenParser, Route.parse(removeBaseUrl(href)), homeScreen()),
 })
 
-export const parseAppRoute = (_mainUrl: string, href: string): AppRoute =>
-  parsePath(removeBaseUrl(href))
-
-export const toUrlString = (r: AppRoute): string => {
-  const page = r.page
+export const toUrlString = (destination: Destination): string => {
+  const { screen } = destination
   const getPath = () => {
-    switch (page._tag) {
-      case 'PageHome':
+    switch (screen._tag) {
+      case 'HomeScreen':
         return format(homeMatch.formatter, {})
-      case 'PageBlock':
+      case 'BlockScreen':
         return format(blockMatch.formatter, {})
-      case 'PageBox':
+      case 'BoxScreen':
         return format(boxMatch.formatter, {})
-      case 'PageButton':
+      case 'ButtonScreen':
         return format(buttonMatch.formatter, {})
-      case 'PageContent':
+      case 'ContentScreen':
         return format(contentMatch.formatter, {})
-      case 'PageDelete':
+      case 'DeleteScreen':
         return format(deleteMatch.formatter, {})
-      case 'PageIcon':
+      case 'IconScreen':
         return format(iconMatch.formatter, {})
-      case 'PageImage':
+      case 'ImageScreen':
         return format(imageMatch.formatter, {})
-      case 'PageNotification':
+      case 'NotificationScreen':
         return format(notificationMatch.formatter, {})
-      case 'PageProgress':
+      case 'ProgressScreen':
         return format(progressMatch.formatter, {})
-      case 'PageTable':
+      case 'TableScreen':
         return format(tableMatch.formatter, {})
-      case 'PageTag':
+      case 'TagScreen':
         return format(tagMatch.formatter, {})
-      case 'PageTitle':
+      case 'TitleScreen':
         return format(titleMatch.formatter, {})
-      case 'PageBreadcrumb':
+      case 'BreadcrumbScreen':
         return format(breadcrumbMatch.formatter, {})
-      case 'PageCard':
+      case 'CardScreen':
         return format(cardMatch.formatter, {})
-      case 'PageDropdown':
+      case 'DropdownScreen':
         return format(dropdownMatch.formatter, {})
-      case 'PageMenu':
+      case 'MenuScreen':
         return format(menuMatch.formatter, {})
-      case 'PageMessage':
+      case 'MessageScreen':
         return format(messageMatch.formatter, {})
-      case 'PageModal':
+      case 'ModalScreen':
         return format(modalMatch.formatter, {})
-      case 'PageNavbar':
+      case 'NavbarScreen':
         return format(navbarMatch.formatter, {})
-      case 'PageFloatingSidebar':
+      case 'FloatingSidebarScreen':
         return format(floatingSidebarMatch.formatter, {})
-      case 'PageSidebar':
+      case 'SidebarScreen':
         return format(sidebarMatch.formatter, {})
-      case 'PagePagination':
+      case 'PaginationScreen':
         return format(paginationMatch.formatter, {})
-      case 'PagePanel':
+      case 'PanelScreen':
         return format(panelMatch.formatter, {})
-      case 'PagePopover':
+      case 'PopoverScreen':
         return format(popoverMatch.formatter, {})
-      case 'PageTabs':
+      case 'TabsScreen':
         return format(tabsMatch.formatter, {})
-      case 'PageField':
+      case 'FieldScreen':
         return format(fieldMatch.formatter, {})
-      case 'PageInput':
+      case 'InputScreen':
         return format(inputMatch.formatter, {})
-      case 'PageTextarea':
+      case 'TextareaScreen':
         return format(textareaMatch.formatter, {})
-      case 'PageSelect':
+      case 'SelectScreen':
         return format(selectMatch.formatter, {})
-      case 'PageCheckbox':
+      case 'CheckboxScreen':
         return format(checkboxMatch.formatter, {})
-      case 'PageRadio':
+      case 'RadioScreen':
         return format(radioMatch.formatter, {})
-      case 'PageFile':
+      case 'FileScreen':
         return format(fileMatch.formatter, {})
-      case 'PageContainer':
+      case 'ContainerScreen':
         return format(containerMatch.formatter, {})
-      case 'PageHero':
+      case 'HeroScreen':
         return format(heroMatch.formatter, {})
-      case 'PageSection':
+      case 'SectionScreen':
         return format(sectionMatch.formatter, {})
-      case 'PageLevel':
+      case 'LevelScreen':
         return format(levelMatch.formatter, {})
-      case 'PageMediaObject':
+      case 'MediaObjectScreen':
         return format(mediaobjectMatch.formatter, {})
-      case 'PageFooter':
+      case 'FooterScreen':
         return format(footerMatch.formatter, {})
-      case 'PageColumns':
+      case 'ColumnsScreen':
         return format(columnsMatch.formatter, {})
-      case 'PageDotLoading':
+      case 'DotLoadingScreen':
         return format(dotloadingMatch.formatter, {})
-      case 'PageNotFound':
+      case 'NotFoundScreen':
         return '404'
     }
   }

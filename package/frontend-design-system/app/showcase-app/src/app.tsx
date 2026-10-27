@@ -4,8 +4,9 @@ import { ColumnMemo as DsColumnMemo } from '@rinn7e/realworld-design-system/grid
 import { ColumnsMemo as DsColumnsMemo } from '@rinn7e/realworld-design-system/grid/columns/component'
 import { ContainerMemo as DsContainerMemo } from '@rinn7e/realworld-design-system/layout/container/component'
 import { FooterMemo as DsFooterMemo } from '@rinn7e/realworld-design-system/layout/footer/component'
-import * as TeaRouter from '@rinn7e/tea-cup-router'
 import * as EqClass from 'fp-ts/lib/Eq'
+import * as O from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/function'
 import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
 import { Monitor, Moon, Sun } from 'lucide-react'
@@ -16,8 +17,9 @@ import {
   SHOWCASE_CATEGORIES,
   getRightSidebarCategories,
   getSidebarCategories,
+  navItemHref,
 } from '@/common/constant/menu'
-import type { AppRoute } from '@/common/type/route'
+import { type Destination, itemOfScreen } from '@/common/type/destination'
 import { BlockScreenMemo } from '@/screen/block-screen/component'
 import { BoxScreenMemo } from '@/screen/box-screen/component'
 import { BreadcrumbScreenMemo } from '@/screen/breadcrumb-screen/component'
@@ -62,7 +64,7 @@ import { TextareaScreenMemo } from '@/screen/textarea-screen/component'
 import { TitleScreenMemo } from '@/screen/title-screen/component'
 import type { ColorScheme } from '@/theme/type'
 
-import { type Model, type Msg, type ScreenModel, teaRouterMsg } from './type'
+import { type Model, type Msg, type ScreenModel, currentScreenOf } from './type'
 
 type ColorSchemeIconProps = {
   scheme: ColorScheme
@@ -95,46 +97,49 @@ const ColorSchemeIconMemo = memo(
 )
 
 type ScreenViewProps = {
-  pageModel: ScreenModel
+  screenModel: ScreenModel
   dispatch: Dispatcher<Msg>
 }
 
 const ScreenViewPropsEq: EqClass.Eq<ScreenViewProps> = EqClass.struct({
-  pageModel: EqClass.eqStrict,
+  screenModel: EqClass.eqStrict,
   dispatch: EqClass.eqStrict,
 })
 
-const ScreenViewComponent = ({ pageModel, dispatch }: ScreenViewProps) => {
-  const navigateRoute = (route: AppRoute) => {
-    dispatch(teaRouterMsg({ _tag: 'ChangeRoute', route }))
+const ScreenViewComponent = ({ screenModel, dispatch }: ScreenViewProps) => {
+  const navigate = (destination: Destination) => {
+    dispatch({
+      _tag: 'NavigationMsg',
+      subMsg: { _tag: 'Navigate', destination },
+    })
   }
 
-  switch (pageModel._tag) {
+  switch (screenModel._tag) {
     case 'HomeScreenModel':
       return (
         <HomeScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'HomeScreenMsg', subMsg })}
         />
       )
     case 'BlockScreenModel':
       return (
         <BlockScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'BlockScreenMsg', subMsg })}
         />
       )
     case 'BoxScreenModel':
       return (
         <BoxScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'BoxScreenMsg', subMsg })}
         />
       )
     case 'BreadcrumbScreenModel':
       return (
         <BreadcrumbScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) =>
             dispatch({ _tag: 'BreadcrumbScreenMsg', subMsg })
           }
@@ -143,35 +148,35 @@ const ScreenViewComponent = ({ pageModel, dispatch }: ScreenViewProps) => {
     case 'ButtonScreenModel':
       return (
         <ButtonScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'ButtonScreenMsg', subMsg })}
         />
       )
     case 'CardScreenModel':
       return (
         <CardScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'CardScreenMsg', subMsg })}
         />
       )
     case 'CheckboxScreenModel':
       return (
         <CheckboxScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'CheckboxScreenMsg', subMsg })}
         />
       )
     case 'ColumnsScreenModel':
       return (
         <ColumnsScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'ColumnsScreenMsg', subMsg })}
         />
       )
     case 'ContainerScreenModel':
       return (
         <ContainerScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) =>
             dispatch({ _tag: 'ContainerScreenMsg', subMsg })
           }
@@ -180,14 +185,14 @@ const ScreenViewComponent = ({ pageModel, dispatch }: ScreenViewProps) => {
     case 'ContentScreenModel':
       return (
         <ContentScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'ContentScreenMsg', subMsg })}
         />
       )
     case 'DotLoadingScreenModel':
       return (
         <DotLoadingScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) =>
             dispatch({ _tag: 'DotLoadingScreenMsg', subMsg })
           }
@@ -196,77 +201,77 @@ const ScreenViewComponent = ({ pageModel, dispatch }: ScreenViewProps) => {
     case 'DeleteScreenModel':
       return (
         <DeleteScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'DeleteScreenMsg', subMsg })}
         />
       )
     case 'DropdownScreenModel':
       return (
         <DropdownScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'DropdownScreenMsg', subMsg })}
         />
       )
     case 'FieldScreenModel':
       return (
         <FieldScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'FieldScreenMsg', subMsg })}
         />
       )
     case 'FileScreenModel':
       return (
         <FileScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'FileScreenMsg', subMsg })}
         />
       )
     case 'FooterScreenModel':
       return (
         <FooterScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'FooterScreenMsg', subMsg })}
         />
       )
     case 'HeroScreenModel':
       return (
         <HeroScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'HeroScreenMsg', subMsg })}
         />
       )
     case 'IconScreenModel':
       return (
         <IconScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'IconScreenMsg', subMsg })}
         />
       )
     case 'ImageScreenModel':
       return (
         <ImageScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'ImageScreenMsg', subMsg })}
         />
       )
     case 'InputScreenModel':
       return (
         <InputScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'InputScreenMsg', subMsg })}
         />
       )
     case 'LevelScreenModel':
       return (
         <LevelScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'LevelScreenMsg', subMsg })}
         />
       )
     case 'MediaObjectScreenModel':
       return (
         <MediaObjectScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) =>
             dispatch({ _tag: 'MediaObjectScreenMsg', subMsg })
           }
@@ -275,35 +280,35 @@ const ScreenViewComponent = ({ pageModel, dispatch }: ScreenViewProps) => {
     case 'MenuScreenModel':
       return (
         <MenuScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'MenuScreenMsg', subMsg })}
         />
       )
     case 'MessageScreenModel':
       return (
         <MessageScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'MessageScreenMsg', subMsg })}
         />
       )
     case 'ModalScreenModel':
       return (
         <ModalScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'ModalScreenMsg', subMsg })}
         />
       )
     case 'NavbarScreenModel':
       return (
         <NavbarScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'NavbarScreenMsg', subMsg })}
         />
       )
     case 'FloatingSidebarScreenModel':
       return (
         <FloatingSidebarScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) =>
             dispatch({ _tag: 'FloatingSidebarScreenMsg', subMsg })
           }
@@ -312,14 +317,14 @@ const ScreenViewComponent = ({ pageModel, dispatch }: ScreenViewProps) => {
     case 'SidebarScreenModel':
       return (
         <SidebarScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'SidebarScreenMsg', subMsg })}
         />
       )
     case 'NotificationScreenModel':
       return (
         <NotificationScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) =>
             dispatch({ _tag: 'NotificationScreenMsg', subMsg })
           }
@@ -328,7 +333,7 @@ const ScreenViewComponent = ({ pageModel, dispatch }: ScreenViewProps) => {
     case 'PaginationScreenModel':
       return (
         <PaginationScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) =>
             dispatch({ _tag: 'PaginationScreenMsg', subMsg })
           }
@@ -337,82 +342,82 @@ const ScreenViewComponent = ({ pageModel, dispatch }: ScreenViewProps) => {
     case 'PanelScreenModel':
       return (
         <PanelScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'PanelScreenMsg', subMsg })}
         />
       )
     case 'PopoverScreenModel':
       return (
         <PopoverScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'PopoverScreenMsg', subMsg })}
         />
       )
     case 'ProgressScreenModel':
       return (
         <ProgressScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'ProgressScreenMsg', subMsg })}
         />
       )
     case 'RadioScreenModel':
       return (
         <RadioScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'RadioScreenMsg', subMsg })}
         />
       )
     case 'SectionScreenModel':
       return (
         <SectionScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'SectionScreenMsg', subMsg })}
         />
       )
     case 'SelectScreenModel':
       return (
         <SelectScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'SelectScreenMsg', subMsg })}
         />
       )
     case 'TableScreenModel':
       return (
         <TableScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'TableScreenMsg', subMsg })}
         />
       )
     case 'TabsScreenModel':
       return (
         <TabsScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'TabsScreenMsg', subMsg })}
         />
       )
     case 'TagScreenModel':
       return (
         <TagScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'TagScreenMsg', subMsg })}
         />
       )
     case 'TextareaScreenModel':
       return (
         <TextareaScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'TextareaScreenMsg', subMsg })}
         />
       )
     case 'TitleScreenModel':
       return (
         <TitleScreenMemo
-          model={pageModel.model}
+          model={screenModel.model}
           dispatch={(subMsg) => dispatch({ _tag: 'TitleScreenMsg', subMsg })}
         />
       )
     case 'NotFoundScreenModel':
-      return <NotFoundScreenMemo navigateRoute={navigateRoute} />
+      return <NotFoundScreenMemo navigate={navigate} />
   }
 }
 
@@ -424,14 +429,13 @@ export type AppProps = {
 }
 
 export const App = ({ model, dispatch }: AppProps) => {
-  const currentRoute = TeaRouter.getRoute(model.router)
-  const pageModel = TeaRouter.getPageModel(model.router)
+  const currentScreen = currentScreenOf(model.screenModel)
 
-  const activeComponent =
-    currentRoute.page._tag === 'PageHome' ||
-    currentRoute.page._tag === 'PageNotFound'
-      ? ''
-      : currentRoute.page._tag.replace(/Page$/, '').toLowerCase()
+  // The menu item of the screen shown (none on home and not found)
+  const activeComponent = pipe(
+    itemOfScreen(currentScreen),
+    O.getOrElse((): string => ''),
+  )
 
   return (
     <div
@@ -445,22 +449,22 @@ export const App = ({ model, dispatch }: AppProps) => {
           brandNavItem: {
             key: 'brand',
             label: 'RealWorld Design System',
-            href: '/',
+            href: navItemHref('brand'),
             isActive: false,
           },
           desktopNavItems: [
             {
               key: 'home',
               label: 'Home',
-              href: '/',
-              isActive: currentRoute.page._tag === 'PageHome',
+              href: navItemHref('home'),
+              isActive: currentScreen._tag === 'HomeScreen',
             },
             {
               key: 'elements',
               label: 'Elements',
-              href: '/block',
+              href: navItemHref('elements'),
               isActive:
-                currentRoute.page._tag !== 'PageHome' &&
+                currentScreen._tag !== 'HomeScreen' &&
                 SHOWCASE_CATEGORIES[0].items.some(
                   (i) => i.id === activeComponent,
                 ),
@@ -468,9 +472,9 @@ export const App = ({ model, dispatch }: AppProps) => {
             {
               key: 'components',
               label: 'Components',
-              href: '/breadcrumb',
+              href: navItemHref('components'),
               isActive:
-                currentRoute.page._tag !== 'PageHome' &&
+                currentScreen._tag !== 'HomeScreen' &&
                 SHOWCASE_CATEGORIES[1].items.some(
                   (i) => i.id === activeComponent,
                 ),
@@ -478,9 +482,9 @@ export const App = ({ model, dispatch }: AppProps) => {
             {
               key: 'form',
               label: 'Form',
-              href: '/field',
+              href: navItemHref('form'),
               isActive:
-                currentRoute.page._tag !== 'PageHome' &&
+                currentScreen._tag !== 'HomeScreen' &&
                 SHOWCASE_CATEGORIES[2].items.some(
                   (i) => i.id === activeComponent,
                 ),
@@ -542,7 +546,10 @@ export const App = ({ model, dispatch }: AppProps) => {
           {/* Main Screen Area */}
           <DsColumnMemo className='min-w-0 flex-1'>
             <div className='w-full'>
-              <ScreenViewMemo pageModel={pageModel} dispatch={dispatch} />
+              <ScreenViewMemo
+                screenModel={model.screenModel}
+                dispatch={dispatch}
+              />
             </div>
           </DsColumnMemo>
 

@@ -3,9 +3,11 @@ import { ButtonMemo as DsButtonMemo } from '@rinn7e/realworld-design-system/elem
 import { TitleMemo as DsTitleMemo } from '@rinn7e/realworld-design-system/element/title/component'
 import { memo } from 'react'
 
+import { defaultDestination } from '@/common/type/destination'
+
 import { type Props, PropsEq } from './type'
 
-const NotFoundScreenComponent = ({ navigateRoute }: Props) => {
+const NotFoundScreenComponent = ({ navigate }: Props) => {
   return (
     <div className='flex flex-col items-center justify-center py-16 text-center'>
       <DsBoxMemo className='flex max-w-md flex-col gap-4 p-10'>
@@ -27,7 +29,7 @@ const NotFoundScreenComponent = ({ navigateRoute }: Props) => {
             <DsButtonMemo
               color='green'
               variant='solid'
-              onClick={() => navigateRoute({ page: { _tag: 'PageHome' } })}
+              onClick={() => navigate(defaultDestination())}
             >
               Return to Home Overview
             </DsButtonMemo>

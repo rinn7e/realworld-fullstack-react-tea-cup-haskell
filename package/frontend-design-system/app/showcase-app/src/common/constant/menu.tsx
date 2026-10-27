@@ -1,4 +1,7 @@
 import type * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
+import * as A from 'fp-ts/lib/Array'
+import * as O from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/function'
 import {
   AlignLeft,
   BarChart2,
@@ -48,7 +51,18 @@ import {
 } from 'lucide-react'
 import React from 'react'
 
-import type { ComponentItem } from '@/common/type/route'
+import {
+  ALL_COMPONENT_ITEMS,
+  type ComponentItem,
+  type Destination,
+  ITEM_SCREENS,
+  blockScreen,
+  breadcrumbScreen,
+  defaultDestination,
+  destinationOfScreen,
+  fieldScreen,
+  toUrlString,
+} from '@/common/type/destination'
 
 export type SectionCategory =
   'elements' | 'components' | 'form' | 'layout' | 'grid' | 'misc'
@@ -203,7 +217,7 @@ export const getSidebarCategories = (
     items: cat.items.map((item) => ({
       key: item.id,
       label: item.name,
-      href: `/${item.id}`,
+      href: toUrlString(destinationOfScreen(ITEM_SCREENS[item.id])),
       isActive: activeComponent === item.id,
       icon: ITEM_ICONS[item.id],
     })),
@@ -232,3 +246,30 @@ export const getRightSidebarCategories = (): DsSidebar.SidebarCategory[] => [
     ],
   },
 ]
+
+// The destination a nav item opens, by its key: a component item of the
+// sidebar, or an entry of the navbar (home, and the first item of a
+// category). The external apps of the right sidebar have none.
+export const navItemDestination = (key: string): O.Option<Destination> => {
+  switch (key) {
+    case 'brand':
+    case 'home':
+      return O.some(defaultDestination())
+    case 'elements':
+      return O.some(destinationOfScreen(blockScreen()))
+    case 'components':
+      return O.some(destinationOfScreen(breadcrumbScreen()))
+    case 'form':
+      return O.some(destinationOfScreen(fieldScreen()))
+    default:
+      return pipe(
+        ALL_COMPONENT_ITEMS,
+        A.findFirst((item) => item === key),
+        O.map((item) => destinationOfScreen(ITEM_SCREENS[item])),
+      )
+  }
+}
+
+// The href of a navbar entry, the URL of its destination
+export const navItemHref = (key: string): string | undefined =>
+  pipe(navItemDestination(key), O.map(toUrlString), O.toUndefined)
