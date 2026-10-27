@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { getSearchParams } from '@/page/comment-page/util'
+import { getSearchParams } from '@/screen/comment-screen/util'
 
 describe('getSearchParams (comments)', () => {
   it('reads author and article prefixes', () => {

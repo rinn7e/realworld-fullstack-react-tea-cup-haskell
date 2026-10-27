@@ -22,7 +22,7 @@ const sortOptions: SearchBar.SearchOption<VisitorSortAttr>[] = [
   { label: 'ID', value: 'id' },
 ]
 
-const VisitorPageComponent = ({ model, shared, dispatch }: Props) => {
+const VisitorScreenComponent = ({ model, shared, dispatch }: Props) => {
   const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
@@ -89,4 +89,4 @@ const VisitorPageComponent = ({ model, shared, dispatch }: Props) => {
   )
 }
 
-export const VisitorPageMemo = memo(VisitorPageComponent, PropsEq.equals)
+export const VisitorScreenMemo = memo(VisitorScreenComponent, PropsEq.equals)

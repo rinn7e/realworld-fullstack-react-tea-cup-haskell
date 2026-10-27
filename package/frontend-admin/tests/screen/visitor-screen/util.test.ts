@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { getSearchParams } from '@/page/visitor-page/util'
+import { getSearchParams } from '@/screen/visitor-screen/util'
 
 describe('getSearchParams (visitors)', () => {
   it('treats text starting with / as a path, anything else as an IP', () => {

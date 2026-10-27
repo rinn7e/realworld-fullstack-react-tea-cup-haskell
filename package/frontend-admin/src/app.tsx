@@ -14,13 +14,13 @@ import {
 } from '@/common/type/route'
 import { Link } from '@/component/link'
 import { PersonaPanelMemo } from '@/component/persona-panel/component'
-import { ArticlePageMemo } from '@/page/article-page/component'
-import { CommentPageMemo } from '@/page/comment-page/component'
-import { HomePageMemo } from '@/page/home-page/component'
-import { LoginPageMemo } from '@/page/login-page/component'
-import { SettingPageMemo } from '@/page/setting-page/component'
-import { UserPageMemo } from '@/page/user-page/component'
-import { VisitorPageMemo } from '@/page/visitor-page/component'
+import { ArticleScreenMemo } from '@/screen/article-screen/component'
+import { CommentScreenMemo } from '@/screen/comment-screen/component'
+import { HomeScreenMemo } from '@/screen/home-screen/component'
+import { LoginScreenMemo } from '@/screen/login-screen/component'
+import { SettingScreenMemo } from '@/screen/setting-screen/component'
+import { UserScreenMemo } from '@/screen/user-screen/component'
+import { VisitorScreenMemo } from '@/screen/visitor-screen/component'
 
 import { type Model, type Msg } from './type'
 
@@ -33,12 +33,12 @@ export type AppProps = {
 export const App = ({ model, dispatch }: AppProps) => {
   const currentRoute = TeaRouter.getRoute(model.router)
 
-  // If we are on the login page, show a different layout (no sidebar)
+  // If we are on the login screen, show a different layout (no sidebar)
   if (currentRoute.page._tag === 'PageLogin') {
     return (
       <SetGlobalMsgContext value={dispatch}>
         <main className='h-dvh bg-gray-50 dark:bg-black'>
-          <PageView model={model} dispatch={dispatch} />
+          <ScreenView model={model} dispatch={dispatch} />
           <PersonaPanelMemo
             model={model.persona}
             theme={model.theme}
@@ -219,7 +219,7 @@ export const App = ({ model, dispatch }: AppProps) => {
               }
             }}
           >
-            <PageView model={model} dispatch={dispatch} />
+            <ScreenView model={model} dispatch={dispatch} />
 
             {/* Scroll to Top Button */}
             {model.showScrollTop && currentRoute.page._tag !== 'PageHome' && (
@@ -281,68 +281,68 @@ const SidebarLink = ({ label, icon, active, route }: SidebarLinkProps) => (
   </Link>
 )
 
-const PageView = ({ model, dispatch }: AppProps) => {
+const ScreenView = ({ model, dispatch }: AppProps) => {
   const pageModel = TeaRouter.getPageModel(model.router)
 
   switch (pageModel._tag) {
-    case 'HomePageModel':
+    case 'HomeScreenModel':
       return (
-        <HomePageMemo
+        <HomeScreenMemo
           model={pageModel.model}
           shared={model.shared}
-          dispatch={(subMsg) => dispatch({ _tag: 'HomePageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'HomeScreenMsg', subMsg })}
         />
       )
-    case 'ArticlePageModel':
+    case 'ArticleScreenModel':
       return (
-        <ArticlePageMemo
+        <ArticleScreenMemo
           model={pageModel.model}
           shared={model.shared}
-          dispatch={(subMsg) => dispatch({ _tag: 'ArticlePageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'ArticleScreenMsg', subMsg })}
         />
       )
-    case 'UserPageModel':
+    case 'UserScreenModel':
       return (
-        <UserPageMemo
+        <UserScreenMemo
           model={pageModel.model}
           shared={model.shared}
-          dispatch={(subMsg) => dispatch({ _tag: 'UserPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'UserScreenMsg', subMsg })}
         />
       )
-    case 'CommentPageModel':
+    case 'CommentScreenModel':
       return (
-        <CommentPageMemo
+        <CommentScreenMemo
           model={pageModel.model}
           shared={model.shared}
-          dispatch={(subMsg) => dispatch({ _tag: 'CommentPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'CommentScreenMsg', subMsg })}
         />
       )
-    case 'VisitorPageModel':
+    case 'VisitorScreenModel':
       return (
-        <VisitorPageMemo
+        <VisitorScreenMemo
           model={pageModel.model}
           shared={model.shared}
-          dispatch={(subMsg) => dispatch({ _tag: 'VisitorPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'VisitorScreenMsg', subMsg })}
         />
       )
 
-    case 'LoginPageModel':
+    case 'LoginScreenModel':
       return (
-        <LoginPageMemo
+        <LoginScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'LoginPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'LoginScreenMsg', subMsg })}
         />
       )
-    case 'SettingPageModel':
+    case 'SettingScreenModel':
       return (
-        <SettingPageMemo
+        <SettingScreenMemo
           user={model.shared.user}
           colorScheme={model.colorScheme}
           theme={model.theme}
           dispatch={dispatch}
         />
       )
-    case 'NotFoundPageModel':
+    case 'NotFoundScreenModel':
       return (
         <div className='flex h-full items-center justify-center text-[24px] font-bold text-slate-400'>
           404 Not Found

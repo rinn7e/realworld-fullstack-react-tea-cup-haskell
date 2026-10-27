@@ -24,7 +24,7 @@ const LoadingSpinner = () => (
   </div>
 )
 
-const HomePageComponent = ({ model, dispatch }: Props) => {
+const HomeScreenComponent = ({ model, dispatch }: Props) => {
   return (
     <div className='relative flex flex-col gap-[32px]'>
       <div>
@@ -273,4 +273,4 @@ const HomePageComponent = ({ model, dispatch }: Props) => {
   )
 }
 
-export const HomePageMemo = memo(HomePageComponent, PropsEq.equals)
+export const HomeScreenMemo = memo(HomeScreenComponent, PropsEq.equals)

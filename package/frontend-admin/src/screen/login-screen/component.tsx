@@ -3,7 +3,7 @@ import React, { memo } from 'react'
 
 import { type Props, PropsEq } from './type'
 
-const LoginPageComponent = ({ model, dispatch }: Props) => {
+const LoginScreenComponent = ({ model, dispatch }: Props) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!model.isSubmitting) {
@@ -140,4 +140,4 @@ const LoginPageComponent = ({ model, dispatch }: Props) => {
   )
 }
 
-export const LoginPageMemo = memo(LoginPageComponent, PropsEq.equals)
+export const LoginScreenMemo = memo(LoginScreenComponent, PropsEq.equals)

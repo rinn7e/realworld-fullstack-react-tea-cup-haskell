@@ -109,26 +109,26 @@ const schemeOptions: SchemeOption[] = [
   },
 ]
 
-export type SettingPageProps = {
+export type SettingScreenProps = {
   user: O.Option<AuthUser>
   colorScheme: ColorScheme
   theme: Theme
   dispatch: Dispatcher<Msg>
 }
 
-const SettingPagePropsEq: EqClass.Eq<SettingPageProps> = EqClass.struct({
+const SettingScreenPropsEq: EqClass.Eq<SettingScreenProps> = EqClass.struct({
   user: O.getEq(AuthUserEq),
   colorScheme: S.Eq,
   theme: ThemeEq,
   dispatch: EqAlways,
 })
 
-const SettingPageComponent = ({
+const SettingScreenComponent = ({
   user,
   colorScheme,
   theme,
   dispatch,
-}: SettingPageProps) => {
+}: SettingScreenProps) => {
   const themesList = Object.values(themes)
 
   return (
@@ -377,7 +377,7 @@ const SettingPageComponent = ({
   )
 }
 
-export const SettingPageMemo = memo(
-  SettingPageComponent,
-  SettingPagePropsEq.equals,
+export const SettingScreenMemo = memo(
+  SettingScreenComponent,
+  SettingScreenPropsEq.equals,
 )

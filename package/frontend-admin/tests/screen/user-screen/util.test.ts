@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { getSearchParams } from '@/page/user-page/util'
+import { getSearchParams } from '@/screen/user-screen/util'
 
 describe('getSearchParams (users)', () => {
   it('reads username and email prefixes', () => {

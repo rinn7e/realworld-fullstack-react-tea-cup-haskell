@@ -2,41 +2,42 @@ import { PaginationMemo } from '@rinn7e/tea-cup-pagination/component'
 import React, { memo } from 'react'
 
 import {
-  AdminUserEq,
   ApiErrorEq,
-  type UserSortAttr,
+  ArticleEq,
+  type ArticleSortAttr,
   getHttpErrorEq,
 } from '@/common/api'
 import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
-import { UserDetailOverlayMemo } from './sub-component/user-detail-overlay'
+import { ArticleDetailOverlayMemo } from './sub-component/article-detail-overlay'
 import { type Props, PropsEq } from './type'
 import { mkPaginationConfig } from './util'
 
-const sortOptions: SearchBar.SearchOption<UserSortAttr>[] = [
-  { label: 'Username', value: 'username' },
-  { label: 'Email', value: 'email' },
+const sortOptions: SearchBar.SearchOption<ArticleSortAttr>[] = [
+  { label: 'Creation Date', value: 'createdAt' },
+  { label: 'Favorites', value: 'favoritesCount' },
+  { label: 'Title', value: 'title' },
   { label: 'ID', value: 'id' },
 ]
 
-const UserPageComponent = ({ model, shared, dispatch }: Props) => {
+const ArticleScreenComponent = ({ model, shared, dispatch }: Props) => {
   const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
     <div className='relative flex flex-col gap-[32px]'>
       <div className='flex flex-col gap-[24px]'>
         <h2 className='text-theme-secondary text-[28px] font-bold dark:text-white'>
-          Users
+          Articles
         </h2>
-        <SearchBarMemo<UserSortAttr>
+        <SearchBarMemo<ArticleSortAttr>
           model={model.searchBar}
           sortOptions={sortOptions}
           sortToString={(s) => s}
-          dispatch={(subMsg: SearchBar.Msg<UserSortAttr>) =>
+          dispatch={(subMsg: SearchBar.Msg<ArticleSortAttr>) =>
             dispatch({ _tag: 'SearchBarMsg', subMsg })
           }
-          placeholder='Search users by username, email, or bio...'
+          placeholder='Search articles by title, slug, or content...'
         />
       </div>
 
@@ -45,17 +46,17 @@ const UserPageComponent = ({ model, shared, dispatch }: Props) => {
           model={model.pagination}
           dispatch={(subMsg) => dispatch({ _tag: 'PaginationMsg', subMsg })}
           config={paginationConfig}
-          itemEq={AdminUserEq}
+          itemEq={ArticleEq}
           errEq={getHttpErrorEq(ApiErrorEq)}
         />
       </div>
 
-      <UserDetailOverlayMemo
-        selectedUser={model.selectedUser}
+      <ArticleDetailOverlayMemo
+        selectedArticle={model.selectedArticle}
         dispatch={dispatch}
       />
     </div>
   )
 }
 
-export const UserPageMemo = memo(UserPageComponent, PropsEq.equals)
+export const ArticleScreenMemo = memo(ArticleScreenComponent, PropsEq.equals)

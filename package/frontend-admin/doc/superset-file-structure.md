@@ -82,19 +82,19 @@ frontend-admin/
 │   ├── package/         # Internal library-like modules
 │   │   ├── tea-cup-prelude/
 │   │   └── [package-name]/
-│   ├── page/            # Application pages
-│   │   ├── [page-name]/
+│   ├── screen/          # Application screens
+│   │   ├── [screen-name]/
 │   │   │   ├── component.tsx
 │   │   │   ├── type.ts
 │   │   │   ├── update.ts
-│   │   │   ├── handler/     # Page-specific event handlers
-│   │   │   ├── sub-component/ # Page-specific sub-components
-│   │   │   └── common/      # Page-specific utilities/constants
+│   │   │   ├── handler/     # Screen-specific event handlers
+│   │   │   ├── sub-component/ # Screen-specific sub-components
+│   │   │   └── common/      # Screen-specific utilities/constants
 │   ├── process/         # Business logic processes
 │   │   ├── register-sw/
 │   │   └── sse/
 │   ├── worker/          # Web Workers
-│   ├── util/            # Utilities NOT for use in components or pages
+│   ├── util/            # Utilities NOT for use in components or screens
 │   ├── app.tsx          # Main App component
 │   ├── program.tsx      # TEA (The Elm Architecture) program setup
 │   ├── root.tsx         # Application root entry point

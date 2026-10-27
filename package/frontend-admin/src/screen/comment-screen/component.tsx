@@ -20,7 +20,7 @@ const sortOptions: SearchBar.SearchOption<CommentSortAttr>[] = [
   { label: 'ID', value: 'id' },
 ]
 
-const CommentPageComponent = ({ model, shared, dispatch }: Props) => {
+const CommentScreenComponent = ({ model, shared, dispatch }: Props) => {
   const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
@@ -56,4 +56,4 @@ const CommentPageComponent = ({ model, shared, dispatch }: Props) => {
   )
 }
 
-export const CommentPageMemo = memo(CommentPageComponent, PropsEq.equals)
+export const CommentScreenMemo = memo(CommentScreenComponent, PropsEq.equals)

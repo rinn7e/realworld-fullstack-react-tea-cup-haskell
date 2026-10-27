@@ -5,17 +5,17 @@ import { type AuthUser } from '@/common/type/auth-user'
 import { type AppRoute } from '@/common/type/route'
 import { type Shared } from '@/common/type/shared'
 import type * as Persona from '@/component/persona-panel'
-import type * as ArticlePage from '@/page/article-page'
-import type * as CommentPage from '@/page/comment-page'
-import type * as HomePage from '@/page/home-page'
-import type * as LoginPage from '@/page/login-page'
-import type * as UserPage from '@/page/user-page'
-import type * as VisitorPage from '@/page/visitor-page'
+import type * as ArticleScreen from '@/screen/article-screen'
+import type * as CommentScreen from '@/screen/comment-screen'
+import type * as HomeScreen from '@/screen/home-screen'
+import type * as LoginScreen from '@/screen/login-screen'
+import type * as UserScreen from '@/screen/user-screen'
+import type * as VisitorScreen from '@/screen/visitor-screen'
 
 import { type ColorScheme, type Theme } from './theme/type'
 
 export type Model = {
-  readonly router: TeaRouter.Model<AppRoute, PageModel>
+  readonly router: TeaRouter.Model<AppRoute, ScreenModel>
   readonly shared: Shared
   readonly persona: Persona.Model
   readonly showScrollTop: boolean
@@ -23,15 +23,15 @@ export type Model = {
   readonly colorScheme: ColorScheme
 }
 
-export type PageModel =
-  | { readonly _tag: 'HomePageModel'; readonly model: HomePage.Model }
-  | { readonly _tag: 'LoginPageModel'; readonly model: LoginPage.Model }
-  | { readonly _tag: 'ArticlePageModel'; readonly model: ArticlePage.Model }
-  | { readonly _tag: 'UserPageModel'; readonly model: UserPage.Model }
-  | { readonly _tag: 'CommentPageModel'; readonly model: CommentPage.Model }
-  | { readonly _tag: 'VisitorPageModel'; readonly model: VisitorPage.Model }
-  | { readonly _tag: 'SettingPageModel' }
-  | { readonly _tag: 'NotFoundPageModel' }
+export type ScreenModel =
+  | { readonly _tag: 'HomeScreenModel'; readonly model: HomeScreen.Model }
+  | { readonly _tag: 'LoginScreenModel'; readonly model: LoginScreen.Model }
+  | { readonly _tag: 'ArticleScreenModel'; readonly model: ArticleScreen.Model }
+  | { readonly _tag: 'UserScreenModel'; readonly model: UserScreen.Model }
+  | { readonly _tag: 'CommentScreenModel'; readonly model: CommentScreen.Model }
+  | { readonly _tag: 'VisitorScreenModel'; readonly model: VisitorScreen.Model }
+  | { readonly _tag: 'SettingScreenModel' }
+  | { readonly _tag: 'NotFoundScreenModel' }
 
 export type Msg =
   | {
@@ -46,12 +46,12 @@ export type Msg =
       readonly token: Option<string>
     }
   | { readonly _tag: 'Logout' }
-  | { readonly _tag: 'HomePageMsg'; readonly subMsg: HomePage.Msg }
-  | { readonly _tag: 'LoginPageMsg'; readonly subMsg: LoginPage.Msg }
-  | { readonly _tag: 'ArticlePageMsg'; readonly subMsg: ArticlePage.Msg }
-  | { readonly _tag: 'UserPageMsg'; readonly subMsg: UserPage.Msg }
-  | { readonly _tag: 'CommentPageMsg'; readonly subMsg: CommentPage.Msg }
-  | { readonly _tag: 'VisitorPageMsg'; readonly subMsg: VisitorPage.Msg }
+  | { readonly _tag: 'HomeScreenMsg'; readonly subMsg: HomeScreen.Msg }
+  | { readonly _tag: 'LoginScreenMsg'; readonly subMsg: LoginScreen.Msg }
+  | { readonly _tag: 'ArticleScreenMsg'; readonly subMsg: ArticleScreen.Msg }
+  | { readonly _tag: 'UserScreenMsg'; readonly subMsg: UserScreen.Msg }
+  | { readonly _tag: 'CommentScreenMsg'; readonly subMsg: CommentScreen.Msg }
+  | { readonly _tag: 'VisitorScreenMsg'; readonly subMsg: VisitorScreen.Msg }
   | { readonly _tag: 'PersonaMsg'; readonly subMsg: Persona.Msg }
   | { readonly _tag: 'SetShowScrollTop'; readonly value: boolean }
   | { readonly _tag: 'ScrollToTop' }
