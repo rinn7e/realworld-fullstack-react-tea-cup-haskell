@@ -1,6 +1,7 @@
 import type * as DsNavbar from '@rinn7e/realworld-design-system/component/navbar'
 import type * as DsSidebar from '@rinn7e/realworld-design-system/component/sidebar'
 
+import { type Brand } from '@/common/type/brand-wrapper'
 import type { NavigationMsg, Screen } from '@/common/type/destination'
 import type * as BlockScreen from '@/screen/block-screen'
 import type * as BoxScreen from '@/screen/box-screen'
@@ -129,8 +130,40 @@ export type ScreenModel =
       readonly model: NotFoundScreen.Model
     }
 
+// The screen shown (`Model.screenModel`). Owned: read it anywhere as a
+// `ScreenModel`, but only the two functions below make one (the brand has
+// no value). So the screen changes only by a move; its own messages change
+// its model in place. Review: a cast to it outside this file changes the
+// screen without a move.
+declare class _CurrentScreenModelBrand {
+  private _currentScreenModelBrand(): void
+}
+
+export type CurrentScreenModel = Brand<ScreenModel, _CurrentScreenModelBrand>
+
+// The screen model a move opens (`initScreenModel`). The showcase has no
+// guard, so a move takes any destination. Review: called by the navigation
+// (`navigation-handler.ts`) and tests only (lint); anywhere else it changes
+// the screen without the move.
+export const currentScreenModelOfMove = (
+  screenModel: ScreenModel,
+): CurrentScreenModel =>
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  screenModel as CurrentScreenModel
+
+// The screen shown with its model changed in place by its own messages.
+// Another screen keeps the one shown: that is a move. Review: for the
+// model of the screen shown; to open another screen, navigate.
+export const sameScreenWith =
+  (current: CurrentScreenModel) =>
+  (screenModel: ScreenModel): CurrentScreenModel =>
+    screenModel._tag === current._tag
+      ? // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        (screenModel as CurrentScreenModel)
+      : current
+
 export type Model = {
-  readonly screenModel: ScreenModel
+  readonly screenModel: CurrentScreenModel
   readonly searchQuery: string
   readonly sidebarModel: DsSidebar.Model
   readonly rightSidebarModel: DsSidebar.Model

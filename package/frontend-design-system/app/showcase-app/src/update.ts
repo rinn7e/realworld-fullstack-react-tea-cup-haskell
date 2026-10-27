@@ -55,7 +55,7 @@ import * as TitleScreen from '@/screen/title-screen'
 import { loadColorScheme, setColorSchemeCmd } from '@/theme/util'
 import { bootDestinationOf } from '@/util'
 
-import { type Model, type Msg } from './type'
+import { type Model, type Msg, sameScreenWith } from './type'
 
 // Nav items open the destination of their key, the same one their href
 // spells (`navItemDestination`)
@@ -221,7 +221,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'HomeScreenModel', model: homeModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'HomeScreenModel',
+              model: homeModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'HomeScreenMsg', subMsg })),
         ]
@@ -240,7 +243,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'BlockScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'BlockScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'BlockScreenMsg', subMsg })),
         ]
@@ -256,7 +262,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'BoxScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'BoxScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'BoxScreenMsg', subMsg })),
         ]
@@ -275,7 +284,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'ButtonScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'ButtonScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'ButtonScreenMsg', subMsg })),
         ]
@@ -294,7 +306,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'ContentScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'ContentScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'ContentScreenMsg', subMsg })),
         ]
@@ -313,7 +328,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'DeleteScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'DeleteScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'DeleteScreenMsg', subMsg })),
         ]
@@ -329,7 +347,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'IconScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'IconScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'IconScreenMsg', subMsg })),
         ]
@@ -348,7 +369,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'ImageScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'ImageScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'ImageScreenMsg', subMsg })),
         ]
@@ -367,7 +391,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'NotificationScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'NotificationScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'NotificationScreenMsg', subMsg })),
         ]
@@ -386,7 +413,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'ProgressScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'ProgressScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'ProgressScreenMsg', subMsg })),
         ]
@@ -405,7 +435,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'TableScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'TableScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'TableScreenMsg', subMsg })),
         ]
@@ -421,7 +454,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'TagScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'TagScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'TagScreenMsg', subMsg })),
         ]
@@ -440,7 +476,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'TitleScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'TitleScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'TitleScreenMsg', subMsg })),
         ]
@@ -459,7 +498,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'BreadcrumbScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'BreadcrumbScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'BreadcrumbScreenMsg', subMsg })),
         ]
@@ -475,7 +517,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'CardScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'CardScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'CardScreenMsg', subMsg })),
         ]
@@ -494,7 +539,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'DropdownScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'DropdownScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'DropdownScreenMsg', subMsg })),
         ]
@@ -510,7 +558,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'MenuScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'MenuScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'MenuScreenMsg', subMsg })),
         ]
@@ -529,7 +580,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'MessageScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'MessageScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'MessageScreenMsg', subMsg })),
         ]
@@ -548,7 +602,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'ModalScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'ModalScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'ModalScreenMsg', subMsg })),
         ]
@@ -567,7 +624,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'NavbarScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'NavbarScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'NavbarScreenMsg', subMsg })),
         ]
@@ -586,10 +646,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: {
+            screenModel: sameScreenWith(screenModel)({
               _tag: 'FloatingSidebarScreenModel',
               model: subModel,
-            },
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'FloatingSidebarScreenMsg', subMsg })),
         ]
@@ -608,7 +668,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'SidebarScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'SidebarScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'SidebarScreenMsg', subMsg })),
         ]
@@ -627,7 +690,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'PaginationScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'PaginationScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'PaginationScreenMsg', subMsg })),
         ]
@@ -646,7 +712,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'PanelScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'PanelScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'PanelScreenMsg', subMsg })),
         ]
@@ -665,7 +734,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'PopoverScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'PopoverScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'PopoverScreenMsg', subMsg })),
         ]
@@ -681,7 +753,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'TabsScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'TabsScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'TabsScreenMsg', subMsg })),
         ]
@@ -700,7 +775,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'FieldScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'FieldScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'FieldScreenMsg', subMsg })),
         ]
@@ -719,7 +797,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'InputScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'InputScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'InputScreenMsg', subMsg })),
         ]
@@ -738,7 +819,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'TextareaScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'TextareaScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'TextareaScreenMsg', subMsg })),
         ]
@@ -757,7 +841,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'SelectScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'SelectScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'SelectScreenMsg', subMsg })),
         ]
@@ -776,7 +863,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'CheckboxScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'CheckboxScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'CheckboxScreenMsg', subMsg })),
         ]
@@ -795,7 +885,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'RadioScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'RadioScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'RadioScreenMsg', subMsg })),
         ]
@@ -811,7 +904,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'FileScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'FileScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'FileScreenMsg', subMsg })),
         ]
@@ -830,7 +926,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'ContainerScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'ContainerScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'ContainerScreenMsg', subMsg })),
         ]
@@ -846,7 +945,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'HeroScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'HeroScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'HeroScreenMsg', subMsg })),
         ]
@@ -865,7 +967,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'SectionScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'SectionScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'SectionScreenMsg', subMsg })),
         ]
@@ -884,7 +989,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'LevelScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'LevelScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'LevelScreenMsg', subMsg })),
         ]
@@ -903,7 +1011,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'MediaObjectScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'MediaObjectScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'MediaObjectScreenMsg', subMsg })),
         ]
@@ -922,7 +1033,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'FooterScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'FooterScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'FooterScreenMsg', subMsg })),
         ]
@@ -941,7 +1055,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'ColumnsScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'ColumnsScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'ColumnsScreenMsg', subMsg })),
         ]
@@ -960,7 +1077,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'DotLoadingScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'DotLoadingScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'DotLoadingScreenMsg', subMsg })),
         ]
@@ -979,7 +1099,10 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         return [
           {
             ...model,
-            screenModel: { _tag: 'NotFoundScreenModel', model: subModel },
+            screenModel: sameScreenWith(screenModel)({
+              _tag: 'NotFoundScreenModel',
+              model: subModel,
+            }),
           },
           cmd.map((subMsg) => ({ _tag: 'NotFoundScreenMsg', subMsg })),
         ]

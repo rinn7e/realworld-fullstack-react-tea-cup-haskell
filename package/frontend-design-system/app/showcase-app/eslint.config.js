@@ -5,6 +5,24 @@ import unusedImports from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
+// The move maker (code-convention.md, "Make Impossible Updates Impossible"):
+// the branded type stops any other write, but not a call to its exported
+// maker. Only a move opens a screen: the navigation (`navigation-handler.ts`)
+// and tests call it. The file defining it is left out.
+const moveMakerFiles = ['src/type.ts']
+const moveMakerUsers = ['src/handler/navigation-handler.ts', 'tests/**/*.ts']
+// By name, so a namespace use (`Type.currentScreenModelOfMove`) and a
+// computed access (`m['currentScreenModelOfMove']`) are caught too
+const moveMakerUses = (makers) =>
+  [
+    `Identifier[name=/^(${makers.join('|')})$/]`,
+    `Literal[value=/^(${makers.join('|')})$/]`,
+  ].map((selector) => ({
+    selector,
+    message:
+      'A move is made only by the navigation (`navigation-handler.ts`): navigate instead.',
+  }))
+
 export default tseslint.config(
   { ignores: ['dist'] },
   {
@@ -38,6 +56,16 @@ export default tseslint.config(
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
         },
+      ],
+    },
+  },
+  {
+    files: ['**/*.{ts,tsx}'],
+    ignores: [...moveMakerFiles, ...moveMakerUsers],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        ...moveMakerUses(['currentScreenModelOfMove']),
       ],
     },
   },

@@ -22,6 +22,7 @@ These conventions are shared by both packages in this folder:
 - [No `update` Wrapper (and the URL Exception)](#no-update-wrapper-and-the-url-exception)
 - [Follow the Component Tree](#follow-the-component-tree)
 - [One Source of Truth: Make Impossible States Impossible](#one-source-of-truth-make-impossible-states-impossible)
+- [Make Impossible Updates Impossible](#make-impossible-updates-impossible)
 - [File Structure and Splitting](#file-structure-and-splitting)
   - [Tea Cup Components](#tea-cup-components)
   - [Library Layout (`lib/`)](#library-layout-lib)
@@ -696,6 +697,51 @@ The destination follows the same rule:
 - **Read dialog and overlay flags from the dialog** (its `isOpen`; a dialog closing counts as closed), never store them a second time.
 - **A user close only updates its owner, and the URL follows.** No "closed by the user, so navigate" sync back. The one exception is a screen whose leaving must go through a navigation block or an auto-save: its close navigates instead of only closing, and that is documented on its model.
 - **A dialog that should survive a refresh and close on back** gets one flat boolean in the destination (`x_setting=true` style in the URL), opened and closed by its owner `reInit`, and dropped by the guard where it cannot open. One boolean per dialog: no `Option` of a dialog union, no grouping type. The showcase has no such dialog today: the demo modals of the modal screen stay out of the URL.
+
+---
+
+## Make Impossible Updates Impossible
+
+One source of truth says where a fact lives. This says **who may change it**: a fact with an owner gets a type only its owner makes, so a write that skips the owner does not type check. Everyone reads it as its plain type; writing it needs the function of the owner. It is the abstract type of Haskell or Elm (export the type, not its constructor), done in TypeScript with a branded type (also called an opaque type): `Brand<T, B>` (`app/showcase-app/src/common/type/brand-wrapper.ts`), where `B` is a `declare class` with one private method that the owner declares next to the type and never exports (it has no value, so its name starts with `_` for the unused-vars rule). A class method, not a symbol key: an object spread drops it, so copying or changing an owned value by a spread gives the plain type again, not an owned one.
+
+```ts
+// app/showcase-app/src/type.ts: the owner
+declare class _CurrentScreenModelBrand {
+  private _currentScreenModelBrand(): void
+}
+
+export type CurrentScreenModel = Brand<ScreenModel, _CurrentScreenModelBrand>
+
+// The only ways in: a move, and the screen shown in place
+export const currentScreenModelOfMove = (screenModel: ScreenModel): CurrentScreenModel => ...
+export const sameScreenWith =
+  (current: CurrentScreenModel) => (screenModel: ScreenModel): CurrentScreenModel => ...
+```
+
+```ts
+// Anywhere else
+model.screenModel._tag                         // fine: reading, it is a ScreenModel
+{ ...model, screenModel: someScreenModel }     // type error: not a CurrentScreenModel
+```
+
+The owned value in the showcase:
+
+| Value                | Made only by                                                                                                | So you cannot                                                                                 |
+| -------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `CurrentScreenModel` | `currentScreenModelOfMove` (used by the navigation only), `sameScreenWith` (`app/showcase-app/src/type.ts`) | change the screen without a move; `sameScreenWith` only changes the model of the screen shown |
+
+An app with a guard also owns the destination the guard let through (`DestinationAfterGuard`, made only by `guardDestination`, the only kind `initScreenModel` takes), and a screen or pane with a param owns its `currentX` field. The showcase has no guard and no screen param, so it owns neither.
+
+Rules:
+
+- **Reading stays free.** A brand is a subtype, so views, getters and `destinationOf` read it as the plain type.
+- **Make one only through its owner.** The types stop every write that is not a cast: a plain value, a changed copy. The owner is the one file that casts to its own value (its makers), each cast with an `eslint-disable-next-line` of `consistent-type-assertions` (see [TypeScript Type Assertions](#typescript-type-assertions)).
+- **Only a move calls the move maker** (`currentScreenModelOfMove`): the types cannot say who may call an exported function, so `app/showcase-app/eslint.config.js` forbids it outside the navigation (`navigation-handler.ts`) and tests. That is the only lint rule here.
+- **A spread does not keep it.** `{ ...owned, field: x }` is the plain type, so a changed copy does not type check where the owned value is needed. Copying the parent (`{ ...model }`) keeps it: its field still holds the value its owner made.
+- **Review watches the rest.** Each owned type, maker and `initScreenModel` carries a `Review:` comment saying what misuse looks like. Block in review: a cast to an owned type outside its owner file (`as X`, `as any`, a value typed `any`), a cast to a type holding one over a changed field (`as Model`), `Object.assign` onto an owned field, and a call of `initScreenModel` outside a move.
+- **Tests go through the owner too:** a fixture builds a model with `init` (`bootOn` in `app/showcase-app/tests/helper/app.ts`) or `initScreenModel`, not by hand.
+- **`app/showcase-app/tests/convention/owned-fields.test.ts` pins it:** each bypass there is a `@ts-expect-error`, so `tsc` fails when one starts to type check.
+- **Add a brand when a fact has an owner and a wrong write is easy:** a field set by `init` / `reInit` that other code could set on the side, or a value that must have passed a check (a guard). Not for every field: a component writing its own private state needs none.
 
 ---
 

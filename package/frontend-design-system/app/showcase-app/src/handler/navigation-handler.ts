@@ -47,12 +47,26 @@ import * as TabsScreen from '@/screen/tabs-screen'
 import * as TagScreen from '@/screen/tag-screen'
 import * as TextareaScreen from '@/screen/textarea-screen'
 import * as TitleScreen from '@/screen/title-screen'
-import { type Model, type Msg, type ScreenModel } from '@/type'
+import {
+  type CurrentScreenModel,
+  type Model,
+  type Msg,
+  type ScreenModel,
+  currentScreenModelOfMove,
+} from '@/type'
 import { destinationOf } from '@/util'
 
-// The screen model of `destination`. Every move opens its screen afresh:
-// no showcase screen keeps state across a move.
+// The screen model of `destination`, the one place a move opens a screen.
+// Every move opens its screen afresh: no showcase screen keeps state across
+// a move. Review: called only by `navigateHandler` and the boot.
 export const initScreenModel = (
+  destination: Destination,
+): [CurrentScreenModel, Cmd<Msg>] => {
+  const [screenModel, cmd] = freshScreenModelOf(destination)
+  return [currentScreenModelOfMove(screenModel), cmd]
+}
+
+const freshScreenModelOf = (
   destination: Destination,
 ): [ScreenModel, Cmd<Msg>] => {
   switch (destination.screen._tag) {
