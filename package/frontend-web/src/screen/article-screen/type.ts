@@ -17,11 +17,23 @@ import {
   UserEq,
   getHttpErrorEq,
 } from '@/common/api'
+import { type Brand } from '@/common/type/brand-wrapper'
 
 import * as CommentSection from './sub-component/comment-section'
 
+// The article shown (the destination's `slug`). Owned: read it anywhere
+// as a `string`, but only `update.ts` makes one (`init`); the brand has no
+// value. Review: a cast to it outside `update.ts` shows another article in
+// the name of the one loaded.
+declare class _CurrentSlugBrand {
+  private _currentSlugBrand(): void
+}
+
+export type CurrentSlug = Brand<string, _CurrentSlugBrand>
+
 export type Model = {
-  slug: string
+  // The article shown, set by a move only
+  slug: CurrentSlug
   article: RD.RemoteData<HttpError<ApiError>, ArticleResponse>
   commentSection: CommentSection.Model
 }

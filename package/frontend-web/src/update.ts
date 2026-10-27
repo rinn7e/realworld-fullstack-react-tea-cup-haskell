@@ -33,7 +33,7 @@ import * as SettingsScreen from '@/screen/settings-screen'
 import * as SignupScreen from '@/screen/signup-screen'
 import type { ColorScheme } from '@/theme/type'
 import { loadColorScheme, setColorSchemeCmd } from '@/theme/util'
-import { type Model, type Msg, withScreenModel } from '@/type'
+import { type Model, type Msg, sameScreenWith, withScreenModel } from '@/type'
 import {
   bootDestinationOf,
   bootUrlOf,
@@ -176,10 +176,13 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         )
         return pipe(
           [
-            withScreenModel(model, {
-              _tag: 'HomeScreenModel',
-              model: homeModel,
-            }),
+            withScreenModel(
+              model,
+              sameScreenWith(screenModel)({
+                _tag: 'HomeScreenModel',
+                model: homeModel,
+              }),
+            ),
             homeCmd.map((subMsg): Msg => ({
               _tag: 'HomeScreenMsg',
               subMsg,
@@ -216,10 +219,13 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
         )
         return pipe(
           [
-            withScreenModel(model, {
-              _tag: 'ArticleScreenModel',
-              model: articleModel,
-            }),
+            withScreenModel(
+              model,
+              sameScreenWith(screenModel)({
+                _tag: 'ArticleScreenModel',
+                model: articleModel,
+              }),
+            ),
             articleCmd.map((m): Msg => ({
               _tag: 'ArticleScreenMsg',
               subMsg: m,
@@ -253,10 +259,13 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
         return pipe(
           [
-            withScreenModel(model, {
-              _tag: 'LoginScreenModel',
-              model: loginModel,
-            }),
+            withScreenModel(
+              model,
+              sameScreenWith(screenModel)({
+                _tag: 'LoginScreenModel',
+                model: loginModel,
+              }),
+            ),
             loginCmd.map((m): Msg => ({ _tag: 'LoginScreenMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
@@ -298,10 +307,13 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
         return pipe(
           [
-            withScreenModel(model, {
-              _tag: 'SignupScreenModel',
-              model: signupModel,
-            }),
+            withScreenModel(
+              model,
+              sameScreenWith(screenModel)({
+                _tag: 'SignupScreenModel',
+                model: signupModel,
+              }),
+            ),
             signupCmd.map((m): Msg => ({ _tag: 'SignupScreenMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {
@@ -345,10 +357,13 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
         return pipe(
           [
-            withScreenModel(model, {
-              _tag: 'SettingsScreenModel',
-              model: settingsModel,
-            }),
+            withScreenModel(
+              model,
+              sameScreenWith(screenModel)({
+                _tag: 'SettingsScreenModel',
+                model: settingsModel,
+              }),
+            ),
             settingsCmd.map((m): Msg => ({
               _tag: 'SettingsScreenMsg',
               subMsg: m,
@@ -384,10 +399,13 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
         return pipe(
           [
-            withScreenModel(model, {
-              _tag: 'ProfileScreenModel',
-              model: profileModel,
-            }),
+            withScreenModel(
+              model,
+              sameScreenWith(screenModel)({
+                _tag: 'ProfileScreenModel',
+                model: profileModel,
+              }),
+            ),
             profileCmd.map((m): Msg => ({
               _tag: 'ProfileScreenMsg',
               subMsg: m,
@@ -414,10 +432,13 @@ export const update = (msg: Msg, model: Model): [Model, Cmd<Msg>] => {
 
         return pipe(
           [
-            withScreenModel(model, {
-              _tag: 'EditorScreenModel',
-              model: editorModel,
-            }),
+            withScreenModel(
+              model,
+              sameScreenWith(screenModel)({
+                _tag: 'EditorScreenModel',
+                model: editorModel,
+              }),
+            ),
             editorCmd.map((m): Msg => ({ _tag: 'EditorScreenMsg', subMsg: m })),
           ] satisfies [Model, Cmd<Msg>],
           updateAndCmd((m) => {

@@ -24,7 +24,7 @@ import {
 } from '@/component/article-list'
 import * as ArticleShort from '@/component/article-short'
 
-import { type Model, type Msg } from './type'
+import { type CurrentHomeTab, type Model, type Msg } from './type'
 
 export const mkPaginationConfig = (
   shared: Shared,
@@ -73,6 +73,14 @@ export const mkPaginationConfig = (
     }
   }, 'EmptyFeed')
 
+// The tab the screen shows: the only place a `CurrentHomeTab` is made.
+// Review: only `init` and `changeTabHandler` call it; anywhere else it
+// changes the tab without its feed.
+const currentHomeTabOf = (tab: HomeTab): CurrentHomeTab =>
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  tab as CurrentHomeTab
+
+// The home screen of a move. Review: called only by `initScreenModel`.
 export const init = (
   tab: HomeTab,
   page: number,
@@ -84,7 +92,7 @@ export const init = (
   const model: Model = {
     pagination,
     tags: RD.pending,
-    tab,
+    tab: currentHomeTabOf(tab),
   }
 
   return [
@@ -169,7 +177,7 @@ const changeTabHandler =
       const [pagination, paginationCmd] = Pagination.init(paginationConfig, 1)
       const newModel: Model = {
         ...model,
-        tab,
+        tab: currentHomeTabOf(tab),
         pagination,
       }
 

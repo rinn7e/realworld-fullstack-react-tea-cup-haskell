@@ -5,6 +5,8 @@ import * as B from 'fp-ts/lib/boolean'
 import * as N from 'fp-ts/lib/number'
 import * as S from 'fp-ts/lib/string'
 
+import { type Brand } from '@/common/type/brand-wrapper'
+
 export type HomeTab =
   | { _tag: 'GlobalFeedTab' }
   | { _tag: 'UserFeedTab' }
@@ -146,6 +148,20 @@ export const ScreenEq: EqClass.Eq<Screen> = {
 export type Destination = {
   readonly screen: Screen
 }
+
+// A destination the guard let through (`guardDestination`): the only kind a
+// move opens. Owned: nothing else can make one (the brand has no value), so
+// skipping the guard does not type check. Only a move holds one:
+// `guardDestination` is called by the navigation, the boot and tests only
+// (lint). Review: a cast to it outside `util/guard.ts` skips the guard.
+declare class _DestinationAfterGuardBrand {
+  private _destinationAfterGuardBrand(): void
+}
+
+export type DestinationAfterGuard = Brand<
+  Destination,
+  _DestinationAfterGuardBrand
+>
 
 export const DestinationEq: EqClass.Eq<Destination> = EqClass.struct({
   screen: ScreenEq,

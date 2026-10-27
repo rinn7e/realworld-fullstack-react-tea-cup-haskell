@@ -14,7 +14,12 @@ import type * as SettingsScreen from '@/screen/settings-screen'
 import type * as SignupScreen from '@/screen/signup-screen'
 import type { ColorScheme } from '@/theme/type'
 
-import { type NavigationMsg, type Screen } from './common/type/destination'
+import { type Brand } from './common/type/brand-wrapper'
+import {
+  type DestinationAfterGuard,
+  type NavigationMsg,
+  type Screen,
+} from './common/type/destination'
 import { type Shared } from './common/type/shared'
 
 // The screen shown, as its model. Its tag and its own fields (a slug, the
@@ -31,8 +36,42 @@ export type ScreenModel =
   | { _tag: 'EditorScreenModel'; model: EditorScreen.Model }
   | { _tag: 'NotFoundScreenModel' }
 
+// The screen shown (`Model.screenModel`), with the params its model holds.
+// Owned: read it anywhere as a `ScreenModel`, but only the two functions
+// below make one (the brand has no value). So the screen changes only by a
+// move; its own messages change its model in place (and the params its
+// model owns, such as the home tab). Review: a cast to it outside this file
+// changes the screen without a move.
+declare class _CurrentScreenModelBrand {
+  private _currentScreenModelBrand(): void
+}
+
+export type CurrentScreenModel = Brand<ScreenModel, _CurrentScreenModelBrand>
+
+// The screen model a move opens: the destination the guard let through
+// (`initScreenModel`). Review: called by the navigation
+// (`navigation-handler.ts`) and tests only (lint); anywhere else it changes
+// the screen without the move.
+export const currentScreenModelOfMove =
+  (_destination: DestinationAfterGuard) =>
+  (screenModel: ScreenModel): CurrentScreenModel =>
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    screenModel as CurrentScreenModel
+
+// The screen shown with its model changed in place by its own messages.
+// Another screen keeps the one shown: that is a move. Review: for the
+// model of the screen shown, changed by its own `update`; a screen model
+// fresh from its `init` is a move, navigate instead.
+export const sameScreenWith =
+  (current: CurrentScreenModel) =>
+  (screenModel: ScreenModel): CurrentScreenModel =>
+    screenModel._tag === current._tag
+      ? // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        (screenModel as CurrentScreenModel)
+      : current
+
 export type Model = {
-  screenModel: ScreenModel
+  screenModel: CurrentScreenModel
   unavailableMode: boolean
   shared: Shared
   debugPanel: DebugPanel.Model
@@ -102,5 +141,5 @@ export const currentScreenOf = (screenModel: ScreenModel): Screen => {
 // tag, which narrows the `Model` built from it)
 export const withScreenModel = (
   model: Model,
-  screenModel: ScreenModel,
+  screenModel: CurrentScreenModel,
 ): Model => ({ ...model, screenModel })

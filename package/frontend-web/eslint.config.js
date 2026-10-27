@@ -9,6 +9,26 @@ import { globalIgnores } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
+// The move makers (code-convention.md, "Make Impossible Updates Impossible"):
+// the branded types stop any other write, but not a call to their exported
+// makers. Only a move holds a guarded destination and opens a screen: the
+// navigation (`navigation-handler.ts`) and tests call them, the boot
+// (`src/update.ts`) the guard only. The files defining them are left out.
+const moveMakerFiles = ['src/util/guard.ts', 'src/type.ts']
+const moveMakerUsers = ['src/handler/navigation-handler.ts', 'tests/**/*.ts']
+const boot = 'src/update.ts'
+// By name, so a namespace use (`Util.guardDestination`) and a computed
+// access (`m['guardDestination']`) are caught too
+const moveMakerUses = (makers) =>
+  [
+    `Identifier[name=/^(${makers.join('|')})$/]`,
+    `Literal[value=/^(${makers.join('|')})$/]`,
+  ].map((selector) => ({
+    selector,
+    message:
+      'A move is made only by the navigation (`navigation-handler.ts`): navigate instead.',
+  }))
+
 export default tseslint.config([
   globalIgnores(['dist', 'src/generated', 'src/package', 'deprecated']),
   {
@@ -80,6 +100,25 @@ export default tseslint.config([
       'react-x/no-array-index-key': 'off',
 
       'react-dom/no-dangerously-set-innerhtml': 'off',
+    },
+  },
+  {
+    files: ['**/*.{ts,tsx}'],
+    ignores: [...moveMakerFiles, ...moveMakerUsers, boot],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        ...moveMakerUses(['guardDestination', 'currentScreenModelOfMove']),
+      ],
+    },
+  },
+  {
+    files: [boot],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        ...moveMakerUses(['currentScreenModelOfMove']),
+      ],
     },
   },
 ])

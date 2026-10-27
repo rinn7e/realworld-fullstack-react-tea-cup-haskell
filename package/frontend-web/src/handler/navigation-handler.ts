@@ -6,6 +6,7 @@ import { Cmd, Task } from 'tea-cup-fp'
 import { trackVisitor } from '@/common/api'
 import {
   type Destination,
+  type DestinationAfterGuard,
   DestinationEq,
   type NavigationMsg,
   toUrlString,
@@ -18,12 +19,28 @@ import * as LoginScreen from '@/screen/login-screen'
 import * as ProfileScreen from '@/screen/profile-screen'
 import * as SettingsScreen from '@/screen/settings-screen'
 import * as SignupScreen from '@/screen/signup-screen'
-import { type Model, type Msg, type ScreenModel, withScreenModel } from '@/type'
+import {
+  type CurrentScreenModel,
+  type Model,
+  type Msg,
+  type ScreenModel,
+  currentScreenModelOfMove,
+  withScreenModel,
+} from '@/type'
 import { destinationOf, guardDestination } from '@/util'
 
-// The screen model of `destination`. Every move opens its screen afresh,
-// with the params of the destination.
+// The screen model of `destination`, the one place a move opens a screen.
+// Every move opens its screen afresh, with the params of the destination.
+// Review: called only by `navigateHandler` and the boot, after the guard.
 export const initScreenModel = (
+  destination: DestinationAfterGuard,
+  shared: Shared,
+): [CurrentScreenModel, Cmd<Msg>] => {
+  const [screenModel, cmd] = freshScreenModelOf(destination, shared)
+  return [currentScreenModelOfMove(destination)(screenModel), cmd]
+}
+
+const freshScreenModelOf = (
   destination: Destination,
   shared: Shared,
 ): [ScreenModel, Cmd<Msg>] => {

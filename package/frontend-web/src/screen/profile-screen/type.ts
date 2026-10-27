@@ -16,15 +16,38 @@ import {
   ProfileResponseEq,
   getHttpErrorEq,
 } from '@/common/api'
+import { type Brand } from '@/common/type/brand-wrapper'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import type * as ArticleShort from '@/component/article-short'
 
+// The profile shown (the destination's `username`). Owned: read it
+// anywhere as a `string`, but only `update.ts` makes one (`init`); the brand
+// has no value. Review: a cast to it outside `update.ts` shows another
+// profile in the name of the one loaded.
+declare class _CurrentUsernameBrand {
+  private _currentUsernameBrand(): void
+}
+
+export type CurrentUsername = Brand<string, _CurrentUsernameBrand>
+
+// The list shown, the favorites or the articles of the profile (the
+// destination's `favorites`). Owned: read it anywhere as a `boolean`, but
+// only `update.ts` makes one (`init`, and the reader switching lists); the
+// brand has no value. Review: a cast to it outside `update.ts` switches the
+// list without loading it.
+declare class _CurrentShowFavoritesBrand {
+  private _currentShowFavoritesBrand(): void
+}
+
+export type CurrentShowFavorites = Brand<boolean, _CurrentShowFavoritesBrand>
+
 export type Model = {
-  // The profile shown (the destination's `username`)
-  username: string
+  // The profile shown (the destination's `username`), set by a move only
+  username: CurrentUsername
   profile: RD.RemoteData<HttpError<ApiError>, ProfileResponse>
   pagination: Pagination.Model<Article, HttpError<ApiError>>
-  showFavorites: boolean
+  // Set by a move (`init`) and the reader switching lists only
+  showFavorites: CurrentShowFavorites
   followRd: RD.RemoteData<HttpError<ApiError>, ProfileResponse>
   unfollowRd: RD.RemoteData<HttpError<ApiError>, ProfileResponse>
 }

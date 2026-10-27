@@ -15,12 +15,20 @@ import {
 import type { Shared } from '@/common/type/shared'
 
 import * as CommentSection from './sub-component/comment-section'
-import { type Model, type Msg } from './type'
+import { type CurrentSlug, type Model, type Msg } from './type'
 
+// The article the screen shows: the only place a `CurrentSlug` is made.
+// Review: only `init` calls it; anywhere else it changes the article
+// without loading it.
+const currentSlugOf = (slug: string): CurrentSlug =>
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  slug as CurrentSlug
+
+// The article screen of a move. Review: called only by `initScreenModel`.
 export const init = (slug: string, shared: Shared): [Model, Cmd<Msg>] => {
   const [commentSection, commentSectionCmd] = CommentSection.init(slug, shared)
   const model: Model = {
-    slug,
+    slug: currentSlugOf(slug),
     article: RD.pending,
     commentSection,
   }

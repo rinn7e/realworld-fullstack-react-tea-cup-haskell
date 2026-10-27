@@ -20,7 +20,7 @@ import {
 } from '@/component/article-list'
 import * as ArticleShort from '@/component/article-short'
 
-import type { Model, Msg } from './type'
+import type { CurrentShowFavorites, CurrentUsername, Model, Msg } from './type'
 
 export const mkPaginationConfig = (
   shared: Shared,
@@ -44,6 +44,18 @@ export const mkPaginationConfig = (
     'EmptyArticles',
   )
 
+// The profile and the list the screen shows: the only places a
+// `CurrentUsername` and a `CurrentShowFavorites` are made. Review: only
+// `init` (both) and `toggleFavoritesHandler` (the list) call them; anywhere
+// else they change the screen without loading it.
+const currentUsernameOf = (username: string): CurrentUsername =>
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  username as CurrentUsername
+const currentShowFavoritesOf = (show: boolean): CurrentShowFavorites =>
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  show as CurrentShowFavorites
+
+// The profile screen of a move. Review: called only by `initScreenModel`.
 export const init = (
   username: string,
   favorites: boolean,
@@ -55,10 +67,10 @@ export const init = (
   )
 
   const model: Model = {
-    username,
+    username: currentUsernameOf(username),
     profile: RD.pending,
     pagination,
-    showFavorites: favorites,
+    showFavorites: currentShowFavoritesOf(favorites),
     followRd: RD.initial,
     unfollowRd: RD.initial,
   }
@@ -148,9 +160,9 @@ const toggleFavoritesHandler =
         mkPaginationConfig(shared, username, show),
         1,
       )
-      const newModel = {
+      const newModel: Model = {
         ...model,
-        showFavorites: show,
+        showFavorites: currentShowFavoritesOf(show),
         pagination,
       }
       return [

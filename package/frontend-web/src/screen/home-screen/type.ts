@@ -14,14 +14,26 @@ import {
   TagsResponseEq,
   getHttpErrorEq,
 } from '@/common/api'
+import { type Brand } from '@/common/type/brand-wrapper'
 import { type HomeTab, HomeTabEq } from '@/common/type/destination'
 import { type Shared, SharedEq } from '@/common/type/shared'
 import type * as ArticleShort from '@/component/article-short'
 
+// The feed shown (the destination's `tab`). Owned: read it anywhere as a
+// `HomeTab`, but only `update.ts` makes one (`init`, and the reader
+// switching tabs); the brand has no value. Review: a cast to it outside
+// `update.ts` changes the tab without its feed.
+declare class _CurrentHomeTabBrand {
+  private _currentHomeTabBrand(): void
+}
+
+export type CurrentHomeTab = Brand<HomeTab, _CurrentHomeTabBrand>
+
 export type Model = {
   pagination: Pagination.Model<Article, HttpError<ApiError>>
   tags: RD.RemoteData<HttpError<ApiError>, TagsResponse>
-  tab: HomeTab
+  // Set by a move (`init`) and the reader switching tabs (`ChangeTab`) only
+  tab: CurrentHomeTab
 }
 
 export const ModelEq = EqClass.struct<Model>({
