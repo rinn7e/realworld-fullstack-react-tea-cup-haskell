@@ -31,7 +31,7 @@ import {
   saveColorScheme,
   saveTheme,
 } from './theme/util'
-import { type Model, type Msg } from './type'
+import { type Model, type Msg, sameScreenWith } from './type'
 
 // Initialization
 // ---------------------------------------------
@@ -207,7 +207,10 @@ const homeScreenMsgHandler = (
     return [
       {
         ...model,
-        screenModel: { _tag: 'HomeScreenModel', model: m },
+        screenModel: sameScreenWith(screenModel)({
+          _tag: 'HomeScreenModel',
+          model: m,
+        }),
       },
       c.map((msg): Msg => ({ _tag: 'HomeScreenMsg', subMsg: msg })),
     ]
@@ -225,7 +228,10 @@ const loginScreenMsgHandler = (
     const [m, c] = LoginScreen.update(subMsg, screenModel.model)
     const nextModel: Model = {
       ...model,
-      screenModel: { _tag: 'LoginScreenModel', model: m },
+      screenModel: sameScreenWith(screenModel)({
+        _tag: 'LoginScreenModel',
+        model: m,
+      }),
     }
     const nextCmd = c.map((msg): Msg => ({
       _tag: 'LoginScreenMsg',
@@ -272,7 +278,10 @@ const articlesScreenMsgHandler = (
     return [
       {
         ...model,
-        screenModel: { _tag: 'ArticleScreenModel', model: m },
+        screenModel: sameScreenWith(screenModel)({
+          _tag: 'ArticleScreenModel',
+          model: m,
+        }),
       },
       c.map((msg): Msg => ({ _tag: 'ArticleScreenMsg', subMsg: msg })),
     ]
@@ -291,7 +300,10 @@ const usersScreenMsgHandler = (
     return [
       {
         ...model,
-        screenModel: { _tag: 'UserScreenModel', model: m },
+        screenModel: sameScreenWith(screenModel)({
+          _tag: 'UserScreenModel',
+          model: m,
+        }),
       },
       c.map((msg): Msg => ({ _tag: 'UserScreenMsg', subMsg: msg })),
     ]
@@ -310,7 +322,10 @@ const commentsScreenMsgHandler = (
     return [
       {
         ...model,
-        screenModel: { _tag: 'CommentScreenModel', model: m },
+        screenModel: sameScreenWith(screenModel)({
+          _tag: 'CommentScreenModel',
+          model: m,
+        }),
       },
       c.map((msg): Msg => ({ _tag: 'CommentScreenMsg', subMsg: msg })),
     ]
@@ -329,7 +344,10 @@ const visitorsScreenMsgHandler = (
     return [
       {
         ...model,
-        screenModel: { _tag: 'VisitorScreenModel', model: m },
+        screenModel: sameScreenWith(screenModel)({
+          _tag: 'VisitorScreenModel',
+          model: m,
+        }),
       },
       c.map((msg): Msg => ({ _tag: 'VisitorScreenMsg', subMsg: msg })),
     ]

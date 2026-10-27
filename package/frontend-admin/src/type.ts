@@ -1,7 +1,12 @@
 import { type Option } from 'fp-ts/lib/Option'
 
 import { type AuthUser } from '@/common/type/auth-user'
-import { type NavigationMsg, type Screen } from '@/common/type/destination'
+import { type Brand } from '@/common/type/brand-wrapper'
+import {
+  type DestinationAfterGuard,
+  type NavigationMsg,
+  type Screen,
+} from '@/common/type/destination'
 import { type Shared } from '@/common/type/shared'
 import type * as Persona from '@/component/persona-panel'
 import type * as ArticleScreen from '@/screen/article-screen'
@@ -14,7 +19,7 @@ import type * as VisitorScreen from '@/screen/visitor-screen'
 import { type ColorScheme, type Theme } from './theme/type'
 
 export type Model = {
-  readonly screenModel: ScreenModel
+  readonly screenModel: CurrentScreenModel
   readonly shared: Shared
   readonly persona: Persona.Model
   readonly showScrollTop: boolean
@@ -34,6 +39,38 @@ export type ScreenModel =
   | { readonly _tag: 'VisitorScreenModel'; readonly model: VisitorScreen.Model }
   | { readonly _tag: 'SettingScreenModel' }
   | { readonly _tag: 'NotFoundScreenModel' }
+
+// The screen shown (`Model.screenModel`). Owned: read it anywhere as a
+// `ScreenModel`, but only the two functions below make one (the brand has
+// no value). So the screen changes only by a move; its own messages change
+// its model in place. Review: a cast to it outside this file changes the
+// screen without a move.
+declare class _CurrentScreenModelBrand {
+  private _currentScreenModelBrand(): void
+}
+
+export type CurrentScreenModel = Brand<ScreenModel, _CurrentScreenModelBrand>
+
+// The screen model a move opens: the destination the guard let through
+// (`initScreenModel`). Review: called by the navigation
+// (`navigation-handler.ts`) and tests only (lint); anywhere else it changes
+// the screen without the move.
+export const currentScreenModelOfMove =
+  (_destination: DestinationAfterGuard) =>
+  (screenModel: ScreenModel): CurrentScreenModel =>
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    screenModel as CurrentScreenModel
+
+// The screen shown with its model changed in place by its own messages.
+// Another screen keeps the one shown: that is a move. Review: for the
+// model of the screen shown; to open another screen, navigate.
+export const sameScreenWith =
+  (current: CurrentScreenModel) =>
+  (screenModel: ScreenModel): CurrentScreenModel =>
+    screenModel._tag === current._tag
+      ? // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        (screenModel as CurrentScreenModel)
+      : current
 
 export type Msg =
   | { readonly _tag: 'NavigationMsg'; readonly subMsg: NavigationMsg }
@@ -84,5 +121,5 @@ export const currentScreenOf = (screenModel: ScreenModel): Screen => {
 // tag, which narrows the `Model` built from it)
 export const withScreenModel = (
   model: Model,
-  screenModel: ScreenModel,
+  screenModel: CurrentScreenModel,
 ): Model => ({ ...model, screenModel })

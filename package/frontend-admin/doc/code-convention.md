@@ -17,6 +17,7 @@
 - [No `update` Wrapper (and the URL Exception)](#no-update-wrapper-and-the-url-exception)
 - [Follow the Component Tree](#follow-the-component-tree)
 - [One Source of Truth: Make Impossible States Impossible](#one-source-of-truth-make-impossible-states-impossible)
+- [Make Impossible Updates Impossible](#make-impossible-updates-impossible)
 - [File Structure and Splitting](#file-structure-and-splitting)
   - [Tea Cup Components](#tea-cup-components)
   - [Dependency Order and Hierarchy](#dependency-order-and-hierarchy)
@@ -642,6 +643,54 @@ The destination follows the same rule:
 - **Read dialog and overlay flags from the dialog** (its `isOpen`; a dialog closing counts as closed), never store them a second time.
 - **A user close only updates its owner, and the URL follows.** No "closed by the user, so navigate" sync back. The one exception is a screen whose leaving must go through a navigation block or an auto-save: its close navigates instead of only closing, and that is documented on its model.
 - **A dialog that should survive a refresh and close on back** gets one flat boolean in the destination (`x_setting=true` style in the URL), opened and closed by its owner `reInit`, and dropped by the guard where it cannot open. One boolean per dialog: no `Option` of a dialog union, no grouping type. The admin has no such dialog today: its detail overlays hold the selected row (data, not a flag) and stay out of the URL.
+
+---
+
+## Make Impossible Updates Impossible
+
+One source of truth says where a fact lives. This says **who may change it**: a fact with an owner gets a type only its owner makes, so a write that skips the owner does not type check. Everyone reads it as its plain type; writing it needs the function of the owner. It is the abstract type of Haskell or Elm (export the type, not its constructor), done in TypeScript with a branded type (also called an opaque type): `Brand<T, B>` (`src/common/type/brand-wrapper.ts`), where `B` is a `declare class` with one private method that the owner declares next to the type and never exports (it has no value, so its name starts with `_` for the unused-vars rule). A class method, not a symbol key: an object spread drops it, so changing an owned value by a spread gives the plain type again, not an owned one.
+
+```ts
+// src/type.ts: the owner
+declare class _CurrentScreenModelBrand {
+  private _currentScreenModelBrand(): void
+}
+
+export type CurrentScreenModel = Brand<ScreenModel, _CurrentScreenModelBrand>
+
+// The only ways in: a move (through the guard), and the screen shown in place
+export const currentScreenModelOfMove =
+  (_destination: DestinationAfterGuard) => (screenModel: ScreenModel): CurrentScreenModel => ...
+export const sameScreenWith =
+  (current: CurrentScreenModel) => (screenModel: ScreenModel): CurrentScreenModel => ...
+```
+
+```ts
+// Anywhere else
+model.screenModel._tag                                  // fine: reading, it is a ScreenModel
+{ ...model, screenModel: { _tag: 'SettingScreenModel' } } // type error: not a CurrentScreenModel
+initScreenModel(destination, shared)                     // type error: not a DestinationAfterGuard
+```
+
+The owned values now:
+
+| Value                   | Made only by                                                                               | So you cannot                                                                                 |
+| ----------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| `DestinationAfterGuard` | `guardDestination` (`src/util/guard.ts`)                                                   | open a destination the guard did not see                                                      |
+| `CurrentScreenModel`    | `currentScreenModelOfMove` (used by the navigation only), `sameScreenWith` (`src/type.ts`) | change the screen without a move; `sameScreenWith` only changes the model of the screen shown |
+
+The admin screens have no params, so there is no `currentX` field to own.
+
+Rules:
+
+- **Reading stays free.** A brand is a subtype, so views, getters and `destinationOf` read it as the plain type.
+- **Make one only through its owner.** The types stop every write that is not a cast: a plain value, a changed copy, an unguarded destination. The owner is the one file that casts to its own value (its makers), each cast with an `eslint-disable-next-line` of `consistent-type-assertions` (see [TypeScript Type Assertions](#typescript-type-assertions)).
+- **Only a move calls the move makers** (`guardDestination`, `currentScreenModelOfMove`): the types cannot say who may call an exported function, so `eslint.config.js` forbids them outside the navigation (`navigation-handler.ts`) and tests; the boot (`src/update.ts`) may call the guard only. That is the only lint rule here.
+- **A spread does not keep it.** `{ ...owned, field: x }` is the plain type, so a changed copy does not type check where the owned value is needed. Copying a value the model already holds (`{ ...model }`) keeps it: it was made by its owner.
+- **Review watches the rest.** Each owned type, maker and `initScreenModel` carries a `Review:` comment saying what misuse looks like. Block in review: a cast to an owned type outside its owner file (`as X`, `as any`, a value typed `any`), a cast to a type holding one over a changed field (`as Model`), `Object.assign` onto an owned field, and a call of `initScreenModel` outside a move.
+- **Tests go through the owner too:** a fixture builds a model with `init` (`bootOn` in `tests/helper/app.ts`), and a destination through `guarded` (`tests/helper/guarded.ts`, the real guard), not by hand.
+- **`tests/convention/owned-fields.test.ts` pins it:** each bypass there is a `@ts-expect-error`, so `tsc` fails when one starts to type check.
+- **Add a brand when a fact has an owner and a wrong write is easy:** a field set by `init` / `reInit` that other code could set on the side, or a value that must have passed a check (the guard). Not for every field: a component writing its own private state needs none.
 
 ---
 

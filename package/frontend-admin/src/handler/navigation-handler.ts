@@ -2,6 +2,7 @@ import { Cmd } from 'tea-cup-fp'
 
 import {
   type Destination,
+  type DestinationAfterGuard,
   DestinationEq,
   type NavigationMsg,
 } from '@/common/type/destination'
@@ -12,12 +13,29 @@ import * as HomeScreen from '@/screen/home-screen'
 import * as LoginScreen from '@/screen/login-screen'
 import * as UserScreen from '@/screen/user-screen'
 import * as VisitorScreen from '@/screen/visitor-screen'
-import { type Model, type Msg, type ScreenModel, withScreenModel } from '@/type'
+import {
+  type CurrentScreenModel,
+  type Model,
+  type Msg,
+  type ScreenModel,
+  currentScreenModelOfMove,
+  withScreenModel,
+} from '@/type'
 import { destinationOf, guardDestination } from '@/util'
 
-// The screen model of `destination`. Every move opens its screen afresh:
-// no admin screen keeps state across a move.
+// The screen model of `destination`, the one place a move opens a screen.
+// Every move opens its screen afresh: no admin screen keeps state across a
+// move. Review: called only by `navigateHandler` and the boot, after the
+// guard.
 export const initScreenModel = (
+  destination: DestinationAfterGuard,
+  shared: Shared,
+): [CurrentScreenModel, Cmd<Msg>] => {
+  const [screenModel, cmd] = freshScreenModelOf(destination, shared)
+  return [currentScreenModelOfMove(destination)(screenModel), cmd]
+}
+
+const freshScreenModelOf = (
   destination: Destination,
   shared: Shared,
 ): [ScreenModel, Cmd<Msg>] => {
