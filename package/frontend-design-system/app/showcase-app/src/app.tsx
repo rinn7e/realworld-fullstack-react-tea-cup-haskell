@@ -18,51 +18,51 @@ import {
   getSidebarCategories,
 } from '@/common/constant/menu'
 import type { AppRoute } from '@/common/type/route'
-import { BlockPageMemo } from '@/page/block-page/component'
-import { BoxPageMemo } from '@/page/box-page/component'
-import { BreadcrumbPageMemo } from '@/page/breadcrumb-page/component'
-import { ButtonPageMemo } from '@/page/button-page/component'
-import { CardPageMemo } from '@/page/card-page/component'
-import { CheckboxPageMemo } from '@/page/checkbox-page/component'
-import { ColumnsPageMemo } from '@/page/columns-page/component'
-import { ContainerPageMemo } from '@/page/container-page/component'
-import { ContentPageMemo } from '@/page/content-page/component'
-import { DeletePageMemo } from '@/page/delete-page/component'
-import { DotLoadingPageMemo } from '@/page/dot-loading-page/component'
-import { DropdownPageMemo } from '@/page/dropdown-page/component'
-import { FieldPageMemo } from '@/page/field-page/component'
-import { FilePageMemo } from '@/page/file-page/component'
-import { FloatingSidebarPageMemo } from '@/page/floating-sidebar-page/component'
-import { FooterPageMemo } from '@/page/footer-page/component'
-import { HeroPageMemo } from '@/page/hero-page/component'
-import { HomePageMemo } from '@/page/home-page/component'
-import { IconPageMemo } from '@/page/icon-page/component'
-import { ImagePageMemo } from '@/page/image-page/component'
-import { InputPageMemo } from '@/page/input-page/component'
-import { LevelPageMemo } from '@/page/level-page/component'
-import { MediaObjectPageMemo } from '@/page/media-object-page/component'
-import { MenuPageMemo } from '@/page/menu-page/component'
-import { MessagePageMemo } from '@/page/message-page/component'
-import { ModalPageMemo } from '@/page/modal-page/component'
-import { NavbarPageMemo } from '@/page/navbar-page/component'
-import { NotFoundPageMemo } from '@/page/not-found-page/component'
-import { NotificationPageMemo } from '@/page/notification-page/component'
-import { PaginationPageMemo } from '@/page/pagination-page/component'
-import { PanelPageMemo } from '@/page/panel-page/component'
-import { PopoverPageMemo } from '@/page/popover-page/component'
-import { ProgressPageMemo } from '@/page/progress-page/component'
-import { RadioPageMemo } from '@/page/radio-page/component'
-import { SectionPageMemo } from '@/page/section-page/component'
-import { SelectPageMemo } from '@/page/select-page/component'
-import { SidebarPageMemo } from '@/page/sidebar-page/component'
-import { TablePageMemo } from '@/page/table-page/component'
-import { TabsPageMemo } from '@/page/tabs-page/component'
-import { TagPageMemo } from '@/page/tag-page/component'
-import { TextareaPageMemo } from '@/page/textarea-page/component'
-import { TitlePageMemo } from '@/page/title-page/component'
+import { BlockScreenMemo } from '@/screen/block-screen/component'
+import { BoxScreenMemo } from '@/screen/box-screen/component'
+import { BreadcrumbScreenMemo } from '@/screen/breadcrumb-screen/component'
+import { ButtonScreenMemo } from '@/screen/button-screen/component'
+import { CardScreenMemo } from '@/screen/card-screen/component'
+import { CheckboxScreenMemo } from '@/screen/checkbox-screen/component'
+import { ColumnsScreenMemo } from '@/screen/columns-screen/component'
+import { ContainerScreenMemo } from '@/screen/container-screen/component'
+import { ContentScreenMemo } from '@/screen/content-screen/component'
+import { DeleteScreenMemo } from '@/screen/delete-screen/component'
+import { DotLoadingScreenMemo } from '@/screen/dot-loading-screen/component'
+import { DropdownScreenMemo } from '@/screen/dropdown-screen/component'
+import { FieldScreenMemo } from '@/screen/field-screen/component'
+import { FileScreenMemo } from '@/screen/file-screen/component'
+import { FloatingSidebarScreenMemo } from '@/screen/floating-sidebar-screen/component'
+import { FooterScreenMemo } from '@/screen/footer-screen/component'
+import { HeroScreenMemo } from '@/screen/hero-screen/component'
+import { HomeScreenMemo } from '@/screen/home-screen/component'
+import { IconScreenMemo } from '@/screen/icon-screen/component'
+import { ImageScreenMemo } from '@/screen/image-screen/component'
+import { InputScreenMemo } from '@/screen/input-screen/component'
+import { LevelScreenMemo } from '@/screen/level-screen/component'
+import { MediaObjectScreenMemo } from '@/screen/media-object-screen/component'
+import { MenuScreenMemo } from '@/screen/menu-screen/component'
+import { MessageScreenMemo } from '@/screen/message-screen/component'
+import { ModalScreenMemo } from '@/screen/modal-screen/component'
+import { NavbarScreenMemo } from '@/screen/navbar-screen/component'
+import { NotFoundScreenMemo } from '@/screen/not-found-screen/component'
+import { NotificationScreenMemo } from '@/screen/notification-screen/component'
+import { PaginationScreenMemo } from '@/screen/pagination-screen/component'
+import { PanelScreenMemo } from '@/screen/panel-screen/component'
+import { PopoverScreenMemo } from '@/screen/popover-screen/component'
+import { ProgressScreenMemo } from '@/screen/progress-screen/component'
+import { RadioScreenMemo } from '@/screen/radio-screen/component'
+import { SectionScreenMemo } from '@/screen/section-screen/component'
+import { SelectScreenMemo } from '@/screen/select-screen/component'
+import { SidebarScreenMemo } from '@/screen/sidebar-screen/component'
+import { TableScreenMemo } from '@/screen/table-screen/component'
+import { TabsScreenMemo } from '@/screen/tabs-screen/component'
+import { TagScreenMemo } from '@/screen/tag-screen/component'
+import { TextareaScreenMemo } from '@/screen/textarea-screen/component'
+import { TitleScreenMemo } from '@/screen/title-screen/component'
 import type { ColorScheme } from '@/theme/type'
 
-import { type Model, type Msg, type PageModel, teaRouterMsg } from './type'
+import { type Model, type Msg, type ScreenModel, teaRouterMsg } from './type'
 
 type ColorSchemeIconProps = {
   scheme: ColorScheme
@@ -94,321 +94,329 @@ const ColorSchemeIconMemo = memo(
   ColorSchemeIconPropsEq.equals,
 )
 
-type PageViewProps = {
-  pageModel: PageModel
+type ScreenViewProps = {
+  pageModel: ScreenModel
   dispatch: Dispatcher<Msg>
 }
 
-const PageViewPropsEq: EqClass.Eq<PageViewProps> = EqClass.struct({
+const ScreenViewPropsEq: EqClass.Eq<ScreenViewProps> = EqClass.struct({
   pageModel: EqClass.eqStrict,
   dispatch: EqClass.eqStrict,
 })
 
-const PageViewComponent = ({ pageModel, dispatch }: PageViewProps) => {
+const ScreenViewComponent = ({ pageModel, dispatch }: ScreenViewProps) => {
   const navigateRoute = (route: AppRoute) => {
     dispatch(teaRouterMsg({ _tag: 'ChangeRoute', route }))
   }
 
   switch (pageModel._tag) {
-    case 'HomePageModel':
+    case 'HomeScreenModel':
       return (
-        <HomePageMemo
+        <HomeScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'HomePageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'HomeScreenMsg', subMsg })}
         />
       )
-    case 'BlockPageModel':
+    case 'BlockScreenModel':
       return (
-        <BlockPageMemo
+        <BlockScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'BlockPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'BlockScreenMsg', subMsg })}
         />
       )
-    case 'BoxPageModel':
+    case 'BoxScreenModel':
       return (
-        <BoxPageMemo
+        <BoxScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'BoxPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'BoxScreenMsg', subMsg })}
         />
       )
-    case 'BreadcrumbPageModel':
+    case 'BreadcrumbScreenModel':
       return (
-        <BreadcrumbPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'BreadcrumbPageMsg', subMsg })}
-        />
-      )
-    case 'ButtonPageModel':
-      return (
-        <ButtonPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'ButtonPageMsg', subMsg })}
-        />
-      )
-    case 'CardPageModel':
-      return (
-        <CardPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'CardPageMsg', subMsg })}
-        />
-      )
-    case 'CheckboxPageModel':
-      return (
-        <CheckboxPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'CheckboxPageMsg', subMsg })}
-        />
-      )
-    case 'ColumnsPageModel':
-      return (
-        <ColumnsPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'ColumnsPageMsg', subMsg })}
-        />
-      )
-    case 'ContainerPageModel':
-      return (
-        <ContainerPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'ContainerPageMsg', subMsg })}
-        />
-      )
-    case 'ContentPageModel':
-      return (
-        <ContentPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'ContentPageMsg', subMsg })}
-        />
-      )
-    case 'DotLoadingPageModel':
-      return (
-        <DotLoadingPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'DotLoadingPageMsg', subMsg })}
-        />
-      )
-    case 'DeletePageModel':
-      return (
-        <DeletePageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'DeletePageMsg', subMsg })}
-        />
-      )
-    case 'DropdownPageModel':
-      return (
-        <DropdownPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'DropdownPageMsg', subMsg })}
-        />
-      )
-    case 'FieldPageModel':
-      return (
-        <FieldPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'FieldPageMsg', subMsg })}
-        />
-      )
-    case 'FilePageModel':
-      return (
-        <FilePageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'FilePageMsg', subMsg })}
-        />
-      )
-    case 'FooterPageModel':
-      return (
-        <FooterPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'FooterPageMsg', subMsg })}
-        />
-      )
-    case 'HeroPageModel':
-      return (
-        <HeroPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'HeroPageMsg', subMsg })}
-        />
-      )
-    case 'IconPageModel':
-      return (
-        <IconPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'IconPageMsg', subMsg })}
-        />
-      )
-    case 'ImagePageModel':
-      return (
-        <ImagePageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'ImagePageMsg', subMsg })}
-        />
-      )
-    case 'InputPageModel':
-      return (
-        <InputPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'InputPageMsg', subMsg })}
-        />
-      )
-    case 'LevelPageModel':
-      return (
-        <LevelPageMemo
-          model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'LevelPageMsg', subMsg })}
-        />
-      )
-    case 'MediaObjectPageModel':
-      return (
-        <MediaObjectPageMemo
+        <BreadcrumbScreenMemo
           model={pageModel.model}
           dispatch={(subMsg) =>
-            dispatch({ _tag: 'MediaObjectPageMsg', subMsg })
+            dispatch({ _tag: 'BreadcrumbScreenMsg', subMsg })
           }
         />
       )
-    case 'MenuPageModel':
+    case 'ButtonScreenModel':
       return (
-        <MenuPageMemo
+        <ButtonScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'MenuPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'ButtonScreenMsg', subMsg })}
         />
       )
-    case 'MessagePageModel':
+    case 'CardScreenModel':
       return (
-        <MessagePageMemo
+        <CardScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'MessagePageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'CardScreenMsg', subMsg })}
         />
       )
-    case 'ModalPageModel':
+    case 'CheckboxScreenModel':
       return (
-        <ModalPageMemo
+        <CheckboxScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'ModalPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'CheckboxScreenMsg', subMsg })}
         />
       )
-    case 'NavbarPageModel':
+    case 'ColumnsScreenModel':
       return (
-        <NavbarPageMemo
+        <ColumnsScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'NavbarPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'ColumnsScreenMsg', subMsg })}
         />
       )
-    case 'FloatingSidebarPageModel':
+    case 'ContainerScreenModel':
       return (
-        <FloatingSidebarPageMemo
+        <ContainerScreenMemo
           model={pageModel.model}
           dispatch={(subMsg) =>
-            dispatch({ _tag: 'FloatingSidebarPageMsg', subMsg })
+            dispatch({ _tag: 'ContainerScreenMsg', subMsg })
           }
         />
       )
-    case 'SidebarPageModel':
+    case 'ContentScreenModel':
       return (
-        <SidebarPageMemo
+        <ContentScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'SidebarPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'ContentScreenMsg', subMsg })}
         />
       )
-    case 'NotificationPageModel':
+    case 'DotLoadingScreenModel':
       return (
-        <NotificationPageMemo
+        <DotLoadingScreenMemo
           model={pageModel.model}
           dispatch={(subMsg) =>
-            dispatch({ _tag: 'NotificationPageMsg', subMsg })
+            dispatch({ _tag: 'DotLoadingScreenMsg', subMsg })
           }
         />
       )
-    case 'PaginationPageModel':
+    case 'DeleteScreenModel':
       return (
-        <PaginationPageMemo
+        <DeleteScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'PaginationPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'DeleteScreenMsg', subMsg })}
         />
       )
-    case 'PanelPageModel':
+    case 'DropdownScreenModel':
       return (
-        <PanelPageMemo
+        <DropdownScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'PanelPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'DropdownScreenMsg', subMsg })}
         />
       )
-    case 'PopoverPageModel':
+    case 'FieldScreenModel':
       return (
-        <PopoverPageMemo
+        <FieldScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'PopoverPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'FieldScreenMsg', subMsg })}
         />
       )
-    case 'ProgressPageModel':
+    case 'FileScreenModel':
       return (
-        <ProgressPageMemo
+        <FileScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'ProgressPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'FileScreenMsg', subMsg })}
         />
       )
-    case 'RadioPageModel':
+    case 'FooterScreenModel':
       return (
-        <RadioPageMemo
+        <FooterScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'RadioPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'FooterScreenMsg', subMsg })}
         />
       )
-    case 'SectionPageModel':
+    case 'HeroScreenModel':
       return (
-        <SectionPageMemo
+        <HeroScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'SectionPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'HeroScreenMsg', subMsg })}
         />
       )
-    case 'SelectPageModel':
+    case 'IconScreenModel':
       return (
-        <SelectPageMemo
+        <IconScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'SelectPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'IconScreenMsg', subMsg })}
         />
       )
-    case 'TablePageModel':
+    case 'ImageScreenModel':
       return (
-        <TablePageMemo
+        <ImageScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'TablePageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'ImageScreenMsg', subMsg })}
         />
       )
-    case 'TabsPageModel':
+    case 'InputScreenModel':
       return (
-        <TabsPageMemo
+        <InputScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'TabsPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'InputScreenMsg', subMsg })}
         />
       )
-    case 'TagPageModel':
+    case 'LevelScreenModel':
       return (
-        <TagPageMemo
+        <LevelScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'TagPageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'LevelScreenMsg', subMsg })}
         />
       )
-    case 'TextareaPageModel':
+    case 'MediaObjectScreenModel':
       return (
-        <TextareaPageMemo
+        <MediaObjectScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'TextareaPageMsg', subMsg })}
+          dispatch={(subMsg) =>
+            dispatch({ _tag: 'MediaObjectScreenMsg', subMsg })
+          }
         />
       )
-    case 'TitlePageModel':
+    case 'MenuScreenModel':
       return (
-        <TitlePageMemo
+        <MenuScreenMemo
           model={pageModel.model}
-          dispatch={(subMsg) => dispatch({ _tag: 'TitlePageMsg', subMsg })}
+          dispatch={(subMsg) => dispatch({ _tag: 'MenuScreenMsg', subMsg })}
         />
       )
-    case 'NotFoundPageModel':
-      return <NotFoundPageMemo navigateRoute={navigateRoute} />
+    case 'MessageScreenModel':
+      return (
+        <MessageScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'MessageScreenMsg', subMsg })}
+        />
+      )
+    case 'ModalScreenModel':
+      return (
+        <ModalScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'ModalScreenMsg', subMsg })}
+        />
+      )
+    case 'NavbarScreenModel':
+      return (
+        <NavbarScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'NavbarScreenMsg', subMsg })}
+        />
+      )
+    case 'FloatingSidebarScreenModel':
+      return (
+        <FloatingSidebarScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) =>
+            dispatch({ _tag: 'FloatingSidebarScreenMsg', subMsg })
+          }
+        />
+      )
+    case 'SidebarScreenModel':
+      return (
+        <SidebarScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'SidebarScreenMsg', subMsg })}
+        />
+      )
+    case 'NotificationScreenModel':
+      return (
+        <NotificationScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) =>
+            dispatch({ _tag: 'NotificationScreenMsg', subMsg })
+          }
+        />
+      )
+    case 'PaginationScreenModel':
+      return (
+        <PaginationScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) =>
+            dispatch({ _tag: 'PaginationScreenMsg', subMsg })
+          }
+        />
+      )
+    case 'PanelScreenModel':
+      return (
+        <PanelScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'PanelScreenMsg', subMsg })}
+        />
+      )
+    case 'PopoverScreenModel':
+      return (
+        <PopoverScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'PopoverScreenMsg', subMsg })}
+        />
+      )
+    case 'ProgressScreenModel':
+      return (
+        <ProgressScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'ProgressScreenMsg', subMsg })}
+        />
+      )
+    case 'RadioScreenModel':
+      return (
+        <RadioScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'RadioScreenMsg', subMsg })}
+        />
+      )
+    case 'SectionScreenModel':
+      return (
+        <SectionScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'SectionScreenMsg', subMsg })}
+        />
+      )
+    case 'SelectScreenModel':
+      return (
+        <SelectScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'SelectScreenMsg', subMsg })}
+        />
+      )
+    case 'TableScreenModel':
+      return (
+        <TableScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'TableScreenMsg', subMsg })}
+        />
+      )
+    case 'TabsScreenModel':
+      return (
+        <TabsScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'TabsScreenMsg', subMsg })}
+        />
+      )
+    case 'TagScreenModel':
+      return (
+        <TagScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'TagScreenMsg', subMsg })}
+        />
+      )
+    case 'TextareaScreenModel':
+      return (
+        <TextareaScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'TextareaScreenMsg', subMsg })}
+        />
+      )
+    case 'TitleScreenModel':
+      return (
+        <TitleScreenMemo
+          model={pageModel.model}
+          dispatch={(subMsg) => dispatch({ _tag: 'TitleScreenMsg', subMsg })}
+        />
+      )
+    case 'NotFoundScreenModel':
+      return <NotFoundScreenMemo navigateRoute={navigateRoute} />
   }
 }
 
-const PageViewMemo = memo(PageViewComponent, PageViewPropsEq.equals)
+const ScreenViewMemo = memo(ScreenViewComponent, ScreenViewPropsEq.equals)
 
 export type AppProps = {
   model: Model
@@ -531,10 +539,10 @@ export const App = ({ model, dispatch }: AppProps) => {
             />
           </DsColumnMemo>
 
-          {/* Main Page Area */}
+          {/* Main Screen Area */}
           <DsColumnMemo className='min-w-0 flex-1'>
             <div className='w-full'>
-              <PageViewMemo pageModel={pageModel} dispatch={dispatch} />
+              <ScreenViewMemo pageModel={pageModel} dispatch={dispatch} />
             </div>
           </DsColumnMemo>
 

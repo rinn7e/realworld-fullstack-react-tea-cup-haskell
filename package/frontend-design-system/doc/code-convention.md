@@ -620,7 +620,7 @@ export const AccountSettingMemo = memo(AccountSettingComponent, PropsEq.equals)
 
 #### Recommended File Breakdown
 
-For any component (or page), split it into the following files:
+For any component (or screen), split it into the following files:
 
 **1. `type.ts`**
 
@@ -644,7 +644,7 @@ For any component (or page), split it into the following files:
 - Re-exports everything from `./type` and `./update`.
 - **NEVER** `export * from './component'` in `index.ts`. Callers must import view components directly from `/component` (or `./component.tsx`).
 
-For complex components (like pages):
+For complex components (like screens):
 
 **5. `sub-component/`**
 
@@ -654,7 +654,7 @@ For complex components (like pages):
 
 **6. `common/`**
 
-- Directory for types, views, or utilities shared **only** among the child components of this specific page/component.
+- Directory for types, views, or utilities shared **only** among the child components of this specific screen/component.
 
 ---
 
@@ -671,19 +671,19 @@ To minimize circular dependencies and ensure a clean modular structure, follow t
 
 1.  **`src/common/`**: Central shared logic. Nothing in `common/` should import from outside `common/` (except external libraries).
 2.  **Global Components (`src/component/`)**: Generic UI components (e.g., `navbar.tsx`, `link.tsx`).
-3.  **Pages (`src/page/`)**: Application pages.
-4.  **Sub Components (`src/page/*/sub-component/`)**: Specific components used only by a single page or parent component.
+3.  **Screens (`src/screen/`)**: Application screens.
+4.  **Sub Components (`src/screen/*/sub-component/`)**: Specific components used only by a single screen or parent component.
 
 **App Structure:**
 
-- The root `App` is the entry point that composes **Components** and **Pages**.
-- Each **Component** or **Page** can contain its own **sub-component** directory.
+- The root `App` is the entry point that composes **Components** and **Screens**.
+- Each **Component** or **Screen** can contain its own **sub-component** directory.
 - Deep nesting of sub-components is possible but should be kept rare to avoid complexity.
 
 **Import Rules:**
 
 - Always prefer importing from `@/common/...`.
-- Sub-components should import shared page-level logic from their parent's `./common/` directory.
+- Sub-components should import shared screen-level logic from their parent's `./common/` directory.
 - Avoid importing from the top-level `@/type.ts` unless you are a global component needing the root `Model` or `Msg`.
 
 ### React Components

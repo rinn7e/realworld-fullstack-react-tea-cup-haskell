@@ -8,21 +8,21 @@ import {
   toUrlString,
 } from '@/common/type/route'
 
-export const mkRouterConfig = <PageModel, Msg>(
-  initPageModel: (
+export const mkRouterConfig = <ScreenModel, Msg>(
+  initScreenModel: (
     route: AppRoute,
     context: undefined,
     prev?: {
       readonly route: AppRoute
-      readonly pageModel: PageModel
+      readonly pageModel: ScreenModel
     },
-  ) => [PageModel, Cmd<Msg>],
+  ) => [ScreenModel, Cmd<Msg>],
   toMsg: (subMsg: TeaRouter.Msg<AppRoute>) => Msg,
-): TeaRouter.Config<AppRoute, PageModel, undefined, Msg> => ({
+): TeaRouter.Config<AppRoute, ScreenModel, undefined, Msg> => ({
   parseUrl: (location) => parseAppRoute('', location.href),
   toUrl: toUrlString,
   routeEq: AppRouteEq,
   guard: () => ({ _tag: 'Allow' }),
-  initPageModel,
+  initPageModel: initScreenModel,
   toMsg,
 })
