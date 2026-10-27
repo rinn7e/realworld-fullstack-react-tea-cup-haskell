@@ -37,6 +37,10 @@ pnpm dev --mode production
 
 This will use the base URL: `https://api.realworld.show/api`.
 
+## Debugging without the URL
+
+Set `VITE_DISABLE_URL=true` (in `.env.development`, or `VITE_DISABLE_URL=true pnpm dev`) to run the app on in-app navigation alone: it boots on the home screen, ignores the browser back and forward, and never writes the URL (see "Navigation and the URL" in [the code convention](doc/code-convention.md)).
+
 ## Available Scripts
 
 > [!NOTE]
