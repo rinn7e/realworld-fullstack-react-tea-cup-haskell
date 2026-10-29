@@ -1,3 +1,4 @@
+import Common
 import SwiftUI
 
 extension VisitorScreen.SubComponent {

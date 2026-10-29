@@ -1,6 +1,6 @@
-struct Profile: Equatable, Decodable {
-  let username: String
-  let bio: String?
-  let image: String?
-  let following: Bool
+public struct Profile: Equatable, Decodable {
+  public let username: String
+  public let bio: String?
+  public let image: String?
+  public let following: Bool
 }

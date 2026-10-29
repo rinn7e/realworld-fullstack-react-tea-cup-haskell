@@ -1,3 +1,5 @@
+import Common
+
 enum LoginScreen {
   struct Model: Equatable {
     var email: String

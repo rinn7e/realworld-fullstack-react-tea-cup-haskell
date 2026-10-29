@@ -1,4 +1,5 @@
 import Charts
+import Common
 import SwiftUI
 
 extension HomeScreen.SubComponent {

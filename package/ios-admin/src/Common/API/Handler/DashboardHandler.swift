@@ -1,15 +1,15 @@
-func getDashboardStats(_ token: String) async -> Result<DashboardStats, HttpError> {
+public func getDashboardStats(_ token: String) async -> Result<DashboardStats, HttpError> {
   runApi(await fetchApi("/admin/dashboard/stats", token: token), decodeSuccess(DashboardStats.self))
 }
 
-func getVisitorStats(_ token: String, filter: String? = nil) async -> Result<[VisitorStat], HttpError> {
+public func getVisitorStats(_ token: String, filter: String? = nil) async -> Result<[VisitorStat], HttpError> {
   runApi(
     await fetchApi("/admin/dashboard/visitor-stats", token: token, query: [("filter", filter)]),
     decodeSuccess([VisitorStat].self)
   )
 }
 
-func getLogs(
+public func getLogs(
   _ token: String,
   limit: Int? = nil,
   offset: Int? = nil,
@@ -26,7 +26,7 @@ func getLogs(
   )
 }
 
-func getVisitors(
+public func getVisitors(
   _ token: String,
   limit: Int? = nil,
   offset: Int? = nil,

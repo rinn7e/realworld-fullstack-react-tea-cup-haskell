@@ -1,27 +1,27 @@
 import Foundation
 
-enum ArticleSortAttr: String, Equatable, CaseIterable {
+public enum ArticleSortAttr: String, Equatable, CaseIterable {
   case id
   case title
   case favoritesCount
   case createdAt
 }
 
-struct Article: Equatable, Decodable, Identifiable {
-  let id: Int
-  let slug: String
-  let title: String
-  let description: String
-  let body: String
-  let tagList: [String]
-  let createdAt: Date
-  let updatedAt: Date
-  let favorited: Bool
-  let favoritesCount: Int
-  let author: AdminUser
+public struct Article: Equatable, Decodable, Identifiable {
+  public let id: Int
+  public let slug: String
+  public let title: String
+  public let description: String
+  public let body: String
+  public let tagList: [String]
+  public let createdAt: Date
+  public let updatedAt: Date
+  public let favorited: Bool
+  public let favoritesCount: Int
+  public let author: AdminUser
 }
 
-struct ArticleListResponse: Equatable, Decodable {
-  let articles: [Article]
-  let articlesCount: Int
+public struct ArticleListResponse: Equatable, Decodable {
+  public let articles: [Article]
+  public let articlesCount: Int
 }

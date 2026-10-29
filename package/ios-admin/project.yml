@@ -13,15 +13,25 @@ packages:
     path: lib/TeaCup
   TeaCupPagination:
     path: lib/TeaCupPagination
+  SentinelAdminModules:
+    path: .
 targets:
   SentinelAdmin:
     type: application
     platform: iOS
     sources:
       - path: src
+        # The folders of the modules of Package.swift
+        excludes:
+          - Theme
+          - Common
     dependencies:
       - package: TeaCup
       - package: TeaCupPagination
+      - package: SentinelAdminModules
+        product: Theme
+      - package: SentinelAdminModules
+        product: Common
     info:
       path: Info.plist
       properties:

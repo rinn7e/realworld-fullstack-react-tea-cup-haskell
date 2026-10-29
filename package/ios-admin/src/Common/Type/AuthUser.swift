@@ -1,7 +1,15 @@
-struct AuthUser: Equatable {
-  let username: String
-  let email: String
-  let token: String
-  let bio: String?
-  let image: String?
+public struct AuthUser: Equatable {
+  public let username: String
+  public let email: String
+  public let token: String
+  public let bio: String?
+  public let image: String?
+
+  public init(username: String, email: String, token: String, bio: String?, image: String?) {
+    self.username = username
+    self.email = email
+    self.token = token
+    self.bio = bio
+    self.image = image
+  }
 }

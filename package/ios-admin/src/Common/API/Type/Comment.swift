@@ -1,21 +1,21 @@
 import Foundation
 
-enum CommentSortAttr: String, Equatable, CaseIterable {
+public enum CommentSortAttr: String, Equatable, CaseIterable {
   case id
   case createdAt
   case author
 }
 
-struct Comment: Equatable, Decodable, Identifiable {
-  let id: Int
-  let body: String
-  let createdAt: Date
-  let updatedAt: Date
-  let articleSlug: String
-  let author: Profile
+public struct Comment: Equatable, Decodable, Identifiable {
+  public let id: Int
+  public let body: String
+  public let createdAt: Date
+  public let updatedAt: Date
+  public let articleSlug: String
+  public let author: Profile
 }
 
-struct CommentListResponse: Equatable, Decodable {
-  let comments: [Comment]
-  let totalCount: Int
+public struct CommentListResponse: Equatable, Decodable {
+  public let comments: [Comment]
+  public let totalCount: Int
 }

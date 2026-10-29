@@ -1,14 +1,16 @@
+import Common
 import SwiftUI
 import TeaCup
+import Theme
 
 enum SettingScreen {
   struct Component: View, Equatable {
     let user: AuthUser?
-    let colorScheme: ColorScheme
+    let colorScheme: Theme.ColorScheme
     let theme: Theme
     let dispatch: Dispatcher<Msg>
 
-    private static let schemeOptions: [(value: ColorScheme, label: String, description: String, systemImage: String)] = [
+    private static let schemeOptions: [(value: Theme.ColorScheme, label: String, description: String, systemImage: String)] = [
       (.light, "Light", "Always use light interface", "sun.max"),
       (.dark, "Dark", "Always use dark interface", "moon"),
       (.auto, "Auto", "Follow your OS setting", "circle.lefthalf.filled"),

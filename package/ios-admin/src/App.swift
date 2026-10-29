@@ -1,5 +1,7 @@
+import Common
 import SwiftUI
 import TeaCup
+import Theme
 
 /// The app: the login screen alone when signed out, otherwise the screens as
 /// tabs (the sidebar of the web app; on iPad the tab bar can become a sidebar).

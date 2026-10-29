@@ -1,4 +1,4 @@
-func getAdminComments(
+public func getAdminComments(
   _ token: String,
   limit: Int? = nil,
   offset: Int? = nil,
@@ -20,6 +20,6 @@ func getAdminComments(
   )
 }
 
-func deleteComment(_ token: String, id: Int) async -> Result<Bool, HttpError> {
+public func deleteComment(_ token: String, id: Int) async -> Result<Bool, HttpError> {
   runApi(await fetchApi("/admin/comments/\(id)", method: "DELETE", token: token), ensureIsOk(true))
 }

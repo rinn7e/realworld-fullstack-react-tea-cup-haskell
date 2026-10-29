@@ -1,35 +1,35 @@
 import Foundation
 
-struct DashboardStats: Equatable, Decodable {
-  let totalUsers: Int
-  let totalArticles: Int
-  let totalComments: Int
-  let totalVisitors: Int
-  let activeUsers24h: Int
+public struct DashboardStats: Equatable, Decodable {
+  public let totalUsers: Int
+  public let totalArticles: Int
+  public let totalComments: Int
+  public let totalVisitors: Int
+  public let activeUsers24h: Int
 }
 
-struct VisitorStat: Equatable, Decodable {
-  let name: String
-  let visitors: Int
+public struct VisitorStat: Equatable, Decodable {
+  public let name: String
+  public let visitors: Int
 }
 
-enum LogLevel: String, Equatable, Decodable {
+public enum LogLevel: String, Equatable, Decodable {
   case INFO
   case WARNING
   case ERROR
   case DEBUG
 }
 
-struct Log: Equatable, Decodable, Identifiable {
-  let id: Int
-  let level: LogLevel
-  let message: String
-  let source: String
-  let timestamp: Date
-  let userId: Int?
+public struct Log: Equatable, Decodable, Identifiable {
+  public let id: Int
+  public let level: LogLevel
+  public let message: String
+  public let source: String
+  public let timestamp: Date
+  public let userId: Int?
 }
 
-struct LogListResponse: Equatable, Decodable {
-  let logs: [Log]
-  let totalCount: Int
+public struct LogListResponse: Equatable, Decodable {
+  public let logs: [Log]
+  public let totalCount: Int
 }

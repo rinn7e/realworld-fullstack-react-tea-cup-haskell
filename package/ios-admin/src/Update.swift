@@ -1,4 +1,6 @@
+import Common
 import TeaCup
+import Theme
 
 // Initialization
 // ---------------------------------------------
@@ -158,7 +160,7 @@ private func switchThemeHandler(_ theme: Theme, _ model: Model) -> (Model, Cmd<M
   return (updatedModel, Cmd { _ in saveTheme(theme) })
 }
 
-private func setColorSchemeHandler(_ scheme: ColorScheme, _ model: Model) -> (Model, Cmd<Msg>) {
+private func setColorSchemeHandler(_ scheme: Theme.ColorScheme, _ model: Model) -> (Model, Cmd<Msg>) {
   var updatedModel = model
   updatedModel.colorScheme = scheme
   return (updatedModel, Cmd { _ in saveColorScheme(scheme) })

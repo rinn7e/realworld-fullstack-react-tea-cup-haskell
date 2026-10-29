@@ -1,10 +1,12 @@
+import Common
 import Foundation
+import Theme
 
 struct Model: Equatable {
   var screenModel: CurrentScreenModel
   var shared: Shared
   var theme: Theme
-  var colorScheme: ColorScheme
+  var colorScheme: Theme.ColorScheme
 }
 
 // The screen shown, as its model. Its case is the destination's screen
@@ -60,7 +62,7 @@ enum Msg {
   case commentScreenMsg(CommentScreen.Msg)
   case visitorScreenMsg(VisitorScreen.Msg)
   case switchTheme(Theme)
-  case setColorScheme(ColorScheme)
+  case setColorScheme(Theme.ColorScheme)
   case noOp
 }
 

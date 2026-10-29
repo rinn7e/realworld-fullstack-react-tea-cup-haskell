@@ -8,7 +8,7 @@ private func pathPieces(_ url: URL) -> [String] {
   ([url.host ?? ""] + url.pathComponents).filter { !$0.isEmpty && $0 != "/" }
 }
 
-func parseDestination(_ url: URL) -> Destination {
+public func parseDestination(_ url: URL) -> Destination {
   let screen: Screen =
     switch pathPieces(url) {
     case []: .homeScreen
@@ -23,7 +23,7 @@ func parseDestination(_ url: URL) -> Destination {
   return destinationOfScreen(screen)
 }
 
-func toUrlString(_ destination: Destination) -> String {
+public func toUrlString(_ destination: Destination) -> String {
   let path =
     switch destination.screen {
     case .homeScreen: ""

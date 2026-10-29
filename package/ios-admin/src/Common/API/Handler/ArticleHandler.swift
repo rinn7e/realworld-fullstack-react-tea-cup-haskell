@@ -1,6 +1,6 @@
 import Foundation
 
-func getAdminArticles(
+public func getAdminArticles(
   _ token: String,
   limit: Int? = nil,
   offset: Int? = nil,
@@ -23,7 +23,7 @@ func getAdminArticles(
   )
 }
 
-func deleteArticle(_ token: String, slug: String) async -> Result<Bool, HttpError> {
+public func deleteArticle(_ token: String, slug: String) async -> Result<Bool, HttpError> {
   let encoded = slug.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? slug
   return runApi(await fetchApi("/admin/articles/\(encoded)", method: "DELETE", token: token), ensureIsOk(true))
 }

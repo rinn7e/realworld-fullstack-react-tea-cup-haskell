@@ -1,23 +1,23 @@
 import Foundation
 
-enum VisitorSortAttr: String, Equatable, CaseIterable {
+public enum VisitorSortAttr: String, Equatable, CaseIterable {
   case id
   case ip
   case path
   case timestamp
 }
 
-struct Visitor: Equatable, Decodable, Identifiable {
-  let id: Int
-  let ip: String
-  let userAgent: String
-  let path: String
-  let fingerprint: String
-  let timestamp: Date
-  let user: AdminUser?
+public struct Visitor: Equatable, Decodable, Identifiable {
+  public let id: Int
+  public let ip: String
+  public let userAgent: String
+  public let path: String
+  public let fingerprint: String
+  public let timestamp: Date
+  public let user: AdminUser?
 }
 
-struct VisitorListResponse: Equatable, Decodable {
-  let visitors: [Visitor]
-  let totalCount: Int
+public struct VisitorListResponse: Equatable, Decodable {
+  public let visitors: [Visitor]
+  public let totalCount: Int
 }

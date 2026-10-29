@@ -15,7 +15,7 @@ private func tokenQuery() -> [String: Any] {
   ]
 }
 
-func saveToken(_ token: String) {
+public func saveToken(_ token: String) {
   removeToken()
   var query = tokenQuery()
   query[kSecValueData as String] = Data(token.utf8)
@@ -23,7 +23,7 @@ func saveToken(_ token: String) {
   SecItemAdd(query as CFDictionary, nil)
 }
 
-func getToken() -> String? {
+public func getToken() -> String? {
   var query = tokenQuery()
   query[kSecReturnData as String] = true
   query[kSecMatchLimit as String] = kSecMatchLimitOne
@@ -34,6 +34,6 @@ func getToken() -> String? {
   return String(data: data, encoding: .utf8)
 }
 
-func removeToken() {
+public func removeToken() {
   SecItemDelete(tokenQuery() as CFDictionary)
 }

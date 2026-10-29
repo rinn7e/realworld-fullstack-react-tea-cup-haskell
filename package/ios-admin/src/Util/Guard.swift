@@ -1,3 +1,5 @@
+import Common
+
 // A destination the guard let through (`guardDestination`): the only kind a
 // move opens. Owned: nothing else can make one (the initializer is file
 // private), so skipping the guard does not type check. Review: a new maker in

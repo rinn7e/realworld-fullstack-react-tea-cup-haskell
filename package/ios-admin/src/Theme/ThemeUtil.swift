@@ -6,24 +6,24 @@ import SwiftUI
 private let COLOR_SCHEME_KEY = "admin-color-scheme"
 private let THEME_KEY = "admin-theme"
 
-func loadColorScheme() -> ColorScheme {
-  UserDefaults.standard.string(forKey: COLOR_SCHEME_KEY).flatMap(ColorScheme.init(rawValue:)) ?? .auto
+public func loadColorScheme() -> Theme.ColorScheme {
+  UserDefaults.standard.string(forKey: COLOR_SCHEME_KEY).flatMap(Theme.ColorScheme.init(rawValue:)) ?? .auto
 }
 
-func saveColorScheme(_ scheme: ColorScheme) {
+public func saveColorScheme(_ scheme: Theme.ColorScheme) {
   UserDefaults.standard.set(scheme.rawValue, forKey: COLOR_SCHEME_KEY)
 }
 
-func loadThemeId() -> String? {
+public func loadThemeId() -> String? {
   UserDefaults.standard.string(forKey: THEME_KEY)
 }
 
-func saveTheme(_ theme: Theme) {
+public func saveTheme(_ theme: Theme) {
   UserDefaults.standard.set(theme.id, forKey: THEME_KEY)
 }
 
 /// The scheme SwiftUI is asked for: nil follows the system, like `auto`
-func preferredColorSchemeOf(_ scheme: ColorScheme) -> SwiftUI.ColorScheme? {
+public func preferredColorSchemeOf(_ scheme: Theme.ColorScheme) -> SwiftUI.ColorScheme? {
   switch scheme {
   case .light: .light
   case .dark: .dark

@@ -1,3 +1,4 @@
+import Common
 import TeaCupPagination
 
 extension CommentScreen {

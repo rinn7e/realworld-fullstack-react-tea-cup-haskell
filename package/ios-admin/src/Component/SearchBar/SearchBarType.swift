@@ -1,3 +1,5 @@
+import Common
+
 enum SearchBar {
   struct SearchOption<Sort> {
     let label: String

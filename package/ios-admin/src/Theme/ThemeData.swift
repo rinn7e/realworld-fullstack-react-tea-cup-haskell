@@ -2,7 +2,7 @@ import SwiftUI
 
 // The presets of the web app. On iOS the primary color is the tint of the app;
 // the fonts of the web themes are left to the system font.
-let themes: [Theme] = [
+public let themes: [Theme] = [
   Theme(
     id: "modernBlue",
     name: "Modern Blue",
@@ -23,4 +23,4 @@ let themes: [Theme] = [
   ),
 ]
 
-let defaultTheme = themes[0]
+public let defaultTheme = themes[0]

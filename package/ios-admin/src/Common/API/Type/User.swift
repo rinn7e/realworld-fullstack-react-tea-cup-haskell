@@ -1,40 +1,49 @@
-enum UserSortAttr: String, Equatable, CaseIterable {
+public enum UserSortAttr: String, Equatable, CaseIterable {
   case id
   case username
   case email
 }
 
-struct AdminUser: Equatable, Decodable, Identifiable {
-  let id: Int
-  let username: String
-  let email: String
-  let bio: String?
-  let image: String?
-  let role: String
+public struct AdminUser: Equatable, Decodable, Identifiable {
+  public let id: Int
+  public let username: String
+  public let email: String
+  public let bio: String?
+  public let image: String?
+  public let role: String
 }
 
-struct AdminUserListResponse: Equatable, Decodable {
-  let users: [AdminUser]
-  let totalCount: Int
+public struct AdminUserListResponse: Equatable, Decodable {
+  public let users: [AdminUser]
+  public let totalCount: Int
 }
 
-struct LoginRequest: Encodable {
-  struct User: Encodable {
-    let email: String
-    let password: String
+public struct LoginRequest: Encodable {
+  public struct User: Encodable {
+    public let email: String
+    public let password: String
+
+    public init(email: String, password: String) {
+      self.email = email
+      self.password = password
+    }
   }
 
-  let user: User
+  public let user: User
+
+  public init(user: User) {
+    self.user = user
+  }
 }
 
-struct UserResponse: Equatable, Decodable {
-  struct User: Equatable, Decodable {
-    let email: String
-    let token: String
-    let username: String
-    let bio: String?
-    let image: String?
+public struct UserResponse: Equatable, Decodable {
+  public struct User: Equatable, Decodable {
+    public let email: String
+    public let token: String
+    public let username: String
+    public let bio: String?
+    public let image: String?
   }
 
-  let user: User
+  public let user: User
 }
