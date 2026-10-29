@@ -13,6 +13,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "android-admin"
+rootProject.name = "mobile-admin-android"
 
 include(":app")

@@ -1,6 +1,6 @@
 # Kotlin Cheat Sheet (FP Perspective)
 
-This cheat sheet is a quick syntax mapping between the Kotlin constructs used in the `android-admin` project and their counterparts in **Haskell**, **Elm**, and functional **TypeScript** (with `fp-ts` and the `react-tea-cup` conventions of `frontend-admin`). It is the Kotlin sibling of the Swift cheat sheet of `ios-admin`.
+This cheat sheet is a quick syntax mapping between the Kotlin constructs used in the `mobile-admin-android` project and their counterparts in **Haskell**, **Elm**, and functional **TypeScript** (with `fp-ts` and the `react-tea-cup` conventions of `frontend-admin`). It is the Kotlin sibling of the Swift cheat sheet of `mobile-admin-ios`.
 
 ---
 
@@ -60,7 +60,7 @@ import teacuppagination.Model
 import component.searchbar.Model   // error: Conflicting import: imported name 'Model' is ambiguous.
 ```
 
-The rule of `android-admin` follows from this: import the `Model`, `Msg`, `initial` or `update` of another module only with an alias, or write it with its package.
+The rule of `mobile-admin-android` follows from this: import the `Model`, `Msg`, `initial` or `update` of another module only with an alias, or write it with its package.
 
 ```kotlin
 import component.searchbar.update as searchBarUpdate
@@ -78,7 +78,7 @@ import teacuppagination.Msg as PaginationMsg
 
 There is no visibility per package or per folder (Java has package private, Kotlin does not). So the `.Internal` pattern of Haskell is a convention here: the helpers of `common/api/handler/Common.kt` are `internal`, and only the handlers of that folder call them.
 
-### 1.5 How `android-admin` Is Organised
+### 1.5 How `mobile-admin-android` Is Organised
 
 | Folder | Package | Web |
 | :--- | :--- | :--- |
@@ -110,7 +110,7 @@ The folders are under `app/src/main/kotlin`. Each file becomes a class named aft
   data class Model(val email: String, val isSubmitting: Boolean)
   ```
 
-A `data class` gets `equals`, `hashCode`, `toString` and `copy` for free. `val` is a read-only field; `var` would make it mutable (`android-admin` uses `val` only).
+A `data class` gets `equals`, `hashCode`, `toString` and `copy` for free. `val` is a read-only field; `var` would make it mutable (`mobile-admin-android` uses `val` only).
 
 ### Copying
 
@@ -203,7 +203,7 @@ data class LoginScreenModel(val model: screen.loginscreen.Model) : ScreenModel
 import screen.loginscreen.update as loginScreenUpdate
 ```
 
-Compare with `ios-admin`, where a Swift module has one flat namespace and no renaming import, so every public name carries its folder (`LoginScreenModel`, `loginScreenUpdate`).
+Compare with `mobile-admin-ios`, where a Swift module has one flat namespace and no renaming import, so every public name carries its folder (`LoginScreenModel`, `loginScreenUpdate`).
 
 ---
 
@@ -306,7 +306,7 @@ fun <Item, Err> update(config: Config<Item, Err>, msg: Msg<Item, *, Err>, model:
 
 ## 10. The Elm Architecture in Kotlin
 
-| Elm | react-tea-cup | android-admin |
+| Elm | react-tea-cup | mobile-admin-android |
 | :--- | :--- | :--- |
 | `Model` | `type Model` | `data class Model` |
 | `Msg` | tagged union | `sealed interface Msg` |
@@ -342,4 +342,4 @@ fun LoginScreen(model: Model, dispatch: Dispatcher<Msg>) {
 | `useState` for a menu open or closed | `var isOpen by remember { mutableStateOf(false) }` |
 | `useEffect` | `LaunchedEffect`, `SideEffect` |
 
-`android-admin` keeps the app state in the model only. `remember` is used for state that belongs to a widget and not to the app (a dropdown open or closed), as a DOM element keeps its own focus.
+`mobile-admin-android` keeps the app state in the model only. `remember` is used for state that belongs to a widget and not to the app (a dropdown open or closed), as a DOM element keeps its own focus.

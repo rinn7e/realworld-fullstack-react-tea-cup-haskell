@@ -12,8 +12,8 @@ A production-grade, type-safe implementation of the RealWorld spec, featuring a 
 * [**package/frontend-web/**](package/frontend-web) — React 19 RealWorld web application built with `react-tea-cup` (Port 5173).
 * [**package/frontend-admin/**](package/frontend-admin) — Sentinel Dashboard for system monitoring and cache management (Port 5174).
 * [**package/frontend-admin-legacy/**](package/frontend-admin-legacy) — Sentinel Dashboard Legacy backup (Port 5176).
-* [**package/ios-admin/**](package/ios-admin) - Native iOS port of the Sentinel Dashboard, in Swift and SwiftUI with The Elm Architecture.
-* [**package/android-admin/**](package/android-admin) - Native Android port of the Sentinel Dashboard, in Kotlin and Jetpack Compose with The Elm Architecture.
+* [**package/mobile-admin-ios/**](package/mobile-admin-ios) - Native iOS port of the Sentinel Dashboard, in Swift and SwiftUI with The Elm Architecture.
+* [**package/mobile-admin-android/**](package/mobile-admin-android) - Native Android port of the Sentinel Dashboard, in Kotlin and Jetpack Compose with The Elm Architecture.
 * [**package/frontend-design-system/**](package/frontend-design-system) — Design system component library built with Tailwind CSS v4 `@plugin` and TEA.
 * [**package/e2e/**](package/e2e) — Playwright E2E integration test suite for `frontend-web`.
 
@@ -38,8 +38,8 @@ cd package/backend && make server-fresh
 | **Frontend Admin** | `package/frontend-admin` | `http://localhost:5174` |
 | **Design System Showcase** | `package/frontend-design-system/app/showcase-app` | `http://localhost:5175` |
 | **Frontend Admin Legacy** | `package/frontend-admin-legacy` | `http://localhost:5176` |
-| **iOS Admin** | `package/ios-admin` | iOS Simulator or an iPhone (see its README) |
-| **Android Admin** | `package/android-admin` | Android emulator or a phone (see its README) |
+| **iOS Admin** | `package/mobile-admin-ios` | iOS Simulator or an iPhone (see its README) |
+| **Android Admin** | `package/mobile-admin-android` | Android emulator or a phone (see its README) |
 
 ## Deployment (Docker + GitHub Actions + VPS)
 
@@ -151,8 +151,8 @@ For details on running individual packages independently:
 * [package/frontend-web/README.md](package/frontend-web/README.md)
 * [package/frontend-admin/README.md](package/frontend-admin/README.md)
 * [package/frontend-admin-legacy/README.md](package/frontend-admin-legacy/README.md)
-* [package/ios-admin/README.md](package/ios-admin/README.md) (and its [Swift cheatsheet](package/ios-admin/doc/swift_cheatsheet.md), for Haskell and TypeScript developers)
-* [package/android-admin/README.md](package/android-admin/README.md) (and its [Kotlin cheatsheet](package/android-admin/doc/kotlin_cheatsheet.md))
+* [package/mobile-admin-ios/README.md](package/mobile-admin-ios/README.md) (and its [Swift cheatsheet](package/mobile-admin-ios/doc/swift_cheatsheet.md), for Haskell and TypeScript developers)
+* [package/mobile-admin-android/README.md](package/mobile-admin-android/README.md) (and its [Kotlin cheatsheet](package/mobile-admin-android/doc/kotlin_cheatsheet.md))
 * [package/frontend-design-system/README.md](package/frontend-design-system/README.md)
 * [package/e2e/README.md](package/e2e/README.md)
 

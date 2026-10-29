@@ -54,11 +54,11 @@ The phone reaches the backend on this Mac over the Wi-Fi, at the LAN IP of the M
 
 `<TEAM>` is the team ID of your signing certificate (`security find-identity -v -p codesigning`, then the `OU` of that certificate). With a free personal team, the app stops opening after 7 days: build and install it again. The phone and the Mac must be on the same Wi-Fi, with the backend running.
 
-## From frontend-admin to ios-admin
+## From frontend-admin to mobile-admin-ios
 
 The file tree follows the one of `frontend-admin/src`, in the casing of Swift: folders and files are UpperCamelCase, with acronyms in capitals (`API`, `URL`). Every module keeps its folder, and every file keeps the name of the web file (`screen/user-screen/type.ts` is `Screen/UserScreen/Type.swift`). Two files of one module cannot have the same name, but each folder is its own module (see Modules), so a `Type.swift` in every screen is fine.
 
-| frontend-admin | ios-admin |
+| frontend-admin | mobile-admin-ios |
 | --- | --- |
 | `src/root.tsx`, `program.tsx`, `app.tsx` | `src/Root.swift`, `Program.swift`, `App.swift` |
 | `src/type.ts`, `update.ts` | `src/Type.swift`, `Update.swift` |

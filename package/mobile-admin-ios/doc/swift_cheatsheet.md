@@ -1,6 +1,6 @@
 # Swift Cheat Sheet (FP Perspective)
 
-This cheat sheet is a quick syntax mapping between the Swift constructs used in the `ios-admin` project and their counterparts in **Haskell**, **Elm**, and functional **TypeScript** (with `fp-ts` and the `react-tea-cup` conventions of `frontend-admin`).
+This cheat sheet is a quick syntax mapping between the Swift constructs used in the `mobile-admin-ios` project and their counterparts in **Haskell**, **Elm**, and functional **TypeScript** (with `fp-ts` and the `react-tea-cup` conventions of `frontend-admin`).
 
 ---
 
@@ -22,7 +22,7 @@ In Haskell and TypeScript, one file is one module. In Swift, one module is a who
 
 The closest Haskell picture: a Swift module is **one big Haskell module that is split over many files**, with no export list inside it.
 
-So `ios-admin` makes a module of every file (section 1.9): one target per file, the way a Haskell project has one module per file.
+So `mobile-admin-ios` makes a module of every file (section 1.9): one target per file, the way a Haskell project has one module per file.
 
 ### 1.2 Inside One Module: No Imports
 
@@ -56,7 +56,7 @@ So `ios-admin` makes a module of every file (section 1.9): one target per file, 
   print(answer())               // no import: same module
   ```
 
-In `ios-admin`, `Update.swift` calls `navigationMsgHandler` from `Handler/NavigationHandler.swift` with no import line, since both are files of the app module. To call `homeScreenInitial`, it must `import Screen_HomeScreen`: that one is another module.
+In `mobile-admin-ios`, `Update.swift` calls `navigationMsgHandler` from `Handler/NavigationHandler.swift` with no import line, since both are files of the app module. To call `homeScreenInitial`, it must `import Screen_HomeScreen`: that one is another module.
 
 ### 1.3 The Price: One Flat Namespace per Module
 
@@ -73,9 +73,9 @@ struct Model {}      // error: invalid redeclaration of 'Model'
 Haskell has no such problem, since `Screen.UserScreen.Model` and `Screen.HomeScreen.Model` live in different modules. In Swift there are two ways out:
 
 * **Nested types**: a name inside a type is qualified by that type (`enum UserScreen { struct Model {} }` gives `UserScreen.Model`). The `enum` is only a namespace: it hides nothing (section 4).
-* **Separate modules, with prefixed names** (`UserScreenModel` in the module `Screen_UserScreen_Type`): what `ios-admin` does, one module per file, because the prefix also protects against the silent shadowing of section 1.8.
+* **Separate modules, with prefixed names** (`UserScreenModel` in the module `Screen_UserScreen_Type`): what `mobile-admin-ios` does, one module per file, because the prefix also protects against the silent shadowing of section 1.8.
 
-File names are also flat: two files with the same name in one module do not build, even in different folders (`X/Type.swift` and `Y/Type.swift` fail with "multiple producers" of `Type.swift.o`). In different modules they are fine, so with a module per file `ios-admin` keeps the web file names: every screen has its `Type.swift` and `Update.swift`.
+File names are also flat: two files with the same name in one module do not build, even in different folders (`X/Type.swift` and `Y/Type.swift` fail with "multiple producers" of `Type.swift.o`). In different modules they are fine, so with a module per file `mobile-admin-ios` keeps the web file names: every screen has its `Type.swift` and `Update.swift`.
 
 ### 1.4 Making Another Module: a Local Swift Package
 
@@ -113,7 +113,7 @@ let package = Package(
 
 The app then lists the package as a dependency (in `project.yml` for XcodeGen, or in the `dependencies:` of another `Package.swift`), and its files write `import TeaCup`.
 
-A package can hold many modules: `ios-admin` has one `Package.swift` at its root, with a target per folder of `src/`, its TEA runtime included (`src/Package/TeaCup` is the module `Package_TeaCup`), so there is no second package to keep in step (section 1.9).
+A package can hold many modules: `mobile-admin-ios` has one `Package.swift` at its root, with a target per folder of `src/`, its TEA runtime included (`src/Package/TeaCup` is the module `Package_TeaCup`), so there is no second package to keep in step (section 1.9).
 
 ### 1.5 What Another Module Can See
 
@@ -201,11 +201,11 @@ let c = TeaCup::Cmd(name: "a")   // the imported one, by a module selector
 let e = App::Cmd(name: "c")      // the own one, said out loud
 ```
 
-In Haskell, the same clash is an "ambiguous occurrence" error until you qualify one of them. In Swift it is not an error, and nothing forces the qualifier: a bare `Cmd` quietly means the local one. Two imported modules with the same name do give an error ("ambiguous for type lookup"), as `Theme.ColorScheme` and SwiftUI `ColorScheme` did in `ios-admin` until one was nested.
+In Haskell, the same clash is an "ambiguous occurrence" error until you qualify one of them. In Swift it is not an error, and nothing forces the qualifier: a bare `Cmd` quietly means the local one. Two imported modules with the same name do give an error ("ambiguous for type lookup"), as `Theme.ColorScheme` and SwiftUI `ColorScheme` did in `mobile-admin-ios` until one was nested.
 
-So `ios-admin` prefixes every public name with its module (`SearchBarModel`, `UserScreenModel`): no two public names of the app are the same, so no local name can hide an imported one, and no qualifier is ever needed.
+So `mobile-admin-ios` prefixes every public name with its module (`SearchBarModel`, `UserScreenModel`): no two public names of the app are the same, so no local name can hide an imported one, and no qualifier is ever needed.
 
-### 1.9 How `ios-admin` Is Organised
+### 1.9 How `mobile-admin-ios` Is Organised
 
 Every file is a module, named after its path (section 1.3 explains why file names may repeat across modules):
 
@@ -282,7 +282,7 @@ import Screen_UserScreen_Type
 model.selectedUser                // error: 'selectedUser' is inaccessible due to '@_spi' protection level
 ```
 
-As with `.Internal`, nothing stops another module from writing `@_spi(Screen_UserScreen) import`: it is a convention, made visible by the name of the group, so a check can find every opt-in. `ios-admin` names each group after its folder, and `script/check-spi.sh` fails when a file uses the group of another folder.
+As with `.Internal`, nothing stops another module from writing `@_spi(Screen_UserScreen) import`: it is a convention, made visible by the name of the group, so a check can find every opt-in. `mobile-admin-ios` names each group after its folder, and `script/check-spi.sh` fails when a file uses the group of another folder.
 
 Why there is no real "friend" level: submodules and a group level were pitched several times (2017), and turned down as a C++ `friend` by another name. What was accepted is `package` (SE-0386, Swift 5.9), which opens a name to the whole package, not to a chosen group.
 
@@ -381,7 +381,7 @@ Swift `enum` is a sum type. A case can carry values ("associated values").
   type Direction = 'asc' | 'desc'
   ```
 
-`: String` gives every case a raw value (`Direction.asc.rawValue == "asc"`, `Direction(rawValue: "asc")`), which is how `ios-admin` writes enums into query strings.
+`: String` gives every case a raw value (`Direction.asc.rawValue == "asc"`, `Direction(rawValue: "asc")`), which is how `mobile-admin-ios` writes enums into query strings.
 
 ### 3.2 Enums with Associated Values (Msg)
 * **Swift**:
@@ -430,7 +430,7 @@ A case with a value is also a function: `Msg.changeEmail` has the type `(String)
 
 ## 4. A TEA Module: a Folder of File Modules, Prefixed Names
 
-A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.tsx`) is a folder of Swift modules in `ios-admin`, one per file (section 1.9). Its public names start with the name of the folder, since Swift has no qualified import and a local name silently wins over an imported one (section 1.8). What the files of the folder share with each other only is `@_spi(<folder>)` (section 1.11).
+A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.tsx`) is a folder of Swift modules in `mobile-admin-ios`, one per file (section 1.9). Its public names start with the name of the folder, since Swift has no qualified import and a local name silently wins over an imported one (section 1.8). What the files of the folder share with each other only is `@_spi(<folder>)` (section 1.11).
 
 * **Swift** (folder `Screen/UserScreen`):
   ```swift
@@ -464,7 +464,7 @@ A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.ts
 * **Elm**: `module Screen.UserScreen exposing (Model, Msg, init, update, view)`.
 * **TypeScript**: `screen/user-screen/index.ts` re-exports `type.ts` and `update.ts`; the view is imported from `@/screen/user-screen/component`; a sub-component is never re-exported.
 
-`init` is a keyword in Swift, so the `init` of a TEA module is `xInitial` in `ios-admin`.
+`init` is a keyword in Swift, so the `init` of a TEA module is `xInitial` in `mobile-admin-ios`.
 
 ### 4.1 A Name Says Where It Is Defined
 
@@ -492,7 +492,7 @@ extension UserScreen {                       // in another file
 UserScreen.Model, UserScreen.update(...)
 ```
 
-An `enum` with no cases cannot be made, so `UserScreen()` never compiles, unlike an empty `struct`. But it is a namespace, not a module: it hides nothing (every member is `internal`, seen by the whole module), and it adds no import, so any file can use any screen. `ios-admin` used it before its modules; the modules replaced it because they check the layers.
+An `enum` with no cases cannot be made, so `UserScreen()` never compiles, unlike an empty `struct`. But it is a namespace, not a module: it hides nothing (every member is `internal`, seen by the whole module), and it adds no import, so any file can use any screen. `mobile-admin-ios` used it before its modules; the modules replaced it because they check the layers.
 
 ---
 
@@ -693,7 +693,7 @@ Constraints sit on the parameter (`Item: Equatable`) or after `where` (`extensio
 
 ## 12. Async Effects
 
-Swift has `async` functions and `Task` built in. `ios-admin` wraps them in `Cmd`, so `update` stays pure.
+Swift has `async` functions and `Task` built in. `mobile-admin-ios` wraps them in `Cmd`, so `update` stays pure.
 
 | Concept | Swift (`Package_TeaCup`) | Haskell | Elm | TypeScript (tea-cup) |
 | :--- | :--- | :--- | :--- | :--- |
@@ -712,7 +712,7 @@ The access levels are in section 1.6. An opaque type is a type whose constructor
 
 | Scope of the owner | Swift | Haskell | Elm | TypeScript |
 | :--- | :--- | :--- | :--- | :--- |
-| **One file** (`ios-admin`) | a struct with a `fileprivate init` | `module M (T) where` (type without its constructor) | `module M exposing (T)` | `Brand<T, B>` with a private class method |
+| **One file** (`mobile-admin-ios`) | a struct with a `fileprivate init` | `module M (T) where` (type without its constructor) | `module M exposing (T)` | `Brand<T, B>` with a private class method |
 | **One module** (another module uses it) | a `public struct` with an `internal init` and a `public` maker function | the same export list | the same | a branded type exported from the package |
 
 ```swift
@@ -730,7 +730,7 @@ Outside `Guard.swift`, `DestinationAfterGuard(...)` does not compile: the guard 
 
 ## 14. The Elm Architecture in Swift
 
-| TEA | Swift (`ios-admin`) | Elm | TypeScript (react-tea-cup) |
+| TEA | Swift (`mobile-admin-ios`) | Elm | TypeScript (react-tea-cup) |
 | :--- | :--- | :--- | :--- |
 | **Model** | `public struct XModel: Equatable` | `type alias Model` | `type Model` with `ModelEq` |
 | **Msg** | `public enum XMsg` | `type Msg` | `type Msg` with `_tag` |

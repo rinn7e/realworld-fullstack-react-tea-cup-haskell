@@ -1,6 +1,6 @@
 # Sentinel Admin (Android)
 
-A native Android port of [`frontend-admin`](../frontend-admin) (the Sentinel Dashboard), written in Kotlin and Jetpack Compose with The Elm Architecture. It talks to the same backend (`package/backend`) through the same `/api/admin` endpoints. It is the Android sibling of [`ios-admin`](../ios-admin), with the same screens and the same TEA structure.
+A native Android port of [`frontend-admin`](../frontend-admin) (the Sentinel Dashboard), written in Kotlin and Jetpack Compose with The Elm Architecture. It talks to the same backend (`package/backend`) through the same `/api/admin` endpoints. It is the Android sibling of [`mobile-admin-ios`](../mobile-admin-ios), with the same screens and the same TEA structure.
 
 ## Tech Stack
 
@@ -51,11 +51,11 @@ The TEA logic (TeaCup, the pagination, the navigation and its guard, the updates
 ./gradlew testDebugUnitTest
 ```
 
-## From frontend-admin to android-admin
+## From frontend-admin to mobile-admin-android
 
 The file tree of `app/src/main/kotlin` is the one of `frontend-admin/src`: a folder holds its types, its update, its utils and its view side by side. A folder is a Kotlin package of the same name, in lower case (`screen/user-screen` is the package `screen.userscreen`), and each file keeps the name of its web file:
 
-| frontend-admin | android-admin (`app/src/main/kotlin`) |
+| frontend-admin | mobile-admin-android (`app/src/main/kotlin`) |
 | --- | --- |
 | `src/root.tsx`, `program.tsx`, `app.tsx` | `app/Root.kt` (the activity), `app/Program.kt`, `app/App.kt` |
 | `src/type.ts`, `update.ts` | `app/Type.kt`, `app/Update.kt` |
