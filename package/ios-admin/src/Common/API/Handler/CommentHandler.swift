@@ -1,3 +1,5 @@
+import CommonAPIType
+
 public func getAdminComments(
   _ token: String,
   limit: Int? = nil,

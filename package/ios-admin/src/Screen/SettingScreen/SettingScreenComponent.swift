@@ -1,4 +1,4 @@
-import Common
+import CommonType
 import SwiftUI
 import TeaCup
 import Theme

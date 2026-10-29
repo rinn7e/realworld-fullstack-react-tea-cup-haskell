@@ -1,3 +1,5 @@
+import CommonAPIType
+
 public func login(_ request: LoginRequest) async -> Result<UserResponse, HttpError> {
   runApi(await fetchApi("/admin/login", method: "POST", body: request), decodeSuccess(UserResponse.self))
 }

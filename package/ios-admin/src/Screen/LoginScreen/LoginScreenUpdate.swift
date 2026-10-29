@@ -1,4 +1,5 @@
-import Common
+import CommonAPIHandler
+import CommonAPIType
 import TeaCup
 
 extension LoginScreen {

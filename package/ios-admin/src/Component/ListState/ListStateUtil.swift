@@ -1,4 +1,4 @@
-import Common
+import CommonAPIType
 
 extension ListState {
   /// API field errors become "field: message, message" pairs joined by "; ",

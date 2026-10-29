@@ -1,4 +1,5 @@
-import Common
+import CommonAPIType
+import CommonType
 import TeaCup
 import TeaCupPagination
 

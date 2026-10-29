@@ -1,4 +1,5 @@
-import Common
+import CommonType
+import CommonTypeDestination
 import Foundation
 import Theme
 

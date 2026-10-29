@@ -23,15 +23,23 @@ targets:
       - path: src
         # The folders of the modules of Package.swift
         excludes:
-          - Theme
           - Common
+          - Theme
     dependencies:
       - package: TeaCup
       - package: TeaCupPagination
       - package: SentinelAdminModules
-        product: Theme
+        product: CommonAPIHandler
       - package: SentinelAdminModules
-        product: Common
+        product: CommonAPIType
+      - package: SentinelAdminModules
+        product: CommonCache
+      - package: SentinelAdminModules
+        product: CommonType
+      - package: SentinelAdminModules
+        product: CommonTypeDestination
+      - package: SentinelAdminModules
+        product: Theme
     info:
       path: Info.plist
       properties:

@@ -1,4 +1,4 @@
-import Common
+import CommonAPIType
 
 enum LoginScreen {
   struct Model: Equatable {

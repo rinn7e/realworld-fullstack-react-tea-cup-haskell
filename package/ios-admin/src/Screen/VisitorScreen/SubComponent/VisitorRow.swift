@@ -1,4 +1,4 @@
-import Common
+import CommonAPIType
 import SwiftUI
 
 extension VisitorScreen.SubComponent {

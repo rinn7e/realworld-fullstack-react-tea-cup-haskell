@@ -1,4 +1,4 @@
-import Common
+import CommonType
 import TeaCup
 
 extension SearchBar {

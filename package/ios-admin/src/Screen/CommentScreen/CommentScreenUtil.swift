@@ -1,4 +1,6 @@
-import Common
+import CommonAPIHandler
+import CommonAPIType
+import CommonType
 import TeaCupPagination
 
 extension CommentScreen {

@@ -1,4 +1,4 @@
-import Common
+import CommonType
 
 enum SearchBar {
   struct SearchOption<Sort> {
