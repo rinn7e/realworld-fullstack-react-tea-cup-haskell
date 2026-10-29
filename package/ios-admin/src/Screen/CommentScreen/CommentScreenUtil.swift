@@ -1,6 +1,6 @@
-import CommonAPIHandler
-import CommonAPIType
-import CommonType
+import Common_API_Handler
+import Common_API_Type
+import Common_Type
 import TeaCupPagination
 
 struct SearchParams {

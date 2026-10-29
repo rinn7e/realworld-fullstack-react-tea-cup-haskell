@@ -1,4 +1,4 @@
-import CommonTypeDestination
+import Common_Type_Destination
 import Foundation
 
 // The URL is an adapter at the edges, as in the web app, but iOS has no address

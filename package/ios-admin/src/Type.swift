@@ -1,13 +1,13 @@
-import CommonType
-import CommonTypeDestination
+import Common_Type
+import Common_Type_Destination
 import Foundation
-import ScreenArticleScreen
-import ScreenCommentScreen
-import ScreenHomeScreen
-import ScreenLoginScreen
-import ScreenSettingScreen
-import ScreenUserScreen
-import ScreenVisitorScreen
+import Screen_ArticleScreen
+import Screen_CommentScreen
+import Screen_HomeScreen
+import Screen_LoginScreen
+import Screen_SettingScreen
+import Screen_UserScreen
+import Screen_VisitorScreen
 import Theme
 
 struct Model: Equatable {

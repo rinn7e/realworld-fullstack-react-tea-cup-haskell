@@ -1,6 +1,6 @@
-import CommonAPIType
-import CommonEnv
-import CommonType
+import Common_API_Type
+import Common_Env
+import Common_Type
 import Foundation
 
 /// The raw answer of a request, or why it failed (the `fetchToTaskEither` pair)

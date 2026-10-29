@@ -1,4 +1,4 @@
-import CommonAPIType
+import Common_API_Type
 import SwiftUI
 
 struct VisitorRow: View, Equatable {

@@ -1,4 +1,4 @@
-import CommonType
+import Common_Type
 import SwiftUI
 import TeaCup
 

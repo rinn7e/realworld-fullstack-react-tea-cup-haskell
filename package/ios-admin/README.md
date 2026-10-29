@@ -60,16 +60,16 @@ Every folder of `src/` that holds code is a module (a target of `Package.swift`)
 | --- | --- | --- |
 | `TeaCup`, `TeaCupPagination` | `lib/TeaCup`, `lib/TeaCupPagination` (own packages) | `react-tea-cup`, `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
 | `Theme` | `src/Theme` | `src/theme` |
-| `CommonEnv`, `CommonCache`, `CommonType`, `CommonTypeDestination`, `CommonAPIType`, `CommonAPIHandler` | `src/Common/<Path>` | `src/common/*` |
-| `ComponentSearchBar`, `ComponentListState`, `ComponentPaginationNav`, `ComponentPagedList`, `ComponentDetailRow`, `ComponentProfileThumbnail`, `ComponentRoleBadge` | `src/Component/<Name>` | `src/component/*` |
-| `ScreenHomeScreen`, `ScreenLoginScreen`, `ScreenArticleScreen`, `ScreenUserScreen`, `ScreenCommentScreen`, `ScreenVisitorScreen`, `ScreenSettingScreen` | `src/Screen/<Name>Screen` | `src/screen/*` |
+| `Common_Env`, `Common_Cache`, `Common_Type`, `Common_Type_Destination`, `Common_API_Type`, `Common_API_Handler` | `src/Common/<Path>` | `src/common/*` |
+| `Component_SearchBar`, `Component_ListState`, `Component_PaginationNav`, `Component_PagedList`, `Component_DetailRow`, `Component_ProfileThumbnail`, `Component_RoleBadge` | `src/Component/<Name>` | `src/component/*` |
+| `Screen_HomeScreen`, `Screen_LoginScreen`, `Screen_ArticleScreen`, `Screen_UserScreen`, `Screen_CommentScreen`, `Screen_VisitorScreen`, `Screen_SettingScreen` | `src/Screen/<Name>Screen` | `src/screen/*` |
 
-A module is named after its path, without the separators (Haskell `Common.API.Type` is `CommonAPIType`), since a Swift module name cannot hold a dot. A folder with modules inside holds no file of its own (`Common/Env.swift` is `Common/Env/Env.swift`), and a component of one file has its folder too (`Component/DetailRow/DetailRowComponent.swift`).
+A module is named after its path, with `_` between the folders (Haskell `Common.API.Type` is `Common_API_Type`): a Swift module name is one identifier, so it cannot hold a dot, and `import Common.API.Type` does not exist (dotted imports are only for the submodules of C and Objective-C modules, like `import Darwin.C.stdio`). A folder with modules inside holds no file of its own (`Common/Env.swift` is `Common/Env/Env.swift`), and a component of one file has its folder too (`Component/DetailRow/DetailRowComponent.swift`).
 
 The dependencies of each module in `Package.swift` are the modules its files import, so the layers of the code convention of frontend-admin ("Dependency Order and Hierarchy") are checked by the compiler: `Common` imports no component or screen, a component imports no screen, and a screen imports no other screen. Each module builds alone:
 
 ```bash
-swift build --sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)" --triple arm64-apple-ios18.0-simulator --target ComponentSearchBar
+swift build --sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)" --triple arm64-apple-ios18.0-simulator --target Component_SearchBar
 ```
 
 The SDK and triple are needed: a plain `swift build` builds for macOS, where some modules of iOS SwiftUI (keyboard types, `.searchable` placements) do not exist. Without `--target`, it builds every module.
@@ -91,7 +91,7 @@ A view type has the name of its file. The internal names stay short (`StatCard`,
 
 | TypeScript and tea-cup | Swift |
 | --- | --- |
-| A module of a screen (`import * as UserScreen from '@/screen/user-screen'`) | `import ScreenUserScreen`, then `UserScreenModel`, `userScreenUpdate` |
+| A module of a screen (`import * as UserScreen from '@/screen/user-screen'`) | `import Screen_UserScreen`, then `UserScreenModel`, `userScreenUpdate` |
 | `UserScreenMemo` from `@/screen/user-screen/component` | `UserScreenComponent` |
 | `Model` with `ModelEq`, `Props` with `PropsEq`, `memo` | A `struct` that is `Equatable`; a view that is `Equatable` skips its body when its input did not change |
 | A sum type with `_tag` and `switch` | An `enum` with associated values and `switch` |

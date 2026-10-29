@@ -1,4 +1,4 @@
-import CommonAPIType
+import Common_API_Type
 
 public func getDashboardStats(_ token: String) async -> Result<DashboardStats, HttpError> {
   runApi(await fetchApi("/admin/dashboard/stats", token: token), decodeSuccess(DashboardStats.self))

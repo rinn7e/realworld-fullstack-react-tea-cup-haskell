@@ -1,5 +1,5 @@
-import CommonType
-import CommonTypeDestination
+import Common_Type
+import Common_Type_Destination
 
 // A destination the guard let through (`guardDestination`): the only kind a
 // move opens. Owned: nothing else can make one (the initializer is file

@@ -1,6 +1,6 @@
-import CommonAPIType
-import ComponentDetailRow
-import ComponentProfileThumbnail
+import Common_API_Type
+import Component_DetailRow
+import Component_ProfileThumbnail
 import SwiftUI
 import TeaCup
 

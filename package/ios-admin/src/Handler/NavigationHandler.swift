@@ -1,11 +1,11 @@
-import CommonType
-import CommonTypeDestination
-import ScreenArticleScreen
-import ScreenCommentScreen
-import ScreenHomeScreen
-import ScreenLoginScreen
-import ScreenUserScreen
-import ScreenVisitorScreen
+import Common_Type
+import Common_Type_Destination
+import Screen_ArticleScreen
+import Screen_CommentScreen
+import Screen_HomeScreen
+import Screen_LoginScreen
+import Screen_UserScreen
+import Screen_VisitorScreen
 import TeaCup
 
 // The screen model of `destination`, the one place a move opens a screen. Every

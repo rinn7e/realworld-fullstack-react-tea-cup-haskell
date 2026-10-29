@@ -1,4 +1,4 @@
-import CommonAPIType
+import Common_API_Type
 
 public struct LoginScreenModel: Equatable {
   var email: String

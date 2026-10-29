@@ -1,5 +1,5 @@
-import CommonAPIHandler
-import CommonAPIType
+import Common_API_Handler
+import Common_API_Type
 import TeaCup
 
 public func loginScreenInitial() -> (LoginScreenModel, Cmd<LoginScreenMsg>) {

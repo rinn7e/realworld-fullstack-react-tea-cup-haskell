@@ -1,4 +1,4 @@
-import CommonAPIType
+import Common_API_Type
 import Foundation
 
 public func getAdminArticles(

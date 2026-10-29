@@ -1,5 +1,5 @@
-import CommonAPIType
-import ComponentSearchBar
+import Common_API_Type
+import Component_SearchBar
 import TeaCupPagination
 
 let GET_COMMENTS_LIMIT = 50

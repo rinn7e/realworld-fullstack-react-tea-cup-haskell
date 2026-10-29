@@ -1,4 +1,4 @@
-import CommonType
+import Common_Type
 import TeaCup
 
 public func searchBarInitial<Sort>(

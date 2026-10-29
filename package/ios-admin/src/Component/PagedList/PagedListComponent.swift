@@ -1,6 +1,6 @@
-import CommonAPIType
-import ComponentListState
-import ComponentPaginationNav
+import Common_API_Type
+import Component_ListState
+import Component_PaginationNav
 import SwiftUI
 import TeaCup
 

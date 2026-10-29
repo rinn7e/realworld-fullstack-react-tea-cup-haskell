@@ -1,4 +1,4 @@
-import CommonAPIType
+import Common_API_Type
 
 public func getAdminComments(
   _ token: String,

@@ -1,5 +1,5 @@
-import CommonAPIType
-import ComponentProfileThumbnail
+import Common_API_Type
+import Component_ProfileThumbnail
 import SwiftUI
 
 struct CommentRow: View, Equatable {

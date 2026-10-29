@@ -1,5 +1,5 @@
-import CommonAPIHandler
-import CommonType
+import Common_API_Handler
+import Common_Type
 import TeaCup
 
 public func homeScreenInitial(_ shared: Shared) -> (HomeScreenModel, Cmd<HomeScreenMsg>) {

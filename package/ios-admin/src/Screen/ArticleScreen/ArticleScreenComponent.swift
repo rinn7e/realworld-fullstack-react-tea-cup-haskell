@@ -1,7 +1,7 @@
-import CommonAPIType
-import CommonType
-import ComponentPagedList
-import ComponentSearchBar
+import Common_API_Type
+import Common_Type
+import Component_PagedList
+import Component_SearchBar
 import SwiftUI
 import TeaCup
 

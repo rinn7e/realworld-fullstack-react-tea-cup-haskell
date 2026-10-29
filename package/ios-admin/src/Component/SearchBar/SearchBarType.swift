@@ -1,4 +1,4 @@
-import CommonType
+import Common_Type
 
 public struct SearchBarOption<Sort> {
   let label: String

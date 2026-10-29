@@ -1,4 +1,4 @@
-import CommonAPIType
+import Common_API_Type
 import SwiftUI
 
 public struct ListStateLoading: View, Equatable {

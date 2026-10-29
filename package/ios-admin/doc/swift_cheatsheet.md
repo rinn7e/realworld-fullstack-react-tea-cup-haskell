@@ -56,7 +56,7 @@ So `ios-admin` makes a module of every folder of code (section 1.9): one target 
   print(answer())               // no import: same module
   ```
 
-In `ios-admin`, `Update.swift` calls `navigationMsgHandler` from `Handler/NavigationHandler.swift` with no import line, since both are files of the app module. To call `homeScreenInitial`, it must `import ScreenHomeScreen`: that one is another module.
+In `ios-admin`, `Update.swift` calls `navigationMsgHandler` from `Handler/NavigationHandler.swift` with no import line, since both are files of the app module. To call `homeScreenInitial`, it must `import Screen_HomeScreen`: that one is another module.
 
 ### 1.3 The Price: One Flat Namespace per Module
 
@@ -73,7 +73,7 @@ struct Model {}      // error: invalid redeclaration of 'Model'
 Haskell has no such problem, since `Screen.UserScreen.Model` and `Screen.HomeScreen.Model` live in different modules. In Swift there are two ways out:
 
 * **Nested types**: a name inside a type is qualified by that type (`enum UserScreen { struct Model {} }` gives `UserScreen.Model`). The `enum` is only a namespace: it hides nothing (section 4).
-* **One module per folder, with prefixed names** (`UserScreenModel` in the module `ScreenUserScreen`): what `ios-admin` does, because the prefix also protects against the silent shadowing of section 1.8.
+* **One module per folder, with prefixed names** (`UserScreenModel` in the module `Screen_UserScreen`): what `ios-admin` does, because the prefix also protects against the silent shadowing of section 1.8.
 
 File names are also flat: two files with the same name in one module do not build, even in different folders (`X/Type.swift` and `Y/Type.swift` fail with "multiple producers" of `Type.swift.o`). Hence `UserScreenType.swift` and not `UserScreen/Type.swift`.
 
@@ -174,6 +174,7 @@ A `private` name used from another file of the same module fails too: `error: 'h
 | Intent | Haskell | TypeScript | Swift |
 | :--- | :--- | :--- | :--- |
 | **Import everything** | `import Data.Text` | `import * as T from 'text'` (qualified) | `import TeaCup` |
+| **Import a dotted module path** | `import Common.API.Type` | `import ... from '@/common/api/type'` | *not possible*: a Swift module name is one identifier (`import Common_API_Type`); dotted imports exist only for C and Objective-C submodules (`import Darwin.C.stdio`) |
 | **Import some names** | `import TeaCup (Cmd)` | `import { Cmd } from 'tea-cup'` | `import struct TeaCup.Cmd` (also `func`, `enum`, `class`, `protocol`, `typealias`, `var`, `let`) |
 | **Import qualified only** | `import qualified TeaCup` | `import * as TeaCup from 'tea-cup'` | *not possible*: `import qualified TeaCup` is a syntax error; every imported name is also usable unqualified |
 | **Qualify a name** | `TeaCup.Cmd` | `TeaCup.Cmd` | `TeaCup::Cmd` (a module selector, Swift 6.3, SE-0491); `TeaCup.Cmd` also works, unless the module has a type named `TeaCup` |
@@ -207,30 +208,30 @@ So `ios-admin` prefixes every public name with its module (`SearchBarModel`, `Us
 | Part | Swift module | Like |
 | :--- | :--- | :--- |
 | `lib/TeaCup/`, `lib/TeaCupPagination/` | packages `TeaCup`, `TeaCupPagination` | the npm packages `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
-| `src/Common/API/Type/` | `CommonAPIType` (a target of the root `Package.swift`) | Haskell `Common.API.Type` |
-| `src/Component/SearchBar/` | `ComponentSearchBar` | Haskell `Component.SearchBar` |
-| `src/Screen/UserScreen/` (with `SubComponent/`) | `ScreenUserScreen` | Haskell `Screen.UserScreen` |
+| `src/Common/API/Type/` | `Common_API_Type` (a target of the root `Package.swift`) | Haskell `Common.API.Type` |
+| `src/Component/SearchBar/` | `Component_SearchBar` | Haskell `Component.SearchBar` |
+| `src/Screen/UserScreen/` (with `SubComponent/`) | `Screen_UserScreen` | Haskell `Screen.UserScreen` |
 | `src/` root, `Handler/`, `Util/` | the app target `SentinelAdmin` | the `executable` of a cabal file |
 
 ```swift
 // Package.swift: the dependencies are the imports of the files of each module
-.target(name: "ComponentPagedList",
-        dependencies: ["CommonAPIType", "ComponentListState", "ComponentPaginationNav",
+.target(name: "Component_PagedList",
+        dependencies: ["Common_API_Type", "Component_ListState", "Component_PaginationNav",
                        .product(name: "TeaCup", package: "TeaCup")],
         path: "src/Component/PagedList"),
 ```
 
 ```swift
-// src/Screen/UserScreen/UserScreenComponent.swift (module ScreenUserScreen)
-import ComponentPagedList      // PagedListComponent
-import ComponentSearchBar      // SearchBarOption, .searchBar(...)
+// src/Screen/UserScreen/UserScreenComponent.swift (module Screen_UserScreen)
+import Component_PagedList      // PagedListComponent
+import Component_SearchBar      // SearchBarOption, .searchBar(...)
 import TeaCup                  // Dispatcher
 
 public struct UserScreenComponent: View, Equatable { ... }   // exported
 struct UserRow: View, Equatable { ... }                      // SubComponent/: internal
 ```
 
-`ScreenUserScreen` has no dependency on another screen, so `import ScreenHomeScreen` in it does not build: the layers of the code convention are checked by the compiler.
+`Screen_UserScreen` has no dependency on another screen, so `import Screen_HomeScreen` in it does not build: the layers of the code convention are checked by the compiler.
 
 ---
 
@@ -378,7 +379,7 @@ A case with a value is also a function: `Msg.changeEmail` has the type `(String)
 
 A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.tsx`) is a Swift module in `ios-admin`: one target per folder (section 1.9). Its public names start with the name of the module, since Swift has no qualified import and a local name silently wins over an imported one (section 1.8).
 
-* **Swift** (module `ScreenUserScreen`):
+* **Swift** (module `Screen_UserScreen`):
   ```swift
   // UserScreenType.swift
   public struct UserScreenModel: Equatable {
@@ -401,7 +402,7 @@ A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.ts
   struct UserRow: View, Equatable { ... }                    // internal: private to the screen
 
   // In the app
-  import ScreenUserScreen
+  import Screen_UserScreen
   userScreenUpdate(model.shared)(subMsg, screenModel)
   UserScreenComponent(model: m, shared: s, dispatch: d)
   ```
@@ -415,10 +416,10 @@ A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.ts
 
 | Swift name | Module | File | TypeScript import |
 | :--- | :--- | :--- | :--- |
-| `UserScreenModel` | `ScreenUserScreen` | `Screen/UserScreen/UserScreenType.swift` | `import { type Model } from '@/screen/user-screen'` |
-| `UserScreenComponent` | `ScreenUserScreen` | `Screen/UserScreen/UserScreenComponent.swift` | `import { UserScreenMemo } from '@/screen/user-screen/component'` |
-| `SearchBarModel` | `ComponentSearchBar` | `Component/SearchBar/SearchBarType.swift` | `import { type Model } from '@/component/search-bar'` |
-| `DetailRowComponent` | `ComponentDetailRow` | `Component/DetailRow/DetailRowComponent.swift` | `import { DetailRowMemo } from '@/component/detail-row'` |
+| `UserScreenModel` | `Screen_UserScreen` | `Screen/UserScreen/UserScreenType.swift` | `import { type Model } from '@/screen/user-screen'` |
+| `UserScreenComponent` | `Screen_UserScreen` | `Screen/UserScreen/UserScreenComponent.swift` | `import { UserScreenMemo } from '@/screen/user-screen/component'` |
+| `SearchBarModel` | `Component_SearchBar` | `Component/SearchBar/SearchBarType.swift` | `import { type Model } from '@/component/search-bar'` |
+| `DetailRowComponent` | `Component_DetailRow` | `Component/DetailRow/DetailRowComponent.swift` | `import { DetailRowMemo } from '@/component/detail-row'` |
 
 A view type has the name of its file. Internal names stay short (`UserRow`, `formatListError`): no other module sees them, so they cannot clash.
 

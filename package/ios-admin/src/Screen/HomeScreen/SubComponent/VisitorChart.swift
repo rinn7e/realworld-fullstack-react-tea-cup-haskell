@@ -1,5 +1,5 @@
 import Charts
-import CommonAPIType
+import Common_API_Type
 import SwiftUI
 
 /// The visitors of each period, as the area chart of the web app

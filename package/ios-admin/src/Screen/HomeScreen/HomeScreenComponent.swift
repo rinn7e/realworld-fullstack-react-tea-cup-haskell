@@ -1,5 +1,5 @@
-import CommonAPIType
-import CommonType
+import Common_API_Type
+import Common_Type
 import SwiftUI
 import TeaCup
 

@@ -1,5 +1,5 @@
-import CommonType
-import ComponentProfileThumbnail
+import Common_Type
+import Component_ProfileThumbnail
 import SwiftUI
 import TeaCup
 import Theme

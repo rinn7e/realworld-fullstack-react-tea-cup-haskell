@@ -1,4 +1,4 @@
-import CommonTypeDestination
+import Common_Type_Destination
 import SwiftUI
 import TeaCup
 

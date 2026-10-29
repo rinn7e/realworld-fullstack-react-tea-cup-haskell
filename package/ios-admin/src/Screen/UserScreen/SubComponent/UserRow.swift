@@ -1,6 +1,6 @@
-import CommonAPIType
-import ComponentProfileThumbnail
-import ComponentRoleBadge
+import Common_API_Type
+import Component_ProfileThumbnail
+import Component_RoleBadge
 import SwiftUI
 
 /// A user in the list (a row of the web table)

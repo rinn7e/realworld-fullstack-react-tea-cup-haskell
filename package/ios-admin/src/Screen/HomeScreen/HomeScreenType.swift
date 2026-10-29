@@ -1,4 +1,4 @@
-import CommonAPIType
+import Common_API_Type
 import TeaCup
 
 public enum HomeScreenTimeFilter: String, Equatable, CaseIterable {
