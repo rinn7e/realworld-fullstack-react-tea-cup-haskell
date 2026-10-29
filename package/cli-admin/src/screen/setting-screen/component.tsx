@@ -3,9 +3,8 @@ import { pipe } from 'fp-ts/lib/function'
 import { Box, Text, useInput } from 'ink'
 import { memo } from 'react'
 
-import { type Shared } from '@core/common/type/shared'
-
 import { API_BASE, TOKEN_FILE } from '@/common/env'
+import { type Shared } from '@/common/type/shared'
 import { KeyHintMemo } from '@/component/key-hint/component'
 
 export type SettingScreenProps = {

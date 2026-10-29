@@ -3,7 +3,7 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as N from 'fp-ts/lib/number'
 import { memo } from 'react'
 
-import { getPaginationPageItems } from '@core/component/pagination-nav/util'
+import { getPaginationPageItems } from './util'
 
 export type PaginationNavProps = {
   currentPage: number

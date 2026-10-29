@@ -7,8 +7,9 @@ import {
   ApiErrorEq,
   type HttpError,
   getHttpErrorEq,
-} from '@core/common/api'
-import { formatListError } from '@core/component/list-state/util'
+} from '@/common/api'
+
+import { formatListError } from './util'
 
 const ListLoadingComponent = () => (
   <div className='flex justify-center py-[60px]'>

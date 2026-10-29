@@ -1,8 +1,7 @@
 import * as O from 'fp-ts/lib/Option'
 import { vi } from 'vitest'
 
-import { type AuthUser } from '@core/common/type/auth-user'
-
+import { type AuthUser } from '@/common/type/auth-user'
 import { type Destination } from '@/common/type/destination'
 import { type Model, type Msg } from '@/type'
 import { init, update } from '@/update'
@@ -34,11 +33,12 @@ export const stubBrowser = (): void => {
 
 // The app booted on `url`, signed in or not
 export const bootOn = (url: string, isSignedIn: boolean): Model =>
-  init(locationOf(url), {
-    user: isSignedIn ? O.some(user) : O.none,
-    isUnavailable: false,
-    token: isSignedIn ? O.some(user.token) : O.none,
-  })[0]
+  init(
+    locationOf(url),
+    isSignedIn ? O.some(user) : O.none,
+    false,
+    isSignedIn ? O.some(user.token) : O.none,
+  )[0]
 
 // One step of the app, with the URL write it ends with
 export const step = (msg: Msg, model: Model) => {

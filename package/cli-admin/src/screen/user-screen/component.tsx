@@ -3,13 +3,12 @@ import { pipe } from 'fp-ts/lib/function'
 import { memo } from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type AdminUser, type UserSortAttr } from '@core/common/api'
-import type * as SearchBar from '@core/component/search-bar'
-import { type Model, type Msg } from '@core/screen/user-screen'
-
+import { type AdminUser, type UserSortAttr } from '@/common/api'
 import { DetailPanelMemo } from '@/component/detail-panel/component'
 import { ListViewMemo } from '@/component/list-view/component'
+import type * as SearchBar from '@/component/search-bar'
 import { type Column } from '@/component/table/component'
+import { type Model, type Msg } from '@/screen/user-screen'
 
 const sortOptions: SearchBar.SearchOption<UserSortAttr>[] = [
   { label: 'Username', value: 'username' },

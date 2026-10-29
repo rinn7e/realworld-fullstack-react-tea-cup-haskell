@@ -3,14 +3,13 @@ import { pipe } from 'fp-ts/lib/function'
 import { memo } from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type Article, type ArticleSortAttr } from '@core/common/api'
-import type * as SearchBar from '@core/component/search-bar'
-import { type Model, type Msg } from '@core/screen/article-screen'
-
+import { type Article, type ArticleSortAttr } from '@/common/api'
 import { formatDateTime } from '@/common/util'
 import { DetailPanelMemo } from '@/component/detail-panel/component'
 import { ListViewMemo } from '@/component/list-view/component'
+import type * as SearchBar from '@/component/search-bar'
 import { type Column } from '@/component/table/component'
+import { type Model, type Msg } from '@/screen/article-screen'
 
 const sortOptions: SearchBar.SearchOption<ArticleSortAttr>[] = [
   { label: 'Creation Date', value: 'createdAt' },

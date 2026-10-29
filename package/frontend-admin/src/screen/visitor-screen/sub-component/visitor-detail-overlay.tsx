@@ -5,10 +5,10 @@ import * as S from 'fp-ts/lib/string'
 import React, { memo } from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type Visitor, VisitorEq } from '@core/common/api'
-import { type Msg } from '@core/screen/visitor-screen/type'
-
+import { type Visitor, VisitorEq } from '@/common/api'
 import { DetailRowMemo } from '@/component/detail-row'
+
+import { type Msg } from '../type'
 
 export type FingerprintBreakdownProps = {
   fingerprint: string

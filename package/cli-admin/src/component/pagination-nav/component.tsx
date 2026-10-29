@@ -1,7 +1,7 @@
 import { Text } from 'ink'
 import { memo } from 'react'
 
-import { getPaginationPageItems } from '@core/component/pagination-nav/util'
+import { getPaginationPageItems } from '@/component/pagination-nav/util'
 
 export type PaginationNavProps = {
   currentPage: number

@@ -4,9 +4,7 @@ import { Box, useInput, useWindowSize } from 'ink'
 import { type ReactNode, useState } from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type ApiError, type HttpError } from '@core/common/api'
-import type * as SearchBar from '@core/component/search-bar'
-
+import { type ApiError, type HttpError } from '@/common/api'
 import { KeyHintMemo } from '@/component/key-hint/component'
 import {
   ListEmptyMemo,
@@ -14,6 +12,7 @@ import {
   ListLoadingMemo,
 } from '@/component/list-state/component'
 import { PaginationNavMemo } from '@/component/pagination-nav/component'
+import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 import { type Column, TableMemo } from '@/component/table/component'
 

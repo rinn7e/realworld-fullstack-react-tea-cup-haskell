@@ -3,7 +3,7 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as S from 'fp-ts/lib/string'
 import { memo } from 'react'
 
-import type { LogLevel } from '@core/common/api'
+import type { LogLevel } from '@/common/api'
 
 export type LevelBadgeProps = {
   level: LogLevel

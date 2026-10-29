@@ -4,10 +4,10 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as O from 'fp-ts/lib/Option'
 import { memo } from 'react'
 
-import { type Comment, CommentEq } from '@core/common/api'
-import type { CommentItemMsg } from '@core/screen/comment-screen/type'
-
+import { type Comment, CommentEq } from '@/common/api'
 import { ProfileThumbnailMemo } from '@/component/profile-thumbnail'
+
+import type { CommentItemMsg } from '../type'
 
 export type CommentTableProps = {
   comments: Comment[]

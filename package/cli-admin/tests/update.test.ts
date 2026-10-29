@@ -1,18 +1,11 @@
 import * as O from 'fp-ts/lib/Option'
 import { describe, expect, it } from 'vitest'
 
-import { destinationOfScreen, userScreen } from '@core/common/type/destination'
-import { currentScreenOf } from '@core/type'
-
+import { destinationOfScreen, userScreen } from '@/common/type/destination'
+import { currentScreenOf } from '@/type'
 import { init, update } from '@/update'
 
-const user = {
-  email: 'admin@example.com',
-  token: 'token',
-  username: 'admin',
-  bio: null,
-  image: null,
-}
+import { user } from './helper/user'
 
 const signedOut = { user: O.none, isUnavailable: false, token: O.none }
 const signedIn = {

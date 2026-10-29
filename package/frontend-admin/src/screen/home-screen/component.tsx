@@ -12,12 +12,11 @@ import {
   YAxis,
 } from 'recharts'
 
-import { type Props, PropsEq } from '@core/screen/home-screen/type'
-
 import { FilterButtonMemo } from './sub-component/filter-button'
 import { LevelBadgeMemo } from './sub-component/level-badge'
 import { LogDetailOverlayMemo } from './sub-component/log-detail-overlay'
 import { StatCardMemo } from './sub-component/stat-card'
+import { type Props, PropsEq } from './type'
 
 const LoadingSpinner = () => (
   <div className='flex items-center justify-center py-[40px]'>

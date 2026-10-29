@@ -12,9 +12,11 @@ import tseslint from 'typescript-eslint'
 // The move makers (code-convention.md, "Make Impossible Updates Impossible"):
 // the branded types stop any other write, but not a call to their exported
 // makers. Only a move holds a guarded destination and opens a screen: the
-// navigation and the boot of the core (`frontend-admin-core`, which checks
-// its own files) and tests call them. Nothing in this app does.
-const moveMakerUsers = ['tests/**/*.ts']
+// navigation (`navigation-handler.ts`) and tests call them, the boot
+// (`src/update.ts`) the guard only. The files defining them are left out.
+const moveMakerFiles = ['src/util/guard.ts', 'src/type.ts']
+const moveMakerUsers = ['src/handler/navigation-handler.ts', 'tests/**/*.ts']
+const boot = 'src/update.ts'
 // By name, so a namespace use (`Util.guardDestination`) and a computed
 // access (`m['guardDestination']`) are caught too
 const moveMakerUses = (makers) =>
@@ -102,11 +104,20 @@ export default tseslint.config([
   },
   {
     files: ['**/*.{ts,tsx}'],
-    ignores: moveMakerUsers,
+    ignores: [...moveMakerFiles, ...moveMakerUsers, boot],
     rules: {
       'no-restricted-syntax': [
         'error',
         ...moveMakerUses(['guardDestination', 'currentScreenModelOfMove']),
+      ],
+    },
+  },
+  {
+    files: [boot],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        ...moveMakerUses(['currentScreenModelOfMove']),
       ],
     },
   },

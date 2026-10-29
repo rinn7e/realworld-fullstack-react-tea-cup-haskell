@@ -6,14 +6,13 @@ import {
   ApiErrorEq,
   type UserSortAttr,
   getHttpErrorEq,
-} from '@core/common/api'
-import type * as SearchBar from '@core/component/search-bar'
-import { type Props, PropsEq } from '@core/screen/user-screen/type'
-
+} from '@/common/api'
+import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
 import { UserDetailOverlayMemo } from './sub-component/user-detail-overlay'
-import { mkPaginationViewConfig } from './util'
+import { type Props, PropsEq } from './type'
+import { mkPaginationConfig } from './util'
 
 const sortOptions: SearchBar.SearchOption<UserSortAttr>[] = [
   { label: 'Username', value: 'username' },
@@ -22,7 +21,7 @@ const sortOptions: SearchBar.SearchOption<UserSortAttr>[] = [
 ]
 
 const UserScreenComponent = ({ model, shared, dispatch }: Props) => {
-  const paginationConfig = mkPaginationViewConfig(shared, model)
+  const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
     <div className='relative flex flex-col gap-[32px]'>

@@ -321,12 +321,11 @@ Never strip, delete, or overwrite existing comments, documentation notes, or JSD
 
 ## Import Organization
 
-All imports should be grouped into four sections for clarity and consistency:
+All imports should be grouped into three sections for clarity and consistency:
 
-1. **External libraries**: third-party dependencies.
-2. **The core**: files of `frontend-admin-core` imported via `@core/`.
-3. **Path aliases**: files imported via `@/`.
-4. **Relative imports**: files imported via `./` or `../`.
+1. **External libraries** – third-party dependencies.
+2. **Path aliases** – files imported via `@/`.
+3. **Relative imports** – files imported via `./` or `../`.
 
 Each section is then sorted alphabetically.
 
@@ -337,8 +336,6 @@ import { pipe } from 'fp-ts/lib/function'
 import { memo } from 'react'
 import * as RT from 'react-tooltip'
 import { Cmd, map } from 'tea-cup-fp'
-
-import { type Shared } from '@core/common/type/shared'
 
 import { MyPG } from '@/cache/db'
 import { mkTooltipClass } from '@/components/shared/dumb-tooltip'
@@ -765,15 +762,6 @@ For complex components (like screens):
 
 ---
 
-### The Core (`frontend-admin-core`)
-
-The Model, Msg, init and update of every screen and of the app, the API and the types live in [`package/frontend-admin-core`](../../frontend-admin-core), shared with the terminal app [`package/cli-admin`](../../cli-admin). This app holds what is its own: the views, the URL, the theme, the persona panel, and its platform (`src/platform.ts`, the `localStorage` token).
-
-- A change to what a screen does (a new message, a new field of a model, an endpoint, a decoder) goes in the core, and both apps get it. Then add its view in each app.
-- A screen here has only `component.tsx`, `sub-component/` and, for a list, `util.tsx` (the renderers it adds to the core pagination config, `mkPaginationViewConfig`).
-- The core never imports this app. Nothing in `src/` of the core is a view or touches the DOM: the browser is reached through the platform (`setPlatform`).
-- The app model is the core model with its own fields (`Core.Model & { ... }`), the app messages the core messages with its own. `update` handles its own and hands every other one to `Core.update`.
-
 ### Dependency Order and Hierarchy
 
 To minimize circular dependencies and ensure a clean modular structure, follow this hierarchy:
@@ -896,5 +884,4 @@ className={cn(
 
 - Tests live in `tests/` (never inside `src/`), and the file tree **mirrors exactly** the `src/` path of the function under test (e.g. `src/common/type/destination/parser.ts` → `tests/common/type/destination/parser.test.ts`).
 - Tests import through the `@/` alias.
-- Tests of the core (its updates, the guard, the search syntax) live in `package/frontend-admin-core/tests`, and import through `@core/`.
 - End-to-end tests live in the separate `package/e2e` package.

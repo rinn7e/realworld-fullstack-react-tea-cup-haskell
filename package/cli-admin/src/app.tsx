@@ -12,9 +12,7 @@ import {
   settingScreen,
   userScreen,
   visitorScreen,
-} from '@core/common/type/destination'
-import { currentScreenOf } from '@core/type'
-
+} from '@/common/type/destination'
 import { KeyHintMemo } from '@/component/key-hint/component'
 import { ArticleScreenMemo } from '@/screen/article-screen/component'
 import { CommentScreenMemo } from '@/screen/comment-screen/component'
@@ -24,6 +22,7 @@ import { NotFoundScreenMemo } from '@/screen/not-found-screen/component'
 import { SettingScreenMemo } from '@/screen/setting-screen/component'
 import { UserScreenMemo } from '@/screen/user-screen/component'
 import { VisitorScreenMemo } from '@/screen/visitor-screen/component'
+import { currentScreenOf } from '@/type'
 
 import { type Model, type Msg } from './type'
 

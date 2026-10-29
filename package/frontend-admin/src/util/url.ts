@@ -2,8 +2,6 @@ import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { Cmd } from 'tea-cup-fp'
 
-import { destinationOf } from '@core/util/destination'
-
 import { IS_DISABLE_URL } from '@/common/env'
 import {
   type Destination,
@@ -14,6 +12,8 @@ import {
 } from '@/common/type/destination'
 import { pushUrlCmd, replaceUrlCmd } from '@/common/util'
 import { type Model, type Msg } from '@/type'
+
+import { destinationOf } from './destination'
 
 // The URL is an adapter at the edges: written from the destination
 // (`destinationOf`, read from the models) after every step, read only at

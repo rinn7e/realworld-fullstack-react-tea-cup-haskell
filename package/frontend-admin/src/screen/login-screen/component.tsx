@@ -1,7 +1,7 @@
 import * as O from 'fp-ts/lib/Option'
 import React, { memo } from 'react'
 
-import { type Props, PropsEq } from '@core/screen/login-screen/type'
+import { type Props, PropsEq } from './type'
 
 const LoginScreenComponent = ({ model, dispatch }: Props) => {
   const handleSubmit = (e: React.FormEvent) => {

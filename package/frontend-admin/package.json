@@ -35,8 +35,7 @@
     "react-tea-cup": "5.1.1",
     "recharts": "^3.8.1",
     "tailwind-merge": "^3.3.1",
-    "tea-cup-fp": "1.1.1",
-    "tea-cup-realworld-admin-core": "workspace:*"
+    "tea-cup-fp": "1.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

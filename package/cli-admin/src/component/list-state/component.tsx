@@ -1,8 +1,8 @@
 import { Text } from 'ink'
 import { memo } from 'react'
 
-import { type ApiError, type HttpError } from '@core/common/api'
-import { formatListError } from '@core/component/list-state/util'
+import { type ApiError, type HttpError } from '@/common/api'
+import { formatListError } from '@/component/list-state/util'
 
 export type ListStateProps = { entityLabel: string }
 

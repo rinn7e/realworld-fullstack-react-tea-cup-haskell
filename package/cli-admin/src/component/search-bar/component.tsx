@@ -2,7 +2,7 @@ import { Box, Text } from 'ink'
 import TextInput from 'ink-text-input'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import type * as SearchBar from '@core/component/search-bar'
+import type * as SearchBar from '@/component/search-bar'
 
 export type SearchBarProps<sortType> = {
   model: SearchBar.Model<sortType>

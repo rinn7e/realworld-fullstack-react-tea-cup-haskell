@@ -1,9 +1,9 @@
 import { defineConfig } from 'tsup'
 
-// One file for `node`: the app and the core (`@core/*`, its source) are
-// bundled, the packages of `node_modules` stay imports. Except the fp ones:
-// the core imports their files without extension (`fp-ts/lib/Option`),
-// which Node's ESM cannot resolve, so they are bundled too.
+// One file for `node`: the app is bundled, the packages of `node_modules`
+// stay imports. Except the fp ones: the app imports their files without
+// extension (`fp-ts/lib/Option`), which Node's ESM cannot resolve, so they
+// are bundled too.
 export default defineConfig({
   entry: ['src/main.tsx'],
   format: ['esm'],

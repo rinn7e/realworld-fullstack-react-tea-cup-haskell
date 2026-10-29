@@ -2,7 +2,7 @@
   "name": "tea-cup-realworld-admin-cli",
   "private": true,
   "version": "1.0.0",
-  "description": "The admin dashboard in the terminal, on the core of frontend-admin",
+  "description": "The admin dashboard in the terminal, a port of frontend-admin",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -31,8 +31,7 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-tea-cup": "5.1.1",
-    "tea-cup-fp": "1.1.1",
-    "tea-cup-realworld-admin-core": "workspace:*"
+    "tea-cup-fp": "1.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

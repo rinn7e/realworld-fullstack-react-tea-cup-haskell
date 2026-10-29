@@ -4,9 +4,8 @@ import { Box, Text, useInput } from 'ink'
 import TextInput from 'ink-text-input'
 import { memo, useState } from 'react'
 
-import { type Props } from '@core/screen/login-screen'
-
 import { KeyHintMemo } from '@/component/key-hint/component'
+import { type Props } from '@/screen/login-screen'
 
 type Field = 'email' | 'password'
 

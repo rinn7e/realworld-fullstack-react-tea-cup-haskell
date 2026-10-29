@@ -4,10 +4,10 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as O from 'fp-ts/lib/Option'
 import { memo } from 'react'
 
-import { type AdminUser, AdminUserEq } from '@core/common/api'
-import type { UserItemMsg } from '@core/screen/user-screen/type'
-
+import { type AdminUser, AdminUserEq } from '@/common/api'
 import { ProfileThumbnailMemo } from '@/component/profile-thumbnail'
+
+import type { UserItemMsg } from '../type'
 
 export type UserTableProps = {
   users: AdminUser[]

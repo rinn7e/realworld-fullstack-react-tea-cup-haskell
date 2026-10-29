@@ -5,8 +5,7 @@ import * as S from 'fp-ts/lib/string'
 import React, { memo } from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type AuthUser, AuthUserEq } from '@core/common/type/auth-user'
-
+import { type AuthUser, AuthUserEq } from '@/common/type/auth-user'
 import { ImageMemo } from '@/component/image'
 import { DEFAULT_AVATAR_URL } from '@/component/profile-thumbnail'
 import { themes } from '@/theme/data'

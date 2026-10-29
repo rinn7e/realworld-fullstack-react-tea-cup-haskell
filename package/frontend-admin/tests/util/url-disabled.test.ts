@@ -1,8 +1,6 @@
 import * as O from 'fp-ts/lib/Option'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { destinationOf } from '@core/util'
-
 import type * as Env from '@/common/env'
 import {
   defaultDestination,
@@ -12,7 +10,7 @@ import {
   userScreen,
 } from '@/common/type/destination'
 import { update } from '@/update'
-import { bootUrlOf, urlChangedMsg, withUrl } from '@/util'
+import { bootUrlOf, destinationOf, urlChangedMsg, withUrl } from '@/util'
 
 import { bootOn, locationOf, navigate, stubBrowser } from '../helper/app'
 

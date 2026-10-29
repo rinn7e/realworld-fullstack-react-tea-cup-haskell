@@ -11,8 +11,7 @@ A production-grade, type-safe implementation of the RealWorld spec, featuring a 
 * [**package/backend/**](package/backend) — Haskell Servant Conduit API with PostgreSQL, Persistent, and Esqueleto.
 * [**package/frontend-web/**](package/frontend-web) — React 19 RealWorld web application built with `react-tea-cup` (Port 5173).
 * [**package/frontend-admin/**](package/frontend-admin) — Sentinel Dashboard for system monitoring and cache management (Port 5174).
-* [**package/frontend-admin-core/**](package/frontend-admin-core) - The Model, Msg, update and API of the Sentinel Dashboard, shared by frontend-admin and cli-admin.
-* [**package/cli-admin/**](package/cli-admin) - The Sentinel Dashboard in the terminal, with Ink on the same core as frontend-admin.
+* [**package/cli-admin/**](package/cli-admin) - Terminal port of the Sentinel Dashboard, in TypeScript and Ink with The Elm Architecture.
 * [**package/frontend-admin-legacy/**](package/frontend-admin-legacy) — Sentinel Dashboard Legacy backup (Port 5176).
 * [**package/mobile-admin-ios/**](package/mobile-admin-ios) - Native iOS port of the Sentinel Dashboard, in Swift and SwiftUI with The Elm Architecture.
 * [**package/mobile-admin-android/**](package/mobile-admin-android) - Native Android port of the Sentinel Dashboard, in Kotlin and Jetpack Compose with The Elm Architecture.
@@ -153,7 +152,6 @@ For details on running individual packages independently:
 * [package/backend/README.md](package/backend/README.md)
 * [package/frontend-web/README.md](package/frontend-web/README.md)
 * [package/frontend-admin/README.md](package/frontend-admin/README.md)
-* [package/frontend-admin-core/README.md](package/frontend-admin-core/README.md)
 * [package/cli-admin/README.md](package/cli-admin/README.md)
 * [package/frontend-admin-legacy/README.md](package/frontend-admin-legacy/README.md)
 * [package/mobile-admin-ios/README.md](package/mobile-admin-ios/README.md) (and its [Swift cheatsheet](package/mobile-admin-ios/doc/swift_cheatsheet.md), for Haskell and TypeScript developers)

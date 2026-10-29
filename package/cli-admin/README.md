@@ -1,12 +1,11 @@
 # Sentinel Dashboard CLI
 
-The Sentinel Dashboard in the terminal. It runs on the same core as the web dashboard ([`frontend-admin-core`](../frontend-admin-core)): the same API, the same Model, Msg and update of every screen, the same navigation and guard. Only the views are its own, written with [Ink](https://github.com/vadimdemedes/ink) (React for the terminal, also used by Claude Code and Gemini CLI) and run by [react-tea-cup](https://github.com/vankeisb/react-tea-cup)'s `Program`.
+The Sentinel Dashboard in the terminal, a port of [frontend-admin](../frontend-admin) like the [iOS](../mobile-admin-ios) and [Android](../mobile-admin-android) apps. Its API, types, and the Model, Msg and update of every screen, the navigation and the guard are a copy of the ones of frontend-admin (a change to one is made to the other by hand). Its views are its own, written with [Ink](https://github.com/vadimdemedes/ink) (React for the terminal, also used by Claude Code and Gemini CLI) and run by the `Program` of [react-tea-cup](https://github.com/vankeisb/react-tea-cup).
 
 ## Tech Stack
 
 - [**ink 8.x**](https://github.com/vadimdemedes/ink): React renderer for the terminal
 - [**react-tea-cup 5.x**](https://github.com/vankeisb/react-tea-cup): The Elm Architecture
-- [**frontend-admin-core**](../frontend-admin-core): the Model, Msg, update and API shared with the web
 - [**tsx**](https://github.com/privatenumber/tsx) to run the source, [**tsup**](https://github.com/egoist/tsup) to bundle it
 
 ## How to Run
@@ -46,26 +45,32 @@ The build is `dist/main.js`, with the `sentinel-admin` bin of `package.json`.
 
 ## From frontend-admin to cli-admin
 
-The folders mirror frontend-admin, minus what the core holds:
+The folders mirror frontend-admin. The logic files are the same, with `@/` imports:
 
-| frontend-admin                                                         | cli-admin                                               |
-| ---------------------------------------------------------------------- | ------------------------------------------------------- |
-| `src/type.ts`, `src/update.ts` (core model, theme, persona panel, URL) | `src/type.ts`, `src/update.ts` (core model, `isTyping`) |
-| `src/root.tsx` (`setPlatform(webPlatform)`)                            | `src/main.tsx` (`setPlatform(cliPlatform)`)             |
-| `src/platform.ts` (`localStorage`)                                     | `src/platform.ts` (a token file)                        |
-| `src/app.tsx` (sidebar)                                                | `src/app.tsx` (tabs and the app keys)                   |
-| `src/screen/<x>-screen/component.tsx`                                  | `src/screen/<x>-screen/component.tsx`                   |
-| `src/component/search-bar`, `list-state`, `pagination-nav`             | the same, with Ink                                      |
-| table and overlay of each screen                                       | `src/component/list-view`, `table`, `detail-panel`      |
-| URL (`withUrl`)                                                        | none: the terminal boots on the overview                |
+- `src/common/api/`, `src/common/type/`: the endpoints, decoders and types.
+- `src/screen/<x>-screen/`: `type.ts`, `update.ts`, `index.ts`, `util.ts`.
+- `src/component/search-bar/`, `list-state/util.ts`, `pagination-nav/util.ts`.
+- `src/handler/navigation-handler.ts`, `src/util/guard.ts`, `src/util/destination.ts`.
+
+What differs:
+
+| frontend-admin                                                    | cli-admin                                                                           |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `src/type.ts`, `src/update.ts` (theme, persona panel, URL)        | `src/type.ts`, `src/update.ts` (`isTyping`, boots on the overview)                  |
+| `src/common/cache` (`localStorage`)                               | `src/common/cache` (a token file), saved and removed by Cmds                        |
+| `src/common/env.ts` (`VITE_*`)                                    | `src/common/env.ts` (`SENTINEL_*`)                                                  |
+| `src/root.tsx`, `src/app.tsx` (sidebar)                           | `src/main.tsx`, `src/app.tsx` (tabs and the app keys)                               |
+| `src/screen/<x>-screen/component.tsx`, `util.tsx` (the renderers) | `src/screen/<x>-screen/component.tsx`, with `src/component/list-view` for the lists |
+| `src/component/search-bar`, `list-state`, `pagination-nav` views  | the same, with Ink, and `table`, `detail-panel`                                     |
+| URL (`withUrl`)                                                   | none                                                                                |
 
 ## Terminal notes
 
 - **Text fields own the keys.** While the search or the login form has the keys, the app keys are off. That is `Model.isTyping`, set by `SetTyping` and cleared by every move.
-- **The cursor is view state.** The highlighted row is local state of the list view (like the focus of a page). The item opened is app state (`selectedUser` of the core and the like).
+- **The cursor is view state.** The highlighted row is local state of the list view (like the focus of a page). The item opened is app state (`selectedUser` and the like).
 - **Long lists scroll.** A table shows the rows the terminal has room for, around the cursor (`useWindowSize`).
 - **No page to scroll.** tea-cup-pagination scrolls the page to the top after each fetch (`window.scrollTo`). `src/main.tsx` gives it a `window` and a `document` that do nothing.
-- **The build bundles the fp libraries.** The core imports `fp-ts/lib/Option` without an extension, which Node ESM cannot resolve, so `tsup.config.ts` bundles fp-ts, io-ts, remote-data-ts and the tea-cup packages.
+- **The build bundles the fp libraries.** The app imports `fp-ts/lib/Option` without an extension, which Node ESM cannot resolve, so `tsup.config.ts` bundles fp-ts, io-ts, remote-data-ts and the tea-cup packages.
 
 ## Commands
 

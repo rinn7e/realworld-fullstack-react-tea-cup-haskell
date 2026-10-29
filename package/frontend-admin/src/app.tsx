@@ -1,8 +1,6 @@
 import React from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { currentScreenOf } from '@core/type'
-
 import { SetGlobalMsgContext } from '@/common/global-context'
 import {
   type Destination,
@@ -24,7 +22,7 @@ import { SettingScreenMemo } from '@/screen/setting-screen/component'
 import { UserScreenMemo } from '@/screen/user-screen/component'
 import { VisitorScreenMemo } from '@/screen/visitor-screen/component'
 
-import { type Model, type Msg } from './type'
+import { type Model, type Msg, currentScreenOf } from './type'
 
 export type AppProps = {
   model: Model

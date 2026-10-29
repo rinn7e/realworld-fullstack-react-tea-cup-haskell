@@ -6,14 +6,13 @@ import {
   CommentEq,
   type CommentSortAttr,
   getHttpErrorEq,
-} from '@core/common/api'
-import type * as SearchBar from '@core/component/search-bar'
-import { type Props, PropsEq } from '@core/screen/comment-screen/type'
-
+} from '@/common/api'
+import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
 import { CommentDetailOverlayMemo } from './sub-component/comment-detail-overlay'
-import { mkPaginationViewConfig } from './util'
+import { type Props, PropsEq } from './type'
+import { mkPaginationConfig } from './util'
 
 const sortOptions: SearchBar.SearchOption<CommentSortAttr>[] = [
   { label: 'Creation Date', value: 'createdAt' },
@@ -22,7 +21,7 @@ const sortOptions: SearchBar.SearchOption<CommentSortAttr>[] = [
 ]
 
 const CommentScreenComponent = ({ model, shared, dispatch }: Props) => {
-  const paginationConfig = mkPaginationViewConfig(shared, model)
+  const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
     <div className='relative flex flex-col gap-[32px]'>

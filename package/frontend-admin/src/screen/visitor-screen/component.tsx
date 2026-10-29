@@ -7,14 +7,13 @@ import {
   VisitorEq,
   type VisitorSortAttr,
   getHttpErrorEq,
-} from '@core/common/api'
-import type * as SearchBar from '@core/component/search-bar'
-import { type Props, PropsEq } from '@core/screen/visitor-screen/type'
-
+} from '@/common/api'
+import type * as SearchBar from '@/component/search-bar'
 import { SearchBarMemo } from '@/component/search-bar/component'
 
 import { VisitorDetailOverlayMemo } from './sub-component/visitor-detail-overlay'
-import { mkPaginationViewConfig } from './util'
+import { type Props, PropsEq } from './type'
+import { mkPaginationConfig } from './util'
 
 const sortOptions: SearchBar.SearchOption<VisitorSortAttr>[] = [
   { label: 'Timestamp', value: 'timestamp' },
@@ -24,7 +23,7 @@ const sortOptions: SearchBar.SearchOption<VisitorSortAttr>[] = [
 ]
 
 const VisitorScreenComponent = ({ model, shared, dispatch }: Props) => {
-  const paginationConfig = mkPaginationViewConfig(shared, model)
+  const paginationConfig = mkPaginationConfig(shared, model)
 
   return (
     <div className='relative flex flex-col gap-[32px]'>
