@@ -6,9 +6,13 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import common.cache.Store
 import common.env.Env
+import debug.FpsOverlay
 import okio.Path.Companion.toPath
 import teacup.ProgramHost
 import teacup.ProgramView
@@ -38,7 +42,14 @@ class MainActivity : ComponentActivity() {
     host.start()
     intent?.data?.let { host.openUrl(it.toString()) }
 
-    setContent { ProgramView(host) { programModel, dispatch -> PreView(programModel, dispatch) } }
+    setContent {
+      Box {
+        ProgramView(host) { programModel, dispatch -> PreView(programModel, dispatch) }
+        // The frame rate counter of a debug build, or of a release built with
+        // `-PfpsOverlay` (README, Performance)
+        if (BuildConfig.DEBUG || BuildConfig.FPS_OVERLAY) FpsOverlay(Modifier.align(Alignment.TopCenter))
+      }
+    }
   }
 
   override fun onNewIntent(intent: Intent) {

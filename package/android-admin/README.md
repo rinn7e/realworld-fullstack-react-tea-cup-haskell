@@ -124,13 +124,22 @@ A deep link that opens the app arrives while the boot checks the stored token, s
 
 Compose skips a view when its input did not change (strong skipping, on by default). The types of `core` are declared stable in `app/stability.conf`, so they are compared with `equals`, the `memo` of the web views; every `Dispatcher` is equal to every other one, like `EqAlways`.
 
-A debug build logs every `update` slower than 4 ms with its message (logcat, tag `Step`). A debug build is not optimized: judge a lag on a release build (R8, the debug key signs it so it installs):
+A debug build draws a frame rate counter above the app (`app/.../debug/FpsOverlay.kt`): the frames per second of the last half second, the longest frame, and the number of hitches (frames that took more than 1.5 times their budget, 16 ms at 60 Hz). A bottom sheet is a window of its own, drawn above the counter.
+
+To find what a lag comes from:
+
+1. Watch the counter while doing the slow thing: a hitch count that goes up names the place.
+2. Read logcat: tag `Hitch` logs each hitch with its length, and tag `Step` logs every `update` slower than 4 ms with its message (debug builds only). A hitch with no slow step before it is the cost of a composition or of the layout, not of `update`.
+   ```bash
+   adb logcat -s Hitch Step
+   ```
+3. For the detail, use the Android Studio profiler (System Trace).
+
+A debug build is not optimized: judge a lag on a release build (R8, the debug key signs it so it installs). `-PfpsOverlay` keeps the counter in it:
 
 ```bash
-./gradlew installRelease
+./gradlew installRelease -PfpsOverlay
 ```
-
-For a frame counter, turn on **Profile HWUI rendering** in the developer options of the device, and use the Android Studio profiler for the detail.
 
 ## Kotlin for Haskell and TypeScript Developers
 

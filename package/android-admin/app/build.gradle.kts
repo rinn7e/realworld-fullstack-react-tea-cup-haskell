@@ -8,6 +8,10 @@ plugins {
 // `./gradlew installDebug -PapiBase=http://192.168.0.10:3000/api`
 val apiBase = providers.gradleProperty("apiBase").getOrElse("http://10.0.2.2:3000/api")
 
+// The frame rate counter, in a debug build always, in a release build with
+// `-PfpsOverlay` (to judge a lag on an optimized build)
+val fpsOverlay = providers.gradleProperty("fpsOverlay").isPresent
+
 android {
   namespace = "tech.rinn7e.sentinel.admin"
   compileSdk = 37
@@ -19,6 +23,7 @@ android {
     versionCode = 1
     versionName = "1.0"
     buildConfigField("String", "API_BASE", "\"$apiBase\"")
+    buildConfigField("boolean", "FPS_OVERLAY", "$fpsOverlay")
   }
 
   buildFeatures {

@@ -2,6 +2,7 @@ package app
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.background
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -35,6 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -95,18 +97,24 @@ fun AppView(model: Model, dispatch: Dispatcher<Msg>) {
 
   AppTheme(model.theme, model.colorScheme) {
     BackHandler(enabled = currentScreen != Screen.HomeScreen && currentScreen != Screen.LoginScreen) { navigate(Screen.HomeScreen) }
-    // The model is the target, the layer its key: a change of layer animates,
-    // and the leaving layer keeps drawing the model it had (the settings slide
-    // out as settings, not as the overview that replaced them). A change inside
-    // a layer (a tab, a message of a screen) draws at once.
+    // Only a change of layer animates; a change inside a layer (a tab, a message
+    // of a screen) draws at once. The leaving layer keeps drawing the last model
+    // it had, so the settings slide out as settings, not as the overview that
+    // replaced them. (Animating on the model itself breaks: the overview loads
+    // during the slide, and each new model restarts the animation.)
+    val currentLayer = layerOf(currentScreen)
+    val lastModelOf = remember { mutableMapOf<Layer, Model>() }
+    lastModelOf[currentLayer] = model
     AnimatedContent(
-      targetState = model,
-      contentKey = { layerOf(currentScreenOf(it.screenModel.screenModel)) },
-      transitionSpec = { layerTransition(layerOf(currentScreenOf(initialState.screenModel.screenModel)), layerOf(currentScreenOf(targetState.screenModel.screenModel))) },
+      targetState = currentLayer,
+      transitionSpec = { layerTransition(initialState, targetState) },
       label = "layer",
-    ) { shown ->
+      // Opaque behind the layers: during a fade, the window (black) would show
+      modifier = Modifier.background(MaterialTheme.colorScheme.background),
+    ) { layer ->
+      val shown = if (layer == currentLayer) model else lastModelOf[layer] ?: model
       val shownScreen = currentScreenOf(shown.screenModel.screenModel)
-      when (layerOf(shownScreen)) {
+      when (layer) {
         Layer.Login, Layer.Settings -> ScreenView(shown, dispatch, accountButton, onBack = { navigate(Screen.HomeScreen) })
         Layer.NotFound -> NotFound(onHome = { navigate(Screen.HomeScreen) })
         Layer.Tabs ->
@@ -146,14 +154,16 @@ private fun layerOf(screen: Screen): Layer =
     else -> Layer.Tabs
   }
 
-// Settings open over the tabs from the right and go back out to the right, the
-// forward and back of an Android screen; the other changes fade
+// The forward and back of an Android screen, with no fade: the settings slide
+// in from the right over the tabs, which shift a little to the left; back, the
+// settings slide out to the right, staying on top, and uncover the tabs. The
+// other changes (login, 404) fade.
 private fun layerTransition(from: Layer, to: Layer): ContentTransform =
   when {
     to == Layer.Settings ->
-      (slideInHorizontally { it } + fadeIn()) togetherWith (slideOutHorizontally { -it / 4 } + fadeOut())
+      slideInHorizontally { it } togetherWith slideOutHorizontally { -it / 4 }
     from == Layer.Settings ->
-      (slideInHorizontally { -it / 4 } + fadeIn()) togetherWith (slideOutHorizontally { it } + fadeOut())
+      (slideInHorizontally { -it / 4 } togetherWith slideOutHorizontally { it }).apply { targetContentZIndex = -1f }
     else -> fadeIn() togetherWith fadeOut()
   }
 
