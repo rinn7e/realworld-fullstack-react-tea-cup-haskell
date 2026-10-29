@@ -36,7 +36,7 @@ Test account: `admin@example.com`, password `testtest` (from `package/backend/re
 
 ## From frontend-admin to ios-admin
 
-The file tree follows the one of `frontend-admin/src`, in the casing of Swift: folders and files are UpperCamelCase, with acronyms in capitals (`API`, `URL`). Every module keeps its folder, and a file keeps its role (`Type`, `Update`, `Util`, `Component`) with the module as a prefix, since Swift does not allow two files of the same name in one target (`screen/user-screen/type.ts` is `Screen/UserScreen/UserScreenType.swift`).
+The file tree follows the one of `frontend-admin/src`, in the casing of Swift: folders and files are UpperCamelCase, with acronyms in capitals (`API`, `URL`). Every module keeps its folder, and every file keeps the name of the web file (`screen/user-screen/type.ts` is `Screen/UserScreen/Type.swift`). Two files of one module cannot have the same name, but each folder is its own module (see Modules), so a `Type.swift` in every screen is fine.
 
 | frontend-admin | ios-admin |
 | --- | --- |
@@ -47,7 +47,7 @@ The file tree follows the one of `frontend-admin/src`, in the casing of Swift: f
 | `src/common/api/type/`, `common/api/handler/` | `src/Common/API/Type/`, `Common/API/Handler/` |
 | `src/common/type/destination/` | `src/Common/Type/Destination/` |
 | `src/component/` (search bar, pagination nav, list state) | `src/Component/` (`SearchBar/`, `PaginationNav/`, `ListState/`) |
-| `src/screen/<name>-screen/` (`type`, `update`, `util`, `component`, `sub-component/`) | `src/Screen/<Name>Screen/` (`<Name>ScreenType.swift`, `...Update`, `...Util`, `...Component`, `SubComponent/`) |
+| `src/screen/<name>-screen/` (`type`, `update`, `util`, `component`, `sub-component/`) | `src/Screen/<Name>Screen/` (`Type.swift`, `Update.swift`, `Util.swift`, `Component.swift`, `SubComponent/`) |
 | `src/theme/` | `src/Theme/` |
 
 The roots (`src`, `lib`, `doc`) stay in lowercase, as in the other packages of this repo.
@@ -64,7 +64,7 @@ Every folder of `src/` that holds code is a module (a target of `Package.swift`)
 | `Component_SearchBar`, `Component_ListState`, `Component_PaginationNav`, `Component_PagedList`, `Component_DetailRow`, `Component_ProfileThumbnail`, `Component_RoleBadge` | `src/Component/<Name>` | `src/component/*` |
 | `Screen_HomeScreen`, `Screen_LoginScreen`, `Screen_ArticleScreen`, `Screen_UserScreen`, `Screen_CommentScreen`, `Screen_VisitorScreen`, `Screen_SettingScreen` | `src/Screen/<Name>Screen` | `src/screen/*` |
 
-A module is named after its path, with `_` between the folders (Haskell `Common.API.Type` is `Common_API_Type`): a Swift module name is one identifier, so it cannot hold a dot, and `import Common.API.Type` does not exist (dotted imports are only for the submodules of C and Objective-C modules, like `import Darwin.C.stdio`). A folder with modules inside holds no file of its own (`Common/Env.swift` is `Common/Env/Env.swift`), and a component of one file has its folder too (`Component/DetailRow/DetailRowComponent.swift`).
+A module is named after its path, with `_` between the folders (Haskell `Common.API.Type` is `Common_API_Type`): a Swift module name is one identifier, so it cannot hold a dot, and `import Common.API.Type` does not exist (dotted imports are only for the submodules of C and Objective-C modules, like `import Darwin.C.stdio`). A folder with modules inside holds no file of its own (`Common/Env.swift` is `Common/Env/Env.swift`), and a component of one file has its folder too (`Component/DetailRow/Component.swift`).
 
 The dependencies of each module in `Package.swift` are the modules its files import, so the layers of the code convention of frontend-admin ("Dependency Order and Hierarchy") are checked by the compiler: `Common` imports no component or screen, a component imports no screen, and a screen imports no other screen. Each module builds alone:
 
@@ -80,14 +80,14 @@ Swift has no qualified import: inside a module, a name of the module wins over a
 
 | Name | File |
 | --- | --- |
-| `ArticleScreenModel`, `ArticleScreenMsg`, `ArticleScreenItemMsg` | `Screen/ArticleScreen/ArticleScreenType.swift` |
-| `articleScreenInitial`, `articleScreenUpdate` | `Screen/ArticleScreen/ArticleScreenUpdate.swift` |
-| `ArticleScreenComponent` | `Screen/ArticleScreen/ArticleScreenComponent.swift` |
+| `ArticleScreenModel`, `ArticleScreenMsg`, `ArticleScreenItemMsg` | `Screen/ArticleScreen/Type.swift` |
+| `articleScreenInitial`, `articleScreenUpdate` | `Screen/ArticleScreen/Update.swift` |
+| `ArticleScreenComponent` | `Screen/ArticleScreen/Component.swift` |
 | `SearchBarModel`, `SearchBarMsg`, `searchBarUpdate`, `SearchBarComponent` | `Component/SearchBar/` |
-| `ListStateLoading`, `ListStateFailure`, `ListStateEmpty` | `Component/ListState/ListStateComponent.swift` |
-| `DetailRowComponent` | `Component/DetailRow/DetailRowComponent.swift` |
+| `ListStateLoading`, `ListStateFailure`, `ListStateEmpty` | `Component/ListState/Component.swift` |
+| `DetailRowComponent` | `Component/DetailRow/Component.swift` |
 
-A view type has the name of its file. The internal names stay short (`StatCard`, `UserRow`, `mkPaginationConfig`, `formatListError`): no other module sees them, so a sub-component is private to its screen, as a web sub-component that is not re-exported. The domain types of `Common` (`AuthUser`, `HttpError`, `Destination`, `Article`, ...) keep their web names, which are already unique.
+The view of a module is `<Module>Component` in its `Component.swift`. The internal names stay short (`StatCard`, `UserRow`, `mkPaginationConfig`, `formatListError`): no other module sees them, so a sub-component is private to its screen, as a web sub-component that is not re-exported. The domain types of `Common` (`AuthUser`, `HttpError`, `Destination`, `Article`, ...) keep their web names, which are already unique.
 
 | TypeScript and tea-cup | Swift |
 | --- | --- |

@@ -75,7 +75,7 @@ Haskell has no such problem, since `Screen.UserScreen.Model` and `Screen.HomeScr
 * **Nested types**: a name inside a type is qualified by that type (`enum UserScreen { struct Model {} }` gives `UserScreen.Model`). The `enum` is only a namespace: it hides nothing (section 4).
 * **One module per folder, with prefixed names** (`UserScreenModel` in the module `Screen_UserScreen`): what `ios-admin` does, because the prefix also protects against the silent shadowing of section 1.8.
 
-File names are also flat: two files with the same name in one module do not build, even in different folders (`X/Type.swift` and `Y/Type.swift` fail with "multiple producers" of `Type.swift.o`). Hence `UserScreenType.swift` and not `UserScreen/Type.swift`.
+File names are also flat: two files with the same name in one module do not build, even in different folders (`X/Type.swift` and `Y/Type.swift` fail with "multiple producers" of `Type.swift.o`). In different modules they are fine, so with a module per folder `ios-admin` keeps the web file names: every screen has its `Type.swift` and `Update.swift`.
 
 ### 1.4 Making Another Module: a Local Swift Package
 
@@ -224,7 +224,7 @@ So `ios-admin` prefixes every public name with its module (`SearchBarModel`, `Us
 ```
 
 ```swift
-// src/Screen/UserScreen/UserScreenComponent.swift (module Screen_UserScreen)
+// src/Screen/UserScreen/Component.swift (module Screen_UserScreen)
 import Component_PagedList      // PagedListComponent
 import Component_SearchBar      // SearchBarOption, .searchBar(...)
 import Package_TeaCup          // Dispatcher
@@ -383,19 +383,19 @@ A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.ts
 
 * **Swift** (module `Screen_UserScreen`):
   ```swift
-  // UserScreenType.swift
+  // Type.swift
   public struct UserScreenModel: Equatable {
     var pagination: Pagination.Model<AdminUser, HttpError>   // internal: the app cannot read it
     var selectedUser: AdminUser?
   }
   public enum UserScreenMsg { case clearSelected; case paginationMsg(...) }
 
-  // UserScreenUpdate.swift
+  // Update.swift
   public func userScreenInitial(_ shared: Shared) -> (UserScreenModel, Cmd<UserScreenMsg>) { ... }
   public func userScreenUpdate(_ shared: Shared) -> (UserScreenMsg, UserScreenModel) -> (UserScreenModel, Cmd<UserScreenMsg>) { ... }
   func paginationMsgHandler(...) { ... }                     // internal helper
 
-  // UserScreenComponent.swift
+  // Component.swift
   public struct UserScreenComponent: View, Equatable {
     public init(model: UserScreenModel, shared: Shared, dispatch: Dispatcher<UserScreenMsg>) { ... }
   }
@@ -418,12 +418,12 @@ A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.ts
 
 | Swift name | Module | File | TypeScript import |
 | :--- | :--- | :--- | :--- |
-| `UserScreenModel` | `Screen_UserScreen` | `Screen/UserScreen/UserScreenType.swift` | `import { type Model } from '@/screen/user-screen'` |
-| `UserScreenComponent` | `Screen_UserScreen` | `Screen/UserScreen/UserScreenComponent.swift` | `import { UserScreenMemo } from '@/screen/user-screen/component'` |
-| `SearchBarModel` | `Component_SearchBar` | `Component/SearchBar/SearchBarType.swift` | `import { type Model } from '@/component/search-bar'` |
-| `DetailRowComponent` | `Component_DetailRow` | `Component/DetailRow/DetailRowComponent.swift` | `import { DetailRowMemo } from '@/component/detail-row'` |
+| `UserScreenModel` | `Screen_UserScreen` | `Screen/UserScreen/Type.swift` | `import { type Model } from '@/screen/user-screen'` |
+| `UserScreenComponent` | `Screen_UserScreen` | `Screen/UserScreen/Component.swift` | `import { UserScreenMemo } from '@/screen/user-screen/component'` |
+| `SearchBarModel` | `Component_SearchBar` | `Component/SearchBar/Type.swift` | `import { type Model } from '@/component/search-bar'` |
+| `DetailRowComponent` | `Component_DetailRow` | `Component/DetailRow/Component.swift` | `import { DetailRowMemo } from '@/component/detail-row'` |
 
-A view type has the name of its file. Internal names stay short (`UserRow`, `formatListError`): no other module sees them, so they cannot clash.
+The view of a module is `<Module>Component` in its `Component.swift`. Internal names stay short (`UserRow`, `formatListError`): no other module sees them, so they cannot clash.
 
 ### 4.2 The Other Way: a Caseless `enum` Namespace
 
