@@ -1,0 +1,22 @@
+# Generated from project.yml by XcodeGen (`xcodegen generate`)
+*.xcodeproj/
+*.xcworkspace/
+Info.plist
+
+# Build output (`xcodebuild -derivedDataPath build`) and Xcode's own
+build/
+DerivedData/
+
+# Per-user Xcode state
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# Swift Package Manager (Package.resolved is kept: it pins the versions)
+.build/
+.swiftpm/
+
+# Simulator and device builds
+*.ipa
+*.dSYM.zip
+*.dSYM

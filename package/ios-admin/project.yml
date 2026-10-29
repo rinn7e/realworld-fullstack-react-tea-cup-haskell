@@ -1,0 +1,33 @@
+name: SentinelAdmin
+options:
+  bundleIdPrefix: tech.rinn7e
+  deploymentTarget:
+    iOS: "18.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    DEVELOPMENT_TEAM: ""
+targets:
+  SentinelAdmin:
+    type: application
+    platform: iOS
+    sources:
+      - path: src
+      - path: lib
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: Sentinel
+        UILaunchScreen: {}
+        ApiBase: $(API_BASE)
+        CFBundleURLTypes:
+          - CFBundleURLName: tech.rinn7e.sentinel-admin
+            CFBundleURLSchemes: [sentinel]
+        # The API on this Mac is plain HTTP on localhost
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: tech.rinn7e.sentinel-admin
+        TARGETED_DEVICE_FAMILY: "1,2"
+        API_BASE: "http:/$()/localhost:3000/api"
