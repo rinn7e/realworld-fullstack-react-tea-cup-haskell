@@ -4,11 +4,11 @@ import * as O from 'fp-ts/lib/Option'
 import React, { memo } from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type Comment, CommentEq } from '@/common/api'
+import { type Comment, CommentEq } from '@core/common/api'
+import { type Msg } from '@core/screen/comment-screen/type'
+
 import { DetailRowMemo } from '@/component/detail-row'
 import { ProfileThumbnailMemo } from '@/component/profile-thumbnail'
-
-import { type Msg } from '../type'
 
 export type CommentDetailOverlayProps = {
   selectedComment: O.Option<Comment>

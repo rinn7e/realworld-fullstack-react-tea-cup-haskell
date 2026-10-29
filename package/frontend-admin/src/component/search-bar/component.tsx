@@ -1,6 +1,6 @@
 import * as Eq from 'fp-ts/lib/Eq'
 
-import { type Props } from './type'
+import { type Props } from '@core/component/search-bar/type'
 
 const SearchBarComponent = <sortType,>(props: Props<sortType>) => {
   return view(props)

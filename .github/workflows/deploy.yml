@@ -26,6 +26,7 @@ on:
       # Frontends served by the server (and the design system they build against)
       - 'package/frontend-web/**'
       - 'package/frontend-admin/**'
+      - 'package/frontend-admin-core/**'
       - 'package/frontend-design-system/**'
       - 'package.json'
       - 'pnpm-lock.yaml'

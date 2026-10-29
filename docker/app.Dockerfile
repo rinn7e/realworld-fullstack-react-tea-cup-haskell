@@ -20,6 +20,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY package/frontend-design-system/package.json package/frontend-design-system/.npmrc package/frontend-design-system/
 COPY package/frontend-web/package.json package/frontend-web/.npmrc package/frontend-web/
 COPY package/frontend-admin/package.json package/frontend-admin/.npmrc package/frontend-admin/
+COPY package/frontend-admin-core/package.json package/frontend-admin-core/.npmrc package/frontend-admin-core/
 
 # GitHub Packages token (@rinn7e/tea-cup-*) is passed as a BuildKit secret (id=gh_token)
 # so it never lands in an image layer, build arg, or build history. The temporary user
@@ -30,7 +31,7 @@ RUN --mount=type=secret,id=gh_token,required=false \
       export GITHUB_TOKEN="$(cat /run/secrets/gh_token)"; \
       printf '//npm.pkg.github.com/:_authToken=%s\n@rinn7e:registry=https://npm.pkg.github.com/\n' "$GITHUB_TOKEN" > /root/.npmrc; \
     fi; \
-    pnpm --filter tea-cup-realworld --filter tea-cup-realworld-admin --filter @rinn7e/realworld-design-system \
+    pnpm --filter tea-cup-realworld --filter tea-cup-realworld-admin --filter tea-cup-realworld-admin-core --filter @rinn7e/realworld-design-system \
       install --frozen-lockfile; \
     status=$?; \
     rm -f /root/.npmrc; \
@@ -39,6 +40,8 @@ RUN --mount=type=secret,id=gh_token,required=false \
 COPY package/frontend-design-system package/frontend-design-system
 COPY package/frontend-web package/frontend-web
 COPY package/frontend-admin package/frontend-admin
+# frontend-admin builds the core (its Model, Msg, update and API) from source
+COPY package/frontend-admin-core package/frontend-admin-core
 
 # The design-system library first: frontend-web's CSS loads its Tailwind plugin from dist/.
 # `vite build` only, its package `build` script would also build the showcase app.

@@ -1,7 +1,5 @@
 import { Route, end, format, lit, parse, zero } from '@rinn7e/fp-ts-routing'
 
-import { BASE_URL } from '@/common/env'
-
 import {
   type Destination,
   type Screen,
@@ -14,7 +12,9 @@ import {
   settingScreen,
   userScreen,
   visitorScreen,
-} from './type'
+} from '@core/common/type/destination/type'
+
+import { BASE_URL } from '@/common/env'
 
 // The only code that knows how a destination is spelled in the URL
 

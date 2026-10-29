@@ -4,9 +4,8 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as O from 'fp-ts/lib/Option'
 import { memo } from 'react'
 
-import { type Article, ArticleEq } from '@/common/api'
-
-import type { ArticleItemMsg } from '../type'
+import { type Article, ArticleEq } from '@core/common/api'
+import type { ArticleItemMsg } from '@core/screen/article-screen/type'
 
 export type ArticleTableProps = {
   articles: Article[]

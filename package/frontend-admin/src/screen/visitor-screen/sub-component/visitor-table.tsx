@@ -4,9 +4,8 @@ import * as EqClass from 'fp-ts/lib/Eq'
 import * as O from 'fp-ts/lib/Option'
 import { memo } from 'react'
 
-import { type Visitor, VisitorEq } from '@/common/api'
-
-import type { VisitorItemMsg } from '../type'
+import { type Visitor, VisitorEq } from '@core/common/api'
+import type { VisitorItemMsg } from '@core/screen/visitor-screen/type'
 
 export type VisitorTableProps = {
   visitors: Visitor[]

@@ -4,10 +4,11 @@ import * as O from 'fp-ts/lib/Option'
 import React, { memo } from 'react'
 import { type Dispatcher } from 'tea-cup-fp'
 
-import { type Log, LogEq } from '@/common/api'
+import { type Log, LogEq } from '@core/common/api'
+import { type Msg } from '@core/screen/home-screen/type'
+
 import { DetailRowMemo } from '@/component/detail-row'
 
-import { type Msg } from '../type'
 import { LevelBadgeMemo } from './level-badge'
 
 export type LogDetailOverlayProps = {

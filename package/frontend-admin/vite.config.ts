@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
       port: 5174,
     },
     test: {
+      setupFiles: ['tests/helper/setup.ts'],
       server: {
         deps: {
           inline: [

@@ -22,6 +22,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@core/*": ["../frontend-admin-core/src/*"],
       "@rinn7e/realworld-design-system": [
         "../frontend-design-system/lib/index.ts"
       ],

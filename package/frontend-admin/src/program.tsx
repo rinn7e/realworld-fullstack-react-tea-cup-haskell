@@ -23,7 +23,7 @@ const preView = (dispatch: Dispatcher<Msg>, model: Model | null) => {
 const preUpdate = (msg: Msg, model: Model | null): [Model | null, Cmd<Msg>] => {
   if (model === null) {
     if (msg._tag === 'Init') {
-      return init(msg.location, msg.user, msg.isUnavailable, msg.token)
+      return init(msg.location, msg.boot)
     } else {
       return [null, Cmd.none()]
     }

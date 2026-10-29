@@ -6,13 +6,14 @@ import {
   ArticleEq,
   type ArticleSortAttr,
   getHttpErrorEq,
-} from '@/common/api'
-import type * as SearchBar from '@/component/search-bar'
+} from '@core/common/api'
+import type * as SearchBar from '@core/component/search-bar'
+import { type Props, PropsEq } from '@core/screen/article-screen/type'
+
 import { SearchBarMemo } from '@/component/search-bar/component'
 
 import { ArticleDetailOverlayMemo } from './sub-component/article-detail-overlay'
-import { type Props, PropsEq } from './type'
-import { mkPaginationConfig } from './util'
+import { mkPaginationViewConfig } from './util'
 
 const sortOptions: SearchBar.SearchOption<ArticleSortAttr>[] = [
   { label: 'Creation Date', value: 'createdAt' },
@@ -22,7 +23,7 @@ const sortOptions: SearchBar.SearchOption<ArticleSortAttr>[] = [
 ]
 
 const ArticleScreenComponent = ({ model, shared, dispatch }: Props) => {
-  const paginationConfig = mkPaginationConfig(shared, model)
+  const paginationConfig = mkPaginationViewConfig(shared, model)
 
   return (
     <div className='relative flex flex-col gap-[32px]'>

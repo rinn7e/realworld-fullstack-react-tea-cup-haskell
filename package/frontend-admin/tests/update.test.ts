@@ -19,7 +19,11 @@ describe('init', () => {
       setItem: () => undefined,
       removeItem,
     })
-    init(locationOf('/'), O.none, false, O.none)
+    init(locationOf('/'), {
+      user: O.none,
+      isUnavailable: false,
+      token: O.none,
+    })
     expect(removeItem).not.toHaveBeenCalled()
   })
 })

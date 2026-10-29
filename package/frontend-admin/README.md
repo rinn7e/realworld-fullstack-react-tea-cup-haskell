@@ -10,6 +10,10 @@
 - [**vite 7.x**](https://github.com/vitejs/vite): Build tool & Dev server
 - [**tailwindcss 4.x**](https://github.com/tailwindlabs/tailwindcss): Styling
 
+## Shared Core
+
+The Model, Msg, update and API of the dashboard live in [`package/frontend-admin-core`](../frontend-admin-core), imported through `@core/...`. This app adds the web views, the URL, the theme and the browser platform (`src/platform.ts`). The terminal app [`package/cli-admin`](../cli-admin) runs on the same core with its own views. See the core README for how an app runs on it.
+
 ## How to Run
 
 ### Installation & Setup
