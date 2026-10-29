@@ -1,3 +1,5 @@
+import TeaCup
+
 extension HomeScreen {
   static func initial(_ shared: Shared) -> (Model, Cmd<Msg>) {
     let currentFilter = TimeFilter.week

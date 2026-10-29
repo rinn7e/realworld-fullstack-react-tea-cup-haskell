@@ -1,3 +1,5 @@
+import TeaCupPagination
+
 extension CommentScreen {
   struct SearchParams {
     var author: String?

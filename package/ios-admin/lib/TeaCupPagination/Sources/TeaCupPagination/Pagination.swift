@@ -1,39 +1,57 @@
+import TeaCup
+
 /// A paged list, ported from `@rinn7e/tea-cup-pagination`: the model holds the
 /// page shown and its items, `update` fetches a page through `Config.handler`.
 /// The views draw the items themselves (`renderItems` of the web package is a
 /// view, so it lives in each screen here).
-enum Pagination {
-  struct Page<Item> {
-    let items: [Item]
-    let totalCount: Int
+public enum Pagination {
+  public struct Page<Item> {
+    public let items: [Item]
+    public let totalCount: Int
+
+    public init(items: [Item], totalCount: Int) {
+      self.items = items
+      self.totalCount = totalCount
+    }
   }
 
-  struct Config<Item, Err: Error> {
+  public struct Config<Item, Err: Error> {
     let handler: (_ offset: Int, _ limit: Int) async -> Result<Page<Item>, Err>
     let limit: Int
+
+    public init(handler: @escaping (_ offset: Int, _ limit: Int) async -> Result<Page<Item>, Err>, limit: Int) {
+      self.handler = handler
+      self.limit = limit
+    }
   }
 
-  struct Model<Item: Equatable, Err: Equatable>: Equatable {
-    var items: RemoteData<Err, [Item]>
-    var page: Int
-    var pageAmount: Int
+  public struct Model<Item: Equatable, Err: Equatable>: Equatable {
+    public var items: RemoteData<Err, [Item]>
+    public var page: Int
+    public var pageAmount: Int
+
+    public init(items: RemoteData<Err, [Item]>, page: Int, pageAmount: Int) {
+      self.items = items
+      self.page = page
+      self.pageAmount = pageAmount
+    }
   }
 
-  enum Msg<Item, ItemMsg, Err: Error> {
+  public enum Msg<Item, ItemMsg, Err: Error> {
     case changePage(Int)
     case fetchResponse(page: Int, result: Result<Page<Item>, Err>)
     case itemMsg(ItemMsg, item: Item)
     case noOp
   }
 
-  static func initial<Item, ItemMsg, Err>(
+  public static func initial<Item, ItemMsg, Err>(
     _ config: Config<Item, Err>,
     page: Int = 1
   ) -> (Model<Item, Err>, Cmd<Msg<Item, ItemMsg, Err>>) {
     (Model(items: .pending, page: page, pageAmount: 0), fetchCmd(config, page: page))
   }
 
-  static func update<Item, ItemMsg, Err>(
+  public static func update<Item, ItemMsg, Err>(
     _ config: Config<Item, Err>
   ) -> (Msg<Item, ItemMsg, Err>, Model<Item, Err>) -> (Model<Item, Err>, Cmd<Msg<Item, ItemMsg, Err>>) {
     { msg, model in

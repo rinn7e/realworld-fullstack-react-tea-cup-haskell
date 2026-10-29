@@ -1,3 +1,5 @@
+import TeaCupPagination
+
 enum ArticleScreen {
   static let GET_ARTICLES_LIMIT = 50
 

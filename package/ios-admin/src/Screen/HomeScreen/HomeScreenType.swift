@@ -1,3 +1,5 @@
+import TeaCup
+
 enum HomeScreen {
   enum TimeFilter: String, Equatable, CaseIterable {
     case day = "24h"

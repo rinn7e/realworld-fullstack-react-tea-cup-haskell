@@ -1,3 +1,5 @@
+import TeaCupPagination
+
 enum VisitorScreen {
   static let GET_VISITORS_LIMIT = 50
 

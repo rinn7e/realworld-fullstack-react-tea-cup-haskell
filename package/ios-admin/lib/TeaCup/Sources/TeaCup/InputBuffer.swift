@@ -6,16 +6,16 @@ import SwiftUI
 /// Every edit is sent, and a `value` the input did not send (a reset of the form)
 /// replaces the buffer. A render can come with an older value than the buffer
 /// while the user types, so the values sent and not seen back yet are kept.
-struct InputBuffer {
-  private(set) var text: String
+public struct InputBuffer {
+  public private(set) var text: String
   private var sent: [String] = []
 
-  init(_ value: String) {
+  public init(_ value: String) {
     text = value
   }
 
   /// An edit of the user: the text to send, or nil when it was sent already
-  mutating func edit(_ newText: String) -> String? {
+  public mutating func edit(_ newText: String) -> String? {
     text = newText
     guard newText != sent.last else { return nil }
     sent.append(newText)
@@ -23,7 +23,7 @@ struct InputBuffer {
   }
 
   /// A new value from the model
-  mutating func receive(_ value: String) {
+  public mutating func receive(_ value: String) {
     if let index = sent.firstIndex(of: value) {
       sent.removeFirst(index + 1)
     } else if value != text {
@@ -35,7 +35,7 @@ struct InputBuffer {
 
 /// A binding over a buffer that sends every edit from its setter: an `onChange`
 /// of the buffer drops the last edits of fast typing.
-func bufferBinding(_ buffer: Binding<InputBuffer>, onInput: @escaping (String) -> Void) -> Binding<String> {
+public func bufferBinding(_ buffer: Binding<InputBuffer>, onInput: @escaping (String) -> Void) -> Binding<String> {
   Binding(
     get: { buffer.wrappedValue.text },
     set: { newText in
@@ -45,8 +45,8 @@ func bufferBinding(_ buffer: Binding<InputBuffer>, onInput: @escaping (String) -
 }
 
 /// A text input with `value` and `onInput`, like `input` with `onChange`.
-struct InputView: View {
-  enum Kind {
+public struct InputView: View {
+  public enum Kind {
     case line
     case secure
   }
@@ -57,7 +57,7 @@ struct InputView: View {
   let onInput: (String) -> Void
   @State private var buffer: InputBuffer
 
-  init(_ label: String, value: String, kind: Kind = .line, onInput: @escaping (String) -> Void) {
+  public init(_ label: String, value: String, kind: Kind = .line, onInput: @escaping (String) -> Void) {
     self.label = label
     self.value = value
     self.kind = kind
@@ -65,7 +65,7 @@ struct InputView: View {
     _buffer = State(initialValue: InputBuffer(value))
   }
 
-  var body: some View {
+  public var body: some View {
     let text = bufferBinding($buffer, onInput: onInput)
     Group {
       switch kind {

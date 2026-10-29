@@ -1,4 +1,5 @@
 import SwiftUI
+import TeaCup
 
 // The model of the program: none until `initialize` builds it (the `null` model
 // of the web program). A deep link that opened the app arrives while the boot

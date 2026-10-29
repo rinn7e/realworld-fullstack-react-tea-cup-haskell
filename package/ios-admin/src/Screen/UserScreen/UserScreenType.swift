@@ -1,3 +1,5 @@
+import TeaCupPagination
+
 enum UserScreen {
   static let GET_USERS_LIMIT = 50
 

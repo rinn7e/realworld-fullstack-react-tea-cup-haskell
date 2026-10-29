@@ -1,4 +1,5 @@
 import SwiftUI
+import TeaCup
 
 extension VisitorScreen.SubComponent {
   struct VisitorDetailSheet: View, Equatable {

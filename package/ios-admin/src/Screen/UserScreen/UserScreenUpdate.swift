@@ -1,3 +1,6 @@
+import TeaCup
+import TeaCupPagination
+
 extension UserScreen {
   static func initial(_ shared: Shared) -> (Model, Cmd<Msg>) {
     let (searchBar, searchBarCmd) = SearchBar.initial("", UserSortAttr.username, .asc)

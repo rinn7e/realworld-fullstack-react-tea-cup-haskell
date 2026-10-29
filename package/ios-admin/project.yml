@@ -7,13 +7,21 @@ settings:
   base:
     SWIFT_VERSION: "5.0"
     DEVELOPMENT_TEAM: ""
+# Local Swift packages, one module each (the npm packages of the web app)
+packages:
+  TeaCup:
+    path: lib/TeaCup
+  TeaCupPagination:
+    path: lib/TeaCupPagination
 targets:
   SentinelAdmin:
     type: application
     platform: iOS
     sources:
       - path: src
-      - path: lib
+    dependencies:
+      - package: TeaCup
+      - package: TeaCupPagination
     info:
       path: Info.plist
       properties:

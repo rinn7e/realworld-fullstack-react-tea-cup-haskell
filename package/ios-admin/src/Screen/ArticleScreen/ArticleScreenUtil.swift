@@ -1,3 +1,5 @@
+import TeaCupPagination
+
 extension ArticleScreen {
   static func mkPaginationConfig(_ shared: Shared, _ model: Model) -> Pagination.Config<Article, HttpError> {
     Pagination.Config(

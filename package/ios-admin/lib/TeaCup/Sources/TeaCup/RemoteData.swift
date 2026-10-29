@@ -1,19 +1,19 @@
 /// Data from a server, like `RemoteData` of remote-data-ts.
-enum RemoteData<E, A> {
+public enum RemoteData<E, A> {
   case initial
   case pending
   case failure(E)
   case success(A)
 
   /// Like `resultToRd` of tea-cup-prelude
-  init(_ result: Result<A, E>) where E: Error {
+  public init(_ result: Result<A, E>) where E: Error {
     switch result {
     case .success(let value): self = .success(value)
     case .failure(let error): self = .failure(error)
     }
   }
 
-  func map<B>(_ transform: (A) -> B) -> RemoteData<E, B> {
+  public func map<B>(_ transform: (A) -> B) -> RemoteData<E, B> {
     switch self {
     case .initial: .initial
     case .pending: .pending
@@ -22,7 +22,7 @@ enum RemoteData<E, A> {
     }
   }
 
-  var isPending: Bool {
+  public var isPending: Bool {
     if case .pending = self { true } else { false }
   }
 }

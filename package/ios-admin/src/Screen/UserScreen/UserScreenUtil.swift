@@ -1,3 +1,5 @@
+import TeaCupPagination
+
 extension UserScreen {
   struct SearchParams {
     var username: String?

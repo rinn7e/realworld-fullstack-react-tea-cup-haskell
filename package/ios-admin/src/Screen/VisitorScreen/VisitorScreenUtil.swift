@@ -1,3 +1,5 @@
+import TeaCupPagination
+
 extension VisitorScreen {
   struct SearchParams {
     var ip: String?

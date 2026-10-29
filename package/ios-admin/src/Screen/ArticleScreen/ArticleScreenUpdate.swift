@@ -1,3 +1,6 @@
+import TeaCup
+import TeaCupPagination
+
 extension ArticleScreen {
   private typealias PaginationModel = Pagination.Model<Article, HttpError>
   private typealias PaginationMsg = Pagination.Msg<Article, ArticleItemMsg, HttpError>

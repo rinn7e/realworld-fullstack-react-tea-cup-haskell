@@ -1,3 +1,5 @@
+import TeaCupPagination
+
 enum CommentScreen {
   static let GET_COMMENTS_LIMIT = 50
 

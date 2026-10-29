@@ -1,4 +1,5 @@
 import SwiftUI
+import TeaCup
 
 extension SearchBar {
   /// The search bar as native parts: the search field of the navigation bar

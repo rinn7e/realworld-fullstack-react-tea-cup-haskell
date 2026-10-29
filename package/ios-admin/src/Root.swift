@@ -1,4 +1,5 @@
 import SwiftUI
+import TeaCup
 
 @main
 struct SentinelAdminApp: App {

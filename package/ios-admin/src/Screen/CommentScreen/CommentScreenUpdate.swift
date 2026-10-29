@@ -1,3 +1,6 @@
+import TeaCup
+import TeaCupPagination
+
 extension CommentScreen {
   private typealias PaginationModel = Pagination.Model<Comment, HttpError>
   private typealias PaginationMsg = Pagination.Msg<Comment, CommentItemMsg, HttpError>

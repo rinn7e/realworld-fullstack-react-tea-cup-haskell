@@ -1,3 +1,5 @@
+import TeaCup
+
 extension SearchBar {
   static func initial<Sort>(
     _ initialSearchText: String,

@@ -1,4 +1,5 @@
 import SwiftUI
+import TeaCup
 
 extension HomeScreen.SubComponent {
   /// The detail of a log, the slide-over panel of the web app as a sheet

@@ -1,4 +1,6 @@
 import SwiftUI
+import TeaCup
+import TeaCupPagination
 
 /// The items of a `Pagination.Model` as a list, with the list states and the
 /// page controls under it: the `PaginationMemo` of the web app with the
