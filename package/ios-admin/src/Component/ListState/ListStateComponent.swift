@@ -1,29 +1,31 @@
 import SwiftUI
 
-struct ListLoadingView: View, Equatable {
-  var body: some View {
-    ProgressView()
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
+enum ListState {
+  struct Loading: View, Equatable {
+    var body: some View {
+      ProgressView()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
   }
-}
 
-struct ListErrorView: View, Equatable {
-  let entityLabel: String
-  let error: HttpError
+  struct Failure: View, Equatable {
+    let entityLabel: String
+    let error: HttpError
 
-  var body: some View {
-    ContentUnavailableView(
-      "Error loading \(entityLabel)",
-      systemImage: "exclamationmark.triangle",
-      description: Text(formatListError(error))
-    )
+    var body: some View {
+      ContentUnavailableView(
+        "Error loading \(entityLabel)",
+        systemImage: "exclamationmark.triangle",
+        description: Text(ListState.formatListError(error))
+      )
+    }
   }
-}
 
-struct ListEmptyView: View, Equatable {
-  let entityLabel: String
+  struct Empty: View, Equatable {
+    let entityLabel: String
 
-  var body: some View {
-    ContentUnavailableView("No \(entityLabel) found.", systemImage: "tray")
+    var body: some View {
+      ContentUnavailableView("No \(entityLabel) found.", systemImage: "tray")
+    }
   }
 }

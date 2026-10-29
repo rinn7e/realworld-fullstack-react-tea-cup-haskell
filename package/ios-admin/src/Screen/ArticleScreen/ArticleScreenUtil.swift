@@ -2,7 +2,7 @@ extension ArticleScreen {
   static func mkPaginationConfig(_ shared: Shared, _ model: Model) -> Pagination.Config<Article, HttpError> {
     Pagination.Config(
       handler: { offset, limit in
-        guard let token = shared.token else { return .failure(notAuthenticatedError) }
+        guard let token = shared.token else { return .failure(.notAuthenticated) }
         let search = model.searchBar.searchText.trimmingCharacters(in: .whitespaces)
         return await getAdminArticles(
           token,

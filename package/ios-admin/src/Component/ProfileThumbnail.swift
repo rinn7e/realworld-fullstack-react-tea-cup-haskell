@@ -2,7 +2,7 @@ import SwiftUI
 
 /// An avatar: the image at `src`, or a person symbol when there is none or it
 /// does not load
-struct ProfileThumbnailView: View, Equatable {
+struct ProfileThumbnail: View, Equatable {
   let src: String?
   let size: CGFloat
 

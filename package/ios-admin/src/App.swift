@@ -87,19 +87,19 @@ private struct ScreenView: View, Equatable {
   var body: some View {
     switch model.screenModel.screenModel {
     case .homeScreenModel(let screenModel):
-      HomeScreenView(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.homeScreenMsg))
+      HomeScreen.Component(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.homeScreenMsg))
     case .articleScreenModel(let screenModel):
-      ArticleScreenView(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.articleScreenMsg))
+      ArticleScreen.Component(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.articleScreenMsg))
     case .userScreenModel(let screenModel):
-      UserScreenView(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.userScreenMsg))
+      UserScreen.Component(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.userScreenMsg))
     case .commentScreenModel(let screenModel):
-      CommentScreenView(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.commentScreenMsg))
+      CommentScreen.Component(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.commentScreenMsg))
     case .visitorScreenModel(let screenModel):
-      VisitorScreenView(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.visitorScreenMsg))
+      VisitorScreen.Component(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.visitorScreenMsg))
     case .loginScreenModel(let screenModel):
-      LoginScreenView(model: screenModel, dispatch: dispatch.map(Msg.loginScreenMsg))
+      LoginScreen.Component(model: screenModel, dispatch: dispatch.map(Msg.loginScreenMsg))
     case .settingScreenModel:
-      SettingScreenView(user: model.shared.user, colorScheme: model.colorScheme, theme: model.theme, dispatch: dispatch)
+      SettingScreen.Component(user: model.shared.user, colorScheme: model.colorScheme, theme: model.theme, dispatch: dispatch)
     case .notFoundScreenModel:
       ContentUnavailableView("404 Not Found", systemImage: "questionmark.folder")
     }

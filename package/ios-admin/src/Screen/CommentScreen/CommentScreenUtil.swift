@@ -24,7 +24,7 @@ extension CommentScreen {
   static func mkPaginationConfig(_ shared: Shared, _ model: Model) -> Pagination.Config<Comment, HttpError> {
     Pagination.Config(
       handler: { offset, limit in
-        guard let token = shared.token else { return .failure(notAuthenticatedError) }
+        guard let token = shared.token else { return .failure(.notAuthenticated) }
         let params = getSearchParams(model.searchBar.searchText.trimmingCharacters(in: .whitespaces))
         return await getAdminComments(
           token,

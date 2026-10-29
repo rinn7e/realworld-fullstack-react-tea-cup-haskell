@@ -18,7 +18,7 @@ extension VisitorScreen {
   static func mkPaginationConfig(_ shared: Shared, _ model: Model) -> Pagination.Config<Visitor, HttpError> {
     Pagination.Config(
       handler: { offset, limit in
-        guard let token = shared.token else { return .failure(notAuthenticatedError) }
+        guard let token = shared.token else { return .failure(.notAuthenticated) }
         let params = getSearchParams(model.searchBar.searchText)
         return await getVisitors(token, limit: limit, offset: offset, ip: params.ip, path: params.path)
           .map { Pagination.Page(items: $0.visitors, totalCount: $0.totalCount) }

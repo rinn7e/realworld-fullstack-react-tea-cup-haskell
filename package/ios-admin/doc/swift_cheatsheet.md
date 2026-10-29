@@ -375,14 +375,42 @@ A caseless `enum` is a namespace, not a module: it gives qualified names (`UserS
     static func update(_ shared: Shared) -> (Msg, Model) -> (Model, Cmd<Msg>) { ... }
   }
 
+  // UserScreenComponent.swift
+  extension UserScreen {
+    enum SubComponent {}                       // the folder SubComponent/
+    struct Component: View, Equatable { ... }  // the view
+  }
+
+  // SubComponent/UserRow.swift
+  extension UserScreen.SubComponent {
+    struct UserRow: View, Equatable { ... }
+  }
+
   // Usage
   UserScreen.update(model.shared)(subMsg, screenModel)
+  UserScreen.Component(model: m, shared: s, dispatch: d)
+  UserScreen.SubComponent.UserRow(user: u)
   ```
-* **Haskell**: two modules, `Screen.UserScreen.Type` and `Screen.UserScreen.Update`, imported qualified.
-* **Elm**: `Screen.UserScreen` exposing `Model`, `Msg`, `init`, `update`.
-* **TypeScript**: `screen/user-screen/type.ts` and `update.ts`, re-exported by `index.ts`.
+* **Haskell**: modules `Screen.UserScreen.Type`, `Screen.UserScreen.Update`, `Screen.UserScreen.Component` and `Screen.UserScreen.SubComponent.UserRow`, imported qualified.
+* **Elm**: `Screen.UserScreen` exposing `Model`, `Msg`, `init`, `update`, `view`.
+* **TypeScript**: `screen/user-screen/type.ts` and `update.ts`, re-exported by `index.ts`; the view imported from `@/screen/user-screen/component`.
 
 `init` is a keyword in Swift, so the `init` of a TEA module is named `initial` in `ios-admin`.
+
+### 4.1 A Name Says Where It Is Defined
+
+`ios-admin` nests every name by its folder, so a qualified name reads like the import path of the web app:
+
+| Swift name | File | TypeScript import |
+| :--- | :--- | :--- |
+| `UserScreen.Model` | `Screen/UserScreen/UserScreenType.swift` | `import { type Model } from '@/screen/user-screen'` |
+| `UserScreen.Component` | `Screen/UserScreen/UserScreenComponent.swift` | `import { UserScreenMemo } from '@/screen/user-screen/component'` |
+| `UserScreen.SubComponent.UserRow` | `Screen/UserScreen/SubComponent/UserRow.swift` | `import { UserTableMemo } from './sub-component/user-table'` |
+| `ListState.formatListError` | `Component/ListState/ListStateUtil.swift` | `import { formatListError } from '@/component/list-state/util'` |
+
+The prefix technique of Objective-C (`UserScreenModel`, `UIView`, `NSString`) gives unique names too, but they are flat: nothing in `UserScreenModel` says which part is the folder. Nested names keep the path, and inside the namespace the short name works (`Model`, `SubComponent.UserRow`).
+
+A view is named `Component` and not `View`: inside `extension UserScreen`, a nested `View` would hide the `View` protocol of SwiftUI.
 
 ---
 
@@ -626,7 +654,7 @@ Outside `Guard.swift`, `DestinationAfterGuard(...)` does not compile: the guard 
 | **Msg** | `enum Msg` | `type Msg` | `type Msg` with `_tag` |
 | **init** | `static func initial(...) -> (Model, Cmd<Msg>)` | `init : flags -> ( Model, Cmd Msg )` | `init = (): [Model, Cmd<Msg>]` |
 | **update** | `static func update(_ msg: Msg, _ model: Model) -> (Model, Cmd<Msg>)` | `update : Msg -> Model -> ( Model, Cmd Msg )` | `update = (msg, model): [Model, Cmd<Msg>]` |
-| **view** | `struct XView: View, Equatable { let model; let dispatch }` | `view : Model -> Html Msg` | `XMemo = memo(XComponent, PropsEq.equals)` |
+| **view** | `extension X { struct Component: View, Equatable { let model; let dispatch } }`, used as `X.Component(...)` | `view : Model -> Html Msg` | `XMemo = memo(XComponent, PropsEq.equals)` |
 | **Send a message** | `dispatch(.submit)` | `onClick Submit` | `dispatch({ _tag: 'Submit' })` |
 | **Child messages** | `dispatch.map(Msg.loginScreenMsg)`, `cmd.map(Msg.loginScreenMsg)` | `Html.map LoginScreenMsg`, `Cmd.map LoginScreenMsg` | `(subMsg) => dispatch({ _tag: 'LoginScreenMsg', subMsg })` |
 | **Program** | `Program(init:update:view:onOpenUrl:)` run by `Runtime` | `Browser.application` | `ProgramWithNav` |

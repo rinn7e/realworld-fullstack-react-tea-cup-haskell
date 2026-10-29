@@ -52,9 +52,24 @@ The file tree follows the one of `frontend-admin/src`, in the casing of Swift: f
 
 The roots (`src`, `lib`, `doc`) stay in lowercase, as in the other packages of this repo.
 
+A name says where it is defined: the namespace is the folder, and the member is the role of the file. So a name read anywhere in the app leads to its file, the way an import path does on the web:
+
+| Name | File |
+| --- | --- |
+| `ArticleScreen.Model`, `ArticleScreen.Msg` | `Screen/ArticleScreen/ArticleScreenType.swift` |
+| `ArticleScreen.initial`, `ArticleScreen.update` | `Screen/ArticleScreen/ArticleScreenUpdate.swift` |
+| `ArticleScreen.Component` | `Screen/ArticleScreen/ArticleScreenComponent.swift` |
+| `ArticleScreen.SubComponent.ArticleRow` | `Screen/ArticleScreen/SubComponent/ArticleRow.swift` |
+| `SearchBar.Component` | `Component/SearchBar/SearchBarComponent.swift` |
+| `ListState.Loading`, `ListState.Failure`, `ListState.Empty` | `Component/ListState/ListStateComponent.swift` |
+| `DetailRow`, `RoleBadge` (a component of one file) | `Component/DetailRow.swift`, `Component/RoleBadge.swift` |
+
+The folder `Screen/` is not a level of the name: an `enum Screen` already exists (the screen of a destination), and the `Screen` at the end of each name says it. A view is a `Component` and not a `View`, since inside the namespace `View` would hide the `View` protocol of SwiftUI.
+
 | TypeScript and tea-cup | Swift |
 | --- | --- |
 | A module of a screen (`import * as UserScreen`) | An `enum` namespace (`UserScreen.Model`, `UserScreen.update`) split over its files with `extension` |
+| `UserScreenMemo` from `@/screen/user-screen/component` | `UserScreen.Component` |
 | `Model` with `ModelEq`, `Props` with `PropsEq`, `memo` | A `struct` that is `Equatable`; a view that is `Equatable` skips its body when its input did not change |
 | A sum type with `_tag` and `switch` | An `enum` with associated values and `switch` |
 | `Option<A>` | `A?` |

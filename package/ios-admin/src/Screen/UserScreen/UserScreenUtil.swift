@@ -23,7 +23,7 @@ extension UserScreen {
   static func mkPaginationConfig(_ shared: Shared, _ model: Model) -> Pagination.Config<AdminUser, HttpError> {
     Pagination.Config(
       handler: { offset, limit in
-        guard let token = shared.token else { return .failure(notAuthenticatedError) }
+        guard let token = shared.token else { return .failure(.notAuthenticated) }
         let params = getSearchParams(model.searchBar.searchText.trimmingCharacters(in: .whitespaces))
         return await getAdminUsers(
           token,
@@ -39,9 +39,3 @@ extension UserScreen {
     )
   }
 }
-
-let notAuthenticatedError = HttpError(
-  statusCode: 401,
-  err: ApiError(errors: ["body": ["Not authenticated"]]),
-  actualErr: "Not authenticated"
-)

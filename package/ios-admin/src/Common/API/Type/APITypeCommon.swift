@@ -9,3 +9,13 @@ struct HttpError: Error, Equatable {
   let err: ApiError?
   let actualErr: String
 }
+
+extension HttpError {
+  /// The error of a request made with no token: the screens cannot load
+  /// anything signed out
+  static let notAuthenticated = HttpError(
+    statusCode: 401,
+    err: ApiError(errors: ["body": ["Not authenticated"]]),
+    actualErr: "Not authenticated"
+  )
+}
