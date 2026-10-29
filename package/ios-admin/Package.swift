@@ -4,7 +4,8 @@ import PackageDescription
 // One module per file (generated): a module is the path of its file under
 // `src/` with `_` between the folders, the Swift form of a Haskell module name
 // (`Screen/UserScreen/Type.swift` is `Screen_UserScreen_Type`); the files of
-// the root, `Handler/` and `Util/` are `MyApp_*`. The dependencies of a module
+// the root, `Handler/` and `Util/` are `MyApp_*`, but `Program.swift` is
+// `Program` (the TeaCup type is `TeaCupProgram`). The dependencies of a module
 // are the modules its file imports, and SwiftPM refuses a cycle. The files of
 // one folder share their internals through `@_spi(<folder module>)`, the
 // `.Internal` pattern of Haskell (script/check-spi.sh). The app target
@@ -52,7 +53,7 @@ let package = Package(
     .library(name: "Package_TeaCup_Program", targets: ["Package_TeaCup_Program"]),
     .library(name: "Package_TeaCup_RemoteData", targets: ["Package_TeaCup_RemoteData"]),
     .library(name: "Package_TeaCupPagination_Pagination", targets: ["Package_TeaCupPagination_Pagination"]),
-    .library(name: "MyApp_Program", targets: ["MyApp_Program"]),
+    .library(name: "Program", targets: ["Program"]),
     .library(name: "Screen_ArticleScreen_Component", targets: ["Screen_ArticleScreen_Component"]),
     .library(name: "Screen_ArticleScreen_SubComponent_ArticleDetailSheet", targets: ["Screen_ArticleScreen_SubComponent_ArticleDetailSheet"]),
     .library(name: "Screen_ArticleScreen_SubComponent_ArticleRow", targets: ["Screen_ArticleScreen_SubComponent_ArticleRow"]),
@@ -138,7 +139,7 @@ let package = Package(
     .target(name: "Package_TeaCup_Program", dependencies: ["Package_TeaCup_Cmd", "Package_TeaCup_Dispatcher"], path: "src/Package/TeaCup", exclude: ["Cmd.swift", "Dispatcher.swift", "InputBuffer.swift", "RemoteData.swift"], sources: ["Program.swift"]),
     .target(name: "Package_TeaCup_RemoteData", path: "src/Package/TeaCup", exclude: ["Cmd.swift", "Dispatcher.swift", "InputBuffer.swift", "Program.swift"], sources: ["RemoteData.swift"]),
     .target(name: "Package_TeaCupPagination_Pagination", dependencies: ["Package_TeaCup_Cmd", "Package_TeaCup_RemoteData"], path: "src/Package/TeaCupPagination", sources: ["Pagination.swift"]),
-    .target(name: "MyApp_Program", dependencies: ["MyApp_App", "Common_Type_Destination_Type", "Package_TeaCup_Cmd", "Package_TeaCup_Dispatcher", "Package_TeaCup_Program", "MyApp_Type", "MyApp_Update", "MyApp_Util_URL"], path: "src", exclude: ["App.swift", "Common", "Component", "Handler", "Package", "Root.swift", "Screen", "Theme", "Type.swift", "Update.swift", "Util"], sources: ["Program.swift"]),
+    .target(name: "Program", dependencies: ["MyApp_App", "Common_Type_Destination_Type", "Package_TeaCup_Cmd", "Package_TeaCup_Dispatcher", "Package_TeaCup_Program", "MyApp_Type", "MyApp_Update", "MyApp_Util_URL"], path: "src", exclude: ["App.swift", "Common", "Component", "Handler", "Package", "Root.swift", "Screen", "Theme", "Type.swift", "Update.swift", "Util"], sources: ["Program.swift"]),
     .target(name: "Screen_ArticleScreen_Component", dependencies: ["Common_API_Type_Article", "Common_Type_Shared", "Component_PagedList_Component", "Component_SearchBar_Component", "Component_SearchBar_Type", "Package_TeaCup_Dispatcher", "Screen_ArticleScreen_SubComponent_ArticleDetailSheet", "Screen_ArticleScreen_SubComponent_ArticleRow", "Screen_ArticleScreen_Type"], path: "src/Screen/ArticleScreen", exclude: ["SubComponent", "Type.swift", "Update.swift", "Util.swift"], sources: ["Component.swift"]),
     .target(name: "Screen_ArticleScreen_SubComponent_ArticleDetailSheet", dependencies: ["Common_API_Type_Article", "Component_DetailRow_Component", "Component_ProfileThumbnail_Component", "Package_TeaCup_Dispatcher", "Screen_ArticleScreen_Type"], path: "src/Screen/ArticleScreen/SubComponent", exclude: ["ArticleRow.swift"], sources: ["ArticleDetailSheet.swift"]),
     .target(name: "Screen_ArticleScreen_SubComponent_ArticleRow", dependencies: ["Common_API_Type_Article"], path: "src/Screen/ArticleScreen/SubComponent", exclude: ["ArticleDetailSheet.swift"], sources: ["ArticleRow.swift"]),

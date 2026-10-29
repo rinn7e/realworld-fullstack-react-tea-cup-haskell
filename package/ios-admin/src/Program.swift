@@ -1,4 +1,4 @@
-// Module: MyApp_Program
+// Module: Program
 
 import Common_Type_Destination_Type
 @_spi(MyApp) import MyApp_App
@@ -51,7 +51,7 @@ func preUpdate(_ msg: Msg, _ programModel: ProgramModel) -> (ProgramModel, Cmd<M
   }
 }
 
-@_spi(MyApp) public let appProgram = Program(
+@_spi(MyApp) public let appProgram = TeaCupProgram(
   init: preInit,
   update: preUpdate,
   view: PreView.init,

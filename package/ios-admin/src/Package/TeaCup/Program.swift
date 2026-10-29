@@ -8,7 +8,7 @@ import SwiftUI
 /// next model with commands, `view` draws the model. `onOpenUrl` is the
 /// `onUrlChange` of `ProgramWithNav`: iOS has no address bar, so a URL reaches
 /// the app only as a deep link.
-public struct Program<Model, Msg, Content: View> {
+public struct TeaCupProgram<Model, Msg, Content: View> {
   let `init`: () -> (Model, Cmd<Msg>)
   let update: (Msg, Model) -> (Model, Cmd<Msg>)
   let view: (Model, Dispatcher<Msg>) -> Content
@@ -33,10 +33,10 @@ public struct Program<Model, Msg, Content: View> {
 @Observable
 public final class Runtime<Model, Msg, Content: View> {
   public private(set) var model: Model
-  @ObservationIgnored private let program: Program<Model, Msg, Content>
+  @ObservationIgnored private let program: TeaCupProgram<Model, Msg, Content>
   @ObservationIgnored private(set) var dispatcher: Dispatcher<Msg> = Dispatcher { _ in }
 
-  public init(_ program: Program<Model, Msg, Content>) {
+  public init(_ program: TeaCupProgram<Model, Msg, Content>) {
     let (model, cmd) = program.`init`()
     self.program = program
     self.model = model

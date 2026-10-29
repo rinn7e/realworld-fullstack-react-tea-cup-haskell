@@ -739,7 +739,7 @@ Outside `Guard.swift`, `DestinationAfterGuard(...)` does not compile: the guard 
 | **view** | `public struct XComponent: View, Equatable { let model; let dispatch }` with a `public init` | `view : Model -> Html Msg` | `XMemo = memo(XComponent, PropsEq.equals)` |
 | **Send a message** | `dispatch(.submit)` | `onClick Submit` | `dispatch({ _tag: 'Submit' })` |
 | **Child messages** | `dispatch.map(Msg.loginScreenMsg)`, `cmd.map(Msg.loginScreenMsg)` | `Html.map LoginScreenMsg`, `Cmd.map LoginScreenMsg` | `(subMsg) => dispatch({ _tag: 'LoginScreenMsg', subMsg })` |
-| **Program** | `Program(init:update:view:onOpenUrl:)` run by `Runtime` | `Browser.application` | `ProgramWithNav` |
+| **Program** | `TeaCupProgram(init:update:view:onOpenUrl:)` run by `Runtime` | `Browser.application` | `ProgramWithNav` |
 | **Text input** | `InputView("Email", value: model.email) { dispatch(.changeEmail($0)) }` | `input [ value model.email, onInput ChangeEmail ] []` | `<input value={model.email} onChange={...} />` |
 | **Show a dialog** | `.sheet(item: Binding(get: { model.selected }, set: { ... }))` | *a view branch on the model* | `{O.isSome(selected) && <Overlay />}` |
 

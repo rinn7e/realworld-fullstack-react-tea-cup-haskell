@@ -19,7 +19,7 @@ targets:
       - path: src/Root.swift
     dependencies:
       - package: SentinelAdminModules
-        product: MyApp_Program
+        product: Program
       - package: SentinelAdminModules
         product: Package_TeaCup_Program
     info:

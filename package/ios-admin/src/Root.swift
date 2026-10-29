@@ -1,6 +1,6 @@
 // Module: MyApp_Root
 
-@_spi(MyApp) import MyApp_Program
+@_spi(MyApp) import Program
 import Package_TeaCup_Program
 import SwiftUI
 

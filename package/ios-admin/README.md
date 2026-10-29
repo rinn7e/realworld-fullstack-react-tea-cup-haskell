@@ -7,7 +7,7 @@ A native iOS port of [`frontend-admin`](../frontend-admin) (the Sentinel Dashboa
 - [**Swift 6 compiler, Swift 5 language mode**](https://www.swift.org): Language
 - [**SwiftUI**](https://developer.apple.com/xcode/swiftui/): Views (iOS 18 and later)
 - [**Swift Charts**](https://developer.apple.com/documentation/charts): The visitor chart
-- **`Package_TeaCup`** (`src/Package/TeaCup`): a small TEA runtime written for this app (`Cmd`, `Dispatcher`, `Program`, `RemoteData`), in the place of `react-tea-cup`, `tea-cup-fp` and `tea-cup-prelude`
+- **`Package_TeaCup`** (`src/Package/TeaCup`): a small TEA runtime written for this app (`Cmd`, `Dispatcher`, `TeaCupProgram`, `RemoteData`), in the place of `react-tea-cup`, `tea-cup-fp` and `tea-cup-prelude`
 - **`Package_TeaCupPagination`** (`src/Package/TeaCupPagination`): a port of `@rinn7e/tea-cup-pagination`
 - [**XcodeGen**](https://github.com/yonaskolb/XcodeGen): Generates the Xcode project from `project.yml`
 
@@ -56,7 +56,7 @@ The roots (`src`, `lib`, `doc`) stay in lowercase, as in the other packages of t
 
 Every Swift file is a module (a target of `Package.swift`), as every file is a module in Haskell and TypeScript. Only `Root.swift` (`@main`) is in the app target (`project.yml`), whose module is `MyApp_Root`.
 
-A module is named after the path of its file, with `_` between the parts: `Screen/UserScreen/Type.swift` is `Screen_UserScreen_Type` (Haskell `Screen.UserScreen.Type`). A Swift module name is one identifier, so it cannot hold a dot, and `import Screen.UserScreen.Type` does not exist (dotted imports are only for the submodules of C and Objective-C modules, like `import Darwin.C.stdio`). The files of the root, `Handler/` and `Util/` have no folder of their own to name them, so they are `MyApp_*` (`MyApp_Update`, `MyApp_Handler_NavigationHandler`).
+A module is named after the path of its file, with `_` between the parts: `Screen/UserScreen/Type.swift` is `Screen_UserScreen_Type` (Haskell `Screen.UserScreen.Type`). A Swift module name is one identifier, so it cannot hold a dot, and `import Screen.UserScreen.Type` does not exist (dotted imports are only for the submodules of C and Objective-C modules, like `import Darwin.C.stdio`). The files of the root, `Handler/` and `Util/` have no folder of their own to name them, so they are `MyApp_*` (`MyApp_Update`, `MyApp_Handler_NavigationHandler`). The one exception is `Program.swift`, the module `Program` that `Root.swift` imports: the TeaCup type is `TeaCupProgram`, so the module name does not clash with it.
 
 | Folder | Modules | Web |
 | --- | --- | --- |
@@ -65,7 +65,7 @@ A module is named after the path of its file, with `_` between the parts: `Scree
 | `src/Common/<Path>` | `Common_API_Type_Article`, `Common_API_Handler_User`, `Common_Type_Destination_Parser`, ... | `src/common/*` |
 | `src/Component/<Name>` | `Component_SearchBar_Type`, `Component_SearchBar_Update`, `Component_SearchBar_Component`, ... | `src/component/*` |
 | `src/Screen/<Name>Screen` | `Screen_UserScreen_Type`, `Screen_UserScreen_Update`, `Screen_UserScreen_SubComponent_UserRow`, ... | `src/screen/*` |
-| `src/`, `src/Handler`, `src/Util` | `MyApp_Root`, `MyApp_App`, `MyApp_Type`, `MyApp_Update`, `MyApp_Program`, `MyApp_Handler_NavigationHandler`, `MyApp_Util_Guard`, ... | `src/*.tsx`, `handler/`, `util/` |
+| `src/`, `src/Handler`, `src/Util` | `MyApp_Root`, `MyApp_App`, `MyApp_Type`, `MyApp_Update`, `Program`, `MyApp_Handler_NavigationHandler`, `MyApp_Util_Guard`, ... | `src/*.tsx`, `handler/`, `util/` |
 
 Each file imports the modules it uses, and the dependencies of each target in `Package.swift` are exactly those imports. SwiftPM refuses a cycle, so the layers of the code convention of frontend-admin ("Dependency Order and Hierarchy") are checked by the compiler: `Common` imports no component or screen, a component imports no screen, and a screen imports no other screen. Each module builds alone:
 
