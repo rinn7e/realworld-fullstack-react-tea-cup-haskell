@@ -5,10 +5,9 @@ A native Android port of [`frontend-admin`](../frontend-admin) (the Sentinel Das
 ## Tech Stack
 
 - [**Kotlin 2.4**](https://kotlinlang.org): Language
-- [**Kotlin Multiplatform**](https://kotlinlang.org/docs/multiplatform.html): The `core` module (TEA runtime, types, updates, API) has no Android dependency, so an iOS target can be added later
 - [**Jetpack Compose**](https://developer.android.com/compose) with [**Material 3**](https://m3.material.io): Views
-- **`teacup`** (`core/.../teacup`): a small TEA runtime written for this app (`Cmd`, `Dispatcher`, `Program`, `Runtime`, `RemoteData`, `Either`), in the place of `react-tea-cup`, `tea-cup-fp`, `tea-cup-prelude` and `fp-ts`
-- **`teacuppagination`** (`core/.../teacuppagination`): a port of `@rinn7e/tea-cup-pagination`
+- **`teacup`** (`app/src/main/kotlin/teacup`): a small TEA runtime written for this app (`Cmd`, `Dispatcher`, `Program`, `Runtime`, `RemoteData`, `Either`), in the place of `react-tea-cup`, `tea-cup-fp`, `tea-cup-prelude` and `fp-ts`
+- **`teacuppagination`** (`app/src/main/kotlin/teacuppagination`): a port of `@rinn7e/tea-cup-pagination`
 - [**Ktor client**](https://ktor.io) and [**kotlinx.serialization**](https://github.com/Kotlin/kotlinx.serialization): HTTP and JSON (the Kotlin side of `io-ts`: decoders generated from the types)
 - [**DataStore**](https://developer.android.com/topic/libraries/architecture/datastore): The token and the theme choices (the `localStorage` of the web app)
 - [**Vico**](https://github.com/patrykandpatrick/vico): The visitor chart
@@ -46,36 +45,28 @@ The phone and the Mac must be on the same Wi-Fi, with the backend running. The a
 
 ### Tests
 
-The logic of `core` (TeaCup, the pagination, the navigation and its guard, the updates, the JSON decoding) is plain Kotlin, tested on the JVM with no device:
+The TEA logic (TeaCup, the pagination, the navigation and its guard, the updates, the JSON decoding) is plain Kotlin, tested on the JVM with no device (`app/src/test/kotlin`):
 
 ```bash
-./gradlew :core:jvmTest
+./gradlew testDebugUnitTest
 ```
 
 ## From frontend-admin to android-admin
 
-The file tree follows the one of `frontend-admin/src`, split in two Gradle modules:
+The file tree of `app/src/main/kotlin` is the one of `frontend-admin/src`: a folder holds its types, its update, its utils and its view side by side. A folder is a Kotlin package of the same name, in lower case (`screen/user-screen` is the package `screen.userscreen`), and each file keeps the name of its web file:
 
-- `core/src/commonMain/kotlin`: everything that is not a view. Types, updates, utils, the API, the cache, the TEA runtime.
-- `app/src/main/kotlin`: the views (Compose) and the activity.
-
-A folder is a Kotlin package of the same name, in lower case (`screen/user-screen` is the package `screen.userscreen`), and each file keeps the name of its web file:
-
-| frontend-admin | android-admin |
+| frontend-admin | android-admin (`app/src/main/kotlin`) |
 | --- | --- |
-| `src/root.tsx`, `program.tsx`, `app.tsx` | `app/.../app/Root.kt` (the activity), `core/.../app/Program.kt`, `app/.../app/App.kt` |
-| `src/type.ts`, `update.ts` | `core/.../app/Type.kt`, `Update.kt` |
-| `src/handler/`, `src/util/` | `core/.../app/handler/`, `core/.../app/util/` |
-| `src/common/` | `core/.../common/` (and `app/.../common/type/DateFormat.kt`) |
-| `src/component/<name>/type.ts`, `update.ts`, `util.ts` | `core/.../component/<name>/Type.kt`, `Update.kt`, `Util.kt` |
-| `src/component/<name>/component.tsx` | `app/.../component/<name>/Component.kt` |
-| `src/screen/<name>/type.ts`, `update.ts`, `util.ts` | `core/.../screen/<name>/Type.kt`, `Update.kt`, `Util.kt` |
-| `src/screen/<name>/component.tsx`, `sub-component/` | `app/.../screen/<name>/Component.kt`, `subcomponent/` |
-| `src/theme/` | `core/.../theme/` (presets, storage), `app/.../theme/Material.kt` (the Material theme) |
+| `src/root.tsx`, `program.tsx`, `app.tsx` | `app/Root.kt` (the activity), `app/Program.kt`, `app/App.kt` |
+| `src/type.ts`, `update.ts` | `app/Type.kt`, `app/Update.kt` |
+| `src/handler/`, `src/util/` | `app/handler/`, `app/util/` |
+| `src/common/` | `common/` |
+| `src/component/<name>/` (`type.ts`, `update.ts`, `util.ts`, `component.tsx`) | `component/<name>/` (`Type.kt`, `Update.kt`, `Util.kt`, `Component.kt`) |
+| `src/screen/<name>/` (`type.ts`, `update.ts`, `util.ts`, `component.tsx`, `sub-component/`) | `screen/<name>/` (`Type.kt`, `Update.kt`, `Util.kt`, `Component.kt`, `subcomponent/`) |
+| `src/theme/` | `theme/` (presets, storage, and `Material.kt`, the Material theme) |
+| `react-tea-cup`, `tea-cup-fp`, `@rinn7e/tea-cup-pagination` | `teacup/`, `teacuppagination/` |
 
-The root files of the web app are in the package `app`: a Kotlin file in no package cannot be imported from a package. The TEA runtime is in `teacup` (a folder cannot be named `package` in Kotlin, it is a keyword).
-
-Two files of one package in the two modules must not have the same name: both would compile to the same class (`screen.userscreen.TypeKt`). So a view file is `Component.kt`, never `Type.kt` or `Update.kt`.
+`Model` and `Msg` are in `Type.kt`, as they are in `type.ts`. The root files of the web app are in the package `app`: a Kotlin file in no package cannot be imported from a package. The TEA runtime is in `teacup` (a folder cannot be named `package` in Kotlin, it is a keyword).
 
 ## Modules and Names
 
@@ -95,7 +86,7 @@ Import the `Model`, `Msg`, `initial` or `update` of another module only with an 
 What Kotlin has and has not, next to Haskell:
 
 - `private` at the top level of a file is private to the file: the export list of a Haskell module.
-- `internal` is the Gradle module (`core`), not the package: there is no visibility per folder. The helpers of `common/api/handler` are `internal`, and the rest of `core` is asked not to call them.
+- `internal` is the Gradle module (the whole app), not the package: there is no visibility per folder. The helpers of `common/api/handler` are `internal`, and the rest of the app is asked not to call them.
 - Owned types (`CurrentScreenModel`, `DestinationAfterGuard`) have a private constructor: only their companion makes one, as on the web and iOS.
 
 ## Native Android Parts
@@ -122,7 +113,7 @@ A deep link that opens the app arrives while the boot checks the stored token, s
 
 ## Performance
 
-Compose skips a view when its input did not change (strong skipping, on by default). The types of `core` are declared stable in `app/stability.conf`, so they are compared with `equals`, the `memo` of the web views; every `Dispatcher` is equal to every other one, like `EqAlways`.
+Compose skips a view when its input did not change (strong skipping, on by default). The types of the app are declared stable in `app/stability.conf`, so they are compared with `equals`, the `memo` of the web views; every `Dispatcher` is equal to every other one, like `EqAlways`.
 
 A debug build draws a frame rate counter above the app (`app/.../debug/FpsOverlay.kt`): the frames per second of the last half second, the longest frame, and the number of hitches (frames that took more than 1.5 times their budget, 16 ms at 60 Hz). A bottom sheet is a window of its own, drawn above the counter.
 

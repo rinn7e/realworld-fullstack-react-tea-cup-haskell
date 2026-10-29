@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.first
 // The token is kept in a DataStore of the app, private to it (the web app
 // keeps it in `localStorage`). Called from commands only.
 
-/** The store of the app, set once at startup by the app (its file lives where the platform says) */
+/** The store of the app, set once at startup by the activity (its file is in the files of the app) */
 object Store {
   lateinit var dataStore: DataStore<Preferences>
     private set

@@ -20,9 +20,9 @@ import teacup.flatMap
 import teacup.mapLeft
 
 // The steps of the web handlers: fetch, check, decode, and an `HttpError` on
-// the way out. `internal`: only the handlers of this folder use them (Kotlin has
-// no visibility per folder, so `internal` is the module; the rest of `core` is
-// asked not to call them).
+// the way out. Only the handlers of this folder use them: Kotlin has no
+// visibility per folder (`internal` is the whole app), so the rest of the app
+// is asked not to call them.
 
 // The engine is the one of the platform (OkHttp on Android), found at runtime
 private val client by lazy { HttpClient() }

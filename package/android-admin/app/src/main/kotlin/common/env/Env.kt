@@ -2,8 +2,7 @@ package common.env
 
 /**
  * The API the app talks to, like `VITE_API_BASE`. Set once at startup by the
- * app, from its build config (the `apiBase` Gradle property): this module does
- * not know how it is built.
+ * activity, from the build config (the `apiBase` Gradle property).
  */
 object Env {
   var apiBase: String = "http://10.0.2.2:3000/api"

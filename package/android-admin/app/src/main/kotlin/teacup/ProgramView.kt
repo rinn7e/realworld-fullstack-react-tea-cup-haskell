@@ -34,7 +34,7 @@ class ProgramHost<Model, Msg>(program: Program<Model, Msg>, onStep: (Msg, Durati
 /**
  * Shows a program: the view of the model, drawn again after every step. The
  * views below skip when their input did not change (strong skipping, with the
- * types of core compared by equals, `stability.conf`).
+ * types of the app compared by equals, `stability.conf`).
  */
 @Composable
 fun <Model, Msg> ProgramView(host: ProgramHost<Model, Msg>, view: @Composable (Model, Dispatcher<Msg>) -> Unit) {

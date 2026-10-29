@@ -13,7 +13,7 @@ A production-grade, type-safe implementation of the RealWorld spec, featuring a 
 * [**package/frontend-admin/**](package/frontend-admin) — Sentinel Dashboard for system monitoring and cache management (Port 5174).
 * [**package/frontend-admin-legacy/**](package/frontend-admin-legacy) — Sentinel Dashboard Legacy backup (Port 5176).
 * [**package/ios-admin/**](package/ios-admin) - Native iOS port of the Sentinel Dashboard, in Swift and SwiftUI with The Elm Architecture.
-* [**package/android-admin/**](package/android-admin) - Native Android port of the Sentinel Dashboard, in Kotlin and Jetpack Compose with The Elm Architecture (its core in Kotlin Multiplatform).
+* [**package/android-admin/**](package/android-admin) - Native Android port of the Sentinel Dashboard, in Kotlin and Jetpack Compose with The Elm Architecture.
 * [**package/frontend-design-system/**](package/frontend-design-system) — Design system component library built with Tailwind CSS v4 `@plugin` and TEA.
 * [**package/e2e/**](package/e2e) — Playwright E2E integration test suite for `frontend-web`.
 

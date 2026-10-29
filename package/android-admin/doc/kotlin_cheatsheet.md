@@ -15,7 +15,7 @@ Kotlin has two levels, and Haskell and TypeScript fold them into one:
 | | Haskell | TypeScript | Kotlin |
 | :--- | :--- | :--- | :--- |
 | **A namespace is** | one file (`module M where`) | one file | a package (`package screen.userscreen`), any number of files |
-| **The unit you build and depend on** | a package (a `library` in `.cabal`) | a package (`package.json`) | a Gradle module (`core`, `app`) |
+| **The unit you build and depend on** | a package (a `library` in `.cabal`) | a package (`package.json`) | a Gradle module (`app`) |
 | **Names between files of one package** | need `import` | need `import` | visible with no `import` |
 | **`import` is for** | other modules | other files | other packages |
 | **Default visibility** | everything, unless an export list | nothing, unless `export` | `public` |
@@ -72,7 +72,7 @@ import teacuppagination.Msg as PaginationMsg
 | Kotlin | Seen by | Haskell / TypeScript |
 | :--- | :--- | :--- |
 | `public` (the default) | everyone | an exported name / `export` |
-| `internal` | the Gradle module (`core`) | a module of the `other-modules` of a Cabal package |
+| `internal` | the Gradle module (`app`, the whole app here) | a module of the `other-modules` of a Cabal package |
 | `private` at the top level | the file | a name left out of the export list / no `export` |
 | `private` in a class | the class (and its companion) | an unexported field |
 
@@ -82,12 +82,12 @@ There is no visibility per package or per folder (Java has package private, Kotl
 
 | Folder | Package | Web |
 | :--- | :--- | :--- |
-| `core/.../teacup`, `teacuppagination` | `teacup`, `teacuppagination` | `react-tea-cup`, `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
-| `core/.../common/api/type` | `common.api.type` | `src/common/api/type` |
-| `core/.../screen/userscreen` and `app/.../screen/userscreen` | `screen.userscreen` | `src/screen/user-screen` |
-| `core/.../app`, `app/.../app` | `app` | `src/*.tsx` |
+| `teacup/`, `teacuppagination/` | `teacup`, `teacuppagination` | `react-tea-cup`, `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
+| `common/api/type/` | `common.api.type` | `src/common/api/type` |
+| `screen/userscreen/` | `screen.userscreen` | `src/screen/user-screen` |
+| `app/` | `app` | `src/*.tsx` |
 
-One package can live in both Gradle modules (`Type.kt` in `core`, `Component.kt` in `app`), but two files of one package must not have the same name: each file becomes a class named after it (`screen.userscreen.TypeKt`), and two such classes clash.
+The folders are under `app/src/main/kotlin`. Each file becomes a class named after it (`screen.userscreen.TypeKt`), so two files of one package cannot have the same name.
 
 ---
 
@@ -178,14 +178,14 @@ sealed interface RemoteData<out E, out A> {
 A screen is a package. Its files share every name with no import, as `type.ts` and `update.ts` would with imports:
 
 ```kotlin
-// core/.../screen/loginscreen/Type.kt
+// screen/loginscreen/Type.kt
 package screen.loginscreen
 
 data class Model(val email: String, val password: String, val isSubmitting: Boolean, val error: String?)
 
 sealed interface Msg { /* ... */ }
 
-// core/.../screen/loginscreen/Update.kt
+// screen/loginscreen/Update.kt
 package screen.loginscreen
 
 fun initial(): Pair<Model, Cmd<Msg>> = Model("", "", false, null) to Cmd.none
@@ -196,10 +196,10 @@ fun update(msg: Msg, model: Model): Pair<Model, Cmd<Msg>> = /* ... */
 The parent names it with its package, like `import qualified Screen.LoginScreen as LoginScreen` in Haskell:
 
 ```kotlin
-// core/.../app/Type.kt
+// app/Type.kt
 data class LoginScreenModel(val model: screen.loginscreen.Model) : ScreenModel
 
-// core/.../app/Update.kt
+// app/Update.kt
 import screen.loginscreen.update as loginScreenUpdate
 ```
 

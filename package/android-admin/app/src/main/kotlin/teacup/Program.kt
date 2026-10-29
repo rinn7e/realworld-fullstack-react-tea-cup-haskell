@@ -9,8 +9,8 @@ import kotlin.time.TimeSource
  * A TEA program, like `Program` of react-tea-cup: `init` and `update` return the
  * next model with commands. `onOpenUrl` is the `onUrlChange` of
  * `ProgramWithNav`: Android has no address bar, so a URL reaches the app only as
- * a deep link. The view is not here: it is drawn by the app (`ProgramView`), so
- * this module stays free of any UI toolkit.
+ * a deep link. The view is not here: `ProgramView` draws the model with
+ * Compose, and this file stays plain Kotlin.
  */
 class Program<Model, Msg>(
   val init: () -> Pair<Model, Cmd<Msg>>,

@@ -20,8 +20,8 @@ import tech.rinn7e.sentinel.admin.BuildConfig
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * The one activity: it sets what core cannot know (the API, the file of the
- * store), runs the program, and passes deep links to it (`sentinel://users`),
+ * The one activity: it sets what only Android knows (the API of the build, the
+ * file of the store), runs the program, and passes deep links to it (`sentinel://users`),
  * both the one that opened the app and the ones that come while it runs.
  */
 class MainActivity : ComponentActivity() {

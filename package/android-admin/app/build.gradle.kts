@@ -1,6 +1,7 @@
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.compose)
+  alias(libs.plugins.kotlin.serialization)
 }
 
 // The API the app talks to, like `VITE_API_BASE`: the emulator reaches the
@@ -43,13 +44,17 @@ android {
 }
 
 composeCompiler {
-  // The types of core are immutable: compare them with equals, so a view skips
+  // The types of the app are immutable: compare them with equals, so a view skips
   // when its input did not change (the `memo` of the web views)
   stabilityConfigurationFiles.add(project.layout.projectDirectory.file("stability.conf"))
 }
 
 dependencies {
-  implementation(project(":core"))
+  implementation(libs.kotlinx.coroutines.core)
+  implementation(libs.kotlinx.serialization.json)
+  implementation(libs.ktor.client.core)
+  implementation(libs.ktor.client.okhttp)
+  implementation(libs.datastore.preferences.core)
   implementation(platform(libs.compose.bom))
   implementation(libs.compose.material3)
   implementation(libs.compose.material.icons.extended)
@@ -60,4 +65,10 @@ dependencies {
   implementation(libs.vico.compose.m3)
   implementation(libs.kotlinx.coroutines.android)
   debugImplementation(libs.compose.ui.tooling)
+
+  // The TEA logic (TeaCup, the pagination, the navigation, the updates, the
+  // JSON) is tested on the JVM, with no device: ./gradlew testDebugUnitTest
+  testImplementation(kotlin("test-junit"))
+  testImplementation(libs.junit)
+  testImplementation(libs.kotlinx.coroutines.test)
 }
