@@ -1,8 +1,8 @@
 import Common_API_Type
 import Component_DetailRow
 import Component_RoleBadge
+import Package_TeaCup
 import SwiftUI
-import TeaCup
 
 struct VisitorDetailSheet: View, Equatable {
   let visitor: Visitor

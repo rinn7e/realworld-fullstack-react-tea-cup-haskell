@@ -1,7 +1,7 @@
 import Common_API_Type
 import Component_DetailRow
+import Package_TeaCup
 import SwiftUI
-import TeaCup
 
 /// The detail of a log, the slide-over panel of the web app as a sheet
 struct LogDetailSheet: View, Equatable {

@@ -1,7 +1,7 @@
 import Common_Type
 import Component_ProfileThumbnail
+import Package_TeaCup
 import SwiftUI
-import TeaCup
 import Theme
 
 public struct SettingScreenComponent: View, Equatable {

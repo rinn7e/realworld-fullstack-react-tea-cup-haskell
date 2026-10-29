@@ -1,5 +1,5 @@
 import Common_Type
-import TeaCup
+import Package_TeaCup
 
 public func searchBarInitial<Sort>(
   _ initialSearchText: String,

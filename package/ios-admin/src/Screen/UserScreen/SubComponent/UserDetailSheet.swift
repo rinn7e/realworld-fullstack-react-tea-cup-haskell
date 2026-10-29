@@ -2,8 +2,8 @@ import Common_API_Type
 import Component_DetailRow
 import Component_ProfileThumbnail
 import Component_RoleBadge
+import Package_TeaCup
 import SwiftUI
-import TeaCup
 
 struct UserDetailSheet: View, Equatable {
   let user: AdminUser

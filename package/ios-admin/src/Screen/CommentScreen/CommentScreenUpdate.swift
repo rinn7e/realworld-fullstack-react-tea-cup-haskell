@@ -1,8 +1,8 @@
 import Common_API_Type
 import Common_Type
 import Component_SearchBar
-import TeaCup
-import TeaCupPagination
+import Package_TeaCup
+import Package_TeaCupPagination
 
 private typealias PaginationModel = Pagination.Model<Comment, HttpError>
 private typealias PaginationMsg = Pagination.Msg<Comment, CommentScreenItemMsg, HttpError>

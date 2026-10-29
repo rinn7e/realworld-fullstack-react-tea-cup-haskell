@@ -1,8 +1,8 @@
 import Common_API_Type
 import Common_Type
 import Component_SearchBar
-import TeaCup
-import TeaCupPagination
+import Package_TeaCup
+import Package_TeaCupPagination
 
 public func userScreenInitial(_ shared: Shared) -> (UserScreenModel, Cmd<UserScreenMsg>) {
   let (searchBar, searchBarCmd) = searchBarInitial("", UserSortAttr.username, .asc)

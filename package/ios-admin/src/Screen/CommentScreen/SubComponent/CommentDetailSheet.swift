@@ -1,8 +1,8 @@
 import Common_API_Type
 import Component_DetailRow
 import Component_ProfileThumbnail
+import Package_TeaCup
 import SwiftUI
-import TeaCup
 
 struct CommentDetailSheet: View, Equatable {
   let comment: Comment

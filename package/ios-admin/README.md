@@ -7,8 +7,8 @@ A native iOS port of [`frontend-admin`](../frontend-admin) (the Sentinel Dashboa
 - [**Swift 6 compiler, Swift 5 language mode**](https://www.swift.org): Language
 - [**SwiftUI**](https://developer.apple.com/xcode/swiftui/): Views (iOS 18 and later)
 - [**Swift Charts**](https://developer.apple.com/documentation/charts): The visitor chart
-- **`TeaCup`** (`lib/TeaCup`, a local package): a small TEA runtime written for this app (`Cmd`, `Dispatcher`, `Program`, `RemoteData`), in the place of `react-tea-cup`, `tea-cup-fp` and `tea-cup-prelude`
-- **`TeaCupPagination`** (`lib/TeaCupPagination`, a local package): a port of `@rinn7e/tea-cup-pagination`
+- **`Package_TeaCup`** (`src/Package/TeaCup`): a small TEA runtime written for this app (`Cmd`, `Dispatcher`, `Program`, `RemoteData`), in the place of `react-tea-cup`, `tea-cup-fp` and `tea-cup-prelude`
+- **`Package_TeaCupPagination`** (`src/Package/TeaCupPagination`): a port of `@rinn7e/tea-cup-pagination`
 - [**XcodeGen**](https://github.com/yonaskolb/XcodeGen): Generates the Xcode project from `project.yml`
 
 There is no third-party dependency.
@@ -58,7 +58,7 @@ Every folder of `src/` that holds code is a module (a target of `Package.swift`)
 
 | Module | Folder | Web |
 | --- | --- | --- |
-| `TeaCup`, `TeaCupPagination` | `lib/TeaCup`, `lib/TeaCupPagination` (own packages) | `react-tea-cup`, `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
+| `Package_TeaCup`, `Package_TeaCupPagination` | `src/Package/<Name>` | `react-tea-cup`, `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
 | `Theme` | `src/Theme` | `src/theme` |
 | `Common_Env`, `Common_Cache`, `Common_Type`, `Common_Type_Destination`, `Common_API_Type`, `Common_API_Handler` | `src/Common/<Path>` | `src/common/*` |
 | `Component_SearchBar`, `Component_ListState`, `Component_PaginationNav`, `Component_PagedList`, `Component_DetailRow`, `Component_ProfileThumbnail`, `Component_RoleBadge` | `src/Component/<Name>` | `src/component/*` |
@@ -97,7 +97,7 @@ A view type has the name of its file. The internal names stay short (`StatCard`,
 | A sum type with `_tag` and `switch` | An `enum` with associated values and `switch` |
 | `Option<A>` | `A?` |
 | `TaskEither<HttpError, A>` and `attemptTE` | `async` function returning `Result<A, HttpError>` and `Cmd.attempt` |
-| `RemoteData` of remote-data-ts | `RemoteData` (`TeaCup`) |
+| `RemoteData` of remote-data-ts | `RemoteData` (`Package_TeaCup`) |
 | `dispatch` with `EqAlways` | `Dispatcher`, which is always equal to another one |
 | `cmd.map((subMsg) => ({ _tag: 'XMsg', subMsg }))` | `cmd.map(Msg.xMsg)` |
 | `pipe(..., updateAndCmd(...))` | `updateAndCmd { ... }((model, cmd))` |

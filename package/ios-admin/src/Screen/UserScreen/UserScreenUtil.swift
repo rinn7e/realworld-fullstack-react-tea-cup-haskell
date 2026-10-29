@@ -1,7 +1,7 @@
 import Common_API_Handler
 import Common_API_Type
 import Common_Type
-import TeaCupPagination
+import Package_TeaCupPagination
 
 struct SearchParams {
   var username: String?

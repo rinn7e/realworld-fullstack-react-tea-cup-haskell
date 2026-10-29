@@ -1,5 +1,5 @@
+import Package_TeaCup
 import SwiftUI
-import TeaCup
 
 public struct LoginScreenComponent: View, Equatable {
   let model: LoginScreenModel

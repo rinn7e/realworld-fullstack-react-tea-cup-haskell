@@ -1,8 +1,8 @@
 import Common_API_Type
 import Component_ListState
 import Component_PaginationNav
+import Package_TeaCup
 import SwiftUI
-import TeaCup
 
 /// The items of a `Pagination.Model` as a list, with the list states and the
 /// page controls under it: the `PaginationMemo` of the web app with the

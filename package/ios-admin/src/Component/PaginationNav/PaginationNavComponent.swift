@@ -1,5 +1,5 @@
+import Package_TeaCup
 import SwiftUI
-import TeaCup
 
 /// The page controls under a list: previous, a menu of the pages (the same items
 /// as the page buttons of the web app) and next.

@@ -1,5 +1,5 @@
 import Common_API_Type
-import TeaCup
+import Package_TeaCup
 
 public enum HomeScreenTimeFilter: String, Equatable, CaseIterable {
   case day = "24h"

@@ -13,6 +13,8 @@ let package = Package(
   name: "SentinelAdminModules",
   platforms: [.iOS(.v18), .macOS(.v15)],
   products: [
+    .library(name: "Package_TeaCup", targets: ["Package_TeaCup"]),
+    .library(name: "Package_TeaCupPagination", targets: ["Package_TeaCupPagination"]),
     .library(name: "Theme", targets: ["Theme"]),
     .library(name: "Common_Env", targets: ["Common_Env"]),
     .library(name: "Common_Cache", targets: ["Common_Cache"]),
@@ -35,11 +37,11 @@ let package = Package(
     .library(name: "Screen_VisitorScreen", targets: ["Screen_VisitorScreen"]),
     .library(name: "Screen_SettingScreen", targets: ["Screen_SettingScreen"]),
   ],
-  dependencies: [
-    .package(path: "lib/TeaCup"),
-    .package(path: "lib/TeaCupPagination"),
-  ],
   targets: [
+    // The TEA runtime, in the place of react-tea-cup, tea-cup-fp and tea-cup-prelude
+    .target(name: "Package_TeaCup", path: "src/Package/TeaCup"),
+    // A paged list, ported from @rinn7e/tea-cup-pagination
+    .target(name: "Package_TeaCupPagination", dependencies: ["Package_TeaCup"], path: "src/Package/TeaCupPagination"),
     .target(name: "Theme", path: "src/Theme"),
     .target(name: "Common_Env", path: "src/Common/Env"),
     .target(name: "Common_Cache", path: "src/Common/Cache"),
@@ -49,18 +51,18 @@ let package = Package(
     .target(name: "Common_API_Handler", dependencies: ["Common_API_Type", "Common_Env", "Common_Type"], path: "src/Common/API/Handler"),
     .target(name: "Component_DetailRow", path: "src/Component/DetailRow"),
     .target(name: "Component_ListState", dependencies: ["Common_API_Type"], path: "src/Component/ListState"),
-    .target(name: "Component_PagedList", dependencies: ["Common_API_Type", "Component_ListState", "Component_PaginationNav", .product(name: "TeaCup", package: "TeaCup")], path: "src/Component/PagedList"),
-    .target(name: "Component_PaginationNav", dependencies: [.product(name: "TeaCup", package: "TeaCup")], path: "src/Component/PaginationNav"),
+    .target(name: "Component_PagedList", dependencies: ["Common_API_Type", "Component_ListState", "Component_PaginationNav", "Package_TeaCup"], path: "src/Component/PagedList"),
+    .target(name: "Component_PaginationNav", dependencies: ["Package_TeaCup"], path: "src/Component/PaginationNav"),
     .target(name: "Component_ProfileThumbnail", path: "src/Component/ProfileThumbnail"),
     .target(name: "Component_RoleBadge", path: "src/Component/RoleBadge"),
-    .target(name: "Component_SearchBar", dependencies: ["Common_Type", .product(name: "TeaCup", package: "TeaCup")], path: "src/Component/SearchBar"),
-    .target(name: "Screen_HomeScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Common_Type", "Component_DetailRow", .product(name: "TeaCup", package: "TeaCup")], path: "src/Screen/HomeScreen"),
-    .target(name: "Screen_LoginScreen", dependencies: ["Common_API_Handler", "Common_API_Type", .product(name: "TeaCup", package: "TeaCup")], path: "src/Screen/LoginScreen"),
-    .target(name: "Screen_ArticleScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Common_Type", "Component_DetailRow", "Component_PagedList", "Component_ProfileThumbnail", "Component_SearchBar", .product(name: "TeaCup", package: "TeaCup"), .product(name: "TeaCupPagination", package: "TeaCupPagination")], path: "src/Screen/ArticleScreen"),
-    .target(name: "Screen_UserScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Common_Type", "Component_DetailRow", "Component_PagedList", "Component_ProfileThumbnail", "Component_RoleBadge", "Component_SearchBar", .product(name: "TeaCup", package: "TeaCup"), .product(name: "TeaCupPagination", package: "TeaCupPagination")], path: "src/Screen/UserScreen"),
-    .target(name: "Screen_CommentScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Common_Type", "Component_DetailRow", "Component_PagedList", "Component_ProfileThumbnail", "Component_SearchBar", .product(name: "TeaCup", package: "TeaCup"), .product(name: "TeaCupPagination", package: "TeaCupPagination")], path: "src/Screen/CommentScreen"),
-    .target(name: "Screen_VisitorScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Common_Type", "Component_DetailRow", "Component_PagedList", "Component_RoleBadge", "Component_SearchBar", .product(name: "TeaCup", package: "TeaCup"), .product(name: "TeaCupPagination", package: "TeaCupPagination")], path: "src/Screen/VisitorScreen"),
-    .target(name: "Screen_SettingScreen", dependencies: ["Common_Type", "Component_ProfileThumbnail", .product(name: "TeaCup", package: "TeaCup"), "Theme"], path: "src/Screen/SettingScreen"),
+    .target(name: "Component_SearchBar", dependencies: ["Common_Type", "Package_TeaCup"], path: "src/Component/SearchBar"),
+    .target(name: "Screen_HomeScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Common_Type", "Component_DetailRow", "Package_TeaCup"], path: "src/Screen/HomeScreen"),
+    .target(name: "Screen_LoginScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Package_TeaCup"], path: "src/Screen/LoginScreen"),
+    .target(name: "Screen_ArticleScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Common_Type", "Component_DetailRow", "Component_PagedList", "Component_ProfileThumbnail", "Component_SearchBar", "Package_TeaCup", "Package_TeaCupPagination"], path: "src/Screen/ArticleScreen"),
+    .target(name: "Screen_UserScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Common_Type", "Component_DetailRow", "Component_PagedList", "Component_ProfileThumbnail", "Component_RoleBadge", "Component_SearchBar", "Package_TeaCup", "Package_TeaCupPagination"], path: "src/Screen/UserScreen"),
+    .target(name: "Screen_CommentScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Common_Type", "Component_DetailRow", "Component_PagedList", "Component_ProfileThumbnail", "Component_SearchBar", "Package_TeaCup", "Package_TeaCupPagination"], path: "src/Screen/CommentScreen"),
+    .target(name: "Screen_VisitorScreen", dependencies: ["Common_API_Handler", "Common_API_Type", "Common_Type", "Component_DetailRow", "Component_PagedList", "Component_RoleBadge", "Component_SearchBar", "Package_TeaCup", "Package_TeaCupPagination"], path: "src/Screen/VisitorScreen"),
+    .target(name: "Screen_SettingScreen", dependencies: ["Common_Type", "Component_ProfileThumbnail", "Package_TeaCup", "Theme"], path: "src/Screen/SettingScreen"),
   ],
   swiftLanguageModes: [.v5]
 )

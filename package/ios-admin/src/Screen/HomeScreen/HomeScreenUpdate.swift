@@ -1,6 +1,6 @@
 import Common_API_Handler
 import Common_Type
-import TeaCup
+import Package_TeaCup
 
 public func homeScreenInitial(_ shared: Shared) -> (HomeScreenModel, Cmd<HomeScreenMsg>) {
   let currentFilter = HomeScreenTimeFilter.week

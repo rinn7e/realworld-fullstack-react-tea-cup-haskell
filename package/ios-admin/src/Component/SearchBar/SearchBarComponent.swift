@@ -1,6 +1,6 @@
 import Common_Type
+import Package_TeaCup
 import SwiftUI
-import TeaCup
 
 /// The search bar as native parts: the search field of the navigation bar
 /// (`searchable`) and a sort menu in the toolbar. Submitting the field sends

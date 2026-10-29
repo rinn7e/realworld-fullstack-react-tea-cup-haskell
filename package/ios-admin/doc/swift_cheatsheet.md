@@ -82,14 +82,14 @@ File names are also flat: two files with the same name in one module do not buil
 A second module needs a second target. The usual way is a local Swift package, the equivalent of a second library in a `.cabal` file, or of a workspace package in `pnpm-workspace.yaml`:
 
 ```
-lib/TeaCup/
+TeaCup/
   Package.swift
   Sources/TeaCup/Cmd.swift
   Sources/TeaCup/Dispatcher.swift
 ```
 
 ```swift
-// lib/TeaCup/Package.swift
+// TeaCup/Package.swift
 // swift-tools-version: 6.0
 import PackageDescription
 
@@ -112,6 +112,8 @@ let package = Package(
   ```
 
 The app then lists the package as a dependency (in `project.yml` for XcodeGen, or in the `dependencies:` of another `Package.swift`), and its files write `import TeaCup`.
+
+A package can hold many modules: `ios-admin` has one `Package.swift` at its root, with a target per folder of `src/`, its TEA runtime included (`src/Package/TeaCup` is the module `Package_TeaCup`), so there is no second package to keep in step (section 1.9).
 
 ### 1.5 What Another Module Can See
 
@@ -207,7 +209,7 @@ So `ios-admin` prefixes every public name with its module (`SearchBarModel`, `Us
 
 | Part | Swift module | Like |
 | :--- | :--- | :--- |
-| `lib/TeaCup/`, `lib/TeaCupPagination/` | packages `TeaCup`, `TeaCupPagination` | the npm packages `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
+| `src/Package/TeaCup/`, `src/Package/TeaCupPagination/` | `Package_TeaCup`, `Package_TeaCupPagination` | the npm packages `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
 | `src/Common/API/Type/` | `Common_API_Type` (a target of the root `Package.swift`) | Haskell `Common.API.Type` |
 | `src/Component/SearchBar/` | `Component_SearchBar` | Haskell `Component.SearchBar` |
 | `src/Screen/UserScreen/` (with `SubComponent/`) | `Screen_UserScreen` | Haskell `Screen.UserScreen` |
@@ -217,7 +219,7 @@ So `ios-admin` prefixes every public name with its module (`SearchBarModel`, `Us
 // Package.swift: the dependencies are the imports of the files of each module
 .target(name: "Component_PagedList",
         dependencies: ["Common_API_Type", "Component_ListState", "Component_PaginationNav",
-                       .product(name: "TeaCup", package: "TeaCup")],
+                       "Package_TeaCup"],
         path: "src/Component/PagedList"),
 ```
 
@@ -225,7 +227,7 @@ So `ios-admin` prefixes every public name with its module (`SearchBarModel`, `Us
 // src/Screen/UserScreen/UserScreenComponent.swift (module Screen_UserScreen)
 import Component_PagedList      // PagedListComponent
 import Component_SearchBar      // SearchBarOption, .searchBar(...)
-import TeaCup                  // Dispatcher
+import Package_TeaCup          // Dispatcher
 
 public struct UserScreenComponent: View, Equatable { ... }   // exported
 struct UserRow: View, Equatable { ... }                      // SubComponent/: internal
@@ -570,7 +572,7 @@ Swift protocols play the part of type classes. The compiler derives the common o
 | `func f<T: Equatable>(_ x: T)` | `f :: Eq t => t -> ...` | *only built-in constraints (`comparable`)* | `<T>(eq: Eq<T>) => (x: T) => ...` |
 | `extension RemoteData: Equatable where E: Equatable, A: Equatable {}` | `instance (Eq e, Eq a) => Eq (RemoteData e a)` | *built-in* | `RD.getEq(eqE, eqA)` |
 
-`Dispatcher` in `TeaCup` writes its own `==` that is always `true`: the `EqAlways` of the `dispatch` prop.
+`Dispatcher` in `Package_TeaCup` writes its own `==` that is always `true`: the `EqAlways` of the `dispatch` prop.
 
 ---
 
@@ -641,7 +643,7 @@ Constraints sit on the parameter (`Item: Equatable`) or after `where` (`extensio
 
 Swift has `async` functions and `Task` built in. `ios-admin` wraps them in `Cmd`, so `update` stays pure.
 
-| Concept | Swift (`TeaCup`) | Haskell | Elm | TypeScript (tea-cup) |
+| Concept | Swift (`Package_TeaCup`) | Haskell | Elm | TypeScript (tea-cup) |
 | :--- | :--- | :--- | :--- | :--- |
 | **An async call** | `func login(_ r: LoginRequest) async -> Result<UserResponse, HttpError>` | `login :: LoginRequest -> IO (Either HttpError UserResponse)` | `Http.post { ..., expect = Http.expectJson SubmitResult decoder }` | `login(r): TaskEither<HttpError, UserResponse>` |
 | **Run it from update** | `.attempt({ await login(r) }, Msg.submitResult)` | *an effect in the update* | *the `Cmd` from `Http.post`* | `attemptTE(login(r), (result) => ({ _tag: 'SubmitResult', result }))` |

@@ -1,7 +1,7 @@
 import Common_API_Handler
 import Common_API_Type
 import Common_Type
-import TeaCupPagination
+import Package_TeaCupPagination
 
 func mkPaginationConfig(_ shared: Shared, _ model: ArticleScreenModel) -> Pagination.Config<Article, HttpError> {
   Pagination.Config(

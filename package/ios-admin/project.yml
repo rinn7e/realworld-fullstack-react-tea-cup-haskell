@@ -7,12 +7,8 @@ settings:
   base:
     SWIFT_VERSION: "5.0"
     DEVELOPMENT_TEAM: ""
-# Local Swift packages, one module each (the npm packages of the web app)
+# The modules of the app (Package.swift)
 packages:
-  TeaCup:
-    path: lib/TeaCup
-  TeaCupPagination:
-    path: lib/TeaCupPagination
   SentinelAdminModules:
     path: .
 targets:
@@ -25,10 +21,12 @@ targets:
         excludes:
           - Common
           - Component
+          - Package
           - Screen
           - Theme
     dependencies:
-      - package: TeaCup
+      - package: SentinelAdminModules
+        product: Package_TeaCup
       - package: SentinelAdminModules
         product: Common_API_Handler
       - package: SentinelAdminModules

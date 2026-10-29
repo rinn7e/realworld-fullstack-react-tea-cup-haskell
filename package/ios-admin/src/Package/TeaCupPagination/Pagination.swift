@@ -1,4 +1,4 @@
-import TeaCup
+import Package_TeaCup
 
 /// A paged list, ported from `@rinn7e/tea-cup-pagination`: the model holds the
 /// page shown and its items, `update` fetches a page through `Config.handler`.

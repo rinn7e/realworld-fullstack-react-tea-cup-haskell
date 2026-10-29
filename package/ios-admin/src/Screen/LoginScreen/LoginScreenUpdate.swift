@@ -1,6 +1,6 @@
 import Common_API_Handler
 import Common_API_Type
-import TeaCup
+import Package_TeaCup
 
 public func loginScreenInitial() -> (LoginScreenModel, Cmd<LoginScreenMsg>) {
   (LoginScreenModel(email: "", password: "", isSubmitting: false, error: nil), .none)

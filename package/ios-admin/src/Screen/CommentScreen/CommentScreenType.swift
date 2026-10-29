@@ -1,6 +1,6 @@
 import Common_API_Type
 import Component_SearchBar
-import TeaCupPagination
+import Package_TeaCupPagination
 
 let GET_COMMENTS_LIMIT = 50
 
