@@ -1,4 +1,4 @@
-// Module: SentinelAdmin (the app target, project.yml)
+// Module: SentinelAdmin
 
 import Common_Type
 import Common_Type_Destination

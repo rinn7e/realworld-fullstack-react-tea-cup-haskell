@@ -1,4 +1,4 @@
-// Module: SentinelAdmin (the app target, project.yml)
+// Module: SentinelAdmin
 
 import Common_API_Handler
 import Common_API_Type
