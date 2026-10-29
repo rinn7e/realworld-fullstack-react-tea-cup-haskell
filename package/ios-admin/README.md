@@ -69,8 +69,10 @@ A module is named after its path, without the separators (Haskell `Common.API.Ty
 The dependencies of each module in `Package.swift` are the modules its files import, so the layers of the code convention of frontend-admin ("Dependency Order and Hierarchy") are checked by the compiler: `Common` imports no component or screen, a component imports no screen, and a screen imports no other screen. Each module builds alone:
 
 ```bash
-swift build --target ComponentSearchBar
+swift build --sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)" --triple arm64-apple-ios18.0-simulator --target ComponentSearchBar
 ```
+
+The SDK and triple are needed: a plain `swift build` builds for macOS, where some modules of iOS SwiftUI (keyboard types, `.searchable` placements) do not exist. Without `--target`, it builds every module.
 
 ## Names
 
