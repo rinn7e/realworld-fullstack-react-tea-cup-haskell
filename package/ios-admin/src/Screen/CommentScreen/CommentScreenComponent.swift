@@ -1,5 +1,7 @@
 import CommonAPIType
 import CommonType
+import ComponentPagedList
+import ComponentSearchBar
 import SwiftUI
 import TeaCup
 
@@ -12,14 +14,14 @@ extension CommentScreen {
     let shared: Shared
     let dispatch: Dispatcher<CommentScreen.Msg>
 
-    private static let sortOptions: [SearchBar.SearchOption<CommentSortAttr>] = [
+    private static let sortOptions: [SearchBarOption<CommentSortAttr>] = [
       .init(label: "Creation Date", value: .createdAt),
       .init(label: "Author", value: .author),
       .init(label: "ID", value: .id),
     ]
 
     var body: some View {
-      PagedList(
+      PagedListComponent(
         items: model.pagination.items,
         page: model.pagination.page,
         pageAmount: model.pagination.pageAmount,

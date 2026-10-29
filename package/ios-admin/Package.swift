@@ -19,9 +19,16 @@ let package = Package(
     .library(name: "CommonTypeDestination", targets: ["CommonTypeDestination"]),
     .library(name: "CommonAPIType", targets: ["CommonAPIType"]),
     .library(name: "CommonAPIHandler", targets: ["CommonAPIHandler"]),
+    .library(name: "ComponentDetailRow", targets: ["ComponentDetailRow"]),
+    .library(name: "ComponentListState", targets: ["ComponentListState"]),
+    .library(name: "ComponentPagedList", targets: ["ComponentPagedList"]),
+    .library(name: "ComponentPaginationNav", targets: ["ComponentPaginationNav"]),
+    .library(name: "ComponentProfileThumbnail", targets: ["ComponentProfileThumbnail"]),
+    .library(name: "ComponentRoleBadge", targets: ["ComponentRoleBadge"]),
+    .library(name: "ComponentSearchBar", targets: ["ComponentSearchBar"]),
   ],
   dependencies: [
-
+    .package(path: "lib/TeaCup"),
   ],
   targets: [
     .target(name: "Theme", path: "src/Theme"),
@@ -31,6 +38,13 @@ let package = Package(
     .target(name: "CommonTypeDestination", dependencies: ["CommonEnv"], path: "src/Common/Type/Destination"),
     .target(name: "CommonAPIType", path: "src/Common/API/Type"),
     .target(name: "CommonAPIHandler", dependencies: ["CommonAPIType", "CommonEnv", "CommonType"], path: "src/Common/API/Handler"),
+    .target(name: "ComponentDetailRow", path: "src/Component/DetailRow"),
+    .target(name: "ComponentListState", dependencies: ["CommonAPIType"], path: "src/Component/ListState"),
+    .target(name: "ComponentPagedList", dependencies: ["CommonAPIType", "ComponentListState", "ComponentPaginationNav", .product(name: "TeaCup", package: "TeaCup")], path: "src/Component/PagedList"),
+    .target(name: "ComponentPaginationNav", dependencies: [.product(name: "TeaCup", package: "TeaCup")], path: "src/Component/PaginationNav"),
+    .target(name: "ComponentProfileThumbnail", path: "src/Component/ProfileThumbnail"),
+    .target(name: "ComponentRoleBadge", path: "src/Component/RoleBadge"),
+    .target(name: "ComponentSearchBar", dependencies: ["CommonType", .product(name: "TeaCup", package: "TeaCup")], path: "src/Component/SearchBar"),
   ],
   swiftLanguageModes: [.v5]
 )

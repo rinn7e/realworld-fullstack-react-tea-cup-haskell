@@ -1,4 +1,5 @@
 import CommonAPIType
+import ComponentProfileThumbnail
 import SwiftUI
 
 extension CommentScreen.SubComponent {
@@ -7,7 +8,7 @@ extension CommentScreen.SubComponent {
 
     var body: some View {
       HStack(alignment: .top, spacing: 12) {
-        ProfileThumbnail(src: comment.author.image, size: 32)
+        ProfileThumbnailComponent(src: comment.author.image, size: 32)
         VStack(alignment: .leading, spacing: 4) {
           HStack {
             Text(comment.author.username).font(.subheadline.weight(.medium))

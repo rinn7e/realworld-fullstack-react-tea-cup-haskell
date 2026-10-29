@@ -1,5 +1,7 @@
 import CommonAPIType
 import CommonType
+import ComponentPagedList
+import ComponentSearchBar
 import SwiftUI
 import TeaCup
 
@@ -12,7 +14,7 @@ extension VisitorScreen {
     let shared: Shared
     let dispatch: Dispatcher<VisitorScreen.Msg>
 
-    private static let sortOptions: [SearchBar.SearchOption<VisitorSortAttr>] = [
+    private static let sortOptions: [SearchBarOption<VisitorSortAttr>] = [
       .init(label: "Timestamp", value: .timestamp),
       .init(label: "Path", value: .path),
       .init(label: "IP", value: .ip),
@@ -20,7 +22,7 @@ extension VisitorScreen {
     ]
 
     var body: some View {
-      PagedList(
+      PagedListComponent(
         items: model.pagination.items,
         page: model.pagination.page,
         pageAmount: model.pagination.pageAmount,

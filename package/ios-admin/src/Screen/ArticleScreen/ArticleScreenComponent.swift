@@ -1,5 +1,7 @@
 import CommonAPIType
 import CommonType
+import ComponentPagedList
+import ComponentSearchBar
 import SwiftUI
 import TeaCup
 
@@ -12,7 +14,7 @@ extension ArticleScreen {
     let shared: Shared
     let dispatch: Dispatcher<ArticleScreen.Msg>
 
-    private static let sortOptions: [SearchBar.SearchOption<ArticleSortAttr>] = [
+    private static let sortOptions: [SearchBarOption<ArticleSortAttr>] = [
       .init(label: "Creation Date", value: .createdAt),
       .init(label: "Favorites", value: .favoritesCount),
       .init(label: "Title", value: .title),
@@ -20,7 +22,7 @@ extension ArticleScreen {
     ]
 
     var body: some View {
-      PagedList(
+      PagedListComponent(
         items: model.pagination.items,
         page: model.pagination.page,
         pageAmount: model.pagination.pageAmount,

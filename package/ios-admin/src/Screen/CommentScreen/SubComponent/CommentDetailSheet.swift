@@ -1,4 +1,6 @@
 import CommonAPIType
+import ComponentDetailRow
+import ComponentProfileThumbnail
 import SwiftUI
 import TeaCup
 
@@ -12,7 +14,7 @@ extension CommentScreen.SubComponent {
         List {
           Section("Author") {
             HStack(spacing: 12) {
-              ProfileThumbnail(src: comment.author.image, size: 44)
+              ProfileThumbnailComponent(src: comment.author.image, size: 44)
               VStack(alignment: .leading, spacing: 2) {
                 Text(comment.author.username).font(.headline)
                 Text(comment.author.bio.flatMap { $0.isEmpty ? nil : $0 } ?? "No bio")
@@ -28,9 +30,9 @@ extension CommentScreen.SubComponent {
           }
 
           Section {
-            DetailRow(label: "Comment ID", value: "\(comment.id)", isMono: true)
-            DetailRow(label: "Article", value: comment.articleSlug, isMono: true)
-            DetailRow(label: "Created At", value: comment.createdAt.formatted(date: .abbreviated, time: .shortened), isMono: false)
+            DetailRowComponent(label: "Comment ID", value: "\(comment.id)", isMono: true)
+            DetailRowComponent(label: "Article", value: comment.articleSlug, isMono: true)
+            DetailRowComponent(label: "Created At", value: comment.createdAt.formatted(date: .abbreviated, time: .shortened), isMono: false)
           }
         }
         .navigationTitle("Comment Details")

@@ -1,11 +1,12 @@
 import CommonAPIType
 import CommonType
+import ComponentSearchBar
 import TeaCup
 import TeaCupPagination
 
 extension UserScreen {
   static func initial(_ shared: Shared) -> (Model, Cmd<Msg>) {
-    let (searchBar, searchBarCmd) = SearchBar.initial("", UserSortAttr.username, .asc)
+    let (searchBar, searchBarCmd) = searchBarInitial("", UserSortAttr.username, .asc)
     let initialModel = Model(
       pagination: Pagination.Model(items: .pending, page: 1, pageAmount: 0),
       selectedUser: nil,
@@ -39,8 +40,8 @@ extension UserScreen {
     }
   }
 
-  private static func searchBarMsgHandler(_ shared: Shared, _ subMsg: SearchBar.Msg<UserSortAttr>, _ model: Model) -> (Model, Cmd<Msg>) {
-    let (searchBar, searchBarCmd) = SearchBar.update(subMsg, model.searchBar)
+  private static func searchBarMsgHandler(_ shared: Shared, _ subMsg: SearchBarMsg<UserSortAttr>, _ model: Model) -> (Model, Cmd<Msg>) {
+    let (searchBar, searchBarCmd) = searchBarUpdate(subMsg, model.searchBar)
     var updatedModel = model
     updatedModel.searchBar = searchBar
 

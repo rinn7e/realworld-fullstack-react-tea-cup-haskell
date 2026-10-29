@@ -1,4 +1,6 @@
 import CommonAPIType
+import ComponentListState
+import ComponentPaginationNav
 import SwiftUI
 import TeaCup
 
@@ -7,28 +9,46 @@ import TeaCup
 /// `renderItems` and `renderPagination` every screen gives it. The list starts
 /// at the top again on every page, like `scrollToTopCmd` of the package. The
 /// header scrolls with the rows (above the rows it would fold the large title).
-struct PagedList<Item: Identifiable & Equatable, Row: View, Header: View>: View {
+public struct PagedListComponent<Item: Identifiable & Equatable, Row: View, Header: View>: View {
   let items: RemoteData<HttpError, [Item]>
   let page: Int
   let pageAmount: Int
   let entityLabel: String
   let onPageChange: Dispatcher<Int>
-  @ViewBuilder let header: () -> Header
-  @ViewBuilder let row: (Item) -> Row
+  let header: () -> Header
+  let row: (Item) -> Row
 
-  var body: some View {
+  public init(
+    items: RemoteData<HttpError, [Item]>,
+    page: Int,
+    pageAmount: Int,
+    entityLabel: String,
+    onPageChange: Dispatcher<Int>,
+    @ViewBuilder header: @escaping () -> Header,
+    @ViewBuilder row: @escaping (Item) -> Row
+  ) {
+    self.items = items
+    self.page = page
+    self.pageAmount = pageAmount
+    self.entityLabel = entityLabel
+    self.onPageChange = onPageChange
+    self.header = header
+    self.row = row
+  }
+
+  public var body: some View {
     List {
       header()
       switch items {
       case .initial, .pending:
-        ListState.Loading()
+        ListStateLoading()
           .padding(.vertical, 40)
           .listRowSeparator(.hidden)
       case .failure(let error):
-        ListState.Failure(entityLabel: entityLabel, error: error)
+        ListStateFailure(entityLabel: entityLabel, error: error)
           .listRowSeparator(.hidden)
       case .success(let list) where list.isEmpty:
-        ListState.Empty(entityLabel: entityLabel)
+        ListStateEmpty(entityLabel: entityLabel)
           .listRowSeparator(.hidden)
       case .success(let list):
         ForEach(list) { item in row(item) }
@@ -37,13 +57,13 @@ struct PagedList<Item: Identifiable & Equatable, Row: View, Header: View>: View 
     .listStyle(.plain)
     .id(page)
     .safeAreaInset(edge: .bottom, spacing: 0) {
-      PaginationNav.Component(currentPage: page, pageAmount: pageAmount, onPageChange: onPageChange)
+      PaginationNavComponent(currentPage: page, pageAmount: pageAmount, onPageChange: onPageChange)
     }
   }
 }
 
-extension PagedList where Header == EmptyView {
-  init(
+extension PagedListComponent where Header == EmptyView {
+  public init(
     items: RemoteData<HttpError, [Item]>,
     page: Int,
     pageAmount: Int,

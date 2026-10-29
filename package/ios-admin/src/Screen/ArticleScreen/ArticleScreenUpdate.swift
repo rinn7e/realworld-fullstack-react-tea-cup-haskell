@@ -1,5 +1,6 @@
 import CommonAPIType
 import CommonType
+import ComponentSearchBar
 import TeaCup
 import TeaCupPagination
 
@@ -8,7 +9,7 @@ extension ArticleScreen {
   private typealias PaginationMsg = Pagination.Msg<Article, ArticleItemMsg, HttpError>
 
   static func initial(_ shared: Shared) -> (Model, Cmd<Msg>) {
-    let (searchBar, searchBarCmd) = SearchBar.initial("", ArticleSortAttr.createdAt, .desc)
+    let (searchBar, searchBarCmd) = searchBarInitial("", ArticleSortAttr.createdAt, .desc)
     let initialModel = Model(
       pagination: Pagination.Model(items: .pending, page: 1, pageAmount: 0),
       selectedArticle: nil,
@@ -42,8 +43,8 @@ extension ArticleScreen {
     }
   }
 
-  private static func searchBarMsgHandler(_ shared: Shared, _ subMsg: SearchBar.Msg<ArticleSortAttr>, _ model: Model) -> (Model, Cmd<Msg>) {
-    let (searchBar, searchBarCmd) = SearchBar.update(subMsg, model.searchBar)
+  private static func searchBarMsgHandler(_ shared: Shared, _ subMsg: SearchBarMsg<ArticleSortAttr>, _ model: Model) -> (Model, Cmd<Msg>) {
+    let (searchBar, searchBarCmd) = searchBarUpdate(subMsg, model.searchBar)
     var updatedModel = model
     updatedModel.searchBar = searchBar
 

@@ -2,11 +2,16 @@ import SwiftUI
 
 /// An avatar: the image at `src`, or a person symbol when there is none or it
 /// does not load
-struct ProfileThumbnail: View, Equatable {
+public struct ProfileThumbnailComponent: View, Equatable {
   let src: String?
   let size: CGFloat
 
-  var body: some View {
+  public init(src: String?, size: CGFloat) {
+    self.src = src
+    self.size = size
+  }
+
+  public var body: some View {
     AsyncImage(url: src.flatMap(URL.init(string:))) { phase in
       switch phase {
       case .success(let image):

@@ -1,4 +1,5 @@
 import CommonAPIType
+import ComponentDetailRow
 import SwiftUI
 import TeaCup
 
@@ -17,12 +18,12 @@ extension HomeScreen.SubComponent {
               .textSelection(.enabled)
           }
           Section {
-            DetailRow(label: "Level", value: log.level.rawValue, isMono: false)
-            DetailRow(label: "Source", value: log.source, isMono: true)
-            DetailRow(label: "Occurrence Time", value: log.timestamp.formatted(date: .abbreviated, time: .standard), isMono: false)
+            DetailRowComponent(label: "Level", value: log.level.rawValue, isMono: false)
+            DetailRowComponent(label: "Source", value: log.source, isMono: true)
+            DetailRowComponent(label: "Occurrence Time", value: log.timestamp.formatted(date: .abbreviated, time: .standard), isMono: false)
           }
           Section("Context Metadata") {
-            DetailRow(label: "Node ID", value: "node-ap-southeast-1a", isMono: true)
+            DetailRowComponent(label: "Node ID", value: "node-ap-southeast-1a", isMono: true)
             LabeledContent("Environment") {
               Text("Production").foregroundStyle(.green).bold()
             }

@@ -1,32 +1,41 @@
 import CommonAPIType
 import SwiftUI
 
-enum ListState {
-  struct Loading: View, Equatable {
-    var body: some View {
-      ProgressView()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
+public struct ListStateLoading: View, Equatable {
+  public init() {}
+
+  public var body: some View {
+    ProgressView()
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+  }
+}
+
+public struct ListStateFailure: View, Equatable {
+  let entityLabel: String
+  let error: HttpError
+
+  public init(entityLabel: String, error: HttpError) {
+    self.entityLabel = entityLabel
+    self.error = error
   }
 
-  struct Failure: View, Equatable {
-    let entityLabel: String
-    let error: HttpError
+  public var body: some View {
+    ContentUnavailableView(
+      "Error loading \(entityLabel)",
+      systemImage: "exclamationmark.triangle",
+      description: Text(formatListError(error))
+    )
+  }
+}
 
-    var body: some View {
-      ContentUnavailableView(
-        "Error loading \(entityLabel)",
-        systemImage: "exclamationmark.triangle",
-        description: Text(ListState.formatListError(error))
-      )
-    }
+public struct ListStateEmpty: View, Equatable {
+  let entityLabel: String
+
+  public init(entityLabel: String) {
+    self.entityLabel = entityLabel
   }
 
-  struct Empty: View, Equatable {
-    let entityLabel: String
-
-    var body: some View {
-      ContentUnavailableView("No \(entityLabel) found.", systemImage: "tray")
-    }
+  public var body: some View {
+    ContentUnavailableView("No \(entityLabel) found.", systemImage: "tray")
   }
 }

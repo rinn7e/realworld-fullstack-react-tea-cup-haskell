@@ -1,4 +1,7 @@
 import CommonAPIType
+import ComponentDetailRow
+import ComponentProfileThumbnail
+import ComponentRoleBadge
 import SwiftUI
 import TeaCup
 
@@ -12,7 +15,7 @@ extension UserScreen.SubComponent {
         List {
           Section {
             HStack(spacing: 16) {
-              ProfileThumbnail(src: user.image, size: 72)
+              ProfileThumbnailComponent(src: user.image, size: 72)
               VStack(alignment: .leading, spacing: 4) {
                 Text(user.username).font(.title2.bold())
                 Text(user.email).foregroundStyle(.secondary)
@@ -22,9 +25,9 @@ extension UserScreen.SubComponent {
           }
 
           Section {
-            DetailRow(label: "User ID", value: "\(user.id)", isMono: true)
-            LabeledContent("Role") { RoleBadge(role: user.role) }
-            DetailRow(label: "Account Status", value: "Active", isMono: false)
+            DetailRowComponent(label: "User ID", value: "\(user.id)", isMono: true)
+            LabeledContent("Role") { RoleBadgeComponent(role: user.role) }
+            DetailRowComponent(label: "Account Status", value: "Active", isMono: false)
           }
 
           Section("Biography") {
@@ -35,8 +38,8 @@ extension UserScreen.SubComponent {
 
           // TODO: Member since and Total Articles are currently mock values since the AdminUser API does not return them
           Section("Account Meta") {
-            DetailRow(label: "Member since", value: "Jan 2024", isMono: false)
-            DetailRow(label: "Total Articles", value: "12", isMono: false)
+            DetailRowComponent(label: "Member since", value: "Jan 2024", isMono: false)
+            DetailRowComponent(label: "Total Articles", value: "12", isMono: false)
           }
         }
         .navigationTitle("User Profile")

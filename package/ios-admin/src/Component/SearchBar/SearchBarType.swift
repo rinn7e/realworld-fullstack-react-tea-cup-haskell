@@ -1,21 +1,26 @@
 import CommonType
 
-enum SearchBar {
-  struct SearchOption<Sort> {
-    let label: String
-    let value: Sort
-  }
+public struct SearchBarOption<Sort> {
+  let label: String
+  let value: Sort
 
-  struct Model<Sort: Equatable>: Equatable {
-    var searchText: String
-    var sort: Sort
-    var direction: Direction
+  public init(label: String, value: Sort) {
+    self.label = label
+    self.value = value
   }
+}
 
-  enum Msg<Sort> {
-    case changeSearchText(String)
-    case changeSort(Sort)
-    case changeDirection(Direction)
-    case submit
-  }
+// Read anywhere (a screen builds its query from it), changed only by
+// `searchBarUpdate`
+public struct SearchBarModel<Sort: Equatable>: Equatable {
+  public internal(set) var searchText: String
+  public internal(set) var sort: Sort
+  public internal(set) var direction: Direction
+}
+
+public enum SearchBarMsg<Sort> {
+  case changeSearchText(String)
+  case changeSort(Sort)
+  case changeDirection(Direction)
+  case submit
 }

@@ -24,6 +24,7 @@ targets:
         # The folders of the modules of Package.swift
         excludes:
           - Common
+          - Component
           - Theme
     dependencies:
       - package: TeaCup
@@ -38,6 +39,16 @@ targets:
         product: CommonType
       - package: SentinelAdminModules
         product: CommonTypeDestination
+      - package: SentinelAdminModules
+        product: ComponentDetailRow
+      - package: SentinelAdminModules
+        product: ComponentPagedList
+      - package: SentinelAdminModules
+        product: ComponentProfileThumbnail
+      - package: SentinelAdminModules
+        product: ComponentRoleBadge
+      - package: SentinelAdminModules
+        product: ComponentSearchBar
       - package: SentinelAdminModules
         product: Theme
     info:

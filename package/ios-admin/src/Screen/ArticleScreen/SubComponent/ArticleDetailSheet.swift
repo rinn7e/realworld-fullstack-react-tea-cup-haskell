@@ -1,4 +1,6 @@
 import CommonAPIType
+import ComponentDetailRow
+import ComponentProfileThumbnail
 import SwiftUI
 import TeaCup
 
@@ -11,14 +13,14 @@ extension ArticleScreen.SubComponent {
       NavigationStack {
         List {
           Section {
-            DetailRow(label: "Title", value: article.title, isMono: false)
-            DetailRow(label: "Slug", value: article.slug, isMono: true)
-            DetailRow(label: "Description", value: article.description, isMono: false)
+            DetailRowComponent(label: "Title", value: article.title, isMono: false)
+            DetailRowComponent(label: "Slug", value: article.slug, isMono: true)
+            DetailRowComponent(label: "Description", value: article.description, isMono: false)
           }
 
           Section("Author") {
             HStack(spacing: 12) {
-              ProfileThumbnail(src: article.author.image, size: 44)
+              ProfileThumbnailComponent(src: article.author.image, size: 44)
               VStack(alignment: .leading, spacing: 2) {
                 Text(article.author.username).font(.headline)
                 Text(article.author.bio.flatMap { $0.isEmpty ? nil : $0 } ?? "No bio")
@@ -35,8 +37,8 @@ extension ArticleScreen.SubComponent {
           }
 
           Section {
-            DetailRow(label: "Favorites", value: "\(article.favoritesCount)", isMono: false)
-            DetailRow(label: "Created", value: article.createdAt.formatted(date: .abbreviated, time: .shortened), isMono: false)
+            DetailRowComponent(label: "Favorites", value: "\(article.favoritesCount)", isMono: false)
+            DetailRowComponent(label: "Created", value: article.createdAt.formatted(date: .abbreviated, time: .shortened), isMono: false)
           }
         }
         .navigationTitle("Article Details")

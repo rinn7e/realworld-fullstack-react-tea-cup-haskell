@@ -2,10 +2,14 @@ import SwiftUI
 
 /// The role of a user as a colored capsule (admins in purple, others in green),
 /// used by the user and visitor details
-struct RoleBadge: View, Equatable {
+public struct RoleBadgeComponent: View, Equatable {
   let role: String
 
-  var body: some View {
+  public init(role: String) {
+    self.role = role
+  }
+
+  public var body: some View {
     let isAdmin = role == "AdminRole" || role == "admin"
     Text(role)
       .font(.caption2.weight(.semibold))

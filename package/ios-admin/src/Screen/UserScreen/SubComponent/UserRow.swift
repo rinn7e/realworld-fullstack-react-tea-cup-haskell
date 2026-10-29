@@ -1,4 +1,6 @@
 import CommonAPIType
+import ComponentProfileThumbnail
+import ComponentRoleBadge
 import SwiftUI
 
 extension UserScreen.SubComponent {
@@ -8,14 +10,14 @@ extension UserScreen.SubComponent {
 
     var body: some View {
       HStack(spacing: 12) {
-        ProfileThumbnail(src: user.image, size: 40)
+        ProfileThumbnailComponent(src: user.image, size: 40)
         VStack(alignment: .leading, spacing: 2) {
           HStack {
             Text(user.username)
               .font(.body.weight(.medium))
               .lineLimit(1)
               .truncationMode(.middle)
-            RoleBadge(role: user.role)
+            RoleBadgeComponent(role: user.role)
               .fixedSize()
           }
           Text(user.email)

@@ -1,4 +1,5 @@
 import CommonAPIType
+import ComponentSearchBar
 import TeaCupPagination
 
 enum UserScreen {
@@ -7,7 +8,7 @@ enum UserScreen {
   struct Model: Equatable {
     var pagination: Pagination.Model<AdminUser, HttpError>
     var selectedUser: AdminUser?
-    var searchBar: SearchBar.Model<UserSortAttr>
+    var searchBar: SearchBarModel<UserSortAttr>
   }
 
   enum UserItemMsg {
@@ -17,7 +18,7 @@ enum UserScreen {
   enum Msg {
     case noOp
     case clearSelected
-    case searchBarMsg(SearchBar.Msg<UserSortAttr>)
+    case searchBarMsg(SearchBarMsg<UserSortAttr>)
     case paginationMsg(Pagination.Msg<AdminUser, UserItemMsg, HttpError>)
   }
 }

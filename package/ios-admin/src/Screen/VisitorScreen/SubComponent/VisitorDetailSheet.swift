@@ -1,4 +1,6 @@
 import CommonAPIType
+import ComponentDetailRow
+import ComponentRoleBadge
 import SwiftUI
 import TeaCup
 
@@ -18,8 +20,8 @@ extension VisitorScreen.SubComponent {
           }
 
           Section {
-            DetailRow(label: "IP Address", value: visitor.ip, isMono: true)
-            DetailRow(label: "Path", value: visitor.path, isMono: true)
+            DetailRowComponent(label: "IP Address", value: visitor.ip, isMono: true)
+            DetailRowComponent(label: "Path", value: visitor.path, isMono: true)
           }
 
           Section {
@@ -40,10 +42,10 @@ extension VisitorScreen.SubComponent {
 
           if let user = visitor.user {
             Section("Linked User") {
-              DetailRow(label: "User ID", value: "#\(user.id)", isMono: true)
-              DetailRow(label: "Username", value: "@\(user.username)", isMono: false)
-              DetailRow(label: "Email", value: user.email, isMono: false)
-              LabeledContent("Role") { RoleBadge(role: user.role) }
+              DetailRowComponent(label: "User ID", value: "#\(user.id)", isMono: true)
+              DetailRowComponent(label: "Username", value: "@\(user.username)", isMono: false)
+              DetailRowComponent(label: "Email", value: user.email, isMono: false)
+              LabeledContent("Role") { RoleBadgeComponent(role: user.role) }
             }
           }
         }

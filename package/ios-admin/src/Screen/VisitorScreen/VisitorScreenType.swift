@@ -1,4 +1,5 @@
 import CommonAPIType
+import ComponentSearchBar
 import TeaCupPagination
 
 enum VisitorScreen {
@@ -7,7 +8,7 @@ enum VisitorScreen {
   struct Model: Equatable {
     var pagination: Pagination.Model<Visitor, HttpError>
     var selectedVisitor: Visitor?
-    var searchBar: SearchBar.Model<VisitorSortAttr>
+    var searchBar: SearchBarModel<VisitorSortAttr>
     var isDescriptionOpen: Bool
   }
 
@@ -19,7 +20,7 @@ enum VisitorScreen {
     case noOp
     case clearSelected
     case toggleDescription
-    case searchBarMsg(SearchBar.Msg<VisitorSortAttr>)
+    case searchBarMsg(SearchBarMsg<VisitorSortAttr>)
     case paginationMsg(Pagination.Msg<Visitor, VisitorItemMsg, HttpError>)
   }
 }

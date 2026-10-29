@@ -1,4 +1,5 @@
 import CommonAPIType
+import ComponentSearchBar
 import TeaCupPagination
 
 enum CommentScreen {
@@ -7,7 +8,7 @@ enum CommentScreen {
   struct Model: Equatable {
     var pagination: Pagination.Model<Comment, HttpError>
     var selectedComment: Comment?
-    var searchBar: SearchBar.Model<CommentSortAttr>
+    var searchBar: SearchBarModel<CommentSortAttr>
   }
 
   enum CommentItemMsg {
@@ -17,7 +18,7 @@ enum CommentScreen {
   enum Msg {
     case noOp
     case clearSelected
-    case searchBarMsg(SearchBar.Msg<CommentSortAttr>)
+    case searchBarMsg(SearchBarMsg<CommentSortAttr>)
     case paginationMsg(Pagination.Msg<Comment, CommentItemMsg, HttpError>)
   }
 }

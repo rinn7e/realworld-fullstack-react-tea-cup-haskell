@@ -1,4 +1,5 @@
 import CommonType
+import ComponentProfileThumbnail
 import SwiftUI
 import TeaCup
 import Theme
@@ -23,7 +24,7 @@ enum SettingScreen {
           Section {
             HStack(spacing: 16) {
               if user.image != nil {
-                ProfileThumbnail(src: user.image, size: 64)
+                ProfileThumbnailComponent(src: user.image, size: 64)
               } else {
                 Text(user.username.prefix(2).uppercased())
                   .font(.title2.weight(.black))
