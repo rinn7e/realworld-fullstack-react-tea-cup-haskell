@@ -1,0 +1,11 @@
+# Gradle
+.gradle/
+build/
+.kotlin/
+local.properties
+
+# Android Studio
+.idea/
+*.iml
+captures/
+.cxx/
