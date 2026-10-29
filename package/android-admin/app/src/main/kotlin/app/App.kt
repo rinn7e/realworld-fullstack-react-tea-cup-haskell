@@ -1,6 +1,13 @@
 package app
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -88,32 +95,67 @@ fun AppView(model: Model, dispatch: Dispatcher<Msg>) {
 
   AppTheme(model.theme, model.colorScheme) {
     BackHandler(enabled = currentScreen != Screen.HomeScreen && currentScreen != Screen.LoginScreen) { navigate(Screen.HomeScreen) }
-    when (currentScreen) {
-      Screen.LoginScreen, Screen.SettingScreen -> ScreenView(model, dispatch, accountButton, onBack = { navigate(Screen.HomeScreen) })
-      Screen.NotFoundScreen -> NotFound(onHome = { navigate(Screen.HomeScreen) })
-      else ->
-        Scaffold(
-          bottomBar = {
-            NavigationBar {
-              for (tab in tabs) {
-                NavigationBarItem(
-                  selected = tab.screen == currentScreen,
-                  onClick = { navigate(tab.screen) },
-                  icon = { Icon(tab.icon, contentDescription = null) },
-                  label = { Text(tab.label) },
-                )
+    // The model is the target, the layer its key: a change of layer animates,
+    // and the leaving layer keeps drawing the model it had (the settings slide
+    // out as settings, not as the overview that replaced them). A change inside
+    // a layer (a tab, a message of a screen) draws at once.
+    AnimatedContent(
+      targetState = model,
+      contentKey = { layerOf(currentScreenOf(it.screenModel.screenModel)) },
+      transitionSpec = { layerTransition(layerOf(currentScreenOf(initialState.screenModel.screenModel)), layerOf(currentScreenOf(targetState.screenModel.screenModel))) },
+      label = "layer",
+    ) { shown ->
+      val shownScreen = currentScreenOf(shown.screenModel.screenModel)
+      when (layerOf(shownScreen)) {
+        Layer.Login, Layer.Settings -> ScreenView(shown, dispatch, accountButton, onBack = { navigate(Screen.HomeScreen) })
+        Layer.NotFound -> NotFound(onHome = { navigate(Screen.HomeScreen) })
+        Layer.Tabs ->
+          Scaffold(
+            bottomBar = {
+              NavigationBar {
+                for (tab in tabs) {
+                  NavigationBarItem(
+                    selected = tab.screen == shownScreen,
+                    onClick = { navigate(tab.screen) },
+                    icon = { Icon(tab.icon, contentDescription = null) },
+                    label = { Text(tab.label) },
+                  )
+                }
               }
+            },
+            contentWindowInsets = WindowInsets(0),
+          ) { padding ->
+            Box(Modifier.padding(padding).consumeWindowInsets(padding)) {
+              ScreenView(shown, dispatch, accountButton, onBack = { navigate(Screen.HomeScreen) })
             }
-          },
-          contentWindowInsets = WindowInsets(0),
-        ) { padding ->
-          Box(Modifier.padding(padding).consumeWindowInsets(padding)) {
-            ScreenView(model, dispatch, accountButton, onBack = { navigate(Screen.HomeScreen) })
           }
-        }
+      }
     }
   }
 }
+
+// The parts of the app a move can switch between. The tabs are one layer: a
+// tab of the navigation bar changes in place, as Material does.
+private enum class Layer { Login, Tabs, Settings, NotFound }
+
+private fun layerOf(screen: Screen): Layer =
+  when (screen) {
+    Screen.LoginScreen -> Layer.Login
+    Screen.SettingScreen -> Layer.Settings
+    Screen.NotFoundScreen -> Layer.NotFound
+    else -> Layer.Tabs
+  }
+
+// Settings open over the tabs from the right and go back out to the right, the
+// forward and back of an Android screen; the other changes fade
+private fun layerTransition(from: Layer, to: Layer): ContentTransform =
+  when {
+    to == Layer.Settings ->
+      (slideInHorizontally { it } + fadeIn()) togetherWith (slideOutHorizontally { -it / 4 } + fadeOut())
+    from == Layer.Settings ->
+      (slideInHorizontally { -it / 4 } + fadeIn()) togetherWith (slideOutHorizontally { it } + fadeOut())
+    else -> fadeIn() togetherWith fadeOut()
+  }
 
 @Composable
 private fun ScreenView(model: Model, dispatch: Dispatcher<Msg>, accountButton: @Composable () -> Unit, onBack: () -> Unit) {
