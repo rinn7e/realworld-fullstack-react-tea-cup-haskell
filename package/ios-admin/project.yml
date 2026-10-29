@@ -38,6 +38,6 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: tech.rinn7e.sentinel-admin
         # The module of Root.swift, named like the other files of the app layer
-        PRODUCT_MODULE_NAME: MyApp_Root
+        PRODUCT_MODULE_NAME: Root
         TARGETED_DEVICE_FAMILY: "1,2"
         API_BASE: "http:/$()/localhost:3000/api"

@@ -1,7 +1,7 @@
-// Module: MyApp_App
+// Module: App
 
 import Common_Type_Destination_Type
-@_spi(MyApp) import MyApp_Type
+@_spi(MyApp) import Type
 import Package_TeaCup_Dispatcher
 import Screen_ArticleScreen_Component
 import Screen_CommentScreen_Component

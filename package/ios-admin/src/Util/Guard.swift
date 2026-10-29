@@ -1,4 +1,4 @@
-// Module: MyApp_Util_Guard
+// Module: Util_Guard
 
 import Common_Type_Destination_Type
 import Common_Type_Shared

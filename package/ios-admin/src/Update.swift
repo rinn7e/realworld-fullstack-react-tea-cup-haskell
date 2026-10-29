@@ -1,4 +1,4 @@
-// Module: MyApp_Update
+// Module: Update
 
 import Common_API_Handler_User
 import Common_API_Type_User
@@ -6,9 +6,9 @@ import Common_Cache_Cache
 import Common_Type_AuthUser
 import Common_Type_Destination_Type
 import Common_Type_Shared
-@_spi(MyApp) import MyApp_Handler_NavigationHandler
-@_spi(MyApp) import MyApp_Type
-@_spi(MyApp) import MyApp_Util_Guard
+@_spi(MyApp) import Handler_NavigationHandler
+@_spi(MyApp) import Type
+@_spi(MyApp) import Util_Guard
 import Package_TeaCup_Cmd
 import Screen_ArticleScreen_Type
 import Screen_ArticleScreen_Update

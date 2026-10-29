@@ -1,4 +1,4 @@
-// Module: MyApp_Root
+// Module: Root
 
 @_spi(MyApp) import Program
 import Package_TeaCup_Program

@@ -1,7 +1,7 @@
-// Module: MyApp_Util_Destination
+// Module: Util_Destination
 
 import Common_Type_Destination_Type
-@_spi(MyApp) import MyApp_Type
+@_spi(MyApp) import Type
 
 // Where the app is, read from the models that show it, never stored: the screen
 // is the screen model's. The tab bar shows it, and a deep link moves it.

@@ -54,9 +54,9 @@ The roots (`src`, `lib`, `doc`) stay in lowercase, as in the other packages of t
 
 ## Modules
 
-Every Swift file is a module (a target of `Package.swift`), as every file is a module in Haskell and TypeScript. Only `Root.swift` (`@main`) is in the app target (`project.yml`), whose module is `MyApp_Root`.
+Every Swift file is a module (a target of `Package.swift`), as every file is a module in Haskell and TypeScript. Only `Root.swift` (`@main`) is in the app target (`project.yml`), whose module is `Root`.
 
-A module is named after the path of its file, with `_` between the parts: `Screen/UserScreen/Type.swift` is `Screen_UserScreen_Type` (Haskell `Screen.UserScreen.Type`). A Swift module name is one identifier, so it cannot hold a dot, and `import Screen.UserScreen.Type` does not exist (dotted imports are only for the submodules of C and Objective-C modules, like `import Darwin.C.stdio`). The files of the root, `Handler/` and `Util/` have no folder of their own to name them, so they are `MyApp_*` (`MyApp_Update`, `MyApp_Handler_NavigationHandler`). The one exception is `Program.swift`, the module `Program` that `Root.swift` imports: the TeaCup type is `TeaCupProgram`, so the module name does not clash with it.
+A module is named after the path of its file, with `_` between the parts: `Screen/UserScreen/Type.swift` is `Screen_UserScreen_Type` (Haskell `Screen.UserScreen.Type`). A Swift module name is one identifier, so it cannot hold a dot, and `import Screen.UserScreen.Type` does not exist (dotted imports are only for the submodules of C and Objective-C modules, like `import Darwin.C.stdio`). The files of the app layer (the root, `Handler/` and `Util/`) have no prefix: `Update`, `Program`, `Handler_NavigationHandler`. A module name never clashes with a type of the app, since every type that could share one is prefixed (the TeaCup program is `TeaCupProgram`).
 
 | Folder | Modules | Web |
 | --- | --- | --- |
@@ -65,7 +65,7 @@ A module is named after the path of its file, with `_` between the parts: `Scree
 | `src/Common/<Path>` | `Common_API_Type_Article`, `Common_API_Handler_User`, `Common_Type_Destination_Parser`, ... | `src/common/*` |
 | `src/Component/<Name>` | `Component_SearchBar_Type`, `Component_SearchBar_Update`, `Component_SearchBar_Component`, ... | `src/component/*` |
 | `src/Screen/<Name>Screen` | `Screen_UserScreen_Type`, `Screen_UserScreen_Update`, `Screen_UserScreen_SubComponent_UserRow`, ... | `src/screen/*` |
-| `src/`, `src/Handler`, `src/Util` | `MyApp_Root`, `MyApp_App`, `MyApp_Type`, `MyApp_Update`, `Program`, `MyApp_Handler_NavigationHandler`, `MyApp_Util_Guard`, ... | `src/*.tsx`, `handler/`, `util/` |
+| `src/`, `src/Handler`, `src/Util` | `Root`, `App`, `Type`, `Update`, `Program`, `Handler_NavigationHandler`, `Util_Guard`, ... | `src/*.tsx`, `handler/`, `util/` |
 
 Each file imports the modules it uses, and the dependencies of each target in `Package.swift` are exactly those imports. SwiftPM refuses a cycle, so the layers of the code convention of frontend-admin ("Dependency Order and Hierarchy") are checked by the compiler: `Common` imports no component or screen, a component imports no screen, and a screen imports no other screen. Each module builds alone:
 
@@ -88,7 +88,7 @@ public struct UserScreenModel: Equatable {
 // Module: Screen_UserScreen_Update
 @_spi(Screen_UserScreen) import Screen_UserScreen_Type    // a sibling: reads and sets it
 
-// Module: MyApp_Update
+// Module: Update
 import Screen_UserScreen_Type                              // not a sibling: cannot see it
 ```
 

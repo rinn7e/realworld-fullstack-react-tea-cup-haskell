@@ -1,10 +1,10 @@
-// Module: MyApp_Type
+// Module: Type
 
 import Common_Type_AuthUser
 import Common_Type_Destination_Type
 import Common_Type_Shared
 import Foundation
-@_spi(MyApp) import MyApp_Util_Guard
+@_spi(MyApp) import Util_Guard
 import Screen_ArticleScreen_Type
 import Screen_CommentScreen_Type
 import Screen_HomeScreen_Type

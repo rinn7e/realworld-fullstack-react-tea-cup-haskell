@@ -215,8 +215,8 @@ Every file is a module, named after its path (section 1.3 explains why file name
 | `src/Screen/UserScreen/SubComponent/UserRow.swift` | `Screen_UserScreen_SubComponent_UserRow` | Haskell `Screen.UserScreen.SubComponent.UserRow` |
 | `src/Common/API/Type/Article.swift` | `Common_API_Type_Article` | Haskell `Common.API.Type.Article` |
 | `src/Package/TeaCup/Cmd.swift` | `Package_TeaCup_Cmd` | a module of the package `tea-cup-fp` |
-| `src/Update.swift`, `src/Util/Guard.swift` | `MyApp_Update`, `MyApp_Util_Guard` | the modules of a cabal `executable` |
-| `src/Root.swift` (`@main`) | `MyApp_Root`, the module of the app target | `Main.hs` |
+| `src/Update.swift`, `src/Util/Guard.swift` | `Update`, `Util_Guard` | the modules of a cabal `executable` |
+| `src/Root.swift` (`@main`) | `Root`, the module of the app target | `Main.hs` |
 
 ```swift
 // Package.swift: one target per file, its dependencies are the imports of the file
@@ -455,7 +455,7 @@ A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.ts
   // Module: Screen_UserScreen_SubComponent_UserRow
   @_spi(Screen_UserScreen) public struct UserRow: View, Equatable { ... }   // private to the screen
 
-  // In the app (Module: MyApp_Update)
+  // In the app (Module: Update)
   import Screen_UserScreen_Type
   import Screen_UserScreen_Update
   userScreenUpdate(model.shared)(subMsg, screenModel)

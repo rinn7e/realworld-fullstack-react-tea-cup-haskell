@@ -1,10 +1,10 @@
 // Module: Program
 
 import Common_Type_Destination_Type
-@_spi(MyApp) import MyApp_App
-@_spi(MyApp) import MyApp_Type
-@_spi(MyApp) import MyApp_Update
-@_spi(MyApp) import MyApp_Util_URL
+@_spi(MyApp) import App
+@_spi(MyApp) import Type
+@_spi(MyApp) import Update
+@_spi(MyApp) import Util_URL
 import Package_TeaCup_Cmd
 import Package_TeaCup_Dispatcher
 import Package_TeaCup_Program

@@ -4,17 +4,17 @@ import PackageDescription
 // One module per file (generated): a module is the path of its file under
 // `src/` with `_` between the folders, the Swift form of a Haskell module name
 // (`Screen/UserScreen/Type.swift` is `Screen_UserScreen_Type`); the files of
-// the root, `Handler/` and `Util/` are `MyApp_*`, but `Program.swift` is
-// `Program` (the TeaCup type is `TeaCupProgram`). The dependencies of a module
-// are the modules its file imports, and SwiftPM refuses a cycle. The files of
-// one folder share their internals through `@_spi(<folder module>)`, the
-// `.Internal` pattern of Haskell (script/check-spi.sh). The app target
-// (`project.yml`) holds `Root.swift` only, as the module `MyApp_Root`.
+// the root, `Handler/` and `Util/` have no prefix (`Update`, `Util_Guard`).
+// The dependencies of a module are the modules its file imports, and SwiftPM
+// refuses a cycle. The files of one folder share their internals through
+// `@_spi(<folder module>)`, the `.Internal` pattern of Haskell
+// (script/check-spi.sh). The app target (`project.yml`) holds `Root.swift`
+// only, as the module `Root`.
 let package = Package(
   name: "SentinelAdminModules",
   platforms: [.iOS(.v18), .macOS(.v15)],
   products: [
-    .library(name: "MyApp_App", targets: ["MyApp_App"]),
+    .library(name: "App", targets: ["App"]),
     .library(name: "Common_API_Handler_Article", targets: ["Common_API_Handler_Article"]),
     .library(name: "Common_API_Handler_Comment", targets: ["Common_API_Handler_Comment"]),
     .library(name: "Common_API_Handler_Common", targets: ["Common_API_Handler_Common"]),
@@ -46,7 +46,7 @@ let package = Package(
     .library(name: "Component_SearchBar_Component", targets: ["Component_SearchBar_Component"]),
     .library(name: "Component_SearchBar_Type", targets: ["Component_SearchBar_Type"]),
     .library(name: "Component_SearchBar_Update", targets: ["Component_SearchBar_Update"]),
-    .library(name: "MyApp_Handler_NavigationHandler", targets: ["MyApp_Handler_NavigationHandler"]),
+    .library(name: "Handler_NavigationHandler", targets: ["Handler_NavigationHandler"]),
     .library(name: "Package_TeaCup_Cmd", targets: ["Package_TeaCup_Cmd"]),
     .library(name: "Package_TeaCup_Dispatcher", targets: ["Package_TeaCup_Dispatcher"]),
     .library(name: "Package_TeaCup_InputBuffer", targets: ["Package_TeaCup_InputBuffer"]),
@@ -93,14 +93,14 @@ let package = Package(
     .library(name: "Theme_Data", targets: ["Theme_Data"]),
     .library(name: "Theme_Type", targets: ["Theme_Type"]),
     .library(name: "Theme_Util", targets: ["Theme_Util"]),
-    .library(name: "MyApp_Type", targets: ["MyApp_Type"]),
-    .library(name: "MyApp_Update", targets: ["MyApp_Update"]),
-    .library(name: "MyApp_Util_Destination", targets: ["MyApp_Util_Destination"]),
-    .library(name: "MyApp_Util_Guard", targets: ["MyApp_Util_Guard"]),
-    .library(name: "MyApp_Util_URL", targets: ["MyApp_Util_URL"]),
+    .library(name: "Type", targets: ["Type"]),
+    .library(name: "Update", targets: ["Update"]),
+    .library(name: "Util_Destination", targets: ["Util_Destination"]),
+    .library(name: "Util_Guard", targets: ["Util_Guard"]),
+    .library(name: "Util_URL", targets: ["Util_URL"]),
   ],
   targets: [
-    .target(name: "MyApp_App", dependencies: ["Common_Type_Destination_Type", "Package_TeaCup_Dispatcher", "Screen_ArticleScreen_Component", "Screen_CommentScreen_Component", "Screen_HomeScreen_Component", "Screen_LoginScreen_Component", "Screen_SettingScreen_Component", "Screen_UserScreen_Component", "Screen_VisitorScreen_Component", "Theme_Util", "MyApp_Type"], path: "src", exclude: ["Common", "Component", "Handler", "Package", "Program.swift", "Root.swift", "Screen", "Theme", "Type.swift", "Update.swift", "Util"], sources: ["App.swift"]),
+    .target(name: "App", dependencies: ["Common_Type_Destination_Type", "Package_TeaCup_Dispatcher", "Screen_ArticleScreen_Component", "Screen_CommentScreen_Component", "Screen_HomeScreen_Component", "Screen_LoginScreen_Component", "Screen_SettingScreen_Component", "Screen_UserScreen_Component", "Screen_VisitorScreen_Component", "Theme_Util", "Type"], path: "src", exclude: ["Common", "Component", "Handler", "Package", "Program.swift", "Root.swift", "Screen", "Theme", "Type.swift", "Update.swift", "Util"], sources: ["App.swift"]),
     .target(name: "Common_API_Handler_Article", dependencies: ["Common_API_Handler_Common", "Common_API_Type_Article", "Common_API_Type_Common"], path: "src/Common/API/Handler", exclude: ["Comment.swift", "Common.swift", "Dashboard.swift", "User.swift"], sources: ["Article.swift"]),
     .target(name: "Common_API_Handler_Comment", dependencies: ["Common_API_Handler_Common", "Common_API_Type_Comment", "Common_API_Type_Common"], path: "src/Common/API/Handler", exclude: ["Article.swift", "Common.swift", "Dashboard.swift", "User.swift"], sources: ["Comment.swift"]),
     .target(name: "Common_API_Handler_Common", dependencies: ["Common_API_Type_Common", "Common_Env_Env", "Common_Type_Date"], path: "src/Common/API/Handler", exclude: ["Article.swift", "Comment.swift", "Dashboard.swift", "User.swift"], sources: ["Common.swift"]),
@@ -132,14 +132,14 @@ let package = Package(
     .target(name: "Component_SearchBar_Component", dependencies: ["Common_Type_Filter", "Component_SearchBar_Type", "Package_TeaCup_Dispatcher", "Package_TeaCup_InputBuffer"], path: "src/Component/SearchBar", exclude: ["Type.swift", "Update.swift"], sources: ["Component.swift"]),
     .target(name: "Component_SearchBar_Type", dependencies: ["Common_Type_Filter"], path: "src/Component/SearchBar", exclude: ["Component.swift", "Update.swift"], sources: ["Type.swift"]),
     .target(name: "Component_SearchBar_Update", dependencies: ["Common_Type_Filter", "Component_SearchBar_Type", "Package_TeaCup_Cmd"], path: "src/Component/SearchBar", exclude: ["Component.swift", "Type.swift"], sources: ["Update.swift"]),
-    .target(name: "MyApp_Handler_NavigationHandler", dependencies: ["Common_Type_Destination_Type", "Common_Type_Shared", "Package_TeaCup_Cmd", "Screen_ArticleScreen_Update", "Screen_CommentScreen_Update", "Screen_HomeScreen_Update", "Screen_LoginScreen_Update", "Screen_UserScreen_Update", "Screen_VisitorScreen_Update", "MyApp_Type", "MyApp_Util_Destination", "MyApp_Util_Guard"], path: "src/Handler", sources: ["NavigationHandler.swift"]),
+    .target(name: "Handler_NavigationHandler", dependencies: ["Common_Type_Destination_Type", "Common_Type_Shared", "Package_TeaCup_Cmd", "Screen_ArticleScreen_Update", "Screen_CommentScreen_Update", "Screen_HomeScreen_Update", "Screen_LoginScreen_Update", "Screen_UserScreen_Update", "Screen_VisitorScreen_Update", "Type", "Util_Destination", "Util_Guard"], path: "src/Handler", sources: ["NavigationHandler.swift"]),
     .target(name: "Package_TeaCup_Cmd", dependencies: ["Package_TeaCup_Dispatcher"], path: "src/Package/TeaCup", exclude: ["Dispatcher.swift", "InputBuffer.swift", "Program.swift", "RemoteData.swift"], sources: ["Cmd.swift"]),
     .target(name: "Package_TeaCup_Dispatcher", path: "src/Package/TeaCup", exclude: ["Cmd.swift", "InputBuffer.swift", "Program.swift", "RemoteData.swift"], sources: ["Dispatcher.swift"]),
     .target(name: "Package_TeaCup_InputBuffer", path: "src/Package/TeaCup", exclude: ["Cmd.swift", "Dispatcher.swift", "Program.swift", "RemoteData.swift"], sources: ["InputBuffer.swift"]),
     .target(name: "Package_TeaCup_Program", dependencies: ["Package_TeaCup_Cmd", "Package_TeaCup_Dispatcher"], path: "src/Package/TeaCup", exclude: ["Cmd.swift", "Dispatcher.swift", "InputBuffer.swift", "RemoteData.swift"], sources: ["Program.swift"]),
     .target(name: "Package_TeaCup_RemoteData", path: "src/Package/TeaCup", exclude: ["Cmd.swift", "Dispatcher.swift", "InputBuffer.swift", "Program.swift"], sources: ["RemoteData.swift"]),
     .target(name: "Package_TeaCupPagination_Pagination", dependencies: ["Package_TeaCup_Cmd", "Package_TeaCup_RemoteData"], path: "src/Package/TeaCupPagination", sources: ["Pagination.swift"]),
-    .target(name: "Program", dependencies: ["MyApp_App", "Common_Type_Destination_Type", "Package_TeaCup_Cmd", "Package_TeaCup_Dispatcher", "Package_TeaCup_Program", "MyApp_Type", "MyApp_Update", "MyApp_Util_URL"], path: "src", exclude: ["App.swift", "Common", "Component", "Handler", "Package", "Root.swift", "Screen", "Theme", "Type.swift", "Update.swift", "Util"], sources: ["Program.swift"]),
+    .target(name: "Program", dependencies: ["App", "Common_Type_Destination_Type", "Package_TeaCup_Cmd", "Package_TeaCup_Dispatcher", "Package_TeaCup_Program", "Type", "Update", "Util_URL"], path: "src", exclude: ["App.swift", "Common", "Component", "Handler", "Package", "Root.swift", "Screen", "Theme", "Type.swift", "Update.swift", "Util"], sources: ["Program.swift"]),
     .target(name: "Screen_ArticleScreen_Component", dependencies: ["Common_API_Type_Article", "Common_Type_Shared", "Component_PagedList_Component", "Component_SearchBar_Component", "Component_SearchBar_Type", "Package_TeaCup_Dispatcher", "Screen_ArticleScreen_SubComponent_ArticleDetailSheet", "Screen_ArticleScreen_SubComponent_ArticleRow", "Screen_ArticleScreen_Type"], path: "src/Screen/ArticleScreen", exclude: ["SubComponent", "Type.swift", "Update.swift", "Util.swift"], sources: ["Component.swift"]),
     .target(name: "Screen_ArticleScreen_SubComponent_ArticleDetailSheet", dependencies: ["Common_API_Type_Article", "Component_DetailRow_Component", "Component_ProfileThumbnail_Component", "Package_TeaCup_Dispatcher", "Screen_ArticleScreen_Type"], path: "src/Screen/ArticleScreen/SubComponent", exclude: ["ArticleRow.swift"], sources: ["ArticleDetailSheet.swift"]),
     .target(name: "Screen_ArticleScreen_SubComponent_ArticleRow", dependencies: ["Common_API_Type_Article"], path: "src/Screen/ArticleScreen/SubComponent", exclude: ["ArticleDetailSheet.swift"], sources: ["ArticleRow.swift"]),
@@ -179,11 +179,11 @@ let package = Package(
     .target(name: "Theme_Data", dependencies: ["Theme_Type"], path: "src/Theme", exclude: ["Type.swift", "Util.swift"], sources: ["Data.swift"]),
     .target(name: "Theme_Type", path: "src/Theme", exclude: ["Data.swift", "Util.swift"], sources: ["Type.swift"]),
     .target(name: "Theme_Util", dependencies: ["Theme_Type"], path: "src/Theme", exclude: ["Data.swift", "Type.swift"], sources: ["Util.swift"]),
-    .target(name: "MyApp_Type", dependencies: ["Common_Type_AuthUser", "Common_Type_Destination_Type", "Common_Type_Shared", "Screen_ArticleScreen_Type", "Screen_CommentScreen_Type", "Screen_HomeScreen_Type", "Screen_LoginScreen_Type", "Screen_SettingScreen_Type", "Screen_UserScreen_Type", "Screen_VisitorScreen_Type", "Theme_Type", "MyApp_Util_Guard"], path: "src", exclude: ["App.swift", "Common", "Component", "Handler", "Package", "Program.swift", "Root.swift", "Screen", "Theme", "Update.swift", "Util"], sources: ["Type.swift"]),
-    .target(name: "MyApp_Update", dependencies: ["Common_API_Handler_User", "Common_API_Type_User", "Common_Cache_Cache", "Common_Type_AuthUser", "Common_Type_Destination_Type", "Common_Type_Shared", "MyApp_Handler_NavigationHandler", "Package_TeaCup_Cmd", "Screen_ArticleScreen_Type", "Screen_ArticleScreen_Update", "Screen_CommentScreen_Type", "Screen_CommentScreen_Update", "Screen_HomeScreen_Type", "Screen_HomeScreen_Update", "Screen_LoginScreen_Type", "Screen_LoginScreen_Update", "Screen_SettingScreen_Type", "Screen_UserScreen_Type", "Screen_UserScreen_Update", "Screen_VisitorScreen_Type", "Screen_VisitorScreen_Update", "Theme_Data", "Theme_Type", "Theme_Util", "MyApp_Type", "MyApp_Util_Guard"], path: "src", exclude: ["App.swift", "Common", "Component", "Handler", "Package", "Program.swift", "Root.swift", "Screen", "Theme", "Type.swift", "Util"], sources: ["Update.swift"]),
-    .target(name: "MyApp_Util_Destination", dependencies: ["Common_Type_Destination_Type", "MyApp_Type"], path: "src/Util", exclude: ["Guard.swift", "URL.swift"], sources: ["Destination.swift"]),
-    .target(name: "MyApp_Util_Guard", dependencies: ["Common_Type_Destination_Type", "Common_Type_Shared"], path: "src/Util", exclude: ["Destination.swift", "URL.swift"], sources: ["Guard.swift"]),
-    .target(name: "MyApp_Util_URL", dependencies: ["Common_Type_Destination_Parser", "Common_Type_Destination_Type", "MyApp_Type"], path: "src/Util", exclude: ["Destination.swift", "Guard.swift"], sources: ["URL.swift"]),
+    .target(name: "Type", dependencies: ["Common_Type_AuthUser", "Common_Type_Destination_Type", "Common_Type_Shared", "Screen_ArticleScreen_Type", "Screen_CommentScreen_Type", "Screen_HomeScreen_Type", "Screen_LoginScreen_Type", "Screen_SettingScreen_Type", "Screen_UserScreen_Type", "Screen_VisitorScreen_Type", "Theme_Type", "Util_Guard"], path: "src", exclude: ["App.swift", "Common", "Component", "Handler", "Package", "Program.swift", "Root.swift", "Screen", "Theme", "Update.swift", "Util"], sources: ["Type.swift"]),
+    .target(name: "Update", dependencies: ["Common_API_Handler_User", "Common_API_Type_User", "Common_Cache_Cache", "Common_Type_AuthUser", "Common_Type_Destination_Type", "Common_Type_Shared", "Handler_NavigationHandler", "Package_TeaCup_Cmd", "Screen_ArticleScreen_Type", "Screen_ArticleScreen_Update", "Screen_CommentScreen_Type", "Screen_CommentScreen_Update", "Screen_HomeScreen_Type", "Screen_HomeScreen_Update", "Screen_LoginScreen_Type", "Screen_LoginScreen_Update", "Screen_SettingScreen_Type", "Screen_UserScreen_Type", "Screen_UserScreen_Update", "Screen_VisitorScreen_Type", "Screen_VisitorScreen_Update", "Theme_Data", "Theme_Type", "Theme_Util", "Type", "Util_Guard"], path: "src", exclude: ["App.swift", "Common", "Component", "Handler", "Package", "Program.swift", "Root.swift", "Screen", "Theme", "Type.swift", "Util"], sources: ["Update.swift"]),
+    .target(name: "Util_Destination", dependencies: ["Common_Type_Destination_Type", "Type"], path: "src/Util", exclude: ["Guard.swift", "URL.swift"], sources: ["Destination.swift"]),
+    .target(name: "Util_Guard", dependencies: ["Common_Type_Destination_Type", "Common_Type_Shared"], path: "src/Util", exclude: ["Destination.swift", "URL.swift"], sources: ["Guard.swift"]),
+    .target(name: "Util_URL", dependencies: ["Common_Type_Destination_Parser", "Common_Type_Destination_Type", "Type"], path: "src/Util", exclude: ["Destination.swift", "Guard.swift"], sources: ["URL.swift"]),
   ],
   swiftLanguageModes: [.v5]
 )

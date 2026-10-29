@@ -1,9 +1,9 @@
-// Module: MyApp_Util_URL
+// Module: Util_URL
 
 import Common_Type_Destination_Parser
 import Common_Type_Destination_Type
 import Foundation
-@_spi(MyApp) import MyApp_Type
+@_spi(MyApp) import Type
 
 // The URL is an adapter at the edges, as in the web app, but iOS has no address
 // bar: there is no history to write after a step, so there is no `withUrl` (the

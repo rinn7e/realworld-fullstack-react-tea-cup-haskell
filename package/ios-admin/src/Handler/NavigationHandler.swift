@@ -1,10 +1,10 @@
-// Module: MyApp_Handler_NavigationHandler
+// Module: Handler_NavigationHandler
 
 import Common_Type_Destination_Type
 import Common_Type_Shared
-@_spi(MyApp) import MyApp_Type
-@_spi(MyApp) import MyApp_Util_Destination
-@_spi(MyApp) import MyApp_Util_Guard
+@_spi(MyApp) import Type
+@_spi(MyApp) import Util_Destination
+@_spi(MyApp) import Util_Guard
 import Package_TeaCup_Cmd
 import Screen_ArticleScreen_Update
 import Screen_CommentScreen_Update
