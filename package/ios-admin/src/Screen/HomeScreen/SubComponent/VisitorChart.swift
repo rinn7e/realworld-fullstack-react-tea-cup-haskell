@@ -1,14 +1,14 @@
-// Module: Screen_HomeScreen
+// Module: Screen_HomeScreen_SubComponent_VisitorChart
 
 import Charts
-import Common_API_Type
+import Common_API_Type_Dashboard
 import SwiftUI
 
 /// The visitors of each period, as the area chart of the web app
-struct VisitorChart: View, Equatable {
+@_spi(Screen_HomeScreen) public struct VisitorChart: View, Equatable {
   let stats: [VisitorStat]
 
-  var body: some View {
+  public var body: some View {
     Chart(stats, id: \.name) { stat in
       AreaMark(x: .value("Period", stat.name), y: .value("Visitors", stat.visitors))
         .interpolationMethod(.monotone)
@@ -23,5 +23,9 @@ struct VisitorChart: View, Equatable {
       AxisMarks(position: .leading)
     }
     .frame(height: 220)
+  }
+
+  @_spi(Screen_HomeScreen) public init(stats: [VisitorStat]) {
+    self.stats = stats
   }
 }

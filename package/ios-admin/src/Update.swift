@@ -1,24 +1,36 @@
-// Module: SentinelAdmin
+// Module: App_Update
 
-import Common_API_Handler
-import Common_API_Type
-import Common_Cache
-import Common_Type
-import Common_Type_Destination
-import Package_TeaCup
-import Screen_ArticleScreen
-import Screen_CommentScreen
-import Screen_HomeScreen
-import Screen_LoginScreen
-import Screen_SettingScreen
-import Screen_UserScreen
-import Screen_VisitorScreen
-import Theme
+@_spi(App) import App_Handler_NavigationHandler
+@_spi(App) import App_Type
+@_spi(App) import App_Util_Guard
+import Common_API_Handler_User
+import Common_API_Type_User
+import Common_Cache_Cache
+import Common_Type_AuthUser
+import Common_Type_Destination_Type
+import Common_Type_Shared
+import Package_TeaCup_Cmd
+import Screen_ArticleScreen_Type
+import Screen_ArticleScreen_Update
+import Screen_CommentScreen_Type
+import Screen_CommentScreen_Update
+import Screen_HomeScreen_Type
+import Screen_HomeScreen_Update
+import Screen_LoginScreen_Type
+import Screen_LoginScreen_Update
+import Screen_SettingScreen_Type
+import Screen_UserScreen_Type
+import Screen_UserScreen_Update
+import Screen_VisitorScreen_Type
+import Screen_VisitorScreen_Update
+import Theme_Data
+import Theme_Type
+import Theme_Util
 
 // Initialization
 // ---------------------------------------------
 
-func initialModel(
+@_spi(App) public func initialModel(
   _ bootDestination: Destination,
   user: AuthUser?,
   isUnavailable: Bool,
@@ -42,7 +54,7 @@ func initialModel(
 
 // Checks the stored token with the server before the app is built. A server
 // that cannot answer (unavailable) keeps the token, so the app opens on it.
-func initializeCmd() -> Cmd<Msg> {
+@_spi(App) public func initializeCmd() -> Cmd<Msg> {
   Cmd { dispatch in
     guard let storedToken = getToken() else {
       dispatch(.initialize(user: nil, isUnavailable: false, token: nil))
@@ -79,7 +91,7 @@ private func authUserOf(_ response: UserResponse) -> AuthUser {
   )
 }
 
-func update(_ msg: Msg, _ model: Model) -> (Model, Cmd<Msg>) {
+@_spi(App) public func update(_ msg: Msg, _ model: Model) -> (Model, Cmd<Msg>) {
   switch msg {
   case .navigationMsg(let subMsg):
     return navigationMsgHandler(subMsg, model)

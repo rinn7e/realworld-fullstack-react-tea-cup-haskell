@@ -22,7 +22,7 @@ In Haskell and TypeScript, one file is one module. In Swift, one module is a who
 
 The closest Haskell picture: a Swift module is **one big Haskell module that is split over many files**, with no export list inside it.
 
-So `ios-admin` makes a module of every folder of code (section 1.9): one target per folder, the way a Haskell project has one module per file.
+So `ios-admin` makes a module of every file (section 1.9): one target per file, the way a Haskell project has one module per file.
 
 ### 1.2 Inside One Module: No Imports
 
@@ -73,9 +73,9 @@ struct Model {}      // error: invalid redeclaration of 'Model'
 Haskell has no such problem, since `Screen.UserScreen.Model` and `Screen.HomeScreen.Model` live in different modules. In Swift there are two ways out:
 
 * **Nested types**: a name inside a type is qualified by that type (`enum UserScreen { struct Model {} }` gives `UserScreen.Model`). The `enum` is only a namespace: it hides nothing (section 4).
-* **One module per folder, with prefixed names** (`UserScreenModel` in the module `Screen_UserScreen`): what `ios-admin` does, because the prefix also protects against the silent shadowing of section 1.8.
+* **Separate modules, with prefixed names** (`UserScreenModel` in the module `Screen_UserScreen_Type`): what `ios-admin` does, one module per file, because the prefix also protects against the silent shadowing of section 1.8.
 
-File names are also flat: two files with the same name in one module do not build, even in different folders (`X/Type.swift` and `Y/Type.swift` fail with "multiple producers" of `Type.swift.o`). In different modules they are fine, so with a module per folder `ios-admin` keeps the web file names: every screen has its `Type.swift` and `Update.swift`.
+File names are also flat: two files with the same name in one module do not build, even in different folders (`X/Type.swift` and `Y/Type.swift` fail with "multiple producers" of `Type.swift.o`). In different modules they are fine, so with a module per file `ios-admin` keeps the web file names: every screen has its `Type.swift` and `Update.swift`.
 
 ### 1.4 Making Another Module: a Local Swift Package
 
@@ -207,33 +207,84 @@ So `ios-admin` prefixes every public name with its module (`SearchBarModel`, `Us
 
 ### 1.9 How `ios-admin` Is Organised
 
-| Part | Swift module | Like |
+Every file is a module, named after its path (section 1.3 explains why file names may repeat across modules):
+
+| File | Swift module | Like |
 | :--- | :--- | :--- |
-| `src/Package/TeaCup/`, `src/Package/TeaCupPagination/` | `Package_TeaCup`, `Package_TeaCupPagination` | the npm packages `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
-| `src/Common/API/Type/` | `Common_API_Type` (a target of the root `Package.swift`) | Haskell `Common.API.Type` |
-| `src/Component/SearchBar/` | `Component_SearchBar` | Haskell `Component.SearchBar` |
-| `src/Screen/UserScreen/` (with `SubComponent/`) | `Screen_UserScreen` | Haskell `Screen.UserScreen` |
-| `src/` root, `Handler/`, `Util/` | the app target `SentinelAdmin` | the `executable` of a cabal file |
+| `src/Screen/UserScreen/Type.swift` | `Screen_UserScreen_Type` | Haskell `Screen.UserScreen.Type` |
+| `src/Screen/UserScreen/SubComponent/UserRow.swift` | `Screen_UserScreen_SubComponent_UserRow` | Haskell `Screen.UserScreen.SubComponent.UserRow` |
+| `src/Common/API/Type/Article.swift` | `Common_API_Type_Article` | Haskell `Common.API.Type.Article` |
+| `src/Package/TeaCup/Cmd.swift` | `Package_TeaCup_Cmd` | a module of the package `tea-cup-fp` |
+| `src/Update.swift`, `src/Util/Guard.swift` | `App_Update`, `App_Util_Guard` | the modules of a cabal `executable` |
+| `src/Root.swift` (`@main`) | the app target `SentinelAdmin` | `Main.hs` |
 
 ```swift
-// Package.swift: the dependencies are the imports of the files of each module
-.target(name: "Component_PagedList",
-        dependencies: ["Common_API_Type", "Component_ListState", "Component_PaginationNav",
-                       "Package_TeaCup"],
-        path: "src/Component/PagedList"),
+// Package.swift: one target per file, its dependencies are the imports of the file
+.target(name: "Component_PagedList_Component",
+        dependencies: ["Common_API_Type_Common", "Component_ListState_Component",
+                       "Component_PaginationNav_Component", "Package_TeaCup_Dispatcher",
+                       "Package_TeaCup_RemoteData"],
+        path: "src/Component/PagedList", sources: ["Component.swift"]),
 ```
 
 ```swift
-// src/Screen/UserScreen/Component.swift (module Screen_UserScreen)
-import Component_PagedList      // PagedListComponent
-import Component_SearchBar      // SearchBarOption, .searchBar(...)
-import Package_TeaCup          // Dispatcher
+// Module: Screen_UserScreen_Component
+import Component_PagedList_Component                                   // another folder
+import Component_SearchBar_Component
+@_spi(Screen_UserScreen) import Screen_UserScreen_SubComponent_UserRow  // a sibling (section 1.11)
+@_spi(Screen_UserScreen) import Screen_UserScreen_Type
 
-public struct UserScreenComponent: View, Equatable { ... }   // exported
-struct UserRow: View, Equatable { ... }                      // SubComponent/: internal
+public struct UserScreenComponent: View, Equatable { ... }             // exported
+
+// Module: Screen_UserScreen_SubComponent_UserRow
+@_spi(Screen_UserScreen) public struct UserRow: View, Equatable { ... } // for the siblings only
 ```
 
-`Screen_UserScreen` has no dependency on another screen, so `import Screen_HomeScreen` in it does not build: the layers of the code convention are checked by the compiler.
+No screen depends on another screen, so `import Screen_HomeScreen_Type` in a user screen file does not build: the layers of the code convention are checked by the compiler. `script/check-spi.sh` checks that every `@_spi(X)` stays in the folder `X`.
+
+### 1.10 Haskell Import and Export, Item by Item
+
+The export side of Swift is about as rich as an export list of Haskell, written on each declaration instead of in one list. The import side is poorer: no `hiding`, no qualified-only import, no alias.
+
+| Haskell | Swift | |
+| :--- | :--- | :--- |
+| `module M (Model, update) where` (export list) | `public` on `Model` and `update`, the rest `internal` | same effect, per declaration |
+| `Model(..)` (a type with its constructor and fields) | `public struct`, `public init`, `public var` fields | yes |
+| `Model` (a type, its constructor hidden) | `public struct` with a non-public `init` | yes |
+| `Model(selectedUser)` (only some fields) | `public var selectedUser`, the other fields `internal` | yes |
+| A field others read but cannot set | `public internal(set) var` | yes, finer than Haskell |
+| `module App (module M) where` (re-export a module) | `@_exported import M` | unofficial (underscored) |
+| Re-export one type | `public typealias Model = M.Model` | yes, for types |
+| `import M (Model, update)` | `import struct M.Model`, `import func M.update` | yes, one line per kind |
+| `import M hiding (update)` | | no |
+| `import qualified M` | | no: every imported name is usable bare |
+| `import qualified M as X` | | no: only the module selector `M::Model` |
+| An import that does not leak to the importers of this module | `internal import M` (SE-0409, Swift 6) | yes |
+
+Neither language can export a name to some modules only: an export list of Haskell gives `Model(..)` to every module that imports `M`. Haskell shares more with sibling modules through the `.Internal` pattern: `M.Internal` exports everything, `M` re-exports the public part, and the other modules are asked not to import `M.Internal`.
+
+### 1.11 The `.Internal` Pattern in Swift: `@_spi`
+
+Swift has the same tool, unofficial but used by Apple and by Swift Testing: `@_spi` (a "system programming interface"). A `public` declaration marked `@_spi(Group)` is seen only by modules that import with the same group:
+
+```swift
+// Module Screen_UserScreen_Type
+public struct UserScreenModel {
+  @_spi(Screen_UserScreen) public var selectedUser: AdminUser?   // the .Internal part
+}
+
+// Module Screen_UserScreen_Update: a sibling, opts in
+@_spi(Screen_UserScreen) import Screen_UserScreen_Type
+model.selectedUser = nil                                         // fine
+
+// The app: a plain import
+import Screen_UserScreen_Type
+model.selectedUser                // error: 'selectedUser' is inaccessible due to '@_spi' protection level
+```
+
+As with `.Internal`, nothing stops another module from writing `@_spi(Screen_UserScreen) import`: it is a convention, made visible by the name of the group, so a check can find every opt-in. `ios-admin` names each group after its folder, and `script/check-spi.sh` fails when a file uses the group of another folder.
+
+Why there is no real "friend" level: submodules and a group level were pitched several times (2017), and turned down as a C++ `friend` by another name. What was accepted is `package` (SE-0386, Swift 5.9), which opens a name to the whole package, not to a chosen group.
 
 ---
 
@@ -377,38 +428,39 @@ A case with a value is also a function: `Msg.changeEmail` has the type `(String)
 
 ---
 
-## 4. A TEA Module: Module per Folder, Prefixed Names
+## 4. A TEA Module: a Folder of File Modules, Prefixed Names
 
-A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.tsx`) is a Swift module in `ios-admin`: one target per folder (section 1.9). Its public names start with the name of the module, since Swift has no qualified import and a local name silently wins over an imported one (section 1.8).
+A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.tsx`) is a folder of Swift modules in `ios-admin`, one per file (section 1.9). Its public names start with the name of the folder, since Swift has no qualified import and a local name silently wins over an imported one (section 1.8). What the files of the folder share with each other only is `@_spi(<folder>)` (section 1.11).
 
-* **Swift** (module `Screen_UserScreen`):
+* **Swift** (folder `Screen/UserScreen`):
   ```swift
-  // Type.swift
+  // Module: Screen_UserScreen_Type
   public struct UserScreenModel: Equatable {
-    var pagination: Pagination.Model<AdminUser, HttpError>   // internal: the app cannot read it
-    var selectedUser: AdminUser?
+    @_spi(Screen_UserScreen) public var pagination: Pagination.Model<AdminUser, HttpError>  // siblings only
+    @_spi(Screen_UserScreen) public var selectedUser: AdminUser?
   }
   public enum UserScreenMsg { case clearSelected; case paginationMsg(...) }
 
-  // Update.swift
+  // Module: Screen_UserScreen_Update
+  @_spi(Screen_UserScreen) import Screen_UserScreen_Type
   public func userScreenInitial(_ shared: Shared) -> (UserScreenModel, Cmd<UserScreenMsg>) { ... }
   public func userScreenUpdate(_ shared: Shared) -> (UserScreenMsg, UserScreenModel) -> (UserScreenModel, Cmd<UserScreenMsg>) { ... }
-  func paginationMsgHandler(...) { ... }                     // internal helper
+  private func paginationMsgHandler(...) { ... }              // this file only
 
-  // Component.swift
+  // Module: Screen_UserScreen_Component
   public struct UserScreenComponent: View, Equatable {
     public init(model: UserScreenModel, shared: Shared, dispatch: Dispatcher<UserScreenMsg>) { ... }
   }
 
-  // SubComponent/UserRow.swift
-  struct UserRow: View, Equatable { ... }                    // internal: private to the screen
+  // Module: Screen_UserScreen_SubComponent_UserRow
+  @_spi(Screen_UserScreen) public struct UserRow: View, Equatable { ... }   // private to the screen
 
-  // In the app
-  import Screen_UserScreen
+  // In the app (Module: App_Update)
+  import Screen_UserScreen_Type
+  import Screen_UserScreen_Update
   userScreenUpdate(model.shared)(subMsg, screenModel)
-  UserScreenComponent(model: m, shared: s, dispatch: d)
   ```
-* **Haskell**: `module Screen.UserScreen (Model, Msg, initial, update, view) where`; `UserRow` is not in the export list.
+* **Haskell**: `Screen.UserScreen.Type`, `Screen.UserScreen.Update`, ... with the fields in `Screen.UserScreen.Internal.Type`, imported by the siblings only.
 * **Elm**: `module Screen.UserScreen exposing (Model, Msg, init, update, view)`.
 * **TypeScript**: `screen/user-screen/index.ts` re-exports `type.ts` and `update.ts`; the view is imported from `@/screen/user-screen/component`; a sub-component is never re-exported.
 
@@ -418,12 +470,12 @@ A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.ts
 
 | Swift name | Module | File | TypeScript import |
 | :--- | :--- | :--- | :--- |
-| `UserScreenModel` | `Screen_UserScreen` | `Screen/UserScreen/Type.swift` | `import { type Model } from '@/screen/user-screen'` |
-| `UserScreenComponent` | `Screen_UserScreen` | `Screen/UserScreen/Component.swift` | `import { UserScreenMemo } from '@/screen/user-screen/component'` |
-| `SearchBarModel` | `Component_SearchBar` | `Component/SearchBar/Type.swift` | `import { type Model } from '@/component/search-bar'` |
-| `DetailRowComponent` | `Component_DetailRow` | `Component/DetailRow/Component.swift` | `import { DetailRowMemo } from '@/component/detail-row'` |
+| `UserScreenModel` | `Screen_UserScreen_Type` | `Screen/UserScreen/Type.swift` | `import { type Model } from '@/screen/user-screen'` |
+| `UserScreenComponent` | `Screen_UserScreen_Component` | `Screen/UserScreen/Component.swift` | `import { UserScreenMemo } from '@/screen/user-screen/component'` |
+| `SearchBarModel` | `Component_SearchBar_Type` | `Component/SearchBar/Type.swift` | `import { type Model } from '@/component/search-bar'` |
+| `DetailRowComponent` | `Component_DetailRow_Component` | `Component/DetailRow/Component.swift` | `import { DetailRowMemo } from '@/component/detail-row'` |
 
-The view of a module is `<Module>Component` in its `Component.swift`. Internal names stay short (`UserRow`, `formatListError`): no other module sees them, so they cannot clash.
+The view of a folder is `<Folder>Component` in its `Component.swift`. The names a folder shares through `@_spi` stay short (`UserRow`, `formatListError`): only its siblings see them, so they cannot clash.
 
 ### 4.2 The Other Way: a Caseless `enum` Namespace
 
@@ -440,7 +492,7 @@ extension UserScreen {                       // in another file
 UserScreen.Model, UserScreen.update(...)
 ```
 
-An `enum` with no cases cannot be made, so `UserScreen()` never compiles, unlike an empty `struct`. But it is a namespace, not a module: it hides nothing (every member is `internal`, seen by the whole module), and it adds no import, so any file can use any screen. `ios-admin` used it before its modules; the module per folder replaced it because it checks the layers.
+An `enum` with no cases cannot be made, so `UserScreen()` never compiles, unlike an empty `struct`. But it is a namespace, not a module: it hides nothing (every member is `internal`, seen by the whole module), and it adds no import, so any file can use any screen. `ios-admin` used it before its modules; the modules replaced it because they check the layers.
 
 ---
 

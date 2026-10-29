@@ -1,6 +1,7 @@
-// Module: Common_Type_Destination
+// Module: Common_Type_Destination_Parser
 
-import Common_Env
+import Common_Env_Env
+@_spi(Common_Type_Destination) import Common_Type_Destination_Type
 import Foundation
 
 // The only code that knows how a destination is spelled in a URL. The deep link

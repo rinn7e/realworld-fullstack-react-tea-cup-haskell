@@ -1,10 +1,14 @@
-// Module: Screen_CommentScreen
+// Module: Screen_CommentScreen_Component
 
-import Common_API_Type
-import Common_Type
-import Component_PagedList
-import Component_SearchBar
-import Package_TeaCup
+import Common_API_Type_Comment
+import Common_Type_Shared
+import Component_PagedList_Component
+import Component_SearchBar_Component
+import Component_SearchBar_Type
+import Package_TeaCup_Dispatcher
+@_spi(Screen_CommentScreen) import Screen_CommentScreen_SubComponent_CommentDetailSheet
+@_spi(Screen_CommentScreen) import Screen_CommentScreen_SubComponent_CommentRow
+@_spi(Screen_CommentScreen) import Screen_CommentScreen_Type
 import SwiftUI
 
 public struct CommentScreenComponent: View, Equatable {

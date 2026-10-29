@@ -1,4 +1,4 @@
-// Module: Common_API_Type
+// Module: Common_API_Type_Common
 
 public struct ApiError: Equatable, Decodable {
   public let errors: [String: [String]]

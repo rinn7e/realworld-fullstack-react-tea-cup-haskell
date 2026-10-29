@@ -16,43 +16,12 @@ targets:
     type: application
     platform: iOS
     sources:
-      - path: src
-        # The folders of the modules of Package.swift
-        excludes:
-          - Common
-          - Component
-          - Package
-          - Screen
-          - Theme
+      - path: src/Root.swift
     dependencies:
       - package: SentinelAdminModules
-        product: Package_TeaCup
+        product: App_Program
       - package: SentinelAdminModules
-        product: Common_API_Handler
-      - package: SentinelAdminModules
-        product: Common_API_Type
-      - package: SentinelAdminModules
-        product: Common_Cache
-      - package: SentinelAdminModules
-        product: Common_Type
-      - package: SentinelAdminModules
-        product: Common_Type_Destination
-      - package: SentinelAdminModules
-        product: Screen_ArticleScreen
-      - package: SentinelAdminModules
-        product: Screen_CommentScreen
-      - package: SentinelAdminModules
-        product: Screen_HomeScreen
-      - package: SentinelAdminModules
-        product: Screen_LoginScreen
-      - package: SentinelAdminModules
-        product: Screen_SettingScreen
-      - package: SentinelAdminModules
-        product: Screen_UserScreen
-      - package: SentinelAdminModules
-        product: Screen_VisitorScreen
-      - package: SentinelAdminModules
-        product: Theme
+        product: Package_TeaCup_Program
     info:
       path: Info.plist
       properties:

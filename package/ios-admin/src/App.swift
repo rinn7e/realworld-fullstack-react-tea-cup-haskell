@@ -1,16 +1,17 @@
-// Module: SentinelAdmin
+// Module: App_App
 
-import Common_Type_Destination
-import Package_TeaCup
-import Screen_ArticleScreen
-import Screen_CommentScreen
-import Screen_HomeScreen
-import Screen_LoginScreen
-import Screen_SettingScreen
-import Screen_UserScreen
-import Screen_VisitorScreen
+@_spi(App) import App_Type
+import Common_Type_Destination_Type
+import Package_TeaCup_Dispatcher
+import Screen_ArticleScreen_Component
+import Screen_CommentScreen_Component
+import Screen_HomeScreen_Component
+import Screen_LoginScreen_Component
+import Screen_SettingScreen_Component
+import Screen_UserScreen_Component
+import Screen_VisitorScreen_Component
 import SwiftUI
-import Theme
+import Theme_Util
 
 /// The app: the login screen alone when signed out, otherwise the screens as
 /// tabs (the sidebar of the web app; on iPad the tab bar can become a sidebar).
@@ -21,7 +22,7 @@ import Theme
 /// not write the selection back, so its screens could not be reached by a move.
 /// Settings is opened from the account button of the navigation bar instead,
 /// as a modal screen; its Done is a move to the overview.
-struct AppView: View, Equatable {
+@_spi(App) public struct AppView: View, Equatable {
   let model: Model
   let dispatch: Dispatcher<Msg>
 
@@ -33,7 +34,7 @@ struct AppView: View, Equatable {
     (.visitorScreen, "Visitors", "globe"),
   ]
 
-  var body: some View {
+  public var body: some View {
     let currentScreen = currentScreenOf(model.screenModel.screenModel)
     Group {
       switch currentScreen {
@@ -89,6 +90,11 @@ struct AppView: View, Equatable {
     .animation(.default, value: currentScreen == .settingScreen)
     .tint(model.theme.primaryColor)
     .preferredColorScheme(preferredColorSchemeOf(model.colorScheme))
+  }
+
+  @_spi(App) public init(model: Model, dispatch: Dispatcher<Msg>) {
+    self.model = model
+    self.dispatch = dispatch
   }
 }
 

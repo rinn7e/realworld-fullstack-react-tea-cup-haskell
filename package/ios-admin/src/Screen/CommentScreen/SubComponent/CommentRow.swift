@@ -1,13 +1,13 @@
-// Module: Screen_CommentScreen
+// Module: Screen_CommentScreen_SubComponent_CommentRow
 
-import Common_API_Type
-import Component_ProfileThumbnail
+import Common_API_Type_Comment
+import Component_ProfileThumbnail_Component
 import SwiftUI
 
-struct CommentRow: View, Equatable {
+@_spi(Screen_CommentScreen) public struct CommentRow: View, Equatable {
   let comment: Comment
 
-  var body: some View {
+  public var body: some View {
     HStack(alignment: .top, spacing: 12) {
       ProfileThumbnailComponent(src: comment.author.image, size: 32)
       VStack(alignment: .leading, spacing: 4) {
@@ -28,5 +28,9 @@ struct CommentRow: View, Equatable {
       }
     }
     .padding(.vertical, 2)
+  }
+
+  @_spi(Screen_CommentScreen) public init(comment: Comment) {
+    self.comment = comment
   }
 }

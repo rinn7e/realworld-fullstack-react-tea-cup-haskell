@@ -1,9 +1,10 @@
-// Module: Component_PagedList
+// Module: Component_PagedList_Component
 
-import Common_API_Type
-import Component_ListState
-import Component_PaginationNav
-import Package_TeaCup
+import Common_API_Type_Common
+import Component_ListState_Component
+import Component_PaginationNav_Component
+import Package_TeaCup_Dispatcher
+import Package_TeaCup_RemoteData
 import SwiftUI
 
 /// The items of a `Pagination.Model` as a list, with the list states and the

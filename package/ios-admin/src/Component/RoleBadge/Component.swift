@@ -1,4 +1,4 @@
-// Module: Component_RoleBadge
+// Module: Component_RoleBadge_Component
 
 import SwiftUI
 

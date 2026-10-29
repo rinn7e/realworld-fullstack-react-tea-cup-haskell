@@ -1,6 +1,8 @@
-// Module: Screen_LoginScreen
+// Module: Screen_LoginScreen_Component
 
-import Package_TeaCup
+import Package_TeaCup_Dispatcher
+import Package_TeaCup_InputBuffer
+@_spi(Screen_LoginScreen) import Screen_LoginScreen_Type
 import SwiftUI
 
 public struct LoginScreenComponent: View, Equatable {

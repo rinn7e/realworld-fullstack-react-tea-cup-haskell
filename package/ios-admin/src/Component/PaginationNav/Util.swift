@@ -1,6 +1,6 @@
-// Module: Component_PaginationNav
+// Module: Component_PaginationNav_Util
 
-enum PaginationPageItem: Equatable, Hashable {
+@_spi(Component_PaginationNav) public enum PaginationPageItem: Equatable, Hashable {
   case page(Int)
   case ellipsis(Int)
 }
@@ -8,7 +8,7 @@ enum PaginationPageItem: Equatable, Hashable {
 /// Page buttons to show: every page when there are at most 7, otherwise the
 /// first/last page, the pages around the current one and ellipses. (Each ellipsis
 /// carries its place, so a list can tell the two apart.)
-func getPaginationPageItems(_ currentPage: Int, _ pageAmount: Int) -> [PaginationPageItem] {
+@_spi(Component_PaginationNav) public func getPaginationPageItems(_ currentPage: Int, _ pageAmount: Int) -> [PaginationPageItem] {
   if pageAmount <= 7 {
     return (1...max(pageAmount, 1)).prefix(pageAmount).map(PaginationPageItem.page)
   } else if currentPage <= 4 {

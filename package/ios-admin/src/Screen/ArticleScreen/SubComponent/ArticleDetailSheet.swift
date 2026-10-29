@@ -1,16 +1,17 @@
-// Module: Screen_ArticleScreen
+// Module: Screen_ArticleScreen_SubComponent_ArticleDetailSheet
 
-import Common_API_Type
-import Component_DetailRow
-import Component_ProfileThumbnail
-import Package_TeaCup
+import Common_API_Type_Article
+import Component_DetailRow_Component
+import Component_ProfileThumbnail_Component
+import Package_TeaCup_Dispatcher
+@_spi(Screen_ArticleScreen) import Screen_ArticleScreen_Type
 import SwiftUI
 
-struct ArticleDetailSheet: View, Equatable {
+@_spi(Screen_ArticleScreen) public struct ArticleDetailSheet: View, Equatable {
   let article: Article
   let dispatch: Dispatcher<ArticleScreenMsg>
 
-  var body: some View {
+  public var body: some View {
     NavigationStack {
       List {
         Section {
@@ -51,5 +52,10 @@ struct ArticleDetailSheet: View, Equatable {
       }
     }
     .presentationDetents([.medium, .large])
+  }
+
+  @_spi(Screen_ArticleScreen) public init(article: Article, dispatch: Dispatcher<ArticleScreenMsg>) {
+    self.article = article
+    self.dispatch = dispatch
   }
 }

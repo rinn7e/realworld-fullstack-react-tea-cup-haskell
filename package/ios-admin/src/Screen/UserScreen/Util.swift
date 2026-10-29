@@ -1,9 +1,11 @@
-// Module: Screen_UserScreen
+// Module: Screen_UserScreen_Util
 
-import Common_API_Handler
-import Common_API_Type
-import Common_Type
-import Package_TeaCupPagination
+import Common_API_Handler_User
+import Common_API_Type_Common
+import Common_API_Type_User
+import Common_Type_Shared
+import Package_TeaCupPagination_Pagination
+@_spi(Screen_UserScreen) import Screen_UserScreen_Type
 
 struct SearchParams {
   var username: String?
@@ -26,7 +28,7 @@ func getSearchParams(_ searchText: String) -> SearchParams {
     ?? SearchParams(username: searchText)
 }
 
-func mkPaginationConfig(_ shared: Shared, _ model: UserScreenModel) -> Pagination.Config<AdminUser, HttpError> {
+@_spi(Screen_UserScreen) public func mkPaginationConfig(_ shared: Shared, _ model: UserScreenModel) -> Pagination.Config<AdminUser, HttpError> {
   Pagination.Config(
     handler: { offset, limit in
       guard let token = shared.token else { return .failure(.notAuthenticated) }

@@ -1,8 +1,13 @@
-// Module: Screen_HomeScreen
+// Module: Screen_HomeScreen_Component
 
-import Common_API_Type
-import Common_Type
-import Package_TeaCup
+import Common_API_Type_Dashboard
+import Common_Type_Shared
+import Package_TeaCup_Dispatcher
+@_spi(Screen_HomeScreen) import Screen_HomeScreen_SubComponent_LevelBadge
+@_spi(Screen_HomeScreen) import Screen_HomeScreen_SubComponent_LogDetailSheet
+@_spi(Screen_HomeScreen) import Screen_HomeScreen_SubComponent_StatCard
+@_spi(Screen_HomeScreen) import Screen_HomeScreen_SubComponent_VisitorChart
+@_spi(Screen_HomeScreen) import Screen_HomeScreen_Type
 import SwiftUI
 
 public struct HomeScreenComponent: View, Equatable {

@@ -1,12 +1,12 @@
-// Module: Screen_ArticleScreen
+// Module: Screen_ArticleScreen_SubComponent_ArticleRow
 
-import Common_API_Type
+import Common_API_Type_Article
 import SwiftUI
 
-struct ArticleRow: View, Equatable {
+@_spi(Screen_ArticleScreen) public struct ArticleRow: View, Equatable {
   let article: Article
 
-  var body: some View {
+  public var body: some View {
     VStack(alignment: .leading, spacing: 4) {
       Text(article.title)
         .font(.body.weight(.medium))
@@ -26,5 +26,9 @@ struct ArticleRow: View, Equatable {
       .labelStyle(.titleAndIcon)
     }
     .padding(.vertical, 2)
+  }
+
+  @_spi(Screen_ArticleScreen) public init(article: Article) {
+    self.article = article
   }
 }

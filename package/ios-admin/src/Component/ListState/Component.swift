@@ -1,6 +1,7 @@
-// Module: Component_ListState
+// Module: Component_ListState_Component
 
-import Common_API_Type
+import Common_API_Type_Common
+@_spi(Component_ListState) import Component_ListState_Util
 import SwiftUI
 
 public struct ListStateLoading: View, Equatable {

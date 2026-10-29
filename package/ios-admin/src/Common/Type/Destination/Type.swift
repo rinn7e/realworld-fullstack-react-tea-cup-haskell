@@ -1,4 +1,4 @@
-// Module: Common_Type_Destination
+// Module: Common_Type_Destination_Type
 
 // The screen a destination shows. None of the admin screens has a param.
 public enum Screen: Equatable, Hashable {

@@ -1,10 +1,14 @@
-// Module: Screen_ArticleScreen
+// Module: Screen_ArticleScreen_Component
 
-import Common_API_Type
-import Common_Type
-import Component_PagedList
-import Component_SearchBar
-import Package_TeaCup
+import Common_API_Type_Article
+import Common_Type_Shared
+import Component_PagedList_Component
+import Component_SearchBar_Component
+import Component_SearchBar_Type
+import Package_TeaCup_Dispatcher
+@_spi(Screen_ArticleScreen) import Screen_ArticleScreen_SubComponent_ArticleDetailSheet
+@_spi(Screen_ArticleScreen) import Screen_ArticleScreen_SubComponent_ArticleRow
+@_spi(Screen_ArticleScreen) import Screen_ArticleScreen_Type
 import SwiftUI
 
 public struct ArticleScreenComponent: View, Equatable {

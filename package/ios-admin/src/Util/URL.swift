@@ -1,6 +1,8 @@
-// Module: SentinelAdmin
+// Module: App_Util_URL
 
-import Common_Type_Destination
+@_spi(App) import App_Type
+import Common_Type_Destination_Parser
+import Common_Type_Destination_Type
 import Foundation
 
 // The URL is an adapter at the edges, as in the web app, but iOS has no address
@@ -10,12 +12,12 @@ import Foundation
 
 // The destination the app boots on. A deep link that opened the app arrives
 // before the boot is done and replaces it (`Program.swift`).
-func bootDestinationOf() -> Destination {
+@_spi(App) public func bootDestinationOf() -> Destination {
   defaultDestination()
 }
 
 // A deep link landed on `url`: opened as a move, like a back or forward of the
 // browser
-func urlChangedMsg(_ url: URL) -> Msg {
+@_spi(App) public func urlChangedMsg(_ url: URL) -> Msg {
   .navigationMsg(.urlChanged(parseDestination(url)))
 }

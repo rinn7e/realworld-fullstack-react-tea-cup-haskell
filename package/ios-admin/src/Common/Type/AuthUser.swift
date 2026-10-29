@@ -1,4 +1,4 @@
-// Module: Common_Type
+// Module: Common_Type_AuthUser
 
 public struct AuthUser: Equatable {
   public let username: String

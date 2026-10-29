@@ -1,4 +1,4 @@
-// Module: Package_TeaCup
+// Module: Package_TeaCup_Dispatcher
 
 /// Sends a message to the runtime, like `Dispatcher` of tea-cup-fp.
 ///

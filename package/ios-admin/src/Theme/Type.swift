@@ -1,4 +1,4 @@
-// Module: Theme
+// Module: Theme_Type
 
 import SwiftUI
 
@@ -7,6 +7,14 @@ public struct Theme: Equatable, Identifiable {
   public let name: String
   public let primaryColor: Color
   public let secondaryColor: Color
+
+  // The presets are made in `Data.swift` only
+  @_spi(Theme) public init(id: String, name: String, primaryColor: Color, secondaryColor: Color) {
+    self.id = id
+    self.name = name
+    self.primaryColor = primaryColor
+    self.secondaryColor = secondaryColor
+  }
 
   // Themes are static presets, so the id identifies one
   public static func == (lhs: Theme, rhs: Theme) -> Bool { lhs.id == rhs.id }

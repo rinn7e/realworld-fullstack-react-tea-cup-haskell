@@ -1,6 +1,7 @@
 // Module: SentinelAdmin
 
-import Package_TeaCup
+@_spi(App) import App_Program
+import Package_TeaCup_Program
 import SwiftUI
 
 @main

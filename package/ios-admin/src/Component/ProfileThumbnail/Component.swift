@@ -1,4 +1,4 @@
-// Module: Component_ProfileThumbnail
+// Module: Component_ProfileThumbnail_Component
 
 import SwiftUI
 

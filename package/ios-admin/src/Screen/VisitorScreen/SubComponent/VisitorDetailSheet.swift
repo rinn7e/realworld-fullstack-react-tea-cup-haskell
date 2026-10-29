@@ -1,16 +1,17 @@
-// Module: Screen_VisitorScreen
+// Module: Screen_VisitorScreen_SubComponent_VisitorDetailSheet
 
-import Common_API_Type
-import Component_DetailRow
-import Component_RoleBadge
-import Package_TeaCup
+import Common_API_Type_Visitor
+import Component_DetailRow_Component
+import Component_RoleBadge_Component
+import Package_TeaCup_Dispatcher
+@_spi(Screen_VisitorScreen) import Screen_VisitorScreen_Type
 import SwiftUI
 
-struct VisitorDetailSheet: View, Equatable {
+@_spi(Screen_VisitorScreen) public struct VisitorDetailSheet: View, Equatable {
   let visitor: Visitor
   let dispatch: Dispatcher<VisitorScreenMsg>
 
-  var body: some View {
+  public var body: some View {
     NavigationStack {
       List {
         Section {
@@ -59,6 +60,11 @@ struct VisitorDetailSheet: View, Equatable {
       }
     }
     .presentationDetents([.medium, .large])
+  }
+
+  @_spi(Screen_VisitorScreen) public init(visitor: Visitor, dispatch: Dispatcher<VisitorScreenMsg>) {
+    self.visitor = visitor
+    self.dispatch = dispatch
   }
 }
 

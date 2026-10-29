@@ -1,5 +1,7 @@
-// Module: Package_TeaCup
+// Module: Package_TeaCup_Program
 
+@_spi(Package_TeaCup) import Package_TeaCup_Cmd
+@_spi(Package_TeaCup) import Package_TeaCup_Dispatcher
 import SwiftUI
 
 /// A TEA program, like `Program` of react-tea-cup: `init` and `update` return the

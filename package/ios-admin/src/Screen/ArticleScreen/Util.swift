@@ -1,11 +1,13 @@
-// Module: Screen_ArticleScreen
+// Module: Screen_ArticleScreen_Util
 
-import Common_API_Handler
-import Common_API_Type
-import Common_Type
-import Package_TeaCupPagination
+import Common_API_Handler_Article
+import Common_API_Type_Article
+import Common_API_Type_Common
+import Common_Type_Shared
+import Package_TeaCupPagination_Pagination
+@_spi(Screen_ArticleScreen) import Screen_ArticleScreen_Type
 
-func mkPaginationConfig(_ shared: Shared, _ model: ArticleScreenModel) -> Pagination.Config<Article, HttpError> {
+@_spi(Screen_ArticleScreen) public func mkPaginationConfig(_ shared: Shared, _ model: ArticleScreenModel) -> Pagination.Config<Article, HttpError> {
   Pagination.Config(
     handler: { offset, limit in
       guard let token = shared.token else { return .failure(.notAuthenticated) }

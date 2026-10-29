@@ -1,4 +1,4 @@
-// Module: Common_API_Type
+// Module: Common_API_Type_Dashboard
 
 import Foundation
 

@@ -1,10 +1,10 @@
-// Module: Component_SearchBar
+// Module: Component_SearchBar_Type
 
-import Common_Type
+import Common_Type_Filter
 
 public struct SearchBarOption<Sort> {
-  let label: String
-  let value: Sort
+  @_spi(Component_SearchBar) public let label: String
+  @_spi(Component_SearchBar) public let value: Sort
 
   public init(label: String, value: Sort) {
     self.label = label
@@ -12,12 +12,19 @@ public struct SearchBarOption<Sort> {
   }
 }
 
-// Read anywhere (a screen builds its query from it), changed only by
-// `searchBarUpdate`
+// Read anywhere (a screen builds its query from it), made only by the search
+// bar (`searchBarInitial`, `searchBarUpdate`): its initializer is the internal
+// part of the folder
 public struct SearchBarModel<Sort: Equatable>: Equatable {
-  public internal(set) var searchText: String
-  public internal(set) var sort: Sort
-  public internal(set) var direction: Direction
+  public let searchText: String
+  public let sort: Sort
+  public let direction: Direction
+
+  @_spi(Component_SearchBar) public init(searchText: String, sort: Sort, direction: Direction) {
+    self.searchText = searchText
+    self.sort = sort
+    self.direction = direction
+  }
 }
 
 public enum SearchBarMsg<Sort> {

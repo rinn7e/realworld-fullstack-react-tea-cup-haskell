@@ -1,12 +1,12 @@
-// Module: Screen_VisitorScreen
+// Module: Screen_VisitorScreen_SubComponent_VisitorRow
 
-import Common_API_Type
+import Common_API_Type_Visitor
 import SwiftUI
 
-struct VisitorRow: View, Equatable {
+@_spi(Screen_VisitorScreen) public struct VisitorRow: View, Equatable {
   let visitor: Visitor
 
-  var body: some View {
+  public var body: some View {
     VStack(alignment: .leading, spacing: 4) {
       HStack {
         Text(visitor.path)
@@ -33,5 +33,9 @@ struct VisitorRow: View, Equatable {
         .lineLimit(1)
     }
     .padding(.vertical, 2)
+  }
+
+  @_spi(Screen_VisitorScreen) public init(visitor: Visitor) {
+    self.visitor = visitor
   }
 }

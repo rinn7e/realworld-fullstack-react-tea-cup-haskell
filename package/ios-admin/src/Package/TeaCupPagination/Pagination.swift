@@ -1,6 +1,7 @@
-// Module: Package_TeaCupPagination
+// Module: Package_TeaCupPagination_Pagination
 
-import Package_TeaCup
+import Package_TeaCup_Cmd
+import Package_TeaCup_RemoteData
 
 /// A paged list, ported from `@rinn7e/tea-cup-pagination`: the model holds the
 /// page shown and its items, `update` fetches a page through `Config.handler`.

@@ -1,6 +1,7 @@
-// Module: Theme
+// Module: Theme_Util
 
 import SwiftUI
+@_spi(Theme) import Theme_Type
 
 // The choices are kept in `UserDefaults` (the web app keeps them in
 // `localStorage`). The loads run at boot, the saves in commands.

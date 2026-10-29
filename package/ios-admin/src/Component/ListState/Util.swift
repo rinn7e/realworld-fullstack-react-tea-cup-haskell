@@ -1,10 +1,10 @@
-// Module: Component_ListState
+// Module: Component_ListState_Util
 
-import Common_API_Type
+import Common_API_Type_Common
 
 /// API field errors become "field: message, message" pairs joined by "; ",
 /// otherwise the connection status and raw error are shown.
-func formatListError(_ err: HttpError) -> String {
+@_spi(Component_ListState) public func formatListError(_ err: HttpError) -> String {
   if let apiError = err.err {
     return apiError.errors
       .sorted { $0.key < $1.key }

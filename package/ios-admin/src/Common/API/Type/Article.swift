@@ -1,5 +1,6 @@
-// Module: Common_API_Type
+// Module: Common_API_Type_Article
 
+@_spi(Common_API_Type) import Common_API_Type_User
 import Foundation
 
 public enum ArticleSortAttr: String, Equatable, CaseIterable {

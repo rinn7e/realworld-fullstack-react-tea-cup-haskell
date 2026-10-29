@@ -1,6 +1,8 @@
-// Module: Common_API_Handler
+// Module: Common_API_Handler_Comment
 
-import Common_API_Type
+@_spi(Common_API_Handler) import Common_API_Handler_Common
+import Common_API_Type_Comment
+import Common_API_Type_Common
 
 public func getAdminComments(
   _ token: String,

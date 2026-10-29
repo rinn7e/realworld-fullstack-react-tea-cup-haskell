@@ -1,14 +1,14 @@
-// Module: SentinelAdmin
+// Module: App_Util_Guard
 
-import Common_Type
-import Common_Type_Destination
+import Common_Type_Destination_Type
+import Common_Type_Shared
 
 // A destination the guard let through (`guardDestination`): the only kind a
 // move opens. Owned: nothing else can make one (the initializer is file
 // private), so skipping the guard does not type check. Review: a new maker in
 // this file skips the guard.
-struct DestinationAfterGuard: Equatable {
-  let destination: Destination
+@_spi(App) public struct DestinationAfterGuard: Equatable {
+  @_spi(App) public let destination: Destination
 
   fileprivate init(_ destination: Destination) {
     self.destination = destination
@@ -22,7 +22,7 @@ struct DestinationAfterGuard: Equatable {
 // `DestinationAfterGuard` is made. Review: called by the navigation, the boot
 // and tests only; a guarded destination anywhere else can open a screen
 // without the move.
-func guardDestination(_ shared: Shared, _ toDestination: Destination) -> DestinationAfterGuard {
+@_spi(App) public func guardDestination(_ shared: Shared, _ toDestination: Destination) -> DestinationAfterGuard {
   let isLoggedIn = shared.user != nil
   let isLoginScreen = toDestination.screen == .loginScreen
 

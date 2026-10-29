@@ -1,10 +1,12 @@
-// Module: Screen_SettingScreen
+// Module: Screen_SettingScreen_Component
 
-import Common_Type
-import Component_ProfileThumbnail
-import Package_TeaCup
+import Common_Type_AuthUser
+import Component_ProfileThumbnail_Component
+import Package_TeaCup_Dispatcher
+@_spi(Screen_SettingScreen) import Screen_SettingScreen_Type
 import SwiftUI
-import Theme
+import Theme_Data
+import Theme_Type
 
 public struct SettingScreenComponent: View, Equatable {
   let user: AuthUser?

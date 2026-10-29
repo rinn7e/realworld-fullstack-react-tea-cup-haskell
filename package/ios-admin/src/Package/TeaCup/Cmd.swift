@@ -1,6 +1,7 @@
-// Module: Package_TeaCup
+// Module: Package_TeaCup_Cmd
 
 import Foundation
+@_spi(Package_TeaCup) import Package_TeaCup_Dispatcher
 
 /// A command: a description of work the runtime does after `update`, like `Cmd`
 /// of tea-cup-fp. `update` stays pure: it only returns commands, and the runtime
@@ -49,7 +50,7 @@ public struct Cmd<Msg> {
   /// Runs every effect, each in its own task, as tea-cup does after a step.
   /// Internal: only the runtime of this module runs commands.
   @MainActor
-  func run(_ dispatch: Dispatcher<Msg>) {
+  @_spi(Package_TeaCup) public func run(_ dispatch: Dispatcher<Msg>) {
     for effect in effects {
       Task { await effect(dispatch) }
     }

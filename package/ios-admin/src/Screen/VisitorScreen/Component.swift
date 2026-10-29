@@ -1,10 +1,14 @@
-// Module: Screen_VisitorScreen
+// Module: Screen_VisitorScreen_Component
 
-import Common_API_Type
-import Common_Type
-import Component_PagedList
-import Component_SearchBar
-import Package_TeaCup
+import Common_API_Type_Visitor
+import Common_Type_Shared
+import Component_PagedList_Component
+import Component_SearchBar_Component
+import Component_SearchBar_Type
+import Package_TeaCup_Dispatcher
+@_spi(Screen_VisitorScreen) import Screen_VisitorScreen_SubComponent_VisitorDetailSheet
+@_spi(Screen_VisitorScreen) import Screen_VisitorScreen_SubComponent_VisitorRow
+@_spi(Screen_VisitorScreen) import Screen_VisitorScreen_Type
 import SwiftUI
 
 public struct VisitorScreenComponent: View, Equatable {

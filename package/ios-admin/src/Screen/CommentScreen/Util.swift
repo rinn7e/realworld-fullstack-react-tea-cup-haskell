@@ -1,9 +1,11 @@
-// Module: Screen_CommentScreen
+// Module: Screen_CommentScreen_Util
 
-import Common_API_Handler
-import Common_API_Type
-import Common_Type
-import Package_TeaCupPagination
+import Common_API_Handler_Comment
+import Common_API_Type_Comment
+import Common_API_Type_Common
+import Common_Type_Shared
+import Package_TeaCupPagination_Pagination
+@_spi(Screen_CommentScreen) import Screen_CommentScreen_Type
 
 struct SearchParams {
   var author: String?
@@ -27,7 +29,7 @@ func getSearchParams(_ searchText: String) -> SearchParams {
     ?? SearchParams(author: searchText)
 }
 
-func mkPaginationConfig(_ shared: Shared, _ model: CommentScreenModel) -> Pagination.Config<Comment, HttpError> {
+@_spi(Screen_CommentScreen) public func mkPaginationConfig(_ shared: Shared, _ model: CommentScreenModel) -> Pagination.Config<Comment, HttpError> {
   Pagination.Config(
     handler: { offset, limit in
       guard let token = shared.token else { return .failure(.notAuthenticated) }

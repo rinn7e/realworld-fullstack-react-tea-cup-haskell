@@ -1,4 +1,4 @@
-// Module: Package_TeaCup
+// Module: Package_TeaCup_RemoteData
 
 /// Data from a server, like `RemoteData` of remote-data-ts.
 public enum RemoteData<E, A> {

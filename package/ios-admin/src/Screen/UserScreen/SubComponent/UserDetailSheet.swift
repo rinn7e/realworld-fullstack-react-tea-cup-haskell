@@ -1,17 +1,18 @@
-// Module: Screen_UserScreen
+// Module: Screen_UserScreen_SubComponent_UserDetailSheet
 
-import Common_API_Type
-import Component_DetailRow
-import Component_ProfileThumbnail
-import Component_RoleBadge
-import Package_TeaCup
+import Common_API_Type_User
+import Component_DetailRow_Component
+import Component_ProfileThumbnail_Component
+import Component_RoleBadge_Component
+import Package_TeaCup_Dispatcher
+@_spi(Screen_UserScreen) import Screen_UserScreen_Type
 import SwiftUI
 
-struct UserDetailSheet: View, Equatable {
+@_spi(Screen_UserScreen) public struct UserDetailSheet: View, Equatable {
   let user: AdminUser
   let dispatch: Dispatcher<UserScreenMsg>
 
-  var body: some View {
+  public var body: some View {
     NavigationStack {
       List {
         Section {
@@ -52,5 +53,10 @@ struct UserDetailSheet: View, Equatable {
       }
     }
     .presentationDetents([.medium, .large])
+  }
+
+  @_spi(Screen_UserScreen) public init(user: AdminUser, dispatch: Dispatcher<UserScreenMsg>) {
+    self.user = user
+    self.dispatch = dispatch
   }
 }

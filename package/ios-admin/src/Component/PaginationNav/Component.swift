@@ -1,6 +1,7 @@
-// Module: Component_PaginationNav
+// Module: Component_PaginationNav_Component
 
-import Package_TeaCup
+@_spi(Component_PaginationNav) import Component_PaginationNav_Util
+import Package_TeaCup_Dispatcher
 import SwiftUI
 
 /// The page controls under a list: previous, a menu of the pages (the same items

@@ -1,6 +1,7 @@
-// Module: Theme
+// Module: Theme_Data
 
 import SwiftUI
+@_spi(Theme) import Theme_Type
 
 // The presets of the web app. On iOS the primary color is the tint of the app;
 // the fonts of the web themes are left to the system font.

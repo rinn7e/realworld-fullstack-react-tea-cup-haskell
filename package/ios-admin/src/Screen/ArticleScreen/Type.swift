@@ -1,15 +1,22 @@
-// Module: Screen_ArticleScreen
+// Module: Screen_ArticleScreen_Type
 
-import Common_API_Type
-import Component_SearchBar
-import Package_TeaCupPagination
+import Common_API_Type_Article
+import Common_API_Type_Common
+import Component_SearchBar_Type
+import Package_TeaCupPagination_Pagination
 
-let GET_ARTICLES_LIMIT = 50
+@_spi(Screen_ArticleScreen) public let GET_ARTICLES_LIMIT = 50
 
 public struct ArticleScreenModel: Equatable {
-  var pagination: Pagination.Model<Article, HttpError>
-  var selectedArticle: Article?
-  var searchBar: SearchBarModel<ArticleSortAttr>
+  @_spi(Screen_ArticleScreen) public var pagination: Pagination.Model<Article, HttpError>
+  @_spi(Screen_ArticleScreen) public var selectedArticle: Article?
+  @_spi(Screen_ArticleScreen) public var searchBar: SearchBarModel<ArticleSortAttr>
+
+  @_spi(Screen_ArticleScreen) public init(pagination: Pagination.Model<Article, HttpError>, selectedArticle: Article? = nil, searchBar: SearchBarModel<ArticleSortAttr>) {
+    self.pagination = pagination
+    self.selectedArticle = selectedArticle
+    self.searchBar = searchBar
+  }
 }
 
 public enum ArticleScreenItemMsg {

@@ -1,19 +1,22 @@
-// Module: SentinelAdmin
+// Module: App_Handler_NavigationHandler
 
-import Common_Type
-import Common_Type_Destination
-import Package_TeaCup
-import Screen_ArticleScreen
-import Screen_CommentScreen
-import Screen_HomeScreen
-import Screen_LoginScreen
-import Screen_UserScreen
-import Screen_VisitorScreen
+@_spi(App) import App_Type
+@_spi(App) import App_Util_Destination
+@_spi(App) import App_Util_Guard
+import Common_Type_Destination_Type
+import Common_Type_Shared
+import Package_TeaCup_Cmd
+import Screen_ArticleScreen_Update
+import Screen_CommentScreen_Update
+import Screen_HomeScreen_Update
+import Screen_LoginScreen_Update
+import Screen_UserScreen_Update
+import Screen_VisitorScreen_Update
 
 // The screen model of `destination`, the one place a move opens a screen. Every
 // move opens its screen afresh: no admin screen keeps state across a move.
 // Review: called only by `navigateHandler` and the boot, after the guard.
-func initScreenModel(_ destination: DestinationAfterGuard, _ shared: Shared) -> (CurrentScreenModel, Cmd<Msg>) {
+@_spi(App) public func initScreenModel(_ destination: DestinationAfterGuard, _ shared: Shared) -> (CurrentScreenModel, Cmd<Msg>) {
   let (screenModel, cmd) = freshScreenModelOf(destination.destination, shared)
   return (CurrentScreenModel.ofMove(destination, screenModel), cmd)
 }
@@ -73,7 +76,7 @@ private func targetDestinationOf(_ subMsg: NavigationMsg, _ currentDestination: 
 }
 
 // Every move of the app
-func navigationMsgHandler(_ subMsg: NavigationMsg, _ model: Model) -> (Model, Cmd<Msg>) {
+@_spi(App) public func navigationMsgHandler(_ subMsg: NavigationMsg, _ model: Model) -> (Model, Cmd<Msg>) {
   let isInternal = if case .urlChanged = subMsg { false } else { true }
   let forceRefresh =
     switch subMsg {

@@ -1,10 +1,14 @@
-// Module: Screen_UserScreen
+// Module: Screen_UserScreen_Component
 
-import Common_API_Type
-import Common_Type
-import Component_PagedList
-import Component_SearchBar
-import Package_TeaCup
+import Common_API_Type_User
+import Common_Type_Shared
+import Component_PagedList_Component
+import Component_SearchBar_Component
+import Component_SearchBar_Type
+import Package_TeaCup_Dispatcher
+@_spi(Screen_UserScreen) import Screen_UserScreen_SubComponent_UserDetailSheet
+@_spi(Screen_UserScreen) import Screen_UserScreen_SubComponent_UserRow
+@_spi(Screen_UserScreen) import Screen_UserScreen_Type
 import SwiftUI
 
 public struct UserScreenComponent: View, Equatable {

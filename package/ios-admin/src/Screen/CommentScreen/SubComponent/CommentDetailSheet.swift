@@ -1,16 +1,17 @@
-// Module: Screen_CommentScreen
+// Module: Screen_CommentScreen_SubComponent_CommentDetailSheet
 
-import Common_API_Type
-import Component_DetailRow
-import Component_ProfileThumbnail
-import Package_TeaCup
+import Common_API_Type_Comment
+import Component_DetailRow_Component
+import Component_ProfileThumbnail_Component
+import Package_TeaCup_Dispatcher
+@_spi(Screen_CommentScreen) import Screen_CommentScreen_Type
 import SwiftUI
 
-struct CommentDetailSheet: View, Equatable {
+@_spi(Screen_CommentScreen) public struct CommentDetailSheet: View, Equatable {
   let comment: Comment
   let dispatch: Dispatcher<CommentScreenMsg>
 
-  var body: some View {
+  public var body: some View {
     NavigationStack {
       List {
         Section("Author") {
@@ -45,5 +46,10 @@ struct CommentDetailSheet: View, Equatable {
       }
     }
     .presentationDetents([.medium, .large])
+  }
+
+  @_spi(Screen_CommentScreen) public init(comment: Comment, dispatch: Dispatcher<CommentScreenMsg>) {
+    self.comment = comment
+    self.dispatch = dispatch
   }
 }

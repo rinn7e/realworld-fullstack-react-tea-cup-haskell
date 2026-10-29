@@ -1,6 +1,9 @@
-// Module: Common_API_Handler
+// Module: Common_API_Handler_Dashboard
 
-import Common_API_Type
+@_spi(Common_API_Handler) import Common_API_Handler_Common
+import Common_API_Type_Common
+import Common_API_Type_Dashboard
+import Common_API_Type_Visitor
 
 public func getDashboardStats(_ token: String) async -> Result<DashboardStats, HttpError> {
   runApi(await fetchApi("/admin/dashboard/stats", token: token), decodeSuccess(DashboardStats.self))

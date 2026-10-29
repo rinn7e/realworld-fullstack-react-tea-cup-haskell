@@ -1,15 +1,15 @@
-// Module: Screen_UserScreen
+// Module: Screen_UserScreen_SubComponent_UserRow
 
-import Common_API_Type
-import Component_ProfileThumbnail
-import Component_RoleBadge
+import Common_API_Type_User
+import Component_ProfileThumbnail_Component
+import Component_RoleBadge_Component
 import SwiftUI
 
 /// A user in the list (a row of the web table)
-struct UserRow: View, Equatable {
+@_spi(Screen_UserScreen) public struct UserRow: View, Equatable {
   let user: AdminUser
 
-  var body: some View {
+  public var body: some View {
     HStack(spacing: 12) {
       ProfileThumbnailComponent(src: user.image, size: 40)
       VStack(alignment: .leading, spacing: 2) {
@@ -38,5 +38,9 @@ struct UserRow: View, Equatable {
         .font(.caption.monospaced())
         .foregroundStyle(.tertiary)
     }
+  }
+
+  @_spi(Screen_UserScreen) public init(user: AdminUser) {
+    self.user = user
   }
 }

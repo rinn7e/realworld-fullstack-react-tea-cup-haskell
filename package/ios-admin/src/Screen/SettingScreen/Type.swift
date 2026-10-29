@@ -1,6 +1,6 @@
-// Module: Screen_SettingScreen
+// Module: Screen_SettingScreen_Type
 
-import Theme
+import Theme_Type
 
 // What the settings ask of the app. The screen has no model of its own (the
 // web screen dispatches the root messages); a module cannot import the app

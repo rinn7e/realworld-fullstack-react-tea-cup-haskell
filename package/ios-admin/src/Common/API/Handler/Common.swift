@@ -1,24 +1,24 @@
-// Module: Common_API_Handler
+// Module: Common_API_Handler_Common
 
-import Common_API_Type
-import Common_Env
-import Common_Type
+import Common_API_Type_Common
+import Common_Env_Env
+import Common_Type_Date
 import Foundation
 
 /// The raw answer of a request, or why it failed (the `fetchToTaskEither` pair)
-struct FetchToTaskEitherSuccess {
+@_spi(Common_API_Handler) public struct FetchToTaskEitherSuccess {
   let ok: Bool
   let status: Int
   let data: Data
 }
 
-struct FetchToTaskEitherError: Error {
+@_spi(Common_API_Handler) public struct FetchToTaskEitherError: Error {
   let err: String
   let status: Int?
 }
 
 /// Sends a request to `API_BASE + path`. The query drops the params that are nil.
-func fetchApi(
+@_spi(Common_API_Handler) public func fetchApi(
   _ path: String,
   method: String = "GET",
   token: String? = nil,
@@ -51,7 +51,7 @@ func fetchApi(
   }
 }
 
-func decodeSuccess<A: Decodable>(_ type: A.Type) -> (FetchToTaskEitherSuccess) -> Result<A, FetchToTaskEitherError> {
+@_spi(Common_API_Handler) public func decodeSuccess<A: Decodable>(_ type: A.Type) -> (FetchToTaskEitherSuccess) -> Result<A, FetchToTaskEitherError> {
   { s in
     let text = String(decoding: s.data, as: UTF8.self)
     guard s.ok else { return .failure(FetchToTaskEitherError(err: text, status: s.status)) }
@@ -65,7 +65,7 @@ func decodeSuccess<A: Decodable>(_ type: A.Type) -> (FetchToTaskEitherSuccess) -
   }
 }
 
-func ensureIsOk<A>(_ value: A) -> (FetchToTaskEitherSuccess) -> Result<A, FetchToTaskEitherError> {
+@_spi(Common_API_Handler) public func ensureIsOk<A>(_ value: A) -> (FetchToTaskEitherSuccess) -> Result<A, FetchToTaskEitherError> {
   { s in
     s.ok ? .success(value) : .failure(FetchToTaskEitherError(err: String(decoding: s.data, as: UTF8.self), status: s.status))
   }
@@ -78,7 +78,7 @@ func decodeApiError(_ e: FetchToTaskEitherError) -> HttpError {
 
 /// A request through the steps of the web handlers: fetch, check, decode, and an
 /// `HttpError` on the way out
-func runApi<A>(
+@_spi(Common_API_Handler) public func runApi<A>(
   _ fetched: Result<FetchToTaskEitherSuccess, FetchToTaskEitherError>,
   _ decode: (FetchToTaskEitherSuccess) -> Result<A, FetchToTaskEitherError>
 ) -> Result<A, HttpError> {

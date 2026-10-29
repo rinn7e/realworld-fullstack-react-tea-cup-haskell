@@ -1,16 +1,18 @@
-// Module: Screen_HomeScreen
+// Module: Screen_HomeScreen_SubComponent_LogDetailSheet
 
-import Common_API_Type
-import Component_DetailRow
-import Package_TeaCup
+import Common_API_Type_Dashboard
+import Component_DetailRow_Component
+import Package_TeaCup_Dispatcher
+@_spi(Screen_HomeScreen) import Screen_HomeScreen_SubComponent_LevelBadge
+@_spi(Screen_HomeScreen) import Screen_HomeScreen_Type
 import SwiftUI
 
 /// The detail of a log, the slide-over panel of the web app as a sheet
-struct LogDetailSheet: View, Equatable {
+@_spi(Screen_HomeScreen) public struct LogDetailSheet: View, Equatable {
   let log: Log
   let dispatch: Dispatcher<HomeScreenMsg>
 
-  var body: some View {
+  public var body: some View {
     NavigationStack {
       List {
         Section("Event Message") {
@@ -45,5 +47,10 @@ struct LogDetailSheet: View, Equatable {
       }
     }
     .presentationDetents([.medium, .large])
+  }
+
+  @_spi(Screen_HomeScreen) public init(log: Log, dispatch: Dispatcher<HomeScreenMsg>) {
+    self.log = log
+    self.dispatch = dispatch
   }
 }

@@ -1,4 +1,4 @@
-// Module: Component_DetailRow
+// Module: Component_DetailRow_Component
 
 import SwiftUI
 

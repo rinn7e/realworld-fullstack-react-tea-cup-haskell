@@ -54,29 +54,55 @@ The roots (`src`, `lib`, `doc`) stay in lowercase, as in the other packages of t
 
 ## Modules
 
-Every folder of `src/` that holds code is a module (a target of `Package.swift`), the Swift form of a Haskell module or an npm package. The app target (`project.yml`) holds the rest of `src/`: the root (`Root`, `Program`, `App`, `Type`, `Update`), `Handler/` and `Util/`.
+Every Swift file is a module (a target of `Package.swift`), as every file is a module in Haskell and TypeScript. Only `Root.swift` (`@main`) is in the app target (`project.yml`).
 
-| Module | Folder | Web |
+A module is named after the path of its file, with `_` between the parts: `Screen/UserScreen/Type.swift` is `Screen_UserScreen_Type` (Haskell `Screen.UserScreen.Type`). A Swift module name is one identifier, so it cannot hold a dot, and `import Screen.UserScreen.Type` does not exist (dotted imports are only for the submodules of C and Objective-C modules, like `import Darwin.C.stdio`). The files of the root, `Handler/` and `Util/` are `App_*` (`App_Update`, `App_Handler_NavigationHandler`).
+
+| Folder | Modules | Web |
 | --- | --- | --- |
-| `Package_TeaCup`, `Package_TeaCupPagination` | `src/Package/<Name>` | `react-tea-cup`, `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
-| `Theme` | `src/Theme` | `src/theme` |
-| `Common_Env`, `Common_Cache`, `Common_Type`, `Common_Type_Destination`, `Common_API_Type`, `Common_API_Handler` | `src/Common/<Path>` | `src/common/*` |
-| `Component_SearchBar`, `Component_ListState`, `Component_PaginationNav`, `Component_PagedList`, `Component_DetailRow`, `Component_ProfileThumbnail`, `Component_RoleBadge` | `src/Component/<Name>` | `src/component/*` |
-| `Screen_HomeScreen`, `Screen_LoginScreen`, `Screen_ArticleScreen`, `Screen_UserScreen`, `Screen_CommentScreen`, `Screen_VisitorScreen`, `Screen_SettingScreen` | `src/Screen/<Name>Screen` | `src/screen/*` |
+| `src/Package/TeaCup`, `src/Package/TeaCupPagination` | `Package_TeaCup_Cmd`, `Package_TeaCup_Program`, `Package_TeaCupPagination_Pagination`, ... | `react-tea-cup`, `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
+| `src/Theme` | `Theme_Type`, `Theme_Data`, `Theme_Util` | `src/theme` |
+| `src/Common/<Path>` | `Common_API_Type_Article`, `Common_API_Handler_User`, `Common_Type_Destination_Parser`, ... | `src/common/*` |
+| `src/Component/<Name>` | `Component_SearchBar_Type`, `Component_SearchBar_Update`, `Component_SearchBar_Component`, ... | `src/component/*` |
+| `src/Screen/<Name>Screen` | `Screen_UserScreen_Type`, `Screen_UserScreen_Update`, `Screen_UserScreen_SubComponent_UserRow`, ... | `src/screen/*` |
+| `src/`, `src/Handler`, `src/Util` | `App_Type`, `App_Update`, `App_Program`, `App_App`, `App_Handler_NavigationHandler`, `App_Util_Guard`, ... | `src/*.tsx`, `handler/`, `util/` |
 
-A module is named after its path, with `_` between the folders (Haskell `Common.API.Type` is `Common_API_Type`): a Swift module name is one identifier, so it cannot hold a dot, and `import Common.API.Type` does not exist (dotted imports are only for the submodules of C and Objective-C modules, like `import Darwin.C.stdio`). A folder with modules inside holds no file of its own (`Common/Env.swift` is `Common/Env/Env.swift`), and a component of one file has its folder too (`Component/DetailRow/Component.swift`).
-
-The dependencies of each module in `Package.swift` are the modules its files import, so the layers of the code convention of frontend-admin ("Dependency Order and Hierarchy") are checked by the compiler: `Common` imports no component or screen, a component imports no screen, and a screen imports no other screen. Each module builds alone:
+Each file imports the modules it uses, and the dependencies of each target in `Package.swift` are exactly those imports. SwiftPM refuses a cycle, so the layers of the code convention of frontend-admin ("Dependency Order and Hierarchy") are checked by the compiler: `Common` imports no component or screen, a component imports no screen, and a screen imports no other screen. Each module builds alone:
 
 ```bash
-swift build --sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)" --triple arm64-apple-ios18.0-simulator --target Component_SearchBar
+swift build --sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)" --triple arm64-apple-ios18.0-simulator --target Component_SearchBar_Update
 ```
 
 The SDK and triple are needed: a plain `swift build` builds for macOS, where some modules of iOS SwiftUI (keyboard types, `.searchable` placements) do not exist. Without `--target`, it builds every module.
 
+### What a Folder Shares: `@_spi`
+
+The files of one folder (a screen with its `SubComponent/`, a component, a `Common` folder, the app layer) share more with each other than with the rest of the app: the fields of a screen model, its sub-components, the pagination config. A file marks them `@_spi(<folder>) public`, and only its siblings import them with `@_spi(<folder>) import`:
+
+```swift
+// Module: Screen_UserScreen_Type
+public struct UserScreenModel: Equatable {
+  @_spi(Screen_UserScreen) public var selectedUser: AdminUser?
+}
+
+// Module: Screen_UserScreen_Update
+@_spi(Screen_UserScreen) import Screen_UserScreen_Type    // a sibling: reads and sets it
+
+// Module: App_Update
+import Screen_UserScreen_Type                              // not a sibling: cannot see it
+```
+
+This is the `.Internal` pattern of Haskell (`M.Internal` exports everything, the other modules are asked not to import it). The compiler lets any module write `@_spi(X) import`, so `script/check-spi.sh` keeps each group to its folder: every `@_spi(X)` of a file, on a declaration or an import, must name the folder of that file.
+
+```bash
+script/check-spi.sh
+```
+
+`@_spi` is an underscored (unofficial) attribute of Swift, used by Apple frameworks and Swift Testing, and stable since 2020; no proposal backs it. See doc/swift_cheatsheet.md (sections 1.10 and 1.11) for why Swift has no "visible to these modules" level.
+
 ## Names
 
-Swift has no qualified import: inside a module, a name of the module wins over an imported one with no error. So the public names of a module start with the name of the module, and no two public names of the app are the same:
+Swift has no qualified import: inside a module, a name of the module wins over an imported one with no error. So the public names of a folder start with the name of the folder, and no two public names of the app are the same:
 
 | Name | File |
 | --- | --- |
@@ -87,11 +113,11 @@ Swift has no qualified import: inside a module, a name of the module wins over a
 | `ListStateLoading`, `ListStateFailure`, `ListStateEmpty` | `Component/ListState/Component.swift` |
 | `DetailRowComponent` | `Component/DetailRow/Component.swift` |
 
-The view of a module is `<Module>Component` in its `Component.swift`. The internal names stay short (`StatCard`, `UserRow`, `mkPaginationConfig`, `formatListError`): no other module sees them, so a sub-component is private to its screen, as a web sub-component that is not re-exported. The domain types of `Common` (`AuthUser`, `HttpError`, `Destination`, `Article`, ...) keep their web names, which are already unique.
+The view of a folder is `<Folder>Component` in its `Component.swift`. The names shared through `@_spi` stay short (`StatCard`, `UserRow`, `mkPaginationConfig`, `formatListError`): only the siblings see them, so a sub-component is private to its screen, as a web sub-component that is not re-exported. The domain types of `Common` (`AuthUser`, `HttpError`, `Destination`, `Article`, ...) keep their web names, which are already unique.
 
 | TypeScript and tea-cup | Swift |
 | --- | --- |
-| A module of a screen (`import * as UserScreen from '@/screen/user-screen'`) | `import Screen_UserScreen`, then `UserScreenModel`, `userScreenUpdate` |
+| A module of a screen (`import * as UserScreen from '@/screen/user-screen'`) | `import Screen_UserScreen_Type`, `import Screen_UserScreen_Update`, then `UserScreenModel`, `userScreenUpdate` |
 | `UserScreenMemo` from `@/screen/user-screen/component` | `UserScreenComponent` |
 | `Model` with `ModelEq`, `Props` with `PropsEq`, `memo` | A `struct` that is `Equatable`; a view that is `Equatable` skips its body when its input did not change |
 | A sum type with `_tag` and `switch` | An `enum` with associated values and `switch` |

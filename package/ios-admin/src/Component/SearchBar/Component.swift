@@ -1,7 +1,9 @@
-// Module: Component_SearchBar
+// Module: Component_SearchBar_Component
 
-import Common_Type
-import Package_TeaCup
+import Common_Type_Filter
+@_spi(Component_SearchBar) import Component_SearchBar_Type
+import Package_TeaCup_Dispatcher
+import Package_TeaCup_InputBuffer
 import SwiftUI
 
 /// The search bar as native parts: the search field of the navigation bar

@@ -1,5 +1,6 @@
-// Module: Common_API_Type
+// Module: Common_API_Type_Comment
 
+@_spi(Common_API_Type) import Common_API_Type_Profile
 import Foundation
 
 public enum CommentSortAttr: String, Equatable, CaseIterable {

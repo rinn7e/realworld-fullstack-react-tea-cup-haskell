@@ -1,16 +1,24 @@
-// Module: Screen_VisitorScreen
+// Module: Screen_VisitorScreen_Type
 
-import Common_API_Type
-import Component_SearchBar
-import Package_TeaCupPagination
+import Common_API_Type_Common
+import Common_API_Type_Visitor
+import Component_SearchBar_Type
+import Package_TeaCupPagination_Pagination
 
-let GET_VISITORS_LIMIT = 50
+@_spi(Screen_VisitorScreen) public let GET_VISITORS_LIMIT = 50
 
 public struct VisitorScreenModel: Equatable {
-  var pagination: Pagination.Model<Visitor, HttpError>
-  var selectedVisitor: Visitor?
-  var searchBar: SearchBarModel<VisitorSortAttr>
-  var isDescriptionOpen: Bool
+  @_spi(Screen_VisitorScreen) public var pagination: Pagination.Model<Visitor, HttpError>
+  @_spi(Screen_VisitorScreen) public var selectedVisitor: Visitor?
+  @_spi(Screen_VisitorScreen) public var searchBar: SearchBarModel<VisitorSortAttr>
+  @_spi(Screen_VisitorScreen) public var isDescriptionOpen: Bool
+
+  @_spi(Screen_VisitorScreen) public init(pagination: Pagination.Model<Visitor, HttpError>, selectedVisitor: Visitor? = nil, searchBar: SearchBarModel<VisitorSortAttr>, isDescriptionOpen: Bool) {
+    self.pagination = pagination
+    self.selectedVisitor = selectedVisitor
+    self.searchBar = searchBar
+    self.isDescriptionOpen = isDescriptionOpen
+  }
 }
 
 public enum VisitorScreenItemMsg {
