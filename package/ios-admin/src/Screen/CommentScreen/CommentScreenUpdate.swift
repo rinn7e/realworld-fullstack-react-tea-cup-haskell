@@ -4,86 +4,84 @@ import ComponentSearchBar
 import TeaCup
 import TeaCupPagination
 
-extension CommentScreen {
-  private typealias PaginationModel = Pagination.Model<Comment, HttpError>
-  private typealias PaginationMsg = Pagination.Msg<Comment, CommentItemMsg, HttpError>
+private typealias PaginationModel = Pagination.Model<Comment, HttpError>
+private typealias PaginationMsg = Pagination.Msg<Comment, CommentScreenItemMsg, HttpError>
 
-  static func initial(_ shared: Shared) -> (Model, Cmd<Msg>) {
-    let (searchBar, searchBarCmd) = searchBarInitial("", CommentSortAttr.createdAt, .desc)
-    let initialModel = Model(
-      pagination: Pagination.Model(items: .pending, page: 1, pageAmount: 0),
-      selectedComment: nil,
-      searchBar: searchBar
-    )
-    let (pagination, paginationCmd): (PaginationModel, Cmd<PaginationMsg>) =
-      Pagination.initial(mkPaginationConfig(shared, initialModel), page: 1)
+public func commentScreenInitial(_ shared: Shared) -> (CommentScreenModel, Cmd<CommentScreenMsg>) {
+  let (searchBar, searchBarCmd) = searchBarInitial("", CommentSortAttr.createdAt, .desc)
+  let initialModel = CommentScreenModel(
+    pagination: Pagination.Model(items: .pending, page: 1, pageAmount: 0),
+    selectedComment: nil,
+    searchBar: searchBar
+  )
+  let (pagination, paginationCmd): (PaginationModel, Cmd<PaginationMsg>) =
+    Pagination.initial(mkPaginationConfig(shared, initialModel), page: 1)
 
-    var model = initialModel
-    model.pagination = pagination
-    return (
-      model,
-      .batch([paginationCmd.map(Msg.paginationMsg), searchBarCmd.map(Msg.searchBarMsg)])
-    )
-  }
+  var model = initialModel
+  model.pagination = pagination
+  return (
+    model,
+    .batch([paginationCmd.map(CommentScreenMsg.paginationMsg), searchBarCmd.map(CommentScreenMsg.searchBarMsg)])
+  )
+}
 
-  static func update(_ shared: Shared) -> (Msg, Model) -> (Model, Cmd<Msg>) {
-    { msg, model in
-      switch msg {
-      case .clearSelected:
-        var updatedModel = model
-        updatedModel.selectedComment = nil
-        return (updatedModel, .none)
-      case .searchBarMsg(let subMsg):
-        return searchBarMsgHandler(shared, subMsg, model)
-      case .paginationMsg(let subMsg):
-        return paginationMsgHandler(shared, subMsg, model)
-      case .noOp:
-        return (model, .none)
-      }
+public func commentScreenUpdate(_ shared: Shared) -> (CommentScreenMsg, CommentScreenModel) -> (CommentScreenModel, Cmd<CommentScreenMsg>) {
+  { msg, model in
+    switch msg {
+    case .clearSelected:
+      var updatedModel = model
+      updatedModel.selectedComment = nil
+      return (updatedModel, .none)
+    case .searchBarMsg(let subMsg):
+      return searchBarMsgHandler(shared, subMsg, model)
+    case .paginationMsg(let subMsg):
+      return paginationMsgHandler(shared, subMsg, model)
+    case .noOp:
+      return (model, .none)
     }
   }
+}
 
-  private static func searchBarMsgHandler(_ shared: Shared, _ subMsg: SearchBarMsg<CommentSortAttr>, _ model: Model) -> (Model, Cmd<Msg>) {
-    let (searchBar, searchBarCmd) = searchBarUpdate(subMsg, model.searchBar)
-    var updatedModel = model
-    updatedModel.searchBar = searchBar
+private func searchBarMsgHandler(_ shared: Shared, _ subMsg: SearchBarMsg<CommentSortAttr>, _ model: CommentScreenModel) -> (CommentScreenModel, Cmd<CommentScreenMsg>) {
+  let (searchBar, searchBarCmd) = searchBarUpdate(subMsg, model.searchBar)
+  var updatedModel = model
+  updatedModel.searchBar = searchBar
 
-    return updateAndCmd { (m: Model) -> (Model, Cmd<Msg>) in
-      switch subMsg {
-      case .submit, .changeSort, .changeDirection:
-        let (pagination, paginationCmd): (PaginationModel, Cmd<PaginationMsg>) =
-          Pagination.initial(mkPaginationConfig(shared, m), page: 1)
-        var next = m
-        next.pagination = pagination
-        return (next, paginationCmd.map(Msg.paginationMsg))
-      case .changeSearchText:
-        return (m, .none)
-      }
-    }((updatedModel, searchBarCmd.map(Msg.searchBarMsg)))
-  }
+  return updateAndCmd { (m: CommentScreenModel) -> (CommentScreenModel, Cmd<CommentScreenMsg>) in
+    switch subMsg {
+    case .submit, .changeSort, .changeDirection:
+      let (pagination, paginationCmd): (PaginationModel, Cmd<PaginationMsg>) =
+        Pagination.initial(mkPaginationConfig(shared, m), page: 1)
+      var next = m
+      next.pagination = pagination
+      return (next, paginationCmd.map(CommentScreenMsg.paginationMsg))
+    case .changeSearchText:
+      return (m, .none)
+    }
+  }((updatedModel, searchBarCmd.map(CommentScreenMsg.searchBarMsg)))
+}
 
-  private static func paginationMsgHandler(_ shared: Shared, _ subMsg: PaginationMsg, _ model: Model) -> (Model, Cmd<Msg>) {
-    let (pagination, paginationCmd) = Pagination.update(mkPaginationConfig(shared, model))(subMsg, model.pagination)
-    var updatedModel = model
-    updatedModel.pagination = pagination
+private func paginationMsgHandler(_ shared: Shared, _ subMsg: PaginationMsg, _ model: CommentScreenModel) -> (CommentScreenModel, Cmd<CommentScreenMsg>) {
+  let (pagination, paginationCmd) = Pagination.update(mkPaginationConfig(shared, model))(subMsg, model.pagination)
+  var updatedModel = model
+  updatedModel.pagination = pagination
 
-    return updateAndCmd { (m: Model) -> (Model, Cmd<Msg>) in
-      if case .itemMsg(let itemMsg, _) = subMsg {
-        return paginationItemMsgHandler(itemMsg)(m)
-      } else {
-        return (m, .none)
-      }
-    }((updatedModel, paginationCmd.map(Msg.paginationMsg)))
-  }
+  return updateAndCmd { (m: CommentScreenModel) -> (CommentScreenModel, Cmd<CommentScreenMsg>) in
+    if case .itemMsg(let itemMsg, _) = subMsg {
+      return paginationItemMsgHandler(itemMsg)(m)
+    } else {
+      return (m, .none)
+    }
+  }((updatedModel, paginationCmd.map(CommentScreenMsg.paginationMsg)))
+}
 
-  private static func paginationItemMsgHandler(_ msg: CommentItemMsg) -> (Model) -> (Model, Cmd<Msg>) {
-    { m in
-      switch msg {
-      case .selectComment(let comment):
-        var updatedModel = m
-        updatedModel.selectedComment = comment
-        return (updatedModel, .none)
-      }
+private func paginationItemMsgHandler(_ msg: CommentScreenItemMsg) -> (CommentScreenModel) -> (CommentScreenModel, Cmd<CommentScreenMsg>) {
+  { m in
+    switch msg {
+    case .selectComment(let comment):
+      var updatedModel = m
+      updatedModel.selectedComment = comment
+      return (updatedModel, .none)
     }
   }
 }

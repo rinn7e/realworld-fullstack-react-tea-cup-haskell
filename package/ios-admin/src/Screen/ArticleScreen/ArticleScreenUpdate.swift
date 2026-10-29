@@ -4,86 +4,84 @@ import ComponentSearchBar
 import TeaCup
 import TeaCupPagination
 
-extension ArticleScreen {
-  private typealias PaginationModel = Pagination.Model<Article, HttpError>
-  private typealias PaginationMsg = Pagination.Msg<Article, ArticleItemMsg, HttpError>
+private typealias PaginationModel = Pagination.Model<Article, HttpError>
+private typealias PaginationMsg = Pagination.Msg<Article, ArticleScreenItemMsg, HttpError>
 
-  static func initial(_ shared: Shared) -> (Model, Cmd<Msg>) {
-    let (searchBar, searchBarCmd) = searchBarInitial("", ArticleSortAttr.createdAt, .desc)
-    let initialModel = Model(
-      pagination: Pagination.Model(items: .pending, page: 1, pageAmount: 0),
-      selectedArticle: nil,
-      searchBar: searchBar
-    )
-    let (pagination, paginationCmd): (PaginationModel, Cmd<PaginationMsg>) =
-      Pagination.initial(mkPaginationConfig(shared, initialModel), page: 1)
+public func articleScreenInitial(_ shared: Shared) -> (ArticleScreenModel, Cmd<ArticleScreenMsg>) {
+  let (searchBar, searchBarCmd) = searchBarInitial("", ArticleSortAttr.createdAt, .desc)
+  let initialModel = ArticleScreenModel(
+    pagination: Pagination.Model(items: .pending, page: 1, pageAmount: 0),
+    selectedArticle: nil,
+    searchBar: searchBar
+  )
+  let (pagination, paginationCmd): (PaginationModel, Cmd<PaginationMsg>) =
+    Pagination.initial(mkPaginationConfig(shared, initialModel), page: 1)
 
-    var model = initialModel
-    model.pagination = pagination
-    return (
-      model,
-      .batch([paginationCmd.map(Msg.paginationMsg), searchBarCmd.map(Msg.searchBarMsg)])
-    )
-  }
+  var model = initialModel
+  model.pagination = pagination
+  return (
+    model,
+    .batch([paginationCmd.map(ArticleScreenMsg.paginationMsg), searchBarCmd.map(ArticleScreenMsg.searchBarMsg)])
+  )
+}
 
-  static func update(_ shared: Shared) -> (Msg, Model) -> (Model, Cmd<Msg>) {
-    { msg, model in
-      switch msg {
-      case .clearSelected:
-        var updatedModel = model
-        updatedModel.selectedArticle = nil
-        return (updatedModel, .none)
-      case .searchBarMsg(let subMsg):
-        return searchBarMsgHandler(shared, subMsg, model)
-      case .paginationMsg(let subMsg):
-        return paginationMsgHandler(shared, subMsg, model)
-      case .noOp:
-        return (model, .none)
-      }
+public func articleScreenUpdate(_ shared: Shared) -> (ArticleScreenMsg, ArticleScreenModel) -> (ArticleScreenModel, Cmd<ArticleScreenMsg>) {
+  { msg, model in
+    switch msg {
+    case .clearSelected:
+      var updatedModel = model
+      updatedModel.selectedArticle = nil
+      return (updatedModel, .none)
+    case .searchBarMsg(let subMsg):
+      return searchBarMsgHandler(shared, subMsg, model)
+    case .paginationMsg(let subMsg):
+      return paginationMsgHandler(shared, subMsg, model)
+    case .noOp:
+      return (model, .none)
     }
   }
+}
 
-  private static func searchBarMsgHandler(_ shared: Shared, _ subMsg: SearchBarMsg<ArticleSortAttr>, _ model: Model) -> (Model, Cmd<Msg>) {
-    let (searchBar, searchBarCmd) = searchBarUpdate(subMsg, model.searchBar)
-    var updatedModel = model
-    updatedModel.searchBar = searchBar
+private func searchBarMsgHandler(_ shared: Shared, _ subMsg: SearchBarMsg<ArticleSortAttr>, _ model: ArticleScreenModel) -> (ArticleScreenModel, Cmd<ArticleScreenMsg>) {
+  let (searchBar, searchBarCmd) = searchBarUpdate(subMsg, model.searchBar)
+  var updatedModel = model
+  updatedModel.searchBar = searchBar
 
-    return updateAndCmd { (m: Model) -> (Model, Cmd<Msg>) in
-      switch subMsg {
-      case .submit, .changeSort, .changeDirection:
-        let (pagination, paginationCmd): (PaginationModel, Cmd<PaginationMsg>) =
-          Pagination.initial(mkPaginationConfig(shared, m), page: 1)
-        var next = m
-        next.pagination = pagination
-        return (next, paginationCmd.map(Msg.paginationMsg))
-      case .changeSearchText:
-        return (m, .none)
-      }
-    }((updatedModel, searchBarCmd.map(Msg.searchBarMsg)))
-  }
+  return updateAndCmd { (m: ArticleScreenModel) -> (ArticleScreenModel, Cmd<ArticleScreenMsg>) in
+    switch subMsg {
+    case .submit, .changeSort, .changeDirection:
+      let (pagination, paginationCmd): (PaginationModel, Cmd<PaginationMsg>) =
+        Pagination.initial(mkPaginationConfig(shared, m), page: 1)
+      var next = m
+      next.pagination = pagination
+      return (next, paginationCmd.map(ArticleScreenMsg.paginationMsg))
+    case .changeSearchText:
+      return (m, .none)
+    }
+  }((updatedModel, searchBarCmd.map(ArticleScreenMsg.searchBarMsg)))
+}
 
-  private static func paginationMsgHandler(_ shared: Shared, _ subMsg: PaginationMsg, _ model: Model) -> (Model, Cmd<Msg>) {
-    let (pagination, paginationCmd) = Pagination.update(mkPaginationConfig(shared, model))(subMsg, model.pagination)
-    var updatedModel = model
-    updatedModel.pagination = pagination
+private func paginationMsgHandler(_ shared: Shared, _ subMsg: PaginationMsg, _ model: ArticleScreenModel) -> (ArticleScreenModel, Cmd<ArticleScreenMsg>) {
+  let (pagination, paginationCmd) = Pagination.update(mkPaginationConfig(shared, model))(subMsg, model.pagination)
+  var updatedModel = model
+  updatedModel.pagination = pagination
 
-    return updateAndCmd { (m: Model) -> (Model, Cmd<Msg>) in
-      if case .itemMsg(let itemMsg, _) = subMsg {
-        return paginationItemMsgHandler(itemMsg)(m)
-      } else {
-        return (m, .none)
-      }
-    }((updatedModel, paginationCmd.map(Msg.paginationMsg)))
-  }
+  return updateAndCmd { (m: ArticleScreenModel) -> (ArticleScreenModel, Cmd<ArticleScreenMsg>) in
+    if case .itemMsg(let itemMsg, _) = subMsg {
+      return paginationItemMsgHandler(itemMsg)(m)
+    } else {
+      return (m, .none)
+    }
+  }((updatedModel, paginationCmd.map(ArticleScreenMsg.paginationMsg)))
+}
 
-  private static func paginationItemMsgHandler(_ msg: ArticleItemMsg) -> (Model) -> (Model, Cmd<Msg>) {
-    { m in
-      switch msg {
-      case .selectArticle(let article):
-        var updatedModel = m
-        updatedModel.selectedArticle = article
-        return (updatedModel, .none)
-      }
+private func paginationItemMsgHandler(_ msg: ArticleScreenItemMsg) -> (ArticleScreenModel) -> (ArticleScreenModel, Cmd<ArticleScreenMsg>) {
+  { m in
+    switch msg {
+    case .selectArticle(let article):
+      var updatedModel = m
+      updatedModel.selectedArticle = article
+      return (updatedModel, .none)
     }
   }
 }

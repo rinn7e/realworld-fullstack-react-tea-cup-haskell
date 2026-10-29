@@ -5,48 +5,47 @@ import ComponentSearchBar
 import SwiftUI
 import TeaCup
 
-extension UserScreen {
-  /// The views used only by this screen (`SubComponent/`)
-  enum SubComponent {}
+public struct UserScreenComponent: View, Equatable {
+  let model: UserScreenModel
+  let shared: Shared
+  let dispatch: Dispatcher<UserScreenMsg>
 
-  struct Component: View, Equatable {
-    let model: UserScreen.Model
-    let shared: Shared
-    let dispatch: Dispatcher<UserScreen.Msg>
+  public init(model: UserScreenModel, shared: Shared, dispatch: Dispatcher<UserScreenMsg>) {
+    self.model = model
+    self.shared = shared
+    self.dispatch = dispatch
+  }
 
-    private static let sortOptions: [SearchBarOption<UserSortAttr>] = [
-      .init(label: "Username", value: .username),
-      .init(label: "Email", value: .email),
-      .init(label: "ID", value: .id),
-    ]
+  private static let sortOptions: [SearchBarOption<UserSortAttr>] = [
+    .init(label: "Username", value: .username),
+    .init(label: "Email", value: .email),
+    .init(label: "ID", value: .id),
+  ]
 
-    var body: some View {
-      PagedListComponent(
-        items: model.pagination.items,
-        page: model.pagination.page,
-        pageAmount: model.pagination.pageAmount,
-        entityLabel: "users",
-        onPageChange: dispatch.map { Msg.paginationMsg(.changePage($0)) }
-      ) { user in
-        Button {
-          dispatch(.paginationMsg(.itemMsg(.selectUser(user), item: user)))
-        } label: {
-          UserScreen.SubComponent.UserRow(user: user)
-        }
-        .tint(.primary)
+  public var body: some View {
+    PagedListComponent(
+      items: model.pagination.items,
+      page: model.pagination.page,
+      pageAmount: model.pagination.pageAmount,
+      entityLabel: "users",
+      onPageChange: dispatch.map { UserScreenMsg.paginationMsg(.changePage($0)) }
+    ) { user in
+      Button {
+        dispatch(.paginationMsg(.itemMsg(.selectUser(user), item: user)))
+      } label: {
+        UserRow(user: user)
       }
-      .navigationTitle("Users")
-      .searchBar(
-        model: model.searchBar,
-        sortOptions: Self.sortOptions,
-        placeholder: "Username, @user, email:…",
-        dispatch: dispatch.map(Msg.searchBarMsg)
-      )
-      .sheet(item: Binding(get: { model.selectedUser }, set: { if $0 == nil { dispatch(.clearSelected) } })) { user in
-        UserScreen.SubComponent.UserDetailSheet(user: user, dispatch: dispatch)
-      }
+      .tint(.primary)
     }
-
-    private typealias Msg = UserScreen.Msg
+    .navigationTitle("Users")
+    .searchBar(
+      model: model.searchBar,
+      sortOptions: Self.sortOptions,
+      placeholder: "Username, @user, email:…",
+      dispatch: dispatch.map(UserScreenMsg.searchBarMsg)
+    )
+    .sheet(item: Binding(get: { model.selectedUser }, set: { if $0 == nil { dispatch(.clearSelected) } })) { user in
+      UserDetailSheet(user: user, dispatch: dispatch)
+    }
   }
 }

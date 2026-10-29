@@ -1,6 +1,13 @@
 import CommonType
 import CommonTypeDestination
 import Foundation
+import ScreenArticleScreen
+import ScreenCommentScreen
+import ScreenHomeScreen
+import ScreenLoginScreen
+import ScreenSettingScreen
+import ScreenUserScreen
+import ScreenVisitorScreen
 import Theme
 
 struct Model: Equatable {
@@ -14,12 +21,12 @@ struct Model: Equatable {
 // (`currentScreenOf`): a `currentScreen` field next to it would say the same
 // thing twice.
 enum ScreenModel: Equatable {
-  case homeScreenModel(HomeScreen.Model)
-  case loginScreenModel(LoginScreen.Model)
-  case articleScreenModel(ArticleScreen.Model)
-  case userScreenModel(UserScreen.Model)
-  case commentScreenModel(CommentScreen.Model)
-  case visitorScreenModel(VisitorScreen.Model)
+  case homeScreenModel(HomeScreenModel)
+  case loginScreenModel(LoginScreenModel)
+  case articleScreenModel(ArticleScreenModel)
+  case userScreenModel(UserScreenModel)
+  case commentScreenModel(CommentScreenModel)
+  case visitorScreenModel(VisitorScreenModel)
   case settingScreenModel
   case notFoundScreenModel
 }
@@ -55,15 +62,15 @@ struct CurrentScreenModel: Equatable {
 enum Msg {
   case navigationMsg(NavigationMsg)
   case initialize(user: AuthUser?, isUnavailable: Bool, token: String?)
-  case logout
-  case homeScreenMsg(HomeScreen.Msg)
-  case loginScreenMsg(LoginScreen.Msg)
-  case articleScreenMsg(ArticleScreen.Msg)
-  case userScreenMsg(UserScreen.Msg)
-  case commentScreenMsg(CommentScreen.Msg)
-  case visitorScreenMsg(VisitorScreen.Msg)
-  case switchTheme(Theme)
-  case setColorScheme(Theme.ColorScheme)
+  case homeScreenMsg(HomeScreenMsg)
+  case loginScreenMsg(LoginScreenMsg)
+  case articleScreenMsg(ArticleScreenMsg)
+  case userScreenMsg(UserScreenMsg)
+  case commentScreenMsg(CommentScreenMsg)
+  case visitorScreenMsg(VisitorScreenMsg)
+  // The logout, theme and color scheme of the settings (the web app has
+  // them as root messages, `Logout`, `SwitchTheme`, `SetColorScheme`)
+  case settingScreenMsg(SettingScreenMsg)
   case noOp
 }
 

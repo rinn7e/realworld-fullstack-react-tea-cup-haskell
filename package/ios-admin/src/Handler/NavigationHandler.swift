@@ -1,5 +1,11 @@
 import CommonType
 import CommonTypeDestination
+import ScreenArticleScreen
+import ScreenCommentScreen
+import ScreenHomeScreen
+import ScreenLoginScreen
+import ScreenUserScreen
+import ScreenVisitorScreen
 import TeaCup
 
 // The screen model of `destination`, the one place a move opens a screen. Every
@@ -13,22 +19,22 @@ func initScreenModel(_ destination: DestinationAfterGuard, _ shared: Shared) -> 
 private func freshScreenModelOf(_ destination: Destination, _ shared: Shared) -> (ScreenModel, Cmd<Msg>) {
   switch destination.screen {
   case .homeScreen:
-    let (newModel, cmd) = HomeScreen.initial(shared)
+    let (newModel, cmd) = homeScreenInitial(shared)
     return (.homeScreenModel(newModel), cmd.map(Msg.homeScreenMsg))
   case .loginScreen:
-    let (newModel, cmd) = LoginScreen.initial()
+    let (newModel, cmd) = loginScreenInitial()
     return (.loginScreenModel(newModel), cmd.map(Msg.loginScreenMsg))
   case .articleScreen:
-    let (newModel, cmd) = ArticleScreen.initial(shared)
+    let (newModel, cmd) = articleScreenInitial(shared)
     return (.articleScreenModel(newModel), cmd.map(Msg.articleScreenMsg))
   case .userScreen:
-    let (newModel, cmd) = UserScreen.initial(shared)
+    let (newModel, cmd) = userScreenInitial(shared)
     return (.userScreenModel(newModel), cmd.map(Msg.userScreenMsg))
   case .commentScreen:
-    let (newModel, cmd) = CommentScreen.initial(shared)
+    let (newModel, cmd) = commentScreenInitial(shared)
     return (.commentScreenModel(newModel), cmd.map(Msg.commentScreenMsg))
   case .visitorScreen:
-    let (newModel, cmd) = VisitorScreen.initial(shared)
+    let (newModel, cmd) = visitorScreenInitial(shared)
     return (.visitorScreenModel(newModel), cmd.map(Msg.visitorScreenMsg))
   case .settingScreen:
     return (.settingScreenModel, .none)

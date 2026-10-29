@@ -25,10 +25,10 @@ targets:
         excludes:
           - Common
           - Component
+          - Screen
           - Theme
     dependencies:
       - package: TeaCup
-      - package: TeaCupPagination
       - package: SentinelAdminModules
         product: CommonAPIHandler
       - package: SentinelAdminModules
@@ -40,15 +40,19 @@ targets:
       - package: SentinelAdminModules
         product: CommonTypeDestination
       - package: SentinelAdminModules
-        product: ComponentDetailRow
+        product: ScreenArticleScreen
       - package: SentinelAdminModules
-        product: ComponentPagedList
+        product: ScreenCommentScreen
       - package: SentinelAdminModules
-        product: ComponentProfileThumbnail
+        product: ScreenHomeScreen
       - package: SentinelAdminModules
-        product: ComponentRoleBadge
+        product: ScreenLoginScreen
       - package: SentinelAdminModules
-        product: ComponentSearchBar
+        product: ScreenSettingScreen
+      - package: SentinelAdminModules
+        product: ScreenUserScreen
+      - package: SentinelAdminModules
+        product: ScreenVisitorScreen
       - package: SentinelAdminModules
         product: Theme
     info:

@@ -26,9 +26,17 @@ let package = Package(
     .library(name: "ComponentProfileThumbnail", targets: ["ComponentProfileThumbnail"]),
     .library(name: "ComponentRoleBadge", targets: ["ComponentRoleBadge"]),
     .library(name: "ComponentSearchBar", targets: ["ComponentSearchBar"]),
+    .library(name: "ScreenHomeScreen", targets: ["ScreenHomeScreen"]),
+    .library(name: "ScreenLoginScreen", targets: ["ScreenLoginScreen"]),
+    .library(name: "ScreenArticleScreen", targets: ["ScreenArticleScreen"]),
+    .library(name: "ScreenUserScreen", targets: ["ScreenUserScreen"]),
+    .library(name: "ScreenCommentScreen", targets: ["ScreenCommentScreen"]),
+    .library(name: "ScreenVisitorScreen", targets: ["ScreenVisitorScreen"]),
+    .library(name: "ScreenSettingScreen", targets: ["ScreenSettingScreen"]),
   ],
   dependencies: [
     .package(path: "lib/TeaCup"),
+    .package(path: "lib/TeaCupPagination"),
   ],
   targets: [
     .target(name: "Theme", path: "src/Theme"),
@@ -45,6 +53,13 @@ let package = Package(
     .target(name: "ComponentProfileThumbnail", path: "src/Component/ProfileThumbnail"),
     .target(name: "ComponentRoleBadge", path: "src/Component/RoleBadge"),
     .target(name: "ComponentSearchBar", dependencies: ["CommonType", .product(name: "TeaCup", package: "TeaCup")], path: "src/Component/SearchBar"),
+    .target(name: "ScreenHomeScreen", dependencies: ["CommonAPIHandler", "CommonAPIType", "CommonType", "ComponentDetailRow", .product(name: "TeaCup", package: "TeaCup")], path: "src/Screen/HomeScreen"),
+    .target(name: "ScreenLoginScreen", dependencies: ["CommonAPIHandler", "CommonAPIType", .product(name: "TeaCup", package: "TeaCup")], path: "src/Screen/LoginScreen"),
+    .target(name: "ScreenArticleScreen", dependencies: ["CommonAPIHandler", "CommonAPIType", "CommonType", "ComponentDetailRow", "ComponentPagedList", "ComponentProfileThumbnail", "ComponentSearchBar", .product(name: "TeaCup", package: "TeaCup"), .product(name: "TeaCupPagination", package: "TeaCupPagination")], path: "src/Screen/ArticleScreen"),
+    .target(name: "ScreenUserScreen", dependencies: ["CommonAPIHandler", "CommonAPIType", "CommonType", "ComponentDetailRow", "ComponentPagedList", "ComponentProfileThumbnail", "ComponentRoleBadge", "ComponentSearchBar", .product(name: "TeaCup", package: "TeaCup"), .product(name: "TeaCupPagination", package: "TeaCupPagination")], path: "src/Screen/UserScreen"),
+    .target(name: "ScreenCommentScreen", dependencies: ["CommonAPIHandler", "CommonAPIType", "CommonType", "ComponentDetailRow", "ComponentPagedList", "ComponentProfileThumbnail", "ComponentSearchBar", .product(name: "TeaCup", package: "TeaCup"), .product(name: "TeaCupPagination", package: "TeaCupPagination")], path: "src/Screen/CommentScreen"),
+    .target(name: "ScreenVisitorScreen", dependencies: ["CommonAPIHandler", "CommonAPIType", "CommonType", "ComponentDetailRow", "ComponentPagedList", "ComponentRoleBadge", "ComponentSearchBar", .product(name: "TeaCup", package: "TeaCup"), .product(name: "TeaCupPagination", package: "TeaCupPagination")], path: "src/Screen/VisitorScreen"),
+    .target(name: "ScreenSettingScreen", dependencies: ["CommonType", "ComponentProfileThumbnail", .product(name: "TeaCup", package: "TeaCup"), "Theme"], path: "src/Screen/SettingScreen"),
   ],
   swiftLanguageModes: [.v5]
 )

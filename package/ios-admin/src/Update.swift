@@ -3,6 +3,13 @@ import CommonAPIType
 import CommonCache
 import CommonType
 import CommonTypeDestination
+import ScreenArticleScreen
+import ScreenCommentScreen
+import ScreenHomeScreen
+import ScreenLoginScreen
+import ScreenSettingScreen
+import ScreenUserScreen
+import ScreenVisitorScreen
 import TeaCup
 import Theme
 
@@ -77,8 +84,6 @@ func update(_ msg: Msg, _ model: Model) -> (Model, Cmd<Msg>) {
   case .initialize:
     // Handled before the model exists (`Program.swift`)
     return (model, .none)
-  case .logout:
-    return logoutHandler(model)
   case .homeScreenMsg(let subMsg):
     return homeScreenMsgHandler(subMsg, model)
   case .loginScreenMsg(let subMsg):
@@ -91,10 +96,8 @@ func update(_ msg: Msg, _ model: Model) -> (Model, Cmd<Msg>) {
     return commentScreenMsgHandler(subMsg, model)
   case .visitorScreenMsg(let subMsg):
     return visitorScreenMsgHandler(subMsg, model)
-  case .switchTheme(let theme):
-    return switchThemeHandler(theme, model)
-  case .setColorScheme(let scheme):
-    return setColorSchemeHandler(scheme, model)
+  case .settingScreenMsg(let subMsg):
+    return settingScreenMsgHandler(subMsg, model)
   case .noOp:
     return (model, .none)
   }
@@ -103,6 +106,17 @@ func update(_ msg: Msg, _ model: Model) -> (Model, Cmd<Msg>) {
 // Handlers
 // ---------------------------------------------
 
+private func settingScreenMsgHandler(_ subMsg: SettingScreenMsg, _ model: Model) -> (Model, Cmd<Msg>) {
+  switch subMsg {
+  case .logout:
+    return logoutHandler(model)
+  case .switchTheme(let theme):
+    return switchThemeHandler(theme, model)
+  case .setColorScheme(let scheme):
+    return setColorSchemeHandler(scheme, model)
+  }
+}
+
 private func logoutHandler(_ model: Model) -> (Model, Cmd<Msg>) {
   var updatedModel = model
   updatedModel.shared = Shared(user: nil, token: nil)
@@ -110,15 +124,15 @@ private func logoutHandler(_ model: Model) -> (Model, Cmd<Msg>) {
   return (navigatedModel, .batch([Cmd { _ in removeToken() }, navigationCmd]))
 }
 
-private func homeScreenMsgHandler(_ subMsg: HomeScreen.Msg, _ model: Model) -> (Model, Cmd<Msg>) {
+private func homeScreenMsgHandler(_ subMsg: HomeScreenMsg, _ model: Model) -> (Model, Cmd<Msg>) {
   guard case .homeScreenModel(let screenModel) = model.screenModel.screenModel else { return (model, .none) }
-  let (m, c) = HomeScreen.update(model.shared)(subMsg, screenModel)
+  let (m, c) = homeScreenUpdate(model.shared)(subMsg, screenModel)
   return (withScreenModel(model, model.screenModel.sameScreenWith(.homeScreenModel(m))), c.map(Msg.homeScreenMsg))
 }
 
-private func loginScreenMsgHandler(_ subMsg: LoginScreen.Msg, _ model: Model) -> (Model, Cmd<Msg>) {
+private func loginScreenMsgHandler(_ subMsg: LoginScreenMsg, _ model: Model) -> (Model, Cmd<Msg>) {
   guard case .loginScreenModel(let screenModel) = model.screenModel.screenModel else { return (model, .none) }
-  let (m, c) = LoginScreen.update(subMsg, screenModel)
+  let (m, c) = loginScreenUpdate(subMsg, screenModel)
   let nextModel = withScreenModel(model, model.screenModel.sameScreenWith(.loginScreenModel(m)))
   let nextCmd = c.map(Msg.loginScreenMsg)
 
@@ -134,27 +148,27 @@ private func loginScreenMsgHandler(_ subMsg: LoginScreen.Msg, _ model: Model) ->
   }
 }
 
-private func articleScreenMsgHandler(_ subMsg: ArticleScreen.Msg, _ model: Model) -> (Model, Cmd<Msg>) {
+private func articleScreenMsgHandler(_ subMsg: ArticleScreenMsg, _ model: Model) -> (Model, Cmd<Msg>) {
   guard case .articleScreenModel(let screenModel) = model.screenModel.screenModel else { return (model, .none) }
-  let (m, c) = ArticleScreen.update(model.shared)(subMsg, screenModel)
+  let (m, c) = articleScreenUpdate(model.shared)(subMsg, screenModel)
   return (withScreenModel(model, model.screenModel.sameScreenWith(.articleScreenModel(m))), c.map(Msg.articleScreenMsg))
 }
 
-private func userScreenMsgHandler(_ subMsg: UserScreen.Msg, _ model: Model) -> (Model, Cmd<Msg>) {
+private func userScreenMsgHandler(_ subMsg: UserScreenMsg, _ model: Model) -> (Model, Cmd<Msg>) {
   guard case .userScreenModel(let screenModel) = model.screenModel.screenModel else { return (model, .none) }
-  let (m, c) = UserScreen.update(model.shared)(subMsg, screenModel)
+  let (m, c) = userScreenUpdate(model.shared)(subMsg, screenModel)
   return (withScreenModel(model, model.screenModel.sameScreenWith(.userScreenModel(m))), c.map(Msg.userScreenMsg))
 }
 
-private func commentScreenMsgHandler(_ subMsg: CommentScreen.Msg, _ model: Model) -> (Model, Cmd<Msg>) {
+private func commentScreenMsgHandler(_ subMsg: CommentScreenMsg, _ model: Model) -> (Model, Cmd<Msg>) {
   guard case .commentScreenModel(let screenModel) = model.screenModel.screenModel else { return (model, .none) }
-  let (m, c) = CommentScreen.update(model.shared)(subMsg, screenModel)
+  let (m, c) = commentScreenUpdate(model.shared)(subMsg, screenModel)
   return (withScreenModel(model, model.screenModel.sameScreenWith(.commentScreenModel(m))), c.map(Msg.commentScreenMsg))
 }
 
-private func visitorScreenMsgHandler(_ subMsg: VisitorScreen.Msg, _ model: Model) -> (Model, Cmd<Msg>) {
+private func visitorScreenMsgHandler(_ subMsg: VisitorScreenMsg, _ model: Model) -> (Model, Cmd<Msg>) {
   guard case .visitorScreenModel(let screenModel) = model.screenModel.screenModel else { return (model, .none) }
-  let (m, c) = VisitorScreen.update(model.shared)(subMsg, screenModel)
+  let (m, c) = visitorScreenUpdate(model.shared)(subMsg, screenModel)
   return (withScreenModel(model, model.screenModel.sameScreenWith(.visitorScreenModel(m))), c.map(Msg.visitorScreenMsg))
 }
 

@@ -1,4 +1,11 @@
 import CommonTypeDestination
+import ScreenArticleScreen
+import ScreenCommentScreen
+import ScreenHomeScreen
+import ScreenLoginScreen
+import ScreenSettingScreen
+import ScreenUserScreen
+import ScreenVisitorScreen
 import SwiftUI
 import TeaCup
 import Theme
@@ -90,19 +97,19 @@ private struct ScreenView: View, Equatable {
   var body: some View {
     switch model.screenModel.screenModel {
     case .homeScreenModel(let screenModel):
-      HomeScreen.Component(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.homeScreenMsg))
+      HomeScreenComponent(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.homeScreenMsg))
     case .articleScreenModel(let screenModel):
-      ArticleScreen.Component(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.articleScreenMsg))
+      ArticleScreenComponent(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.articleScreenMsg))
     case .userScreenModel(let screenModel):
-      UserScreen.Component(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.userScreenMsg))
+      UserScreenComponent(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.userScreenMsg))
     case .commentScreenModel(let screenModel):
-      CommentScreen.Component(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.commentScreenMsg))
+      CommentScreenComponent(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.commentScreenMsg))
     case .visitorScreenModel(let screenModel):
-      VisitorScreen.Component(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.visitorScreenMsg))
+      VisitorScreenComponent(model: screenModel, shared: model.shared, dispatch: dispatch.map(Msg.visitorScreenMsg))
     case .loginScreenModel(let screenModel):
-      LoginScreen.Component(model: screenModel, dispatch: dispatch.map(Msg.loginScreenMsg))
+      LoginScreenComponent(model: screenModel, dispatch: dispatch.map(Msg.loginScreenMsg))
     case .settingScreenModel:
-      SettingScreen.Component(user: model.shared.user, colorScheme: model.colorScheme, theme: model.theme, dispatch: dispatch)
+      SettingScreenComponent(user: model.shared.user, colorScheme: model.colorScheme, theme: model.theme, dispatch: dispatch.map(Msg.settingScreenMsg))
     case .notFoundScreenModel:
       ContentUnavailableView("404 Not Found", systemImage: "questionmark.folder")
     }
