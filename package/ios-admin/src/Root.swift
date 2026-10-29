@@ -1,6 +1,7 @@
 // Module: Root
 
 @_spi(MyApp) import Program
+import Package_Debug_FpsOverlay
 import Package_TeaCup_Program
 import SwiftUI
 
@@ -11,6 +12,9 @@ struct SentinelAdminApp: App {
   var body: some Scene {
     WindowGroup {
       ProgramView(runtime: runtime)
+        #if DEBUG
+          .onAppear(perform: installFpsOverlay)
+        #endif
     }
   }
 }

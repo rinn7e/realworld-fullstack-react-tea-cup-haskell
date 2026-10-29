@@ -2,7 +2,11 @@
 
 @_spi(Package_TeaCup) import Package_TeaCup_Cmd
 @_spi(Package_TeaCup) import Package_TeaCup_Dispatcher
+import OSLog
 import SwiftUI
+
+private let signposter = OSSignposter(subsystem: "tech.rinn7e.sentinel-admin", category: .pointsOfInterest)
+private let stepLog = Logger(subsystem: "tech.rinn7e.sentinel-admin", category: "Step")
 
 /// A TEA program, like `Program` of react-tea-cup: `init` and `update` return the
 /// next model with commands, `view` draws the model. `onOpenUrl` is the
@@ -45,9 +49,20 @@ public final class Runtime<Model, Msg, Content: View> {
   }
 
   public func dispatch(_ msg: Msg) {
+    // Each step is an interval in Instruments (Points of Interest), and a slow
+    // `update` is logged with its message: a hitch right after one is its cost
+    let state = signposter.beginInterval("update", "\(String(describing: msg).prefix(120))")
+    let start = ContinuousClock.now
     let (newModel, cmd) = program.update(msg, model)
     model = newModel
     cmd.run(dispatcher)
+    signposter.endInterval("update", state)
+    #if DEBUG
+      let elapsed = ContinuousClock.now - start
+      if elapsed > .milliseconds(4) {
+        stepLog.warning("Slow update: \(elapsed) for \(String(describing: msg).prefix(120))")
+      }
+    #endif
   }
 
   fileprivate var content: Content {

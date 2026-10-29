@@ -149,6 +149,16 @@ xcrun simctl openurl booted sentinel://users
 
 A deep link that opens the app arrives while the boot checks the stored token, so it is kept and the app boots on it (`Program.swift`).
 
+## Performance
+
+A debug build draws a frame rate counter above the app (`src/Package/Debug/FpsOverlay.swift`): the frames per second of the last half second, the longest frame, and the number of hitches (frames that took more than 1.5 times their budget, 8 ms at 120 Hz). A release build has none of it.
+
+To find what a lag comes from:
+
+1. Watch the counter while doing the slow thing: a hitch count that goes up names the place.
+2. Read the log, in the Xcode console or the Console app (filter on `tech.rinn7e.sentinel-admin`): category `Hitch` logs each hitch with its length, and category `Step` logs every `update` slower than 4 ms with its message. A hitch with no slow step before it is the cost of a `body` or of the layout, not of `update`.
+3. For the detail, profile with Instruments (SwiftUI and Animation Hitches templates). Every step of the runtime is an interval named `update` under Points of Interest, next to the hitches and the view bodies.
+
 ## Not Ported
 
 - **The persona panel**: a web helper to take a screenshot, clear the browser cache and show browser information.

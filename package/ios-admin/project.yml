@@ -22,6 +22,8 @@ targets:
         product: Program
       - package: SentinelAdminModules
         product: Package_TeaCup_Program
+      - package: SentinelAdminModules
+        product: Package_Debug_FpsOverlay
     info:
       path: Info.plist
       properties:
