@@ -34,6 +34,26 @@ The simulator reaches the backend on this Mac at `localhost`. Another API is set
 
 Test account: `admin@example.com`, password `testtest` (from `package/backend/resource/seed.sql`).
 
+### On an iPhone
+
+The phone reaches the backend on this Mac over the Wi-Fi, at the LAN IP of the Mac (`ipconfig getifaddr en0`). The backend of `make api` already listens on every interface (`*:3000`), so there is nothing to expose; check with `curl http://<LAN IP>:3000/api/tags` from the Mac.
+
+1. Plug the phone in once (or pair it over the Wi-Fi in Xcode), with **Developer Mode** on (Settings, Privacy & Security). `xcrun devicectl list devices` shows its identifier.
+2. Build it for the phone, signed by your team (a free personal team works), with the LAN IP as `API_BASE`. Use `-configuration Release` for an optimized build (see Performance):
+   ```bash
+   xcodebuild -project SentinelAdmin.xcodeproj -scheme SentinelAdmin -destination 'id=<DEVICE_ID>' \
+     -derivedDataPath build -allowProvisioningUpdates DEVELOPMENT_TEAM=<TEAM> CODE_SIGN_STYLE=Automatic \
+     "API_BASE=http:/\$()/$(ipconfig getifaddr en0):3000/api" build
+   ```
+3. Install and launch it:
+   ```bash
+   xcrun devicectl device install app --device <DEVICE_ID> build/Build/Products/Debug-iphoneos/SentinelAdmin.app
+   xcrun devicectl device process launch --device <DEVICE_ID> tech.rinn7e.sentinel-admin
+   ```
+4. The first launch is refused ("profile has not been explicitly trusted"): on the phone, trust the developer in Settings, General, VPN and Device Management, then launch again. Allow **Local Network** when the app asks, or it cannot reach the backend.
+
+`<TEAM>` is the team ID of your signing certificate (`security find-identity -v -p codesigning`, then the `OU` of that certificate). With a free personal team, the app stops opening after 7 days: build and install it again. The phone and the Mac must be on the same Wi-Fi, with the backend running.
+
 ## From frontend-admin to ios-admin
 
 The file tree follows the one of `frontend-admin/src`, in the casing of Swift: folders and files are UpperCamelCase, with acronyms in capitals (`API`, `URL`). Every module keeps its folder, and every file keeps the name of the web file (`screen/user-screen/type.ts` is `Screen/UserScreen/Type.swift`). Two files of one module cannot have the same name, but each folder is its own module (see Modules), so a `Type.swift` in every screen is fine.
@@ -67,7 +87,7 @@ A module is named after the path of its file, with `_` between the parts: `Scree
 | `src/Screen/<Name>Screen` | `Screen_UserScreen_Type`, `Screen_UserScreen_Update`, `Screen_UserScreen_SubComponent_UserRow`, ... | `src/screen/*` |
 | `src/`, `src/Handler`, `src/Util` | `Root`, `App`, `Type`, `Update`, `Program`, `Handler_NavigationHandler`, `Util_Guard`, ... | `src/*.tsx`, `handler/`, `util/` |
 
-Each file imports the modules it uses, and the dependencies of each target in `Package.swift` are exactly those imports. SwiftPM refuses a cycle, so the layers of the code convention of frontend-admin ("Dependency Order and Hierarchy") are checked by the compiler: `Common` imports no component or screen, a component imports no screen, and a screen imports no other screen. Each module builds alone:
+Each file imports the modules it uses, and the dependencies of each target in `Package.swift` are exactly those imports. `Package.swift` and the dependencies of the app target in `project.yml` are generated from the files and their imports: after adding, moving or removing a file, or changing its imports, run `python3 script/gen-package.py` (then `xcodegen generate`). SwiftPM refuses a cycle, so the layers of the code convention of frontend-admin ("Dependency Order and Hierarchy") are checked by the compiler: `Common` imports no component or screen, a component imports no screen, and a screen imports no other screen. Each module builds alone:
 
 ```bash
 swift build --sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)" --triple arm64-apple-ios18.0-simulator --target Component_SearchBar_Update
@@ -153,7 +173,7 @@ A deep link that opens the app arrives while the boot checks the stored token, s
 
 A debug build draws a frame rate counter above the app (`src/Package/Debug/FpsOverlay.swift`): the frames per second of the last half second, the longest frame, and the number of hitches (frames that took more than 1.5 times their budget, 8 ms at 120 Hz). A release build has none of it, unless it is built with `-DFPS_OVERLAY`.
 
-A debug build is not optimized (`-Onone`), which makes SwiftUI slower than it ships: judge a lag on a release build. To build one with the counter, for a phone on the same Wi-Fi as this Mac (`<TEAM>` is your signing team, `<DEVICE_ID>` from `xcrun devicectl list devices`):
+A debug build is not optimized (`-Onone`), which makes SwiftUI slower than it ships: judge a lag on a release build. To build one with the counter, for a phone set up as in How to Run (On an iPhone):
 
 ```bash
 xcodebuild -project SentinelAdmin.xcodeproj -scheme SentinelAdmin -configuration Release \

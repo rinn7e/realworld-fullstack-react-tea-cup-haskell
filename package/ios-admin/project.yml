@@ -19,11 +19,11 @@ targets:
       - path: src/Root.swift
     dependencies:
       - package: SentinelAdminModules
-        product: Program
+        product: Package_Debug_FpsOverlay
       - package: SentinelAdminModules
         product: Package_TeaCup_Program
       - package: SentinelAdminModules
-        product: Package_Debug_FpsOverlay
+        product: Program
     info:
       path: Info.plist
       properties:

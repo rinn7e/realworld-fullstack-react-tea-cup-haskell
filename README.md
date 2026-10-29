@@ -37,6 +37,7 @@ cd package/backend && make server-fresh
 | **Frontend Admin** | `package/frontend-admin` | `http://localhost:5174` |
 | **Design System Showcase** | `package/frontend-design-system/app/showcase-app` | `http://localhost:5175` |
 | **Frontend Admin Legacy** | `package/frontend-admin-legacy` | `http://localhost:5176` |
+| **iOS Admin** | `package/ios-admin` | iOS Simulator or an iPhone (see its README) |
 
 ## Deployment (Docker + GitHub Actions + VPS)
 
@@ -148,6 +149,7 @@ For details on running individual packages independently:
 * [package/frontend-web/README.md](package/frontend-web/README.md)
 * [package/frontend-admin/README.md](package/frontend-admin/README.md)
 * [package/frontend-admin-legacy/README.md](package/frontend-admin-legacy/README.md)
+* [package/ios-admin/README.md](package/ios-admin/README.md) (and its [Swift cheatsheet](package/ios-admin/doc/swift_cheatsheet.md), for Haskell and TypeScript developers)
 * [package/frontend-design-system/README.md](package/frontend-design-system/README.md)
 * [package/e2e/README.md](package/e2e/README.md)
 
