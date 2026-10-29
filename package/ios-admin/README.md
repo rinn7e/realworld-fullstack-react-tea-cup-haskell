@@ -7,8 +7,8 @@ A native iOS port of [`frontend-admin`](../frontend-admin) (the Sentinel Dashboa
 - [**Swift 6 compiler, Swift 5 language mode**](https://www.swift.org): Language
 - [**SwiftUI**](https://developer.apple.com/xcode/swiftui/): Views (iOS 18 and later)
 - [**Swift Charts**](https://developer.apple.com/documentation/charts): The visitor chart
-- **`lib/TeaCup`**: a small TEA runtime written for this app (`Cmd`, `Dispatcher`, `Program`, `RemoteData`), in the place of `react-tea-cup`, `tea-cup-fp` and `tea-cup-prelude`
-- **`lib/TeaCupPagination`**: a port of `@rinn7e/tea-cup-pagination`
+- **`TeaCup`** (`lib/TeaCup`, a local package): a small TEA runtime written for this app (`Cmd`, `Dispatcher`, `Program`, `RemoteData`), in the place of `react-tea-cup`, `tea-cup-fp` and `tea-cup-prelude`
+- **`TeaCupPagination`** (`lib/TeaCupPagination`, a local package): a port of `@rinn7e/tea-cup-pagination`
 - [**XcodeGen**](https://github.com/yonaskolb/XcodeGen): Generates the Xcode project from `project.yml`
 
 There is no third-party dependency.
@@ -52,29 +52,50 @@ The file tree follows the one of `frontend-admin/src`, in the casing of Swift: f
 
 The roots (`src`, `lib`, `doc`) stay in lowercase, as in the other packages of this repo.
 
-A name says where it is defined: the namespace is the folder, and the member is the role of the file. So a name read anywhere in the app leads to its file, the way an import path does on the web:
+## Modules
+
+Every folder of `src/` that holds code is a module (a target of `Package.swift`), the Swift form of a Haskell module or an npm package. The app target (`project.yml`) holds the rest of `src/`: the root (`Root`, `Program`, `App`, `Type`, `Update`), `Handler/` and `Util/`.
+
+| Module | Folder | Web |
+| --- | --- | --- |
+| `TeaCup`, `TeaCupPagination` | `lib/TeaCup`, `lib/TeaCupPagination` (own packages) | `react-tea-cup`, `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
+| `Theme` | `src/Theme` | `src/theme` |
+| `CommonEnv`, `CommonCache`, `CommonType`, `CommonTypeDestination`, `CommonAPIType`, `CommonAPIHandler` | `src/Common/<Path>` | `src/common/*` |
+| `ComponentSearchBar`, `ComponentListState`, `ComponentPaginationNav`, `ComponentPagedList`, `ComponentDetailRow`, `ComponentProfileThumbnail`, `ComponentRoleBadge` | `src/Component/<Name>` | `src/component/*` |
+| `ScreenHomeScreen`, `ScreenLoginScreen`, `ScreenArticleScreen`, `ScreenUserScreen`, `ScreenCommentScreen`, `ScreenVisitorScreen`, `ScreenSettingScreen` | `src/Screen/<Name>Screen` | `src/screen/*` |
+
+A module is named after its path, without the separators (Haskell `Common.API.Type` is `CommonAPIType`), since a Swift module name cannot hold a dot. A folder with modules inside holds no file of its own (`Common/Env.swift` is `Common/Env/Env.swift`), and a component of one file has its folder too (`Component/DetailRow/DetailRowComponent.swift`).
+
+The dependencies of each module in `Package.swift` are the modules its files import, so the layers of the code convention of frontend-admin ("Dependency Order and Hierarchy") are checked by the compiler: `Common` imports no component or screen, a component imports no screen, and a screen imports no other screen. Each module builds alone:
+
+```bash
+swift build --target ComponentSearchBar
+```
+
+## Names
+
+Swift has no qualified import: inside a module, a name of the module wins over an imported one with no error. So the public names of a module start with the name of the module, and no two public names of the app are the same:
 
 | Name | File |
 | --- | --- |
-| `ArticleScreen.Model`, `ArticleScreen.Msg` | `Screen/ArticleScreen/ArticleScreenType.swift` |
-| `ArticleScreen.initial`, `ArticleScreen.update` | `Screen/ArticleScreen/ArticleScreenUpdate.swift` |
-| `ArticleScreen.Component` | `Screen/ArticleScreen/ArticleScreenComponent.swift` |
-| `ArticleScreen.SubComponent.ArticleRow` | `Screen/ArticleScreen/SubComponent/ArticleRow.swift` |
-| `SearchBar.Component` | `Component/SearchBar/SearchBarComponent.swift` |
-| `ListState.Loading`, `ListState.Failure`, `ListState.Empty` | `Component/ListState/ListStateComponent.swift` |
-| `DetailRow`, `RoleBadge` (a component of one file) | `Component/DetailRow.swift`, `Component/RoleBadge.swift` |
+| `ArticleScreenModel`, `ArticleScreenMsg`, `ArticleScreenItemMsg` | `Screen/ArticleScreen/ArticleScreenType.swift` |
+| `articleScreenInitial`, `articleScreenUpdate` | `Screen/ArticleScreen/ArticleScreenUpdate.swift` |
+| `ArticleScreenComponent` | `Screen/ArticleScreen/ArticleScreenComponent.swift` |
+| `SearchBarModel`, `SearchBarMsg`, `searchBarUpdate`, `SearchBarComponent` | `Component/SearchBar/` |
+| `ListStateLoading`, `ListStateFailure`, `ListStateEmpty` | `Component/ListState/ListStateComponent.swift` |
+| `DetailRowComponent` | `Component/DetailRow/DetailRowComponent.swift` |
 
-The folder `Screen/` is not a level of the name: an `enum Screen` already exists (the screen of a destination), and the `Screen` at the end of each name says it. A view is a `Component` and not a `View`, since inside the namespace `View` would hide the `View` protocol of SwiftUI.
+A view type has the name of its file. The internal names stay short (`StatCard`, `UserRow`, `mkPaginationConfig`, `formatListError`): no other module sees them, so a sub-component is private to its screen, as a web sub-component that is not re-exported. The domain types of `Common` (`AuthUser`, `HttpError`, `Destination`, `Article`, ...) keep their web names, which are already unique.
 
 | TypeScript and tea-cup | Swift |
 | --- | --- |
-| A module of a screen (`import * as UserScreen`) | An `enum` namespace (`UserScreen.Model`, `UserScreen.update`) split over its files with `extension` |
-| `UserScreenMemo` from `@/screen/user-screen/component` | `UserScreen.Component` |
+| A module of a screen (`import * as UserScreen from '@/screen/user-screen'`) | `import ScreenUserScreen`, then `UserScreenModel`, `userScreenUpdate` |
+| `UserScreenMemo` from `@/screen/user-screen/component` | `UserScreenComponent` |
 | `Model` with `ModelEq`, `Props` with `PropsEq`, `memo` | A `struct` that is `Equatable`; a view that is `Equatable` skips its body when its input did not change |
 | A sum type with `_tag` and `switch` | An `enum` with associated values and `switch` |
 | `Option<A>` | `A?` |
 | `TaskEither<HttpError, A>` and `attemptTE` | `async` function returning `Result<A, HttpError>` and `Cmd.attempt` |
-| `RemoteData` of remote-data-ts | `RemoteData` (`lib/TeaCup`) |
+| `RemoteData` of remote-data-ts | `RemoteData` (`TeaCup`) |
 | `dispatch` with `EqAlways` | `Dispatcher`, which is always equal to another one |
 | `cmd.map((subMsg) => ({ _tag: 'XMsg', subMsg }))` | `cmd.map(Msg.xMsg)` |
 | `pipe(..., updateAndCmd(...))` | `updateAndCmd { ... }((model, cmd))` |

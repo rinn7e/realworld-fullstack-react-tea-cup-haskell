@@ -22,7 +22,7 @@ In Haskell and TypeScript, one file is one module. In Swift, one module is a who
 
 The closest Haskell picture: a Swift module is **one big Haskell module that is split over many files**, with no export list inside it.
 
-So `ios-admin` (the `SentinelAdmin` app target) is a single module of about 80 files, and `lib/TeaCup` is not a module of its own: it is a folder of the same target.
+So `ios-admin` makes a module of every folder of code (section 1.9): one target per folder, the way a Haskell project has one module per file.
 
 ### 1.2 Inside One Module: No Imports
 
@@ -56,7 +56,7 @@ So `ios-admin` (the `SentinelAdmin` app target) is a single module of about 80 f
   print(answer())               // no import: same module
   ```
 
-In `ios-admin`, `Update.swift` calls `navigationMsgHandler` from `Handler/NavigationHandler.swift` and `HomeScreen.initial` from `Screen/HomeScreen/HomeScreenUpdate.swift` with no import line at all. The only imports in the app are other modules: `import SwiftUI`, `import Foundation`, `import Charts`, `import Security`.
+In `ios-admin`, `Update.swift` calls `navigationMsgHandler` from `Handler/NavigationHandler.swift` with no import line, since both are files of the app module. To call `homeScreenInitial`, it must `import ScreenHomeScreen`: that one is another module.
 
 ### 1.3 The Price: One Flat Namespace per Module
 
@@ -70,14 +70,10 @@ struct Model {}
 struct Model {}      // error: invalid redeclaration of 'Model'
 ```
 
-Haskell has no such problem, since `Screen.UserScreen.Model` and `Screen.HomeScreen.Model` live in different modules. Swift solves it with **nested types**: a name inside a type is qualified by that type, so this compiles:
+Haskell has no such problem, since `Screen.UserScreen.Model` and `Screen.HomeScreen.Model` live in different modules. In Swift there are two ways out:
 
-```swift
-enum UserScreen { struct Model {} }
-enum HomeScreen { struct Model {} }   // fine: UserScreen.Model and HomeScreen.Model
-```
-
-That is why every TEA module of `ios-admin` is a caseless `enum` (section 4): it is the Swift way to get `UserScreen.Model` without a module per file.
+* **Nested types**: a name inside a type is qualified by that type (`enum UserScreen { struct Model {} }` gives `UserScreen.Model`). The `enum` is only a namespace: it hides nothing (section 4).
+* **One module per folder, with prefixed names** (`UserScreenModel` in the module `ScreenUserScreen`): what `ios-admin` does, because the prefix also protects against the silent shadowing of section 1.8.
 
 File names are also flat: two files with the same name in one module do not build, even in different folders (`X/Type.swift` and `Y/Type.swift` fail with "multiple producers" of `Type.swift.o`). Hence `UserScreenType.swift` and not `UserScreen/Type.swift`.
 
@@ -179,7 +175,8 @@ A `private` name used from another file of the same module fails too: `error: 'h
 | :--- | :--- | :--- | :--- |
 | **Import everything** | `import Data.Text` | `import * as T from 'text'` (qualified) | `import TeaCup` |
 | **Import some names** | `import TeaCup (Cmd)` | `import { Cmd } from 'tea-cup'` | `import struct TeaCup.Cmd` (also `func`, `enum`, `class`, `protocol`, `typealias`, `var`, `let`) |
-| **Qualified use** | `import qualified TeaCup` then `TeaCup.Cmd` | `TeaCup.Cmd` after `import * as TeaCup` | `TeaCup.Cmd`, always allowed after `import TeaCup` |
+| **Import qualified only** | `import qualified TeaCup` | `import * as TeaCup from 'tea-cup'` | *not possible*: `import qualified TeaCup` is a syntax error; every imported name is also usable unqualified |
+| **Qualify a name** | `TeaCup.Cmd` | `TeaCup.Cmd` | `TeaCup::Cmd` (a module selector, Swift 6.3, SE-0491); `TeaCup.Cmd` also works, unless the module has a type named `TeaCup` |
 | **Alias the module** | `import qualified TeaCup as T` | `import * as T from 'tea-cup'` | *not possible*: `import TeaCup as T` is a syntax error; alias one type with `typealias T = TeaCup.Cmd` |
 | **Hide some names** | `import TeaCup hiding (Cmd)` | *import only what you need* | *not possible* |
 | **Re-export** | `module App (module TeaCup) where` | `export * from './cmd'` | *only the unofficial `@_exported import TeaCup`* |
@@ -196,22 +193,44 @@ import TeaCup
 
 struct Cmd { let name: String; let local = true }   // App.Cmd
 
-let d = Cmd(name: "b")          // App.Cmd: no error, no warning
-let c = TeaCup.Cmd(name: "a")   // the imported one, qualified with its module name
+let d = Cmd(name: "b")           // App.Cmd: no error, no warning
+let c = TeaCup::Cmd(name: "a")   // the imported one, by a module selector
+let e = App::Cmd(name: "c")      // the own one, said out loud
 ```
 
-In Haskell, the same clash is an "ambiguous occurrence" error until you qualify one of them. In Swift, it is not an error, so name your types well, or qualify with the module name when in doubt.
+In Haskell, the same clash is an "ambiguous occurrence" error until you qualify one of them. In Swift it is not an error, and nothing forces the qualifier: a bare `Cmd` quietly means the local one. Two imported modules with the same name do give an error ("ambiguous for type lookup"), as `Theme.ColorScheme` and SwiftUI `ColorScheme` did in `ios-admin` until one was nested.
+
+So `ios-admin` prefixes every public name with its module (`SearchBarModel`, `UserScreenModel`): no two public names of the app are the same, so no local name can hide an imported one, and no qualifier is ever needed.
 
 ### 1.9 How `ios-admin` Is Organised
 
-| Part | Now | With modules |
+| Part | Swift module | Like |
 | :--- | :--- | :--- |
-| `src/` | the app module `SentinelAdmin` | the same |
-| `lib/TeaCup/` | a folder of the app module | a local package `TeaCup`, with `public` on `Cmd`, `Dispatcher`, `Program`, `RemoteData`, `InputBuffer` |
-| `lib/TeaCupPagination/` | a folder of the app module | a local package `TeaCupPagination` that depends on `TeaCup` |
-| A screen (`Screen/UserScreen/`) | a caseless `enum UserScreen` split over its files | the same: a module per screen would need a target per screen |
+| `lib/TeaCup/`, `lib/TeaCupPagination/` | packages `TeaCup`, `TeaCupPagination` | the npm packages `tea-cup-fp`, `@rinn7e/tea-cup-pagination` |
+| `src/Common/API/Type/` | `CommonAPIType` (a target of the root `Package.swift`) | Haskell `Common.API.Type` |
+| `src/Component/SearchBar/` | `ComponentSearchBar` | Haskell `Component.SearchBar` |
+| `src/Screen/UserScreen/` (with `SubComponent/`) | `ScreenUserScreen` | Haskell `Screen.UserScreen` |
+| `src/` root, `Handler/`, `Util/` | the app target `SentinelAdmin` | the `executable` of a cabal file |
 
-`frontend-admin` makes the same split: the screens are files of the app, and `tea-cup-fp` and `@rinn7e/tea-cup-pagination` are packages.
+```swift
+// Package.swift: the dependencies are the imports of the files of each module
+.target(name: "ComponentPagedList",
+        dependencies: ["CommonAPIType", "ComponentListState", "ComponentPaginationNav",
+                       .product(name: "TeaCup", package: "TeaCup")],
+        path: "src/Component/PagedList"),
+```
+
+```swift
+// src/Screen/UserScreen/UserScreenComponent.swift (module ScreenUserScreen)
+import ComponentPagedList      // PagedListComponent
+import ComponentSearchBar      // SearchBarOption, .searchBar(...)
+import TeaCup                  // Dispatcher
+
+public struct UserScreenComponent: View, Equatable { ... }   // exported
+struct UserRow: View, Equatable { ... }                      // SubComponent/: internal
+```
+
+`ScreenUserScreen` has no dependency on another screen, so `import ScreenHomeScreen` in it does not build: the layers of the code convention are checked by the compiler.
 
 ---
 
@@ -355,62 +374,70 @@ A case with a value is also a function: `Msg.changeEmail` has the type `(String)
 
 ---
 
-## 4. Namespaces (Caseless Enums & Extensions)
+## 4. A TEA Module: Module per Folder, Prefixed Names
 
-Swift has no module per file (section 1), so a module of the web app becomes a caseless `enum`: it has no values, it only holds types and static functions. `extension` adds to it from other files, which keeps the `type` / `update` / `util` split of the web app.
+A TEA module of the web app (a folder with `type.ts`, `update.ts`, `component.tsx`) is a Swift module in `ios-admin`: one target per folder (section 1.9). Its public names start with the name of the module, since Swift has no qualified import and a local name silently wins over an imported one (section 1.8).
 
-A caseless `enum` is a namespace, not a module: it gives qualified names (`UserScreen.Model`), but it hides nothing, since every member is `internal` like the rest of the app. A member that only its own file may use is `private` (an `enum` with no cases cannot be made, so `UserScreen()` never compiles, unlike an empty `struct`).
-
-* **Swift**:
+* **Swift** (module `ScreenUserScreen`):
   ```swift
   // UserScreenType.swift
-  enum UserScreen {
-    struct Model: Equatable { ... }
-    enum Msg { ... }
+  public struct UserScreenModel: Equatable {
+    var pagination: Pagination.Model<AdminUser, HttpError>   // internal: the app cannot read it
+    var selectedUser: AdminUser?
   }
+  public enum UserScreenMsg { case clearSelected; case paginationMsg(...) }
 
   // UserScreenUpdate.swift
-  extension UserScreen {
-    static func initial(_ shared: Shared) -> (Model, Cmd<Msg>) { ... }
-    static func update(_ shared: Shared) -> (Msg, Model) -> (Model, Cmd<Msg>) { ... }
-  }
+  public func userScreenInitial(_ shared: Shared) -> (UserScreenModel, Cmd<UserScreenMsg>) { ... }
+  public func userScreenUpdate(_ shared: Shared) -> (UserScreenMsg, UserScreenModel) -> (UserScreenModel, Cmd<UserScreenMsg>) { ... }
+  func paginationMsgHandler(...) { ... }                     // internal helper
 
   // UserScreenComponent.swift
-  extension UserScreen {
-    enum SubComponent {}                       // the folder SubComponent/
-    struct Component: View, Equatable { ... }  // the view
+  public struct UserScreenComponent: View, Equatable {
+    public init(model: UserScreenModel, shared: Shared, dispatch: Dispatcher<UserScreenMsg>) { ... }
   }
 
   // SubComponent/UserRow.swift
-  extension UserScreen.SubComponent {
-    struct UserRow: View, Equatable { ... }
-  }
+  struct UserRow: View, Equatable { ... }                    // internal: private to the screen
 
-  // Usage
-  UserScreen.update(model.shared)(subMsg, screenModel)
-  UserScreen.Component(model: m, shared: s, dispatch: d)
-  UserScreen.SubComponent.UserRow(user: u)
+  // In the app
+  import ScreenUserScreen
+  userScreenUpdate(model.shared)(subMsg, screenModel)
+  UserScreenComponent(model: m, shared: s, dispatch: d)
   ```
-* **Haskell**: modules `Screen.UserScreen.Type`, `Screen.UserScreen.Update`, `Screen.UserScreen.Component` and `Screen.UserScreen.SubComponent.UserRow`, imported qualified.
-* **Elm**: `Screen.UserScreen` exposing `Model`, `Msg`, `init`, `update`, `view`.
-* **TypeScript**: `screen/user-screen/type.ts` and `update.ts`, re-exported by `index.ts`; the view imported from `@/screen/user-screen/component`.
+* **Haskell**: `module Screen.UserScreen (Model, Msg, initial, update, view) where`; `UserRow` is not in the export list.
+* **Elm**: `module Screen.UserScreen exposing (Model, Msg, init, update, view)`.
+* **TypeScript**: `screen/user-screen/index.ts` re-exports `type.ts` and `update.ts`; the view is imported from `@/screen/user-screen/component`; a sub-component is never re-exported.
 
-`init` is a keyword in Swift, so the `init` of a TEA module is named `initial` in `ios-admin`.
+`init` is a keyword in Swift, so the `init` of a TEA module is `xInitial` in `ios-admin`.
 
 ### 4.1 A Name Says Where It Is Defined
 
-`ios-admin` nests every name by its folder, so a qualified name reads like the import path of the web app:
+| Swift name | Module | File | TypeScript import |
+| :--- | :--- | :--- | :--- |
+| `UserScreenModel` | `ScreenUserScreen` | `Screen/UserScreen/UserScreenType.swift` | `import { type Model } from '@/screen/user-screen'` |
+| `UserScreenComponent` | `ScreenUserScreen` | `Screen/UserScreen/UserScreenComponent.swift` | `import { UserScreenMemo } from '@/screen/user-screen/component'` |
+| `SearchBarModel` | `ComponentSearchBar` | `Component/SearchBar/SearchBarType.swift` | `import { type Model } from '@/component/search-bar'` |
+| `DetailRowComponent` | `ComponentDetailRow` | `Component/DetailRow/DetailRowComponent.swift` | `import { DetailRowMemo } from '@/component/detail-row'` |
 
-| Swift name | File | TypeScript import |
-| :--- | :--- | :--- |
-| `UserScreen.Model` | `Screen/UserScreen/UserScreenType.swift` | `import { type Model } from '@/screen/user-screen'` |
-| `UserScreen.Component` | `Screen/UserScreen/UserScreenComponent.swift` | `import { UserScreenMemo } from '@/screen/user-screen/component'` |
-| `UserScreen.SubComponent.UserRow` | `Screen/UserScreen/SubComponent/UserRow.swift` | `import { UserTableMemo } from './sub-component/user-table'` |
-| `ListState.formatListError` | `Component/ListState/ListStateUtil.swift` | `import { formatListError } from '@/component/list-state/util'` |
+A view type has the name of its file. Internal names stay short (`UserRow`, `formatListError`): no other module sees them, so they cannot clash.
 
-The prefix technique of Objective-C (`UserScreenModel`, `UIView`, `NSString`) gives unique names too, but they are flat: nothing in `UserScreenModel` says which part is the folder. Nested names keep the path, and inside the namespace the short name works (`Model`, `SubComponent.UserRow`).
+### 4.2 The Other Way: a Caseless `enum` Namespace
 
-A view is named `Component` and not `View`: inside `extension UserScreen`, a nested `View` would hide the `View` protocol of SwiftUI.
+Without a module per folder, a caseless `enum` gives qualified names in one module:
+
+```swift
+enum UserScreen {
+  struct Model: Equatable { ... }
+  enum Msg { ... }
+}
+extension UserScreen {                       // in another file
+  static func update(...) -> ... { ... }
+}
+UserScreen.Model, UserScreen.update(...)
+```
+
+An `enum` with no cases cannot be made, so `UserScreen()` never compiles, unlike an empty `struct`. But it is a namespace, not a module: it hides nothing (every member is `internal`, seen by the whole module), and it adds no import, so any file can use any screen. `ios-admin` used it before its modules; the module per folder replaced it because it checks the layers.
 
 ---
 
@@ -455,7 +482,7 @@ fetched.flatMap(decode).mapError(decodeApiError)
 * **Swift**:
   ```swift
   extension View {
-    func searchBar<Sort>(model: SearchBar.Model<Sort>, ...) -> some View { ... }
+    func searchBar<Sort>(model: SearchBarModel<Sort>, ...) -> some View { ... }
   }
 
   // Usage
@@ -542,7 +569,7 @@ Swift protocols play the part of type classes. The compiler derives the common o
 | `func f<T: Equatable>(_ x: T)` | `f :: Eq t => t -> ...` | *only built-in constraints (`comparable`)* | `<T>(eq: Eq<T>) => (x: T) => ...` |
 | `extension RemoteData: Equatable where E: Equatable, A: Equatable {}` | `instance (Eq e, Eq a) => Eq (RemoteData e a)` | *built-in* | `RD.getEq(eqE, eqA)` |
 
-`Dispatcher` in `lib/TeaCup` writes its own `==` that is always `true`: the `EqAlways` of the `dispatch` prop.
+`Dispatcher` in `TeaCup` writes its own `==` that is always `true`: the `EqAlways` of the `dispatch` prop.
 
 ---
 
@@ -613,7 +640,7 @@ Constraints sit on the parameter (`Item: Equatable`) or after `where` (`extensio
 
 Swift has `async` functions and `Task` built in. `ios-admin` wraps them in `Cmd`, so `update` stays pure.
 
-| Concept | Swift (`lib/TeaCup`) | Haskell | Elm | TypeScript (tea-cup) |
+| Concept | Swift (`TeaCup`) | Haskell | Elm | TypeScript (tea-cup) |
 | :--- | :--- | :--- | :--- | :--- |
 | **An async call** | `func login(_ r: LoginRequest) async -> Result<UserResponse, HttpError>` | `login :: LoginRequest -> IO (Either HttpError UserResponse)` | `Http.post { ..., expect = Http.expectJson SubmitResult decoder }` | `login(r): TaskEither<HttpError, UserResponse>` |
 | **Run it from update** | `.attempt({ await login(r) }, Msg.submitResult)` | *an effect in the update* | *the `Cmd` from `Http.post`* | `attemptTE(login(r), (result) => ({ _tag: 'SubmitResult', result }))` |
@@ -650,11 +677,11 @@ Outside `Guard.swift`, `DestinationAfterGuard(...)` does not compile: the guard 
 
 | TEA | Swift (`ios-admin`) | Elm | TypeScript (react-tea-cup) |
 | :--- | :--- | :--- | :--- |
-| **Model** | `struct Model: Equatable` | `type alias Model` | `type Model` with `ModelEq` |
-| **Msg** | `enum Msg` | `type Msg` | `type Msg` with `_tag` |
-| **init** | `static func initial(...) -> (Model, Cmd<Msg>)` | `init : flags -> ( Model, Cmd Msg )` | `init = (): [Model, Cmd<Msg>]` |
-| **update** | `static func update(_ msg: Msg, _ model: Model) -> (Model, Cmd<Msg>)` | `update : Msg -> Model -> ( Model, Cmd Msg )` | `update = (msg, model): [Model, Cmd<Msg>]` |
-| **view** | `extension X { struct Component: View, Equatable { let model; let dispatch } }`, used as `X.Component(...)` | `view : Model -> Html Msg` | `XMemo = memo(XComponent, PropsEq.equals)` |
+| **Model** | `public struct XModel: Equatable` | `type alias Model` | `type Model` with `ModelEq` |
+| **Msg** | `public enum XMsg` | `type Msg` | `type Msg` with `_tag` |
+| **init** | `public func xInitial(...) -> (XModel, Cmd<XMsg>)` | `init : flags -> ( Model, Cmd Msg )` | `init = (): [Model, Cmd<Msg>]` |
+| **update** | `public func xUpdate(_ msg: XMsg, _ model: XModel) -> (XModel, Cmd<XMsg>)` | `update : Msg -> Model -> ( Model, Cmd Msg )` | `update = (msg, model): [Model, Cmd<Msg>]` |
+| **view** | `public struct XComponent: View, Equatable { let model; let dispatch }` with a `public init` | `view : Model -> Html Msg` | `XMemo = memo(XComponent, PropsEq.equals)` |
 | **Send a message** | `dispatch(.submit)` | `onClick Submit` | `dispatch({ _tag: 'Submit' })` |
 | **Child messages** | `dispatch.map(Msg.loginScreenMsg)`, `cmd.map(Msg.loginScreenMsg)` | `Html.map LoginScreenMsg`, `Cmd.map LoginScreenMsg` | `(subMsg) => dispatch({ _tag: 'LoginScreenMsg', subMsg })` |
 | **Program** | `Program(init:update:view:onOpenUrl:)` run by `Runtime` | `Browser.application` | `ProgramWithNav` |
