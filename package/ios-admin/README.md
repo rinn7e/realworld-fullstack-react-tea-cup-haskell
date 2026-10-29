@@ -151,7 +151,20 @@ A deep link that opens the app arrives while the boot checks the stored token, s
 
 ## Performance
 
-A debug build draws a frame rate counter above the app (`src/Package/Debug/FpsOverlay.swift`): the frames per second of the last half second, the longest frame, and the number of hitches (frames that took more than 1.5 times their budget, 8 ms at 120 Hz). A release build has none of it.
+A debug build draws a frame rate counter above the app (`src/Package/Debug/FpsOverlay.swift`): the frames per second of the last half second, the longest frame, and the number of hitches (frames that took more than 1.5 times their budget, 8 ms at 120 Hz). A release build has none of it, unless it is built with `-DFPS_OVERLAY`.
+
+A debug build is not optimized (`-Onone`), which makes SwiftUI slower than it ships: judge a lag on a release build. To build one with the counter, for a phone on the same Wi-Fi as this Mac (`<TEAM>` is your signing team, `<DEVICE_ID>` from `xcrun devicectl list devices`):
+
+```bash
+xcodebuild -project SentinelAdmin.xcodeproj -scheme SentinelAdmin -configuration Release \
+  -destination 'id=<DEVICE_ID>' -derivedDataPath build -allowProvisioningUpdates \
+  DEVELOPMENT_TEAM=<TEAM> CODE_SIGN_STYLE=Automatic \
+  "API_BASE=http:/\$()/$(ipconfig getifaddr en0):3000/api" \
+  'OTHER_SWIFT_FLAGS=$(inherited) -DFPS_OVERLAY' build
+xcrun devicectl device install app --device <DEVICE_ID> build/Build/Products/Release-iphoneos/SentinelAdmin.app
+```
+
+The `Step` log of slow updates is in debug builds only; the signposts are in both.
 
 To find what a lag comes from:
 

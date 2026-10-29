@@ -12,7 +12,7 @@ struct SentinelAdminApp: App {
   var body: some Scene {
     WindowGroup {
       ProgramView(runtime: runtime)
-        #if DEBUG
+        #if DEBUG || FPS_OVERLAY
           .onAppear(perform: installFpsOverlay)
         #endif
     }
