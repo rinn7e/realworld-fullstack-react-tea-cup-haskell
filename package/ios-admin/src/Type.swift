@@ -1,10 +1,10 @@
-// Module: App_Type
+// Module: MyApp_Type
 
-@_spi(App) import App_Util_Guard
 import Common_Type_AuthUser
 import Common_Type_Destination_Type
 import Common_Type_Shared
 import Foundation
+@_spi(MyApp) import MyApp_Util_Guard
 import Screen_ArticleScreen_Type
 import Screen_CommentScreen_Type
 import Screen_HomeScreen_Type
@@ -14,13 +14,13 @@ import Screen_UserScreen_Type
 import Screen_VisitorScreen_Type
 import Theme_Type
 
-@_spi(App) public struct Model: Equatable {
-  @_spi(App) public var screenModel: CurrentScreenModel
-  @_spi(App) public var shared: Shared
-  @_spi(App) public var theme: Theme
-  @_spi(App) public var colorScheme: Theme.ColorScheme
+@_spi(MyApp) public struct Model: Equatable {
+  @_spi(MyApp) public var screenModel: CurrentScreenModel
+  @_spi(MyApp) public var shared: Shared
+  @_spi(MyApp) public var theme: Theme
+  @_spi(MyApp) public var colorScheme: Theme.ColorScheme
 
-  @_spi(App) public init(screenModel: CurrentScreenModel, shared: Shared, theme: Theme, colorScheme: Theme.ColorScheme) {
+  @_spi(MyApp) public init(screenModel: CurrentScreenModel, shared: Shared, theme: Theme, colorScheme: Theme.ColorScheme) {
     self.screenModel = screenModel
     self.shared = shared
     self.theme = theme
@@ -31,7 +31,7 @@ import Theme_Type
 // The screen shown, as its model. Its case is the destination's screen
 // (`currentScreenOf`): a `currentScreen` field next to it would say the same
 // thing twice.
-@_spi(App) public enum ScreenModel: Equatable {
+@_spi(MyApp) public enum ScreenModel: Equatable {
   case homeScreenModel(HomeScreenModel)
   case loginScreenModel(LoginScreenModel)
   case articleScreenModel(ArticleScreenModel)
@@ -47,8 +47,8 @@ import Theme_Type
 // file private). So the screen changes only by a move; its own messages change
 // its model in place. Review: a new maker in this file that skips the move
 // changes the screen without one.
-@_spi(App) public struct CurrentScreenModel: Equatable {
-  @_spi(App) public let screenModel: ScreenModel
+@_spi(MyApp) public struct CurrentScreenModel: Equatable {
+  @_spi(MyApp) public let screenModel: ScreenModel
 
   fileprivate init(_ screenModel: ScreenModel) {
     self.screenModel = screenModel
@@ -58,19 +58,19 @@ import Theme_Type
   // (`initScreenModel`). Review: called by the navigation
   // (`NavigationHandler.swift`) and tests only; anywhere else it changes the
   // screen without the move.
-  @_spi(App) public static func ofMove(_ destination: DestinationAfterGuard, _ screenModel: ScreenModel) -> CurrentScreenModel {
+  @_spi(MyApp) public static func ofMove(_ destination: DestinationAfterGuard, _ screenModel: ScreenModel) -> CurrentScreenModel {
     CurrentScreenModel(screenModel)
   }
 
   // The screen shown with its model changed in place by its own messages.
   // Another screen keeps the one shown: that is a move. Review: for the model
   // of the screen shown; to open another screen, navigate.
-  @_spi(App) public func sameScreenWith(_ screenModel: ScreenModel) -> CurrentScreenModel {
+  @_spi(MyApp) public func sameScreenWith(_ screenModel: ScreenModel) -> CurrentScreenModel {
     currentScreenOf(screenModel) == currentScreenOf(self.screenModel) ? CurrentScreenModel(screenModel) : self
   }
 }
 
-@_spi(App) public enum Msg {
+@_spi(MyApp) public enum Msg {
   case navigationMsg(NavigationMsg)
   case initialize(user: AuthUser?, isUnavailable: Bool, token: String?)
   case homeScreenMsg(HomeScreenMsg)
@@ -86,7 +86,7 @@ import Theme_Type
 }
 
 // The screen shown (the destination's `screen`, `destinationOf`)
-@_spi(App) public func currentScreenOf(_ screenModel: ScreenModel) -> Screen {
+@_spi(MyApp) public func currentScreenOf(_ screenModel: ScreenModel) -> Screen {
   switch screenModel {
   case .homeScreenModel: .homeScreen
   case .loginScreenModel: .loginScreen
@@ -99,7 +99,7 @@ import Theme_Type
   }
 }
 
-@_spi(App) public func withScreenModel(_ model: Model, _ screenModel: CurrentScreenModel) -> Model {
+@_spi(MyApp) public func withScreenModel(_ model: Model, _ screenModel: CurrentScreenModel) -> Model {
   var updatedModel = model
   updatedModel.screenModel = screenModel
   return updatedModel

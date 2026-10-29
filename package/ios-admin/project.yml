@@ -19,7 +19,7 @@ targets:
       - path: src/Root.swift
     dependencies:
       - package: SentinelAdminModules
-        product: App_Program
+        product: MyApp_Program
       - package: SentinelAdminModules
         product: Package_TeaCup_Program
     info:
@@ -37,5 +37,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: tech.rinn7e.sentinel-admin
+        # The module of Root.swift, named like the other files of the app layer
+        PRODUCT_MODULE_NAME: MyApp_Root
         TARGETED_DEVICE_FAMILY: "1,2"
         API_BASE: "http:/$()/localhost:3000/api"

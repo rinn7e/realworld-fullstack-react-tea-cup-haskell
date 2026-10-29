@@ -1,6 +1,6 @@
-// Module: SentinelAdmin
+// Module: MyApp_Root
 
-@_spi(App) import App_Program
+@_spi(MyApp) import MyApp_Program
 import Package_TeaCup_Program
 import SwiftUI
 

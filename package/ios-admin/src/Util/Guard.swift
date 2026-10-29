@@ -1,4 +1,4 @@
-// Module: App_Util_Guard
+// Module: MyApp_Util_Guard
 
 import Common_Type_Destination_Type
 import Common_Type_Shared
@@ -7,8 +7,8 @@ import Common_Type_Shared
 // move opens. Owned: nothing else can make one (the initializer is file
 // private), so skipping the guard does not type check. Review: a new maker in
 // this file skips the guard.
-@_spi(App) public struct DestinationAfterGuard: Equatable {
-  @_spi(App) public let destination: Destination
+@_spi(MyApp) public struct DestinationAfterGuard: Equatable {
+  @_spi(MyApp) public let destination: Destination
 
   fileprivate init(_ destination: Destination) {
     self.destination = destination
@@ -22,7 +22,7 @@ import Common_Type_Shared
 // `DestinationAfterGuard` is made. Review: called by the navigation, the boot
 // and tests only; a guarded destination anywhere else can open a screen
 // without the move.
-@_spi(App) public func guardDestination(_ shared: Shared, _ toDestination: Destination) -> DestinationAfterGuard {
+@_spi(MyApp) public func guardDestination(_ shared: Shared, _ toDestination: Destination) -> DestinationAfterGuard {
   let isLoggedIn = shared.user != nil
   let isLoginScreen = toDestination.screen == .loginScreen
 

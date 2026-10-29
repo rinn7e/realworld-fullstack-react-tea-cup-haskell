@@ -1,10 +1,10 @@
-// Module: App_Program
+// Module: MyApp_Program
 
-@_spi(App) import App_App
-@_spi(App) import App_Type
-@_spi(App) import App_Update
-@_spi(App) import App_Util_URL
 import Common_Type_Destination_Type
+@_spi(MyApp) import MyApp_App
+@_spi(MyApp) import MyApp_Type
+@_spi(MyApp) import MyApp_Update
+@_spi(MyApp) import MyApp_Util_URL
 import Package_TeaCup_Cmd
 import Package_TeaCup_Dispatcher
 import Package_TeaCup_Program
@@ -13,7 +13,7 @@ import SwiftUI
 // The model of the program: none until `initialize` builds it (the `null` model
 // of the web program). A deep link that opened the app arrives while the boot
 // checks the token, so it is kept as the destination to boot on.
-@_spi(App) public enum ProgramModel: Equatable {
+@_spi(MyApp) public enum ProgramModel: Equatable {
   case booting(bootDestination: Destination)
   case ready(Model)
 }
@@ -37,7 +37,7 @@ func preUpdate(_ msg: Msg, _ programModel: ProgramModel) -> (ProgramModel, Cmd<M
   }
 }
 
-@_spi(App) public struct PreView: View, Equatable {
+@_spi(MyApp) public struct PreView: View, Equatable {
   let programModel: ProgramModel
   let dispatch: Dispatcher<Msg>
 
@@ -51,7 +51,7 @@ func preUpdate(_ msg: Msg, _ programModel: ProgramModel) -> (ProgramModel, Cmd<M
   }
 }
 
-@_spi(App) public let appProgram = Program(
+@_spi(MyApp) public let appProgram = Program(
   init: preInit,
   update: preUpdate,
   view: PreView.init,

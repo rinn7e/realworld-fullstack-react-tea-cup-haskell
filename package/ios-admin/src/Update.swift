@@ -1,14 +1,14 @@
-// Module: App_Update
+// Module: MyApp_Update
 
-@_spi(App) import App_Handler_NavigationHandler
-@_spi(App) import App_Type
-@_spi(App) import App_Util_Guard
 import Common_API_Handler_User
 import Common_API_Type_User
 import Common_Cache_Cache
 import Common_Type_AuthUser
 import Common_Type_Destination_Type
 import Common_Type_Shared
+@_spi(MyApp) import MyApp_Handler_NavigationHandler
+@_spi(MyApp) import MyApp_Type
+@_spi(MyApp) import MyApp_Util_Guard
 import Package_TeaCup_Cmd
 import Screen_ArticleScreen_Type
 import Screen_ArticleScreen_Update
@@ -30,7 +30,7 @@ import Theme_Util
 // Initialization
 // ---------------------------------------------
 
-@_spi(App) public func initialModel(
+@_spi(MyApp) public func initialModel(
   _ bootDestination: Destination,
   user: AuthUser?,
   isUnavailable: Bool,
@@ -54,7 +54,7 @@ import Theme_Util
 
 // Checks the stored token with the server before the app is built. A server
 // that cannot answer (unavailable) keeps the token, so the app opens on it.
-@_spi(App) public func initializeCmd() -> Cmd<Msg> {
+@_spi(MyApp) public func initializeCmd() -> Cmd<Msg> {
   Cmd { dispatch in
     guard let storedToken = getToken() else {
       dispatch(.initialize(user: nil, isUnavailable: false, token: nil))
@@ -91,7 +91,7 @@ private func authUserOf(_ response: UserResponse) -> AuthUser {
   )
 }
 
-@_spi(App) public func update(_ msg: Msg, _ model: Model) -> (Model, Cmd<Msg>) {
+@_spi(MyApp) public func update(_ msg: Msg, _ model: Model) -> (Model, Cmd<Msg>) {
   switch msg {
   case .navigationMsg(let subMsg):
     return navigationMsgHandler(subMsg, model)

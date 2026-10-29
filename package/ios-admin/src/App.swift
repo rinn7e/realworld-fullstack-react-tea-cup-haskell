@@ -1,7 +1,7 @@
-// Module: App_App
+// Module: MyApp_App
 
-@_spi(App) import App_Type
 import Common_Type_Destination_Type
+@_spi(MyApp) import MyApp_Type
 import Package_TeaCup_Dispatcher
 import Screen_ArticleScreen_Component
 import Screen_CommentScreen_Component
@@ -22,7 +22,7 @@ import Theme_Util
 /// not write the selection back, so its screens could not be reached by a move.
 /// Settings is opened from the account button of the navigation bar instead,
 /// as a modal screen; its Done is a move to the overview.
-@_spi(App) public struct AppView: View, Equatable {
+@_spi(MyApp) public struct AppView: View, Equatable {
   let model: Model
   let dispatch: Dispatcher<Msg>
 
@@ -92,7 +92,7 @@ import Theme_Util
     .preferredColorScheme(preferredColorSchemeOf(model.colorScheme))
   }
 
-  @_spi(App) public init(model: Model, dispatch: Dispatcher<Msg>) {
+  @_spi(MyApp) public init(model: Model, dispatch: Dispatcher<Msg>) {
     self.model = model
     self.dispatch = dispatch
   }

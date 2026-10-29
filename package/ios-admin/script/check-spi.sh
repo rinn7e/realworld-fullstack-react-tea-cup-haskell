@@ -7,7 +7,7 @@
 #
 # The folder of a file is its path under src/ with `_` between the folders
 # (`Screen/UserScreen` is `Screen_UserScreen`); a `SubComponent/` file belongs
-# to its screen, and the root, `Handler/` and `Util/` are `App`.
+# to its screen, and the root, `Handler/` and `Util/` are `MyApp`.
 set -u
 
 cd "$(dirname "$0")/.."
@@ -17,7 +17,7 @@ group_of() {
   dir=$(dirname "$1")
   dir=${dir%/SubComponent}
   case "$dir" in
-    src | src/Handler | src/Util) echo "App" ;;
+    src | src/Handler | src/Util) echo "MyApp" ;;
     *) dir=${dir#src/}; echo "${dir//\//_}" ;;
   esac
 }
