@@ -1,3 +1,5 @@
+// Module: Common_Type
+
 public struct Shared: Equatable {
   public var user: AuthUser?
   public var token: String?

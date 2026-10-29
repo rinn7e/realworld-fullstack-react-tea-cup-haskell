@@ -1,3 +1,5 @@
+// Module: Theme
+
 import SwiftUI
 
 // The presets of the web app. On iOS the primary color is the tint of the app;

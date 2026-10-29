@@ -1,3 +1,5 @@
+// Module: Common_Type
+
 import Foundation
 
 /// Decodes the dates of the API (ISO 8601, with or without fractional seconds),

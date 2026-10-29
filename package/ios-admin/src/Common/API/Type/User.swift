@@ -1,3 +1,5 @@
+// Module: Common_API_Type
+
 public enum UserSortAttr: String, Equatable, CaseIterable {
   case id
   case username

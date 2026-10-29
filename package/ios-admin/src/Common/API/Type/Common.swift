@@ -1,3 +1,5 @@
+// Module: Common_API_Type
+
 public struct ApiError: Equatable, Decodable {
   public let errors: [String: [String]]
 

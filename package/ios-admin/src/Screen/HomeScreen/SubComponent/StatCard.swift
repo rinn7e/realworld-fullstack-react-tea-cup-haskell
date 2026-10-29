@@ -1,3 +1,5 @@
+// Module: Screen_HomeScreen
+
 import SwiftUI
 
 struct StatCard: View, Equatable {

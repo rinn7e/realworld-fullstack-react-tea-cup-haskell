@@ -1,3 +1,5 @@
+// Module: Component_PaginationNav
+
 enum PaginationPageItem: Equatable, Hashable {
   case page(Int)
   case ellipsis(Int)

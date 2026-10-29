@@ -1,3 +1,5 @@
+// Module: Package_TeaCup
+
 /// Sends a message to the runtime, like `Dispatcher` of tea-cup-fp.
 ///
 /// Every dispatcher is equal to every other one, like `EqAlways` on the

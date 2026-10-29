@@ -1,3 +1,5 @@
+// Module: SentinelAdmin (the app target, project.yml)
+
 import Package_TeaCup
 import SwiftUI
 

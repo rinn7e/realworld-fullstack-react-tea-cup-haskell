@@ -1,3 +1,5 @@
+// Module: Screen_ArticleScreen
+
 import Common_API_Type
 import SwiftUI
 

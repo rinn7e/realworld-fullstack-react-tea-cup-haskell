@@ -1,3 +1,5 @@
+// Module: Common_Type
+
 public struct AuthUser: Equatable {
   public let username: String
   public let email: String

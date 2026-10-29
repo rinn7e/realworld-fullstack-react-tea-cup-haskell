@@ -1,3 +1,5 @@
+// Module: Component_ProfileThumbnail
+
 import SwiftUI
 
 /// An avatar: the image at `src`, or a person symbol when there is none or it

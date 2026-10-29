@@ -1,3 +1,5 @@
+// Module: Package_TeaCupPagination
+
 import Package_TeaCup
 
 /// A paged list, ported from `@rinn7e/tea-cup-pagination`: the model holds the

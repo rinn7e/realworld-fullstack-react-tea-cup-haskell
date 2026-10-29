@@ -1,3 +1,5 @@
+// Module: Package_TeaCup
+
 import SwiftUI
 
 /// The edit buffer of a text input with `value` and `onInput`, like a DOM input

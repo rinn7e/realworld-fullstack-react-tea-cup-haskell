@@ -1,3 +1,5 @@
+// Module: Component_SearchBar
+
 import Common_Type
 import Package_TeaCup
 

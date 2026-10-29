@@ -1,3 +1,5 @@
+// Module: Common_Type_Destination
+
 // The screen a destination shows. None of the admin screens has a param.
 public enum Screen: Equatable, Hashable {
   case homeScreen

@@ -1,3 +1,5 @@
+// Module: Theme
+
 import SwiftUI
 
 public struct Theme: Equatable, Identifiable {

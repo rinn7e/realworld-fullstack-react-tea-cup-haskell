@@ -1,3 +1,5 @@
+// Module: Common_API_Type
+
 import Foundation
 
 public struct DashboardStats: Equatable, Decodable {

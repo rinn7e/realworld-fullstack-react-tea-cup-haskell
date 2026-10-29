@@ -1,3 +1,5 @@
+// Module: SentinelAdmin (the app target, project.yml)
+
 import Common_Type_Destination
 
 // Where the app is, read from the models that show it, never stored: the screen

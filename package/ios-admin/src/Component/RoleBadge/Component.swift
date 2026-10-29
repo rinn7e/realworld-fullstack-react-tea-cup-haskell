@@ -1,3 +1,5 @@
+// Module: Component_RoleBadge
+
 import SwiftUI
 
 /// The role of a user as a colored capsule (admins in purple, others in green),

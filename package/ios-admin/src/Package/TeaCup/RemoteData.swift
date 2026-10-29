@@ -1,3 +1,5 @@
+// Module: Package_TeaCup
+
 /// Data from a server, like `RemoteData` of remote-data-ts.
 public enum RemoteData<E, A> {
   case initial

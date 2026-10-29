@@ -1,3 +1,5 @@
+// Module: Component_SearchBar
+
 import Common_Type
 
 public struct SearchBarOption<Sort> {

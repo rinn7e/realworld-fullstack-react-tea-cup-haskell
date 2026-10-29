@@ -1,3 +1,5 @@
+// Module: Package_TeaCup
+
 import Foundation
 
 /// A command: a description of work the runtime does after `update`, like `Cmd`

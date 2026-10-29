@@ -1,3 +1,5 @@
+// Module: Theme
+
 import SwiftUI
 
 // The choices are kept in `UserDefaults` (the web app keeps them in

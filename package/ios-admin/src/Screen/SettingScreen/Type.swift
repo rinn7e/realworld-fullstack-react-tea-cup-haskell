@@ -1,3 +1,5 @@
+// Module: Screen_SettingScreen
+
 import Theme
 
 // What the settings ask of the app. The screen has no model of its own (the

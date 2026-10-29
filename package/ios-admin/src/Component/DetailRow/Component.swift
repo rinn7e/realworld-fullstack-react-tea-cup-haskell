@@ -1,3 +1,5 @@
+// Module: Component_DetailRow
+
 import SwiftUI
 
 /// A label and its value in a detail sheet, the value selectable for copying
